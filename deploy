@@ -1,0 +1,226 @@
+#!/bin/bash
+#
+# deploy: A simple bash script for deploying sites.
+#
+#
+source conf/colors.conf
+source src/yesno.func
+
+
+# Functions
+# http://wiki.bash-hackers.org/howto/getopts_tutorial
+while getopts ":f:" opt; do
+  case $opt in
+    a)
+      echo "-a was triggered, Parameter: $OPTARG" >&2
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+      ;;
+  esac
+done
+
+#
+# STEP 0: Change to working directory
+#
+
+SITE=$1
+cd /var/www/html/$SITE; \
+
+
+#
+# Current working directory
+CWD=$(pwd)
+
+
+#
+# STEP 1: Ask the user for confirmation before beginning deployment
+#
+clear
+    echo "deploy 2.0"
+    echo ""
+    printf "Current working path is %s\n" ${CWD}
+    echo
+
+    if yesno --default yes "Continue? [Y/n] "; then
+        echo ""
+
+
+#
+# STEP 1.5: Set permissions correctly
+#
+#
+# Site-specific Permissions 
+echo -e "${green}Setting permissions...${endColor}"
+sudo sleep 1
+
+    if [ $1 = "caa" ]; then
+    	echo -e "  $SITE/lib/"
+	sudo chown -R cworrell.web /var/www/html/$SITE/lib ; \
+    else
+    	sleep 1
+    fi
+
+# Universal Permissions
+	sudo chown -R apache.apache /var/www/html/$SITE/public/system ; \
+	echo -e "  $SITE/public/app/system/"
+	sudo chown -R apache.apache /var/www/html/$SITE/public/app ; \
+	echo -e "  $SITE/public/app/"
+#	sudo chown -R apache.apache /var/www/html/$SITE/public/app/plugins ; \
+#	echo -e "  $SITE/public/app/plugins/"
+#	sudo chown -R apache.apache /var/www/html/$SITE/public/app/mu-plugins ; \
+#	echo -e "  $SITE/public/app/mu-plugins/"
+#	sudo chown -R apache.apache /var/www/html/$SITE/public/app/themes ; \
+#	echo -e "  $SITE/public/app/themes/"
+#	sudo chown -R apache.apache /var/www/html/$SITE/public/app/upgrade ; \
+#	echo -e "  $SITE/public/app/upgrade/"
+	echo ""
+#
+# STEP 2: Checkout Master
+#
+#    echo ""
+	echo -e "${green}Checking out master branch...${endColor}"
+	# while :;do echo -n .;sleep 1;done &
+	git checkout master > /tmp/${PWD##*/}.log
+	# kill $!; trap 'kill $!' SIGTERM
+
+    else
+	echo "Exiting."
+        exit
+    fi
+
+
+#
+# STEP 3: Do we need Grunt? 
+#
+if [ $1 = "caa" ]; then
+    echo ""
+
+    if yesno --default no "Run Grunt? [y/N] "; then
+    echo ""
+    cd /var/www/html/$SITE; \
+    sudo grunt build --force
+    sleep 1
+    else
+        echo "Skipping Grunt..."
+        #exit
+    fi
+else
+    sleep 1
+fi
+
+
+#
+# STEP 4: Add updated files 
+#
+    echo ""
+    if yesno --default yes "Stage files [Y/n] "; then
+    echo ""
+    git add -A
+    sleep 1
+    else
+        echo "Cleaning up..."
+    rm /tmp/${PWD##*/}.log
+        echo "Exiting."
+    exit
+    fi
+
+
+#
+# STEP 5: Commit changes
+#
+    echo ""
+    read -p "Enter your notes on this commit: " notes
+    git commit -m "$notes"
+    sleep 1
+
+#
+# STEP 6. Push our "master" branch to Bitbucket
+#
+    echo ""
+    if yesno --default yes "Push master branch to Bitbucket? [Y/n] "; then
+    echo ""
+    git push
+    sleep 1
+    else
+        echo "Cleaning up..."
+    rm /tmp/${PWD##*/}.log
+        echo "Exiting."
+    exit
+    fi
+
+
+#
+# STEP 7: Checkout out Production branch
+#
+    echo ""
+    echo -e "${green}Checking out production branch...${endColor}"
+    git checkout production > /tmp/${PWD##*/}.log
+
+
+#
+# STEP 8: Merge our updated "master" branch into production. 
+#
+    echo -e "${green}Merging master into production...${endColor}"
+    git merge master > /tmp/${PWD##*/}.log
+
+
+#
+# STEP 9: Push production
+#
+    echo ""
+    if yesno --default yes "Push production branch to Bitbucket? [Y/n] "; then
+    echo ""
+    git push
+    sleep 1
+    else
+        echo "Cleaning up..."
+    rm /tmp/${PWD##*/}.log
+        echo "Exiting."
+    exit
+    fi
+
+
+#
+# STEP 10: Checkout Master once again
+#
+    echo ""
+    echo -e "${green}Checking out master branch...${endColor}"
+    git checkout master > /tmp/${PWD##*/}.log
+
+
+#
+# STEP 11: Push code live with Mina
+#
+    echo ""
+    if yesno --default yes "Deploy to live server? [Y/n] "; then
+    echo ""
+    ssh-add > /tmp/${PWD##*/}.log
+
+    cd /var/www/html/$SITE; \
+    mina deploy
+    sleep 1
+    else
+        echo "Cleaning up..."
+        rm /tmp/${PWD##*/}.log
+        echo "Exiting."
+    exit
+    fi
+
+
+#
+# Clean up and exit
+#
+    echo ""
+    echo "Cleaning up..."
+	sudo chown -R apache.apache /var/www/html/$SITE/public/system ; \
+	sudo chown -R apache.apache /var/www/html/$SITE/public/app ; \
+	rm /tmp/${PWD##*/}.log
+	echo -e "${green}Complete.${endColor}"
+    exit
+
