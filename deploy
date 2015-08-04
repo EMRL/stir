@@ -3,9 +3,10 @@
 # deploy: A simple bash script for deploying sites.
 #
 #
-source conf/colors.conf
-source src/yesno.func
-
+# Load external stuff
+#
+source /home/fdiebel/deploy/conf/colors.conf
+source /home/fdiebel/deploy/src/yesno.func
 
 # Functions
 # http://wiki.bash-hackers.org/howto/getopts_tutorial
@@ -46,7 +47,6 @@ clear
     echo ""
     printf "Current working path is %s\n" ${CWD}
     echo
-
     if yesno --default yes "Continue? [Y/n] "; then
         echo ""
 
@@ -55,9 +55,10 @@ clear
 # STEP 1.5: Set permissions correctly
 #
 #
-# Site-specific Permissions 
-echo -e "${green}Setting permissions...${endColor}"
+# Force sudo password, and set site-specific Permissions
 sudo sleep 1
+echo -e "${green}Setting permissions...${endColor}"
+sleep 1
 
     if [ $1 = "caa" ]; then
     	echo -e "  $SITE/lib/"
@@ -71,19 +72,10 @@ sudo sleep 1
 	echo -e "  $SITE/public/app/system/"
 	sudo chown -R apache.apache /var/www/html/$SITE/public/app ; \
 	echo -e "  $SITE/public/app/"
-#	sudo chown -R apache.apache /var/www/html/$SITE/public/app/plugins ; \
-#	echo -e "  $SITE/public/app/plugins/"
-#	sudo chown -R apache.apache /var/www/html/$SITE/public/app/mu-plugins ; \
-#	echo -e "  $SITE/public/app/mu-plugins/"
-#	sudo chown -R apache.apache /var/www/html/$SITE/public/app/themes ; \
-#	echo -e "  $SITE/public/app/themes/"
-#	sudo chown -R apache.apache /var/www/html/$SITE/public/app/upgrade ; \
-#	echo -e "  $SITE/public/app/upgrade/"
 	echo ""
 #
 # STEP 2: Checkout Master
 #
-#    echo ""
 	echo -e "${green}Checking out master branch...${endColor}"
 	# while :;do echo -n .;sleep 1;done &
 	git checkout master > /tmp/${PWD##*/}.log
@@ -94,9 +86,8 @@ sudo sleep 1
         exit
     fi
 
-
 #
-# STEP 3: Do we need Grunt? 
+# STEP 3: Do we need Grunt/npm? 
 #
 if [ $1 = "caa" ]; then
     echo ""
@@ -112,8 +103,30 @@ if [ $1 = "caa" ]; then
     fi
 else
     sleep 1
-fi
 
+#
+# STEP 3a: Do we need npm?
+NPM="/var/www/html/$SITE/public/app/themes/$SITE/package.json"
+if [ -f "$NPM" ]
+then
+    echo ""
+    echo "DEBUG: Found /var/www/html/$SITE/public/app/themes/$SITE/package.json"
+    if yesno --default no "Run Node Package Manager? [y/N] "; then
+        cd /var/www/html/$SITE/public/app/themes/$SITE; \
+        echo "Compiling..."
+        npm run build > /dev/null
+        echo "Complete."
+        cd /var/www/html/$SITE; \
+        sleep 1
+        else
+        echo "Skipping Node Package Manager..."
+        #exit
+        fi
+
+    else
+        sleep 1
+    fi
+fi
 
 #
 # STEP 4: Add updated files 
@@ -125,7 +138,7 @@ fi
     sleep 1
     else
         echo "Cleaning up..."
-    rm /tmp/${PWD##*/}.log
+        rm /tmp/${PWD##*/}.log
         echo "Exiting."
     exit
     fi
