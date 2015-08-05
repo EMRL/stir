@@ -32,8 +32,7 @@ done
 
 SITE=$1
 cd /var/www/html/$SITE; \
-
-
+tempfile="/tmp/deploy.log"
 #
 # Current working directory
 CWD=$(pwd)
@@ -110,14 +109,19 @@ NPM="/var/www/html/$SITE/public/app/themes/$SITE/package.json"
 if [ -f "$NPM" ]
 then
     echo ""
-    echo "DEBUG: Found /var/www/html/$SITE/public/app/themes/$SITE/package.json"
     if yesno --default no "Run Node Package Manager? [y/N] "; then
         cd /var/www/html/$SITE/public/app/themes/$SITE; \
-        echo "Compiling..."
-        npm run build > /dev/null
-        echo "Complete."
+        npm run build 2>/dev/null 1>>$tempfile &
+        while ps |grep $! &>/dev/null; do
+        echo -n "."
+        sleep 2
+        done
+
+
+        echo -n "Complete."
         cd /var/www/html/$SITE; \
         sleep 1
+        echo ""
         else
         echo "Skipping Node Package Manager..."
         #exit
