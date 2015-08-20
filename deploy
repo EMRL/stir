@@ -67,6 +67,8 @@ sleep 1
     fi
 
 # Universal Permissions
+    sudo chown -R cworrell.web /var/www/html/$SITE/.git ; \
+    echo -e "  $SITE/.git"
 	sudo chown -R apache.apache /var/www/html/$SITE/public/system ; \
 	echo -e "  $SITE/public/app/system/"
 	sudo chown -R apache.apache /var/www/html/$SITE/public/app ; \
@@ -77,7 +79,12 @@ sleep 1
 #
 	echo -e "${green}Checking out master branch...${endColor}"
 	# while :;do echo -n .;sleep 1;done &
-	git checkout master > /tmp/${PWD##*/}.log
+	git checkout master 2>/dev/null 1>>/tmp/${PWD##*/}.log &
+        while ps |grep $! &>/dev/null; do
+        echo -n "."
+        sleep 2
+        done
+
 	# kill $!; trap 'kill $!' SIGTERM
 
     else
@@ -114,11 +121,10 @@ then
         npm run build 2>/dev/null 1>>$tempfile &
         while ps |grep $! &>/dev/null; do
         echo -n "."
-        sleep 2
+        sleep 1
         done
-
-
         echo -n "Complete."
+
         cd /var/www/html/$SITE; \
         sleep 1
         echo ""
