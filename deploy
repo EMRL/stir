@@ -4,51 +4,98 @@
 #
 #
 # Load external stuff
-#
-source /home/fdiebel/deploy/conf/colors.conf
-source /home/fdiebel/deploy/src/yesno.func
 
-# Functions
-# http://wiki.bash-hackers.org/howto/getopts_tutorial
-while getopts ":f:" opt; do
-  case $opt in
-    a)
-      echo "-a was triggered, Parameter: $OPTARG" >&2
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      exit 1
-      ;;
-  esac
-done
+VERSION=0.1.0
+USAGE="Usage: deploy [NAME]"
 
-#
-# STEP 0: Change to working directory
-#
+source /home/fdiebel/deploy/lib/colors.sh
+source /home/fdiebel/deploy/lib/yesno.sh 
 
-SITE=$1
+
+# Establish that parameter exists, and is correct
+
+SITE=$1             
+
+if [ $# == 0 ] ; then
+    echo $USAGE
+    exit 1;
+fi
+
+while getopts ":i:vh" optname
+  do
+    case "$optname" in
+      "v")
+        echo "Version $VERSION"
+        exit 0;
+        ;;
+      "i")
+        echo "-i argument: $OPTARG"
+        ;;
+      "h")
+        echo $USAGE
+        exit 0;
+        ;;
+      "?")
+        echo "Unknown option $OPTARG"
+        exit 0;
+        ;;
+      ":")
+        echo "No argument value for option $OPTARG"
+        exit 0;
+        ;;
+      *)
+        echo "Unknown error while processing options"
+        exit 0;
+        ;;
+    esac
+  done
+
+if [ ! -d "/var/www/html/"$SITE ]; then
+  echo "ERROR: /var/www/html/"$SITE" is not a valid directory."
+   exit
+fi
+
+if [ -f /var/www/html/$SITE/.git/index ];
+    then
+    sleep 1
+else
+   echo "There is nothing at /var/www/html/"$SITE" to deploy."
+   exit
+fi
+
 cd /var/www/html/$SITE; \
+
 tempfile="/tmp/deploy.log"
 #
 # Current working directory
 CWD=$(pwd)
 
+if [ "$1" = "" ]; then
+    echo "Usage: deploy [PROJECT NAME]"
+    exit
+else
+    sleep 1
+fi
 
 #
 # STEP 1: Ask the user for confirmation before beginning deployment
 #
 clear
     echo "deploy 2.0"
-    echo ""
     printf "Current working path is %s\n" ${CWD}
     echo
     if yesno --default yes "Continue? [Y/n] "; then
         echo ""
 
+# lockfile
+LOCK_FILE=/tmp/$SITE.lock
+if [ -f "$LOCK_FILE" ]; then
+   echo "FATAL: " $SITE " is already being deployed in another instance."
+   exit
+fi
+
+trap "rm -f $LOCK_FILE" EXIT
+touch $LOCK_FILE
 
 #
 # STEP 1.5: Set permissions correctly
@@ -84,12 +131,28 @@ sleep 1
         echo -n "."
         sleep 2
         done
+        echo ""
 
 	# kill $!; trap 'kill $!' SIGTERM
 
     else
 	echo "Exiting."
         exit
+    fi
+
+#
+# Alright, testing the WP upgrades
+echo ""
+    if yesno --default no "Update Wordpress? [y/N] "; then
+    echo ""
+    cd /var/www/html/$SITE/public; \
+    wp plugin update --all
+    wp core update
+    wp core update-db
+    cd /var/www/html/$SITE/public; \
+        else
+        echo "Skipping Wordpress updates..."
+        #exit
     fi
 
 #
@@ -243,7 +306,7 @@ fi
     echo "Cleaning up..."
 	sudo chown -R apache.apache /var/www/html/$SITE/public/system ; \
 	sudo chown -R apache.apache /var/www/html/$SITE/public/app ; \
-	rm /tmp/${PWD##*/}.log
+#	rm /tmp/${PWD##*/}.log
 	echo -e "${green}Complete.${endColor}"
     exit
 
