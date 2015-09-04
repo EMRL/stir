@@ -143,13 +143,16 @@ sleep 1
 #
 # Alright, testing the WP upgrades
 echo ""
+    cd /var/www/html/$SITE/public; \
+    wp plugin status
+    # eventually I will sed (in a log file?) for the string "U = Update Available" before continuing the rest of this.
     if yesno --default no "Update Wordpress? [y/N] "; then
     echo ""
-    cd /var/www/html/$SITE/public; \
     wp plugin update --all
     wp core update
+    # later i'll only run this if an update was made. how do I run this on the live site?  pinging a URL I guess... hmmm.....
     wp core update-db
-    cd /var/www/html/$SITE/public; \
+    cd /var/www/html/$SITE/; \
         else
         echo "Skipping Wordpress updates..."
         #exit
