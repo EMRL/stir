@@ -10,6 +10,7 @@ USAGE="Usage: deploy [NAME]"
 
 source /home/fdiebel/deploy/lib/colors.sh
 source /home/fdiebel/deploy/lib/yesno.sh 
+source /home/fdiebel/deploy/lib/pmfix.sh 
 
 
 # Establish that parameter exists, and is correct

@@ -1,4 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/bash
+#
+echo "DEBUG: Loaded function _alert()"
+
+
 
 # Set Colors
 bold=$(tput bold)

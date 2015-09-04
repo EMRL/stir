@@ -3,7 +3,7 @@
 # deploy: A simple bash script for deploying sites.
 #
 #
-
+echo "DEBUG: Loading colors.sh"
 # Setup
 #
 # Setup fancy colors

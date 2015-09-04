@@ -1,7 +1,9 @@
 #!/bin/bash
 # Yes/No function
-function yesno()
-{
+#
+echo "DEBUG: Loading yesno()"
+
+function yesno() {
     local ans
     local ok=0
     local timeout=0
@@ -11,6 +13,7 @@ function yesno()
     while [[ "$1" ]]
     do
         case "$1" in
+
         --default)
             shift
             default=$1
