@@ -4,7 +4,7 @@
 #
 # Checks if project uses node.js, and runs package manager if needed.
 # Also checks for Grunt, for backward compatibility with CAA.
-echo "DEBUG: Loading npm()"
+trace "Loading npm()"
 
 function npm() {
 # Grunt check

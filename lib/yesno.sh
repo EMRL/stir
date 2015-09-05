@@ -1,7 +1,7 @@
 #!/bin/bash
 # Yes/No function
 #
-echo "DEBUG: Loading yesno()"
+trace "Loading yesno()"
 
 function yesno() {
     local ans

@@ -5,33 +5,43 @@
 #
 # Load external stuff
 
-SITE=$1 # This is going to change - I want to add switches
+SITE=$1 		# This is going to change - I want to add switches
 
-# Load external functions
+# Load external configuration & functions
 deployPath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 libLocation="${deployPath}/lib/loader.sh"
 etcLocation="${deployPath}/etc/deploy.conf"
 
-#echo; echo "DEBUG: Running from" $deployPath
-#echo "DEBUG: Loader found at" $libLocation
-
 if [ -f "${etcLocation}" ]; then
     source "${etcLocation}"
 else
-  echo "Unable to load configuration, exiting."
-  exit 1
+	error "Unable to load configuration, exiting."
+	exit 1
 fi
 
 if [ -f "${libLocation}" ]; then
     source "${libLocation}"
 else
-  echo "Unable to load libraries, exiting."
-  exit 1
+	error "Unable to load libraries, exiting."
+	exit 1
 fi
 
-gitcheck    # Check for a valid git project
-lock        # Create lock file
-pmfix       # Fix permissions
+trace "deploy version" $VERSION
+trace "Development workpath is" $WORKPATH
+trace "Running from" $deployPath
+trace "Loader found at" $libLocation
+
+gitcheck    	# Check for a valid git project
+lock        	# Create lock file
+go   			# Start a deployment work session
+pmfix       	# Fix permissions
+gitcm			# Checkout master branch
+wp 				# Run Wordpress upgrades if needed
+
+
+
+
+
 
 
 exit

@@ -4,7 +4,7 @@
 #
 # Repairs potential permission issues before deployment
 
-echo "DEBUG: Loading pmfix()"
+trace "Loading pmfix()"
 
 function pmfix() {
     # Force sudo password input if needed
@@ -20,7 +20,7 @@ function pmfix() {
     	sleep 1
     fi
 
-    # Set Permissions
+    # Set permissions
     sudo chown -R cworrell.web /var/www/html/$SITE/.git ; \
         echo -e "  $SITE/.git"
 	sudo chown -R apache.apache /var/www/html/$SITE/public/system ; \

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-echo "DEBUG: Loading _alert()"
+trace "Loading _alert()"
 
 
 
@@ -18,7 +18,7 @@ function _alert() { #my function
   if [ "${1}" = "emergency" ]; then
     local color="${bold}${red}"
   fi
-  if [ "${1}" = "error" ] || [ "${1}" = "warning" ]; then
+  if [ "${1}" = "ERROR:" ] || [ "${1}" = "warning" ]; then
     local color="${red}"
   fi
   if [ "${1}" = "success" ]; then
@@ -48,17 +48,20 @@ function _alert() { #my function
   fi
 
   # Print to console when script is not 'quiet'
-  ((quiet)) && return || echo -e "$(date +"%r") ${color}$(printf "[%9s]" ${1}) "${_message}"${reset}";
+#  ((quiet)) && return || echo -e "$(date +"%r") ${color}$(printf "[%9s]" ${1}) "${_message}"${reset}";
+
+  ((quiet)) && return || echo -e "${color}$(printf ${1}) "${_message}"${reset}";
+
 
 }
 
 function die ()       { local _message="${@} Exiting."; echo "$(_alert emergency)"; safeExit;}
-function error ()     { local _message="${@}"; echo "$(_alert error)"; }
-function warning ()   { local _message="${@}"; echo "$(_alert warning)"; }
-function notice ()    { local _message="${@}"; echo "$(_alert notice)"; }
-function info ()      { local _message="${@}"; echo "$(_alert info)"; }
-function debug ()     { local _message="${@}"; echo "$(_alert debug)"; }
-function success ()   { local _message="${@}"; echo "$(_alert success)"; }
+function error ()     { local _message="${@}"; echo "$(_alert ERROR:)"; }
+function warning ()   { local _message="${@}"; echo "$(_alert WARNING:)"; }
+function notice ()    { local _message="${@}"; echo "$(_alert NOTICE:)"; }
+function info ()      { local _message="${@}"; echo "$(_alert INFO:)"; }
+function debug ()     { local _message="${@}"; echo "$(_alert DEBUG:)"; }
+function success ()   { local _message="${@}"; echo "$(_alert SUCCESS:)"; }
 function input()      { local _message="${@}"; echo "$(_alert input)"; }
 function header()     { local _message="========== ${@} ==========  "; echo "$(_alert header)"; }
 
