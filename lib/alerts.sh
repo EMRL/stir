@@ -11,8 +11,8 @@ cyan='\E[36;47m'
 white='\E[37;47m'
 endColor='\e[0m'
 
-#bold=$(tput bold)
-#underline=$(tput sgr 0 1)
+bold=$(tput bold)
+underline=$(tput sgr 0 1)
 reset=$(tput sgr0)
 #purple=$(tput setaf 171)
 #red=$(tput setaf 1)
@@ -27,10 +27,10 @@ function _alert() {
   if [ "${1}" = "ERROR:" ] || [ "${1}" = "WARNING:" ]; then
     local color="${red}"
   fi
- if [ "${1}" = "notice" ]; then
+  if [ "${1}" = "notice" ]; then
     local color="${purple}"
   fi
-  if [ "${1}" = "success" ] || [ "${1}" = "TRACE:" ]; then
+  if [ "${1}" = "success" ]; then
     local color="${green}"
   fi
   if [ "${1}" = "debug" ]; then
@@ -59,7 +59,7 @@ function _alert() {
   # Print to console when script is not 'quiet'
 #  ((quiet)) && return || echo -e "$(date +"%r") ${color}$(printf "[%9s]" ${1}) "${_message}"${reset}";
 
-  ((quiet)) && return || echo -e "${color}$(printf ${1}) "${_message}"${reset}";
+((quiet)) && return || echo -e "${color}$(printf ${1}) "${_message}"${reset}";
 
 
 }

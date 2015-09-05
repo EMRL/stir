@@ -8,7 +8,7 @@
 # for the string "U = Update Available" before continuing the rest of this.
 trace "Loading wpress()"
 
-function wpress() {
+function wPress() {
     if hash wp 2>/dev/null; then
     trace "wp-cli found, proceeding with Wordpress updates."
 

@@ -13,14 +13,14 @@ libLocation="${deployPath}/lib/loader.sh"
 etcLocation="${deployPath}/etc/deploy.conf"
 
 if [ -f "${etcLocation}" ]; then
-    source "${etcLocation}"
+  source "${etcLocation}"
 else
-	error "Unable to load configuration, exiting."
-	exit 1
+  error "Unable to load configuration, exiting."
+  exit 1
 fi
 
 if [ -f "${libLocation}" ]; then
-    source "${libLocation}"
+  source "${libLocation}"
 else
 	error "Unable to load libraries, exiting."
 	exit 1
@@ -28,9 +28,9 @@ fi
 
 # Create temp directory. Hopefully it will be deleted upon exit. 
 tmpDir="/tmp/${scriptName}.$RANDOM.$RANDOM.$RANDOM.$$"
-	(umask 077 && mkdir "${tmpDir}") || {
- 	die "Could not create temporary directory! Exiting."
-	}
+(umask 077 && mkdir "${tmpDir}") || {
+  die "Could not create temporary directory! Exiting."
+}
 
 trace "Version" $VERSION
 trace "Development workpath is" $WORKPATH
@@ -44,29 +44,34 @@ trace "Loader found at" $libLocation
 while [[ $1 = -?* ]]; do
   case $1 in
     -h|--help) usage >&2; exit ;;
-    -v|--version) echo "$(basename $0) ${version}"; exit ;;
-    -t|--trace) verbose=1;;
-    -d|--debug) debug=1;;
-    --force) force=1 ;;
-    --endopts) shift; break ;;
-    *) die "invalid option: '$1'." ;;
-  esac
-  shift
+-v|--version) echo "$(basename $0) ${VERSION}"; exit ;;
+-V|--verbose) VERBOSE=1;;
+-d|--debug) debug=1;;
+--force) force=1 ;;
+--endopts) shift; break ;;
+*) die "invalid option: '$1'." ;;
+esac
+shift
 done
 
 # Store the remaining part as arguments.
 APP+=("$@")
 trace "Application is" $APP
 
-gitcheck    	# Check for a valid git project
-lock        	# Create lock file
-go   			    # Start a deployment work session
-pmfix       	# Fix permissions
-gitcm			    # Checkout master branch
-wpress 			  # Run Wordpress upgrades if needed
-npm           # Run node package management
+function coreDeploy {
+  gitCheck    	# Check for a valid git project
+  lock        	# Create lock file
+  go   			    # Start a deployment work session
+  permFix       	# Fix permissions
+  gitChkm			    # Checkout master branch
+  wPress 			  # Run Wordpress upgrades if needed
+  pm           # Run node package management
+}
 
+# Trapping stuff will go here
 
+# the deploy process
+coreDeploy
 
 
 

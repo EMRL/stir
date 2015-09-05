@@ -4,9 +4,9 @@
 #
 # Checks if project uses node.js, and runs package manager if needed.
 # Also checks for Grunt, for backward compatibility with CAA.
-trace "Loading npm()"
+trace "Loading pm()"
 
-function npm() {
+function pm() {
 # Grunt check
     if [ $APP = "caa" ]; then
         echo ""

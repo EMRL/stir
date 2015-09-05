@@ -5,7 +5,7 @@
 # Handles git related processes
 trace "Loading git functions"
 
-function gitcheck() {
+function gitCheck() {
 	if [ ! -d $WORKPATH/$APP ]; then
   		error $WORKPATH/$APP "is not a valid directory."
    		exit
@@ -19,7 +19,7 @@ function gitcheck() {
 	fi
 	}
 
-function gitcm() {
+function gitChkm() {
 	echo -e "${green}Checking out master branch...${endColor}"
 	git checkout master 2>/dev/null 1>>/tmp/${PWD##*/}.log &
         while ps |grep $! &>/dev/null; do
