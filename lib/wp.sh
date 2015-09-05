@@ -6,19 +6,23 @@
 #
 # Many things planned here, eventually I will sed (in a log file?) 
 # for the string "U = Update Available" before continuing the rest of this.
-echo "DEBUG: Loading wp()"
+trace "Loading wp()"
 
 function wp() {
-    cd /var/www/html/$SITE/public; \
-    wp plugin status
-
-    if yesno --default no "Update Wordpress? [y/N] "; then
-        echo ""
-        wp plugin update --all
-        wp core update
-        wp core update-db   # this is mostly useless, as it updates only the development site's db :(
-        cd /var/www/html/$SITE/; \
+    if [ -f $WORKPATH/$SITE/public/system/wp-settings.php ]; then
+    cd $WORKPATH/$SITE/public; \
+    trace "Current path is" $(pwd)
+    #wp plugin status
+        if yesno --default no "Update Wordpress? [y/N] "; then
+            echo ""
+            #wp plugin update --all
+            #wp core update
+            #wp core update-db   # this is mostly useless, as it updates only the development site's db :(
+            cd /var/www/html/$SITE/; \
+        else
+            echo "Skipping Wordpress updates..."
+        fi
     else
-        echo "Skipping Wordpress updates..."
+        trace "Wordpress not found."
     fi
 }
