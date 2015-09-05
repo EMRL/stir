@@ -36,7 +36,7 @@ lock        	# Create lock file
 go   			# Start a deployment work session
 pmfix       	# Fix permissions
 gitcm			# Checkout master branch
-wp 				# Run Wordpress upgrades if needed
+wpress 			# Run Wordpress upgrades if needed
 
 
 

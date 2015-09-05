@@ -6,18 +6,18 @@
 #
 # Many things planned here, eventually I will sed (in a log file?) 
 # for the string "U = Update Available" before continuing the rest of this.
-trace "Loading wp()"
+trace "Loading wpress()"
 
-function wp() {
+function wpress() {
     if [ -f $WORKPATH/$SITE/public/system/wp-settings.php ]; then
     cd $WORKPATH/$SITE/public; \
     trace "Current path is" $(pwd)
-    #wp plugin status
+    wp plugin status
         if yesno --default no "Update Wordpress? [y/N] "; then
             echo ""
-            #wp plugin update --all
-            #wp core update
-            #wp core update-db   # this is mostly useless, as it updates only the development site's db :(
+            wp plugin update --all
+            wp core update
+            wp core update-db   # this is mostly useless, as it updates only the development site's db :(
             cd /var/www/html/$SITE/; \
         else
             echo "Skipping Wordpress updates..."

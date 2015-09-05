@@ -11,8 +11,6 @@ function trace () {
     fi
 }
 
-trace "Loading func.sh"
-
 function usage() {
   echo -n "deploy [OPTION]... [PROJECT]...
 
@@ -28,14 +26,14 @@ A web app deployment script designed for EMRL's local development workflow.
 }
 
 function go() {			# Open a deployment session, ask for user confirmation before beginning
-	cd $WORKPATH/$SITE; \
+  cd $WORKPATH/$SITE; \
     echo "deploy" $VERSION
     printf "Current working path is %s\n" ${WORKPATH}/${SITE}
     echo
     if yesno --default yes "Continue? [Y/n] "; then
-        echo ""
+      echo ""
     else
-		echo "Exiting."
-        exit
+      echo "Exiting."
+      exit
     fi
-}
+  }
