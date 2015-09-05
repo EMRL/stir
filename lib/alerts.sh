@@ -1,27 +1,36 @@
 #!/bin/bash
 #
-trace "Loading _alert()"
-
-
-
 # Set Colors
-bold=$(tput bold)
-underline=$(tput sgr 0 1)
-reset=$(tput sgr0)
-purple=$(tput setaf 171)
-red=$(tput setaf 1)
-green=$(tput setaf 76)
-tan=$(tput setaf 3)
-blue=$(tput setaf 38)
+black='\E[30;47m'
+red='\e[0;31m'
+green='\e[0;32m'
+yellow='\E[33;47m'
+blue='\E[34;47m'
+magenta='\E[35;47m'
+cyan='\E[36;47m'
+white='\E[37;47m'
+endColor='\e[0m'
 
-function _alert() { #my function
+#bold=$(tput bold)
+#underline=$(tput sgr 0 1)
+reset=$(tput sgr0)
+#purple=$(tput setaf 171)
+#red=$(tput setaf 1)
+#green=$(tput setaf 76)
+#tan=$(tput setaf 3)
+#blue=$(tput setaf 38)
+
+function _alert() {
   if [ "${1}" = "emergency" ]; then
     local color="${bold}${red}"
   fi
-  if [ "${1}" = "ERROR:" ] || [ "${1}" = "warning" ]; then
+  if [ "${1}" = "ERROR:" ] || [ "${1}" = "WARNING:" ]; then
     local color="${red}"
   fi
-  if [ "${1}" = "success" ]; then
+ if [ "${1}" = "notice" ]; then
+    local color="${purple}"
+  fi
+  if [ "${1}" = "success" ] || [ "${1}" = "TRACE:" ]; then
     local color="${green}"
   fi
   if [ "${1}" = "debug" ]; then
@@ -61,6 +70,7 @@ function warning ()   { local _message="${@}"; echo "$(_alert WARNING:)"; }
 function notice ()    { local _message="${@}"; echo "$(_alert NOTICE:)"; }
 function info ()      { local _message="${@}"; echo "$(_alert INFO:)"; }
 function debug ()     { local _message="${@}"; echo "$(_alert DEBUG:)"; }
+function trace ()     { local _message="${@}"; echo "$(_alert TRACE:)"; }
 function success ()   { local _message="${@}"; echo "$(_alert SUCCESS:)"; }
 function input()      { local _message="${@}"; echo "$(_alert input)"; }
 function header()     { local _message="========== ${@} ==========  "; echo "$(_alert header)"; }

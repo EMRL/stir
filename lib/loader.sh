@@ -6,7 +6,6 @@
 
 source "${deployPath}/lib/func.sh"			# Always load this one first
 source "${deployPath}/lib/alerts.sh"
-source "${deployPath}/lib/colors.sh"
 source "${deployPath}/lib/git.sh"
 source "${deployPath}/lib/lock.sh"
 source "${deployPath}/lib/npm.sh"

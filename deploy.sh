@@ -26,7 +26,7 @@ else
 	exit 1
 fi
 
-trace "deploy version" $VERSION
+trace "Version" $VERSION
 trace "Development workpath is" $WORKPATH
 trace "Running from" $deployPath
 trace "Loader found at" $libLocation
