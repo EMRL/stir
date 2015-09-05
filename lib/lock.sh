@@ -7,11 +7,11 @@
 trace "Loading lock()"
 
 # Define lock file location
-LOCK_FILE=/tmp/$SITE.lock
+LOCK_FILE=/tmp/$APP.lock
 
 function lock() {
 	if [ -f "$LOCK_FILE" ]; then
-		error $WORKPATH/$SITE "is already being deployed in another instance."
+		error $WORKPATH/$APP "is already being deployed in another instance."
    		exit
 	fi
 

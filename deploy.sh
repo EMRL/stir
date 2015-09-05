@@ -5,7 +5,7 @@
 #
 # Load external stuff
 
-SITE=$1 		# This is going to change - I want to add switches
+#SITE=$1 		# This is going to change - I want to add switches
 
 # Load external configuration & functions
 deployPath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -26,18 +26,45 @@ else
 	exit 1
 fi
 
+# Create temp directory. Hopefully it will be deleted upon exit. 
+tmpDir="/tmp/${scriptName}.$RANDOM.$RANDOM.$RANDOM.$$"
+	(umask 077 && mkdir "${tmpDir}") || {
+ 	die "Could not create temporary directory! Exiting."
+	}
+
 trace "Version" $VERSION
 trace "Development workpath is" $WORKPATH
 trace "Running from" $deployPath
 trace "Loader found at" $libLocation
 
+# If no arguments are passed, display help
+[[ $# -eq 0 ]] && set -- "--help"
+
+# Read the options and set stuff
+while [[ $1 = -?* ]]; do
+  case $1 in
+    -h|--help) usage >&2; exit ;;
+    -v|--version) echo "$(basename $0) ${version}"; exit ;;
+    -t|--trace) verbose=1;;
+    -d|--debug) debug=1;;
+    --force) force=1 ;;
+    --endopts) shift; break ;;
+    *) die "invalid option: '$1'." ;;
+  esac
+  shift
+done
+
+# Store the remaining part as arguments.
+APP+=("$@")
+trace "Application is" $APP
+
 gitcheck    	# Check for a valid git project
 lock        	# Create lock file
-go   			# Start a deployment work session
+go   			    # Start a deployment work session
 pmfix       	# Fix permissions
-gitcm			# Checkout master branch
-wpress 			# Run Wordpress upgrades if needed
-
+gitcm			    # Checkout master branch
+wpress 			  # Run Wordpress upgrades if needed
+npm           # Run node package management
 
 
 

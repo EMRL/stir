@@ -70,7 +70,7 @@ function warning ()   { local _message="${@}"; echo "$(_alert WARNING:)"; }
 function notice ()    { local _message="${@}"; echo "$(_alert NOTICE:)"; }
 function info ()      { local _message="${@}"; echo "$(_alert INFO:)"; }
 function debug ()     { local _message="${@}"; echo "$(_alert DEBUG:)"; }
-function trace ()     { local _message="${@}"; echo "$(_alert TRACE:)"; }
+#function trace ()     { local _message="${@}"; echo "$(_alert TRACE:)"; }
 function success ()   { local _message="${@}"; echo "$(_alert SUCCESS:)"; }
 function input()      { local _message="${@}"; echo "$(_alert input)"; }
 function header()     { local _message="========== ${@} ==========  "; echo "$(_alert header)"; }

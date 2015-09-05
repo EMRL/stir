@@ -6,15 +6,15 @@
 trace "Loading git functions"
 
 function gitcheck() {
-	if [ ! -d $WORKPATH/$SITE ]; then
-  		error $WORKPATH/$SITE "is not a valid directory."
+	if [ ! -d $WORKPATH/$APP ]; then
+  		error $WORKPATH/$APP "is not a valid directory."
    		exit
 	fi
 
-	if [ -f $WORKPATH/$SITE/.git/index ]; then
+	if [ -f $WORKPATH/$APP/.git/index ]; then
 	    sleep 1
 	else
-   		error "There is nothing at " $WORKPATH/$SITE "to deploy."
+   		error "There is nothing at " $WORKPATH/$APP "to deploy."
    		exit
 	fi
 	}
