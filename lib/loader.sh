@@ -1,15 +1,17 @@
 #!/bin/bash
 #
-# func.sh
+# loader.sh
 #
-# Loader for external functions.
-#echo "DEBUG: Loaded function _alert()"
-source ${BASH_SOURCE[0]/%pmfix.sh}
+# A sub-wrapper for loading external functions.
+echo ""
 
-#echo "DEBUG: Loading colors.sh (OBSELETE)"
-#source ./colors.sh
+	source "${deployPath}/lib/alerts.sh"
+	source "${deployPath}/lib/colors.sh"
+	source "${deployPath}/lib/git.sh"
+	source "${deployPath}/lib/lock.sh"
+	source "${deployPath}/lib/npm.sh"
+	source "${deployPath}/lib/pmfix.sh"
+	source "${deployPath}/lib/wp.sh"
+	source "${deployPath}/lib/yesno.sh"
 
-#echo "DEBUG: Loading function pmfix()"
-#source ./pmfix.sh
-#echo "DEBUG: Loading function yesno()"
-#source /home/fdiebel/deploy/lib/yesno.sh
+echo ""

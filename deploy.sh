@@ -5,24 +5,33 @@
 #
 # Load external stuff
 
-VERSION=2.0.1
-USAGE="Usage: deploy [NAME]"
+SITE=$1 # This is going to change - I want to add switches
 
-# Load excternal functions
+# Load external functions
 deployPath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 libLocation="${deployPath}/lib/loader.sh"
+etcLocation="${deployPath}/etc/deploy.conf"
 
-echo $deployPath
-echo $libLocation
+#echo; echo "DEBUG: Running from" $deployPath
+#echo "DEBUG: Loader found at" $libLocation
+
+if [ -f "${etcLocation}" ]; then
+    source "${etcLocation}"
+else
+  echo "Unable to load configuration, exiting."
+  exit 1
+fi
 
 if [ -f "${libLocation}" ]; then
-    echo "DEBUG: Loading external functions..."
-    source $deployPath/lib/pmfix.sh
+    source "${libLocation}"
 else
   echo "Unable to load libraries, exiting."
   exit 1
 fi
 
+gitcheck    # Check for a valid git project
+lock        # Create lock file
+pmfix       # Fix permissions
 
 
-
+exit

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-echo "DEBUG: Loaded function _alert()"
+echo "DEBUG: Loading _alert()"
 
 
 
