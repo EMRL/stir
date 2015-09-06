@@ -23,8 +23,14 @@ function gitCheck() {
 # Checkout master
 function gitChkm() {
 	notice "${green}Checking out master branch...${endColor}"
-	git checkout master #2>/dev/null 1>> $logFile &
-	emptyLine
+	 _start=1
+  _end=100
+  for number in $(seq ${_start} ${_end})
+  do
+    git checkout master 2>/dev/null 1>> $logFile &
+    ProgressBar ${number} ${_end}
+  done; 
+  emptyLine
 }
 
 # Stage files
@@ -59,15 +65,27 @@ function gitPushm() {
 # Checkout production
 function gitChkp() {
 	notice "${green}Checking out production branch...${endColor}"
-	git checkout production #2>/dev/null 1>> $logFile &
-	emptyLine
+   _start=1
+  _end=100
+  for number in $(seq ${_start} ${_end})
+  do
+    git checkout production 2>/dev/null 1>> $logFile &
+    ProgressBar ${number} ${_end}
+  done; 
+  emptyLine
 }
 
-# Merg master into production
+# Merge master into production
 function gitMerge() {
 	notice "${green}Merging master into production...${endColor}"
-	git merge master #2>/dev/null 1>> $logFile &
-	emptyLine
+   _start=1
+  _end=100
+  for number in $(seq ${_start} ${_end})
+  do
+    git merge master 2>/dev/null 1>> $logFile &
+    ProgressBar ${number} ${_end}
+  done; 
+  emptyLine
 }
 
 # Push production
