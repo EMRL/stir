@@ -1,0 +1,316 @@
+#!/bin/bash
+#
+# deploy: A simple bash script for deploying sites.
+#
+#
+# Load external stuff
+
+VERSION=0.1.0
+USAGE="Usage: deploy [NAME]"
+
+source /home/fdiebel/deploy/lib/colors.sh
+source /home/fdiebel/deploy/lib/yesno.sh 
+source /home/fdiebel/deploy/lib/pmfix.sh 
+
+
+# Establish that parameter exists, and is correct
+
+SITE=$1             
+
+if [ $# == 0 ] ; then
+    echo $USAGE
+    exit 1;
+fi
+
+while getopts ":i:vh" optname
+  do
+    case "$optname" in
+      "v")
+        echo "Version $VERSION"
+        exit 0;
+        ;;
+      "i")
+        echo "-i argument: $OPTARG"
+        ;;
+      "h")
+        echo $USAGE
+        exit 0;
+        ;;
+      "?")
+        echo "Unknown option $OPTARG"
+        exit 0;
+        ;;
+      ":")
+        echo "No argument value for option $OPTARG"
+        exit 0;
+        ;;
+      *)
+        echo "Unknown error while processing options"
+        exit 0;
+        ;;
+    esac
+  done
+
+if [ ! -d "/var/www/html/"$SITE ]; then
+  echo "ERROR: /var/www/html/"$SITE" is not a valid directory."
+   exit
+fi
+
+if [ -f /var/www/html/$SITE/.git/index ];
+    then
+    sleep 1
+else
+   echo "There is nothing at /var/www/html/"$SITE" to deploy."
+   exit
+fi
+
+cd /var/www/html/$SITE; \
+
+tempfile="/tmp/deploy.log"
+#
+# Current working directory
+CWD=$(pwd)
+
+if [ "$1" = "" ]; then
+    echo "Usage: deploy [PROJECT NAME]"
+    exit
+else
+    sleep 1
+fi
+
+#
+# STEP 1: Ask the user for confirmation before beginning deployment
+#
+clear
+    echo "deploy 2.0"
+    printf "Current working path is %s\n" ${CWD}
+    echo
+    if yesno --default yes "Continue? [Y/n] "; then
+        echo ""
+
+# lockfile
+LOCK_FILE=/tmp/$SITE.lock
+if [ -f "$LOCK_FILE" ]; then
+   echo "FATAL: " $SITE " is already being deployed in another instance."
+   exit
+fi
+
+trap "rm -f $LOCK_FILE" EXIT
+touch $LOCK_FILE
+
+#
+# STEP 1.5: Set permissions correctly
+#
+#
+# Force sudo password, and set site-specific Permissions
+sudo sleep 1
+echo -e "${green}Setting permissions...${endColor}"
+sleep 1
+
+    if [ $1 = "caa" ]; then
+    	echo -e "  $SITE/lib/"
+	sudo chown -R cworrell.web /var/www/html/$SITE/lib ; \
+    else
+    	sleep 1
+    fi
+
+# Universal Permissions
+    sudo chown -R cworrell.web /var/www/html/$SITE/.git ; \
+    echo -e "  $SITE/.git"
+	sudo chown -R apache.apache /var/www/html/$SITE/public/system ; \
+	echo -e "  $SITE/public/app/system/"
+	sudo chown -R apache.apache /var/www/html/$SITE/public/app ; \
+	echo -e "  $SITE/public/app/"
+	echo ""
+#
+# STEP 2: Checkout Master
+#
+	echo -e "${green}Checking out master branch...${endColor}"
+	# while :;do echo -n .;sleep 1;done &
+	git checkout master 2>/dev/null 1>>/tmp/${PWD##*/}.log &
+        while ps |grep $! &>/dev/null; do
+        echo -n "."
+        sleep 2
+        done
+        echo ""
+
+	# kill $!; trap 'kill $!' SIGTERM
+
+    else
+	echo "Exiting."
+        exit
+    fi
+
+#
+# Alright, testing the WP upgrades
+echo ""
+    cd /var/www/html/$SITE/public; \
+    wp plugin status
+    # eventually I will sed (in a log file?) for the string "U = Update Available" before continuing the rest of this.
+    if yesno --default no "Update Wordpress? [y/N] "; then
+    echo ""
+    wp plugin update --all
+    wp core update
+    # later i'll only run this if an update was made. how do I run this on the live site?  pinging a URL I guess... hmmm.....
+    wp core update-db
+    cd /var/www/html/$SITE/; \
+        else
+        echo "Skipping Wordpress updates..."
+        #exit
+    fi
+
+#
+# STEP 3: Do we need Grunt/npm? 
+#
+if [ $1 = "caa" ]; then
+    echo ""
+
+    if yesno --default no "Run Grunt? [y/N] "; then
+    echo ""
+    cd /var/www/html/$SITE; \
+    sudo grunt build --force
+    sleep 1
+    else
+        echo "Skipping Grunt..."
+        #exit
+    fi
+else
+    sleep 1
+
+#
+# STEP 3a: Do we need npm?
+NPM="/var/www/html/$SITE/public/app/themes/$SITE/package.json"
+if [ -f "$NPM" ]
+then
+    echo ""
+    if yesno --default no "Run Node Package Manager? [y/N] "; then
+        cd /var/www/html/$SITE/public/app/themes/$SITE; \
+        npm run build 2>/dev/null 1>>$tempfile &
+        while ps |grep $! &>/dev/null; do
+        echo -n "."
+        sleep 1
+        done
+        echo -n "Complete."
+
+        cd /var/www/html/$SITE; \
+        sleep 1
+        echo ""
+        else
+        echo "Skipping Node Package Manager..."
+        #exit
+        fi
+
+    else
+        sleep 1
+    fi
+fi
+
+#
+# STEP 4: Add updated files 
+#
+    echo ""
+    if yesno --default yes "Stage files [Y/n] "; then
+    echo ""
+    git add -A
+    sleep 1
+    else
+        echo "Cleaning up..."
+        rm /tmp/${PWD##*/}.log
+        echo "Exiting."
+    exit
+    fi
+
+
+#
+# STEP 5: Commit changes
+#
+    echo ""
+    read -p "Enter your notes on this commit: " notes
+    git commit -m "$notes"
+    sleep 1
+
+#
+# STEP 6. Push our "master" branch to Bitbucket
+#
+    echo ""
+    if yesno --default yes "Push master branch to Bitbucket? [Y/n] "; then
+    echo ""
+    git push
+    sleep 1
+    else
+        echo "Cleaning up..."
+    rm /tmp/${PWD##*/}.log
+        echo "Exiting."
+    exit
+    fi
+
+
+#
+# STEP 7: Checkout out Production branch
+#
+    echo ""
+    echo -e "${green}Checking out production branch...${endColor}"
+    git checkout production > /tmp/${PWD##*/}.log
+
+
+#
+# STEP 8: Merge our updated "master" branch into production. 
+#
+    echo -e "${green}Merging master into production...${endColor}"
+    git merge master > /tmp/${PWD##*/}.log
+
+
+#
+# STEP 9: Push production
+#
+    echo ""
+    if yesno --default yes "Push production branch to Bitbucket? [Y/n] "; then
+    echo ""
+    git push
+    sleep 1
+    else
+        echo "Cleaning up..."
+    rm /tmp/${PWD##*/}.log
+        echo "Exiting."
+    exit
+    fi
+
+
+#
+# STEP 10: Checkout Master once again
+#
+    echo ""
+    echo -e "${green}Checking out master branch...${endColor}"
+    git checkout master > /tmp/${PWD##*/}.log
+
+
+#
+# STEP 11: Push code live with Mina
+#
+    echo ""
+    if yesno --default yes "Deploy to live server? [Y/n] "; then
+    echo ""
+    ssh-add > /tmp/${PWD##*/}.log
+
+    cd /var/www/html/$SITE; \
+    mina deploy
+    sleep 1
+    else
+        echo "Cleaning up..."
+        rm /tmp/${PWD##*/}.log
+        echo "Exiting."
+    exit
+    fi
+
+
+#
+# Clean up and exit
+#
+    echo ""
+    echo "Cleaning up..."
+	sudo chown -R apache.apache /var/www/html/$SITE/public/system ; \
+	sudo chown -R apache.apache /var/www/html/$SITE/public/app ; \
+#	rm /tmp/${PWD##*/}.log
+	echo -e "${green}Complete.${endColor}"
+    exit
+
