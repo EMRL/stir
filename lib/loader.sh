@@ -9,6 +9,9 @@ clear
 function trace () {
   if [[ $VERBOSE -eq 1 ]]; then
     echo -e "${tan}TRACE:${endColor} $@"
+    echo "TRACE: $@" >> $logFile
+  else
+    echo "TRACE: $@" >> $logFile
   fi
 }
 
