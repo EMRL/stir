@@ -3,7 +3,7 @@
 # deploy: A simple bash script for deploying sites.
 #
 #
-VERSION="2.0.1"
+VERSION="3.0RC-alpha"
 INSTALL="/home/fdiebel/deploy"
 
 # Options
@@ -109,7 +109,7 @@ fi
 
 trace "Version" $VERSION
 trace "Development workpath is" $WORKPATH
-trace "Lead developer permissions are" $DEV.$GRP
+trace "Lead developer permissions are" $DEVUSER.$DEVGRP
 trace "Apache permissions are" $APACHEUSER.$APACHEGRP
 trace "Running from" $deployPath
 trace "Current project is" $APP
@@ -134,8 +134,9 @@ function appDeploy {
   minaDeploy      # Deploy project to live server   
 }
 
-# Trapping stuff will go here
-#
+# Trapping stuff
+trap earlyExit INT
+
 # Execute the deploy process
 appDeploy
 
