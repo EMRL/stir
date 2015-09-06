@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# npm()
+# pm()
 #
 # Checks if project uses node.js, and runs package manager if needed.
 # Also checks for Grunt, for backward compatibility with some of our older projects (Namely CAA)
@@ -13,9 +13,15 @@ function pm() {
         emptyLine
 
         if yesno --default no "Run Grunt? [y/N] "; then
-            emptyLine
             cd $WORKPATH/$APP; \
-            sudo grunt build --force
+
+            if [[ $VERBOSE -eq 1 ]]; then
+                sudo grunt build --force 2>&1 | tee --append $logFile                
+            else
+                sudo grunt build --force &>> $logFile &
+                spinner $!
+                info "Packages successfully compiled."
+            fi
         else
             info "Skipping Grunt..."
         fi
@@ -23,16 +29,25 @@ function pm() {
         sleep 1
 
         # node.js check
-        if [ -f "$WORKPATH/$APP/public/app/themes/$APP/package.json" ]
-            then
+        if [ -f "$WORKPATH/$APP/public/app/themes/$APP/package.json" ]; then
             trace "$WORKPATH/$APP/public/app/themes/$APP/package.json found."
             emptyLine
+
             if yesno --default no "Run Node Package Manager? [y/N] "; then
                 cd $WORKPATH/$APP/public/app/themes/$APP; \
-                npm run build # 2>/dev/null 1>>$logFile &
+
+                if [[ $VERBOSE -eq 1 ]]; then
+                    npm run build | tee --append $logFile               
+                else
+                    npm run build  &>> $logFile &
+                    spinner $!
+                    info "Packages successfully compiled."
+                fi
+
             else
                 info "Skipping Node Package Manager..."
             fi
+
         else
             trace "$WORKPATH/$APP/public/app/themes/$APP/package.json not found, skipping."
         fi

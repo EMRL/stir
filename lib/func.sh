@@ -11,12 +11,10 @@ trace "Loading func.sh"
 # Open a deployment session, ask for user confirmation before beginning
 function go() {			
 	cd $WORKPATH/$APP; \
-	info "deploy" $VERSION
+	echo "deploy" $VERSION
 	printf "Current working path is %s\n" ${WORKPATH}/${APP}
-	emptyLine
 
-	if yesno --default yes "Continue? [Y/n] "; 
-	then
+	if yesno --default yes "Continue? [Y/n] "; then
 		trace "Loading project."
 	else
   		info "Exiting."
@@ -27,7 +25,7 @@ function go() {
 # Progress spinner; we'll see if this works
 function spinner() {
     local pid=$1
-    local delay=0.25
+    local delay=0.15
     local spinstr='|/-\'
     tput civis;
     while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
@@ -46,14 +44,22 @@ function ProgressBar() {
     let _progress=(${1}*100/${2}*100)/100
     let _done=(${_progress}*4)/10
     let _left=40-$_done
-
     _fill=$(printf "%${_done}s")
     _empty=$(printf "%${_left}s")
 	printf "\rProgress : [${_fill// /#}${_empty// /-}] ${_progress}%%"
 }
 
+function earlyExit() {
+    rm $WORKPATH/$APP/.git/index.lock &> /dev/null
+    echo; info "Exiting."
+    mail -s "$SUBJECT: $APP" $TO < $logFile
+    rm $logFile
+    exit
+}
+
 function safeExit() {
-    #mail -s "$SUBJECT: $APP" $TO < $logFile
+    rm $WORKPATH/$APP/.git/index.lock &> /dev/null
+    mail -s "$SUBJECT: $APP" $TO < $logFile
     rm $logFile
     exit
 }

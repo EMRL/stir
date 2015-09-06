@@ -22,14 +22,19 @@ function gitCheck() {
 
 # Checkout master
 function gitChkm() {
-	notice "${green}Checking out master branch...${endColor}"
-	 _start=1
-  _end=100
-  for number in $(seq ${_start} ${_end})
-  do
-    git checkout master 2>/dev/null 1>> $logFile &
+	notice "Checking out master branch..."
+
+  if [[ $VERBOSE -eq 1 ]]; then
+    git checkout master | tee --append $logFile               
+  else
+    git checkout master &>> $logFile &
+    _start=1
+    _end=100
+    for number in $(seq ${_start} ${_end})
+    do
     ProgressBar ${number} ${_end}
-  done; 
+    done;
+  fi 
   emptyLine
 }
 
@@ -38,7 +43,12 @@ function gitStage() {
 	emptyLine
     if yesno --default yes "Stage files [Y/n] "; then
     	emptyLine
-    	git add -A
+    	git add -A &>> $logFile &
+        if grep -q "fatal: Unable to create '$WORKPATH/$APP/.git/index.lock': File exists." $logFile; then
+          error "Unable to create '$WORKPATH/$APP/.git/index.lock': File exists."
+        else
+          trace "Files staged successfully."
+        fi
     else
 		safeExit    
 	fi
@@ -64,12 +74,12 @@ function gitPushm() {
 
 # Checkout production
 function gitChkp() {
-	notice "${green}Checking out production branch...${endColor}"
-   _start=1
+	notice "Checking out production branch..."
+  git checkout production  &>> $logFile &
+  _start=1
   _end=100
   for number in $(seq ${_start} ${_end})
   do
-    git checkout production 2>/dev/null 1>> $logFile &
     ProgressBar ${number} ${_end}
   done; 
   emptyLine
@@ -77,12 +87,12 @@ function gitChkp() {
 
 # Merge master into production
 function gitMerge() {
-	notice "${green}Merging master into production...${endColor}"
-   _start=1
+	notice "Merging master into production..."
+  git merge master  &>> $logFile &
+  _start=1
   _end=100
   for number in $(seq ${_start} ${_end})
   do
-    git merge master 2>/dev/null 1>> $logFile &
     ProgressBar ${number} ${_end}
   done; 
   emptyLine

@@ -49,6 +49,10 @@ function warning () {
   fi
 }
 
+function log() {
+  echo "$@" >> logFile
+}
+
 function emptyLine () {
   if [[ $QUIET != "1" ]]; then
     echo ""
