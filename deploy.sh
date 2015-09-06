@@ -122,7 +122,7 @@ function appDeploy {
   go   			      # Start a deployment work session
   permFix       	# Fix permissions
   gitChkm			    # Checkout master branch
-  wPress 			    # Run Wordpress upgrades if needed
+  wpPkg 			    # Run Wordpress upgrades if needed
   pm              # Run node package management, or grunt
   gitStage        # Stage files
   gitCommit       # Commit, with message

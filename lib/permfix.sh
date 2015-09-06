@@ -14,7 +14,7 @@ function permFix() {
     # /lib is obselete for future repositories
     if [ -d "$WORKPATH/$APP/lib" ]; then
         info "  $APP/lib/"
-        sudo chown -R $DEV.$GRP $WORKPATH/$APP/lib ; \
+        sudo chown -R $DEVUSER.$DEVGRP $WORKPATH/$APP/lib ; \
     else
         sleep 1
     fi
