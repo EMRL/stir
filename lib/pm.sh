@@ -3,46 +3,38 @@
 # npm()
 #
 # Checks if project uses node.js, and runs package manager if needed.
-# Also checks for Grunt, for backward compatibility with CAA.
+# Also checks for Grunt, for backward compatibility with some of our older projects (Namely CAA)
 trace "Loading pm()"
 
 function pm() {
-# Grunt check
-    if [ $APP = "caa" ]; then
-        echo ""
+    # Grunt check
+    if [ -d "$WORKPATH/$APP/lib" ]
+        then
+        emptyLine
 
         if yesno --default no "Run Grunt? [y/N] "; then
-            echo ""
-            cd /var/www/html/$APP; \
+            emptyLine
+            cd $WORKPATH/$APP; \
             sudo grunt build --force
-            sleep 1
         else
-            echo "Skipping Grunt..."
+            info "Skipping Grunt..."
         fi
     else
         sleep 1
 
         # node.js check
-        NPM="/var/www/html/$APP/public/app/themes/$APP/package.json"
-        if [ -f "$NPM" ]
+        if [ -f "$WORKPATH/$APP/public/app/themes/$APP/package.json" ]
             then
-            echo ""
+            trace "$WORKPATH/$APP/public/app/themes/$APP/package.json found."
+            emptyLine
             if yesno --default no "Run Node Package Manager? [y/N] "; then
-                cd /var/www/html/$APP/public/app/themes/$APP; \
-                npm run build 2>/dev/null 1>>$tempfile &
-                while ps |grep $! &>/dev/null; do
-                echo -n "."
-                sleep 1
-                done
-                echo -n "Complete."
-                cd /var/www/html/$APP; \
-                sleep 1
-                echo ""
+                cd $WORKPATH/$APP/public/app/themes/$APP; \
+                npm run build # 2>/dev/null 1>>$logFile &
             else
-                echo "Skipping Node Package Manager..."
+                info "Skipping Node Package Manager..."
             fi
         else
-            sleep 1
+            trace "$WORKPATH/$APP/public/app/themes/$APP/package.json not found, skipping."
         fi
     fi
 }

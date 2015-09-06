@@ -11,7 +11,7 @@ LOCK_FILE=/tmp/$APP.lock
 
 function lock() {
 	if [ -f "$LOCK_FILE" ]; then
-		error $WORKPATH/$APP "is already being deployed in another instance."
+		warning $WORKPATH/$APP "is already being deployed in another instance."
    		exit
 	fi
 

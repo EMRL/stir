@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# pmfix()
+# wp.sh
 #
 # Checks for Wordpress upgrades, and executes upgrades if needed
 #
@@ -9,21 +9,23 @@
 trace "Loading wpress()"
 
 function wPress() {
-    if hash wp 2>/dev/null; then
     trace "wp-cli found, proceeding with Wordpress updates."
+    notice "Checking for required updates..."
+    if hash wp 2>/dev/null; then
 
         if [ -f $WORKPATH/$APP/public/system/wp-settings.php ]; then
         cd $WORKPATH/$APP/public; \
-        trace "Current path is" $(pwd)
         wp plugin status
+        wp core check-update
             if yesno --default no "Update Wordpress? [y/N] "; then
-                echo ""
+                emptyLine
+                trace "Updating plugins if needed."
                 wp plugin update --all
+                trace "Updating core if needed."
                 wp core update
-                wp core update-db   # this is mostly useless, as it updates only the development site's db :(
-                cd /var/www/html/$APP/; \
+                cd $WORKPATH/$APP/; \
             else
-                echo "Skipping Wordpress updates..."
+                info "Skipping Wordpress updates..."
             fi
         else
             trace "Wordpress not found."
