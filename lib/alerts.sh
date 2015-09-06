@@ -20,12 +20,20 @@ endColor='\e[0m'
 function info () {
   if [[ $QUIET != "1" ]]; then
     echo -e "${reset}$@${endColor}"
+    echo "$@" >> $logFile
+  fi
+}
+
+function input () {
+  if [[ $QUIET != "1" ]]; then
+    echo -e "${reset}$@${endColor}"
   fi
 }
 
 function notice () {
   if [[ $QUIET != "1" ]]; then
     echo; echo -e "${green}$@${endColor}"
+    echo "" >> $logFile; echo "$@" >> $logFile
 #  else
   fi
 }
@@ -44,5 +52,6 @@ function warning () {
 function emptyLine () {
   if [[ $QUIET != "1" ]]; then
     echo ""
+    echo "" >> $logFile
   fi
 }
