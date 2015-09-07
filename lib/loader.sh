@@ -3,7 +3,9 @@
 # loader.sh
 #
 # A sub-wrapper for loading external functions.
-clear
+
+# Save current contents of the terminal
+tput smcup; clear
 
 # Creating this function first, so verbose output option is usable early
 function trace () {
@@ -23,15 +25,14 @@ while [ -h "${SOURCE}" ]; do
   [[ ${SOURCE} != /* ]] && SOURCE="${DIR}/${SOURCE}"
 done
 SOURCEPATH="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
-
-if [ ! -d "${SOURCEPATH}" ]
-then
-  die "Failed to find library files expected in: ${SOURCEPATH}"
-fi
-for utility_file in "${SOURCEPATH}"/*.sh
-do
+  if [ ! -d "${SOURCEPATH}" ]
+  then
+    die "Failed to find library files expected in: ${SOURCEPATH}"
+  fi
+  for utility_file in "${SOURCEPATH}"/*.sh
+  do
   if [ -e "${utility_file}" ]; then
-    # Don't source self
+    # Don't source yourself, silly script
     if [[ "${utility_file}" == *"loader.sh"* ]]; then
       continue
     fi

@@ -7,23 +7,24 @@ trace "Loading git functions"
 
 # Make sure we're in a git repository.
 function gitCheck() {
-	if [ ! -d $WORKPATH/$APP ]; then
-  		error $WORKPATH/$APP "is not a valid directory."
-   		exit
-	fi
+  # Directory is deal?
+  if [ ! -d $WORKPATH/$APP ]; then
+    info $WORKPATH/$APP "is not a valid directory."
+    exit 1
+  fi
 
-	if [ -f $WORKPATH/$APP/.git/index ]; then
-	    sleep 1
-	else
-   		error "There is nothing at " $WORKPATH/$APP "to deploy."
-   		exit
-	fi
+  # Check that .git exists
+  if [ -f $WORKPATH/$APP/.git/index ]; then
+    sleep 1
+  else
+    info "There is nothing at " $WORKPATH/$APP "to deploy."
+    exit 1
+  fi
 }
 
 # Checkout master
 function gitChkm() {
-	notice "Checking out master branch..."
-
+  notice "Checking out master branch..."
   if [[ $VERBOSE -eq 1 ]]; then
     git checkout master | tee --append $logFile               
   else
@@ -40,71 +41,91 @@ function gitChkm() {
 
 # Stage files
 function gitStage() {
-	emptyLine
-    if yesno --default yes "Stage files [Y/n] "; then
-    	emptyLine
-    	git add -A &>> $logFile &
-        if grep -q "fatal: Unable to create '$WORKPATH/$APP/.git/index.lock': File exists." $logFile; then
-          error "Unable to create '$WORKPATH/$APP/.git/index.lock': File exists."
-        else
-          trace "Files staged successfully."
-        fi
-    else
-		safeExit    
-	fi
+  emptyLine
+  if [ "$FORCE" = "1" ] || yesno --default yes "Stage files? [Y/n] "; then
+
+    if [[ $VERBOSE -eq 1 ]]; then
+        git add -A | tee --append $logFile; exitStatus              
+    else  
+      git add -A &>> $logFile; exitStatus
+    fi
+  else
+    safeExit    
+  fi
 }
 
 # Commit, with message
 function gitCommit() {
-	emptyLine
-    read -p "Enter your notes on this commit: " notes
-    git commit -m "$notes"
+  emptyLine
+  read -p "Enter your notes on this commit: " notes
+  git commit -m "$notes" &>> $logFile; exitStatus
+  trace "Commit message:" $notes
 }
 
 # Push master
 function gitPushm() {
-    emptyLine
-    if yesno --default yes "Push master branch to Bitbucket? [Y/n] "; then
-    	emptyLine
-    	git push
+  trace "Pushing master."
+  emptyLine  
+  if [[ $VERBOSE -eq 1 ]]; then
+    git push | tee --append $logFile; exitStatus
+  trace "Commit message:" $notes              
+  else
+
+    if  [ "$FORCE" = "1" ] || yesno --default yes "Push master branch to Bitbucket? [Y/n] "; then
+      git push &>> $logFile &
+      spinner $!
+      info "Successful. "
     else
-       safeExit
+      safeExit
     fi
+  fi
 }
 
 # Checkout production
 function gitChkp() {
-	notice "Checking out production branch..."
-  git checkout production  &>> $logFile &
-  _start=1
-  _end=100
-  for number in $(seq ${_start} ${_end})
-  do
+  notice "Checking out production branch..."
+  if [[ $VERBOSE -eq 1 ]]; then
+    git checkout production | tee --append $logFile               
+  else
+    git checkout production  &>> $logFile &
+    _start=1
+    _end=100
+    for number in $(seq ${_start} ${_end}); do
     ProgressBar ${number} ${_end}
-  done; 
-  emptyLine
+    done;
+    emptyLine
+  fi
 }
 
 # Merge master into production
 function gitMerge() {
-	notice "Merging master into production..."
-  git merge master  &>> $logFile &
-  _start=1
-  _end=100
-  for number in $(seq ${_start} ${_end})
-  do
+  notice "Merging master into production..."
+  if [[ $VERBOSE -eq 1 ]]; then
+    git merge master | tee --append $logFile               
+  else
+    git merge master  &>> $logFile &
+    _start=1
+    _end=100
+    for number in $(seq ${_start} ${_end}); do
     ProgressBar ${number} ${_end}
-  done; 
-  emptyLine
+    done; 
+    emptyLine
+  fi
 }
 
 # Push production
 function gitPushp() {
-    emptyLine
-    if yesno --default yes "Push production branch to Bitbucket? [Y/n] "; then
-    	emptyLine
-    	git push
+  emptyLine
+  if [[ $VERBOSE -eq 1 ]]; then
+    git push | tee --append $logFile               
+  else
+    
+    if  [ "$FORCE" = "1" ] || yesno --default yes "Push production branch to Bitbucket? [Y/n] "; then
+      git push &>> $logFile &
+      spinner $!
+      info "Successful. "
     else
-		safeExit
+      safeExit
     fi
+  fi
 }

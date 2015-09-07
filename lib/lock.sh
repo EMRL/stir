@@ -10,12 +10,13 @@ trace "Loading lock()"
 LOCK_FILE=/tmp/$APP.lock
 
 function lock() {
-	if [ -f "$LOCK_FILE" ]; then
-		warning $WORKPATH/$APP "is already being deployed in another instance."
-   		exit
-	fi
+  trace "Creating lockfile"
 
-	trap "rm -f $LOCK_FILE" EXIT
-	trace "Creating lockfile"
-	touch $LOCK_FILE
+  if [ -f "$LOCK_FILE" ]; then
+    warning $WORKPATH/$APP "is already being deployed in another instance."
+    exit
+  fi
+
+  trap "rm -f $LOCK_FILE" EXIT
+  touch $LOCK_FILE
 }

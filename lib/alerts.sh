@@ -40,7 +40,7 @@ function notice () {
 
 function error () {
   echo -e "${red}$@${endColor}"
-  safeExit
+  errorExit
 }
 
 function warning () {

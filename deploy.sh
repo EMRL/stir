@@ -8,17 +8,14 @@ INSTALL="/home/fdiebel/deploy"
 
 # Options
 function usage() {
-  echo -n "deploy [OPTION]... [PROJECT]...
-
-An application deployment script designed for EMRL's local development workflow.
+  echo -n "Usage: deploy [options] [target] ...
 
 Options:
-  --force           Skip all user interaction.  Implied 'Yes' to all actions.
-  -q, --quiet       Quiet (no output)
-  -l, --log         Print log to file
-  -s, --strict      Exit script with null variables.  i.e 'set -o nounset'
-  -V, --verbose     Output more information. (Items echoed to 'verbose')
-  -d, --debug       Runs script in BASH debug mode (set -x)
+  -F, --force       Skip all user interaction, forces 'Yes' to all actions.
+  -Q, --forcequiet  Like the --force command, with minimal output to screen
+  -s, --strict      Run in Strict mode. Any error will halt deployment completely
+  -V, --verbose     Output more process information to screen
+  -d, --debug       Run in debug mode
   -h, --help        Display this help and exit
   -v, --version     Output version information and exit
 
@@ -65,18 +62,27 @@ unset options
 while [[ $1 = -?* ]]; do
   case $1 in
     -h|--help) usage >&2; exit ;;
-    -v|--version) echo "$(basename $0) ${version}"; exit ;;
+    -v|--version) echo "$(basename $0) ${VERSION}"; exit ;;
     -V|--verbose) VERBOSE=1 ;;
-    -l|--log) printLog=1 ;;
-    -q|--quiet) quiet=1 ;;
-    -s|--strict) strict=1;;
-    -d|--debug) debug=1;;
-    --force) force=1 ;;
+    -Q|--forcequiet) QUIET=1 ;;
+    -s|--strict) STRICT=1 ;;
+    -d|--debug) DEBUG=1 ;;
+    -F|--force) FORCE=1 ;;
     --endopts) shift; break ;;
-    *) die "invalid option: '$1'." ;;
+    *) echo "Invalid option: '$1'" 1>&2 ; exit 1 ;;
   esac
   shift
 done
+
+# Run in debug mode, if set
+if [ "${DEBUG}" == "1" ]; then
+  set -x
+fi
+
+# Exit on empty variable, will usually get confused by git output
+if [ "${STRICT}" == "1" ]; then
+  set -e
+fi
 
 # Store the remaining part as arguments.
 APP+=("$@")
@@ -93,18 +99,24 @@ deployPath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 libLocation="${INSTALL}/lib/loader.sh"
 etcLocation="${INSTALL}/etc/deploy.conf"
 
+# System wide configuration files
 if [ -f "${etcLocation}" ]; then
-	source "${etcLocation}"
+  source "${etcLocation}"
 else
-	echo "Unable to load configuration, exiting."
-	exit 1
+  echo "Unable to load configuration, exiting."
+  exit 1
+fi
+
+# Per-user configuration
+if [ -r ~/.deployrc ]; then
+  source ~/.deployrc
 fi
 
 if [ -f "${libLocation}" ]; then
-	source "${libLocation}"
+  source "${libLocation}"
 else
-	echo "Unable to load libraries, exiting."
-	exit 1
+  echo "Unable to load libraries, exiting."
+  exit 1
 fi
 
 trace "Version" $VERSION
@@ -119,10 +131,10 @@ trace "Logfile is" $logFile
 function appDeploy {
   gitCheck        # Check for a valid git project
   lock            # Create lock file
-  go   			      # Start a deployment work session
-  permFix       	# Fix permissions
-  gitChkm			    # Checkout master branch
-  wpPkg 			    # Run Wordpress upgrades if needed
+  go              # Start a deployment work session
+  permFix         # Fix permissions
+  gitChkm         # Checkout master branch
+  wpPkg           # Run Wordpress upgrades if needed
   pm              # Run node package management, or grunt
   gitStage        # Stage files
   gitCommit       # Commit, with message
@@ -130,12 +142,12 @@ function appDeploy {
   gitChkp         # Checkout production branch
   gitMerge        # Merge master into production
   gitPushp        # Push production to Bit Bucket
-  gitChkm        # checkout master once again  
-  minaDeploy      # Deploy project to live server   
+  gitChkm         # checkout master once again  
+  pkgDeploy       # Deploy project to live server   
 }
 
 # Trapping stuff
-trap earlyExit INT
+trap userExit INT
 
 # Execute the deploy process
 appDeploy
