@@ -1,7 +1,7 @@
 
 Deploy
 =============
-A web app deployment script, with a focus on publishing Wordpress sites to live environments.
+A web app deployment script, with a focus on publishing Wordpress sites to live environments. This script is in daily use at [EMRL](http://emrl.com). an advertising agency in northern California. If you have any questions, please feel free to contact us.
 
 ```
 Usage: deploy [options] [target] ...
