@@ -14,12 +14,12 @@ Options:
 - -h, --help        Display this help and exit
 - -v, --version     Output version information and exit
 ```
-  
+
 How It Works
 --------
-Maybe i'll finish this at some point. Basically this thing is a wrapper that simplifies web app deployment from a development environment to a production server. At the moment is mostly focused on Wordpress projects but in theory it should work for other stuff too.
+Maybe I'll finish this at some point. Basically this thing is a wrapper that simplifies web app deployment from a development environment to a production server. At the moment is mostly focused on Wordpress projects but in theory it should work for other stuff too.
 
-It is heavily reliant on our environment here but shouldn't be too hard to tweak if you need to. [`deploy`](https://bitbucket.org/) makes use of [`git`](https://git-scm.com/), [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`node.js`](https://nodejs.org/),  [`mina`](http://nadarei.co/mina/) and [Bit Bucket](https://bitbucket.org/)
+-deploy- requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
 
 Configuration
 --------
