@@ -64,11 +64,13 @@ EMAILSUCCESS="1"
 EMAILQUIT="1" 
 
 # Override flags - uncomment and set to "1" to use. 
-#
 # Setting these values will disallow input of that user flag
-#VERBOSE="1" # Output more detailed process information to screen
-#DEBUG="1" # Run in debug mode
-#STRICT="1" # Run in Strict mode. Any error will
+#
+# VERBOSE="1" 
+# DEBUG="1" 
+# STRICT="1" 
+# FORCE="1"						
+# FORCEQUIET="1"
 ```
 
 Installation
