@@ -7,7 +7,7 @@ trace "Loading git functions"
 
 # Make sure we're in a git repository.
 function gitCheck() {
-  # Directory is deal?
+  # Directory exists?
   if [ ! -d $WORKPATH/$APP ]; then
     info $WORKPATH/$APP "is not a valid directory."
     exit 1

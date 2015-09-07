@@ -4,7 +4,6 @@
 #
 #
 VERSION="3.0RC-alpha"
-INSTALL="/home/fdiebel/deploy"
 
 # Options
 function usage() {
@@ -94,10 +93,16 @@ logFile="/tmp/$APP.$RANDOM.log"
   exit 1
 }
 
+# Path of the script
+if [ ! -d /etc/deploy ]; then
+  deployPath=/etc/deploy
+else
+  deployPath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+fi
+
 # Load external configuration & functions
-deployPath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-libLocation="${INSTALL}/lib/loader.sh"
-etcLocation="${INSTALL}/etc/deploy.conf"
+libLocation="${deployPath}/lib/loader.sh"
+etcLocation="${deployPath}/etc/deploy.conf"
 
 # System wide configuration files
 if [ -f "${etcLocation}" ]; then
