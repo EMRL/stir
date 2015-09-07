@@ -7,10 +7,17 @@ trace "Loading git functions"
 
 # Make sure we're in a git repository.
 function gitCheck() {
+
+  # Is git installed?
+  hash git 2>/dev/null || {
+    info "deploy" $VERSION "requires git to function properly."; 
+    errorExit
+  }
+
   # Directory exists?
   if [ ! -d $WORKPATH/$APP ]; then
     info $WORKPATH/$APP "is not a valid directory."
-    exit 1
+    errorExit
   fi
 
   # Check that .git exists
@@ -18,7 +25,7 @@ function gitCheck() {
     sleep 1
   else
     info "There is nothing at " $WORKPATH/$APP "to deploy."
-    exit 1
+    errorExit
   fi
 }
 
