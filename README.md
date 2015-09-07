@@ -27,26 +27,44 @@ Configuration is handled in the `etc/deploy.conf` file. Individual users can als
 
 ```
 # Application settings
-WORKPATH="/var/www/html" # No trailing slash
-DEPLOY="mina deploy" # The command your system uses for deployment			
+#
+# This is the root directory for all of your development projects, with no trailing slash.
+WORKPATH="/var/www/html" 
+
+# The command your system uses for deployment			
+DEPLOY="mina deploy"
 
 # Permission values
+#
+# You may run into weird permission issues if working in a multiuser environment, we do.
+#
+# Lead developer username and group
 DEVUSER="cworrell" # Lead developer username
 DEVGRP="web" # Lead developer group
+#
+# The user/group that runs the apache server
 APACHEUSER="apache" # Apache user
 APACHEGRP="apache" # Apache group
 
-# Email values
-FROM="deploy@emrl.com" # Email log from address
-TO="fdiebel@emrl.com" # Where to send logs
+# Email settings
+#
+# Who should receive log's via email
+TO="fdiebel@emrl.com"
+#
+# Other settings
 SUBJECT="[EMRL] Deployment" #Email log subject line
-
-# When to send email, 1=yes, 0=no
-EMAILERROR="1" # Email log when deployment crashes/fails
-EMAILSUCCESS="1" # Email log when deployment is successful
-EMAILQUIT="1" # Email log when a user quits dfeployment early
+#
+# Email log when deployment crashes/fails
+EMAILERROR="1" 
+#
+# Email log when deployment is successful
+EMAILSUCCESS="1" 
+#
+# Email log when a user quits dfeployment early
+EMAILQUIT="1" 
 
 # Override flags - uncomment and set to "1" to use. 
+#
 # Setting these values will disallow input of that user flag
 #VERBOSE="1" # Output more detailed process information to screen
 #DEBUG="1" # Run in debug mode
