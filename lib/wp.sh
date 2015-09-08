@@ -38,7 +38,7 @@ function wpPkg() {
           info "Skipping plugin updates..."
         fi
       else
-        info "Plugins are up to date."
+        info "Plugins are up to date."; UPD1="1"
       fi
 
       # Check log for core updates
@@ -47,7 +47,7 @@ function wpPkg() {
       cd $WORKPATH/$APP/public; \
       wp core check-update &>> $logFile
       if grep -q "Success: WordPress is at the latest version." $logFile; then
-        info "Wordpress core is up to date."
+        info "Wordpress core is up to date."; UPD2="1"
       else
         sleep 1
 
@@ -67,6 +67,12 @@ function wpPkg() {
     fi
   else
     trace "wp-cli not found, skipping Wordpress updates."
+  fi
+
+  # If running in Wordpress update-only mode, bail out
+  if [ "$UPGRADE" = "1" ] && [ "$UPD1" = "1" ] && [ "$UPD2" = "1" ]; then
+    info "No updates available, halting deployment."
+    safeExit
   fi
 }
 

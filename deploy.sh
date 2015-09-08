@@ -12,6 +12,7 @@ function usage() {
   echo -n "Usage: deploy [options] [target] ...
 
 Options:
+  -u, --upgrade     If there are no available upgrades, halt deployment
   -F, --force       Skip all user interaction, forces 'Yes' to all actions.
   -Q, --forcequiet  Like the --force command, with minimal output to screen
   -s, --strict      Run in Strict mode. Any error will halt deployment completely
@@ -54,6 +55,7 @@ unset options
 while [[ $1 = -?* ]]; do
   case $1 in
     -h|--help) usage >&2; exit ;;
+    -u|--upgrade) UPGRADE=1 ;;
     -v|--version) echo "$(basename $0) ${VERSION}"; exit ;;
     -V|--verbose) VERBOSE=1 ;;
     -Q|--forcequiet) QUIET=1 ;;
