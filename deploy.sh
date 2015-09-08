@@ -4,6 +4,7 @@
 #
 #
 VERSION="3.0RC-alpha"
+DEV=$USER"@"$HOSTNAME
 
 # Options
 function usage() {
@@ -77,12 +78,18 @@ fi
 # Store the remaining part as arguments.
 APP+=("$@")
 
-# Fire up a log file
+# Fire up a log file, and trashfile
 logFile="/tmp/$APP.$RANDOM.log"
 (umask 077 && touch "${logFile}") || {
   echo "Could not create logfile, exiting."
   exit 1
 }
+trshFile="/tmp/$APP.trash.$RANDOM.log"
+(umask 077 && touch "${logFile}") || {
+  echo "Could not create logfile, exiting."
+  exit 1
+}
+
 
 # Path of the script
 if [ -d /etc/deploy ]; then
@@ -130,23 +137,28 @@ trace "Loading system configuration file at" $etcLocation
 if [ "${USERRC}" == "1" ]; then
   trace "Loading user configuration from ~/.deployrc"
 else
-  trace "No user configuration file"
+  trace "No user .deployrc found"
 fi
 
 # Does a project configuration exit?
 if [ "${APPRC}" == "1" ]; then
   trace "Loading project configuration from" $WORKPATH"/"$APP"/.deployrc"
 else
-  trace "No project configuration file"
+  trace "No project .deployrc found"
 fi
 
-trace "Project configuration file at" $WORKPATH"/"$APP"/.deployrc"
+# Are we using "smart" *cough* commits?
+if [ "${SMRTCOMMIT}" == "1" ]; then
+  trace "Smart commits are enabled"
+else
+  trace "Smart commits are disabled"
+fi
+
 trace "Development workpath is" $WORKPATH
 trace "Lead developer permissions are" $DEVUSER.$DEVGRP
 trace "Apache permissions are" $APACHEUSER.$APACHEGRP
-
 trace "Current project is" $APP
-
+trace "Current user is" $DEV
 trace "Logfile is" $logFile
 
 
