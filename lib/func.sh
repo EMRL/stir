@@ -97,7 +97,7 @@ function ProgressBar() {
 function mailLog {
   # Filter as needed
   if [ "${NOPHP}" == "1" ]; then
-    grep -v "Notice:" $logFile > $postFile
+    grep -vE "(Notice:|Warning:|Strict Standards:)" $logFile > $postFile
     cat $postFile > $logFile
   fi
   # Content-type can be text/plain or text/html, working o swichtes
