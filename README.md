@@ -1,7 +1,7 @@
 
 Deploy
 =============
-A web app deployment script, with a focus on publishing Wordpress sites to live environments. This script is in daily use at [EMRL](http://emrl.com). an advertising agency in northern California. If you have any questions, please feel free to contact us.
+This is a multi-use deployment script, with a focus on publishing Wordpress sites and web apps to live environments. This script is in daily use at [EMRL](http://emrl.com), an advertising agency in northern California. If you have any questions, please feel free to contact us.
 
 ```
 Usage: deploy [options] [target] ...
@@ -19,7 +19,7 @@ How It Works
 --------
 Maybe I'll finish this at some point. Basically this thing is a wrapper that simplifies web app deployment from a development environment to a production server. At the moment is mostly focused on Wordpress projects but in theory it should work for other stuff too.
 
--deploy- requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
+This script requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
 
 Configuration
 --------
