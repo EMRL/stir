@@ -56,7 +56,7 @@ function warning () {
 }
 
 function log() {
-  echo "$@" >> logFile
+  echo "$@" >> $logFile
 }
 
 function emptyLine () {

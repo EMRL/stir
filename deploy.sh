@@ -85,11 +85,10 @@ logFile="/tmp/$APP.$RANDOM.log"
   exit 1
 }
 trshFile="/tmp/$APP.trash.$RANDOM.log"
-(umask 077 && touch "${logFile}") || {
-  echo "Could not create logfile, exiting."
+(umask 077 && touch "${trshFile}") || {
+  echo "Could not create trash, exiting."
   exit 1
 }
-
 
 # Path of the script
 if [ -d /etc/deploy ]; then

@@ -13,6 +13,7 @@ function go() {
   echo "deploy" $VERSION
   printf "Current working path is %s\n" ${WORKPATH}/${APP}
 
+  # Chill and wait for user to confirm project
   if  [ "$FORCE" = "1" ] || yesno --default yes "Continue? [Y/n] "; then
     trace "Loading project."
   else
@@ -22,7 +23,7 @@ function go() {
 
 # Check that dependencies exist
 function depCheck() {
-    hash git 2>/dev/null || { echo >&2 "I require foo but it's not installed.  Aborting."; exit 1; }
+  hash git 2>/dev/null || { echo >&2 "I require git but it's not installed. Aborting."; exit 1; }
 }
 
 # Constructing smart *cough* commit messages
@@ -39,8 +40,10 @@ function smrtCommit() {
       # Strips the last period, makes my head hurt.
       PCC=${PCB%?}; PCD=$(echo $PCB | cut -c 1-$(expr `echo "$PCC" | wc -c` - 2))
       trace "Plugin status ["$PCD"]"
-      # Will have to add the stuff for core upgrade, still need logs
+      # Replace current commit message with Plugin upgrade info 
       COMMITMSG=$PCD
+      # Will have to add the stuff for core upgrade, still need logs
+      #
     fi
   fi
 }
@@ -49,7 +52,7 @@ function smrtCommit() {
 function errorChk() {
   rc=$?; 
   if [[ $rc != 0 ]]; then 
-    trace "FAIL"; warning "Exiting on error." 
+    trace "FAIL"; warning "Exiting on ERROR CODE=1" 
     if  yesno --default yes "Would you like to view the log file? [Y/n] "; then
       less $logFile; mailLog
       exit 1
@@ -98,13 +101,13 @@ function mailLog {
 # User-requested exit
 function userExit() {
   rm $WORKPATH/$APP/.git/index.lock &> /dev/null
-  echo; info "Exiting."
+  info "Exiting on user request."
   # check the email settings
   if [ "${EMAILQUIT}" == "1" ]; then
       mailLog
   fi
   # Clean up your mess
-  rm $logFile; rm $trashFile
+  rm $logFile; rm $trshFile
   #tput rmcup   # I'm not sure if I really want to use this or not.
   tput cnorm; exit 0
 }
@@ -118,7 +121,7 @@ function errorExit() {
       mailLog
   fi
   # Clean up your mess
-  rm $logFile; rm $trashFile
+  rm $logFile; rm $trshFile
   #tput rmcup   # I'm not sure if I really want to use this or not.
   tput cnorm; exit 1
 }
@@ -131,7 +134,7 @@ function safeExit() {
       mailLog
   fi
   # Clean up your mess
-  rm $logFile; rm $trashFile
+  rm $logFile; rm $trshFile
   #tput rmcup   # I'm not sure if I really want to use this or not.
   tput cnorm; exit 0
 }
