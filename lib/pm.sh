@@ -6,8 +6,7 @@
 # Also checks for Grunt, for backward compatibility with some of our older projects (Namely CAA)
 trace "Loading pm()"
 function pm() {
-  notice "Checking for package manager..."
-  
+  notice "Checking for package manager..." 
   # Grunt check
   if [ -d "$WORKPATH/$APP/lib" ]
     then
@@ -27,7 +26,6 @@ function pm() {
     fi
   else
     sleep 1
-
     # node.js check
     if [ -f "$WORKPATH/$APP/public/app/themes/$APP/package.json" ]; then
       trace "$WORKPATH/$APP/public/app/themes/$APP/package.json found."

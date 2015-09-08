@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# npm()
+# lock()
 #
 # Checks if project uses node.js, and runs package manager if needed.
 # Also checks for Grunt, for backward compatibility with CAA.

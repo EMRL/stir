@@ -3,7 +3,7 @@
 # git.sh
 #
 # Handles git related processes
-trace "Loading git functions"
+trace "Loading git.sh"
 
 # Make sure we're in a git repository.
 function gitCheck() {
@@ -80,7 +80,7 @@ function gitCommit() {
   else
     # Found stuff, let's get a commit message
     if [[ -z "$COMMITMSG" ]]; then
-      read -p "Enter commit message: " notes     
+      while read -p "Enter commit message: " notes  && [ -z "$notes" ]; do :; done
     else
       read -p "Enter commit message [$COMMITMSG]: " notes 
       notes=${notes:-$COMMITMSG}
