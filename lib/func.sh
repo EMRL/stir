@@ -28,9 +28,9 @@ function depCheck() {
 
 # Check for modified files. This will hopefully find files modified a user *other*
 # than the user currently executing the deploy command. Still looking into the best way to do this.
-function activCheck() {
+#function activCheck() {
 # find . -mmin -10 -ls 
-}
+#}
 
 # Constructing smart *cough* commit messages
 function smrtCommit() {
