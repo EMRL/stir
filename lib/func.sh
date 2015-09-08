@@ -17,13 +17,19 @@ function go() {
   if  [ "$FORCE" = "1" ] || yesno --default yes "Continue? [Y/n] "; then
     trace "Loading project."
   else
-    userExit
+    quickExit
   fi
 }
 
 # Check that dependencies exist
 function depCheck() {
   hash git 2>/dev/null || { echo >&2 "I require git but it's not installed. Aborting."; exit 1; }
+}
+
+# Check for modified files. This will hopefully find files modified a user *other*
+# than the user currently executing the deploy command. Still looking into the best way to do this.
+function activCheck() {
+# find . -mmin -10 -ls 
 }
 
 # Constructing smart *cough* commit messages
@@ -45,24 +51,6 @@ function smrtCommit() {
       # Will have to add the stuff for core upgrade, still need logs
       #
     fi
-  fi
-}
-
-# Try to get exit/error code
-function errorChk() {
-  rc=$?; 
-  if [[ $rc != 0 ]]; then 
-    trace "FAIL"; warning "Exiting on ERROR CODE=1" 
-    if  yesno --default yes "Would you like to view the log file? [Y/n] "; then
-      less $logFile; mailLog
-      exit 1
-    else
-      mailLog; exit 1
-    fi
-  fi
-  if
-    [[ $rc == 0 ]]; then 
-    trace "OK"; console "Success."
   fi
 }
 
@@ -104,6 +92,24 @@ function mailLog {
   cat $logFile | mail -s "$(echo -e $SUBJECT ${APP^^}"\nContent-Type: text/plain")" $TO
 }
 
+# Try to get exit/error code
+function errorChk() {
+  rc=$?; 
+  if [[ $rc != 0 ]]; then 
+    trace "FAIL"; warning "Exiting on ERROR CODE=1" 
+    if  yesno --default yes "Would you like to view the log file? [Y/n] "; then
+      less $logFile; mailLog
+      exit 1
+    else
+      mailLog; exit 1
+    fi
+  fi
+  if
+    [[ $rc == 0 ]]; then 
+    trace "OK"; console "Success."
+  fi
+}
+
 # User-requested exit
 function userExit() {
   rm $WORKPATH/$APP/.git/index.lock &> /dev/null
@@ -112,6 +118,15 @@ function userExit() {
   if [ "${EMAILQUIT}" == "1" ]; then
       mailLog
   fi
+  # Clean up your mess
+  rm $logFile; rm $postFile; rm $trshFile
+  #tput rmcup   # I'm not sure if I really want to use this or not.
+  tput cnorm; exit 0
+}
+
+# Quick exit, never send log. Ever.
+function quickExit() {
+  rm $WORKPATH/$APP/.git/index.lock &> /dev/null
   # Clean up your mess
   rm $logFile; rm $postFile; rm $trshFile
   #tput rmcup   # I'm not sure if I really want to use this or not.
