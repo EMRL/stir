@@ -14,14 +14,13 @@ function pkgDeploy() {
 
     # deploy via deployment command specified in mina
     if [[ $VERBOSE -eq 1 ]]; then
-      $DEPLOY | tee --append $trshFile               
+      $DEPLOY | tee --append $trshFile 
+      info "Deployment Success."             
     else
       $DEPLOY &>> $trshFile &
       spinner $!
+      info "Deployment Success."
     fi
-    log "Deployment Summary"
-    log "=================="
-    git whatchanged -1 &>> $logFile &
   else
     safeExit
   fi   
