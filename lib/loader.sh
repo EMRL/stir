@@ -27,7 +27,8 @@ done
 SOURCEPATH="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
   if [ ! -d "${SOURCEPATH}" ]
   then
-    die "Failed to find library files expected in: ${SOURCEPATH}"
+    echo "Failed to find library files expected in: ${SOURCEPATH}";
+    exit 1
   fi
   for utility_file in "${SOURCEPATH}"/*.sh
   do
