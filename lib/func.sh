@@ -95,19 +95,25 @@ function ProgressBar() {
 
 # Log via email, needs work
 function mailLog {
+  # Filter as needed
+  if [ "${NOPHP}" == "1" ]; then
+    grep -v "Notice:" $logFile > $postFile
+    cat $postFile > $logFile
+  fi
   mail -s "Content-Type: text/plain; charset=UTF-8" -s "$SUBJECT: $APP" $TO < $logFile
+
 }
 
 # User-requested exit
 function userExit() {
   rm $WORKPATH/$APP/.git/index.lock &> /dev/null
-  info "Exiting on user request."
+  trace "Exit on user request"
   # check the email settings
   if [ "${EMAILQUIT}" == "1" ]; then
       mailLog
   fi
   # Clean up your mess
-  rm $logFile; rm $trshFile
+  rm $logFile; rm $postFile; rm $trshFile
   #tput rmcup   # I'm not sure if I really want to use this or not.
   tput cnorm; exit 0
 }
@@ -121,7 +127,7 @@ function errorExit() {
       mailLog
   fi
   # Clean up your mess
-  rm $logFile; rm $trshFile
+  rm $logFile; rm $postFile; rm $trshFile
   #tput rmcup   # I'm not sure if I really want to use this or not.
   tput cnorm; exit 1
 }
@@ -134,7 +140,7 @@ function safeExit() {
       mailLog
   fi
   # Clean up your mess
-  rm $logFile; rm $trshFile
+  rm $logFile; rm $postFile; rm $trshFile
   #tput rmcup   # I'm not sure if I really want to use this or not.
   tput cnorm; exit 0
 }

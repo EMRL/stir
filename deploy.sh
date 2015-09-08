@@ -4,6 +4,7 @@
 #
 #
 VERSION="3.0RC-alpha"
+NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
 # Options
@@ -81,6 +82,12 @@ APP+=("$@")
 # Fire up a log file, and trashfile
 logFile="/tmp/$APP.$RANDOM.log"
 (umask 077 && touch "${logFile}") || {
+  echo "Could not create logfile, exiting."
+  exit 1
+}
+echo -e "Deployment logfile for" ${APP^^} "-" $NOW "\r\r" >> $logFile
+postFile="/tmp/$APP.$RANDOM.log"
+(umask 077 && touch "${postFile}") || {
   echo "Could not create logfile, exiting."
   exit 1
 }

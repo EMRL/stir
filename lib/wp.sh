@@ -73,5 +73,6 @@ function wpPkg() {
 function wpCheck() {
   notice "Checking for updates..."
   wp plugin status &>> $logFile
-  wp core check-update &>> $logFile
+  # Probably going to let this stay commented out
+  # wp core check-update &>> $logFile
 }

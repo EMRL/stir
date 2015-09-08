@@ -14,10 +14,12 @@ function pm() {
     if  [ "$FORCE" = "1" ] || yesno --default no "Run Grunt? [y/N] "; then
       cd $WORKPATH/$APP; \
       if [[ $VERBOSE -eq 1 ]]; then
-        sudo grunt build --force 2>&1 | tee --append $trshFile                
+        sudo grunt build --force 2>&1 | tee --append $trshFile
+        trace "Output from grunt is not currently being logged, sorry."           
       else
         sudo grunt build --force &>> $trshFile &
         spinner $!
+        trace "Output from grunt is not currently being logged, sorry."
         info "Packages successfully compiled."
       fi
     else
@@ -34,17 +36,21 @@ function pm() {
         cd $WORKPATH/$APP/public/app/themes/$APP; \
 
         if [[ $VERBOSE -eq 1 ]]; then
-          npm run build | tee --append $trshFile               
+          npm run build | tee --append $trshFile
+          trace "Output from npm is not currently being logged, sorry."                
         else
           npm run build  &>> $trshFile &
           spinner $!
+          trace "Output from npm is not currently being logged, sorry."    
           info "Packages successfully compiled."
         fi
       else
         info "Skipping Node Package Manager..."
       fi
     else
+      info "No package management needed."
       trace "$WORKPATH/$APP/public/app/themes/$APP/package.json not found, skipping."
+
     fi
   fi
 }

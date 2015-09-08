@@ -33,7 +33,7 @@ function gitCheck() {
 function gitChkm() {
   notice "Checking out master branch..."
   if [[ $VERBOSE -eq 1 ]]; then
-    git checkout master | tee --append $logFile               
+    git checkout master | tee --append $logFile            
   else
     git checkout master &>> $logFile &
     _start=1
@@ -43,12 +43,17 @@ function gitChkm() {
     ProgressBar ${number} ${_end}
     done;
   fi 
-  emptyLine
+  # Were there any conflicts checking out?
+  if grep -q "error: Your local changes to the following files would be overwritten by checkout:" $logFile; then
+     error "There is a conflict checking out."
+  else
+    trace "OK"; emptyLine
+  fi
 }
 
 # Stage files
 function gitStage() {
-  emptyLine
+  trace "Staging files"; emptyLine
   if [ "$FORCE" = "1" ] || yesno --default yes "Stage files? [Y/n] "; then
 
     if [[ $VERBOSE -eq 1 ]]; then
@@ -57,7 +62,7 @@ function gitStage() {
       git add -A &>> $logFile; errorChk
     fi
   else
-    exit    
+    trace "Exiting without staging files"; userExit    
   fi
 }
 
@@ -96,7 +101,7 @@ function gitPushm() {
     if  [ "$FORCE" = "1" ] || yesno --default yes "Push master branch to Bitbucket? [Y/n] "; then
       git push &>> $logFile &
       spinner $!
-      info "Successful. "
+      info "Success.    "
     else
       safeExit
     fi
@@ -117,6 +122,7 @@ function gitChkp() {
     done;
     emptyLine
   fi
+  trace "OK"
 }
 
 # Merge master into production
@@ -133,19 +139,22 @@ function gitMerge() {
     done; 
     emptyLine
   fi
+  trace "OK"
 }
 
 # Push production
 function gitPushp() {
-  emptyLine
+  trace "Push production"; emptyLine
   if [[ $VERBOSE -eq 1 ]]; then
-    git push | tee --append $logFile               
+    git push | tee --append $logFile 
+    trace "OK"              
   else
     
     if  [ "$FORCE" = "1" ] || yesno --default yes "Push production branch to Bitbucket? [Y/n] "; then
       git push &>> $logFile &
       spinner $!
-      info "Successful. "
+      info "Success.    "
+      trace "OK"
     else
       safeExit
     fi
