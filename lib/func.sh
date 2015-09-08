@@ -104,7 +104,7 @@ function userExit() {
       mailLog
   fi
   # Clean up your mess
-  rm $logFile
+  rm $logFile; rm $trashFile
   #tput rmcup   # I'm not sure if I really want to use this or not.
   tput cnorm; exit 0
 }
@@ -118,7 +118,7 @@ function errorExit() {
       mailLog
   fi
   # Clean up your mess
-  rm $logFile
+  rm $logFile; rm $trashFile
   #tput rmcup   # I'm not sure if I really want to use this or not.
   tput cnorm; exit 1
 }
@@ -131,7 +131,7 @@ function safeExit() {
       mailLog
   fi
   # Clean up your mess
-  rm $logFile
+  rm $logFile; rm $trashFile
   #tput rmcup   # I'm not sure if I really want to use this or not.
   tput cnorm; exit 0
 }
