@@ -100,8 +100,7 @@ function mailLog {
     grep -v "Notice:" $logFile > $postFile
     cat $postFile > $logFile
   fi
-  mail -s "Content-Type: text/plain; charset=UTF-8" -s "$SUBJECT: $APP" $TO < $logFile
-
+  cat $logFile | mail -s "$(echo -e $SUBJECT: ${APP^^}"\nContent-Type: text/plain")" $TO
 }
 
 # User-requested exit
