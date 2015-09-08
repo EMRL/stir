@@ -73,7 +73,7 @@ if [ "${DEBUG}" == "1" ]; then
   set -x
 fi
 
-# Exit on empty variable, will usually get confused by git output
+# Exit on empty variable, will possibly get confused by git output
 if [ "${STRICT}" == "1" ]; then
   set -e
 fi
@@ -178,6 +178,7 @@ function appDeploy {
   gitChkm         # Checkout master branch
   wpPkg           # Run Wordpress upgrades if needed
   pm              # Run node package management, or grunt
+  gitStatus       # Make sure there's anything here to commit
   gitStage        # Stage files
   gitCommit       # Commit, with message
   gitPushm        # Push master to Bit Bucket

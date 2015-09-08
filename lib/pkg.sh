@@ -15,12 +15,12 @@ function pkgDeploy() {
     # deploy via deployment command specified in mina
     if [[ $VERBOSE -eq 1 ]]; then
       $DEPLOY | tee --append $trshFile
-      git show --stat &>> $logFile 
+      # git show --stat &>> $logFile 
       info "Deployment Success."             
     else
       $DEPLOY &>> $trshFile &
       spinner $!
-      git show --stat &>> $logFile
+      # git show --stat &>> $logFile
       info "Deployment Success."
     fi
   else

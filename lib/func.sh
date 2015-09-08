@@ -89,7 +89,7 @@ function mailLog {
     cat $postFile > $logFile
   fi
   # Content-type can be text/plain or text/html, working o swichtes
-  cat $logFile | mail -s "$(echo -e $SUBJECT ${APP^^}"\nContent-Type: text/plain")" $TO
+  cat $logFile | mail -s "$(echo -e $SUBJECT "-" ${APP^^}"\nContent-Type: text/plain")" $TO
 }
 
 # Try to get exit/error code

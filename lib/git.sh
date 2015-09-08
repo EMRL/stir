@@ -11,13 +11,13 @@ function gitCheck() {
   # Is git installed?
   hash git 2>/dev/null || {
     info "deploy" $VERSION "requires git to function properly."; 
-    errorExit
+    exit 1
   }
 
   # Directory exists?
   if [ ! -d $WORKPATH/$APP ]; then
     info $WORKPATH/$APP "is not a valid directory."
-    errorExit
+    exit 1
   fi
 
   # Check that .git exists
@@ -25,7 +25,7 @@ function gitCheck() {
     sleep 1
   else
     info "There is nothing at " $WORKPATH/$APP "to deploy."
-    errorExit
+    exit 1
   fi
 }
 
@@ -48,6 +48,23 @@ function gitChkm() {
      error "There is a conflict checking out."
   else
     trace "OK"; emptyLine
+  fi
+}
+
+# Does anything need to be committed? (Besides me?)
+function gitStatus() {
+  trace "Check Status"
+  if [[ $VERBOSE -eq 1 ]]; then
+    git status | tee --append $logFile            
+  else
+    git status &>> $logFile &
+  fi
+  # Were there any conflicts checking out?
+  if grep -q "nothing to commit, working directory clean" $logFile; then
+     info "Nothing to commit, working directory clean."
+     safeExit
+  else
+    trace "OK";
   fi
 }
 
