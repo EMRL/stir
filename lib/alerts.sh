@@ -17,6 +17,12 @@ purple=$(tput setaf 171)
 tan=$(tput setaf 3)
 endColor='\e[0m'
 
+function console () {
+  if [[ $QUIET != "1" ]]; then
+    echo -e "${reset}$@${endColor}"
+  fi
+}
+
 function info () {
   if [[ $QUIET != "1" ]]; then
     echo -e "${reset}$@${endColor}"

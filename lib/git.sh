@@ -52,21 +52,37 @@ function gitStage() {
   if [ "$FORCE" = "1" ] || yesno --default yes "Stage files? [Y/n] "; then
 
     if [[ $VERBOSE -eq 1 ]]; then
-        git add -A | tee --append $logFile; exitStatus              
+        git add -A | tee --append $logFile; errorChk              
     else  
-      git add -A &>> $logFile; exitStatus
+      git add -A &>> $logFile; errorChk
     fi
   else
-    safeExit    
+    exit    
   fi
 }
 
 # Commit, with message
 function gitCommit() {
-  emptyLine
-  read -p "Enter your notes on this commit: " notes
-  git commit -m "$notes" &>> $logFile; exitStatus
-  trace "Commit message:" $notes
+  # Check for stuff that needs a commit
+  notice "Examining working directory..."
+
+  # Smart commit stuff
+  smrtCommit
+  git commit --dry-run &>> $logFile; 
+  if grep -q "nothing to commit, working directory clean" $logFile; then 
+    info "Nothing to commit, working directory clean."
+    safeExit
+  else
+    # Found stuff, let's get a commit message
+    if [[ -z "$COMMITMSG" ]]; then
+      read -p "Enter commit message: " notes     
+    else
+      read -p "Enter commit message [$COMMITMSG]: " notes 
+      notes=${notes:-$COMMITMSG}
+      git commit -m "$notes" &>> $logFile
+      trace "Commit message:" $notes
+    fi
+  fi
 }
 
 # Push master
@@ -74,8 +90,7 @@ function gitPushm() {
   trace "Pushing master."
   emptyLine  
   if [[ $VERBOSE -eq 1 ]]; then
-    git push | tee --append $logFile; exitStatus
-  trace "Commit message:" $notes              
+    git push | tee --append $logFile; errorChk           
   else
 
     if  [ "$FORCE" = "1" ] || yesno --default yes "Push master branch to Bitbucket? [Y/n] "; then

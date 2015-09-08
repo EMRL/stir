@@ -44,6 +44,7 @@ function wpPkg() {
       # Check log for core updates
       # There's a little bug when certain plugins are spitting errors; work around seems to be 
       # to check for core updates a second time
+      cd $WORKPATH/$APP/public; \
       wp core check-update &>> $logFile
       if grep -q "Success: WordPress is at the latest version." $logFile; then
         info "Wordpress core is up to date."
@@ -52,6 +53,7 @@ function wpPkg() {
 
         # Update available
         if  [ "$FORCE" = "1" ] || yesno --default no "A new version of Wordpress is available, update? [y/N] "; then
+          cd $WORKPATH/$APP/public; \
           wp core update &>> $logFile &
           spinner $!
           cd $WORKPATH/$APP/; \
