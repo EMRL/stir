@@ -3,15 +3,26 @@
 # doinst.sh
 #
 # Installs deployment files for use system-wide
+
+# Check for root
+if [[ $EUID -ne 0 ]]; then
+  echo "You must have root access to install - try 'sudo install/doinst.sh'" 2>&1
+  exit 1
+else
+
 if [ ! -d /etc/deploy ]; then
-  sudo mkdir /etc/deploy
+  mkdir /etc/deploy
 fi
-sudo cp etc/* /etc/deploy
+cp etc/* /etc/deploy
 
 if [ ! -d /etc/deploy/lib ]; then
-  sudo mkdir /etc/deploy/lib
+  mkdir /etc/deploy/lib
 fi
-sudo cp  lib/* /etc/deploy/lib
-sudo cp deploy.sh /usr/local/bin/deploy
-sudo chmod 755 /usr/local/bin/deploy
+cp  lib/* /etc/deploy/lib
+cp deploy.sh /usr/local/bin/deploy
+chmod 755 /usr/local/bin/deploy
 exit
+
+fi
+
+
