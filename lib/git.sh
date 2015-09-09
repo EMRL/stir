@@ -97,9 +97,12 @@ function gitCommit() {
   else
     # Found stuff, let's get a commit message
     if [[ -z "$COMMITMSG" ]]; then
-      while read -p "Enter commit message: " notes  && [ -z "$notes" ]; do :; done
+      while read -p "Enter commit message: " notes && [ -z "$notes" ]; do :; done
     else
-      read -p "Enter commit message [$COMMITMSG]: " notes 
+      # We want to be able to edit the default commit if available
+      notes=$COMMITMSG
+      read -p "Enter commit message [$COMMITMSG]: " -e -i "${COMMITMSG}" notes
+      # update the commit message based on user input ()
       notes=${notes:-$COMMITMSG}
       git commit -m "$notes" &>> $logFile
       trace "Commit message:" $notes
