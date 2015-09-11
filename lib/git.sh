@@ -29,8 +29,12 @@ function gitCheck() {
   fi
 
   # Try to clear out old git processes owned by this user
-  killall -9 git > /dev/null
+  killall -9 git &>> /dev/null
+
+  # Unstage anything that is leftover from a mess
+  git reset HEAD &>> $logFile
 }
+
 
 # Checkout master
 function gitChkm() {
