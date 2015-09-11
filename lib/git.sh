@@ -61,7 +61,7 @@ function gitStatus() {
   fi
   # Were there any conflicts checking out?
   if grep -q "nothing to commit, working directory clean" $logFile; then
-     info "Nothing to commit, working directory clean."
+     console "Nothing to commit, working directory clean."
      safeExit
   else
     trace "OK";
@@ -90,6 +90,7 @@ function gitCommit() {
 
   # Smart commit stuff
   smrtCommit
+  # Do a dry run; check for anything to commit
   git commit --dry-run &>> $logFile; 
   if grep -q "nothing to commit, working directory clean" $logFile; then 
     info "Nothing to commit, working directory clean."
@@ -102,7 +103,7 @@ function gitCommit() {
       # We want to be able to edit the default commit if available
       notes=$COMMITMSG
       read -p "Enter commit message [$COMMITMSG]: " -e -i "${COMMITMSG}" notes
-      # update the commit message based on user input ()
+      # Update the commit message based on user input ()
       notes=${notes:-$COMMITMSG}
       git commit -m "$notes" &>> $logFile
       trace "Commit message:" $notes
@@ -140,9 +141,13 @@ function gitChkp() {
     for number in $(seq ${_start} ${_end}); do
     ProgressBar ${number} ${_end}
     done;
-    emptyLine
+  fi 
+  # Were there any conflicts checking out?
+  if grep -q "error: Your local changes to the following files would be overwritten by checkout:" $logFile; then
+     error "There is a conflict checking out."
+  else
+    trace "OK"; emptyLine
   fi
-  trace "OK"
 }
 
 # Merge master into production

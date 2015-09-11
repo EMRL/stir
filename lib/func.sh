@@ -92,22 +92,29 @@ function mailLog {
   cat $logFile | mail -s "$(echo -e $SUBJECT "-" ${APP^^}"\nContent-Type: text/plain")" $TO
 }
 
+# Post commit message to task manager
+function postCommit() {
+  # Here's the basic command that will work: 
+  cat $logFile | mail -r $USER@emrl.com -s "$(echo -e $SUBJECT "-" ${APP^^}"\nContent-Type: text/plain")" task-3859@projects.emrl.com
+  # The "task-3859@projects.emrl.com" is an address that will need 
+  # to be assigned for each project
+  # 
+  # We can check to see if that value is 0, and skip this function is so
+}
+
 # Try to get exit/error code
 function errorChk() {
   rc=$?; 
   if [[ $rc != 0 ]]; then 
-    trace "FAIL"; warning "Exiting on ERROR CODE=1" 
-    if  yesno --default yes "Would you like to view the log file? [Y/n] "; then
-      less $logFile; mailLog
-      exit 1
+    trace "FAIL"; warning "Exiting on ERROR CODE=1"
+    errorExit 
     else
-      mailLog; exit 1
-    fi
-  fi
+  # If exit code is not 1
   if
     [[ $rc == 0 ]]; then 
     trace "OK"; console "Success."
   fi
+fi
 }
 
 # User-requested exit
@@ -126,8 +133,8 @@ function userExit() {
 
 # Quick exit, never send log. Ever.
 function quickExit() {
-  rm $WORKPATH/$APP/.git/index.lock &> /dev/null
   # Clean up your mess
+  rm $WORKPATH/$APP/.git/index.lock &> /dev/null
   rm $logFile; rm $postFile; rm $trshFile
   #tput rmcup   # I'm not sure if I really want to use this or not.
   tput cnorm; exit 0
@@ -135,13 +142,15 @@ function quickExit() {
 
 # Exit on error
 function errorExit() {
-  info "Exiting on error - check" $logFile "for more information."
-  rm $WORKPATH/$APP/.git/index.lock &> /dev/null
-  # check the email settings
+  if  yesno --default yes "Would you like to view the log file? [Y/n] "; then
+    less $logFile;
+  fi
+  # Send log
   if [ "${EMAILERROR}" == "1" ]; then
-      mailLog
+    mailLog
   fi
   # Clean up your mess
+  rm $WORKPATH/$APP/.git/index.lock &> /dev/null
   rm $logFile; rm $postFile; rm $trshFile
   #tput rmcup   # I'm not sure if I really want to use this or not.
   tput cnorm; exit 1
