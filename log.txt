@@ -1,0 +1,6 @@
+# wp plugin update --all --dry-run > $logFile
+
+Available plugin updates:
+name	status	version	update_version
+the-events-calendar	active	3.11.2	3.12.1
+wordfence	active	6.0.15	6.0.16

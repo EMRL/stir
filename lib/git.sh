@@ -27,6 +27,9 @@ function gitCheck() {
     info "There is nothing at " $WORKPATH/$APP "to deploy."
     exit 1
   fi
+
+  # Try to clear out old git processes owned by this user
+  killall -9 git > /dev/null
 }
 
 # Checkout master

@@ -12,18 +12,19 @@ function pkgDeploy() {
     ssh-add &>> $logFile
     cd $WORKPATH/$APP; \
 
-    # deploy via deployment command specified in mina
+    # Deploy via deployment command specified in mina
     if [[ $VERBOSE -eq 1 ]]; then
       $DEPLOY | tee --append $trshFile
       # git show --stat &>> $logFile 
-      info "Deployment Success."             
+      info "Deployment Success."; postCommit
     else
       $DEPLOY &>> $trshFile &
       spinner $!
       # git show --stat &>> $logFile
-      info "Deployment Success."
+      info "Deployment Success."; postCommit
     fi
   else
+    # Run whatever integrations might be setup
     safeExit
   fi   
 }

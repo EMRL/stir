@@ -8,7 +8,7 @@ trace "Loading func.sh"
 
 # Open a deployment session, ask for user confirmation before beginning
 function go() {
-  tput cnorm;     
+  tput cnorm;
   cd $WORKPATH/$APP; \
   echo "deploy" $VERSION
   printf "Current working path is %s\n" ${WORKPATH}/${APP}
@@ -31,76 +31,6 @@ function depCheck() {
 #function activCheck() {
 # find . -mmin -10 -ls 
 #}
-
-# Constructing smart *cough* commit messages
-function smrtCommit() {
-  if [[ $SMRTCOMMIT == 1 ]]; then
-    trace "Building commit message"
-    # Checks for the existence of a successful plugin upgrade, using grep
-    PCA=$(grep '\<Success: Updated' $logFile | grep 'plugins')
-    if [[ -z "$PCA" ]]; then
-      trace "No plugin updates"
-    else
-      # Yanks out the "Success: "
-      PCB=$(echo $PCA | sed 's/^.*\(Updated.*\)/\1/g')
-      # Strips the last period, makes my head hurt.
-      PCC=${PCB%?}; PCD=$(echo $PCB | cut -c 1-$(expr `echo "$PCC" | wc -c` - 2))
-      trace "Plugin status ["$PCD"]"
-      # Replace current commit message with Plugin upgrade info 
-      COMMITMSG=$PCD
-      # Will have to add the stuff for core upgrade, still need logs
-      #
-    fi
-  fi
-}
-
-# Progress spinner; we'll see if this works
-function spinner() {
-  local pid=$1
-  local delay=0.15
-  local spinstr='|/-\'
-  tput civis;
-  while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
-    local temp=${spinstr#?}
-    printf "Working... %c  " "$spinstr"
-    local spinstr=$temp${spinstr%"$temp"}
-    sleep $delay
-    printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
-  done
-  printf "    \b\b\b\b"
-  tput cnorm;
-}
-
-# Progress bar
-function ProgressBar() {
-  let _progress=(${1}*100/${2}*100)/100
-  let _done=(${_progress}*4)/10
-  let _left=40-$_done
-  _fill=$(printf "%${_done}s")
-  _empty=$(printf "%${_left}s")
-  printf "\rProgress : [${_fill// /#}${_empty// /-}] ${_progress}%%"
-}
-
-# Log via email, needs work
-function mailLog {
-  # Filter as needed
-  if [ "${NOPHP}" == "1" ]; then
-    grep -vE "(Notice:|Warning:|Strict Standards:)" $logFile > $postFile
-    cat $postFile > $logFile
-  fi
-  # Content-type can be text/plain or text/html, working o swichtes
-  cat $logFile | mail -s "$(echo -e $SUBJECT "-" ${APP^^}"\nContent-Type: text/plain")" $TO
-}
-
-# Post commit message to task manager
-function postCommit() {
-  # Here's the basic command that will work: 
-  cat $logFile | mail -r $USER@emrl.com -s "$(echo -e $SUBJECT "-" ${APP^^}"\nContent-Type: text/plain")" task-3859@projects.emrl.com
-  # The "task-3859@projects.emrl.com" is an address that will need 
-  # to be assigned for each project
-  # 
-  # We can check to see if that value is 0, and skip this function is so
-}
 
 # Try to get exit/error code
 function errorChk() {

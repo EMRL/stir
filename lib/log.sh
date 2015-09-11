@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# log.sh
+#
+# Handles parsing and creating logs
+trace "Loading log.sh"
+
+# Log via email, needs work
+function mailLog {
+  # Filter as needed
+  if [ "${NOPHP}" == "1" ]; then
+    grep -vE "(Notice:|Warning:|Strict Standards:)" $logFile > $postFile
+    cat $postFile > $logFile
+  fi
+  # Content-type can be text/plain or text/html, working o swichtes
+  cat $logFile | mail -s "$(echo -e $SUBJECT "-" ${APP^^}"\nContent-Type: text/plain")" $TO
+}

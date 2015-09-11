@@ -1,0 +1,3 @@
+# wp plugin update --all --dry-run > $logFile
+
+No plugin updates available.

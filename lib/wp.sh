@@ -30,8 +30,29 @@ function wpPkg() {
 
         # If available then let's do it
         if  [ "$FORCE" = "1" ] || yesno --default no "Plugin updates available, proceed? [y/N] "; then
+          # Check for Wordfence cache file and remove if found
+          if [ -f $WORKPATH/$APP/public/app/plugins/wordfence/tmp/configCache.php ]; then
+            sudo rm $WORKPATH/$APP/public/app/plugins/wordfence/tmp/configCache.php
+          fi
+
+          # Coming soon 
+          # Create a seperate log here, with something like 
+          # wp plugin update --all --dry-run > $logFile
+
           wp plugin update --all &>> $logFile &
           spinner $!
+          # Any problems with plugin updates?
+          if grep -q "Warning: The update cannot be installed because we will be unable to copy some files." $logFile; then
+            error "One or more plugin upgrades have failed, probably due to problems with permissions."
+          else
+            if grep -q "Plugin update failed." $logFile; then
+              error "One or more plugin upgrades have failed."
+            else
+              trace "OK"
+            fi
+            trace "OK"
+          fi
+
           cd $WORKPATH/$APP/; \
           info "Plugin updates complete."
         else

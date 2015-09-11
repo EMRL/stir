@@ -162,6 +162,14 @@ else
   trace "Smart commits are disabled"
 fi
 
+# Are any integrations setup?
+POSTEMAIL=$POSTEMAILHEAD$TASK$POSTEMAILTAIL
+if [[ -z "$POSTEMAIL" ]]; then
+  trace "No integration found"
+else
+  trace "Integration enabled, using" $POSTEMAIL
+fi
+
 trace "Development workpath is" $WORKPATH
 trace "Lead developer permissions are" $DEVUSER.$DEVGRP
 trace "Apache permissions are" $APACHEUSER.$APACHEGRP
