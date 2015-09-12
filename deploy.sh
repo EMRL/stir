@@ -98,6 +98,11 @@ trshFile="/tmp/$APP.trash.$RANDOM.log"
   echo "Could not create trash, exiting."
   exit 1
 }
+statFile="/tmp/$APP.stat.$RANDOM.log"
+(umask 077 && touch "${statFile}") || {
+  echo "Could not create stat file, exiting."
+  exit 1
+}
 
 # Path of the script
 if [ -d /etc/deploy ]; then
@@ -124,8 +129,8 @@ if [ -r ~/.deployrc ]; then
 fi
 
 # Load per-project configuration, if it exists
-if [ -r $WORKPATH/$APP/.deployrc ]; then
-  source $WORKPATH/$APP/.deployrc; APPRC=1
+if [ -r $WORKPATH/$APP/config/deploy.sh ]; then
+  source $WORKPATH/$APP/config/deploy.sh; APPRC=1
 fi
 
 # Load libraries, or die
@@ -139,7 +144,7 @@ fi
 trace "Version" $VERSION
 trace "Running from" $deployPath
 trace "Loader found at" $libLocation
-trace "Loading system configuration file at" $etcLocation
+trace "Loading system configuration file from" $etcLocation
 
 # Does a user configuration exit?
 if [ "${USERRC}" == "1" ]; then
@@ -150,9 +155,9 @@ fi
 
 # Does a project configuration exit?
 if [ "${APPRC}" == "1" ]; then
-  trace "Loading project configuration from" $WORKPATH"/"$APP"/.deployrc"
+  trace "Loading project configuration from" $WORKPATH"/"$APP"/config/deploy.sh"
 else
-  trace "No project .deployrc found"
+  trace "No project config file found"
 fi
 
 # Are we using "smart" *cough* commits?
@@ -178,12 +183,13 @@ trace "Current user is" $DEV
 trace "Logfile is" $logFile
 
 
-function appDeploy {
+function  appDeploy {
   gitCheck        # Check for a valid git project
   lock            # Create lock file
   go              # Start a deployment work session
   permFix         # Fix permissions
   gitChkm         # Checkout master branch
+  preDeploy       # Get the status
   wpPkg           # Run Wordpress upgrades if needed
   pm              # Run node package management, or grunt
   gitStatus       # Make sure there's anything here to commit

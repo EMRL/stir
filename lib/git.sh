@@ -35,7 +35,6 @@ function gitCheck() {
   git reset HEAD &>> $logFile
 }
 
-
 # Checkout master
 function gitChkm() {
   notice "Checking out master branch..."
@@ -49,12 +48,41 @@ function gitChkm() {
     do
     ProgressBar ${number} ${_end}
     done;
-  fi 
-  # Were there any conflicts checking out?
-  if grep -q "error: Your local changes to the following files would be overwritten by checkout:" $logFile; then
-     error "There is a conflict checking out."
+    emptyLine 
+  fi
+}
+
+function preDeploy() {
+  # If there are changes waiting in the repo, stop and ask for user input
+  # This should probably be it's own function
+  if [[ -z $(git status -uno --porcelain) ]]; then
+    emptyLine
   else
-    trace "OK"; emptyLine
+    emptyLine; 
+    if yesno --default no "Unresolved changes in this repository, view files? [y/N] "; then
+      git status -uno --porcelain
+      if  yesno --default yes "Continue deploy? [Y/n] "; then
+        trace "Continuing deploy"
+      else
+        userExit
+      fi
+      trace "Continuing deploy"
+    fi
+  fi
+} 
+
+function postDeploy() {
+  # We just attempted to deploy, check for changes sitll waiting in the repo
+  # if we find any, something went wrong.
+  if [[ -z $(git status -uno --porcelain) ]]; then
+    emptyLine 
+  else
+    info ""
+    if  yesno --default yes "Attempted deploy, but something went wrong, view status? [Y/n] "; then
+      git status; errorExit
+    else
+      errorExit
+    fi
   fi
 }
 
@@ -148,12 +176,13 @@ function gitChkp() {
     for number in $(seq ${_start} ${_end}); do
     ProgressBar ${number} ${_end}
     done;
+    emptyLine
   fi 
   # Were there any conflicts checking out?
   if grep -q "error: Your local changes to the following files would be overwritten by checkout:" $logFile; then
      error "There is a conflict checking out."
   else
-    trace "OK"; emptyLine
+    trace "OK"
   fi
 }
 
