@@ -2,6 +2,7 @@
 #
 # alerts.sh
 
+# Define color codes
 black='\E[30;47m'
 red='\e[0;31m'
 green='\e[0;32m'
@@ -17,51 +18,56 @@ purple=$(tput setaf 171)
 tan=$(tput setaf 3)
 endColor='\e[0m'
 
+#  Standard text output only to console
 function console () {
-  if [[ $QUIET != "1" ]]; then
-    echo -e "${reset}$@${endColor}"
-  fi
+	if [[ $QUIET != "1" ]]; then
+		echo -e "${reset}$@${endColor}"
+	fi
 }
 
+# Standard text output to console and logfile
 function info () {
-  if [[ $QUIET != "1" ]]; then
-    echo -e "${reset}$@${endColor}"
-    echo "$@" >> $logFile
-  fi
+	if [[ $QUIET != "1" ]]; then
+		echo -e "${reset}$@${endColor}"
+		echo "$@" >> $logFile
+	fi
+}
+
+# Standard text output only to log
+function log() {
+	echo "$@" >> $logFile
 }
 
 function input () {
-  if [[ $QUIET != "1" ]]; then
-    echo -e "${reset}$@${endColor}"
-  fi
+	if [[ $QUIET != "1" ]]; then
+		echo -e "${reset}$@${endColor}"
+	fi
 }
 
+# Sectional header
 function notice () {
-  if [[ $QUIET != "1" ]]; then
-    echo; echo -e "${green}$@${endColor}"
-    echo "" >> $logFile; echo "$@" >> $logFile
+	if [[ $QUIET != "1" ]]; then
+		echo; echo -e "${green}$@${endColor}"
+		echo "" >> $logFile; echo "$@" >> $logFile
 #  else
-  fi
+	fi
 }
 
 function error () {
-  echo -e "${red}$@${endColor}"
-  errorExit
+	echo -e "${red}$@${endColor}"
+	errorExit
 }
 
 function warning () {
-  if [[ $QUIET != "1" ]]; then
-    echo -e "${red}$@${endColor}"
-  fi
+	if [[ $QUIET != "1" ]]; then
+		echo -e "${red}$@${endColor}"
+	fi
 }
 
-function log() {
-  echo "$@" >> $logFile
-}
 
 function emptyLine () {
-  if [[ $QUIET != "1" ]]; then
-    echo ""
-    echo "" >> $logFile
-  fi
+	if [[ $QUIET != "1" ]]; then
+		echo ""
+		echo "" >> $logFile
+	fi
 }
