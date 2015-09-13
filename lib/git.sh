@@ -124,7 +124,7 @@ function gitPushMstr() {
 		git push | tee --append $logFile; errorChk           
 	else
 
-		if  [ "$FORCE" = "1" ] || yesno --default yes "Push master branch to Bitbucket? [Y/n] "; then
+		if  [ "$FORCE" = "1" ] || yesno --default yes "Push master branch? [Y/n] "; then
 			git push &>> $logFile &
 			spinner $!
 			info "Success.    "
@@ -155,9 +155,9 @@ function gitChkProd() {
 function gitMerge() {
 	notice "Merging master into production..."
 	if [[ $VERBOSE -eq 1 ]]; then
-		git merge master | tee --append $logFile               
+		git merge --no-edit master | tee --append $logFile               
 	else
-		git merge master  &>> $logFile &
+		git merge --no-edit master  &>> $logFile &
 		showProgress
 	fi
 }
@@ -170,7 +170,7 @@ function gitPushProd() {
 		trace "OK"              
 	else
 		
-		if  [ "$FORCE" = "1" ] || yesno --default yes "Push production branch to Bitbucket? [Y/n] "; then
+		if  [ "$FORCE" = "1" ] || yesno --default yes "Push production branch? [Y/n] "; then
 			git push &>> $logFile &
 			spinner $!
 			info "Success.    "

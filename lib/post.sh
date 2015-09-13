@@ -7,13 +7,18 @@ trace "Loading postCommit()"
 
 # Compile commit message with other stuff for integration
 function buildLog() {
-	# OK let's grab the short version of the commit hash
-	COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL="https://bitbucket.org/emrl/"$REPO"/commits/"$COMMITHASH
-	TASKLOG="$notes"$'\n'"<a href=\"$COMMITURL\">Commit $COMMITHASH"
 	trace "Posting '"$TASKLOG"'"
-	echo $TASKLOG | mail -r $USER@$FROMDOMAIN -s "$(echo -e $SUBJECT "-" ${APP^^}"\nContent-Type: text/plain")" $POSTEMAIL
-	# echo $COMMITHASH - $notes > $postFile; echo $COMMITURL >> $postFile
-	# cat $TASKLOG | mail -r $USER@$FROMDOMAIN -s "$(echo -e $SUBJECT "-" ${APP^^}"\nContent-Type: text/plain")" $POSTEMAIL
+	# OK let's grab the short version of the commit hash
+	COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL=$BITBUCKET"/"$REPO"/commits/"$COMMITHASH
+	# Alright let's try to get a short URL
+	id="7c005cbb4e"
+	#output=`awk -F# '{gsub(/ /,"");print ($1) }' < /root/output`
+	echo "Commit" $COMMITHASH":" $notes > $postFile
+	# lynx -dump "http://emrl.co/yourls-api.php?signature=$id&action=shorturl&format=simply&url=$COMMITURL" > $urlFile
+	# awk '{print $1}' $urlFile > $trshFile && mv $trshFile $urlFile;
+	# echo $urlFile >> $postFile
+	echo $COMMITURL >> $postFile
+	(cat $postFile) | mail -r $USER@$FROMDOMAIN -s "$(echo -e $SUBJECT "-" ${APP^^}"\nContent-Type: text/plain")" $POSTEMAIL
 }
 
 # Post via email

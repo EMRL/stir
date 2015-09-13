@@ -2,7 +2,7 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.0RC-beta"
+VERSION="3.0RC-delta"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
@@ -112,6 +112,12 @@ statFile="/tmp/$APP.$RANDOM.log"
 	echo "Could not create temporary file, exiting."
 	exit 1
 }
+# Short URL temp file
+urlFile="/tmp/$APP.$RANDOM.log"
+(umask 077 && touch "${urlFile}") || {
+	echo "Could not create temporary file, exiting."
+	exit 1
+}
 
 # Path of the script; I should flip this check to make it more useful
 if [ -d /etc/deploy ]; then
@@ -185,8 +191,8 @@ else
 fi
 
 trace "Development workpath is" $WORKPATH
-trace "Lead developer permissions are" $DEVUSER.$DEVGRP
-trace "Apache permissions are" $APACHEUSER.$APACHEGRP
+trace "Lead developer permissions are" $DEVUSER.$DEVGROUP
+trace "Apache permissions are" $APACHEUSER.$APACHEGROUP
 trace "Current project is" $APP
 trace "Current user is" $DEV
 trace "Git lock at" $gitLock
