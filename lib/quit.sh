@@ -58,7 +58,7 @@ function errorExit() {
 
 # Clean exit
 function safeExit() {
-	info "Exiting."
+	info "Exiting."; console
 	# check the email settings
 	if [ "${EMAILSUCCESS}" == "TRUE" ]; then
 	   mailLog

@@ -8,7 +8,7 @@ trace "Loading pkg.sh"
 function preDeploy() {
 	# If there are changes waiting in the repo, stop and ask for user input
 	# This should probably be it's own function
-	if [[ -z $(git status  f--porcelain) ]]; then
+	if [[ -z $(git status --porcelain) ]]; then
 		trace "Status looks good"
 	else
 		emptyLine;
