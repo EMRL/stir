@@ -101,13 +101,13 @@ postFile="/tmp/$APP.$RANDOM.log"
 	exit 1
 }
 # Logfile for random trash, might go away
-trshFile="/tmp/$APP.trash.$RANDOM.log"
+trshFile="/tmp/$APP.$RANDOM.log"
 (umask 077 && touch "${trshFile}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
 }
 # Stat file, prolly will go away as well
-statFile="/tmp/$APP.stat.$RANDOM.log"
+statFile="/tmp/$APP.$RANDOM.log"
 (umask 077 && touch "${statFile}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
@@ -139,7 +139,7 @@ fi
 
 # Load per-project configuration, if it exists
 if [ -r $WORKPATH/$APP/config/deploy.sh ]; then
-	source $WORKPATH/$APP/config/deploy.sh; APPRC=1
+	source $WORKPATH/$APP/$CONFIGDIR/deploy.sh; APPRC=1
 fi
 
 # Load libraries, or die
@@ -164,13 +164,13 @@ fi
 
 # Does a project configuration exit?
 if [ "${APPRC}" == "1" ]; then
-	trace "Loading project configuration from" $WORKPATH"/"$APP"/config/deploy.sh"
+	trace "Loading project configuration from" $WORKPATH"/"$APP"/$CONFIGDIR/deploy.sh"
 else
 	trace "No project config file found"
 fi
 
 # Are we using "smart" *cough* commits?
-if [ "${SMRTCOMMIT}" == "1" ]; then
+if [ "${SMARTCOMMIT}" == "TRUE" ]; then
 	trace "Smart commits are enabled"
 else
 	trace "Smart commits are disabled"
@@ -189,7 +189,7 @@ trace "Lead developer permissions are" $DEVUSER.$DEVGRP
 trace "Apache permissions are" $APACHEUSER.$APACHEGRP
 trace "Current project is" $APP
 trace "Current user is" $DEV
-trace "Logfile is" $logFile
+trace "Git lock at" $gitLock
 
 
 function  appDeploy {
@@ -208,7 +208,7 @@ function  appDeploy {
 	gitChkProd		# Checkout production branch
 	gitMerge		# Merge master into production
 	gitPushProd		# Push production to Bit Bucket
-	gitChkm			# checkout master once again  
+	gitChkMstr		# checkout master once again  
 	pkgDeploy		# Deploy project to live server   
 }
 

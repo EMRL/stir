@@ -8,7 +8,7 @@ trace "Loading smrtCommit()"
 
 # Constructing smart *cough* commit messages
 function smrtCommit() {
-	if [[ $SMRTCOMMIT == "TRUE" ]]; then
+	if [[ $SMARTCOMMIT == "TRUE" ]]; then
 		trace "Building commit message"
 
 		# Checks for the existence of a successful plugin upgrade, using grep
@@ -20,6 +20,13 @@ function smrtCommit() {
 			PCB=$(echo $PCA | sed 's/^.*\(Updated.*\)/\1/g')
 			# Strips the last period, makes my head hurt.
 			PCC=${PCB%?}; PCD=$(echo $PCB | cut -c 1-$(expr `echo "$PCC" | wc -c` - 2))
+
+			# Get this thing ready.
+			# Remove the leading spaces 
+			# awk '{print $1}' FILE
+			# Add commas between the plugins with this
+			# sed 'N;s/\n/, /' FILE
+
 			trace "Plugin status ["$PCD"]"
 			# Replace current commit message with Plugin upgrade info 
 			COMMITMSG=$PCD

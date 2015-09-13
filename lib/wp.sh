@@ -33,7 +33,8 @@ function wpPkg() {
 				info "The following updates are available:"
 				# Clean the garbage out of the log for console display
 				sed '1,/update_version/d' $wpFile > $trshFile && mv $trshFile $wpFile;
-				awk '{print "  " $1,$4}' $wpFile; emptyLine
+				awk '{print "  " $1,$4}' $wpFile > $trshFile && mv $trshFile $wpFile;
+				cat $wpFile; emptyLine
 				if  [ "$FORCE" = "1" ] || yesno --default no "Proceed with updates? [y/N] "; then
 					# Check for Wordfence cache file and remove if found
 					if [ -f $WORKPATH/$APP/public/app/plugins/wordfence/tmp/configCache.php ]; then

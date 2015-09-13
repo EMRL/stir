@@ -13,16 +13,16 @@ function permFix() {
   # /lib is obselete for future repositories
   if [ -d "$WORKPATH/$APP/lib" ]; then
     sudo chown -R $DEVUSER.$DEVGRP $WORKPATH/$APP/lib; #errorChk
-    info "  $APP/lib/"
+    info " $APP/lib/"
   else
     sleep 1
   fi
 
   # Set permissions
   sudo chown -R $DEVUSER.$DEVGRP $WORKPATH/$APP/.git; #errorChk
-  info "  $APP/.git"
+  info " $APP/.git"
   sudo chown -R $APACHEUSER.$APACHEGRP $WORKPATH/$APP/public/system; #errorChk
-  info "  $APP/public/app/system/"
+  info " $APP/public/app/system/"
   sudo chown -R $APACHEUSER.$APACHEGRP $WORKPATH/$APP/public/app; #errorChk
-  info "  $APP/public/app/"
+  info " $APP/public/app/"
 }

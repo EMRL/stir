@@ -5,6 +5,9 @@
 # Handles git related processes
 trace "Loading git.sh"
 
+# Assign a variable to represent .git/index.lock
+gitLock="$WORKPATH/$APP/.git/index.lock"
+
 # Make sure we're in a git repository.
 function gitStart() {
 	# Is git installed?
@@ -29,9 +32,6 @@ function gitStart() {
 
 	# Try to clear out old git processes owned by this user
 	killall -9 git &>> /dev/null
-
-	# Assign a variable to represent .git/index.lock
-	gitLock=$WORKPATH/$APP/.git/index.lock
 	
 	# Unstage anything that is leftover from a mess
 	# git reset HEAD &>> $logFile
@@ -48,82 +48,37 @@ function gitChkMstr() {
 	fi
 }
 
-function preDeploy() {
-	# If there are changes waiting in the repo, stop and ask for user input
-	# This should probably be it's own function
-	if [[ -z $(git status -uno --porcelain) ]]; then
-		trace "Status looks good"
-	else
-		emptyLine;
-		warning "There are undeployed changes in this project."
-		if yesno --default no "View unresolved files? [y/N] "; then
-			console; console "N = New | M = Modified | D = Deleted"
-			console "------------------------------------"
-			git status -uno --porcelain; echo
-			if  yesno --default yes "Continue deploy? [Y/n] "; then
-				trace "Continuing deploy"
-			else
-				userExit
-			fi
-			trace "Continuing deploy"
-		fi
-	fi
-} 
-
-function postDeploy() {
-	# We just attempted to deploy, check for changes sitll waiting in the repo
-	# if we find any, something went wrong.
-	if [[ -z $(git status -uno --porcelain) ]]; then
-		emptyLine 
-	else
-		info ""
-		if  yesno --default yes "Attempted deploy, but something went wrong, view status? [Y/n] "; then
-			git status; errorExit
-		else
-			errorExit
-		fi
-	fi
-}
-
 # Does anything need to be committed? (Besides me?)
 function gitStatus() {
 	trace "Check Status"
-	if [[ $VERBOSE -eq 1 ]]; then
-		git status | tee --append $logFile            
-	else
-		git status &>> $logFile &
-	fi
-	# Were there any conflicts checking out?
-	if grep -q "nothing to commit, working directory clean" $logFile; then
-		 console "Nothing to commit, working directory clean."
-		 safeExit
-	else
-		trace "OK";
+	if [[ -z $(git status --porcelain) ]]; then
+		console "Nothing to commit, working directory clean."; safeExit
 	fi
 }
 
 # Stage files
 function gitStage() {
-	trace "Staging files"; emptyLine
-	if [ "$FORCE" = "1" ] || yesno --default yes "Stage files? [Y/n] "; then
-
-		if [[ $VERBOSE -eq 1 ]]; then
-				git add -A | tee --append $logFile; errorChk              
-		else  
-			git add -A &>> $logFile; errorChk
-		fi
+	# Check for stuff that needs a commit
+	if [[ -z $(git status --porcelain) ]]; then
+		console "Nothing to commit, working directory clean."; safeExit
 	else
-		trace "Exiting without staging files"; userExit    
+		trace "Staging files"; emptyLine
+		if [ "$FORCE" = "1" ] || yesno --default yes "Stage files? [Y/n] "; then
+			if [[ $VERBOSE -eq 1 ]]; then
+				git add -A | tee --append $logFile; errorChk              
+			else  
+				git add -A &>> $logFile; errorChk
+			fi
+		else
+			trace "Exiting without staging files"; userExit    
+		fi
 	fi
 }
 
 # Commit, with message
 function gitCommit() {
-	# Check for stuff that needs a commit
-	notice "Examining working directory..."
-
 	# Smart commit stuff
-	smrtCommit
+	smrtCommit; emptyLine
 	# Do a dry run; check for anything to commit
 	git commit --dry-run &>> $logFile; 
 	if grep -q "nothing to commit, working directory clean" $logFile; then 
@@ -132,16 +87,32 @@ function gitCommit() {
 	else
 		# Found stuff, let's get a commit message
 		if [[ -z "$COMMITMSG" ]]; then
-			while read -p "Enter commit message: " notes && [ -z "$notes" ]; do :; done
+			# while read -p "Enter commit message: " notes && [ -z "$notes" ]; do :; done
+			read -p "Enter commit message: " notes
+			if [[ -z "$notes" ]]; then
+				console "Commit message must not be empty."
+				read -p "Enter commit message: " notes
+				if [[ -z "$notes" ]]; then
+					console "Really?"
+					read -p "Enter commit message: " notes
+				fi
+				if [[ -z "$notes" ]]; then
+					console "Last chance."
+					read -p "Enter commit message: " notes
+				fi
+				if [[ -z "$notes" ]]; then
+					quickExit
+				fi
+			fi
 		else
 			# We want to be able to edit the default commit if available
 			notes=$COMMITMSG
 			read -p "Enter commit message [$COMMITMSG]: " -e -i "${COMMITMSG}" notes
 			# Update the commit message based on user input ()
 			notes=${notes:-$COMMITMSG}
-			git commit -m "$notes" &>> $logFile
-			trace "Commit message:" $notes
 		fi
+		git commit -m "$notes" &>> $logFile
+		trace "Commit message:" $notes
 	fi
 }
 
@@ -189,7 +160,6 @@ function gitMerge() {
 		git merge master  &>> $logFile &
 		showProgress
 	fi
-	trace "OK"
 }
 
 # Push production

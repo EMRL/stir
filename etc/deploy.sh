@@ -39,10 +39,10 @@
 # system & per-user settings.
 
 # A human readable project name
-#PROJNAME="Best Webapp Ever"	
+# PROJNAME="Best Webapp Ever"	
 
 # A human readable client name
-#PROJCLIENT="Best Client Ever"
+# PROJCLIENT="Best Client Ever"
 
 # Development project URL, without http://
 # DEVURL=""
@@ -50,12 +50,15 @@
 # Production, or "Live" project URL, without http://
 # PRODURL=""
 
+# Repository name
+# REPO="this-is-the-name"
+
 # If for some reason you'd like a default commit message. It will
 # always be editable before finalizing commit.	
-#COMMITMSG="This is a default commit message"
+# COMMITMSG="This is a default commit message"
 
 # Disallow deployment	
-#DONOTDEPLOY="1"	
+# DONOTDEPLOY="1"	
 
 # Integration options.			
 # 

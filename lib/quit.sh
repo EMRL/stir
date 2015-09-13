@@ -24,7 +24,7 @@ function userExit() {
 	rm $WORKPATH/$APP/.git/index.lock &> /dev/null
 	trace "Exit on user request"
 	# check the email settings
-	if [ "${EMAILQUIT}" == "1" ]; then
+	if [ "${EMAILQUIT}" == "TRUE" ]; then
 	   mailLog
 	fi
 	# Clean up your mess
@@ -47,7 +47,7 @@ function errorExit() {
 		less $logFile;
 	fi
 	# Send log
-	if [ "${EMAILERROR}" == "1" ]; then
+	if [ "${EMAILERROR}" == "TRUE" ]; then
 		mailLog
 	fi
   	# Clean up your mess
@@ -60,7 +60,7 @@ function errorExit() {
 function safeExit() {
 	info "Exiting."
 	# check the email settings
-	if [ "${EMAILSUCCESS}" == "1" ]; then
+	if [ "${EMAILSUCCESS}" == "TRUE" ]; then
 	   mailLog
 	fi
 	# Clean up your mess

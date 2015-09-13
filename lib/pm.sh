@@ -49,7 +49,6 @@ function pkgMgr() {
 		else
 			info "No package management needed."
 			trace "$WORKPATH/$APP/public/app/themes/$APP/package.json not found, skipping."
-
 		fi
 	fi
 }
