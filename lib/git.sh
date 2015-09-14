@@ -180,3 +180,12 @@ function gitPushProd() {
 		fi
 	fi
 }
+
+# Get the stats for this git author, just for 
+function gitStats() {
+	getent passwd $USER | cut -d ':' -f 5 | cut -d ',' -f 1 > $trshFile
+	FULLUSER=$(<$trshFile)
+	git log --author="$FULLUSER" --pretty=tformat: --numstat | \
+	gawk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END \
+	{ printf "Your total lines of code contributed so far: %s\n(+%s added | -%s deleted)\n",loc,add,subs }' -
+} 

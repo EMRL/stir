@@ -2,7 +2,7 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.0RC-delta"
+VERSION="3.0RC-gamma"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
@@ -11,13 +11,13 @@ function usage() {
 	echo -n "Usage: deploy [options] [target] ...
 
 Options:
-  -u, --upgrade     If there are no available upgrades, halt deployment
-  -F, --force       Skip all user interaction, forces 'Yes' to all actions.
-  -Q, --forcequiet  Like the --force command, with minimal output to screen
-  -s, --strict      Run in Strict mode. Any error will halt deployment completely
-  -V, --verbose     Output more process information to screen
-  -d, --debug       Run in debug mode
-  -h, --help        Display this help and exit
+  -u, --upgrade          If there are no available upgrades, halt deployment
+  -F, --force            Skip all user interaction, forces 'Yes' to all actions.
+  -Q, --forcequiet       Like the --force command, with minimal output to screen
+  -s, --strict           Run in Strict mode. Any error will halt deployment completely
+  -V, --verbose          Output more process information to screen
+  -d, --debug            Run in debug mode
+  -h, --help             Display this help and exit
   -v, --version     Output version information and exit
 
 "
@@ -89,7 +89,7 @@ logFile="/tmp/$APP.$RANDOM.log"
 	exit 1
 }
 wpFile="/tmp/$APP.$RANDOM.log"
-(umask 077 && touch "${logFile}") || {
+(umask 077 && touch "${wpFile}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
 }
@@ -190,6 +190,8 @@ else
 	trace "Integration enabled, using" $POSTEMAIL
 fi
 
+trace "Log file is" $logFile
+trace "Updates log is" $wpFile
 trace "Development workpath is" $WORKPATH
 trace "Lead developer permissions are" $DEVUSER.$DEVGROUP
 trace "Apache permissions are" $APACHEUSER.$APACHEGROUP

@@ -26,6 +26,8 @@ function buildLog() {
 
 # Post via email
 function postCommit() {
+	# just for yuks, display git stats for this user
+	gitStats
 	# Check to see if there's an email integration setup
 	if [[ -z "$POSTEMAIL" ]]; then
 		trace "No email integration setup"

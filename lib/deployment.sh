@@ -29,25 +29,19 @@ function preDeploy() {
 
 function pkgDeploy() {
 	emptyLine
-	if [ -f "{$WORKPATH}/{$APP}/config/deploy.rb" ]; then
-		if  [ "$FORCE" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
-			# Add ssh keys and double check directoy
-			cd $WORKPATH/$APP; \
-			ssh-add &>> $logFile; sleep 2
-			# Deploy via deployment command specified in mina
-			if [[ $VERBOSE -eq 1 ]]; then
-				$DEPLOY | tee --append $logFile
-				postDeploy
-			else
-				$DEPLOY &>> $logFile &
-				spinner $!
-				postDeploy
-			fi
+	if  [ "$FORCE" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
+		# Add ssh keys and double check directoy
+		cd $WORKPATH/$APP; \
+		ssh-add &>> $logFile; sleep 2
+		# Deploy via deployment command specified in mina
+		if [[ $VERBOSE -eq 1 ]]; then
+			$DEPLOY | tee --append $logFile
+			postDeploy
+		else
+			$DEPLOY &>> $logFile &
+			spinner $!
+			postDeploy
 		fi
-	else
-		info "No deployment configuration for this project."
-		# Run integration hooks
-		postCommit
 	fi
 }
 
@@ -55,9 +49,8 @@ function postDeploy() {
 	# We just attempted to deploy, check for changes sitll waiting in the repo
 	# if we find any, something went wrong.
 	if [[ -z $(git status -uno --porcelain) ]]; then
-		info "Deployment Success." 
 		# Run integration hooks
-		postCommit
+		postCommit; info "Deployment Success." 
 	else
 		info ""
 		if  yesno --default yes "Attempted deploy, but something went wrong, view status? [Y/n] "; then
