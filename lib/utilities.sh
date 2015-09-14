@@ -1,10 +1,10 @@
 #!/bin/bash
 #
-# func.sh
+# utilities.sh
 #
 # Handles various setup, logging, and option flags
 # Make sure this function is loaded up first
-trace "Loading func.sh"
+trace "Loading utilities.sh"
 
 # Open a deployment session, ask for user confirmation before beginning
 function go() {
@@ -13,6 +13,20 @@ function go() {
 	echo "deploy" $VERSION
 	printf "Current working path is %s\n" ${WORKPATH}/${APP}
 
+	if [ -z "${APPRC}" ]; then
+		if [ ! -d $WORKPATH/$APP/config ]; then
+			sudo mkdir $WORKPATH/$APP/config
+		fi
+		emptyLine; info "Project configuration not found, creating."; sleep 2
+		sudo cp ${deployPath}/deploy.sh $WORKPATH/$APP/config/
+
+		sudo chown $DEVUSER.$DEVGROUP $WORKPATH/$APP/config/deploy.sh
+		if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
+			sudo nano $WORKPATH/$APP/config/deploy.sh
+		else
+			info "You can change configuration later be editing" $WORKPATH/$APP/"config/deploy.sh"
+		fi
+	fi
 	# Chill and wait for user to confirm project
 	if  [ "$FORCE" = "1" ] || yesno --default yes "Continue? [Y/n] "; then
 		trace "Loading project."

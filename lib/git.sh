@@ -107,7 +107,7 @@ function gitCommit() {
 		else
 			# We want to be able to edit the default commit if available
 			notes=$COMMITMSG
-			read -p "Enter commit message [$COMMITMSG]: " -e -i "${COMMITMSG}" notes
+			read -p "Edit commit message: " -e -i "${COMMITMSG}" notes
 			# Update the commit message based on user input ()
 			notes=${notes:-$COMMITMSG}
 		fi

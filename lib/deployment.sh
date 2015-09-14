@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# pkg.sh
+# deployment.sh
 #
 # Handles deployment via mina
-trace "Loading pkg.sh"   
+trace "Loading deployment.sh"   
 
 function preDeploy() {
 	# If there are changes waiting in the repo, stop and ask for user input
@@ -29,22 +29,26 @@ function preDeploy() {
 
 function pkgDeploy() {
 	emptyLine
-	if  [ "$FORCE" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
-		# Add ssh keys and double check directoy
-		cd $WORKPATH/$APP; \
-		ssh-add &>> $logFile; sleep 2
-		# Deploy via deployment command specified in mina
-		if [[ $VERBOSE -eq 1 ]]; then
-			$DEPLOY | tee --append $logFile
-			# git show --stat &>> $logFile 
-			postDeploy
-		else
-			$DEPLOY &>> $logFile &
-			spinner $!
-			# git show --stat &>> $logFile
-			postDeploy
+	if [ -f "{$WORKPATH}/{$APP}/config/deploy.rb" ]; then
+		if  [ "$FORCE" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
+			# Add ssh keys and double check directoy
+			cd $WORKPATH/$APP; \
+			ssh-add &>> $logFile; sleep 2
+			# Deploy via deployment command specified in mina
+			if [[ $VERBOSE -eq 1 ]]; then
+				$DEPLOY | tee --append $logFile
+				postDeploy
+			else
+				$DEPLOY &>> $logFile &
+				spinner $!
+				postDeploy
+			fi
 		fi
-	fi   
+	else
+		info "No deployment configuration for this project."
+		# Run integration hooks
+		postCommit
+	fi
 }
 
 function postDeploy() {

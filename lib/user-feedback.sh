@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# ui.sh
+# user-feedback.sh
 #
 # Handles interface components
-trace "Loading ui.sh"
+trace "Loading user-feedback.sh"
 
 # Progress spinner; we'll see if this works
 function spinner() {

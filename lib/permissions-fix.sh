@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# pmfix()
+# permfix()
 #
 # Repairs potential permission issues before deployment
 trace "Loading permFix()"

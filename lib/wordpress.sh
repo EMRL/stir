@@ -1,10 +1,10 @@
 #!/bin/bash
 #
-# wp.sh
+# wordpress.sh
 #
 # Checks for Wordpress upgrades, and executes upgrades if needed
 #
-trace "Loading wpress()"
+trace "Loading wordpress.sh"
 
 function wpPkg() {
 	# Is wp-cli installed? 
@@ -17,13 +17,13 @@ function wpPkg() {
 			cd $WORKPATH/$APP/public; \
 			
 			# Look for updates
-			if [[ $VERBOSE -eq 1 ]]; then
-				wp plugin status | tee --append $logFile $wpFile              
-				wp core check-update | tee --append $logfile
-			else
+			#if [[ $VERBOSE -eq 1 ]]; then
+			#	wp plugin status | tee --append $logFile $wpFile              
+			#	wp core check-update | tee --append $logfile
+			#else
 				wpCheck &
 				spinner $!
-			fi
+			#fi
 
 			# Check the logs
 			#if grep -q "U = Update Available" $logFile; then

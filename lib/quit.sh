@@ -1,23 +1,9 @@
 #!/bin/bash
 #
-# exit.sh
+# quit.sh
 #
-# Handles various exit codes
-trace "Loading exit.sh"
-
-# Try to get exit/error code
-function errorChk() {
-	EXITCODE=$?; 
-	if [[ $EXITCODE != 0 ]]; then 
-		error "FAIL"; warning "Exiting on status other than 0." 
-	else
-		# If exit code is 0
-		if
-			[[ $EXITCODE == 0 ]]; then 
-			trace "OK"; console "Success."
-		fi
-	fi
-}
+# Handles exiting the program
+trace "Loading quit.sh"
 
 # User-requested exit
 function userExit() {

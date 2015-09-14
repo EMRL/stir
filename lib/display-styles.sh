@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# alerts.sh
+# display-styles.sh
 
 # Define color codes
 black='\E[30;47m'

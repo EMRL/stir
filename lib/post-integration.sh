@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# postCommit()
+# post-integration.sh
 #
 # Handles integration with other services
-trace "Loading postCommit()"
+trace "Loading post-integration.sh"
 
 # Compile commit message with other stuff for integration
 function buildLog() {
@@ -13,10 +13,13 @@ function buildLog() {
 	# Alright let's try to get a short URL
 	id="7c005cbb4e"
 	#output=`awk -F# '{gsub(/ /,"");print ($1) }' < /root/output`
-	echo "Commit" $COMMITHASH":" $notes > $postFile
+	echo "<strong>Commit" $COMMITHASH"</strong>:" $notes > $postFile
+
+	# Make a short URL, not implemented
 	# lynx -dump "http://emrl.co/yourls-api.php?signature=$id&action=shorturl&format=simply&url=$COMMITURL" > $urlFile
 	# awk '{print $1}' $urlFile > $trshFile && mv $trshFile $urlFile;
 	# echo $urlFile >> $postFile
+	
 	echo $COMMITURL >> $postFile
 	(cat $postFile) | mail -r $USER@$FROMDOMAIN -s "$(echo -e $SUBJECT "-" ${APP^^}"\nContent-Type: text/plain")" $POSTEMAIL
 }

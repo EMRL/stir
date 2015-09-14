@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# log.sh
+# log-handling.sh
 #
 # Handles parsing and creating logs
-trace "Loading log.sh"
+trace "Loading log-handling.sh"
 
 # Log via email, needs work
 function mailLog {

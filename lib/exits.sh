@@ -1,13 +1,13 @@
 #!/bin/bash
 #
-# exitcode.sh
+# errorChk()
 #
 # Handles various exit code checking
-trace "Loading exitcode.sh"
+trace "Loading errorChk()"
 
 # Try to get exit/error code
 function errorChk() {
-EXITCODE=$?; 
+	EXITCODE=$?; 
 	if [[ $EXITCODE == 1 ]]; then 
 		trace "FAIL"; warning "Exiting on ERROR CODE=1"
 		errorExit 
