@@ -14,11 +14,11 @@ Options:
   -u, --upgrade          If there are no available upgrades, halt deployment
   -F, --force            Skip all user interaction, forces 'Yes' to all actions.
   -Q, --forcequiet       Like the --force command, with minimal output to screen
-  -s, --strict           Run in Strict mode. Any error will halt deployment completely
+  -s, --strict           Any error will halt deployment completely
   -V, --verbose          Output more process information to screen
   -d, --debug            Run in debug mode
   -h, --help             Display this help and exit
-  -v, --version     Output version information and exit
+  -v, --version          Output version information and exit
 
 "
 }

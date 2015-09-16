@@ -19,17 +19,16 @@ function go() {
 			sudo mkdir $WORKPATH/$APP/config
 		fi
 		emptyLine; info "Project configuration not found, creating."; sleep 2
-		sudo cp ${deployPath}/deploy.sh $WORKPATH/$APP/config/
-		sudo chown $DEVUSER.$DEVGROUP $WORKPATH/$APP/config/deploy.sh
+		sudo cp ${deployPath}/deploy.sh $WORKPATH/$APP/$CONFIGDIR/
+		sudo chown $DEVUSER.$DEVGROUP $WORKPATH/$APP/$CONFIGDIR/deploy.sh
 		if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
-			sudo nano $WORKPATH/$APP/config/deploy.sh
+			sudo nano $WORKPATH/$APP/$CONFIGDIR/deploy.sh
 			clear; sleep 1
-			info "Loading new project configuration."
-			if [ -r $WORKPATH/$APP/config/deploy.sh ]; then
-				source $WORKPATH/$APP/$CONFIGDIR/deploy.sh; APPRC=1
-			fi
+			# info "Loading new project configuration."
+			# source $WORKPATH/$APP/$CONFIGDIR/deploy.sh
+			quickExit
 		else
-			info "You can change configuration later be editing" $WORKPATH/$APP/"config/deploy.sh"
+			info "You can change configuration later by editing" $WORKPATH/$APP/"config/deploy.sh"
 		fi
 	fi
 
