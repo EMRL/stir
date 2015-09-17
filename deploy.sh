@@ -2,7 +2,7 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.0RC-gamma"
+VERSION="3.0RC-epsilon"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
@@ -90,6 +90,11 @@ logFile="/tmp/$APP.$RANDOM.log"
 }
 wpFile="/tmp/$APP.$RANDOM.log"
 (umask 077 && touch "${wpFile}") || {
+	echo "Could not create temporary file, exiting."
+	exit 1
+}
+coreFile="/tmp/$APP.$RANDOM.log"
+(umask 077 && touch "${coreFile}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
 }
