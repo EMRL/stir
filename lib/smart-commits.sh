@@ -31,5 +31,16 @@ function smrtCommit() {
 			COMMITMSG="$PCC ($PLUGINS)"
 			# Will have to add the stuff for core upgrade, still need logs
 		fi
+
+		# So what about a Wordpress core upgrade?
+		if [[ $UPDCORE == "1" ]]; then
+			if [[ -z "$PCC" ]]; then 
+				COMMITMSG="Updated system (wp-core $COREUPD)"
+			else
+				COMMITMSG="$PCC ($PLUGINS) and system (wp-core $COREUPD)"
+			fi
+		else			
+			trace "No system updates"
+		fi
 	fi
 }

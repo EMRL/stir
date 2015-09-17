@@ -74,13 +74,22 @@ function wpPkg() {
 			else
 				sleep 1
 
-				# Update available
-				if  [ "$FORCE" = "1" ] || yesno --default no "A new version of Wordpress is available, update? [y/N] "; then
+				# Get files setup for smart commit
+				wp core check-update &> $coreFile
+				# Filter out PHP garbage and awk the version number
+				grep -vE "(Notice:|Warning:|Strict Standards:)" $coreFile > $trshFile && mv $trshFile $coreFile;
+				awk 'FNR == 1 {next} {print $1}' $coreFile > $trshFile && mv $trshFile $coreFile;
+				COREUPD=$(<$coreFile)
+
+				# Update available!  \o/
+				if  [ "$FORCE" = "1" ] || yesno --default no "A new version of Wordpress is available ("$COREUPD"), update? [y/N] "; then
 					cd $WORKPATH/$APP/public; \
 					wp core update &>> $logFile &
 					spinner $!
 					cd $WORKPATH/$APP/; \
-					info "Wordpress core updates complete."
+					info "Upgrading production database..."; lynx -dump $PRODURL/system/wp-admin/upgrade.php > $trshFile
+					info "Wordpress core updates complete."; UPDCORE=1
+
 				else
 					info "Skipping Wordpress core updates..."
 				fi   
