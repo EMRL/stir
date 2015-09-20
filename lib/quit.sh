@@ -62,5 +62,6 @@ function cleanUp() {
 	[[ -f $statFile ]] && rm "$statFile"
 	[[ -f $wpFile ]] && rm "$wpFile"
 	[[ -f $urlFile ]] && rm "$urlFile"
+	[[ -f $gitLock ]] && rm "$coreFile"
 	[[ -f $gitLock ]] && rm "$gitLock"
 }
