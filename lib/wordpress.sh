@@ -77,15 +77,24 @@ function wpPkg() {
 				# Get files setup for smart commit
 				wp core check-update &> $coreFile
 				# Filter out PHP garbage and awk the version number
-				grep -vE "(Notice:|Warning:|Strict Standards:)" $coreFile > $trshFile && mv $trshFile $coreFile;
+				grep -vE "Notice:|Warning:|Strict Standards:|PHP" $coreFile > $trshFile && mv $trshFile $coreFile;
 				awk 'FNR == 1 {next} {print $1}' $coreFile > $trshFile && mv $trshFile $coreFile;
+				# just in case, try to remove all blank lines. DOS formatting is messing up output with PHP crap
+				sed -n -E -e '/version/,$ p'  $coreFile > $trshFile && mv $trshFile $coreFile;
 				COREUPD=$(<$coreFile)
 
 				# Update available!  \o/
+				echo -e "";
 				if  [ "$FORCE" = "1" ] || yesno --default no "A new version of Wordpress is available ("$COREUPD"), update? [y/N] "; then
 					cd $WORKPATH/$APP/public; \
 					wp core update &>> $logFile &
 					spinner $!
+					# Double check upgrade was successful
+					wp core check-update --quiet &> $trshFile
+					if grep -q "version" $trshFile; then
+						error "Core update failed.";
+					fi
+					sleep 1
 					cd $WORKPATH/$APP/; \
 					info "Upgrading production database..."; lynx -dump $PRODURL/system/wp-admin/upgrade.php > $trshFile
 					info "Wordpress core updates complete."; UPDCORE=1
