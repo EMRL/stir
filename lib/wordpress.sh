@@ -34,6 +34,8 @@ function wpPkg() {
 				# Clean the garbage out of the log for console display
 				sed '1,/update_version/d' $wpFile > $trshFile && mv $trshFile $wpFile;
 				awk '{print "  " $1,$4}' $wpFile > $trshFile && mv $trshFile $wpFile;
+				# Work around the weird "Available" bug
+				sed '/Available/d' $wpFile > $trshFile && mv $trshFile $wpFile;
 				cat $wpFile; emptyLine
 				if  [ "$FORCE" = "1" ] || yesno --default no "Proceed with updates? [y/N] "; then
 					# Check for Wordfence cache file and remove if found
