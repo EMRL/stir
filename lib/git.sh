@@ -52,7 +52,7 @@ function gitChkMstr() {
 function gitStatus() {
 	trace "Check Status"
 	if [[ -z $(git status --porcelain) ]]; then
-		console "Nothing to commit, working directory clean."; safeExit
+		console "Nothing to commit, working directory clean."; quietExit
 	fi
 }
 
@@ -60,7 +60,7 @@ function gitStatus() {
 function gitStage() {
 	# Check for stuff that needs a commit
 	if [[ -z $(git status --porcelain) ]]; then
-		console "Nothing to commit, working directory clean."; safeExit
+		console "Nothing to commit, working directory clean."; quietExit
 	else
 		trace "Staging files"; emptyLine
 		if [ "$FORCE" = "1" ] || yesno --default yes "Stage files? [Y/n] "; then
