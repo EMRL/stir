@@ -55,6 +55,15 @@ function safeExit() {
 	tput cnorm; exit 0
 }
 
+# Clean exit, nothing to commit
+function quietExit() {
+	info "Exiting."; console
+	# Clean up your mess
+	cleanUp
+	#tput rmcup   # I'm not sure if I really want to use this or not.
+	tput cnorm; exit 0
+}
+
 function cleanUp() {
 	[[ -f $logFile ]] && rm "$logFile"
 	[[ -f $trshFile ]] && rm "$trshFile"
