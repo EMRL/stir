@@ -2,18 +2,21 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.0RC-epsilon"
+VERSION="3.0"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
 # Options
+# 
+# For later:
+#   -Q, --forcequiet       Like the --force command, with minimal output to screen
+
 function usage() {
 	echo -n "Usage: deploy [options] [target] ...
 
 Options:
   -u, --upgrade          If there are no available upgrades, halt deployment
   -F, --force            Skip all user interaction, forces 'Yes' to all actions.
-  -Q, --forcequiet       Like the --force command, with minimal output to screen
   -s, --strict           Any error will halt deployment completely
   -V, --verbose          Output more process information to screen
   -d, --debug            Run in debug mode
