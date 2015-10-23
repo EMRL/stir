@@ -98,6 +98,7 @@ function wpPkg() {
 					fi
 					sleep 1
 					cd $WORKPATH/$APP/; \
+					info "Upgrading development database..."; lynx -dump $DEVURL/system/wp-admin/upgrade.php > $trshFile
 					info "Upgrading production database..."; lynx -dump $PRODURL/system/wp-admin/upgrade.php > $trshFile
 					info "Wordpress core updates complete."; UPDCORE=1
 
