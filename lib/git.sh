@@ -181,7 +181,7 @@ function gitPushProd() {
 	fi
 }
 
-# Get the stats for this git author, just for 
+# Get the stats for this git author, just for fun
 function gitStats() {
 	info "Calculating..."
 	getent passwd $USER | cut -d ':' -f 5 | cut -d ',' -f 1 > $trshFile

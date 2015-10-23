@@ -2,7 +2,7 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.0"
+VERSION="3.01"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
@@ -217,6 +217,7 @@ function  appDeploy {
 	gitStart		# Check for a valid git project and get set up
 	lock			# Create lock file
 	go				# Start a deployment work session
+	serverChk
 	permFix			# Fix permissions
 	gitChkMstr		# Checkout master branch
 	preDeploy		# Get the status
