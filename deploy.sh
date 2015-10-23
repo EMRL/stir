@@ -86,42 +86,42 @@ APP+=("$@")
 # Fire up temporary log files. Consolidate this shit better someday, geez.
 # 
 # Main log file
-logFile="/tmp/$APP.$RANDOM.log"
+logFile="/tmp/$APP.log-$RANDOM.log"
 (umask 077 && touch "${logFile}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
 }
-wpFile="/tmp/$APP.$RANDOM.log"
+wpFile="/tmp/$APP.wp-$RANDOM.log"
 (umask 077 && touch "${wpFile}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
 }
-coreFile="/tmp/$APP.$RANDOM.log"
+coreFile="/tmp/$APP.core-$RANDOM.log"
 (umask 077 && touch "${coreFile}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
 }
 # WTF IS THIS
 echo -e "Deployment logfile for" ${APP^^} "-" $NOW "\r\r" >> $logFile
-postFile="/tmp/$APP.$RANDOM.log"
+postFile="/tmp/$APP.wtf-$RANDOM.log"
 (umask 077 && touch "${postFile}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
 }
 # Logfile for random trash, might go away
-trshFile="/tmp/$APP.$RANDOM.log"
+trshFile="/tmp/$APP.trsh-$RANDOM.log"
 (umask 077 && touch "${trshFile}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
 }
 # Stat file, prolly will go away as well
-statFile="/tmp/$APP.$RANDOM.log"
+statFile="/tmp/$APP.stat-$RANDOM.log"
 (umask 077 && touch "${statFile}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
 }
 # Short URL temp file
-urlFile="/tmp/$APP.$RANDOM.log"
+urlFile="/tmp/$APP.url-$RANDOM.log"
 (umask 077 && touch "${urlFile}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
@@ -199,7 +199,12 @@ else
 fi
 
 trace "Log file is" $logFile
-trace "Updates log is" $wpFile
+trace "Plugin updates log is" $wpFile
+trace "Core upgrade log is" $coreFile
+trace "Post file is " $postFile
+trace "Trash file is" $trshFile
+trace "Stat file is" $statFile
+trace "URL file is" $urlFile
 trace "Development workpath is" $WORKPATH
 trace "Lead developer permissions are" $DEVUSER.$DEVGROUP
 trace "Apache permissions are" $APACHEUSER.$APACHEGROUP
