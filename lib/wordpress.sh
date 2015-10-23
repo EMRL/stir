@@ -79,10 +79,24 @@ function wpPkg() {
 				# Get files setup for smart commit
 				wp core check-update &> $coreFile
 				# Filter out PHP garbage and awk the version number
+				
+
+
+#cut -d "=" -f 2 <<< "$your_str"
+
+#grep -oP "(?<=package_url )[^ ]+" $coreFile &> $trshFile
+
+# cat $coreFile | grep -oP "(?<=package_url )[^ ]+" > $coreFile
+
 				grep -vE "Notice:|Warning:|Strict Standards:|PHP" $coreFile > $trshFile && mv $trshFile $coreFile;
-				awk 'FNR == 1 {next} {print $1}' $coreFile > $trshFile && mv $trshFile $coreFile;
-				# just in case, try to remove all blank lines. DOS formatting is messing up output with PHP crap
-				sed -n -E -e '/version/,$ p'  $coreFile > $trshFile && mv $trshFile $coreFile;
+				#awk 'FNR == 1 {next} {print $1}' $coreFile > $trshFile && mv $trshFile $coreFile;
+
+				cat $coreFile | awk 'FNR == 1 {next} {print $1}' > $trshFile && mv $trshFile $coreFile;
+				# The code below is no longer needed
+				# Just in case, try to remove all blank lines. DOS formatting is messing up output with PHP crap
+				# sed -n -E -e '/version/,$ p' $coreFile > $trshFile && mv $trshFile $coreFile;
+
+
 				COREUPD=$(<$coreFile)
 
 				# Update available!  \o/
