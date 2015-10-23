@@ -43,7 +43,7 @@ function wpPkg() {
 						sudo rm $WORKPATH/$APP/public/app/plugins/wordfence/tmp/configCache.php
 					fi
 
-					wp plugin update --all &>> $logFile &
+					sudo -u "apache" --  /usr/local/bin/wp plugin update --all &>> $logFile &
 					spinner $!
 					# Any problems with plugin updates?
 					if grep -q "Warning: The update cannot be installed because we will be unable to copy some files." $logFile; then
@@ -88,21 +88,22 @@ function wpPkg() {
 
 # cat $coreFile | grep -oP "(?<=package_url )[^ ]+" > $coreFile
 
+				# Strip out any randomly occuring debugging output
 				grep -vE "Notice:|Warning:|Strict Standards:|PHP" $coreFile > $trshFile && mv $trshFile $coreFile;
-				#awk 'FNR == 1 {next} {print $1}' $coreFile > $trshFile && mv $trshFile $coreFile;
-
+				# This is the old methond, for some reason is stopped working
+				# awk 'FNR == 1 {next} {print $1}' $coreFile > $trshFile && mv $trshFile $coreFile;
 				cat $coreFile | awk 'FNR == 1 {next} {print $1}' > $trshFile && mv $trshFile $coreFile;
 				# The code below is no longer needed
 				# Just in case, try to remove all blank lines. DOS formatting is messing up output with PHP crap
 				# sed -n -E -e '/version/,$ p' $coreFile > $trshFile && mv $trshFile $coreFile;
-
-
 				COREUPD=$(<$coreFile)
 
 				# Update available!  \o/
 				echo -e "";
 				if  [ "$FORCE" = "1" ] || yesno --default no "A new version of Wordpress is available ("$COREUPD"), update? [y/N] "; then
 					cd $WORKPATH/$APP/public; \
+					# Need to make filepath a variable
+					sudo -u "apache" --  /usr/local/bin/wp core update
 					wp core update &>> $logFile &
 					spinner $!
 					# Double check upgrade was successful
