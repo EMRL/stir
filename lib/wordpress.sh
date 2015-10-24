@@ -103,8 +103,8 @@ function wpPkg() {
 				if  [ "$FORCE" = "1" ] || yesno --default no "A new version of Wordpress is available ("$COREUPD"), update? [y/N] "; then
 					cd $WORKPATH/$APP/public; \
 					# Need to make filepath a variable
-					sudo -u "apache" --  /usr/local/bin/wp core update
-					wp core update &>> $logFile &
+					sudo -u "apache" --  /usr/local/bin/wp core update &>> $logFile &
+					# wp core update &>> $logFile &
 					spinner $!
 					# Double check upgrade was successful
 					wp core check-update --quiet &> $trshFile
