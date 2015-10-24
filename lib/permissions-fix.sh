@@ -19,6 +19,8 @@ function permFix() {
   fi
 
   # Set permissions
+  sudo chown -R $DEVUSER.$DEVGROUP $WORKPATH/$APP/.gitignore; #errorChk
+  sudo chown -R $DEVUSER.$DEVGROUP $WORKPATH/$APP/.gitmodules; #errorChk
   sudo chown -R $DEVUSER.$DEVGROUP $WORKPATH/$APP/.git; #errorChk
   info " $APP/.git"
   sudo chown -R $APACHEUSER.$APACHEGROUP $WORKPATH/$APP/public/system; #errorChk
