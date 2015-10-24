@@ -16,7 +16,7 @@ function serverChk() {
 		# I'll make this better later
 		REPOURL=$BITBUCKET"/"$REPO"/"
 		wget --spider $REPOURL > $trshFile 2>&1
-		if grep -q "401 UNAUTHORIZED" $trshFile; then
+		if grep -Eq '200 OK|401 UNAUTHORIZED' $trshFile; then
 			info " "$BITBUCKET"/"$REPO"/ ${tan}OK${endColor}";
 		else
 			info " "$BITBUCKET"/"$REPO"/ ${red}FAIL${endColor}"; SERVERFAIL="1"
