@@ -15,7 +15,7 @@ function serverChk() {
 		# For now, we'll use 401 to indicate all is working well
 		# I'll make this better later
 		REPOURL=$BITBUCKET"/"$REPO"/"
-		wget --spider $REPOURL > $trshFile 2>&1
+		wget --spider --no-check-certificate $REPOURL > $trshFile 2>&1
 		if grep -Eq '200 OK|401 UNAUTHORIZED' $trshFile; then
 			info " "$BITBUCKET"/"$REPO"/ ${tan}OK${endColor}";
 		else
@@ -27,7 +27,7 @@ function serverChk() {
 		trace "No development URL set, skipping check"
 	else
 		# Should return "200 OK" if all is working well
-		wget --spider $DEVURL > $trshFile 2>&1
+		wget --spider --no-check-certificate $DEVURL > $trshFile 2>&1
 		if grep -q "200 OK" $trshFile; then
 			info " "$DEVURL "(development) ${tan}OK${endColor}";
 		else
@@ -39,7 +39,7 @@ function serverChk() {
 		trace "No production URL set, skipping check"
 	else
 		# Should return "200 OK" if all is working well
-		wget --spider $PRODURL > $trshFile 2>&1
+		wget --spider --no-check-certificate $PRODURL > $trshFile 2>&1
 		if grep -q "200 OK" $trshFile; then
 			info " "$PRODURL "(production) ${tan}OK${endColor}"
 		else
