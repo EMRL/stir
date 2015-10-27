@@ -217,7 +217,7 @@ function  appDeploy {
 	gitStart		# Check for a valid git project and get set up
 	lock			# Create lock file
 	go				# Start a deployment work session
-	serverChk
+	serverChk		# Check that servers are up and running
 	permFix			# Fix permissions
 	gitChkMstr		# Checkout master branch
 	preDeploy		# Get the status

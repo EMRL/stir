@@ -42,6 +42,8 @@ function go() {
 		info "This project is currently locked, and can't be deployed."
 		warning "Cancelling."; quickExit
 	fi
+	# Force sudo password input if needed
+	sudo sleep 1
 }
 
 # Check that dependencies exist

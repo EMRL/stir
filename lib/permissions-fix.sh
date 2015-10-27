@@ -6,8 +6,6 @@
 trace "Loading permFix()"
 
 function permFix() {
-	# Force sudo password input if needed
-	sudo sleep 1    
 	notice "Setting permissions..."    
   
 	# /lib is obselete for future repositories
