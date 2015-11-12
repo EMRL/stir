@@ -127,13 +127,14 @@ function gitCommit() {
 					# Update the commit message based on user input ()
 					notes=${notes:-$COMMITMSG}
 				else
-					info "Using auto-generated commit message."
+					info "Using auto-generated commit message:" $COMMITMSG
+					notes=$COMMITMSG
 				fi
 				trace "Oh gosh. Nested if/thens. Halp."
 			fi
-			git commit -m "$notes" &>> $logFile
-			trace "Commit message:" $notes
 		fi
+		git commit -m "$notes" &>> $logFile
+		trace "Commit message:" $notes
 	fi
 }
 
