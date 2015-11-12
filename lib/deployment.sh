@@ -12,7 +12,7 @@ function preDeploy() {
 		trace "Status looks good"
 	else
 		emptyLine;
-		warning "There are undeployed changes in this project."
+		warning "There are previously undeployed changes in this project."
 		if yesno --default no "View unresolved files? [y/N] "; then
 			console; console " N = New | M = Modified | D = Deleted"
 			console " ------------------------------------ "
