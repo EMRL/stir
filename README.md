@@ -33,6 +33,10 @@ Configuration is handled in the `etc/deploy.conf` file. Individual users can als
 
 Repositories can each have their own deploy configuration. An example of this file can be [found here](https://github.com/EMRL/deploy/blob/master/etc/deploy.sh).
 
+Running on Autopilot
+--------
+As of 3.1, `deploy -Fu` or `deploy --force --upgrade` should work well for unattended updates of Wordpress site plugin and core updates; great for maintaining updates via a crontab. Running in this mode, the project will only be deployed if there are Wordpress core or plugin updates. If other code changes are detected the project will not be auto-updated. Smart Commits must be enabled or nothing will be deployed.
+
 Contact
 --------
 * <http://emrl.com/>

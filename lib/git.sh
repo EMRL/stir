@@ -105,14 +105,29 @@ function gitCommit() {
 				fi
 			fi
 		else
-			# We want to be able to edit the default commit if available
-			notes=$COMMITMSG
-			read -p "Edit commit message: " -e -i "${COMMITMSG}" notes
-			# Update the commit message based on user input ()
-			notes=${notes:-$COMMITMSG}
+			# If runnint in -Fu (force updates only) mode, grab the Smart Commit 
+			# message and skip asking for user input. Nice for cron updates. 
+			if [ "$FORCE" = "1" ] && [ "$UPDATE" = "1" ]; then
+				# We need Smart commits enabled of this can't work
+				if [ "$SMARTCOMMIT" != "TRUE" ]; then
+					console "Smart Commits must enabled when forcing updates."; quietExit
+				else
+					if [ -z "$COMMITMSG" ; then
+						info "Commit message mut not be empty."; quietExit
+					else
+						notes=$COMMITMSG
+					fi
+				fi
+			else
+				# We want to be able to edit the default commit if available]
+				notes=$COMMITMSG
+				read -p "Edit commit message: " -e -i "${COMMITMSG}" notes
+				# Update the commit message based on user input ()
+				notes=${notes:-$COMMITMSG}
+			fi
+			git commit -m "$notes" &>> $logFile
+			trace "Commit message:" $notes
 		fi
-		git commit -m "$notes" &>> $logFile
-		trace "Commit message:" $notes
 	fi
 }
 

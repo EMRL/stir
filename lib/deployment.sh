@@ -11,18 +11,24 @@ function preDeploy() {
 	if [[ -z $(git status --porcelain) ]]; then
 		trace "Status looks good"
 	else
-		emptyLine;
-		warning "There are previously undeployed changes in this project."
-		if yesno --default no "View unresolved files? [y/N] "; then
-			console; console " N = New | M = Modified | D = Deleted"
-			console " ------------------------------------ "
-			git status --porcelain; echo
-			if  yesno --default yes "Continue deploy? [Y/n] "; then
+		# If running in --force moe we can't crash out and exit
+		if [[ "$FORCE" = "1" ]]; then
+			warning "There are previously undeployed changes in this project, deployment can not continue."; quietExit
+		else
+			emptyLine;
+			warning "There are previously undeployed changes in this project."
+
+			if yesno --default no "View unresolved files? [y/N] "; then
+				console; console " N = New | M = Modified | D = Deleted"
+				console " ------------------------------------ "
+				git status --porcelain; echo
+				if  yesno --default yes "Continue deploy? [Y/n] "; then
+					trace "Continuing deploy"
+				else
+					userExit
+				fi
 				trace "Continuing deploy"
-			else
-				userExit
 			fi
-			trace "Continuing deploy"
 		fi
 	fi
 } 
