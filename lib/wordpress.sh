@@ -75,19 +75,8 @@ function wpPkg() {
 				info "Wordpress core is up to date."; UPD2="1"
 			else
 				sleep 1
-
 				# Get files setup for smart commit
 				wp core check-update &> $coreFile
-				# Filter out PHP garbage and awk the version number
-				
-
-
-#cut -d "=" -f 2 <<< "$your_str"
-
-#grep -oP "(?<=package_url )[^ ]+" $coreFile &> $trshFile
-
-# cat $coreFile | grep -oP "(?<=package_url )[^ ]+" > $coreFile
-
 				# Strip out any randomly occuring debugging output
 				grep -vE "Notice:|Warning:|Strict Standards:|PHP" $coreFile > $trshFile && mv $trshFile $coreFile;
 				# This is the old methond, for some reason is stopped working

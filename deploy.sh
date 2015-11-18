@@ -2,7 +2,7 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.1-beta"
+VERSION="3.1-gamma"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
@@ -16,7 +16,8 @@ function usage() {
 
 Options:
   -u, --upgrade          If there are no available upgrades, halt deployment
-  -F, --force            Skip all user interaction, forces 'Yes' to all actions.
+  -F, --force            Skip all user interaction, forces 'Yes' to all actions
+  -S, --skip-update      Skip any Wordpress core/plugin updates
   -s, --strict           Any error will halt deployment completely
   -V, --verbose          Output more process information to screen
   -d, --debug            Run in debug mode
@@ -58,6 +59,7 @@ while [[ $1 = -?* ]]; do
 	case $1 in
 		-h|--help) usage >&2; exit ;;
 		-u|--upgrade) UPGRADE=1 ;;
+		-S|--skip-update) SKIPUPDATE=1 ;;
 		-v|--version) echo "$(basename $0) ${VERSION}"; exit ;;
 		-V|--verbose) VERBOSE=1 ;;
 		-Q|--forcequiet) QUIET=1 ;;
@@ -221,7 +223,11 @@ function  appDeploy {
 	permFix			# Fix permissions
 	gitChkMstr		# Checkout master branch
 	preDeploy		# Get the status
-	wpPkg			# Run Wordpress upgrades if needed
+
+	if [ "${SKIPUPDATE}" != "1" ]; then
+		wpPkg		# Run Wordpress upgrades if needed
+	fi
+	
 	pkgMgr			# Run node package management, or grunt
 	gitStatus		# Make sure there's anything here to commit
 	gitStage		# Stage files
