@@ -2,7 +2,7 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.1-gamma"
+VERSION="3.2-delta"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
@@ -175,7 +175,18 @@ trace "Loading system configuration file from" $etcLocation
 if [ "${USERRC}" == "1" ]; then
 	trace "Loading user configuration from ~/.deployrc"
 else
-	trace "No user .deployrc found"
+	trace "User configuration not found, creating."
+	cp ${deployPath}/.deployrc ~/.deployrc
+	console "User configuration file missing, creating ~/.deployrc"
+	if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
+		nano ~/.deployrc
+		clear; sleep 1
+		console "Loading user configuration."
+		source ~/.deployrc
+		# quickExit
+	else
+		info "You can change configuration later by editing ~/.deployrc"
+	fi
 fi
 
 # Does a project configuration exit?

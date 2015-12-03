@@ -2,53 +2,45 @@
 #
 # .deployrc
 #
-# This is a default user configuration file, that will live
-# in ~/.deployrc
+# This is a default user configuration file, located in ~/.deployrc
 #
+# Settings in this file will override global settings, but per-project
+# settings will override those settings found here. Anything you leave
+# commented out or unset in this file will use the global configuration.
+
+# Miscellaneous settings
 #
-#
-# Global settings
-
-# Set the work path. This is the directory where all your 
-# repos are stored, with no trailing slash
-# WORKPATH="/var/www/html"
-
-# Path to repository configuration files relative to its 
-# root directory, usually ./config
-# CONFIGDIR="config"
-
-# The command to finalize deployment of your project(s)
-# DEPLOY="mina deploy"				
-
 # Activate "Smart Commits"; this feature tries to create automatic 
 # commit messages by parsing the log files generated during 
 # Wordpress updates. Set to exactly "TRUE" to activate.
 # SMARTCOMMIT="TRUE"	
-
-# If you want to see statistics about your recent git 
-# commits, set this value to exactly "TRUE"
+#
+# If you want to see statistics about your recent git activity,
+# set this value to exactly "TRUE"
 # GITSTATS="TRUE" 		
 
+# Log settings
+#
 # Send log file in HTML?
 # LOGHTML="FALSE"
-
+#
 # Strips the bulk of nasty PHP debug messages out of the 
 # log files that are emailed unpon deployment.
 # NOPHP="TRUE" 
-
-# Set the address and subject line of 
+#
+# Set the address that should receive your log files
 # TO="deploy@emrl.com"
-
+#
 # Email log subject line "- project name" is appended to this, creating
 # a subject line such as "Project deployed - Project Name"
 # SUBJECT="[EMRL] Deployment"		
-
-# When should email logs be sent? Setting to 1=yes.
+#
+# When should email logs be sent?
 # EMAILERROR="TRUE"
 # EMAILSUCCESS="TRUE"				
 # EMAILQUIT="TRUE"					
 
-# Integration options.			
+# Integration options
 # 
 # Set values for where you'd like to post commit messages to 
 # via email. You can use something like Zapier to re-post that
@@ -56,16 +48,16 @@
 # for input directly via email like ours does, you post directly.
 # Some of these options will definitely need to be set in the 
 # project's .deployrc, not in a master configuration.
-
+#
 # Email from domain. Whatever you're integrating with may need
 # a different From: address than that of the the machine you're 
 # actually deploying from.
 # FROMDOMAIN="emrl.com"
-
+#
 # If you need to specify a user, other than your unix user name
 # to be the in the From: email, do it here. Otherwise Leave blank.
 # FROMUSER=""
-
+#
 # Post commit logs to this email address. This should probably 
 # be set per-project. For examples, for oour task management 
 # system, this email would be task-####@projects.emrl.com, with 
@@ -73,32 +65,6 @@
 # being deployed.
 # POSTEMAILHEAD="task-"
 # POSTEMAILTAIL="@projects.emrl.com"
-
+#
 # Post commit logs to this URL.
 # POSTURL=""
-
-# Startup options
-# 
-# These options override the setting of that flag by a user when 
-# running deploy. Uncomment and set to "1" to use, or set to "0" 
-# to disallow users from using that flag. Leave commented to 
-# do nothing.
-
-# Output more detailed process information to screen
-# VERBOSE="1"
-
-# Runs in Wordpress upgrade mode				
-# UPGRADE="1"
-
-# Run in debug mode	
-# DEBUG="1"		
-
-# Run in Strict mode. Any error will halt deployment completely	
-# STRICT="1" 		
-
-# Skip all user interaction, forces 'Yes' to all actions	
-# FORCE="1"	
-
-# Like the --force command, with minimal output to screen				
-# FORCEQUIET="1"
-					

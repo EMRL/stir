@@ -21,6 +21,8 @@ else
 		mkdir /etc/deploy; errorChk
 	fi
 	cp etc/* /etc/deploy; errorChk
+	cp etc/.deployrc /etc/deploy; errorChk
+
 	if [ ! -d /etc/deploy/lib ]; then
 		mkdir /etc/deploy/lib; errorChk
 	fi
