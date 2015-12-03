@@ -205,10 +205,12 @@ function gitPushProd() {
 
 # Get the stats for this git author, just for fun
 function gitStats() {
-	info "Calculating..."
-	getent passwd $USER | cut -d ':' -f 5 | cut -d ',' -f 1 > $trshFile
-	FULLUSER=$(<$trshFile)
-	git log --author="$FULLUSER" --pretty=tformat: --numstat | \
-	gawk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END \
-	{ printf "Your total lines of code contributed so far: %s\n(+%s added | -%s deleted)\n",loc,add,subs }' -
+	if [ "${GITSTATS}" == "TRUE" ]; then
+		info "Calculating..."
+		getent passwd $USER | cut -d ':' -f 5 | cut -d ',' -f 1 > $trshFile
+		FULLUSER=$(<$trshFile)
+		git log --author="$FULLUSER" --pretty=tformat: --numstat | \
+		gawk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END \
+		{ printf "Your total lines of code contributed so far: %s\n(+%s added | -%s deleted)\n",loc,add,subs }' -
+	fi
 } 
