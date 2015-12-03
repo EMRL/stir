@@ -214,7 +214,6 @@ trace "Current project is" $APP
 trace "Current user is" $DEV
 trace "Git lock at" $gitLock
 
-
 function  appDeploy {
 	gitStart		# Check for a valid git project and get set up
 	lock			# Create lock file
@@ -224,11 +223,14 @@ function  appDeploy {
 	gitChkMstr		# Checkout master branch
 	preDeploy		# Get the status
 
-	if [ "${SKIPUPDATE}" != "1" ]; then
+#	if [ "${SKIPUPDATE}" != "1" ]; then
 		wpPkg		# Run Wordpress upgrades if needed
+#	fi
+	
+	if [ "${FORCE}" != "1" ]; then
+		pkgMgr			# Run node package management, or grunt
 	fi
 	
-	pkgMgr			# Run node package management, or grunt
 	gitStatus		# Make sure there's anything here to commit
 	gitStage		# Stage files
 	gitCommit		# Commit, with message
