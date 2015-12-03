@@ -222,15 +222,8 @@ function  appDeploy {
 	permFix			# Fix permissions
 	gitChkMstr		# Checkout master branch
 	preDeploy		# Get the status
-
-#	if [ "${SKIPUPDATE}" != "1" ]; then
-		wpPkg		# Run Wordpress upgrades if needed
-#	fi
-	
-	if [ "${FORCE}" != "1" ]; then
-		pkgMgr			# Run node package management, or grunt
-	fi
-	
+	wpPkg			# Run Wordpress upgrades if needed
+	pkgMgr			# Run node package management, or grunt
 	gitStatus		# Make sure there's anything here to commit
 	gitStage		# Stage files
 	gitCommit		# Commit, with message
@@ -238,7 +231,7 @@ function  appDeploy {
 	gitChkProd		# Checkout production branch
 	gitMerge		# Merge master into production
 	gitPushProd		# Push production to Bit Bucket
-	gitChkMstr		# checkout master once again  
+	gitChkMstr		# Checkout master once again  
 	pkgDeploy		# Deploy project to live server   
 }
 
