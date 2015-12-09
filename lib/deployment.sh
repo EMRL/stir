@@ -58,7 +58,7 @@ function postDeploy() {
 		postCommit; info "Deployment Success." 
 	else
 		info ""
-		if  yesno --default yes "Attempted deploy, but something went wrong, view status? [Y/n] "; then
+		if  yesno --default yes "Attempted deploy, but something went wrong, view details? [Y/n] "; then
 			git status; errorExit
 		else
 			errorExit

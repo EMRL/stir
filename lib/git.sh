@@ -177,9 +177,12 @@ function gitChkProd() {
 function gitMerge() {
 	notice "Merging master into production..."
 	if [[ $VERBOSE -eq 1 ]]; then
-		git merge --no-edit master | tee --append $logFile               
+		# git merge --no-edit master | tee --append $logFile
+		git merge master | tee --append $logFile               
 	else
+		# What the shizzzz
 		git merge --no-edit master  &>> $logFile &
+		git merge master  &>> $logFile &
 		showProgress
 	fi
 }
@@ -197,6 +200,8 @@ function gitPushProd() {
 			spinner $!
 			info "Success.    "
 			trace "OK"
+			# Try a second push just cause reasons. Ugh.
+			git push &>> $logFile &
 		else
 			safeExit
 		fi
