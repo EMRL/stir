@@ -107,20 +107,18 @@ function wpPkg() {
 						if  [ "$FORCE" = "1" ] || yesno --default no "A new version of Wordpress is available ("$COREUPD"), update? [y/N] "; then
 							cd $WORKPATH/$APP/public; \
 							# Need to make filepath a variable
-							sudo -u "apache" --  /usr/local/bin/wp core update &>> $logFile &
+							sudo -u "apache" -- /usr/local/bin/wp core update &>> $logFile &
 							# wp core update &>> $logFile &
 							spinner $!
 							# Double check upgrade was successful
-							wp core check-update --quiet &> $trshFile
-
 							if grep -q "version" $trshFile; then
 								error "Core update failed.";
 							fi
 
 							sleep 1
 							cd $WORKPATH/$APP/; \
-							info "Upgrading development database..."; lynx -dump $DEVURL/system/wp-admin/upgrade.php > $trshFile
-							info "Upgrading production database..."; lynx -dump $PRODURL/system/wp-admin/upgrade.php > $trshFile
+							info "Upgrading development database..."; lynx -dump $DEVURL/system/wp-admin/upgrade.php?step=1 > $trshFile
+							info "Upgrading production database..."; lynx -dump $PRODURL/system/wp-admin/upgrade.php?step=1 > $trshFile
 							info "Wordpress core updates complete."; UPDCORE=1
 						else
 							info "Skipping Wordpress core updates..."

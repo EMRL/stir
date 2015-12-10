@@ -5,7 +5,9 @@
 # A sub-wrapper for loading external functions.
 
 # Save current contents of the terminal
-tput smcup; clear
+if [[ $VERBOSE -ne 1 ]]; then
+	tput smcup; clear
+fi
 
 # Creating this function first, so verbose output option is usable early
 function trace () {

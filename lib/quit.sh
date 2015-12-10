@@ -73,4 +73,6 @@ function cleanUp() {
 	[[ -f $urlFile ]] && rm "$urlFile"
 	[[ -f $coreFile ]] && rm "$coreFile"
 	[[ -f $gitLock ]] && rm "$gitLock"
+	# Attempt to reset the terminal
+	echo -e \\033c
 }

@@ -176,16 +176,24 @@ function gitChkProd() {
 # Merge master into production
 function gitMerge() {
 	notice "Merging master into production..."
+	# Bonus add, just because. Ugh.
+	git add -A 
 	if [[ $VERBOSE -eq 1 ]]; then
-		# git merge --no-edit master | tee --append $logFile
-		git merge master | tee --append $logFile               
+		git merge --no-edit master | tee --append $logFile              
 	else
 		# What the shizzzz
 		git merge --no-edit master  &>> $logFile &
-		git merge master  &>> $logFile &
 		showProgress
 	fi
 }
+
+# function gitMerge() {
+# 	warning "Running git add -A."
+# 	git add -A
+# 	warning "Running git merge master."
+# 	git merge --no-edit master; errorChk
+# }
+
 
 # Push production
 function gitPushProd() {
@@ -201,7 +209,7 @@ function gitPushProd() {
 			info "Success.    "
 			trace "OK"
 			# Try a second push just cause reasons. Ugh.
-			git push &>> $logFile &
+			git push &>> $logFile
 		else
 			safeExit
 		fi
