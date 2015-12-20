@@ -179,11 +179,23 @@ function gitMerge() {
 	# Bonus add, just because. Ugh.
 	git add -A 
 	if [[ $VERBOSE -eq 1 ]]; then
-		git merge --no-edit master | tee --append $logFile              
+		if  [ "$FORCE" = "1" ] || yesno --default yes "Merge master? [Y/n] "; then
+			git merge --no-edit master | tee --append $logFile              
+			#git merge --no-edit master  &>> $logFile &
+			#showProgress
+		fi
+
+		# git merge --no-edit master | tee --append $logFile              
 	else
 		# What the shizzzz
-		git merge --no-edit master  &>> $logFile &
-		showProgress
+
+		if  [ "$FORCE" = "1" ] || yesno --default yes "Merge master? [Y/n] "; then
+			#git merge --no-edit master | tee --append $logFile              
+			git merge --no-edit master  &>> $logFile &
+			showProgress
+			sleep 1
+		fi
+
 	fi
 }
 
@@ -204,12 +216,14 @@ function gitPushProd() {
 	else
 		
 		if  [ "$FORCE" = "1" ] || yesno --default yes "Push production branch? [Y/n] "; then
+			# git push | tee --append $logFile 
 			git push &>> $logFile &
 			spinner $!
-			info "Success.    "
-			trace "OK"
+			# info "Success.    "
+			# trace "OK"
 			# Try a second push just cause reasons. Ugh.
 			git push &>> $logFile
+			sleep 1
 		else
 			safeExit
 		fi
@@ -226,4 +240,9 @@ function gitStats() {
 		gawk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END \
 		{ printf "Your total lines of code contributed so far: %s\n(+%s added | -%s deleted)\n",loc,add,subs }' -
 	fi
-} 
+}
+
+# Generate snippet to be shown on the WP dashboard
+function gitLog {
+	git log -8 --no-merges --pretty=format:'<p>%s<br />%ar &bull; <a href="'$BITBUCKET'/'$REPO'/commits/%H">%h</a></p>' > $WORKPATH/$APP/public/log.html
+}
