@@ -36,7 +36,11 @@ function wpPkg() {
 					# If available then let's do it
 					info "The following updates are available:"
 					# Clean the garbage out of the log for console display
+					sed 's/[+|-]//g' $wpFile > $trshFile && mv $trshFile $wpFile;
+					sed '/^\s*$/d' $wpFile > $trshFile && mv $trshFile $wpFile;
+					# remove the column label row
 					sed '1,/update_version/d' $wpFile > $trshFile && mv $trshFile $wpFile;
+					# Remove everything left but the first and fourth "words"
 					awk '{print "  " $1,$4}' $wpFile > $trshFile && mv $trshFile $wpFile;
 					# Work around the weird "Available" bug
 					sed '/Available/d' $wpFile > $trshFile && mv $trshFile $wpFile;
@@ -49,7 +53,7 @@ function wpPkg() {
 							sudo rm $WORKPATH/$APP/public/app/plugins/wordfence/tmp/configCache.php
 						fi
 
-						sudo -u "apache" --  /usr/local/bin/wp plugin update --all &>> $logFile &
+						sudo -u "apache" --  /usr/local/bin/wp plugin update --all --no-color &>> $logFile &
 						spinner $!
 
 						# Any problems with plugin updates?
@@ -78,18 +82,18 @@ function wpPkg() {
 				# There's a little bug when certain plugins are spitting errors; work around seems to be 
 				# to check for core updates a second time
 				cd $WORKPATH/$APP/public; \
-				wp core check-update &>> $logFile
+				wp core check-update --no-color &>> $logFile
 
-				if grep -q "Success: WordPress is at the latest version." $logFile; then
+				if grep -q "WordPress is at the latest version." $logFile; then
 					info "Wordpress core is up to date."; UPD2="1"
 				else
 					sleep 1
 					# Get files setup for smart commit
-					wp core check-update &> $coreFile
+					wp core check-update --no-color &> $coreFile
 					# Strip out any randomly occuring debugging output
 					grep -vE "Notice:|Warning:|Strict Standards:|PHP" $coreFile > $trshFile && mv $trshFile $coreFile;
 					# This is the old methond, for some reason is stopped working
-					# awk 'FNR == 1 {next} {print $1}' $coreFile > $trshFile && mv $trshFile $coreFile;
+					awk 'FNR == 1 {next} {print $1}' $coreFile > $trshFile && mv $trshFile $coreFile;
 					cat $coreFile | awk 'FNR == 1 {next} {print $1}' > $trshFile && mv $trshFile $coreFile;
 					# The code below is no longer needed
 					# Just in case, try to remove all blank lines. DOS formatting is messing up output with PHP crap
@@ -107,18 +111,20 @@ function wpPkg() {
 						if  [ "$FORCE" = "1" ] || yesno --default no "A new version of Wordpress is available ("$COREUPD"), update? [y/N] "; then
 							cd $WORKPATH/$APP/public; \
 							# Need to make filepath a variable
-							sudo -u "apache" -- /usr/local/bin/wp core update &>> $logFile &
+							sudo -u "apache" --  /usr/local/bin/wp core update --no-color &>> $logFile &
 							# wp core update &>> $logFile &
 							spinner $!
 							# Double check upgrade was successful
+							wp core check-update --quiet --no-color &> $trshFile
+
 							if grep -q "version" $trshFile; then
 								error "Core update failed.";
 							fi
 
 							sleep 1
 							cd $WORKPATH/$APP/; \
-							info "Upgrading development database..."; lynx -dump $DEVURL/system/wp-admin/upgrade.php?step=1 > $trshFile
-							info "Upgrading production database..."; lynx -dump $PRODURL/system/wp-admin/upgrade.php?step=1 > $trshFile
+							info "Upgrading development database..."; lynx -dump $DEVURL/system/wp-admin/upgrade.php > $trshFile
+							info "Upgrading production database..."; lynx -dump $PRODURL/system/wp-admin/upgrade.php > $trshFile
 							info "Wordpress core updates complete."; UPDCORE=1
 						else
 							info "Skipping Wordpress core updates..."
@@ -142,9 +148,9 @@ function wpPkg() {
 
 function wpCheck() {
 	notice "Checking for updates..."
-	# This is uper ghetto :[
-	wp plugin status &>> $logFile
-	wp plugin update --dry-run --all &> $wpFile
+	# This is super ghetto :[
+	wp plugin status --no-color &>> $logFile
+	wp plugin update --dry-run --no-color --all &> $wpFile
 	# Probably going to let this stay commented out
 	# wp core check-update &>> $logFile
 }
