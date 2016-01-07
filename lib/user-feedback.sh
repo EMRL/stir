@@ -18,7 +18,7 @@ function spinner() {
 		sleep $delay
 		printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
 	done
-	printf "    \b\b\b\b"
+	printf "            \b\b\b\b\b\b\b\b\b\b\b\b"
 	tput cnorm;
 }
 

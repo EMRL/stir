@@ -79,6 +79,7 @@ function gitStage() {
 function gitCommit() {
 	# Smart commit stuff
 	smrtCommit; emptyLine
+
 	# Do a dry run; check for anything to commit
 	git commit --dry-run &>> $logFile; 
 	if grep -q "nothing to commit, working directory clean" $logFile; then 
@@ -105,7 +106,7 @@ function gitCommit() {
 				fi
 			fi
 		else
-			# If runnint in -Fu (force updates only) mode, grab the Smart Commit 
+			# If running in -Fu (force updates only) mode, grab the Smart Commit 
 			# message and skip asking for user input. Nice for cron updates. 
 			if [ "$FORCE" = "1" ] && [ "$UPDATE" = "1" ]; then
 				# We need Smart commits enabled or this can't work
@@ -204,12 +205,14 @@ function gitPushProd() {
 	else
 		
 		if  [ "$FORCE" = "1" ] || yesno --default yes "Push production branch? [Y/n] "; then
+			# git push | tee --append $logFile 
 			git push &>> $logFile &
 			spinner $!
-			info "Success.    "
-			trace "OK"
+			# info "Success.    "
+			# trace "OK"
 			# Try a second push just cause reasons. Ugh.
 			git push &>> $logFile
+			sleep 1
 		else
 			safeExit
 		fi

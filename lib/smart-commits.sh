@@ -12,11 +12,12 @@ function smrtCommit() {
 		trace "Building commit message"
 		# Checks for the existence of a successful plugin upgrade, using grep, and if 
 		# we find updates, grab the relevant line of text from the logs
+		# Looks like this changed somehow, new version of wp-cli maybe?
 		PCA=$(grep '\<Success: Updated' $logFile | grep 'plugins')
 		if [[ -z "$PCA" ]]; then
 			trace "No plugin updates"
 		else
-			# How many plugins we updated? First, strip out the Success:
+			# How many plugins have we updated? First, strip out the Success:
 			PCB=$(echo $PCA | sed 's/^.*\(Updated.*\)/\1/g')
 			# Strips the last period, makes my head hurt.
 			# PCC=${PCB%?}; PCD=$(echo $PCB | cut -c 1-$(expr `echo "$PCC" | wc -c` - 2))
@@ -42,5 +43,8 @@ function smrtCommit() {
 		else			
 			trace "No system updates"
 		fi
+
+		# Output the contents of $COmMiTMSG
+		trace "Auto-generated commit message: $COMMITMSG"
 	fi
 }
