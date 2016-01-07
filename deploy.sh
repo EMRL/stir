@@ -18,6 +18,7 @@ Options:
   -u, --upgrade          If there are no available upgrades, halt deployment
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
   -S, --skip-update      Skip any Wordpress core/plugin updates
+  -l, --log-update       Update commit log, then exit
   -s, --strict           Any error will halt deployment completely
   -V, --verbose          Output more process information to screen
   -d, --debug            Run in debug mode
@@ -66,6 +67,7 @@ while [[ $1 = -?* ]]; do
 		-s|--strict) STRICT=1 ;;
 		-d|--debug) DEBUG=1 ;;
 		-F|--force) FORCE=1 ;;
+		-l|--log-update) LOGUPDATE=1 ;;
 		--endopts) shift; break ;;
 		*) echo "Invalid option: '$1'" 1>&2 ; exit 1 ;;
 	esac
@@ -229,6 +231,15 @@ function  appDeploy {
 	gitStart		# Check for a valid git project and get set up
 	lock			# Create lock file
 	go				# Start a deployment work session
+
+	# If user only wants to update the log file, do that
+	if [ "${LOGUPDATE}" == "1" ]; then
+		gitChkProd
+		gitLog
+		gitChkMstr
+		safeExit
+	fi
+
 	serverChk		# Check that servers are up and running
 	permFix			# Fix permissions
 	gitChkMstr		# Checkout master branch
