@@ -48,11 +48,6 @@ function wpPkg() {
 
 					if  [ "$FORCE" = "1" ] || yesno --default no "Proceed with updates? [y/N] "; then
 
-						# Check for Wordfence cache file and remove if found
-						if [ -f $WORKPATH/$APP/public/app/plugins/wordfence/tmp/configCache.php ]; then
-							sudo rm $WORKPATH/$APP/public/app/plugins/wordfence/tmp/configCache.php
-						fi
-
 						sudo -u "apache" --  /usr/local/bin/wp plugin update --all --no-color &>> $logFile &
 						spinner $!
 
@@ -60,13 +55,20 @@ function wpPkg() {
 						if grep -q "Warning: The update cannot be installed because we will be unable to copy some files." $logFile; then
 							error "One or more plugin upgrades have failed, probably due to problems with permissions."
 						else
-
 							if grep -q "Plugin update failed." $logFile; then
 								error "One or more plugin upgrades have failed."
 							else
-								trace "OK"
+								if grep -q "Warning: Update package not available." $logFile; then
+									error "One or more update packages are not available."
+								else
+									if grep -q "Error: Updated" $logFile; then
+										error "One or more plugin upgrades have failed."
+									fi
+									trace "Update seems OK"
+								fi
+								trace "Update seems OK"
 							fi
-							trace "OK"
+							trace "Update seems OK"
 						fi
 
 						cd $WORKPATH/$APP/; \
@@ -92,12 +94,18 @@ function wpPkg() {
 					wp core check-update --no-color &> $coreFile
 					# Strip out any randomly occuring debugging output
 					grep -vE "Notice:|Warning:|Strict Standards:|PHP" $coreFile > $trshFile && mv $trshFile $coreFile;
-					# This is the old methond, for some reason is stopped working
-					awk 'FNR == 1 {next} {print $1}' $coreFile > $trshFile && mv $trshFile $coreFile;
+					# Clean out the gobbleygook from wp-cli
+					sed 's/[+|-]//g' $coreFile > $trshFile && mv $trshFile $coreFile;
+					# This is the old method, for some reason is stopped working
+					#awk 'FNR == 1 {next} {print $1}' $coreFile > $trshFile && mv $trshFile $coreFile;
+					# This seems to be working better, for now
 					cat $coreFile | awk 'FNR == 1 {next} {print $1}' > $trshFile && mv $trshFile $coreFile;
-					# The code below is no longer needed
 					# Just in case, try to remove all blank lines. DOS formatting is messing up output with PHP crap
-					# sed -n -E -e '/version/,$ p' $coreFile > $trshFile && mv $trshFile $coreFile;
+					sed '/^\s*$/d' $coreFile > $trshFile && mv $trshFile $coreFile;
+					# Remove line breaks, value should noe equal 'version x.x.x' or some such.
+					sed ':a;N;$!ba;s/\n/ /g' $coreFile > $trshFile && mv $trshFile $coreFile;
+					# So much sed, so little time
+					#sed -n -E -e '/version/,$ p' $coreFile > $trshFile && mv $trshFile $coreFile;
 					COREUPD=$(<$coreFile)
 
 					# Update available!  \o/
@@ -117,6 +125,7 @@ function wpPkg() {
 							# Double check upgrade was successful
 							wp core check-update --quiet --no-color &> $trshFile
 
+							# If we still see 'version' in the output, we must have missed the upgrade somehow
 							if grep -q "version" $trshFile; then
 								error "Core update failed.";
 							fi
@@ -124,7 +133,6 @@ function wpPkg() {
 							sleep 1
 							cd $WORKPATH/$APP/; \
 							info "Upgrading development database..."; lynx -dump $DEVURL/system/wp-admin/upgrade.php > $trshFile
-							info "Upgrading production database..."; lynx -dump $PRODURL/system/wp-admin/upgrade.php > $trshFile
 							info "Wordpress core updates complete."; UPDCORE=1
 						else
 							info "Skipping Wordpress core updates..."

@@ -188,14 +188,6 @@ function gitMerge() {
 	fi
 }
 
-# function gitMerge() {
-# 	warning "Running git add -A."
-# 	git add -A
-# 	warning "Running git merge master."
-# 	git merge --no-edit master; errorChk
-# }
-
-
 # Push production
 function gitPushProd() {
 	trace "Push production"; emptyLine

@@ -72,7 +72,7 @@ function cleanUp() {
 	[[ -f $wpFile ]] && rm "$wpFile"
 	[[ -f $urlFile ]] && rm "$urlFile"
 	[[ -f $coreFile ]] && rm "$coreFile"
-	[[ -f $gitLock ]] && rm "$gitLock"
+	# [[ -f $gitLock ]] && rm "$gitLock"
 	# Attempt to reset the terminal
 	# echo -e \\033c
 }

@@ -19,15 +19,25 @@ function buildLog() {
 	# lynx -dump "http://emrl.co/yourls-api.php?signature=$id&action=shorturl&format=simply&url=$COMMITURL" > $urlFile
 	# awk '{print $1}' $urlFile > $trshFile && mv $trshFile $urlFile;
 	# echo $urlFile >> $postFile
-	
-	echo $COMMITURL >> $postFile
-	(cat $postFile) | mail -r $USER@$FROMDOMAIN -s "$(echo -e $SUBJECT "-" ${APP^^}"\nContent-Type: text/plain")" $POSTEMAIL
 }
 
+function mailPost {
+	echo $COMMITURL >> $postFile
+	(cat $postFile) | mail -r $USER@$FROMDOMAIN -s "$(echo -e $SUBJECT "-" ${APP^^}"\nContent-Type: text/plain")" $POSTEMAIL	
+}
 # Post via email
 function postCommit() {
-	# just for yuks, display git stats for this user
+	# Check for a Wordpress core update, update production database if needed
+	if [[ -z "$COREUPD" ]]; then	
+		info "Upgrading production database..."; lynx -dump $PRODURL/system/wp-admin/upgrade.php > $trshFile
+	fi
+	# just for yuks, display git stats for this user (user can override this if it annoys them)
 	gitStats
+	# Is Slack integration configured?
+	if [ "${POSTTOSLACK}" == "TRUE" ]; then
+		trace "Slack integration seems to be configured. Posting to" $SLACKURL
+		buildLog; slackPost
+	fi
 	# Check to see if there's an email integration setup
 	if [[ -z "$POSTEMAIL" ]]; then
 		trace "No email integration setup"
@@ -35,7 +45,7 @@ function postCommit() {
 	# Is it a valid email address? Ghetto check but better than nothing
 	if [[ "$POSTEMAIL" == ?*@?*.?* ]]; then
 		trace "Running email integration"
-		buildLog
+		buildLog; mailPost
 	else
 		trace "Integration email address" $POSTEMAIL "does not look valid. Check your configuration."
 	fi

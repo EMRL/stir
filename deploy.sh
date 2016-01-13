@@ -2,7 +2,7 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.2-delta"
+VERSION="3.2.5"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
@@ -15,7 +15,7 @@ function usage() {
 	echo -n "Usage: deploy [options] [target] ...
 
 Options:
-  -u, --upgrade          If there are no available upgrades, halt deployment
+  -u, --update          If there are no available upgrades, halt deployment
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
   -S, --skip-update      Skip any Wordpress core/plugin updates
   -s, --strict           Any error will halt deployment completely
@@ -58,7 +58,7 @@ unset options
 while [[ $1 = -?* ]]; do
 	case $1 in
 		-h|--help) usage >&2; exit ;;
-		-u|--upgrade) UPGRADE=1 ;;
+		-u|--update) UPGRADE=1 ;;
 		-S|--skip-update) SKIPUPDATE=1 ;;
 		-v|--version) echo "$(basename $0) ${VERSION}"; exit ;;
 		-V|--verbose) VERBOSE=1 ;;
@@ -204,6 +204,9 @@ else
 fi
 
 # Are any integrations setup?
+if [ "${POSTTOSLACK}" == "TRUE" ]; then
+	trace "Slack integration enabled, using" $SLACKURL
+fi
 POSTEMAIL=$POSTEMAILHEAD$TASK$POSTEMAILTAIL
 if [[ -z "$POSTEMAIL" ]]; then
 	trace "No integration found"

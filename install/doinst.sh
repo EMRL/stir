@@ -26,7 +26,12 @@ else
 	if [ ! -d /etc/deploy/lib ]; then
 		mkdir /etc/deploy/lib; errorChk
 	fi
-	cp lib/* /etc/deploy/lib; errorChk
+
+	if [ ! -d /etc/deploy/lib/test ]; then
+		mkdir /etc/deploy/lib/test; errorChk
+	fi
+
+	cp -R lib/* /etc/deploy/lib; errorChk
 	cp deploy.sh /usr/local/bin/deploy; errorChk
 	chmod 755 /usr/local/bin/deploy; errorChk
 	echo "Successfully installed, try typing 'deploy' for help."

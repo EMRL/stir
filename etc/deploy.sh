@@ -37,3 +37,7 @@
 
 # Integration options.
 # TASK="task"
+
+# Slack Integration for this project
+# POSTTOSLACK="TRUE"
+# SLACKURL="https://hooks.slack.com/services/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"

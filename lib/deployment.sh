@@ -11,7 +11,7 @@ function preDeploy() {
 	if [[ -z $(git status --porcelain) ]]; then
 		trace "Status looks good"
 	else
-		# If running in --force moe we can't crash out and exit
+		# If running in --force mode we will not allow deployment to continue
 		if [[ "$FORCE" = "1" ]]; then
 			warning "There are previously undeployed changes in this project, deployment can not continue."; quietExit
 		else
