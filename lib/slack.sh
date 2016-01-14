@@ -31,5 +31,5 @@ function slackPost () {
 }
 
 # Test the integration
-# slackPost 
+# slackPost > /dev/null 2>&1
 # "For every action, there is an equal and opposite malfunction." "WARNING"

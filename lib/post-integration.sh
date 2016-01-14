@@ -7,7 +7,7 @@ trace "Loading post-integration.sh"
 
 # Compile commit message with other stuff for integration
 function buildLog() {
-	trace "Posting '"$TASKLOG"'"
+	trace "Posting" $TASKLOG
 	# OK let's grab the short version of the commit hash
 	COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL=$BITBUCKET"/"$REPO"/commits/"$COMMITHASH
 	# Alright let's try to get a short URL
@@ -36,7 +36,7 @@ function postCommit() {
 	# Is Slack integration configured?
 	if [ "${POSTTOSLACK}" == "TRUE" ]; then
 		trace "Slack integration seems to be configured. Posting to" $SLACKURL
-		buildLog; slackPost
+		buildLog; slackPost > /dev/null 2>&1
 	fi
 	# Check to see if there's an email integration setup
 	if [[ -z "$POSTEMAIL" ]]; then
