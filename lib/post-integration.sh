@@ -9,7 +9,7 @@ trace "Loading post-integration.sh"
 function buildLog() {
 	trace "Posting" $TASKLOG
 	# OK let's grab the short version of the commit hash
-	COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL=$BITBUCKET"/"$REPO"/commits/"$COMMITHASH
+	COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL=$REPOHOST"/"$REPO"/commits/"$COMMITHASH
 	# Alright let's try to get a short URL
 	id="7c005cbb4e"
 	#output=`awk -F# '{gsub(/ /,"");print ($1) }' < /root/output`

@@ -7,6 +7,11 @@
 # 
 # If any value set here will override both global and per-user settings.
 
+# The URL for this repo's hosting, with no trailing slash. For example, 
+# if you use Github and your repo URL looks like https://github.com/EMRL/deploy
+# your REPOHOST should be set to https://github.com/EMRL (with no trailling slash)
+# REPOHOST=""
+
 # A human readable project name
 # PROJNAME="Best Webapp Ever"	
 

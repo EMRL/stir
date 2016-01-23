@@ -43,8 +43,12 @@ function gitChkMstr() {
 	if [[ $VERBOSE -eq 1 ]]; then
 		git checkout master | tee --append $logFile            
 	else
-		git checkout master &>> $logFile &
-		showProgress
+		if [ "${QUIET}" != "1" ]; then
+			git checkout master &>> $logFile &
+			showProgress
+		else
+			git checkout master &>> $logFile
+		fi
 	fi
 }
 
@@ -146,11 +150,14 @@ function gitPushMstr() {
 	if [[ $VERBOSE -eq 1 ]]; then
 		git push | tee --append $logFile; errorChk           
 	else
-
 		if  [ "$FORCE" = "1" ] || yesno --default yes "Push master branch? [Y/n] "; then
-			git push &>> $logFile &
-			spinner $!
-			info "Success.    "
+			if [ "${QUIET}" != "1" ]; then
+				git push &>> $logFile &
+				spinner $!
+				info "Success.    "
+			else
+				git push &>> $logFile
+			fi
 		else
 			safeExit
 		fi
@@ -163,8 +170,12 @@ function gitChkProd() {
 	if [[ $VERBOSE -eq 1 ]]; then
 		git checkout production | tee --append $logFile               
 	else
-		git checkout production  &>> $logFile &
-		showProgress
+		if [ "${QUIET}" != "1" ]; then
+			git checkout production &>> $logFile &
+			showProgress
+		else
+			git checkout production &>> $logFile
+		fi
 	fi 
 	# Were there any conflicts checking out?
 	if grep -q "error: Your local changes to the following files would be overwritten by checkout:" $logFile; then
@@ -184,9 +195,12 @@ function gitMerge() {
 	if [[ $VERBOSE -eq 1 ]]; then
 		git merge --no-edit master | tee --append $logFile              
 	else
-		# What the shizzzz
-		git merge --no-edit master  &>> $logFile &
-		showProgress
+		if [ "${QUIET}" != "1" ]; then
+			git merge --no-edit master &>> $logFile &
+			showProgress
+		else
+			git merge --no-edit master &>> $logFile
+		fi
 	fi
 }
 
@@ -197,15 +211,17 @@ function gitPushProd() {
 		git push | tee --append $logFile 
 		trace "OK"              
 	else
-		
 		if  [ "$FORCE" = "1" ] || yesno --default yes "Push production branch? [Y/n] "; then
-			# git push | tee --append $logFile 
-			git push &>> $logFile &
-			spinner $!
+			if [ "${QUIET}" != "1" ]; then
+				git push &>> $logFile &
+				spinner $!
+			else
+				git push &>> $logFile
+			fi
 			# info "Success.    "
 			# trace "OK"
 			# Try a second push just cause reasons. Ugh.
-			git push &>> $logFile
+			# git push &>> $logFile
 			sleep 1
 		else
 			safeExit
