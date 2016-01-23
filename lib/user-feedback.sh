@@ -7,19 +7,21 @@ trace "Loading user-feedback.sh"
 
 # Progress spinner; we'll see if this works
 function spinner() {
-	local pid=$1
-	local delay=0.15
-	local spinstr='|/-\'
-	tput civis;
-	while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
-		local temp=${spinstr#?}
-		printf "Working... %c  " "$spinstr"
-		local spinstr=$temp${spinstr%"$temp"}
-		sleep $delay
-		printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
-	done
-	printf "            \b\b\b\b\b\b\b\b\b\b\b\b"
-	tput cnorm;
+	if [ "${QUIET}" != "1" ]; then
+		local pid=$1
+		local delay=0.15
+		local spinstr='|/-\'
+		tput civis;
+		while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+			local temp=${spinstr#?}
+			printf "Working... %c  " "$spinstr"
+			local spinstr=$temp${spinstr%"$temp"}
+			sleep $delay
+			printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
+		done
+		printf "            \b\b\b\b\b\b\b\b\b\b\b\b"
+		tput cnorm;
+	fi
 }
 
 # Set up the progress bar function
@@ -34,6 +36,7 @@ function progressBar() {
 
 # Display progress bar
 function showProgress() {
+	if [ "${QUIET}" != "1" ]; then
 		_start=1
 		_end=100
 		for number in $(seq ${_start} ${_end})
@@ -41,4 +44,5 @@ function showProgress() {
 		progressBar ${number} ${_end}
 		done;
 		emptyLine; sleep 1
+	fi
 }

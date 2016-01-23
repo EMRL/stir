@@ -15,11 +15,12 @@ function usage() {
 	echo -n "Usage: deploy [options] [target] ...
 
 Options:
-  -u, --update          If there are no available upgrades, halt deployment
+  -u, --update           If there are no available updates, halt deployment
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
   -S, --skip-update      Skip any Wordpress core/plugin updates
   -s, --strict           Any error will halt deployment completely
   -V, --verbose          Output more process information to screen
+  -q, --quiet            Display minimal output on screen
   -d, --debug            Run in debug mode
   -h, --help             Display this help and exit
   -v, --version          Output version information and exit
@@ -62,7 +63,7 @@ while [[ $1 = -?* ]]; do
 		-S|--skip-update) SKIPUPDATE=1 ;;
 		-v|--version) echo "$(basename $0) ${VERSION}"; exit ;;
 		-V|--verbose) VERBOSE=1 ;;
-		-Q|--forcequiet) QUIET=1 ;;
+		-q|--quiet) QUIET=1 ;;
 		-s|--strict) STRICT=1 ;;
 		-d|--debug) DEBUG=1 ;;
 		-F|--force) FORCE=1 ;;

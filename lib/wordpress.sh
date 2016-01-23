@@ -21,13 +21,14 @@ function wpPkg() {
 				cd $WORKPATH/$APP/public; \
 				
 				# Look for updates
-				#if [[ $VERBOSE -eq 1 ]]; then
-				#	wp plugin status | tee --append $logFile $wpFile              
-				#	wp core check-update | tee --append $logfile
-				#else
+				notice "Checking for updates..."
+				if [ "${QUIET}" != "1" ]; then
 					wpCheck &
 					spinner $!
-				#fi
+				else
+					$WPCLI/wp plugin status --no-color >> $logFile
+					$WPCLI/wp plugin update --dry-run --no-color --all > $wpFile
+				fi
 
 				# Check the logs
 				#if grep -q "U = Update Available" $logFile; then
@@ -50,8 +51,12 @@ function wpPkg() {
 
 						# No longer run as apache
 						# sudo -u "apache" --  /usr/local/bin/wp plugin update --all --no-color &>> $logFile &
-						wp plugin update --all --no-color &>> $logFile &
-						spinner $!
+						if [ "${QUIET}" != "1" ]; then
+							$WPCLI/wp plugin update --all --no-color &>> $logFile &
+							spinner $!
+						else
+							$WPCLI/wp plugin update --all --no-color &>> $logFile
+						fi	
 
 						# Any problems with plugin updates?
 						if grep -q "Warning: The update cannot be installed because we will be unable to copy some files." $logFile; then
@@ -86,14 +91,14 @@ function wpPkg() {
 				# There's a little bug when certain plugins are spitting errors; work around seems to be 
 				# to check for core updates a second time
 				cd $WORKPATH/$APP/public; \
-				wp core check-update --no-color &>> $logFile
+				$WPCLI/wp core check-update --no-color &>> $logFile
 
 				if grep -q "WordPress is at the latest version." $logFile; then
 					info "Wordpress core is up to date."; UPD2="1"
 				else
 					sleep 1
 					# Get files setup for smart commit
-					wp core check-update --no-color &> $coreFile
+					$WPCLI/wp core check-update --no-color &> $coreFile
 					# Strip out any randomly occuring debugging output
 					grep -vE "Notice:|Warning:|Strict Standards:|PHP" $coreFile > $trshFile && mv $trshFile $coreFile;
 					# Clean out the gobbleygook from wp-cli
@@ -120,23 +125,24 @@ function wpPkg() {
 
 						if  [ "$FORCE" = "1" ] || yesno --default no "A new version of Wordpress is available ("$COREUPD"), update? [y/N] "; then
 							cd $WORKPATH/$APP/public; \
-							# Need to make filepath a variable
-							# sudo -u "apache" --  /usr/local/bin/wp core update --no-color &>> $logFile &
-							wp core update --no-color &>> $logFile &
-							# wp core update &>> $logFile &
-							spinner $!
-							# Double check upgrade was successful
-							wp core check-update --quiet --no-color &> $trshFile
-
-							# If we still see 'version' in the output, we must have missed the upgrade somehow
-							if grep -q "version" $trshFile; then
-								error "Core update failed.";
+							if [ "${QUIET}" != "1" ]; then
+								$WPCLI/wp core update --no-color &>> $logFile &
+								spinner $!
+							else
+								$WPCLI/wp core update --no-color &>> $logFile
 							fi
 
-							sleep 1
-							cd $WORKPATH/$APP/; \
-							info "Upgrading development database..."; lynx -dump $DEVURL/system/wp-admin/upgrade.php > $trshFile
-							info "Wordpress core updates complete."; UPDCORE=1
+							# Double check upgrade was successfull if we still see 'version' 
+							# in the output, we must have missed the upgrade somehow
+							$WPCLI/wp core check-update --quiet --no-color &> $trshFile
+							if grep -q "version" $trshFile; then
+								error "Core update failed.";
+							else
+								sleep 1
+								cd $WORKPATH/$APP/; \
+								info "Upgrading development database..."; lynx -dump $DEVURL/system/wp-admin/upgrade.php > $trshFile
+								info "Wordpress core updates complete."; UPDCORE=1
+							fi
 						else
 							info "Skipping Wordpress core updates..."
 						fi
@@ -160,8 +166,8 @@ function wpPkg() {
 function wpCheck() {
 	notice "Checking for updates..."
 	# This is super ghetto :[
-	wp plugin status --no-color &>> $logFile
-	wp plugin update --dry-run --no-color --all &> $wpFile
+	$WPCLI/wp plugin status --no-color &>> $logFile
+	$WPCLI/wp plugin update --dry-run --no-color --all &> $wpFile
 	# Probably going to let this stay commented out
 	# wp core check-update &>> $logFile
 }

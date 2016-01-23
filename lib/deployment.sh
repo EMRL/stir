@@ -43,8 +43,12 @@ function pkgDeploy() {
 			$DEPLOY | tee --append $logFile
 			postDeploy
 		else
-			$DEPLOY &>> $logFile &
-			spinner $!
+			if [ "${QUIET}" != "1" ]; then
+				$DEPLOY &>> $logFile &
+				spinner $!
+			else
+				$DEPLOY &>> $logFile
+			fi
 			postDeploy
 		fi
 	fi

@@ -8,7 +8,9 @@ trace "Loading utilities.sh"
 
 # Open a deployment session, ask for user confirmation before beginning
 function go() {
-	tput cnorm;
+	if [ "${QUIET}" != "1" ]; then
+		tput cnorm;
+	fi
 	cd $WORKPATH/$APP; \
 	echo "deploy" $VERSION
 	printf "Current working path is %s\n" ${WORKPATH}/${APP}

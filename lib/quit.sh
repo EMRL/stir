@@ -14,17 +14,13 @@ function userExit() {
 	   mailLog
 	fi
 	# Clean up your mess
-	cleanUp
-	#tput rmcup   # I'm not sure if I really want to use this or not.
-	tput cnorm; exit 0
+	cleanUp; exit 0
 }
 
 # Quick exit, never send log. Ever.
 function quickExit() {
 	# Clean up your mess
-	cleanUp
-	#tput rmcup   # I'm not sure if I really want to use this or not.
-	tput cnorm; exit 0
+	cleanUp; exit 0
 }
 
 # Exit on error
@@ -37,9 +33,7 @@ function errorExit() {
 		mailLog
 	fi
   	# Clean up your mess
-	cleanUp
-	#tput rmcup   # I'm not sure if I really want to use this or not.
-	tput cnorm; exit 1
+	cleanUp; exit 1
 }
 
 # Clean exit
@@ -50,18 +44,14 @@ function safeExit() {
 	   mailLog
 	fi
 	# Clean up your mess
-	cleanUp
-	#tput rmcup   # I'm not sure if I really want to use this or not.
-	tput cnorm; exit 0
+	cleanUp; exit 0
 }
 
 # Clean exit, nothing to commit
 function quietExit() {
 	info "Exiting."; console
 	# Clean up your mess
-	cleanUp
-	#tput rmcup   # I'm not sure if I really want to use this or not.
-	tput cnorm; exit 0
+	cleanUp; exit 0
 }
 
 function cleanUp() {
@@ -75,4 +65,7 @@ function cleanUp() {
 	# [[ -f $gitLock ]] && rm "$gitLock"
 	# Attempt to reset the terminal
 	# echo -e \\033c
+	if [ "$QUIET" != "1" ]; then
+		tput cnorm
+	fi
 }

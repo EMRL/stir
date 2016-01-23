@@ -5,8 +5,9 @@
 # A sub-wrapper for loading external functions.
 
 # Save current contents of the terminal
-if [[ $VERBOSE -ne 1 ]]; then
+if [ "${QUIET}" != "1" ]; then
 	tput smcup; clear
+	clear
 fi
 
 # Creating this function first, so verbose output option is usable early
