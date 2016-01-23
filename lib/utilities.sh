@@ -16,13 +16,16 @@ function go() {
 	# Does a configuration file for this repo exist?
 	if [ -z "${APPRC}" ]; then
 		if [ ! -d $WORKPATH/$APP/config ]; then
+			# sudo mkdir $WORKPATH/$APP/config
 			sudo mkdir $WORKPATH/$APP/config
 		fi
 		emptyLine; info "Project configuration not found, creating."; sleep 2
-		sudo cp ${deployPath}/deploy.sh $WORKPATH/$APP/$CONFIGDIR/
-		sudo chown $DEVUSER.$DEVGROUP $WORKPATH/$APP/$CONFIGDIR/deploy.sh
+		# sudo cp ${deployPath}/deploy.sh $WORKPATH/$APP/$CONFIGDIR/
+		# sudo chown $DEVUSER.$DEVGROUP $WORKPATH/$APP/$CONFIGDIR/deploy.sh
+		cp ${deployPath}/deploy.sh $WORKPATH/$APP/$CONFIGDIR/
 		if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
-			sudo nano $WORKPATH/$APP/$CONFIGDIR/deploy.sh
+			# sudo nano $WORKPATH/$APP/$CONFIGDIR/deploy.sh
+			nano $WORKPATH/$APP/$CONFIGDIR/deploy.sh
 			clear; sleep 1
 			# info "Loading new project configuration."
 			# source $WORKPATH/$APP/$CONFIGDIR/deploy.sh
@@ -42,8 +45,11 @@ function go() {
 		info "This project is currently locked, and can't be deployed."
 		warning "Cancelling."; quickExit
 	fi
+
 	# Force sudo password input if needed
-	sudo sleep 1
+	if [[ $FIXPERMISSIONS == "TRUE" ]]; then
+		sudo sleep 1
+	fi
 
 	# if git.lock exists, do we want to remove it?
 	if [ -f $gitLock ]; then

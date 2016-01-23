@@ -48,7 +48,9 @@ function wpPkg() {
 
 					if  [ "$FORCE" = "1" ] || yesno --default no "Proceed with updates? [y/N] "; then
 
-						sudo -u "apache" --  /usr/local/bin/wp plugin update --all --no-color &>> $logFile &
+						# No longer run as apache
+						# sudo -u "apache" --  /usr/local/bin/wp plugin update --all --no-color &>> $logFile &
+						wp plugin update --all --no-color &>> $logFile &
 						spinner $!
 
 						# Any problems with plugin updates?
@@ -119,7 +121,8 @@ function wpPkg() {
 						if  [ "$FORCE" = "1" ] || yesno --default no "A new version of Wordpress is available ("$COREUPD"), update? [y/N] "; then
 							cd $WORKPATH/$APP/public; \
 							# Need to make filepath a variable
-							sudo -u "apache" --  /usr/local/bin/wp core update --no-color &>> $logFile &
+							# sudo -u "apache" --  /usr/local/bin/wp core update --no-color &>> $logFile &
+							wp core update --no-color &>> $logFile &
 							# wp core update &>> $logFile &
 							spinner $!
 							# Double check upgrade was successful

@@ -177,6 +177,8 @@ function gitChkProd() {
 # Merge master into production
 function gitMerge() {
 	notice "Merging master into production..."
+	# Clear out the index.lock file, cause reasons
+	[[ -f $gitLock ]] && rm "$gitLock"
 	# Bonus add, just because. Ugh.
 	git add -A 
 	if [[ $VERBOSE -eq 1 ]]; then
