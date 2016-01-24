@@ -27,12 +27,17 @@
 # The exact name of the Bitbucket/Github repository
 # REPO="name-of-repo"
 
+# Configure you branches. In most cases they will be master & production. IF
+# you are only using a master branch, leave production undefined.
+MASTER="master"
+PRODUCTION="production"
+
 # If for some reason you'd like a default commit message. It will
 # always be editable before finalizing commit.	
 # COMMITMSG="This is a default commit message"
 
 # The command to finalize deployment of your project(s)
-# DEPLOY="mina deploy"				
+DEPLOY="mina deploy"				
 
 # Set the address and subject line of 
 # TO="deploy@emrl.com"
