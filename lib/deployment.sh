@@ -35,21 +35,23 @@ function preDeploy() {
 
 function pkgDeploy() {
 	emptyLine
-	if  [ "$FORCE" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
-		# Add ssh keys and double check directoy
-		cd $WORKPATH/$APP; \
-		# Deploy via deployment command specified in mina
-		if [[ $VERBOSE -eq 1 ]]; then
-			$DEPLOY | tee --append $logFile
-			postDeploy
-		else
-			if [ "${QUIET}" != "1" ]; then
-				$DEPLOY &>> $logFile &
-				spinner $!
+	if [ -n "$DEPLOY" ]; then
+		if  [ "$FORCE" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
+			# Add ssh keys and double check directoy
+			cd $WORKPATH/$APP; \
+			# Deploy via deployment command specified in mina
+			if [[ $VERBOSE -eq 1 ]]; then
+				$DEPLOY | tee --append $logFile
+				postDeploy
 			else
-				$DEPLOY &>> $logFile
+				if [ "${QUIET}" != "1" ]; then
+					$DEPLOY &>> $logFile &
+					spinner $!
+				else
+					$DEPLOY &>> $logFile
+				fi
+				postDeploy
 			fi
-			postDeploy
 		fi
 	fi
 }
@@ -59,7 +61,7 @@ function postDeploy() {
 	# if we find any, something went wrong.
 	if [[ -z $(git status -uno --porcelain) ]]; then
 		# Run integration hooks
-		postCommit; info "Deployment Success." 
+		postCommit; info "Deployment Success."
 	else
 		info ""
 		if  yesno --default yes "Attempted deploy, but something went wrong, view details? [Y/n] "; then

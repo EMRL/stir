@@ -139,10 +139,15 @@ function wpPkg() {
 								error "Core update failed.";
 							else
 								sleep 1
-								cd $WORKPATH/$APP/; \
-								info "Upgrading development database..."; lynx -dump $DEVURL/system/wp-admin/upgrade.php > $trshFile
+								cd $WORKPATH/$APP/; \	
 								info "Wordpress core updates complete."; UPDCORE=1
 							fi
+							
+							# Update staging server database if needed
+							if [ "$UPDCORE" = "1" ]; then
+								info "Upgrading development database..."; lynx -dump $DEVURL/system/wp-admin/upgrade.php > $trshFile
+							fi
+							
 						else
 							info "Skipping Wordpress core updates..."
 						fi
@@ -164,10 +169,6 @@ function wpPkg() {
 }
 
 function wpCheck() {
-	notice "Checking for updates..."
-	# This is super ghetto :[
 	$WPCLI/wp plugin status --no-color &>> $logFile
 	$WPCLI/wp plugin update --dry-run --no-color --all &> $wpFile
-	# Probably going to let this stay commented out
-	# wp core check-update &>> $logFile
 }

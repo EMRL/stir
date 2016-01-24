@@ -14,12 +14,12 @@ function serverChk() {
 	else
 		# For now, we'll use 401 to indicate all is working well
 		# I'll make this better later
-		REPOURL=$BITBUCKET"/"$REPO"/"
+		REPOURL=$REPOHOST"/"$REPO"/"
 		wget --spider --no-check-certificate $REPOURL > $trshFile 2>&1
 		if grep -Eq '200 OK|401 UNAUTHORIZED' $trshFile; then
-			info " "$BITBUCKET"/"$REPO"/ ${tan}OK${endColor}";
+			info " "$REPOHOST"/"$REPO"/ ${tan}OK${endColor}";
 		else
-			info " "$BITBUCKET"/"$REPO"/ ${red}FAIL${endColor}"; SERVERFAIL="1"
+			info " "$REPOHOST"/"$REPO"/ ${red}FAIL${endColor}"; SERVERFAIL="1"
 		fi
 	fi
 

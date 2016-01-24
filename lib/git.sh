@@ -39,15 +39,19 @@ function gitStart() {
 
 # Checkout master
 function gitChkMstr() {
-	notice "Checking out master branch..."
-	if [[ $VERBOSE -eq 1 ]]; then
-		git checkout master | tee --append $logFile            
+	if [ -z "$MASTER" ]; then
+		emptyLine; error "deploy" $VERSION "requires a master branch to be defined.";
 	else
-		if [ "${QUIET}" != "1" ]; then
-			git checkout master &>> $logFile &
-			showProgress
+		notice "Checking out master branch..."
+		if [[ $VERBOSE -eq 1 ]]; then
+			git checkout master | tee --append $logFile            
 		else
-			git checkout master &>> $logFile
+			if [ "${QUIET}" != "1" ]; then
+				git checkout master &>> $logFile &
+				showProgress
+			else
+				git checkout master &>> $logFile
+			fi
 		fi
 	fi
 }
@@ -145,86 +149,94 @@ function gitCommit() {
 
 # Push master
 function gitPushMstr() {
-	trace "Pushing master."
-	emptyLine  
-	if [[ $VERBOSE -eq 1 ]]; then
-		git push | tee --append $logFile; errorChk           
-	else
-		if  [ "$FORCE" = "1" ] || yesno --default yes "Push master branch? [Y/n] "; then
-			if [ "${QUIET}" != "1" ]; then
-				git push &>> $logFile &
-				spinner $!
-				info "Success.    "
-			else
-				git push &>> $logFile
-			fi
+	if [ -n "$PRODUCTION" ]; then
+		trace "Pushing master."
+		emptyLine  
+		if [[ $VERBOSE -eq 1 ]]; then
+			git push | tee --append $logFile; errorChk           
 		else
-			safeExit
+			if  [ "$FORCE" = "1" ] || yesno --default yes "Push master branch? [Y/n] "; then
+				if [ "${QUIET}" != "1" ]; then
+					git push &>> $logFile &
+					spinner $!
+					info "Success.    "
+				else
+					git push &>> $logFile
+				fi
+			else
+				safeExit
+			fi
 		fi
 	fi
 }
 
 # Checkout production
 function gitChkProd() {
-	notice "Checking out production branch..."
-	if [[ $VERBOSE -eq 1 ]]; then
-		git checkout production | tee --append $logFile               
-	else
-		if [ "${QUIET}" != "1" ]; then
-			git checkout production &>> $logFile &
-			showProgress
+	if [ -n "$PRODUCTION" ]; then
+		notice "Checking out production branch..."
+		if [[ $VERBOSE -eq 1 ]]; then
+			git checkout production | tee --append $logFile               
 		else
-			git checkout production &>> $logFile
+			if [ "${QUIET}" != "1" ]; then
+				git checkout production &>> $logFile &
+				showProgress
+			else
+				git checkout production &>> $logFile
+			fi
+		fi 
+		# Were there any conflicts checking out?
+		if grep -q "error: Your local changes to the following files would be overwritten by checkout:" $logFile; then
+			 error "There is a conflict checking out."
+		else
+			trace "OK"
 		fi
-	fi 
-	# Were there any conflicts checking out?
-	if grep -q "error: Your local changes to the following files would be overwritten by checkout:" $logFile; then
-		 error "There is a conflict checking out."
-	else
-		trace "OK"
 	fi
 }
 
 # Merge master into production
 function gitMerge() {
-	notice "Merging master into production..."
-	# Clear out the index.lock file, cause reasons
-	[[ -f $gitLock ]] && rm "$gitLock"
-	# Bonus add, just because. Ugh.
-	git add -A 
-	if [[ $VERBOSE -eq 1 ]]; then
-		git merge --no-edit master | tee --append $logFile              
-	else
-		if [ "${QUIET}" != "1" ]; then
-			git merge --no-edit master &>> $logFile &
-			showProgress
+	if [ -n "$PRODUCTION" ]; then
+		notice "Merging master into production..."
+		# Clear out the index.lock file, cause reasons
+		[[ -f $gitLock ]] && rm "$gitLock"
+		# Bonus add, just because. Ugh.
+		git add -A 
+		if [[ $VERBOSE -eq 1 ]]; then
+			git merge --no-edit master | tee --append $logFile              
 		else
-			git merge --no-edit master &>> $logFile
+			if [ "${QUIET}" != "1" ]; then
+				git merge --no-edit master &>> $logFile &
+				showProgress
+			else
+				git merge --no-edit master &>> $logFile
+			fi
 		fi
 	fi
 }
 
 # Push production
 function gitPushProd() {
-	trace "Push production"; emptyLine
-	if [[ $VERBOSE -eq 1 ]]; then
-		git push | tee --append $logFile 
-		trace "OK"              
-	else
-		if  [ "$FORCE" = "1" ] || yesno --default yes "Push production branch? [Y/n] "; then
-			if [ "${QUIET}" != "1" ]; then
-				git push &>> $logFile &
-				spinner $!
-			else
-				git push &>> $logFile
-			fi
-			# info "Success.    "
-			# trace "OK"
-			# Try a second push just cause reasons. Ugh.
-			# git push &>> $logFile
-			sleep 1
+	if [ -n "$PRODUCTION" ]; then
+		trace "Push production"; emptyLine
+		if [[ $VERBOSE -eq 1 ]]; then
+			git push | tee --append $logFile 
+			trace "OK"              
 		else
-			safeExit
+			if  [ "$FORCE" = "1" ] || yesno --default yes "Push production branch? [Y/n] "; then
+				if [ "${QUIET}" != "1" ]; then
+					git push &>> $logFile &
+					spinner $!
+				else
+					git push &>> $logFile
+				fi
+				# info "Success.    "
+				# trace "OK"
+				# Try a second push just cause reasons. Ugh.
+				# git push &>> $logFile
+				sleep 1
+			else
+				safeExit
+			fi
 		fi
 	fi
 }

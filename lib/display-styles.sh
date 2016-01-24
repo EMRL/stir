@@ -58,6 +58,7 @@ function notice () {
 
 function error () {
 	echo -e "${red}$@${endColor}"
+	echo "ERROR: $@" >> $logFile
 	errorExit
 }
 
@@ -66,7 +67,6 @@ function warning () {
 		echo -e "${red}$@${endColor}"
 	fi
 }
-
 
 function emptyLine () {
 		echo ""

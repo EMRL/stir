@@ -28,7 +28,7 @@ function mailPost {
 # Post via email
 function postCommit() {
 	# Check for a Wordpress core update, update production database if needed
-	if [[ -z "$COREUPD" ]]; then	
+	if [ "$UPDCORE" = "1" ]; then
 		info "Upgrading production database..."; lynx -dump $PRODURL/system/wp-admin/upgrade.php > $trshFile
 	fi
 	# just for yuks, display git stats for this user (user can override this if it annoys them)

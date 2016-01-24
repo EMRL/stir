@@ -2,7 +2,7 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.2.6"
+VERSION="3.2.7"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
@@ -18,6 +18,7 @@ Options:
   -u, --update           If there are no available updates, halt deployment
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
   -S, --skip-update      Skip any Wordpress core/plugin updates
+  -c, --current          Deploy a project from current working directory          
   -s, --strict           Any error will halt deployment completely
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
@@ -61,6 +62,7 @@ while [[ $1 = -?* ]]; do
 		-h|--help) usage >&2; exit ;;
 		-u|--update) UPGRADE=1 ;;
 		-S|--skip-update) SKIPUPDATE=1 ;;
+		-c|--current) CURRENT=1 ;;
 		-v|--version) echo "$(basename $0) ${VERSION}"; exit ;;
 		-V|--verbose) VERBOSE=1 ;;
 		-q|--quiet) QUIET=1 ;;
@@ -147,6 +149,11 @@ if [ -f "${etcLocation}" ]; then
 else
 	echo "Unable to load configuration file at" $etcLocation", exiting."
 	exit 1
+fi
+
+# Check to see if the user is deploying from current working directory
+if [ "${CURRENT}" == "1" ]; then
+	WORKPATH=".."
 fi
 
 # Load per-user configuration, if it exists

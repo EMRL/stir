@@ -25,9 +25,9 @@ function quickExit() {
 
 # Exit on error
 function errorExit() {
-	if  yesno --default yes "Would you like to view the log file? [Y/n] "; then
-		less $logFile;
-	fi
+	#if  yesno --default yes "Would you like to view the log file? [Y/n] "; then
+	#	less $logFile;
+	#fi
 	# Send log
 	if [ "${EMAILERROR}" == "TRUE" ]; then
 		mailLog

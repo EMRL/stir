@@ -12,7 +12,7 @@ function pkgMgr() {
 			notice "Checking for package manager..." 
 
 			# Checking for app/lib, which assumes we're using Grunt
-			if [ -d "$WORKPATH/$APP/lib" ]
+			if [ -f "$WORKPATH/$APP/Gruntfile.coffee" ]
 				then
 		
 				if  [ "$FORCE" = "1" ] || yesno --default no "Run Grunt? [y/N] "; then
