@@ -2,7 +2,7 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.2.7"
+VERSION="3.3RC"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
@@ -230,8 +230,12 @@ trace "Trash file is" $trshFile
 trace "Stat file is" $statFile
 trace "URL file is" $urlFile
 trace "Development workpath is" $WORKPATH
-trace "Lead developer permissions are" $DEVUSER.$DEVGROUP
-trace "Apache permissions are" $APACHEUSER.$APACHEGROUP
+
+if [ "${FIXPERMISSIONS}" == "TRUE" ]; then
+	trace "Lead developer permissions are" $DEVUSER.$DEVGROUP
+	trace "Apache permissions are" $APACHEUSER.$APACHEGROUP
+fi
+
 trace "Current project is" $APP
 trace "Current user is" $DEV
 trace "Git lock at" $gitLock

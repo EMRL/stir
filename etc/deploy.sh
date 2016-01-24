@@ -27,7 +27,7 @@
 # The exact name of the Bitbucket/Github repository
 # REPO="name-of-repo"
 
-# Configure you branches. In most cases they will be master & production. IF
+# Configure your branches. In most cases the name will be master & production. If
 # you are only using a master branch, leave production undefined.
 MASTER="master"
 PRODUCTION="production"
