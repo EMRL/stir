@@ -57,7 +57,11 @@ function notice () {
 }
 
 function error () {
-	echo -e "${red}$@${endColor}"
+	if [[ $QUIET != "1" ]]; then
+		echo -e "${red}$@${endColor}"
+	else
+		echo -e "$@"
+	fi
 	echo "ERROR: $@" >> $logFile
 	errorExit
 }
