@@ -149,7 +149,7 @@ function gitCommit() {
 
 # Push master
 function gitPushMstr() {
-	if [ -n "$PRODUCTION" ]; then
+	if [ -n "$MASTER" ]; then
 		trace "Pushing master."
 		emptyLine  
 		if [[ $VERBOSE -eq 1 ]]; then
