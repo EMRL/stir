@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# This is an example cron file for periodic scheduled deployments. 
+
+# Nerf any color coded garbage you have in your shell stuff
+export TERM=${TERM:-dumb}
+
+# Define the home directory; the cron task should be run as the user that owns this 
+HOME=/home/[user name]
+
+# Read in the user's profile keychain - learn more about setting up
+# a keychain at http://www.funtoo.org
+source $HOME/.bash_profile 2>&1
+source $HOME/.keychain/$HOSTNAME-sh 2>&1
+
+# And now, the deploy command; the safest mode to run from a cron is something like
+# deploy --force --update --quiet (or -Fuq in short form)
+#
+# This means the command will bypass asking for human interaction, and only update Wordpress 
+# plugin/core files. Snart commits must be enabled, as there will be no human to write a 
+# commit message
+deploy -Fuq [repo name]
+
+# If you have problems with authenticating, you can debug what's up with a command like this: 
+# ssh -Tvvv git@bitbucket.org
+# ssh -Tvvv git@github.com
