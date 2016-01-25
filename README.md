@@ -4,19 +4,23 @@ This is a multi-use deployment script, with a focus on publishing Wordpress site
 
 ```
 Usage: deploy [options] [target] ...
+
 Options:
-  -u, --upgrade     If there are no available upgrades, halt deployment
-  -F, --force       Skip all user interaction, forces 'Yes' to all actions.
-  -s, --strict      Any error will halt deployment completely
-  -V, --verbose     Output more process information to screen
-  -d, --debug       Run in debug mode
-  -h, --help        Display this help and exit
-  -v, --version     Output version information and exit
+  -u, --update           If there are no available updates, halt deployment
+  -F, --force            Skip all user interaction, forces 'Yes' to all actions
+  -S, --skip-update      Skip any Wordpress core/plugin updates
+  -c, --current          Deploy a project from current working directory
+  -s, --strict           Any error will halt deployment completely
+  -V, --verbose          Output more process information to screen
+  -q, --quiet            Display minimal output on screen
+  -d, --debug            Run in debug mode
+  -h, --help             Display this help and exit
+  -v, --version          Output version information and exit
 ```
 
 How It Works
 --------
-Maybe I'll finish this at some point. Basically this thing is a wrapper that simplifies web app deployment from a development environment to a production server. At the moment is mostly focused on Wordpress projects but in theory it should work for other stuff too.
+Basically, this thing is a wrapper that simplifies web app deployment from a development environment to a production server. At the moment is mostly focused on Wordpress projects but in theory it should work for other stuff too.
 
 This script requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
 
@@ -33,9 +37,13 @@ Configuration is handled in the `etc/deploy.conf` file. Individual users can als
 
 Repositories can each have their own deploy configuration. An example of this file can be [found here](https://github.com/EMRL/deploy/blob/master/etc/deploy.sh).
 
+Integration
+--------
+For workgroups and teams that use it `deploy` is able to integrate with Slack. You'll need to set up an "Incoming Webhook" custom integration on the Slack side to get this ready to roll. See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get going.
+
 Running on Autopilot
 --------
-As of 3.1, `deploy -Fu` or `deploy --force --upgrade` should work well for unattended updates of Wordpress site plugin and core updates; great for maintaining updates via a crontab. Running in this mode, the project will only be deployed if there are Wordpress core or plugin updates. If other code changes are detected the project will not be auto-updated. Smart Commits must be enabled or nothing will be deployed.
+As of 3.3, `deploy -Fuq` or `deploy --force --upgrade --quiet` should work well for unattended updates of Wordpress site plugin and core updates; great for maintaining updates via a crontab. An example cron script can be [found here](https://github.com/EMRL/deploy/blob/master/etc/cron/deploy.cron.example). Running in this mode, the project will only be deployed if there are Wordpress core or plugin updates. If other code changes are detected the project will not be auto-updated. Smart Commits must be enabled or nothing will be deployed.
 
 Contact
 --------
