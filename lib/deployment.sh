@@ -42,7 +42,7 @@ function pkgDeploy() {
 			# Deploy via deployment command specified in mina
 			if [[ $VERBOSE -eq 1 ]]; then
 				$DEPLOY | tee --append $logFile
-				postDeploy
+				#postDeploy
 			else
 				if [ "${QUIET}" != "1" ]; then
 					$DEPLOY &>> $logFile &
@@ -50,10 +50,11 @@ function pkgDeploy() {
 				else
 					$DEPLOY &>> $logFile
 				fi
-				postDeploy
+				#postDeploy
 			fi
 		fi
 	fi
+	postDeploy
 }
 
 function postDeploy() {
