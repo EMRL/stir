@@ -30,7 +30,6 @@ function smrtCommit() {
 			# Replace current commit message with Plugin upgrade info 
 			PLUGINS=$(<$wpFile)
 			COMMITMSG="$PCC ($PLUGINS)"
-			# Will have to add the stuff for core upgrade, still need logs
 		fi
 
 		# So what about a Wordpress core upgrade?
@@ -44,7 +43,7 @@ function smrtCommit() {
 			trace "No system updates"
 		fi
 
-		# Output the contents of $COmMiTMSG
+		# Output the contents of $COMMiTMSG
 		trace "Auto-generated commit message: $COMMITMSG"
 	fi
 }

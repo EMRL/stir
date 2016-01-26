@@ -169,6 +169,12 @@ function wpPkg() {
 }
 
 function wpCheck() {
+	# For the logfile
 	$WPCLI/wp plugin status --no-color &>> $logFile
+	# For the console/smart commit message
 	$WPCLI/wp plugin update --dry-run --no-color --all &> $wpFile
+
+	# Other options, thanks Corey
+	# wp plugin list --format=csv --all --fields=name,update_version,update | grep 'available'
+	# wp plugin list --format=csv --all --fields=title,update_version,update | grep 'available'
 }
