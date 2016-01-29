@@ -4,6 +4,7 @@ This is a list of all the variables used. It is not yet complete, and most non-e
 
 Variables
 --------
+```
 UPGRADE
 SKIPUPDATE
 CURRENT
@@ -12,9 +13,11 @@ QUIET
 STRICT
 DEBUG
 FORCE
+```
 
 Constants and Environment Variables
 --------
+```
 WORKPATH
 CONFIGDIR
 REPOHOST
@@ -52,3 +55,4 @@ COMMITMSG
 DEPLOY
 DONOTDEPLOY
 TASK
+```
