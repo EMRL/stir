@@ -10,11 +10,13 @@
 # The URL for this repo's hosting, with no trailing slash. For example, 
 # if you use Github and your repo URL looks like https://github.com/EMRL/deploy
 # your REPOHOST should be set to https://github.com/EMRL (with no trailling slash)
+# If most of your repos are all hosted at the same location, you may want to define
+# this in either the global or user configuration files.
 # REPOHOST=""
 
-# If you wish to login using your account name/password (without using an SSH key)
-# set SSHKEY to exactly "FALSE"
-# SSHKEY="FALSE"
+# If you have no SSH key or wish to login manually using your account name/password 
+# in the console, set NOKEY to exactly "TRUE"
+# NOKEY="TRUE"
 
 # A human readable project name
 # PROJNAME="Best Webapp Ever"	
