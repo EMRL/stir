@@ -122,8 +122,8 @@ function gitCommit() {
 					console "Smart Commits must enabled when forcing updates."
 					console "Set SMARTCOMMIT=TRUE in" $WORKPATH"/"$APP"/$CONFIGDIR/deploy.sh"; quietExit
 				else
-					if [ -z "$COMMITMSG" ; then
-						info "Commit message mut not be empty."; quietExit
+					if [ -z "$COMMITMSG" ]; then
+						info "Commit message must not be empty."; quietExit
 					else
 						notes=$COMMITMSG
 					fi
