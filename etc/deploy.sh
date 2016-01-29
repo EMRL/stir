@@ -12,6 +12,10 @@
 # your REPOHOST should be set to https://github.com/EMRL (with no trailling slash)
 # REPOHOST=""
 
+# If you wish to login using your account name/password (without using an SSH key)
+# set SSHKEY to exactly "FALSE"
+# SSHKEY="FALSE"
+
 # A human readable project name
 # PROJNAME="Best Webapp Ever"	
 

@@ -156,10 +156,14 @@ function gitPushMstr() {
 			git push | tee --append $logFile; errorChk           
 		else
 			if  [ "$FORCE" = "1" ] || yesno --default yes "Push master branch? [Y/n] "; then
-				if [ "${QUIET}" != "1" ]; then
-					git push &>> $logFile &
-					spinner $!
-					info "Success.    "
+				if [ "$SSHKEY" -ne "FALSE" ]; then
+					if [ "${QUIET}" != "1" ]; then
+						git push &>> $logFile &
+						spinner $!
+						info "Success.    "
+					else
+						git push &>> $logFile; errorChk
+					fi
 				else
 					git push &>> $logFile; errorChk
 				fi
