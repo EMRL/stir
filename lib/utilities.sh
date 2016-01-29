@@ -18,19 +18,13 @@ function go() {
 	# Does a configuration file for this repo exist?
 	if [ -z "${APPRC}" ]; then
 		if [ ! -d $WORKPATH/$APP/config ]; then
-			# sudo mkdir $WORKPATH/$APP/config
-			sudo mkdir $WORKPATH/$APP/config
+			mkdir $WORKPATH/$APP/config
 		fi
 		emptyLine; info "Project configuration not found, creating."; sleep 2
-		# sudo cp ${deployPath}/deploy.sh $WORKPATH/$APP/$CONFIGDIR/
-		# sudo chown $DEVUSER.$DEVGROUP $WORKPATH/$APP/$CONFIGDIR/deploy.sh
 		cp ${deployPath}/deploy.sh $WORKPATH/$APP/$CONFIGDIR/
 		if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
-			# sudo nano $WORKPATH/$APP/$CONFIGDIR/deploy.sh
 			nano $WORKPATH/$APP/$CONFIGDIR/deploy.sh
 			clear; sleep 1
-			# info "Loading new project configuration."
-			# source $WORKPATH/$APP/$CONFIGDIR/deploy.sh
 			quickExit
 		else
 			info "You can change configuration later by editing" $WORKPATH/$APP/"config/deploy.sh"
@@ -74,9 +68,3 @@ function go() {
 function depCheck() {
 	hash git 2>/dev/null || { echo >&2 "I require git but it's not installed. Aborting."; exit 1; }
 }
-
-# Check for modified files. This will hopefully find files modified a user *other*
-# than the user currently executing the deploy command. Still looking into the best way to do this.
-#function activCheck() {
-# find . -mmin -10 -ls 
-#}

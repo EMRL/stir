@@ -142,7 +142,7 @@ function gitCommit() {
 				trace "Oh gosh. Nested if/thens. Halp."
 			fi
 		fi
-		git commit -m "$notes" &>> $logFile
+		git commit -m "$notes" &>> $logFile; errorChk
 		trace "Commit message:" $notes
 	fi
 }
@@ -161,7 +161,7 @@ function gitPushMstr() {
 					spinner $!
 					info "Success.    "
 				else
-					git push &>> $logFile
+					git push &>> $logFile; errorChk
 				fi
 			else
 				safeExit
@@ -175,13 +175,13 @@ function gitChkProd() {
 	if [ -n "$PRODUCTION" ]; then
 		notice "Checking out production branch..."
 		if [[ $VERBOSE -eq 1 ]]; then
-			git checkout production | tee --append $logFile               
+			git checkout production | tee --append $logFile; errorChk               
 		else
 			if [ "${QUIET}" != "1" ]; then
 				git checkout production &>> $logFile &
 				showProgress
 			else
-				git checkout production &>> $logFile
+				git checkout production &>> $logFile; errorChk
 			fi
 		fi 
 		# Were there any conflicts checking out?
@@ -200,7 +200,7 @@ function gitMerge() {
 		# Clear out the index.lock file, cause reasons
 		[[ -f $gitLock ]] && rm "$gitLock"
 		# Bonus add, just because. Ugh.
-		git add -A 
+		git add -A; errorChk 
 		if [[ $VERBOSE -eq 1 ]]; then
 			git merge --no-edit master | tee --append $logFile              
 		else
@@ -208,7 +208,7 @@ function gitMerge() {
 				git merge --no-edit master &>> $logFile &
 				showProgress
 			else
-				git merge --no-edit master &>> $logFile
+				git merge --no-edit master &>> $logFile; errorChk
 			fi
 		fi
 	fi
@@ -219,7 +219,7 @@ function gitPushProd() {
 	if [ -n "$PRODUCTION" ]; then
 		trace "Push production"; emptyLine
 		if [[ $VERBOSE -eq 1 ]]; then
-			git push | tee --append $logFile 
+			git push | tee --append $logFile; errorChk 
 			trace "OK"              
 		else
 			if  [ "$FORCE" = "1" ] || yesno --default yes "Push production branch? [Y/n] "; then
@@ -227,7 +227,7 @@ function gitPushProd() {
 					git push &>> $logFile &
 					spinner $!
 				else
-					git push &>> $logFile
+					git push &>> $logFile; errorChk
 				fi
 				# info "Success.    "
 				# trace "OK"
