@@ -156,8 +156,7 @@ function gitPushMstr() {
 			git push | tee --append $logFile; errorChk           
 		else
 			if  [ "$FORCE" = "1" ] || yesno --default yes "Push master branch? [Y/n] "; then
-				console "VALUE =" $SSHKEY
-				if [ $SSHKEY != "FALSE" ]; then
+				if [ "$NOKEY" -ne "TRUE" ]; then
 					if [ "${QUIET}" != "1" ]; then
 						git push &>> $logFile &
 						spinner $!
