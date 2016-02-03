@@ -2,7 +2,7 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.3RC"
+VERSION="3.3"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
@@ -69,6 +69,7 @@ while [[ $1 = -?* ]]; do
 		-s|--strict) STRICT=1 ;;
 		-d|--debug) DEBUG=1 ;;
 		-F|--force) FORCE=1 ;;
+		--slack-test) SLACKTEST=1 ;;
 		--endopts) shift; break ;;
 		*) echo "Invalid option: '$1'" 1>&2 ; exit 1 ;;
 	esac
@@ -172,6 +173,11 @@ if [ -f "${libLocation}" ]; then
 else
 	echo "Unable to load libraries at" $libLocation", exiting."
 	exit 1
+fi
+
+# Slack test
+if [ "${SLACKTEST}" == "1" ]; then
+	slackTest; quickExit
 fi
 
 trace "Version" $VERSION

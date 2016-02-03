@@ -37,17 +37,21 @@ function wpPkg() {
 					# If available then let's do it
 					info "The following updates are available:"
 					# Clean the garbage out of the log for console display
-					sed 's/[+|-]//g' $wpFile > $trshFile && mv $trshFile $wpFile;
+					sed 's/[+|]//g' $wpFile > $trshFile && mv $trshFile $wpFile;
 					sed '/^\s*$/d' $wpFile > $trshFile && mv $trshFile $wpFile;
-					# remove the column label row
+					# Remove lines with multiple sequential hyphens
+					sed '/--/d' $wpFile > $trshFile && mv $trshFile $wpFile;
+					# Remove the column label row
 					sed '1,/update_version/d' $wpFile > $trshFile && mv $trshFile $wpFile;
 					# Remove everything left but the first and fourth "words"
 					awk '{print "  " $1,$4}' $wpFile > $trshFile && mv $trshFile $wpFile;
 					# Work around the weird "Available" bug
 					sed '/Available/d' $wpFile > $trshFile && mv $trshFile $wpFile;
+					# Work around for the odd "REQUEST:" occuring
+					sed '/REQUEST:/d' $wpFile > $trshFile && mv $trshFile $wpFile;
 					cat $wpFile; emptyLine
 
-					if  [ "$FORCE" = "1" ] || yesno --default no "Proceed with updates? [y/N] "; then
+					if  [ "$FORCE" = "1" ] ||  yesno --default no "Proceed with updates? [y/N] "; then
 
 						# No longer run as apache
 						# sudo -u "apache" --  /usr/local/bin/wp plugin update --all --no-color &>> $logFile &

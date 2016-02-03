@@ -13,11 +13,13 @@ QUIET
 STRICT
 DEBUG
 FORCE
+SLACKTEST
 ```
 
 Constants and Environment Variables
 --------
 ```
+CLEARSCREEN
 WORKPATH
 CONFIGDIR
 REPOHOST

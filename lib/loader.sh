@@ -6,8 +6,10 @@
 
 # Save current contents of the terminal
 if [ "${QUIET}" != "1" ]; then
-	tput smcup; clear
-	clear
+	if [ "${CLEARSCREEN}" == "TRUE" ]; then
+		tput smcup; clear
+		# clear
+	fi
 fi
 
 # Creating this function first, so verbose output option is usable early

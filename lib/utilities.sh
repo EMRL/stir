@@ -12,7 +12,7 @@ function go() {
 		tput cnorm;
 	fi
 	cd $WORKPATH/$APP; \
-	echo "deploy" $VERSION
+	console "deploy" $VERSION
 	printf "Current working path is %s\n" ${WORKPATH}/${APP}
 
 	# Does a configuration file for this repo exist?
