@@ -39,7 +39,7 @@ Repositories can each have their own deploy configuration. An example of this fi
 
 Integration
 --------
-For workgroups and teams that use it `deploy` is able to integrate with Slack. You'll need to set up an "Incoming Webhook" custom integration on the Slack side to get this ready to roll. See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get going.
+For workgroups and teams that use it `deploy` is able to integrate with Slack. You'll need to set up an "Incoming Webhook" custom integration on the Slack side to get this ready to roll. See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get going. Once you think you've got Slack configured, run `deploy --slack-test` to test.
 
 Running on Autopilot
 --------
