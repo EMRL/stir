@@ -139,7 +139,7 @@ function wpPkg() {
 								error "Core update failed.";
 							else
 								sleep 1
-								cd $WORKPATH/$APP/; \	
+								cd $WORKPATH/$APP/; # \	
 								info "Wordpress core updates complete."; UPDCORE=1
 							fi
 							
