@@ -70,6 +70,7 @@ function warning () {
 	if [[ $QUIET != "1" ]]; then
 		echo -e "${red}$@${endColor}"
 	fi
+	echo "WARNING: $@" >> $logFile
 }
 
 function emptyLine () {
