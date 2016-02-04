@@ -2,7 +2,7 @@ Variable List
 =============
 This is a list of all the variables used. It is not yet complete, and most non-environment variables will be renamed to follow the conventions [`outlined here`](https://google.github.io/styleguide/shell.xml)
 
-Variables
+Startup Variables
 --------
 ```
 UPGRADE
