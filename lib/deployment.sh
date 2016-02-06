@@ -6,6 +6,17 @@
 trace "Loading deployment.sh"   
 
 function preDeploy() {
+	# If CHECKBRANCH is set, make sure current branch is correct.
+		trace "hello?"
+	if [ -n "$BRANCHCHECK" ]; then 
+		current_branch="$(git rev-parse --abbrev-ref HEAD)"
+
+		console "${current_branch}"
+		if [[ "${current_branch}" != "${BRANCHCHECK}" ]]; then
+			errorExit
+		fi
+	fi
+
 	# If there are changes waiting in the repo, stop and ask for user input
 	# This should probably be it's own function
 	if [[ -z $(git status --porcelain) ]]; then

@@ -30,11 +30,16 @@ function gitStart() {
 		exit 1
 	fi
 
+	# If CHECKBRANCH is set, make sure current branch is correct.
+	if [ -n "$CHECKBRANCH" ]; then 
+		current_branch="$(git rev-parse --abbrev-ref HEAD)"
+		if [[ "${current_branch}" != "${CHECKBRANCH}" ]]; then
+			error "Must be on" $CHECKBRANCH "branch to continue deployment.";
+		fi
+	fi
+
 	# Try to clear out old git processes owned by this user
 	killall -9 git &>> /dev/null
-	
-	# Unstage anything that is leftover from a mess
-	# git reset HEAD &>> $logFile
 }
 
 # Checkout master

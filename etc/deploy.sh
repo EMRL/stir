@@ -38,6 +38,11 @@
 MASTER="master"
 PRODUCTION="production"
 
+# Define CHECKBRANCH if you only want deploy to run when the set branch is 
+# currently checked out; e.g. if CHECKBRANCH="master" and the current branch is 
+# "development", deployment will halt.
+# CHECKBRANCH="master"
+
 # If for some reason you'd like a default commit message. It will
 # always be editable before finalizing commit.	
 # COMMITMSG="This is a default commit message"
