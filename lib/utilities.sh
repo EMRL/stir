@@ -11,7 +11,6 @@ function go() {
 	if [ "${QUIET}" != "1" ]; then
 		tput cnorm;
 	fi
-	cd $WORKPATH/$APP; \
 	console "deploy" $VERSION
 	printf "Current working path is %s\n" ${WORKPATH}/${APP}
 

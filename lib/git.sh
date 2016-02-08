@@ -20,6 +20,8 @@ function gitStart() {
 	if [ ! -d $WORKPATH/$APP ]; then
 		info $WORKPATH/$APP "is not a valid directory."
 		exit 1
+	else
+		cd $WORKPATH/$APP; \
 	fi
 
 	# Check that .git exists
