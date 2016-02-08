@@ -32,6 +32,13 @@ function errorExit() {
 	if [ "${EMAILERROR}" == "TRUE" ]; then
 		mailLog
 	fi
+
+	# Check Slack settings
+	if [ "${POSTTOSLACK}" == "TRUE" ] && [ "${SLACKERROR}" == "TRUE" ]; then
+		message_state="ERROR"
+		slackPost
+	fi
+
   	# Clean up your mess
 	cleanUp; exit 1
 }
