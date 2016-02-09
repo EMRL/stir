@@ -85,6 +85,12 @@ fi
 # Store the remaining part as arguments.
 APP+=("$@")
 
+# Check to see if the user is deploying from current working directory
+if [ "${CURRENT}" == "1" ]; then
+	WORKPATH="$(dirname "${PWD}")"
+	APP="${PWD##*/}"
+fi
+
 # Fire up temporary log files. Consolidate this shit better someday, geez.
 # 
 # Main log file
@@ -150,7 +156,8 @@ fi
 
 # Check to see if the user is deploying from current working directory
 if [ "${CURRENT}" == "1" ]; then
-	WORKPATH=".."
+	WORKPATH="$(dirname "${PWD}")"
+	APP="${PWD##*/}"
 fi
 
 # Load per-user configuration, if it exists

@@ -63,6 +63,7 @@ function error () {
 		echo -e "$@"
 	fi
 	echo "ERROR: $@" >> $logFile
+	error_msg="$@"
 	errorExit
 }
 

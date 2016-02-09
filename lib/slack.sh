@@ -10,7 +10,7 @@ function slackPost () {
 		if [ -z "$notes" ]; then
 			notes="Something went wrong."
 		fi
-		slack_message="${USER} attempted to deploy changes to ${APP}\nERROR: *${notes}*"
+		slack_message="${USER} attempted to deploy changes to ${APP}\nERROR: *${error_msg}*"
 	else
 		slack_message="${USER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
 	fi

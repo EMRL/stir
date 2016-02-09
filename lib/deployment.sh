@@ -6,17 +6,6 @@
 trace "Loading deployment.sh"   
 
 function preDeploy() {
-	# If CHECKBRANCH is set, make sure current branch is correct.
-		trace "hello?"
-	if [ -n "$BRANCHCHECK" ]; then 
-		current_branch="$(git rev-parse --abbrev-ref HEAD)"
-
-		console "${current_branch}"
-		if [[ "${current_branch}" != "${BRANCHCHECK}" ]]; then
-			errorExit
-		fi
-	fi
-
 	# If there are changes waiting in the repo, stop and ask for user input
 	# This should probably be it's own function
 	if [[ -z $(git status --porcelain) ]]; then
@@ -24,9 +13,10 @@ function preDeploy() {
 	else
 		# If running in --force mode we will not allow deployment to continue
 		if [[ "$FORCE" = "1" ]]; then
-			warning "There are previously undeployed changes in this project, deployment can not continue."; quietExit
+			emptyLine
+			error "There are previously undeployed changes in this project, deployment can not continue."
 		else
-			emptyLine;
+			emptyLine
 			warning "There are previously undeployed changes in this project."
 
 			if yesno --default no "View unresolved files? [y/N] "; then
