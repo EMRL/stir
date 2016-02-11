@@ -3,8 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Added change log
+- Running ```deploy --current``` will now deploy the current directory and no longer needs to be launched as ```deploy --current [project name]```
 - Option to include error messages in Slack integration
 - Option added to projects' ```config/deploy.sh``` to enforce repo to have a certain branch checked out before beginning deployment session. 
+- Added ```deploy --slack-test``` to allow testing of Slack integration
 
 ## [3.3] - 02-03-2015
 - Added ssh key detection, allows manual login to repo host if keys not found
