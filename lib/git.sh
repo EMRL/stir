@@ -40,6 +40,16 @@ function gitStart() {
 		fi
 	fi
 
+	# Check for active files
+	if [ "$FORCE" = "1" ]; then
+		trace "Checking for active files"
+		active_files=$(find $WORKPATH/$APP -mmin -$ACTIVECHECK)
+		if [ ! -z "$active_files" ]; then
+			trace "Recently changed files:" $active_files
+			error "Code base has changed within the last 10 minutes. Halting deployment."
+		fi
+	fi
+
 	# Try to clear out old git processes owned by this user
 	killall -9 git &>> /dev/null
 }

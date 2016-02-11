@@ -82,4 +82,5 @@ libLocation
 POSTEMAIL
 current_branch
 error_msg
+active_files
 ```
