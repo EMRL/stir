@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Added active file check when running in ```--force``` mode, as another failsafe for potential issues caused in multi-developer environments
 - Added change log
 - Running ```deploy --current``` will now deploy the current directory and no longer needs to be launched as ```deploy --current [project name]```
 - Option to include error messages in Slack integration
