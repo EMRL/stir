@@ -1,9 +1,7 @@
-Variable List
-=============
+# Variable List
 This is a list of all the variables used. It is not yet complete, and most non-environment variables will be renamed to follow the conventions [`outlined here`](https://google.github.io/styleguide/shell.xml)
 
-Startup Variables
---------
+## Startup Variables
 ```
 UPGRADE
 SKIPUPDATE
@@ -16,8 +14,7 @@ FORCE
 SLACKTEST
 ```
 
-Constants and Environment Variables
---------
+## Constants and Environment Variables
 ```
 CLEARSCREEN
 WORKPATH
@@ -58,10 +55,11 @@ DEPLOY
 DONOTDEPLOY
 TASK
 CHECKBRANCH
+ACTIVECHECK
+CHECKTIME
 ```
 
-Variables (Format needs to change)
---------
+## Variables (Format needs to change)
 ```
 VERSION
 NOW
@@ -84,3 +82,15 @@ current_branch
 error_msg
 active_files
 ```
+
+## Logfiles
+There are way way way too many logfiles in use at this time. I'm going to be tidying this up.
+````
+Main Log file: /tmp/[repo].log-####.log
+Plugin update log: /tmp/[repo].wp-#####.log
+Core update log: /tmp/[repo].core-####.log
+Post log: /tmp/[repo].wtf-####.log
+Trash output: /tmp/[repo].trsh-####.log
+Stats output: /tmp/[repo].stat-####.log
+URL output: /tmp/[repo].url-####.log
+````

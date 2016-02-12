@@ -2,7 +2,7 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.3.2"
+VERSION="3.3.3"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 

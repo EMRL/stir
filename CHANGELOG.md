@@ -2,15 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
-- Added active file check as another failsafe for potential issues that may come up in multi-developer environments
+## [3.3.2] - 02-11-2016
+- Added active file check as another failsafe when running as cron (```deploy --force --update --quiet```) to stop potential issues that may come up in multi-developer environments
 - Added change log
 - Running ```deploy --current``` will now deploy the current directory and no longer needs to be launched as ```deploy --current [project name]```
 - Option to include error messages in Slack integration
 - Option added to projects' ```config/deploy.sh``` to enforce repo to have a certain branch checked out before beginning deployment session. 
 - Added ```deploy --slack-test``` to allow testing of Slack integration
 
-## [3.3] - 02-03-2015
+## [3.3] - 02-03-2016
 - Added ssh key detection, allows manual login to repo host if keys not found
 - Added Slack integration
 - Added ```deploy --force --update --quiet``` for unattended Wordpress plugin/core updates via cron scheduling 
@@ -37,7 +37,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.3...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.3.3...HEAD
+[3.3.2]: https://github.com/EMRL/deploy/compare/v3.3...3.3.3
 [3.3]: https://github.com/EMRL/deploy/compare/v3.1...v3.3
 [3.1]: https://github.com/EMRL/deploy/compare/v3.0...v3.1
 [3.0]: https://github.com/EMRL/deploy/commits/v3.0
