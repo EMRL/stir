@@ -38,7 +38,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 [Unreleased]: https://github.com/EMRL/deploy/compare/v3.3.3...HEAD
-[3.3.3]: https://github.com/EMRL/deploy/compare/v3.3...3.3.3
+[3.3.3]: https://github.com/EMRL/deploy/compare/v3.3...v3.3.3
 [3.3]: https://github.com/EMRL/deploy/compare/v3.1...v3.3
 [3.1]: https://github.com/EMRL/deploy/compare/v3.0...v3.1
 [3.0]: https://github.com/EMRL/deploy/commits/v3.0
