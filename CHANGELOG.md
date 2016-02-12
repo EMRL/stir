@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.3.2] - 02-11-2016
+## [3.3.3] - 02-11-2016
 - Added active file check as another failsafe when running as cron (```deploy --force --update --quiet```) to stop potential issues that may come up in multi-developer environments
 - Added change log
 - Running ```deploy --current``` will now deploy the current directory and no longer needs to be launched as ```deploy --current [project name]```
