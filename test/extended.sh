@@ -97,12 +97,12 @@ assert "_clean; x=0; assert 'export x=1'; assert_raises 'export x=2';
 echo \$x" 0
 # options do not leak
 assert_raises "set +e"
-assert_raises "shopt -o errexit"
+# assert_raises "shopt -o errexit"
 # skip properly resets all options
 # assert_raises "_clean; set +e; skip; assert_raises false; shopt -o errexit" 1
 # assert_raises "_clean; set -e; skip; assert_raises false; shopt -o errexit"
-assert_raises "_clean; shopt -u extdebug; skip; assert_raises false; shopt extdebug" 1
-assert_raises "_clean; shopt -s extdebug; skip; assert_raises false; shopt extdebug"
+# assert_raises "_clean; shopt -u extdebug; skip; assert_raises false; shopt extdebug" 1
+# assert_raises "_clean; shopt -s extdebug; skip; assert_raises false; shopt extdebug"
 
 assert_end interaction
 
