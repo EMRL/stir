@@ -9,7 +9,7 @@
 
 # The URL for this repo's hosting, with no trailing slash. For example, 
 # if you use Github and your repo URL looks like https://github.com/EMRL/deploy
-# your REPOHOST should be set to https://github.com/EMRL (with no trailling slash)
+# your REPOHOST should be set to https://github.com/EMRL (with no trailing slash)
 # If most of your repos are all hosted at the same location, you may want to define
 # this in either the global or user configuration files.
 # REPOHOST=""
@@ -24,10 +24,10 @@
 # A human readable client name
 # PROJCLIENT="Client Name"
 
-# Development project URL, including http:// or https://
+# Development project URL, including http:// or https:// (with no trailing slash)
 # DEVURL="http://devurl.com/"
 
-# Production, or "Live" project URL, including http:// or https://
+# Production, or "Live" project URL, including http:// or https:// (with no trailling slash)
 # PRODURL="http://productionurl.com/"
 
 # The exact name of the Bitbucket/Github repository
@@ -54,7 +54,7 @@ DEPLOY="mina deploy"
 # TO="deploy@emrl.com"
 
 # Disallow deployment; set to TRUE to enable. Double negative, it's tricky.
-# DONOTDEPLOY="1"	
+# DONOTDEPLOY="TRUE"	
 
 # Integration options.
 # TASK="task"
