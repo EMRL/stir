@@ -24,10 +24,10 @@
 # A human readable client name
 # PROJCLIENT="Client Name"
 
-# Development project URL, without http://
+# Development project URL, including http:// or https://
 # DEVURL="http://devurl.com/"
 
-# Production, or "Live" project URL, without http://
+# Production, or "Live" project URL, including http:// or https://
 # PRODURL="http://productionurl.com/"
 
 # The exact name of the Bitbucket/Github repository
@@ -61,4 +61,4 @@ DEPLOY="mina deploy"
 
 # Slack Integration for this project
 # POSTTOSLACK="TRUE"
-# SLACKURL="https://hooks.slack.com/services/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"
+# SLACKURL="https://hooks.slack.com/services/#########/#########/######"
