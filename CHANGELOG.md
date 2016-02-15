@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+- Cleaned up configuration files
+
 ## [3.3.3] - 02-11-2016
 - Added active file check as another failsafe when running as cron (```deploy --force --update --quiet```) to stop potential issues that may come up in multi-developer environments
 - Added change log
