@@ -47,7 +47,7 @@
 # to whatever service you like, or if your project tracker allows
 # for input directly via email like ours does, you post directly.
 # Some of these options will definitely need to be set in the 
-# project's .deployrc, not in a master configuration.
+# project's deploy.sh, not in a master configuration.
 #
 # Email from domain. Whatever you're integrating with may need
 # a different From: address than that of the the machine you're 
@@ -65,6 +65,3 @@
 # being deployed.
 # POSTEMAILHEAD="task-"
 # POSTEMAILTAIL="@projects.emrl.com"
-#
-# Post commit logs to this URL.
-# POSTURL=""
