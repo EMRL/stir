@@ -1,5 +1,7 @@
 # Deploy
 
+{<img src="https://travis-ci.org/EMRL/deploy.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/EMRL/deploy]
+
 This is a multi-use deployment script, with a focus on publishing Wordpress sites and web apps to live environments. This script is in daily use at [EMRL](http://emrl.com), an advertising agency in northern California. If you have any questions, please feel free to contact us.
 
 [View Changelog](https://github.com/EMRL/deploy/blob/master/CHANGELOG.md)
