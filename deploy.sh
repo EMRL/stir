@@ -2,12 +2,23 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-VERSION="3.3.3"
+set -uo pipefail
+IFS=$'\n\t'
+VERSION="3.3.31"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
+# Initialize startup variables
+read -r UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE SLACKTEST <<< ""
+
+# Initialize constants and environment variables
+read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS LOGHTML NOPHP FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP TO SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT FROMDOMAIN FROMUSER POSTEMAILHEAD POSTEMAILTAIL POSTTOSLACK SLACKURL POSTURL NOKEY PROJNAME PROJCLIENT DEVURL PRODURL REPO MASTER PRODUCTION COMMITMSG DEPLOY DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME <<< ""
+
+# Initialize internal variables
+read -r optstring options logFile wpFile coreFile postFile trshFile statFile urlFile deployPath etcLocation libLocation POSTEMAIL current_branch error_msg active_files notes UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC message_state COMMITURL COMMITHASH UPD1 UPD2 UPDATE <<< ""
+
 # Options
-function usage() {
+function flags() {
 	echo -n "Usage: deploy [options] [target] ...
 
 Options:
@@ -29,7 +40,7 @@ Options:
 [[ $# -eq 0 ]] && set -- "--help"
 
 # Grab options and parse their format
-optstring=h
+option_string=h
 unset options
 while (($#)); do
 	case $1 in
@@ -37,7 +48,7 @@ while (($#)); do
 			for ((i=1; i < ${#1}; i++)); do
 				c=${1:i:1}
 				options+=("-$c")
-				if [[ $optstring = *"$c:"* && ${1:i+1} ]]; then
+				if [[ $option_string = *"$c:"* && ${1:i+1} ]]; then
 					options+=("${1:i+1}")
 					break
 				fi
@@ -53,13 +64,13 @@ set -- "${options[@]}"
 unset options
 
 # Read the options
-while [[ $1 = -?* ]]; do
+while [[ ${1:-unset} = -?* ]]; do
 	case $1 in
-		-h|--help) usage >&2; exit ;;
+		-h|--help) flags >&2; exit ;;
 		-u|--update) UPGRADE=1 ;;
 		-S|--skip-update) SKIPUPDATE=1 ;;
 		-c|--current) CURRENT=1 ;;
-		-v|--version) echo "$(basename $0) ${VERSION}"; exit ;;
+		-v|--version) echo "$(basename "${0}") ${VERSION}"; exit ;;
 		-V|--verbose) VERBOSE=1 ;;
 		-q|--quiet) QUIET=1 ;;
 		-s|--strict) STRICT=1 ;;
@@ -110,7 +121,7 @@ coreFile="/tmp/$APP.core-$RANDOM.log"
 	exit 1
 }
 # WTF IS THIS
-echo -e "Deployment logfile for" ${APP^^} "-" $NOW "\r\r" >> $logFile
+echo -e "Deployment logfile for ${APP^^} - $NOW\r\r" >> "${logFile}"
 postFile="/tmp/$APP.wtf-$RANDOM.log"
 (umask 077 && touch "${postFile}") || {
 	echo "Could not create temporary file, exiting."
@@ -150,7 +161,7 @@ etcLocation="${deployPath}/deploy.conf"
 if [ -f "${etcLocation}" ]; then
 	source "${etcLocation}"
 else
-	echo "Unable to load configuration file at" $etcLocation", exiting."
+	echo "Unable to load configuration file at ${etcLocation}, exiting."
 	exit 1
 fi
 
@@ -166,15 +177,15 @@ if [ -r ~/.deployrc ]; then
 fi
 
 # Load per-project configuration, if it exists
-if [ -r $WORKPATH/$APP/config/deploy.sh ]; then
-	source $WORKPATH/$APP/$CONFIGDIR/deploy.sh; APPRC=1
+if [ -r "${WORKPATH}/${APP}/config/deploy.sh" ]; then
+	source "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"; APPRC=1
 fi
 
 # Load libraries, or die
 if [ -f "${libLocation}" ]; then
 	source "${libLocation}"
 else
-	echo "Unable to load libraries at" $libLocation", exiting."
+	echo "Unable to load libraries at ${libLocation}, exiting."
 	exit 1
 fi
 
@@ -183,17 +194,17 @@ if [ "${SLACKTEST}" == "1" ]; then
 	slackTest; quickExit
 fi
 
-trace "Version" $VERSION
-trace "Running from" $deployPath
-trace "Loader found at" $libLocation
-trace "Loading system configuration file from" $etcLocation
+trace "Version ${VERSION}"
+trace "Running from ${deployPath}"
+trace "Loader found at ${libLocation}"
+trace "Loading system configuration file from ${etcLocation}"
 
 # Does a user configuration exit?
 if [ "${USERRC}" == "1" ]; then
 	trace "Loading user configuration from ~/.deployrc"
 else
 	trace "User configuration not found, creating."
-	cp ${deployPath}/.deployrc ~/.deployrc
+	cp "${deployPath}"/.deployrc ~/.deployrc
 	console "User configuration file missing, creating ~/.deployrc"
 	if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
 		nano ~/.deployrc
@@ -208,7 +219,7 @@ fi
 
 # Does a project configuration exit?
 if [ "${APPRC}" == "1" ]; then
-	trace "Loading project configuration from" $WORKPATH"/"$APP"/$CONFIGDIR/deploy.sh"
+	trace "Loading project configuration from ${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
 else
 	trace "No project config file found"
 fi
@@ -222,38 +233,38 @@ fi
 
 # Are any integrations setup?
 if [ "${POSTTOSLACK}" == "TRUE" ]; then
-	trace "Slack integration enabled, using" $SLACKURL
+	trace "Slack integration enabled, using ${SLACKURL}"
 fi
-POSTEMAIL=$POSTEMAILHEAD$TASK$POSTEMAILTAIL
-if [[ -z "$POSTEMAIL" ]]; then
+POSTEMAIL="${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL}"
+if [[ -z "${POSTEMAIL}" ]]; then
 	trace "No integration found"
 else
-	trace "Integration enabled, using" $POSTEMAIL
+	trace "Integration enabled, using ${POSTEMAIL}"
 fi
 
-trace "Log file is" $logFile
-trace "Plugin updates log is" $wpFile
-trace "Core upgrade log is" $coreFile
-trace "Post file is " $postFile
-trace "Trash file is" $trshFile
-trace "Stat file is" $statFile
-trace "URL file is" $urlFile
-trace "Development workpath is" $WORKPATH
+trace "Log file is ${logFile}"
+trace "Plugin updates log is ${wpFile}"
+trace "Core upgrade log is ${coreFile}"
+trace "Post file is ${postFile}"
+trace "Trash file is ${trshFile}"
+trace "Stat file is ${statFile}"
+trace "URL file is ${urlFile}"
+trace "Development workpath is ${WORKPATH}"
 
 if [ "${FIXPERMISSIONS}" == "TRUE" ]; then
-	trace "Lead developer permissions are" $DEVUSER.$DEVGROUP
-	trace "Apache permissions are" $APACHEUSER.$APACHEGROUP
+	trace "Lead developer permissions are ${DEVUSER}.${DEVGROUP}"
+	trace "Apache permissions are ${APACHEUSER}.${APACHEGROUP}"
 fi
 
-trace "Current project is" $APP
-trace "Current user is" $DEV
-trace "Git lock at" $gitLock
+trace "Current project is ${APP}"
+trace "Current user is ${DEV}"
+trace "Git lock at ${gitLock}"
 
 function  appDeploy {
 	gitStart		# Check for a valid git project and get set up
 	lock			# Create lock file
 	go				# Start a deployment work session
-	serverChk		# Check that servers are up and running
+	server_check	# Check that servers are up and running
 	permFix			# Fix permissions
 	gitChkMstr		# Checkout master branch
 	preDeploy		# Get the status

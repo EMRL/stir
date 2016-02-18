@@ -15,7 +15,6 @@ function server_check() {
 		# For now, we'll use 200, 301, or 401 to indicate all is working well cause 
 		# Bitbucket is being a noob; I'll make this better later
 		REPOURL="${REPOHOST}/${REPO}/"
-		# wget --spider --no-check-certificate $REPOURL > $trshFile 2>&1
 		if curl -s --head "${REPOHOST}" | grep -E "200|301|401" > /dev/null; then
 			info " $REPOHOST/$REPO/ ${tan}OK${endColor}";
 		else
@@ -47,6 +46,6 @@ function server_check() {
 
 	# Did anything fail?
 	if [ "${SERVERFAIL}" == "1" ]; then
-		console; warning "Fix server issues before continuing."; quietExit
+		console; error "Fix server issues before continuing.";
 	fi
 }

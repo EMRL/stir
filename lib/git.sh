@@ -50,8 +50,8 @@ function gitStart() {
 		fi
 	fi
 
-	# Try to clear out old git processes owned by this user
-	killall -9 git &>> /dev/null
+	# Try to clear out old git processes owned by this user, if they exist
+	killall -9 git &>> /dev/null || true
 }
 
 # Checkout master

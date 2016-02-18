@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 - Added [Travis CI](https://travis-ci.org/EMRL/deploy) tests
+- Cleaned up many functions
 - Cleaned up configuration files
 
 ## [3.3.3] - 02-11-2016
