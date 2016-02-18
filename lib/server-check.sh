@@ -1,25 +1,25 @@
 #!/bin/bash
 #
-# smrtCommit()
+# server_check()
 #
 # Check to see if production environment is online and running its Apache server
-trace "Loading serverChk()"
+trace "Loading server_check()"
 
-function serverChk() {
+function server_check() {
 	notice "Checking servers..."
 	# Set SERVERFAIL to 0
 	SERVERFAIL="0"
 	if [[ -z "${REPO}" ]]; then
 		trace "No repo name set, skipping check"
 	else
-		# For now, we'll use 401 to indicate all is working well
-		# I'll make this better later
-		REPOURL=$REPOHOST"/"$REPO"/"
-		wget --spider --no-check-certificate $REPOURL > $trshFile 2>&1
-		if grep -Eq '200 OK|401 UNAUTHORIZED' $trshFile; then
-			info " "$REPOHOST"/"$REPO"/ ${tan}OK${endColor}";
+		# For now, we'll use 200, 301, or 401 to indicate all is working well cause 
+		# Bitbucket is being a noob; I'll make this better later
+		REPOURL="${REPOHOST}/${REPO}/"
+		# wget --spider --no-check-certificate $REPOURL > $trshFile 2>&1
+		if curl -s --head "${REPOHOST}" | grep -E "200|301|401" > /dev/null; then
+			info " $REPOHOST/$REPO/ ${tan}OK${endColor}";
 		else
-			info " "$REPOHOST"/"$REPO"/ ${red}FAIL${endColor}"; SERVERFAIL="1"
+			info " $REPOHOST/$REPO/ ${red}FAIL${endColor}"; SERVERFAIL="1"
 		fi
 	fi
 
@@ -27,11 +27,10 @@ function serverChk() {
 		trace "No development URL set, skipping check"
 	else
 		# Should return "200 OK" if all is working well
-		wget --spider --no-check-certificate $DEVURL > $trshFile 2>&1
-		if grep -q "200 OK" $trshFile; then
-			info " "$DEVURL "(development) ${tan}OK${endColor}";
+		if curl -s --head "${DEVURL}" | grep "200 OK" > /dev/null; then
+			info " ${DEVURL} (development) ${tan}OK${endColor}";
 		else
-			info " "$DEVURL "(development) ${red}FAIL${endColor}"; SERVERFAIL="1"
+			info " ${DEVURL} (development) ${red}FAIL${endColor}"; SERVERFAIL="1"
 		fi
 	fi
 
@@ -39,11 +38,10 @@ function serverChk() {
 		trace "No production URL set, skipping check"
 	else
 		# Should return "200 OK" if all is working well
-		wget --spider --no-check-certificate $PRODURL > $trshFile 2>&1
-		if grep -q "200 OK" $trshFile; then
-			info " "$PRODURL "(production) ${tan}OK${endColor}"
+		if curl -s --head "${PRODURL}" | grep "200 OK" > /dev/null; then
+			info " ${PRODURL} (production) ${tan}OK${endColor}"
 		else
-			info " "$PRODURL "(production) ${red}FAIL${endColor}"; SERVERFAIL="1"
+			info " ${PRODURL} (production) ${red}FAIL${endColor}"; SERVERFAIL="1"
 		fi
 	fi
 
