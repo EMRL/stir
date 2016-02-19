@@ -7,7 +7,7 @@ trace "Loading quit.sh"
 
 # User-requested exit
 function userExit() {
-	rm $WORKPATH/$APP/.git/index.lock &> /dev/null
+	rm "${WORKPATH}/${APP}/.git/index.lock" &> /dev/null
 	trace "Exit on user request"
 	# check the email settings
 	if [ "${EMAILQUIT}" == "TRUE" ]; then

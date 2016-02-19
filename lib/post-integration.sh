@@ -7,14 +7,15 @@ trace "Loading post-integration.sh"
 
 # Compile commit message with other stuff for integration
 function buildLog() {
-	trace "Posting" $TASKLOG
+	trace "Posting ${TASKLOG}"
 	# OK let's grab the short version of the commit hash
-	COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL=$REPOHOST"/"$REPO"/commits/"$COMMITHASH
-	echo "<strong>Commit" $COMMITHASH"</strong>:" $notes > $postFile
+	COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL="${REPOHOST}/${REPO}/commits/${COMMITHASH}"
+	echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${postFile}"
 }
 
 function mailPost() {
-	echo $COMMITURL >> $postFile
+	echo "${COMMITURL}" >> "${postFile}"
+	# Make this better
 	(cat "${postFile}") | mail -r "${USER}@${FROMDOMAIN}" -s "$(echo -e ${SUBJECT} "-" ${APP}"\nContent-Type: text/plain")" "${POSTEMAIL}"
 }
 

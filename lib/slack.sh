@@ -28,11 +28,11 @@ function slackPost () {
 	esac
 
 	# Create payload 
-	curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" ${SLACKURL} > /dev/null 2>&1
+	curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" > /dev/null 2>&1
 }
 
 function slackTest {
 	console "Testing Slack integration..."
-	curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration from deploy ${VERSION}\nhttps://github.com/EMRL/deploy\"}" ${SLACKURL}
+	curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration from deploy ${VERSION}\nhttps://github.com/EMRL/deploy\"}" "${SLACKURL}"
 	emptyLine
 }
