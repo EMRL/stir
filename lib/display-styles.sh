@@ -25,56 +25,56 @@ fi
 #  Standard text output only to console
 function console () {
 	if [[ $QUIET != "1" ]]; then
-		echo -e "${reset}$@${endColor}"
+		echo -e "${reset}$*${endColor}"
 	fi
 }
 
 # Standard text output to console and logfile
 function info () {
 	if [[ $QUIET != "1" ]]; then
-		echo -e "${reset}$@${endColor}"
+		echo -e "${reset}$*${endColor}"
 	fi
-	echo "$@" >> $logFile
+	echo "$@" >> "${logFile}"
 }
 
 # Standard text output only to log
 function log() {
-	echo "$@" >> $logFile
+	echo "$@" >> "${logFile}"
 }
 
 function input () {
 	if [[ $QUIET != "1" ]]; then
-		echo -e "${reset}$@${endColor}"
+		echo -e "${reset}$*${endColor}"
 	fi
 }
 
 # Sectional header
 function notice () {
 	if [[ $QUIET != "1" ]]; then
-		echo; echo -e "${green}$@${endColor}"
+		echo; echo -e "${green}$*${endColor}"
 	fi
-	echo "" >> $logFile; echo "$@" >> $logFile
+	echo "" >> "${logFile}"; echo "$@" >> "${logFile}"
 }
 
 function error () {
 	if [[ $QUIET != "1" ]]; then
-		echo -e "${red}$@${endColor}"
+		echo -e "${red}$*${endColor}"
 	else
 		echo -e "$@"
 	fi
-	echo "ERROR: $@" >> $logFile
-	error_msg="$@"
+	echo "ERROR: $*" >> "${logFile}"
+	error_msg="$*"
 	errorExit
 }
 
 function warning () {
 	if [[ $QUIET != "1" ]]; then
-		echo -e "${red}$@${endColor}"
+		echo -e "${red}$*${endColor}"
 	fi
-	echo "WARNING: $@" >> $logFile
+	echo "WARNING: $*" >> "${logFile}"
 }
 
 function emptyLine () {
 		echo ""
-		echo "" >> $logFile
+		echo "" >> "${logFile}"
 }

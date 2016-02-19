@@ -2,7 +2,7 @@
 #
 # deployment.sh
 #
-# Handles deployment via mina
+# Handles deployment-realted tasks
 trace "Loading deployment.sh"   
 
 function preDeploy() {
@@ -12,7 +12,7 @@ function preDeploy() {
 		trace "Status looks good"
 	else
 		# If running in --force mode we will not allow deployment to continue
-		if [[ "$FORCE" = "1" ]]; then
+		if [[ "${FORCE}" = "1" ]]; then
 			emptyLine
 			error "There are previously undeployed changes in this project, deployment can not continue."
 		else
@@ -36,22 +36,20 @@ function preDeploy() {
 
 function pkgDeploy() {
 	emptyLine
-	if [ -n "$DEPLOY" ]; then
-		if  [ "$FORCE" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
+	if [ -n "${DEPLOY}" ]; then
+		if  [ "${FORCE}" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
 			# Add ssh keys and double check directoy
-			cd $WORKPATH/$APP; \
-			# Deploy via deployment command specified in mina
-			if [[ $VERBOSE -eq 1 ]]; then
-				$DEPLOY | tee --append $logFile
-				#postDeploy
+			cd "${WORKPATH}/${APP}" || errorChk
+			# Deploy via deployment command specified in configuration
+			if [[ "${VERBOSE}" -eq 1 ]]; then
+				"${DEPLOY}" | tee --append "${logFile}"
 			else
 				if [ "${QUIET}" != "1" ]; then
-					$DEPLOY &>> $logFile &
+					$DEPLOY &>> "${logFile}" &
 					spinner $!
 				else
-					$DEPLOY &>> $logFile
+					"${DEPLOY}" &>> "${logFile}"
 				fi
-				#postDeploy
 			fi
 		fi
 	fi

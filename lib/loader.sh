@@ -14,7 +14,7 @@ fi
 
 # Creating this function first, so verbose output option is usable early
 function trace () {
-	if [[ $VERBOSE -eq 1 ]]; then
+	if [[ "${VERBOSE}" -eq 1 ]]; then
 		echo -e "$(tput setaf 3)TRACE:$(tput sgr0) $*"
 		echo "TRACE: $*" >> "${logFile}"
 	else
@@ -42,6 +42,7 @@ SOURCEPATH="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
 		if [[ "${LIBRARIES}" == *"loader.sh"* ]]; then
 			continue
 		fi
+		# shellcheck disable=1090
 		source "$LIBRARIES"
 	fi
 done

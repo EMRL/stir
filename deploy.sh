@@ -2,23 +2,58 @@
 #
 # deploy: A simple bash script for deploying sites.
 #
-set -uo pipefail
 IFS=$'\n\t'
 VERSION="3.3.31"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
-# Initialize startup variables
-read -r UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE SLACKTEST <<< ""
-echo "${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} ${DEBUG} ${FORCE} ${SLACKTEST}" > /dev/null
-
-# Initialize constants and environment variables
-read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS LOGHTML NOPHP FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP TO SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT FROMDOMAIN FROMUSER POSTEMAILHEAD POSTEMAILTAIL POSTTOSLACK SLACKURL POSTURL NOKEY PROJNAME PROJCLIENT DEVURL PRODURL REPO MASTER PRODUCTION COMMITMSG DEPLOY DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME <<< ""
-echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} ${SMARTCOMMIT} ${GITSTATS} ${LOGHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} ${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${SUBJECT} ${EMAILERROR} ${EMAILSUCCESS} ${EMAILQUIT} ${FROMDOMAIN} ${FROMUSER} ${POSTEMAILHEAD} ${POSTEMAILTAIL} ${POSTTOSLACK} ${SLACKURL} ${POSTURL} ${NOKEY} ${PROJNAME} ${PROJCLIENT} ${DEVURL} ${PRODURL} ${REPO} ${MASTER} ${PRODUCTION} ${COMMITMSG} ${DEPLOY} ${DONOTDEPLOY} ${TASK} ${CHECKBRANCH} ${ACTIVECHECK} ${CHECKTIME}" > /dev/null
-
-# Initialize internal variables
-read -r optstring options logFile wpFile coreFile postFile trshFile statFile urlFile deployPath etcLocation libLocation POSTEMAIL current_branch error_msg active_files notes UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC message_state COMMITURL COMMITHASH UPD1 UPD2 UPDATE <<< ""
-echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} ${urlFile} ${deployPath} ${etcLocation} ${libLocation} ${POSTEMAIL} ${current_branch} ${error_msg} ${active_files} ${notes} ${UPDCORE} ${TASKLOG} ${PCA} ${PCB} ${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} ${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE}" > /dev/null
+# Initialize and export all startup variables so we can pass ShellCheck tests 
+# as well as run in strict mode - this seems super clunky, there has to be a 
+# better way!
+#
+# Set mode
+set -uo pipefail
+# Startup variables
+read -r UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
+	SLACKTEST <<< ""
+echo "${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
+	${DEBUG} ${FORCE} ${SLACKTEST}" > /dev/null
+# Temp files
+read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
+echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
+	${urlFile}" > /dev/null
+# Console Colors
+read -r black red green yellow blue magenta cyan white endColor bold underline \
+	reset purple tan <<< ""
+echo "${black} ${red} ${green} ${yellow} ${blue} ${magenta} ${cyan} ${white} \
+	${endColor} ${bold} ${underline} ${reset} ${purple} ${tan}" > /dev/null
+# Constants and environment variables
+read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
+	LOGHTML NOPHP FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP TO \
+	SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT FROMDOMAIN FROMUSER \
+	POSTEMAILHEAD POSTEMAILTAIL POSTTOSLACK SLACKURL POSTURL NOKEY PROJNAME \
+	PROJCLIENT DEVURL PRODURL REPO MASTER PRODUCTION COMMITMSG DEPLOY \
+	DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME <<< ""
+echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
+	${SMARTCOMMIT} ${GITSTATS} ${LOGHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
+	${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${SUBJECT} ${EMAILERROR} 
+	${EMAILSUCCESS} ${EMAILQUIT} ${FROMDOMAIN} ${FROMUSER} ${POSTEMAILHEAD} 
+	${POSTEMAILTAIL} ${POSTTOSLACK} ${SLACKURL} ${POSTURL} ${NOKEY} ${PROJNAME} 
+	${PROJCLIENT} ${DEVURL} ${PRODURL} ${REPO} ${MASTER} ${PRODUCTION} 
+	${COMMITMSG} ${DEPLOY} ${DONOTDEPLOY} ${TASK} ${CHECKBRANCH} ${ACTIVECHECK} 
+	${CHECKTIME}" > /dev/null
+# Iinternal variables
+read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
+	urlFile deployPath etcLocation libLocation POSTEMAIL current_branch \
+	error_msg active_files notes UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS \
+	slack_icon APPRC message_state COMMITURL COMMITHASH UPD1 UPD2 UPDATE \
+	gitLock <<< ""
+echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
+	${trshFile} ${statFile} ${urlFile} ${deployPath} ${etcLocation} 
+	${libLocation} ${POSTEMAIL} ${current_branch} ${error_msg} ${active_files} 
+	${notes} ${UPDCORE} ${TASKLOG} ${PCA} ${PCB} ${PCC} ${PCD} ${PLUGINS} 
+	${slack_icon} ${APPRC} ${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} 
+	${UPD2} ${UPDATE} ${gitLock}" > /dev/null
 
 # Options
 function flags() {
@@ -162,6 +197,7 @@ etcLocation="${deployPath}/deploy.conf"
 
 # System wide configuration files
 if [ -f "${etcLocation}" ]; then
+	# shellcheck disable=1090
 	source "${etcLocation}"
 else
 	echo "Unable to load configuration file at ${etcLocation}, exiting."
@@ -176,16 +212,19 @@ fi
 
 # Load per-user configuration, if it exists
 if [ -r ~/.deployrc ]; then
+	# shellcheck disable=1090
 	source ~/.deployrc; USERRC=1
 fi
 
 # Load per-project configuration, if it exists
 if [ -r "${WORKPATH}/${APP}/config/deploy.sh" ]; then
+	# shellcheck disable=1090
 	source "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"; APPRC=1
 fi
 
 # Load libraries, or die
 if [ -f "${libLocation}" ]; then
+	# shellcheck disable=1090
 	source "${libLocation}"
 else
 	echo "Unable to load libraries at ${libLocation}, exiting."
@@ -197,6 +236,7 @@ if [ "${SLACKTEST}" == "1" ]; then
 	slackTest; quickExit
 fi
 
+# Spam all the things!
 trace "Version ${VERSION}"
 trace "Running from ${deployPath}"
 trace "Loader found at ${libLocation}"
@@ -213,6 +253,7 @@ else
 		nano ~/.deployrc
 		clear; sleep 1
 		console "Loading user configuration."
+		# shellcheck disable=1090
 		source ~/.deployrc
 		# quickExit
 	else
@@ -254,6 +295,7 @@ trace "Stat file is ${statFile}"
 trace "URL file is ${urlFile}"
 trace "Development workpath is ${WORKPATH}"
 
+# Are we planning on "fixing" permissions?
 if [ "${FIXPERMISSIONS}" == "TRUE" ]; then
 	trace "Lead developer permissions are ${DEVUSER}.${DEVGROUP}"
 	trace "Apache permissions are ${APACHEUSER}.${APACHEGROUP}"
@@ -263,7 +305,8 @@ trace "Current project is ${APP}"
 trace "Current user is ${DEV}"
 trace "Git lock at ${gitLock}"
 
-function  appDeploy {
+# Setup the core application
+function appDeploy() {
 	gitStart		# Check for a valid git project and get set up
 	lock			# Create lock file
 	go				# Start a deployment work session

@@ -11,7 +11,7 @@ function go() {
 	if [ "${QUIET}" != "1" ]; then
 		tput cnorm;
 	fi
-	console "deploy" $VERSION
+	console "deploy ${VERSION}"
 	printf "Current working path is %s\n" ${WORKPATH}/${APP}
 
 	# Does a configuration file for this repo exist?
