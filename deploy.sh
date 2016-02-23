@@ -15,9 +15,9 @@ DEV=$USER"@"$HOSTNAME
 set -uo pipefail
 # Startup variables
 read -r UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
-	SLACKTEST <<< ""
+	SLACKTEST FUNCTIONLIST VARIABLELIST <<< ""
 echo "${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
-	${DEBUG} ${FORCE} ${SLACKTEST}" > /dev/null
+	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -114,7 +114,9 @@ while [[ ${1:-unset} = -?* ]]; do
 		-s|--strict) STRICT=1 ;;
 		-d|--debug) DEBUG=1 ;;
 		-F|--force) FORCE=1 ;;
-		--slack-test) SLACKTEST=1 ;;
+		--slack-test) SLACKTEST=1; APP="null";;
+		--function-list) FUNCTIONLIST=1; APP="null";;
+		--variable-list) VARIABLELIST=1; APP="null";;
 		--endopts) shift; break ;;
 		*) echo "Invalid option: '$1'" 1>&2 ; exit 1 ;;
 	esac
@@ -235,6 +237,19 @@ fi
 if [ "${SLACKTEST}" == "1" ]; then
 	slackTest; quickExit
 fi
+
+# Function list
+if [ "${FUNCTIONLIST}" == "1" ]; then
+	compgen -A function | more; quickExit
+	#compgen -A function > /tmp/func.list
+	#tr '\n' ' ' < /tmp/func.list;  echo
+	#quickExit
+fi
+
+# Variable list
+# if [ "${VARIABLELIST}" == "1" ]; then
+#	( set -o posix ; set ) | more; quickExit
+# fi
 
 # Spam all the things!
 trace "Version ${VERSION}"

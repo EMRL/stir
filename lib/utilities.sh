@@ -12,7 +12,7 @@ function go() {
 		tput cnorm;
 	fi
 	console "deploy ${VERSION}"
-	printf "Current working path is %s\n ${WORKPATH}/${APP}"
+	console "Current working path is ${WORKPATH}/${APP}"
 
 	# Does a configuration file for this repo exist?
 	if [ -z "${APPRC}" ]; then
