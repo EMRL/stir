@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added [Travis CI](https://travis-ci.org/EMRL/deploy) tests
 - Cleaned up many functions
 - Cleaned up configuration files
+- Added ```deploy --function-list``` to list all available functions() for help debugging in the future
 
 ## [3.3.3] - 02-11-2016
 - Added active file check as another failsafe when running as cron (```deploy --force --update --quiet```) to stop potential issues that may come up in multi-developer environments
