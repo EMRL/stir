@@ -35,20 +35,29 @@ function preDeploy() {
 } 
 
 function pkgDeploy() {
+	# There are problems with code right now. The changes I made to pass shellcheck
+	# broke the deployment command getting passed through. Looks like I need to do some 
+	# stuff with eval, see http://emrl.co/s6chq
 	emptyLine
 	if [ -n "${DEPLOY}" ]; then
-		if  [ "${FORCE}" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
-			# Add ssh keys and double check directoy
-			cd "${WORKPATH}/${APP}" || errorChk
+		# Add ssh keys and double check directoy
+		cd "${WORKPATH}/${APP}" || errorChk
+		trace "Launching deployment from ${PWD}"
+		# Make sure the project's deploy command is going to work
+		deploy_cmd=$(echo "mina deploy" | awk '{print $1;}')
+		hash "${deploy_cmd}" 2>/dev/null || {
+			warning "Your deployment command ${deploy_cmd} cannot be found.";
+		}
+		if [ "${FORCE}" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
 			# Deploy via deployment command specified in configuration
 			if [[ "${VERBOSE}" -eq 1 ]]; then
-				"${DEPLOY}" | tee --append "${logFile}"
+				mina deploy | tee --append "${logFile}"
 			else
 				if [ "${QUIET}" != "1" ]; then
-					$DEPLOY &>> "${logFile}" &
+					mina deploy &>> "${logFile}" &
 					spinner $!
 				else
-					"${DEPLOY}" &>> "${logFile}"
+					mina deploy &>> "${logFile}"
 				fi
 			fi
 		fi

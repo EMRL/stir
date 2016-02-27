@@ -64,6 +64,7 @@ CHECKTIME
 VERSION
 NOW
 DEV
+deploy_cmd
 optstring
 options
 APP
