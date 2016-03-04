@@ -70,7 +70,7 @@ function wpPkg() {
 								error "One or more plugin upgrades have failed."
 							else
 								if grep -q "Warning: Update package not available." $logFile; then
-									error "One or more update packages are not available."
+									error "One or more update packages are not available. \nThis is often be caused by commercial plugins; check your log files."
 								else
 									if grep -q "Error: Updated" $logFile; then
 										error "One or more plugin upgrades have failed."
