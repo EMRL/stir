@@ -191,18 +191,18 @@ function gitPushMstr() {
 	fi
 }
 
-# Checkout production
+# Checkout production, now with added -f
 function gitChkProd() {
 	if [ -n "$PRODUCTION" ]; then
 		notice "Checking out production branch..."
 		if [[ "${VERBOSE}" -eq 1 ]]; then
-			git checkout production | tee --append "${logFile}"; errorChk               
+			git checkout -f production | tee --append "${logFile}"; errorChk               
 		else
 			if [ "${QUIET}" != "1" ]; then
-				git checkout production &>> "${logFile}" &
+				git checkout -f production &>> "${logFile}" &
 				showProgress
 			else
-				git checkout production &>> "${logFile}"; errorChk
+				git checkout -f production &>> "${logFile}"; errorChk
 			fi
 		fi 
 		# Were there any conflicts checking out?

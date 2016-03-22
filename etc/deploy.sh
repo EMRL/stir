@@ -59,6 +59,23 @@ DEPLOY="mina deploy"
 # Integration options.
 # TASK="task"
 
-# Slack Integration for this project
-# POSTTOSLACK="TRUE"
-# SLACKURL="https://hooks.slack.com/services/#########/#########/######"
+# Slack Integration
+# 
+# You'll need to set up an "Incoming Webhook" custom integration on the Slack 
+# side to get this ready to roll. 
+# See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get 
+# going. Once your Slack webhook is setup, run # 'deploy --slack-test' to 
+# test your configuration.
+#
+# Set POSTTOSLACK to "TRUE" to enable Slack integration.
+POSTTOSLACK="TRUE"
+
+# Add your full Webhook URL below, including https://
+SLACKURL="https://hooks.slack.com/services/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"
+
+# Normally only successful deployments are posted to Slack.
+# Enable the settings below to post on WARNiNG and/or ERROR.
+SLACKERROR="TRUE"
+
+# Post commit logs to this URL.
+# POSTURL=""
