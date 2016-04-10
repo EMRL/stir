@@ -15,8 +15,6 @@ function slackPost () {
 		slack_message="${USER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
 	fi
 
-#	slack_message="${USER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
-
 	# Set icon for message state
 	case "${message_state}" in
  		ERROR)
@@ -33,6 +31,12 @@ function slackPost () {
 
 function slackTest {
 	console "Testing Slack integration..."
-	curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration from deploy ${VERSION}\nhttps://github.com/EMRL/deploy\"}" "${SLACKURL}"
-	emptyLine
+
+	if [[ -z "${SLACKURL}" ]]; then
+		warning "No Slack configuration found."; emptyLine
+		exit 1
+	else
+		curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration from deploy ${VERSION}\nhttps://github.com/EMRL/deploy\"}" "${SLACKURL}"
+		emptyLine
+	fi
 }

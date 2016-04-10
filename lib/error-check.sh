@@ -10,6 +10,7 @@ function errorChk() {
 	EXITCODE=$?; 
 	if [[ "${EXITCODE}" != 0 ]]; then 
 		warning "Exiting on error code ${EXITCODE}"
+		error_msg="Exited on error code ${EXITCODE}"
 		errorExit
 	fi
 }

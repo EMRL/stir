@@ -44,20 +44,20 @@ function pkgDeploy() {
 		cd "${WORKPATH}/${APP}" || errorChk
 		trace "Launching deployment from ${PWD}"
 		# Make sure the project's deploy command is going to work
-		deploy_cmd=$(echo "mina deploy" | awk '{print $1;}')
+		deploy_cmd=$(echo "${DEPLOY}" | awk '{print $1;}')
 		hash "${deploy_cmd}" 2>/dev/null || {
 			warning "Your deployment command ${deploy_cmd} cannot be found.";
 		}
 		if [ "${FORCE}" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
 			# Deploy via deployment command specified in configuration
 			if [[ "${VERBOSE}" -eq 1 ]]; then
-				mina deploy | tee --append "${logFile}"
+				eval "${DEPLOY}" | tee --append "${logFile}"
 			else
 				if [ "${QUIET}" != "1" ]; then
-					mina deploy &>> "${logFile}" &
+					eval "${DEPLOY}" &>> "${logFile}" &
 					spinner $!
 				else
-					mina deploy &>> "${logFile}"
+					eval "${DEPLOY}" &>> "${logFile}"
 				fi
 			fi
 		fi

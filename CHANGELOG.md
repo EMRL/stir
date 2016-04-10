@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Fixed issue with pkgDeploy() not executing deployment command correctly
+- Exit codes pass more reliably to Slack messages 
 - Added [Travis CI](https://travis-ci.org/EMRL/deploy) tests
 - Cleaned up many functions
 - Cleaned up configuration files
@@ -24,7 +26,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added ```deploy --skip-update```
 
 ## 3.2 - N/A
-- Skipped version, internal release only
+- Skipped version number, internal release only
 
 ## [3.1] - 11-12-2015
 - Added install script
