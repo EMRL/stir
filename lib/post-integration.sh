@@ -23,8 +23,9 @@ function mailPost() {
 function postCommit() {
 	# Check for a Wordpress core update, update production database if needed
 	if [ "$UPDCORE" = "1" ]; then
-		info "Upgrading production database..."; lynx -dump "${PRODURL}"/system/wp-admin/upgrade.php > "${trshFile}"
+		info "Upgrading production database..."; lynx -dump "${PRODURL}"/system/wp-admin/upgrade.php?step=1 > "${trshFile}"
 	fi
+
 	# just for yuks, display git stats for this user (user can override this if it annoys them)
 	gitStats
 	# Is Slack integration configured?

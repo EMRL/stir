@@ -150,8 +150,7 @@ function wpPkg() {
 							# Update staging server database if needed
 							if [ "$UPDCORE" = "1" ]; then
 								info "Upgrading development database..."; lynx -dump $DEVURL/system/wp-admin/upgrade.php > $trshFile
-							fi
-							
+							fi							
 						else
 							info "Skipping Wordpress core updates..."
 						fi
