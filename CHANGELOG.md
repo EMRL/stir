@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.3.4] - 05-16-2016
 - Fixed issue with pkgDeploy() not executing deployment command correctly
 - Exit codes pass more reliably to Slack messages 
 - Added [Travis CI](https://travis-ci.org/EMRL/deploy) tests
@@ -44,7 +44,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.3.3...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.3.4...HEAD
+[3.3.4]: https://github.com/EMRL/deploy/compare/v3.3.3...v3.3.4
 [3.3.3]: https://github.com/EMRL/deploy/compare/v3.3...v3.3.3
 [3.3]: https://github.com/EMRL/deploy/compare/v3.1...v3.3
 [3.1]: https://github.com/EMRL/deploy/compare/v3.0...v3.1
