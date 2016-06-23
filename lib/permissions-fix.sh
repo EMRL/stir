@@ -30,8 +30,10 @@ function permFix() {
 		sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/.git; #errorChk
 		info " ${APP}/.git"
 		sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/public/system; #errorChk
-		info " ${APP}/public/app/system/"
+		info " ${APP}/public/system/"
 		sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/public/app; #errorChk
 		info " ${APP}/public/app/"
+		sudo chown -R "${APACHEUSER}"."${APACHEGROUP}" "${WORKPATH}"/"${APP}"/public/app; #errorChk
+		info " ${APP}/public/app/plugins"
 	fi
 }

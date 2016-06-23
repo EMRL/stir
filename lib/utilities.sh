@@ -47,14 +47,16 @@ function go() {
 	fi
 
 	# Check for signs of Wordfence
-	if [ -f "${WORKPATH}/${APP}/public/app/wflogs/config.php" ]; then
-		trace "Wordfence found."; emptyLine
-		warning "WARNING: Wordfence firewall detected, and may cause issues with deployment."
-		if yesno --default yes "Clean and repair files? [Y/n] "; then
-			sudo chmod -R 755 "${WORKPATH}/${APP}/public/app/wflogs" 2>/dev/null
-			sleep 1
-		else
-			quickExit
+	if [[ "${WFCHECK}" == "TRUE" ]]; then
+		if [ -f "${WORKPATH}/${APP}/public/app/wflogs/config.php" ]; then
+			trace "Wordfence found."; emptyLine
+			warning "Wordfence firewall detected, and may cause issues with deployment."
+			if yesno --default yes "Attempt to repair files? [Y/n] "; then
+				sudo chmod -Rv 755 "${WORKPATH}/${APP}/public/app/wflogs" 2>/dev/null
+				sleep 1
+			else
+				quickExit
+			fi
 		fi
 	fi
 
@@ -72,6 +74,25 @@ function go() {
 				quickExit
 			fi
 		fi
+	fi
+}
+
+function fixIndex() {
+	# A rather brutal fix for index permissions issues
+	if [[ "${FIXINDEX}" == "TRUE" ]]; then
+		trace "Checking Index"
+		if [ -w "${WORKPATH}/${APP}/.git/index" ]; then
+			trace "Looks good."
+		else
+			trace "Index is not writable, attempting to fix..."
+			sudo chmod 777 "${WORKPATH}/${APP}/.git/index" ; errorChk
+			if [ -w "${WORKPATH}/${APP}/.git/index" ]; then
+				trace "Looks good."
+			else
+				error "Unable to write new index file."; 
+			fi
+		fi
+		sleep 1
 	fi
 }
 

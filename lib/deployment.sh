@@ -42,12 +42,14 @@ function pkgDeploy() {
 	if [ -n "${DEPLOY}" ]; then
 		# Add ssh keys and double check directoy
 		cd "${WORKPATH}/${APP}" || errorChk
-		trace "Launching deployment from ${PWD}"
+		trace "Launching deployment from ${PWD}"; fixIndex
 		# Make sure the project's deploy command is going to work
 		deploy_cmd=$(echo "${DEPLOY}" | awk '{print $1;}')
 		hash "${deploy_cmd}" 2>/dev/null || {
 			warning "Your deployment command ${deploy_cmd} cannot be found.";
 		}
+
+
 		if [ "${FORCE}" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
 			# Deploy via deployment command specified in configuration
 			if [[ "${VERBOSE}" -eq 1 ]]; then

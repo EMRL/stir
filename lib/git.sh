@@ -59,7 +59,7 @@ function gitChkMstr() {
 	if [ -z "${MASTER}" ]; then
 		emptyLine; error "deploy ${VERSION} requires a master branch to be defined.";
 	else
-		notice "Checking out master branch..."
+		notice "Checking out master branch..."; fixIndex
 		if [[ "${VERBOSE}" -eq 1 ]]; then
 			git checkout master | tee --append "${logFile}"            
 		else
@@ -167,7 +167,7 @@ function gitCommit() {
 # Push master
 function gitPushMstr() {
 	if [ -n "${MASTER}" ]; then
-		trace "Pushing master."
+		trace "Pushing master."; fixIndex
 		emptyLine  
 		if [[ "${VERBOSE}" -eq 1 ]]; then
 			git push | tee --append "${logFile}"; errorChk           
@@ -194,7 +194,7 @@ function gitPushMstr() {
 # Checkout production, now with added -f
 function gitChkProd() {
 	if [ -n "$PRODUCTION" ]; then
-		notice "Checking out production branch..."
+		notice "Checking out production branch..."; fixIndex
 		if [[ "${VERBOSE}" -eq 1 ]]; then
 			git checkout -f production | tee --append "${logFile}"; errorChk               
 		else
@@ -217,7 +217,7 @@ function gitChkProd() {
 # Merge master into production
 function gitMerge() {
 	if [ -n "$PRODUCTION" ]; then
-		notice "Merging master into production..."
+		notice "Merging master into production..."; fixIndex
 		# Clear out the index.lock file, cause reasons
 		[[ -f "${gitLock}" ]] && rm "${gitLock}"
 		# Bonus add, just because. Ugh.
@@ -238,7 +238,8 @@ function gitMerge() {
 # Push production
 function gitPushProd() {
 	if [ -n "$PRODUCTION" ]; then
-		trace "Push production"; emptyLine
+		trace "Push production"; fixIndex
+		emptyLine
 		if [[ "${VERBOSE}" -eq 1 ]]; then
 			git push | tee --append "${logFile}"; errorChk 
 			trace "OK"              

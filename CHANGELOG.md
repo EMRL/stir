@@ -3,7 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-- Added fix for Wordfence permission problems
+- Added temporary fix for Wordfence permission problems
+- Added check for .git/index permission issues
 
 ## [3.3.4] - 05-16-2016
 - Fixed issue with pkgDeploy() not executing deployment command correctly

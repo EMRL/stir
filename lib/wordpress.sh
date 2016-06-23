@@ -56,8 +56,14 @@ function wpPkg() {
 						# No longer run as apache
 						# sudo -u "apache" --  /usr/local/bin/wp plugin update --all --no-color &>> $logFile &
 						if [ "${QUIET}" != "1" ]; then
-							$WPCLI/wp plugin update --all --no-color &>> $logFile &
-							spinner $!
+							# Is Wordfence check enabled?
+							if [[ "${WFCHECK}" == "TRUE" ]]; then
+								sudo -u "apache" -- /usr/local/bin/wp plugin update --all --no-color &>> $logFile &
+								spinner $!
+							else
+								$WPCLI/wp plugin update --all --no-color &>> $logFile &
+								spinner $!
+							fi
 						else
 							$WPCLI/wp plugin update --all --no-color &>> $logFile
 						fi	
@@ -95,14 +101,23 @@ function wpPkg() {
 				# There's a little bug when certain plugins are spitting errors; work around seems to be 
 				# to check for core updates a second time
 				cd $WORKPATH/$APP/public; \
-				$WPCLI/wp core check-update --no-color &>> $logFile
+
+				if [[ "${WFCHECK}" == "TRUE" ]]; then
+					sudo -u "apache" -- $WPCLI/wp core check-update --no-color &>> $logFile
+				else
+					$WPCLI/wp core check-update --no-color &>> $logFile
+				fi
 
 				if grep -q "WordPress is at the latest version." $logFile; then
 					info "Wordpress core is up to date."; UPD2="1"
 				else
 					sleep 1
 					# Get files setup for smart commit
-					$WPCLI/wp core check-update --no-color &> $coreFile
+					if [[ "${WFCHECK}" == "TRUE" ]]; then
+						sudo -u "apache" -- $WPCLI/wp core check-update --no-color &> $coreFile
+					else
+						$WPCLI/wp core check-update --no-color &> $coreFile
+					fi
 					# Strip out any randomly occuring debugging output
 					grep -vE "Notice:|Warning:|Strict Standards:|PHP" $coreFile > $trshFile && mv $trshFile $coreFile;
 					# Clean out the gobbleygook from wp-cli
@@ -172,10 +187,18 @@ function wpPkg() {
 }
 
 function wpCheck() {
-	# For the logfile
-	$WPCLI/wp plugin status --no-color &>> $logFile
-	# For the console/smart commit message
-	$WPCLI/wp plugin update --dry-run --no-color --all &> $wpFile
+	# Wordfence is really pissing me off now
+	if [[ "${WFCHECK}" == "TRUE" ]]; then
+		# For the logfile
+		sudo -u "apache" -- $WPCLI/wp plugin status --no-color &>> $logFile
+		# For the console/smart commit message
+		sudo -u "apache" -- $WPCLI/wp plugin update --dry-run --no-color --all &> $wpFile
+	else
+		# For the logfile
+		$WPCLI/wp plugin status --no-color &>> $logFile
+		# For the console/smart commit message
+		$WPCLI/wp plugin update --dry-run --no-color --all &> $wpFile
+	fi
 
 	# Other options, thanks Corey
 	# wp plugin list --format=csv --all --fields=name,update_version,update | grep 'available'
