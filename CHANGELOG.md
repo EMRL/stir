@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+- Added fix for Wordfence permission problems
+
 ## [3.3.4] - 05-16-2016
 - Fixed issue with pkgDeploy() not executing deployment command correctly
 - Exit codes pass more reliably to Slack messages 
