@@ -46,6 +46,18 @@ function go() {
 		sudo sleep 1
 	fi
 
+	# Check for signs of Wordfence
+	if [ -f "${WORKPATH}/${APP}/public/app/wflogs/config.php" ]; then
+		trace "Wordfence found."; emptyLine
+		warning "WARNING: Wordfence firewall detected, and may cause issues with deployment."
+		if yesno --default yes "Clean and repair files? [Y/n] "; then
+			sudo chmod -R 755 "${WORKPATH}/${APP}/public/app/wflogs" 2>/dev/null
+			sleep 1
+		else
+			quickExit
+		fi
+	fi
+
 	# if git.lock exists, do we want to remove it?
 	if [ -f "${gitLock}" ]; then
 		warning "Found ${gitLock}"

@@ -57,6 +57,7 @@ TASK
 CHECKBRANCH
 ACTIVECHECK
 CHECKTIME
+WFCHECK
 ```
 
 ## Variables (Format needs to change)
