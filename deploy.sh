@@ -33,7 +33,7 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
 	SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT FROMDOMAIN FROMUSER \
 	POSTEMAILHEAD POSTEMAILTAIL POSTTOSLACK SLACKURL POSTURL NOKEY PROJNAME \
 	PROJCLIENT DEVURL PRODURL REPO MASTER PRODUCTION COMMITMSG DEPLOY \
-	DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME <<< ""
+	DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME GARBAGE WFCHECK <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
 	${SMARTCOMMIT} ${GITSTATS} ${LOGHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
 	${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${SUBJECT} ${EMAILERROR} 
@@ -41,7 +41,7 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
 	${POSTEMAILTAIL} ${POSTTOSLACK} ${SLACKURL} ${POSTURL} ${NOKEY} ${PROJNAME} 
 	${PROJCLIENT} ${DEVURL} ${PRODURL} ${REPO} ${MASTER} ${PRODUCTION} 
 	${COMMITMSG} ${DEPLOY} ${DONOTDEPLOY} ${TASK} ${CHECKBRANCH} ${ACTIVECHECK} 
-	${CHECKTIME}" > /dev/null
+	${CHECKTIME} ${GARBAGE} ${WFCHECK}" > /dev/null
 # Iinternal variables
 read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	urlFile deployPath etcLocation libLocation POSTEMAIL current_branch \
@@ -328,6 +328,7 @@ function appDeploy() {
 	server_check	# Check that servers are up and running
 	permFix			# Fix permissions
 	gitChkMstr		# Checkout master branch
+	gitGarbage		# If needed, clean up the trash
 	preDeploy		# Get the status
 	wpPkg			# Run Wordpress upgrades if needed
 	pkgMgr			# Run node package management, or grunt

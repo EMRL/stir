@@ -73,6 +73,14 @@ function gitChkMstr() {
 	fi
 }
 
+# Garbage collection
+function gitGarbage() {
+	if [ "${GARBAGE}" = "TRUE" ]; then 
+		notice "Running garbage collection..."
+		git gc | tee --append "${logFile}"
+	fi
+}
+
 # Does anything need to be committed? (Besides me?)
 function gitStatus() {
 	trace "Check Status"
@@ -90,9 +98,9 @@ function gitStage() {
 		trace "Staging files"; emptyLine
 		if [ "${FORCE}" = "1" ] || yesno --default yes "Stage files? [Y/n] "; then
 			if [[ "${VERBOSE}" -eq 1 ]]; then
-				git add -A | tee --append "${logFile}"; errorChk              
+				git add . | tee --append "${logFile}"; errorChk              
 			else  
-				git add -A &>> "${logFile}"; errorChk
+				git add . &>> "${logFile}"; errorChk
 			fi
 		else
 			trace "Exiting without staging files"; userExit    
@@ -193,18 +201,35 @@ function gitPushMstr() {
 
 # Checkout production, now with added -f
 function gitChkProd() {
-	if [ -n "$PRODUCTION" ]; then
+	if [ -n "${PRODUCTION}" ]; then
 		notice "Checking out production branch..."; fixIndex
+
 		if [[ "${VERBOSE}" -eq 1 ]]; then
-			git checkout -f production | tee --append "${logFile}"; errorChk               
+			git checkout "${PRODUCTION}" | tee --append "${logFile}"; errorChk               
 		else
 			if [ "${QUIET}" != "1" ]; then
-				git checkout -f production &>> "${logFile}" &
+				git checkout "${PRODUCTION}" &>> "${logFile}" &
 				showProgress
 			else
-				git checkout -f production &>> "${logFile}"; errorChk
+				git checkout "${PRODUCTION}" &>> "${logFile}"; errorChk
 			fi
-		fi 
+		fi
+
+		# Make sure the branch currently checked out is production, if not
+		# then let's try a ghetto fix
+		current_branch="$(git rev-parse --abbrev-ref HEAD)"
+		if [[ "${current_branch}" != "${PRODUCTION}" ]]; then
+			# If we're in that weird stuck mode on master, let's try to "fix" it
+			if yesno --default yes "Current branch is ${current_branch} and should be ${PRODUCTION}, try again? [Y/n] "; then
+				if [[ "${current_branch}" = "${MASTER}" ]]; then 
+					[[ -f "${gitLock}" ]] && rm "${gitLock}"
+					git add .; git checkout "${PRODUCTION}" &>> "${logFile}" #; errorChk
+				fi
+			else
+				safeExit
+			fi
+		fi
+
 		# Were there any conflicts checking out?
 		if grep -q "error: Your local changes to the following files would be overwritten by checkout:" "${logFile}"; then
 			 error "There is a conflict checking out."
@@ -215,21 +240,23 @@ function gitChkProd() {
 }
 
 # Merge master into production
+# git merge --no-edit might be bugging, took it our for now
 function gitMerge() {
 	if [ -n "$PRODUCTION" ]; then
 		notice "Merging master into production..."; fixIndex
 		# Clear out the index.lock file, cause reasons
 		[[ -f "${gitLock}" ]] && rm "${gitLock}"
 		# Bonus add, just because. Ugh.
-		git add -A; errorChk 
+		# git add -A; errorChk 
 		if [[ "${VERBOSE}" -eq 1 ]]; then
-			git merge --no-edit master | tee --append "${logFile}"              
+			git merge "${MASTER}" | tee --append "${logFile}"              
 		else
 			if [ "${QUIET}" != "1" ]; then
-				git merge --no-edit master &>> "${logFile}" &
+				# git merge --no-edit master &>> "${logFile}" &
+				git merge "${MASTER}" &>> "${logFile}" &
 				showProgress
 			else
-				git merge --no-edit master &>> "${logFile}"; errorChk
+				git merge "${MASTER}"&>> "${logFile}"; errorChk
 			fi
 		fi
 	fi

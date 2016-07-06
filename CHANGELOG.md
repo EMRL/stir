@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Added a more reliable method of updating Advanced Custom Fields Pro
+- Added "Garbage Collection" mode to help keep your repo neat and tidy
+- Debugging some issues that can cause permission problems in certain environments
 - Added temporary fix for Wordfence permission problems
 - Added check for .git/index permission issues
 

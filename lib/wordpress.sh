@@ -52,9 +52,10 @@ function wpPkg() {
 					cat $wpFile; emptyLine
 
 					if  [ "$FORCE" = "1" ] ||  yesno --default no "Proceed with updates? [y/N] "; then
-
-						# No longer run as apache
-						# sudo -u "apache" --  /usr/local/bin/wp plugin update --all --no-color &>> $logFile &
+						# If ACFPRO needs an update, do it first via wget
+						acfUpdate &
+						spinner $!
+						# Let's get to work
 						if [ "${QUIET}" != "1" ]; then
 							# Is Wordfence check enabled?
 							if [[ "${WFCHECK}" == "TRUE" ]]; then
@@ -203,4 +204,14 @@ function wpCheck() {
 	# Other options, thanks Corey
 	# wp plugin list --format=csv --all --fields=name,update_version,update | grep 'available'
 	# wp plugin list --format=csv --all --fields=title,update_version,update | grep 'available'
+}
+
+# For future use, ACF is a pain
+function acfUpdate() {
+	ACFFILE="/tmp/acfpro.zip"
+	# download the ACF PRO upgrade file
+	wget -O "${ACFFILE}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACFKEY}" &>> $logFile
+	$WPCLI/wp plugin delete --no-color advanced-custom-fields-pro &>> $logFile
+	$WPCLI/wp plugin install --no-color ${ACFFILE} &>> $logFile
+	rm "${ACFFILE}"
 }

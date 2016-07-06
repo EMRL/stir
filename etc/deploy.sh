@@ -33,6 +33,12 @@
 # The exact name of the Bitbucket/Github repository
 # REPO="name-of-repo"
 
+# Advanced Custom Fields Pro License
+#
+# Too many issues seem to crop up with the normal method of updating ACF Pro. Including
+# your license key below will enable upgrades to happen more reliably.
+# ACFKEY="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
 # Configure your branches. In most cases the name will be master & production. If
 # you are only using a master branch, leave production undefined.
 MASTER="master"
@@ -56,7 +62,7 @@ DEPLOY="mina deploy"
 # Disallow deployment; set to TRUE to enable. Double negative, it's tricky.
 # DONOTDEPLOY="TRUE"	
 
-# Integration options.
+# Integration ID
 # TASK="task"
 
 # Slack Integration
@@ -68,14 +74,14 @@ DEPLOY="mina deploy"
 # test your configuration.
 #
 # Set POSTTOSLACK to "TRUE" to enable Slack integration.
-POSTTOSLACK="TRUE"
+# POSTTOSLACK="TRUE"
 
 # Add your full Webhook URL below, including https://
-SLACKURL="https://hooks.slack.com/services/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"
+# SLACKURL="https://hooks.slack.com/services/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"
 
 # Normally only successful deployments are posted to Slack.
 # Enable the settings below to post on WARNiNG and/or ERROR.
-SLACKERROR="TRUE"
+# SLACKERROR="FALSE"
 
 # Post commit logs to this URL.
 # POSTURL=""
