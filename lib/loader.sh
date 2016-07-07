@@ -10,6 +10,10 @@ if [ "${QUIET}" != "1" ]; then
 		tput smcup; clear
 		# clear
 	fi
+else
+	if [[ "${FORCE}" != "1" ]] && [[ "${QUIET}" = "1" ]]; then
+		echo "To deploy using the --quiet flag, you must also use --force."; exit 1
+	fi
 fi
 
 # Creating this function first, so verbose output option is usable early
@@ -32,8 +36,7 @@ done
 SOURCEPATH="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
 	if [ ! -d "${SOURCEPATH}" ]
 	then
-		echo "Failed to find library files expected in: ${SOURCEPATH}";
-		exit 1
+		echo "Failed to find library files expected in: ${SOURCEPATH}"; exit 1
 	fi
 	for LIBRARIES in "${SOURCEPATH}"/*.sh
 	do

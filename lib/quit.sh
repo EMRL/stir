@@ -72,6 +72,11 @@ function cleanUp() {
 	# [[ -f $gitLock ]] && rm "$gitLock"
 	# Attempt to reset the terminal
 	# echo -e \\033c
+
+	# If Wordfence was an issue, restart the plugin
+	if [[ "${WFOFF}" = "1" ]]; then
+		"${WPCLI}"/wp plugin activate --no-color wordfence &>> $logFile; errorChk
+	fi
 	if [ "$QUIET" != "1" ]; then
 		tput cnorm
 	fi

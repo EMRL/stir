@@ -58,6 +58,8 @@ CHECKBRANCH
 ACTIVECHECK
 CHECKTIME
 WFCHECK
+ACFKEY
+WFOFF
 ```
 
 ## Variables (Format needs to change)

@@ -75,9 +75,12 @@ function gitChkMstr() {
 
 # Garbage collection
 function gitGarbage() {
-	if [ "${GARBAGE}" = "TRUE" ]; then 
-		notice "Running garbage collection..."
+	if [ "${GARBAGE}" = "TRUE" ] && [[ "${QUIET}" != "1" ]]; then 
+		notice "Preparing repository..."
 		git gc | tee --append "${logFile}"
+		if [[ "${QUIET}" != "1" ]]; then
+			git gc &>> "${logFile}"
+		fi
 	fi
 }
 
@@ -98,9 +101,9 @@ function gitStage() {
 		trace "Staging files"; emptyLine
 		if [ "${FORCE}" = "1" ] || yesno --default yes "Stage files? [Y/n] "; then
 			if [[ "${VERBOSE}" -eq 1 ]]; then
-				git add . | tee --append "${logFile}"; errorChk              
+				git add -A | tee --append "${logFile}"; errorChk              
 			else  
-				git add . &>> "${logFile}"; errorChk
+				git add -A &>> "${logFile}"; errorChk
 			fi
 		else
 			trace "Exiting without staging files"; userExit    
@@ -288,7 +291,7 @@ function gitPushProd() {
 
 # Get the stats for this git author, just for fun
 function gitStats() {
-	if [ "${GITSTATS}" == "TRUE" ]; then
+	if [ "${GITSTATS}" == "TRUE" ] && [[ "${QUIET}" != "1" ]]; then
 		info "Calculating..."
 		getent passwd "${USER}" | cut -d ':' -f 5 | cut -d ',' -f 1 > "${trshFile}"
 		FULLUSER=$(<"${trshFile}")

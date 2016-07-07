@@ -23,7 +23,7 @@ function wpPkg() {
 				# Look for updates
 				notice "Checking for updates..."
 				if [ "${QUIET}" != "1" ]; then
-					wpCheck &
+					wfCheck; wpCheck &
 					spinner $!
 				else
 					$WPCLI/wp plugin status --no-color >> $logFile
@@ -51,20 +51,14 @@ function wpPkg() {
 					sed '/REQUEST:/d' $wpFile > $trshFile && mv $trshFile $wpFile;
 					cat $wpFile; emptyLine
 
-					if  [ "$FORCE" = "1" ] ||  yesno --default no "Proceed with updates? [y/N] "; then
+					if [ "${FORCE}" = "1" ] || yesno --default no "Proceed with updates? [y/N] "; then
 						# If ACFPRO needs an update, do it first via wget
 						acfUpdate &
 						spinner $!
 						# Let's get to work
 						if [ "${QUIET}" != "1" ]; then
-							# Is Wordfence check enabled?
-							if [[ "${WFCHECK}" == "TRUE" ]]; then
-								sudo -u "apache" -- /usr/local/bin/wp plugin update --all --no-color &>> $logFile &
-								spinner $!
-							else
-								$WPCLI/wp plugin update --all --no-color &>> $logFile &
-								spinner $!
-							fi
+							$WPCLI/wp plugin update --all --no-color &>> $logFile &
+							spinner $!
 						else
 							$WPCLI/wp plugin update --all --no-color &>> $logFile
 						fi	
@@ -82,11 +76,8 @@ function wpPkg() {
 									if grep -q "Error: Updated" $logFile; then
 										error "One or more plugin upgrades have failed."
 									fi
-									trace "Update seems OK"
 								fi
-								trace "Update seems OK"
 							fi
-							trace "Update seems OK"
 						fi
 
 						cd $WORKPATH/$APP/; \
@@ -102,23 +93,14 @@ function wpPkg() {
 				# There's a little bug when certain plugins are spitting errors; work around seems to be 
 				# to check for core updates a second time
 				cd $WORKPATH/$APP/public; \
-
-				if [[ "${WFCHECK}" == "TRUE" ]]; then
-					sudo -u "apache" -- $WPCLI/wp core check-update --no-color &>> $logFile
-				else
-					$WPCLI/wp core check-update --no-color &>> $logFile
-				fi
+				$WPCLI/wp core check-update --no-color &>> $logFile
 
 				if grep -q "WordPress is at the latest version." $logFile; then
 					info "Wordpress core is up to date."; UPD2="1"
 				else
 					sleep 1
 					# Get files setup for smart commit
-					if [[ "${WFCHECK}" == "TRUE" ]]; then
-						sudo -u "apache" -- $WPCLI/wp core check-update --no-color &> $coreFile
-					else
-						$WPCLI/wp core check-update --no-color &> $coreFile
-					fi
+					$WPCLI/wp core check-update --no-color &> $coreFile
 					# Strip out any randomly occuring debugging output
 					grep -vE "Notice:|Warning:|Strict Standards:|PHP" $coreFile > $trshFile && mv $trshFile $coreFile;
 					# Clean out the gobbleygook from wp-cli
@@ -188,30 +170,44 @@ function wpPkg() {
 }
 
 function wpCheck() {
-	# Wordfence is really pissing me off now
-	if [[ "${WFCHECK}" == "TRUE" ]]; then
-		# For the logfile
-		sudo -u "apache" -- $WPCLI/wp plugin status --no-color &>> $logFile
-		# For the console/smart commit message
-		sudo -u "apache" -- $WPCLI/wp plugin update --dry-run --no-color --all &> $wpFile
-	else
-		# For the logfile
-		$WPCLI/wp plugin status --no-color &>> $logFile
-		# For the console/smart commit message
-		$WPCLI/wp plugin update --dry-run --no-color --all &> $wpFile
-	fi
-
+	# For the logfile
+	$WPCLI/wp plugin status --no-color &>> $logFile
+	# For the console/smart commit message
+	$WPCLI/wp plugin update --dry-run --no-color --all &> $wpFile
 	# Other options, thanks Corey
 	# wp plugin list --format=csv --all --fields=name,update_version,update | grep 'available'
 	# wp plugin list --format=csv --all --fields=title,update_version,update | grep 'available'
 }
 
+function wfCheck() {
+	# Check for signs of Wordfence
+	if [[ "${WFCHECK}" == "TRUE" ]]; then
+		if [ -f "${WORKPATH}/${APP}/public/app/wflogs/config.php" ]; then
+			trace "Wordfence found."; emptyLine
+			warning "Wordfence firewall detected, and may cause issues with deployment."
+			if [[ "${FORCE}" = "1" ]] && [[ "${QUIET}" != "1" ]]; then
+				error "Deployment can not continue while Wordfence firewall is enabled."
+			else
+				if yesno --default yes "Attempt to repair files? (sudo required) [Y/n] "; then
+					"${WPCLI}"/wp plugin deactivate --no-color wordfence &>> $logFile; WFOFF="1"
+					sudo rm -rf "${WORKPATH}/${APP}/public/app/wflogs" &>> $logFile
+					sleep 1; emptyLine
+				else
+					error "Deployment can not continue while Wordfence firewall is enabled."
+				fi
+			fi
+		fi
+	fi
+}
+
 # For future use, ACF is a pain
 function acfUpdate() {
-	ACFFILE="/tmp/acfpro.zip"
-	# download the ACF PRO upgrade file
-	wget -O "${ACFFILE}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACFKEY}" &>> $logFile
-	$WPCLI/wp plugin delete --no-color advanced-custom-fields-pro &>> $logFile
-	$WPCLI/wp plugin install --no-color ${ACFFILE} &>> $logFile
-	rm "${ACFFILE}"
+	if grep -q "advanced-custom-fields-pro" $wpFile; then
+		ACFFILE="/tmp/acfpro.zip"
+		# download the ACF PRO upgrade file
+		wget -O "${ACFFILE}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACFKEY}" &>> $logFile
+		$WPCLI/wp plugin delete --no-color advanced-custom-fields-pro &>> $logFile
+		$WPCLI/wp plugin install --no-color ${ACFFILE} &>> $logFile
+		rm "${ACFFILE}"
+	fi
 }

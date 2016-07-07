@@ -1,21 +1,20 @@
 #!/bin/bash
 #
-# Here are examples of settings you might need to change on 
-# a per-project basis. If so, create a file in your projects' root 
-# folder called .deployrc. Project settings will override both 
-# system & per-user settings.
+# Here are examples of settings you might need to change on a per-project 
+# basis. If so, create a file in your projects' root folder called .deployrc. 
+# Project settings will override both system & per-user settings.
 # 
 # If any value set here will override both global and per-user settings.
 
-# The URL for this repo's hosting, with no trailing slash. For example, 
-# if you use Github and your repo URL looks like https://github.com/EMRL/deploy
+# The URL for this repo's hosting, with no trailing slash. For example, if 
+# you use Github and your repo URL looks like https://github.com/EMRL/deploy
 # your REPOHOST should be set to https://github.com/EMRL (with no trailing slash)
 # If most of your repos are all hosted at the same location, you may want to define
 # this in either the global or user configuration files.
 # REPOHOST=""
 
-# If you have no SSH key or wish to login manually using your account name/password 
-# in the console, set NOKEY to exactly "TRUE"
+# If you have no SSH key or wish to login manually using your account name and
+# password in the console, set NOKEY to exactly "TRUE"
 # NOKEY="TRUE"
 
 # A human readable project name
@@ -24,10 +23,11 @@
 # A human readable client name
 # PROJCLIENT="Client Name"
 
-# Development project URL, including http:// or https:// (with no trailing slash)
+# Development project URL, including http:// or https:// with no trailing slash
 # DEVURL="http://devurl.com/"
 
-# Production, or "Live" project URL, including http:// or https:// (with no trailling slash)
+# Production, or "Live" project URL, including http:// or https:// (with no 
+# trailing slash)
 # PRODURL="http://productionurl.com/"
 
 # The exact name of the Bitbucket/Github repository
@@ -41,8 +41,8 @@
 
 # Configure your branches. In most cases the name will be master & production. If
 # you are only using a master branch, leave production undefined.
-MASTER="master"
-PRODUCTION="production"
+# MASTER="master"
+# PRODUCTION="production"
 
 # Define CHECKBRANCH if you only want deploy to run when the set branch is 
 # currently checked out; e.g. if CHECKBRANCH="master" and the current branch is 
@@ -54,7 +54,7 @@ PRODUCTION="production"
 # COMMITMSG="This is a default commit message"
 
 # The command to finalize deployment of your project(s)
-DEPLOY="mina deploy"				
+# DEPLOY="mina deploy"				
 
 # Set the address and subject line of 
 # TO="deploy@emrl.com"
@@ -63,6 +63,11 @@ DEPLOY="mina deploy"
 # DONOTDEPLOY="TRUE"	
 
 # Integration ID
+#
+# This is used to post deploy logs to project management systems that can 
+# external email input. For examples, for our task management system 
+# accepts emails in the format task-####@projects.emrl.com, with the #### 
+# being the task identification number for the project being deployed.
 # TASK="task"
 
 # Slack Integration
@@ -77,7 +82,7 @@ DEPLOY="mina deploy"
 # POSTTOSLACK="TRUE"
 
 # Add your full Webhook URL below, including https://
-# SLACKURL="https://hooks.slack.com/services/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"
+# SLACKURL="https://hooks.slack.com/services/###################/########################"
 
 # Normally only successful deployments are posted to Slack.
 # Enable the settings below to post on WARNiNG and/or ERROR.

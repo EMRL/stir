@@ -2,11 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.4] - 07-07-2016
 - Added a more reliable method of updating Advanced Custom Fields Pro
 - Added "Garbage Collection" mode to help keep your repo neat and tidy
-- Debugging some issues that can cause permission problems in certain environments
-- Added temporary fix for Wordfence permission problems
+- Fixed some issues that can cause permission problems in certain environments
+- Added optional fix for Wordfence firewall permission problems
 - Added check for .git/index permission issues
 
 ## [3.3.4] - 05-16-2016
@@ -51,7 +51,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.3.4...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.4...HEAD
+[3.4]: https://github.com/EMRL/deploy/compare/v3.3.4...v3.4
 [3.3.4]: https://github.com/EMRL/deploy/compare/v3.3.3...v3.3.4
 [3.3.3]: https://github.com/EMRL/deploy/compare/v3.3...v3.3.3
 [3.3]: https://github.com/EMRL/deploy/compare/v3.1...v3.3
