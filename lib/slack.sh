@@ -33,7 +33,7 @@ function slackTest {
 	console "Testing Slack integration..."
 
 	if [[ -z "${SLACKURL}" ]]; then
-		warning "No Slack configuration found."; emptyLine
+		warning "No global Slack configuration found."; emptyLine
 		exit 1
 	else
 		curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration from deploy ${VERSION}\nhttps://github.com/EMRL/deploy\"}" "${SLACKURL}"

@@ -3,7 +3,7 @@
 # deploy: A simple bash script for deploying sites.
 #
 IFS=$'\n\t'
-VERSION="3.4"
+VERSION="3.4.1"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
@@ -134,12 +134,18 @@ if [ "${STRICT}" == "1" ]; then
 fi
 
 # Store the remaining part as arguments.
-APP+=("$@")
+APP+=("${@}")
 
 # Check to see if the user is deploying from current working directory
 if [ "${CURRENT}" == "1" ]; then
 	WORKPATH="$(dirname "${PWD}")"
 	APP="${PWD##*/}"
+fi
+
+# If not trying to deploy current directory, and no repo is named, exit
+if [ -z "${@}" ] && [ "${APP}" != "null" ] && [ "${CURRENT}" != "1" ]; then
+	echo "Choose a valid project, or use the --current flag to deploy from the current directory."
+	exit 1
 fi
 
 # Fire up temporary log files. Consolidate this shit better someday, geez.
