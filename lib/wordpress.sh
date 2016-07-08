@@ -21,7 +21,6 @@ function wpPkg() {
 				cd $WORKPATH/$APP/public; \
 				
 				# Look for updates
-				notice "Checking for updates..."
 				if [ "${QUIET}" != "1" ]; then
 					wfCheck; wpCheck &
 					spinner $!
@@ -163,13 +162,14 @@ function wpPkg() {
 
 		# If running in Wordpress update-only mode, bail out
 		if [ "$UPGRADE" = "1" ] && [ "$UPD1" = "1" ] && [ "$UPD2" = "1" ]; then
-			info "No updates available, halting deployment."
+			notice "No updates available, halting deployment."
 			safeExit
 		fi
 	fi
 }
 
 function wpCheck() {
+	notice "Checking for updates..."
 	# For the logfile
 	$WPCLI/wp plugin status --no-color &>> $logFile
 	# For the console/smart commit message
@@ -185,13 +185,22 @@ function wfCheck() {
 		if [ -f "${WORKPATH}/${APP}/public/app/wflogs/config.php" ]; then
 			trace "Wordfence found."; emptyLine
 			warning "Wordfence firewall detected, and may cause issues with deployment."
-			if [[ "${FORCE}" = "1" ]] && [[ "${QUIET}" != "1" ]]; then
+			if [[ "${FORCE}" = "1" ]] || [[ "${QUIET}" = "1" ]]; then
 				error "Deployment can not continue while Wordfence firewall is enabled."
 			else
 				if yesno --default yes "Attempt to repair files? (sudo required) [Y/n] "; then
 					"${WPCLI}"/wp plugin deactivate --no-color wordfence &>> $logFile; WFOFF="1"
 					sudo rm -rf "${WORKPATH}/${APP}/public/app/wflogs" &>> $logFile
-					sleep 1; emptyLine
+					# Remove from repo history, in case .gitignore doesn't have them excluded
+					if ! grep -q "wflog" "${WORKPATH}/${APP}/.gitignore"; then
+						cd $WORKPATH/$APP; \
+	 					git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch public/app/wflogs > /dev/null" HEAD &>> $logFile &
+	 					spinner $!
+						rm -rf .git/refs/original/ && git reflog expire --all &&  git gc --aggressive --prune &>> $logFile &
+						spinner $!
+						cd $WORKPATH/$APP/public; \
+					fi
+					sleep 1
 				else
 					error "Deployment can not continue while Wordfence firewall is enabled."
 				fi
