@@ -220,10 +220,10 @@ function gitChkProd() {
 
 		# Make sure the branch currently checked out is production, if not
 		# then let's try a ghetto fix
-		current_branch="$(git rev-parse --abbrev-ref HEAD)"
+		sleep 3; current_branch="$(git rev-parse --abbrev-ref HEAD)"
 		if [[ "${current_branch}" != "${PRODUCTION}" ]]; then
 			# If we're in that weird stuck mode on master, let's try to "fix" it
-			if yesno --default yes "Current branch is ${current_branch} and should be ${PRODUCTION}, try again? [Y/n] "; then
+			if  [ "${FORCE}" = "1" ] || yesno --default yes "Current branch is ${current_branch} and should be ${PRODUCTION}, try again? [Y/n] "; then
 				if [[ "${current_branch}" = "${MASTER}" ]]; then 
 					[[ -f "${gitLock}" ]] && rm "${gitLock}"
 					git add .; git checkout "${PRODUCTION}" &>> "${logFile}" #; errorChk
@@ -274,14 +274,19 @@ function gitPushProd() {
 			git push | tee --append "${logFile}"; errorChk 
 			trace "OK"              
 		else
-			if  [ "${FORCE}" = "1" ] || yesno --default yes "Push production branch? [Y/n] "; then
+			if [ "${FORCE}" = "1" ] || yesno --default yes "Push production branch? [Y/n] "; then
 				if [ "${QUIET}" != "1" ]; then
+					sleep 1
 					git push &>> "${logFile}" &
 					spinner $!
 				else
 					git push &>> "${logFile}"; errorChk
 				fi
 				sleep 1
+				if [[ $(git status --porcelain) ]]; then
+					sleep 1; git add . &>> "${logFile}"
+					git push --force-with-lease  &>> "${logFile}"
+				fi
 			else
 				safeExit
 			fi

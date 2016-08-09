@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+- Added more robust branch checking
+
 ## [3.4] - 07-07-2016
 - Added a more reliable method of updating Advanced Custom Fields Pro
 - Added "Garbage Collection" mode to help keep your repo neat and tidy
