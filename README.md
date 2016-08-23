@@ -12,16 +12,22 @@ This is a multi-use deployment script, with a focus on publishing Wordpress site
 Usage: deploy [options] [target] ...
 
 Options:
-  -u, --update           If there are no available updates, halt deployment
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
   -S, --skip-update      Skip any Wordpress core/plugin updates
-  -c, --current          Deploy a project from current working directory
-  -s, --strict           Any error will halt deployment completely
+  -u, --update           If no available Wordpress updates, halt deployment
+  -m, --merge            Force merge of branches
+  -c, --current          Deploy a project from current working directory          
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
   -d, --debug            Run in debug mode
+  -s, --strict           Any error will halt deployment completely
   -h, --help             Display this help and exit
   -v, --version          Output version information and exit
+
+Other Options:
+  --slack-test           Test global Slack integration
+  --function-list        Output a list of all functions()
+  --variable-list        Output a list of all variables used by deploy 
 ```
 
 ## How It Works

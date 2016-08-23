@@ -151,7 +151,7 @@ if [ "${CURRENT}" == "1" ]; then
 fi
 
 # If not trying to deploy current directory, and no repo is named, exit
-if [ -z "${@}" ] && [ "${APP}" != "null" ] && [ "${CURRENT}" != "1" ]; then
+if [ -z "${@}" ] && [ "${CURRENT}" != "1" ]; then
 	echo "Choose a valid project, or use the --current flag to deploy from the current directory."
 	exit 1
 fi
