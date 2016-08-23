@@ -6,6 +6,7 @@ This is a list of all the variables used. It is not yet complete, and most non-e
 UPGRADE
 SKIPUPDATE
 CURRENT
+MERGE
 VERBOSE
 QUIET
 STRICT
@@ -60,6 +61,7 @@ CHECKTIME
 WFCHECK
 ACFKEY
 WFOFF
+AUTOMERGE
 ```
 
 ## Variables (Format needs to change)

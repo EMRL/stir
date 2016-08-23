@@ -47,13 +47,13 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	urlFile deployPath etcLocation libLocation POSTEMAIL current_branch \
 	error_msg active_files notes UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS \
 	slack_icon APPRC message_state COMMITURL COMMITHASH UPD1 UPD2 UPDATE \
-	gitLock <<< ""
+	gitLock AUTOMERGE MERGE <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${deployPath} ${etcLocation} 
 	${libLocation} ${POSTEMAIL} ${current_branch} ${error_msg} ${active_files} 
 	${notes} ${UPDCORE} ${TASKLOG} ${PCA} ${PCB} ${PCC} ${PCD} ${PLUGINS} 
 	${slack_icon} ${APPRC} ${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} 
-	${UPD2} ${UPDATE} ${gitLock}" > /dev/null
+	${UPD2} ${UPDATE} ${gitLock} ${AUTOMERGE} ${MERGE}"  > /dev/null
 
 # Options
 function flags() {
@@ -63,6 +63,7 @@ Options:
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
   -S, --skip-update      Skip any Wordpress core/plugin updates
   -u, --update           If no available Wordpress updates, halt deployment
+  -m, --merge            Force merge of branches
   -c, --current          Deploy a project from current working directory          
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
@@ -71,6 +72,12 @@ Options:
   -h, --help             Display this help and exit
   -v, --version          Output version information and exit
 
+Other Options:
+  --slack-test           Test global Slack integration
+  --function-list        Output a list of all functions()
+  --variable-list        Output a list of all variables used by deploy 
+
+More information at https://github.com/EMRL/deploy
 "
 }
 
@@ -114,6 +121,7 @@ while [[ ${1:-unset} = -?* ]]; do
 		-s|--strict) STRICT=1 ;;
 		-d|--debug) DEBUG=1 ;;
 		-F|--force) FORCE=1 ;;
+		-m|--merge) MERGE=1 ;; 
 		--slack-test) SLACKTEST=1; APP="null";;
 		--function-list) FUNCTIONLIST=1; APP="null";;
 		--variable-list) VARIABLELIST=1; APP="null";;
@@ -320,6 +328,11 @@ trace "Development workpath is ${WORKPATH}"
 if [ "${FIXPERMISSIONS}" == "TRUE" ]; then
 	trace "Lead developer permissions are ${DEVUSER}.${DEVGROUP}"
 	trace "Apache permissions are ${APACHEUSER}.${APACHEGROUP}"
+fi
+
+# Check for upcoming merge
+if [ "${AUTOMERGE}" == "TRUE" ]; then
+	MERGE="1"
 fi
 
 trace "Current project is ${APP}"

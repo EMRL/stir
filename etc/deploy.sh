@@ -44,6 +44,10 @@
 # MASTER="master"
 # PRODUCTION="production"
 
+# Configure merge behavior. If you wish to automatically merge your MASTER and 
+# PRODUCTION branches when deploying, set AUTOMERGE to TRUE.
+# AUTOMERGE="TRUE"
+
 # Define CHECKBRANCH if you only want deploy to run when the set branch is 
 # currently checked out; e.g. if CHECKBRANCH="master" and the current branch is 
 # "development", deployment will halt.

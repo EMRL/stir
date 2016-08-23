@@ -204,40 +204,42 @@ function gitPushMstr() {
 
 # Checkout production, now with added -f
 function gitChkProd() {
-	if [ -n "${PRODUCTION}" ]; then
-		notice "Checking out production branch..."; fixIndex
+	if [ "${MERGE}" = "1" ]; then
+		if [ -n "${PRODUCTION}" ]; then
+			notice "Checking out production branch..."; fixIndex
 
-		if [[ "${VERBOSE}" -eq 1 ]]; then
-			git checkout "${PRODUCTION}" | tee --append "${logFile}"; errorChk               
-		else
-			if [ "${QUIET}" != "1" ]; then
-				git checkout "${PRODUCTION}" &>> "${logFile}" &
-				showProgress
+			if [[ "${VERBOSE}" -eq 1 ]]; then
+				git checkout "${PRODUCTION}" | tee --append "${logFile}"; errorChk               
 			else
-				git checkout "${PRODUCTION}" &>> "${logFile}"; errorChk
-			fi
-		fi
-
-		# Make sure the branch currently checked out is production, if not
-		# then let's try a ghetto fix
-		sleep 3; current_branch="$(git rev-parse --abbrev-ref HEAD)"
-		if [[ "${current_branch}" != "${PRODUCTION}" ]]; then
-			# If we're in that weird stuck mode on master, let's try to "fix" it
-			if  [ "${FORCE}" = "1" ] || yesno --default yes "Current branch is ${current_branch} and should be ${PRODUCTION}, try again? [Y/n] "; then
-				if [[ "${current_branch}" = "${MASTER}" ]]; then 
-					[[ -f "${gitLock}" ]] && rm "${gitLock}"
-					git add .; git checkout "${PRODUCTION}" &>> "${logFile}" #; errorChk
+				if [ "${QUIET}" != "1" ]; then
+					git checkout "${PRODUCTION}" &>> "${logFile}" &
+					showProgress
+				else
+					git checkout "${PRODUCTION}" &>> "${logFile}"; errorChk
 				fi
-			else
-				safeExit
 			fi
-		fi
 
-		# Were there any conflicts checking out?
-		if grep -q "error: Your local changes to the following files would be overwritten by checkout:" "${logFile}"; then
-			 error "There is a conflict checking out."
-		else
-			trace "OK"
+			# Make sure the branch currently checked out is production, if not
+			# then let's try a ghetto fix
+			sleep 3; current_branch="$(git rev-parse --abbrev-ref HEAD)"
+			if [[ "${current_branch}" != "${PRODUCTION}" ]]; then
+				# If we're in that weird stuck mode on master, let's try to "fix" it
+				if  [ "${FORCE}" = "1" ] || yesno --default yes "Current branch is ${current_branch} and should be ${PRODUCTION}, try again? [Y/n] "; then
+					if [[ "${current_branch}" = "${MASTER}" ]]; then 
+						[[ -f "${gitLock}" ]] && rm "${gitLock}"
+						git add .; git checkout "${PRODUCTION}" &>> "${logFile}" #; errorChk
+					fi
+				else
+					safeExit
+				fi
+			fi
+
+			# Were there any conflicts checking out?
+			if grep -q "error: Your local changes to the following files would be overwritten by checkout:" "${logFile}"; then
+				 error "There is a conflict checking out."
+			else
+				trace "OK"
+			fi
 		fi
 	fi
 }
@@ -245,21 +247,23 @@ function gitChkProd() {
 # Merge master into production
 # git merge --no-edit might be bugging, took it our for now
 function gitMerge() {
-	if [ -n "$PRODUCTION" ]; then
-		notice "Merging master into production..."; fixIndex
-		# Clear out the index.lock file, cause reasons
-		[[ -f "${gitLock}" ]] && rm "${gitLock}"
-		# Bonus add, just because. Ugh.
-		# git add -A; errorChk 
-		if [[ "${VERBOSE}" -eq 1 ]]; then
-			git merge "${MASTER}" | tee --append "${logFile}"              
-		else
-			if [ "${QUIET}" != "1" ]; then
-				# git merge --no-edit master &>> "${logFile}" &
-				git merge "${MASTER}" &>> "${logFile}" &
-				showProgress
+	if [ "${MERGE}" = "1" ]; then
+		if [ -n "${PRODUCTION}" ]; then
+			notice "Merging master into production..."; fixIndex
+			# Clear out the index.lock file, cause reasons
+			[[ -f "${gitLock}" ]] && rm "${gitLock}"
+			# Bonus add, just because. Ugh.
+			# git add -A; errorChk 
+			if [[ "${VERBOSE}" -eq 1 ]]; then
+				git merge "${MASTER}" | tee --append "${logFile}"              
 			else
-				git merge "${MASTER}"&>> "${logFile}"; errorChk
+				if [ "${QUIET}" != "1" ]; then
+					# git merge --no-edit master &>> "${logFile}" &
+					git merge "${MASTER}" &>> "${logFile}" &
+					showProgress
+				else
+					git merge "${MASTER}"&>> "${logFile}"; errorChk
+				fi
 			fi
 		fi
 	fi
@@ -267,28 +271,30 @@ function gitMerge() {
 
 # Push production
 function gitPushProd() {
-	if [ -n "$PRODUCTION" ]; then
-		trace "Push production"; fixIndex
-		emptyLine
-		if [[ "${VERBOSE}" -eq 1 ]]; then
-			git push | tee --append "${logFile}"; errorChk 
-			trace "OK"              
-		else
-			if [ "${FORCE}" = "1" ] || yesno --default yes "Push production branch? [Y/n] "; then
-				if [ "${QUIET}" != "1" ]; then
-					sleep 1
-					git push &>> "${logFile}" &
-					spinner $!
-				else
-					git push &>> "${logFile}"; errorChk
-				fi
-				sleep 1
-				if [[ $(git status --porcelain) ]]; then
-					sleep 1; git add . &>> "${logFile}"
-					git push --force-with-lease  &>> "${logFile}"
-				fi
+	if [ "${MERGE}" = "1" ]; then
+		if [ -n "$PRODUCTION" ]; then
+			trace "Push production"; fixIndex
+			emptyLine
+			if [[ "${VERBOSE}" -eq 1 ]]; then
+				git push | tee --append "${logFile}"; errorChk 
+				trace "OK"              
 			else
-				safeExit
+				if [ "${FORCE}" = "1" ] || yesno --default yes "Push production branch? [Y/n] "; then
+					if [ "${QUIET}" != "1" ]; then
+						sleep 1
+						git push &>> "${logFile}" &
+						spinner $!
+					else
+						git push &>> "${logFile}"; errorChk
+					fi
+					sleep 1
+					if [[ $(git status --porcelain) ]]; then
+						sleep 1; git add . &>> "${logFile}"
+						git push --force-with-lease  &>> "${logFile}"
+					fi
+				else
+					safeExit
+				fi
 			fi
 		fi
 	fi

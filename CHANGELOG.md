@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Changed default merge behavior - deploy will no longer perform automatic merges unless ran as ```deploy --merge``` or ```AUTOMERGE="TRUE"``` is defined in ```config/deploy.sh``` 
 - Added more robust branch checking
 
 ## [3.4] - 07-07-2016
