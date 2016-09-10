@@ -3,7 +3,7 @@
 # deploy: A simple bash script for deploying sites.
 #
 IFS=$'\n\t'
-VERSION="3.4.1"
+VERSION="3.4.3"
 NOW=$(date +"%m-%d-%Y")
 DEV=$USER"@"$HOSTNAME
 
@@ -27,6 +27,9 @@ read -r black red green yellow blue magenta cyan white endColor bold underline \
 	reset purple tan <<< ""
 echo "${black} ${red} ${green} ${yellow} ${blue} ${magenta} ${cyan} ${white} \
 	${endColor} ${bold} ${underline} ${reset} ${purple} ${tan}" > /dev/null
+# User feedback
+read -r pid delay spinstr <<< ""
+echo "${pid} ${delay} ${spinstr}" > /dev/null
 # Constants and environment variables
 read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
 	LOGHTML NOPHP FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP TO \
@@ -310,9 +313,9 @@ if [ "${POSTTOSLACK}" == "TRUE" ]; then
 fi
 POSTEMAIL="${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL}"
 if [[ -z "${POSTEMAIL}" ]]; then
-	trace "No integration found"
+	trace "No email integration found"
 else
-	trace "Integration enabled, using ${POSTEMAIL}"
+	trace "Email integration enabled, using ${POSTEMAIL}"
 fi
 
 trace "Log file is ${logFile}"
@@ -333,6 +336,7 @@ fi
 # Check for upcoming merge
 if [ "${AUTOMERGE}" == "TRUE" ]; then
 	MERGE="1"
+	trace "Automerge is enabled"
 fi
 
 trace "Current project is ${APP}"
