@@ -213,7 +213,8 @@ function gitChkProd() {
 			else
 				if [ "${QUIET}" != "1" ]; then
 					git checkout "${PRODUCTION}" &>> "${logFile}" &
-					showProgress
+					spinner $!
+					info "Success.    "
 				else
 					git checkout "${PRODUCTION}" &>> "${logFile}"; errorChk
 				fi
@@ -284,6 +285,7 @@ function gitPushProd() {
 						sleep 1
 						git push &>> "${logFile}" &
 						spinner $!
+						info "Success.    "
 					else
 						git push &>> "${logFile}"; errorChk
 					fi
@@ -297,6 +299,12 @@ function gitPushProd() {
 				fi
 			fi
 		fi
+
+		# This is here temporarily to doubleplus force through a buggish situation
+		trace "Forcing a second push..."
+		git checkout production &>> "${logFile}"
+		git merge master &>> "${logFile}"
+		git push &>> "${logFile}"
 	fi
 }
 
