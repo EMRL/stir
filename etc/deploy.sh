@@ -1,8 +1,8 @@
 #!/bin/bash
 #
 # Here are examples of settings you might need to change on a per-project 
-# basis. If so, create a file in your projects' root folder called .deployrc. 
-# Project settings will override both system & per-user settings.
+# basis. This file should be placed in config/deploy.sh in your projects' 
+# root folder. Project settings will override both system & per-user settings.
 # 
 # If any value set here will override both global and per-user settings.
 
@@ -23,20 +23,20 @@
 # A human readable client name
 # PROJCLIENT="Client Name"
 
-# Development project URL, including http:// or https:// with no trailing slash
-# DEVURL="http://devurl.com/"
+# Development project URL, including http:// or https:// 
+# DEVURL="http://devurl.com"
 
-# Production, or "Live" project URL, including http:// or https:// (with no 
-# trailing slash)
-# PRODURL="http://productionurl.com/"
+# Production, or "Live" project URL, including http:// or https://
+# PRODURL="http://productionurl.com"
 
 # The exact name of the Bitbucket/Github repository
 # REPO="name-of-repo"
 
 # Advanced Custom Fields Pro License
 #
-# Too many issues seem to crop up with the normal method of updating ACF Pro. Including
-# your license key below will enable upgrades to happen more reliably.
+# Too many issues seem to crop up with the normal method of updating the Wordpress 
+# plugin Advanced Custom Fields Pro. Including your license key below will enable 
+# upgrades to happen more reliably.
 # ACFKEY="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 # Configure your branches. In most cases the name will be master & production. If
@@ -50,7 +50,7 @@
 
 # Define CHECKBRANCH if you only want deploy to run when the set branch is 
 # currently checked out; e.g. if CHECKBRANCH="master" and the current branch is 
-# "development", deployment will halt.
+# "production", deployment will halt.
 # CHECKBRANCH="master"
 
 # If for some reason you'd like a default commit message. It will
