@@ -17,7 +17,7 @@ source $HOME/.keychain/$HOSTNAME-sh 2>&1
 # deploy --force --update --quiet (or -Fuq *cough* in short form)
 #
 # This means the command will bypass asking for human interaction, and only update Wordpress 
-# plugin/core files. Snart commits must be enabled, as there will be no human to write a 
+# plugin/core files. Smart commits must be enabled, as there will be no human to write a 
 # commit message
 deploy -Fuq [repo name]
 
