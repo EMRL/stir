@@ -30,6 +30,7 @@ function errorExit() {
 	#fi
 	# Send log
 	if [ "${EMAILERROR}" == "TRUE" ]; then
+		message_state="ERROR"
 		mailLog
 	fi
 

@@ -7,7 +7,7 @@ trace "Loading slackPost()"
 function slackPost () {
 	# Format the message 
 	if [ "${message_state}" == "ERROR" ]; then
-		if [ -z "$notes" ]; then
+		if [ -z "${notes}" ]; then
 			notes="Something went wrong."
 		fi
 		slack_message="${USER} attempted to deploy changes to ${APP}\nERROR: *${error_msg}*"

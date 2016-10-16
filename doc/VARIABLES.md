@@ -24,7 +24,7 @@ REPOHOST
 WPCLI
 SMARTCOMMIT
 GITSTATS
-LOGHTML
+EMAILHTML
 NOPHP
 FIXPERMISSIONS
 DEVUSER
@@ -80,6 +80,7 @@ postFile
 trshFile
 statFile
 urlFile
+htmlFile
 deployPath
 etcLocation
 libLocation
@@ -99,4 +100,5 @@ Post log: /tmp/[repo].wtf-####.log
 Trash output: /tmp/[repo].trsh-####.log
 Stats output: /tmp/[repo].stat-####.log
 URL output: /tmp/[repo].url-####.log
+HTML log output: /tmp/[repo].html-####.log
 ````

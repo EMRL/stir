@@ -3,8 +3,8 @@
 # deploy: A simple bash script for deploying sites.
 #
 IFS=$'\n\t'
-VERSION="3.4.3"
-NOW=$(date +"%m-%d-%Y")
+VERSION="3.4.5"
+NOW=$(date +"%m/%d/%Y (%r)")
 DEV=$USER"@"$HOSTNAME
 
 # Initialize and export all startup variables so we can pass ShellCheck tests 
@@ -32,27 +32,27 @@ read -r pid delay spinstr <<< ""
 echo "${pid} ${delay} ${spinstr}" > /dev/null
 # Constants and environment variables
 read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
-	LOGHTML NOPHP FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP TO \
+	EMAILHTML NOPHP FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP TO \
 	SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT FROMDOMAIN FROMUSER \
 	POSTEMAILHEAD POSTEMAILTAIL POSTTOSLACK SLACKURL POSTURL NOKEY PROJNAME \
 	PROJCLIENT DEVURL PRODURL REPO MASTER PRODUCTION COMMITMSG DEPLOY \
 	DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME GARBAGE WFCHECK ACFKEY WFOFF <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
-	${SMARTCOMMIT} ${GITSTATS} ${LOGHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
+	${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
 	${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${SUBJECT} ${EMAILERROR} 
 	${EMAILSUCCESS} ${EMAILQUIT} ${FROMDOMAIN} ${FROMUSER} ${POSTEMAILHEAD} 
 	${POSTEMAILTAIL} ${POSTTOSLACK} ${SLACKURL} ${POSTURL} ${NOKEY} ${PROJNAME} 
 	${PROJCLIENT} ${DEVURL} ${PRODURL} ${REPO} ${MASTER} ${PRODUCTION} 
 	${COMMITMSG} ${DEPLOY} ${DONOTDEPLOY} ${TASK} ${CHECKBRANCH} ${ACTIVECHECK} 
 	${CHECKTIME} ${GARBAGE} ${WFCHECK} ${ACFKEY} ${WFOFF}" > /dev/null
-# Iinternal variables
+# Internal variables
 read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
-	urlFile deployPath etcLocation libLocation POSTEMAIL current_branch \
+	urlFile htmlFile deployPath etcLocation libLocation POSTEMAIL current_branch \
 	error_msg active_files notes UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS \
 	slack_icon APPRC message_state COMMITURL COMMITHASH UPD1 UPD2 UPDATE \
 	gitLock AUTOMERGE MERGE <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
-	${trshFile} ${statFile} ${urlFile} ${deployPath} ${etcLocation} 
+	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${deployPath} ${etcLocation} 
 	${libLocation} ${POSTEMAIL} ${current_branch} ${error_msg} ${active_files} 
 	${notes} ${UPDCORE} ${TASKLOG} ${PCA} ${PCB} ${PCC} ${PCD} ${PLUGINS} 
 	${slack_icon} ${APPRC} ${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} 
@@ -199,6 +199,13 @@ statFile="/tmp/$APP.stat-$RANDOM.log"
 # Short URL temp file
 urlFile="/tmp/$APP.url-$RANDOM.log"
 (umask 077 && touch "${urlFile}") || {
+	echo "Could not create temporary file, exiting."
+	exit 1
+}
+
+# Short URL temp file
+htmlFile="/tmp/$APP.html-$RANDOM.log"
+(umask 077 && touch "${htmlFile}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
 }

@@ -21,9 +21,6 @@
 
 # Log settings
 #
-# Send log file in HTML?
-# LOGHTML="FALSE"
-#
 # Strips the bulk of nasty PHP debug messages out of the 
 # log files that are emailed unpon deployment.
 # NOPHP="TRUE" 
@@ -39,6 +36,9 @@
 # EMAILERROR="TRUE"
 # EMAILSUCCESS="TRUE"				
 # EMAILQUIT="TRUE"					
+
+# Send log file in HTML?
+# EMAILHTML="FALSE"
 
 # Integration options
 # 
