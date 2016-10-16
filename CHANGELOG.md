@@ -38,9 +38,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added ```deploy --current``` which will allow for deployment of current working directory if a project is found
 - Added ```deploy --skip-update```
 
-## 3.2 - N/A
-- Skipped version number, internal release only
-
 ## [3.1] - 11-12-2015
 - Added install script
 - Added progress indicators
