@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Added HTML email log option
 - Changed default merge behavior - deploy will no longer perform automatic merges unless ran as ```deploy --merge``` or ```AUTOMERGE="TRUE"``` is defined in ```config/deploy.sh``` 
 - Fixed a small bug when repo name is undeclared when not running ```deploy --current```
 - Added more robust branch checking
