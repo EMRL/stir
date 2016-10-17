@@ -19,7 +19,7 @@ source $HOME/.keychain/$HOSTNAME-sh 2>&1
 # This means the command will bypass asking for human interaction, and only update Wordpress 
 # plugin/core files. Smart commits must be enabled, as there will be no human to write a 
 # commit message
-deploy -Fuq [repo name]
+deploy --automate [repo name]
 
 # If you have problems with authenticating, you can debug what's up with a command like this: 
 # ssh -Tvvv git@bitbucket.org

@@ -25,9 +25,10 @@ Options:
   -v, --version          Output version information and exit
 
 Other Options:
+  --automate             For unattended deployment, equivalent to -Fuq 
   --slack-test           Test global Slack integration
   --function-list        Output a list of all functions()
-  --variable-list        Output a list of all variables used by deploy 
+  --variable-list        Output a list of all variables used by deploy
 ```
 
 ## How It Works
