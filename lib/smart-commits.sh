@@ -4,7 +4,7 @@
 #
 # Tries to create "Smart Commit" messages based on parsing
 # output from wp-cli.
-trace "Loading smrtCommit()"
+trace "Loading smart commit functions"
 
 # Constructing smart *cough* commit messages
 function smrtCommit() {
@@ -26,7 +26,6 @@ function smrtCommit() {
 			awk '{print $1, $2}' "${wpFile}" > "${trshFile}" && mv "${trshFile}" "${wpFile}";
 			# Add commas between the plugins with this
 			sed ':a;N;$!ba;s/\n/, /g' "${wpFile}" > "${trshFile}" && mv "${trshFile}" "${wpFile}";
-			trace "Plugin status [${PCD}]"
 			# Replace current commit message with Plugin upgrade info 
 			PLUGINS=$(<"${wpFile}")
 			COMMITMSG="$PCC ($PLUGINS)"

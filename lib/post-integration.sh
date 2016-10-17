@@ -3,7 +3,7 @@
 # post-integration.sh
 #
 # Handles integration with other services
-trace "Loading post-integration.sh"
+trace "Loading post integration"
 
 # Compile commit message with other stuff for integration
 function buildLog() {

@@ -2,8 +2,8 @@
 #
 # deployment.sh
 #
-# Handles deployment-realted tasks
-trace "Loading deployment.sh"   
+# Handles deployment-related tasks
+trace "Loading deployment functions"   
 
 function preDeploy() {
 	# If there are changes waiting in the repo, stop and ask for user input

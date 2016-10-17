@@ -3,13 +3,13 @@
 # quit.sh
 #
 # Handles exiting the program
-trace "Loading quit.sh"
+trace "Loading exit states"
 
 # User-requested exit
 function userExit() {
 	rm "${WORKPATH}/${APP}/.git/index.lock" &> /dev/null
 	trace "Exit on user request"
-	# check the email settings
+	# Check email settings
 	if [ "${EMAILQUIT}" == "TRUE" ]; then
 	   mailLog
 	fi
@@ -25,12 +25,9 @@ function quickExit() {
 
 # Exit on error
 function errorExit() {
-	#if  yesno --default yes "Would you like to view the log file? [Y/n] "; then
-	#	less $logFile;
-	#fi
-	# Send log
+	message_state="ERROR"; makeLog # Compile log
+	# Check email settings
 	if [ "${EMAILERROR}" == "TRUE" ]; then
-		message_state="ERROR"
 		mailLog
 	fi
 
@@ -47,7 +44,8 @@ function errorExit() {
 # Clean exit
 function safeExit() {
 	info "Exiting."; console
-	# check the email settings
+	makeLog # Compile log
+	# Check email settings
 	if [ "${EMAILSUCCESS}" == "TRUE" ]; then
 	   mailLog
 	fi
@@ -69,6 +67,9 @@ function cleanUp() {
 	[[ -f $statFile ]] && rm "$statFile"
 	[[ -f $wpFile ]] && rm "$wpFile"
 	[[ -f $urlFile ]] && rm "$urlFile"
+	[[ -f $htmlFile ]] && rm "$htmlFile"
+	[[ -f $htmlEmail ]] && rm "$htmlEmail"
+	[[ -f $clientEmail ]] && rm "$clientEmail"
 	[[ -f $coreFile ]] && rm "$coreFile"
 	# [[ -f $gitLock ]] && rm "$gitLock"
 	# Attempt to reset the terminal

@@ -3,7 +3,7 @@
 # server_check()
 #
 # Check to see if production environment is online and running its Apache server
-trace "Loading server_check()"
+trace "Loading server checks"
 
 function server_check() {
 	notice "Checking servers..."

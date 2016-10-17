@@ -3,7 +3,7 @@
 # errorChk()
 #
 # Handles various exit code checking
-trace "Loading errorChk()"
+trace "Loading error checking"
 
 # Try to get exit/error code
 function errorChk() {

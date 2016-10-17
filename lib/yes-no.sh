@@ -1,7 +1,7 @@
 #!/bin/bash
 # 
 # A simple Yes/No function
-trace "Loading yesno()"
+trace "Loading input functions"
 
 function yesno() {
 	local ans

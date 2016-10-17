@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # display-styles.sh
+trace "Loading console styles"
 
 # Define color codes
 black='\E[30;47m'
@@ -23,14 +24,14 @@ if [[ $QUIET != "1" ]]; then
 fi
 
 #  Standard text output only to console
-function console () {
+function console() {
 	if [[ $QUIET != "1" ]]; then
 		echo -e "${reset}$*${endColor}"
 	fi
 }
 
 # Standard text output to console and logfile
-function info () {
+function info() {
 	if [[ $QUIET != "1" ]]; then
 		echo -e "${reset}$*${endColor}"
 	fi
@@ -42,21 +43,23 @@ function log() {
 	echo "$@" >> "${logFile}"
 }
 
-function input () {
+function input() {
 	if [[ $QUIET != "1" ]]; then
 		echo -e "${reset}$*${endColor}"
 	fi
 }
 
 # Sectional header
-function notice () {
+function notice() {
 	if [[ $QUIET != "1" ]]; then
 		echo; echo -e "${green}$*${endColor}"
 	fi
 	echo "" >> "${logFile}"; echo "$@" >> "${logFile}"
 }
 
-function error () {
+function error() {
+	# Set to ERROR
+	message_state="ERROR"
 	if [[ $QUIET != "1" ]]; then
 		echo -e "${red}$*${endColor}"
 	else
@@ -67,14 +70,14 @@ function error () {
 	errorExit
 }
 
-function warning () {
+function warning() {
 	if [[ $QUIET != "1" ]]; then
 		echo -e "${red}$*${endColor}"
 	fi
 	echo "WARNING: $*" >> "${logFile}"
 }
 
-function emptyLine () {
+function emptyLine() {
 		echo ""
 		echo "" >> "${logFile}"
 }

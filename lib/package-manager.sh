@@ -4,7 +4,7 @@
 #
 # Checks if project uses node.js, and runs package manager if needed.
 # Also checks for Grunt, for our own internal backward compatibility.
-trace "Loading pkgMgr()"
+trace "Loading package management"
 
 function pkgMgr() {
 	if [ "${FORCE}" != "1" ]; then

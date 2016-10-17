@@ -3,7 +3,7 @@
 # user-feedback.sh
 #
 # Handles interface components
-trace "Loading user-feedback.sh"
+trace "Loading user feedback"
 
 # Progress spinner; we'll see if this works
 function spinner() {

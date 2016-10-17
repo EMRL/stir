@@ -4,7 +4,7 @@
 #
 # Handles various setup, logging, and option flags
 # Make sure this function is loaded up first
-trace "Loading utilities.sh"
+trace "Loading utilities"
 
 # Open a deployment session, ask for user confirmation before beginning
 function go() {

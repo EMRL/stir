@@ -4,7 +4,7 @@
 #
 # Repairs potential permission issues before deployment; in 
 # the future this should never be needed
-trace "Loading permFix()"
+trace "Loading permissions fixes"
 
 function permFix() {
 	if [ "${FIXPERMISSIONS}" == "TRUE" ]; then

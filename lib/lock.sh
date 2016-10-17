@@ -4,7 +4,7 @@
 #
 # Checks if project uses node.js, and runs package manager if needed.
 # Also checks for Grunt, for backward compatibility with CAA.
-trace "Loading lock()"
+trace "Locking process"
 
 # Define lock file location
 LOCK_FILE=/tmp/$APP.lock

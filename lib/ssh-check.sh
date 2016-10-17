@@ -3,7 +3,7 @@
 # sshChk()
 #
 # 
-trace "Loading sshChk()"
+trace "Loading SSH checks"
 
 function sshChk() {
 	notice "Checking SSH Keys..."

@@ -33,6 +33,7 @@ while [ -h "${SOURCE}" ]; do
 	SOURCE="$(readlink "${SOURCE}")"
 	[[ ${SOURCE} != /* ]] && SOURCE="${DIR}/${SOURCE}"
 done
+
 SOURCEPATH="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
 	if [ ! -d "${SOURCEPATH}" ]
 	then

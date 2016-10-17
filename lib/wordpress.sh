@@ -4,7 +4,7 @@
 #
 # Checks for Wordpress upgrades, and executes upgrades if needed
 #
-trace "Loading wordpress.sh"
+trace "Loading Wordpress functions"
 
 function wpPkg() {
 

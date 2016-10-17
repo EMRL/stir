@@ -2,7 +2,7 @@
 # slackPost()
 #
 # Integration with Slack!
-trace "Loading slackPost()"
+trace "Loading Slack integration"
 
 function slackPost () {
 	# Format the message 

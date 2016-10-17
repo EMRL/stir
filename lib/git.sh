@@ -3,7 +3,7 @@
 # git.sh
 #
 # Handles git related processes
-trace "Loading git.sh"
+trace "Loading git libraries"
 
 # Assign a variable to represent .git/index.lock
 gitLock="$WORKPATH/$APP/.git/index.lock"
