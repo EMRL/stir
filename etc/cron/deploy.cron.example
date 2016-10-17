@@ -13,11 +13,16 @@ HOME=/home/[user name]
 source $HOME/.bash_profile 2>&1
 source $HOME/.keychain/$HOSTNAME-sh 2>&1
 
-# And now, the deploy command; the safest mode to run from a cron is something like
+# And now, the deploy command; the recommended cron command is 
+# deploy --automate 
+#
+# The deprecated mode to run from a cron is as follows
 # deploy --force --update --quiet (or -Fuq *cough* in short form)
 #
-# This means the command will bypass asking for human interaction, and only update Wordpress 
-# plugin/core files. Smart commits must be enabled, as there will be no human to write a 
+# Both commands are quite similar - the new --automate switch adds a flag to send
+# an email update to clients upon a successful deployment, if you wish.
+#
+# Smart commits must be enabled, as there will be no human to write a 
 # commit message
 deploy --automate [repo name]
 
