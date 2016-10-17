@@ -59,15 +59,18 @@ function gitChkMstr() {
 	if [ -z "${MASTER}" ]; then
 		emptyLine; error "deploy ${VERSION} requires a master branch to be defined.";
 	else
-		notice "Checking out master branch..."; fixIndex
-		if [[ "${VERBOSE}" -eq 1 ]]; then
-			git checkout master | tee --append "${logFile}"            
-		else
-			if [ "${QUIET}" != "1" ]; then
-				git checkout master &>> "${logFile}" &
-				showProgress
+		current_branch="$(git rev-parse --abbrev-ref HEAD)"
+		if [[ "${current_branch}" != "${MASTER}" ]]; then
+			notice "Checking out master branch..."; fixIndex
+			if [[ "${VERBOSE}" -eq 1 ]]; then
+				git checkout master | tee --append "${logFile}"            
 			else
-				git checkout master &>> "${logFile}"
+				if [ "${QUIET}" != "1" ]; then
+					git checkout master &>> "${logFile}" &
+					showProgress
+				else
+					git checkout master &>> "${logFile}"
+				fi
 			fi
 		fi
 	fi

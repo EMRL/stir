@@ -300,7 +300,6 @@ fi
 # Spam all the things!
 trace "Version ${VERSION}"
 trace "Running from ${deployPath}"
-trace "Loader found at ${libLocation}"
 trace "Loading system configuration file from ${etcLocation}"
 
 # Does a user configuration exit?
