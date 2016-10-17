@@ -80,12 +80,12 @@ function makeLog {
 	# Remote log function 
 	if [ "${REMOTELOG}" == "TRUE" ]; then
 		# Compile the head, log information, and footer into a single html file
-		cat "${deployPath}/html/emrl/head.html" "${trshFile}" "${logFile}" "${deployPath}/html/emrl/foot.html" > "${htmlEmail}"
+		cat "${deployPath}/html/emrl/head.html" "${trshFile}" "${logFile}" "${deployPath}/html/emrl/foot.html" > "${htmlFile}"
 		trace "Posting logs to remote server"
 		# scp "${htmlFile}" emrl@web521.webfaction.com:/home/emrl/webapps/emrl/current/public/deploy/
 		# Copy to home directory to help with debugging
 		if [ "${POSTTOLOCALHOST}" == "TRUE" ]; then
-			cp "${htmlFile}" "${LOCALHOSTPATH}"
+			cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}.html"
 		fi
 	fi
 }
