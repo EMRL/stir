@@ -3,7 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Added ```deploy ---automate``` for scheduled update deployments. Equivalent to ```deploy --force --update --quiet``` with the addition of a flag to enable sending a scheduled update email notice to clients
+- Added ability to save HTML logs to local filesystem
 - Added HTML email log option
+- Cleaned up log output
 - Changed default merge behavior - deploy will no longer perform automatic merges unless ran as ```deploy --merge``` or ```AUTOMERGE="TRUE"``` is defined in ```config/deploy.sh``` 
 - Fixed a small bug when repo name is undeclared when not running ```deploy --current```
 - Added more robust branch checking

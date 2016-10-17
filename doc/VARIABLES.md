@@ -13,6 +13,9 @@ STRICT
 DEBUG
 FORCE
 SLACKTEST
+FUNCTIONLIST 
+VARIABLELIST 
+AUTOMATE
 ```
 
 ## Constants and Environment Variables
@@ -62,6 +65,14 @@ WFCHECK
 ACFKEY
 WFOFF
 AUTOMERGE
+REMOTELOG 
+POSTTOLOCALHOST 
+LOCALHOSTPATH
+NOTIFYCLIENT
+CLIENTEMAIL
+CLIENTLOGO
+REMOTEURL
+AUTOMATEDONLY
 ```
 
 ## Variables (Format needs to change)
@@ -88,6 +99,25 @@ POSTEMAIL
 current_branch
 error_msg
 active_files
+notes 
+UPDCORE 
+TASKLOG 
+PCA
+PCB
+PCC
+PCD
+PLUGINS
+slack_icon
+APPRC
+message_state
+COMMITURL
+COMMITHASH
+UPD1
+UPD2
+UPDATE
+gitLock
+AUTOMERGE
+MERGE
 ```
 
 ## Logfiles
