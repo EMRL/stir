@@ -23,6 +23,22 @@
 # A human readable client name
 # PROJCLIENT="Client Name"
 
+# If you are using html logfiles, define the full URL to the client's logo
+# CLIENTLOGO="http://client.com/assets/img/logo.png"
+
+# Client Notification Emails
+#
+# If you'd like to send short, branded HTML emails to someone on the client
+# side, set NOTIFYCLIENT to "TRUE" below, and define their email address.
+# Email value can also be a comma separated string of multiple addresses. 
+# NOTIFYCLIENT="TRUE"
+# CLIENTEMAIL="client@client.com"
+#
+# If you want the client to only receive these emails when running scheduled 
+# updates (for example a weekly cron using deploy --automate) Set the following
+# to "TRUE"
+# AUTOMATEDONLY="TRUE"
+
 # Development project URL, including http:// or https:// 
 # DEVURL="http://devurl.com"
 
@@ -60,7 +76,8 @@
 # The command to finalize deployment of your project(s)
 # DEPLOY="mina deploy"				
 
-# Set the address and subject line of 
+# If this project needs logs mailed to an address other than the one configured
+# globally, set it below. 
 # TO="deploy@emrl.com"
 
 # Disallow deployment; set to TRUE to enable. Double negative, it's tricky.

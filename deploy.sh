@@ -3,7 +3,7 @@
 # deploy: A simple bash script for deploying sites.
 #
 IFS=$'\n\t'
-VERSION="3.4.5"
+VERSION="3.5-RC"
 NOW=$(date +"%m/%d/%Y (%r)")
 DEV=$USER"@"$HOSTNAME
 
@@ -15,9 +15,10 @@ DEV=$USER"@"$HOSTNAME
 set -uo pipefail
 # Startup variables
 read -r UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
-	SLACKTEST FUNCTIONLIST VARIABLELIST <<< ""
+	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE <<< ""
 echo "${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
-	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}" > /dev/null
+	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
+	${AUTOMATE}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -34,29 +35,34 @@ echo "${pid} ${delay} ${spinstr}" > /dev/null
 read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
 	EMAILHTML NOPHP FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP TO \
 	SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT FROMDOMAIN FROMUSER \
-	POSTEMAILHEAD POSTEMAILTAIL POSTTOSLACK SLACKURL POSTURL NOKEY PROJNAME \
-	PROJCLIENT DEVURL PRODURL REPO MASTER PRODUCTION COMMITMSG DEPLOY \
-	DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME GARBAGE WFCHECK ACFKEY WFOFF <<< ""
+	POSTEMAILHEAD POSTEMAILTAIL POSTTOSLACK SLACKURL SLACKERROR POSTURL NOKEY \
+	PROJNAME PROJCLIENT DEVURL PRODURL REPO MASTER PRODUCTION COMMITMSG DEPLOY \
+	DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME GARBAGE WFCHECK ACFKEY \
+	WFOFF REMOTELOG POSTTOLOCALHOST LOCALHOSTPATH NOTIFYCLIENT CLIENTEMAIL \
+	CLIENTLOGO REMOTEURL AUTOMATEDONLY <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
 	${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
 	${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${SUBJECT} ${EMAILERROR} 
 	${EMAILSUCCESS} ${EMAILQUIT} ${FROMDOMAIN} ${FROMUSER} ${POSTEMAILHEAD} 
-	${POSTEMAILTAIL} ${POSTTOSLACK} ${SLACKURL} ${POSTURL} ${NOKEY} ${PROJNAME} 
-	${PROJCLIENT} ${DEVURL} ${PRODURL} ${REPO} ${MASTER} ${PRODUCTION} 
+	${POSTEMAILTAIL} ${POSTTOSLACK} ${SLACKURL} ${SLACKERROR} ${POSTURL} ${NOKEY} 
+	${PROJNAME} ${PROJCLIENT} ${DEVURL} ${PRODURL} ${REPO} ${MASTER} ${PRODUCTION} 
 	${COMMITMSG} ${DEPLOY} ${DONOTDEPLOY} ${TASK} ${CHECKBRANCH} ${ACTIVECHECK} 
-	${CHECKTIME} ${GARBAGE} ${WFCHECK} ${ACFKEY} ${WFOFF}" > /dev/null
+	${CHECKTIME} ${GARBAGE} ${WFCHECK} ${ACFKEY} ${WFOFF} ${REMOTELOG}
+	${POSTTOLOCALHOST} ${LOCALHOSTPATH} ${NOTIFYCLIENT} ${CLIENTEMAIL}
+	${CLIENTLOGO} ${REMOTEURL} ${AUTOMATEDONLY}" > /dev/null
 # Internal variables
 read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
-	urlFile htmlFile deployPath etcLocation libLocation POSTEMAIL current_branch \
-	error_msg active_files notes UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS \
-	slack_icon APPRC message_state COMMITURL COMMITHASH UPD1 UPD2 UPDATE \
-	gitLock AUTOMERGE MERGE <<< ""
+	urlFile htmlFile htmlEmail clientEMail deployPath etcLocation libLocation \
+	POSTEMAIL current_branch error_msg active_files notes UPDCORE TASKLOG PCA \
+	PCB PCC PCD PLUGINS slack_icon APPRC message_state COMMITURL COMMITHASH \
+	UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
-	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${deployPath} ${etcLocation} 
-	${libLocation} ${POSTEMAIL} ${current_branch} ${error_msg} ${active_files} 
-	${notes} ${UPDCORE} ${TASKLOG} ${PCA} ${PCB} ${PCC} ${PCD} ${PLUGINS} 
-	${slack_icon} ${APPRC} ${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} 
-	${UPD2} ${UPDATE} ${gitLock} ${AUTOMERGE} ${MERGE}"  > /dev/null
+	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlEmail} ${clientEMail} 
+	${deployPath} ${etcLocation} ${libLocation} ${POSTEMAIL} ${current_branch} 
+	${error_msg} ${active_files} ${notes} ${UPDCORE} ${TASKLOG} ${PCA} ${PCB} 
+	${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} ${message_state} ${COMMITURL} 
+	${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} ${AUTOMERGE} 
+	${MERGE}"  > /dev/null
 
 # Options
 function flags() {
@@ -76,6 +82,7 @@ Options:
   -v, --version          Output version information and exit
 
 Other Options:
+  --automate             For unattended deployment, equivalent to -Fuq 
   --slack-test           Test global Slack integration
   --function-list        Output a list of all functions()
   --variable-list        Output a list of all variables used by deploy 
@@ -125,6 +132,7 @@ while [[ ${1:-unset} = -?* ]]; do
 		-d|--debug) DEBUG=1 ;;
 		-F|--force) FORCE=1 ;;
 		-m|--merge) MERGE=1 ;; 
+		--automate) FORCE=1; UPGRADE=1; MERGE=1; QUIET=1 ;;
 		--slack-test) SLACKTEST=1; APP="null";;
 		--function-list) FUNCTIONLIST=1; APP="null";;
 		--variable-list) VARIABLELIST=1; APP="null";;
@@ -203,9 +211,23 @@ urlFile="/tmp/$APP.url-$RANDOM.log"
 	exit 1
 }
 
-# Short URL temp file
-htmlFile="/tmp/$APP.html-$RANDOM.log"
+# HTML log temp file
+htmlFile="/tmp/$APP.log-$RANDOM.html"
 (umask 077 && touch "${htmlFile}") || {
+	echo "Could not create temporary file, exiting."
+	exit 1
+}
+
+# HTML log temp file
+htmlEmail="/tmp/$APP.email-$RANDOM.html"
+(umask 077 && touch "${htmlEmail}") || {
+	echo "Could not create temporary file, exiting."
+	exit 1
+}
+
+# HTML log temp file
+clientEmail="/tmp/$APP.shortemail-$RANDOM.html"
+(umask 077 && touch "${clientEmail}") || {
 	echo "Could not create temporary file, exiting."
 	exit 1
 }
@@ -325,6 +347,12 @@ else
 	trace "Email integration enabled, using ${POSTEMAIL}"
 fi
 
+# Remote logging?
+if [ "${REMOTELOG}" == "TRUE" ]; then
+	trace "Remote log posting enabled"
+fi
+
+# General info
 trace "Log file is ${logFile}"
 trace "Plugin updates log is ${wpFile}"
 trace "Core upgrade log is ${coreFile}"
