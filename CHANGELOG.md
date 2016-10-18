@@ -4,8 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 - Added ```deploy ---automate``` for scheduled update deployments. Equivalent to ```deploy --force --update --quiet``` with the addition of a flag to enable sending a scheduled update email notice to clients
+- Recently changed file checks are now more accurate
 - Added ability to save HTML logs to local filesystem
+- Added ability to post log files to a remote host with scp
 - Added HTML email log option
+- Logs are now only emailed and posted when something noteworthy has occured - e.g. a commit has been made or an error has occurred
 - Changed checkout behavior - master branch is now only checked out when needed
 - Cleaned up log output
 - Changed default merge behavior - deploy will no longer perform automatic merges unless ran as ```deploy --merge``` or ```AUTOMERGE="TRUE"``` is defined in ```config/deploy.sh``` 
