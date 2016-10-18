@@ -78,6 +78,8 @@ function warning() {
 }
 
 function emptyLine() {
+	if [[ $QUIET != "1" ]]; then
 		echo ""
 		echo "" >> "${logFile}"
+	fi
 }

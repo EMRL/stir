@@ -39,7 +39,8 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
 	PROJNAME PROJCLIENT DEVURL PRODURL REPO MASTER PRODUCTION COMMITMSG DEPLOY \
 	DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME GARBAGE WFCHECK ACFKEY \
 	WFOFF REMOTELOG POSTTOLOCALHOST LOCALHOSTPATH NOTIFYCLIENT CLIENTEMAIL \
-	CLIENTLOGO REMOTEURL AUTOMATEDONLY <<< ""
+	CLIENTLOGO REMOTEURL AUTOMATEDONLY SCPPOST SCPUSER SCPHOST SCPHOSTPATH \
+	SCPPASS	<<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
 	${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
 	${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${SUBJECT} ${EMAILERROR} 
@@ -49,7 +50,8 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
 	${COMMITMSG} ${DEPLOY} ${DONOTDEPLOY} ${TASK} ${CHECKBRANCH} ${ACTIVECHECK} 
 	${CHECKTIME} ${GARBAGE} ${WFCHECK} ${ACFKEY} ${WFOFF} ${REMOTELOG}
 	${POSTTOLOCALHOST} ${LOCALHOSTPATH} ${NOTIFYCLIENT} ${CLIENTEMAIL}
-	${CLIENTLOGO} ${REMOTEURL} ${AUTOMATEDONLY}" > /dev/null
+	${CLIENTLOGO} ${REMOTEURL} ${AUTOMATEDONLY} ${SCPPOST} ${SCPUSER} ${SCPHOST} 
+	${SCPHOSTPATH} ${SCPPASS}"> /dev/null
 # Internal variables
 read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	urlFile htmlFile htmlEmail clientEMail deployPath etcLocation libLocation \
@@ -62,7 +64,7 @@ echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile}
 	${error_msg} ${active_files} ${notes} ${UPDCORE} ${TASKLOG} ${PCA} ${PCB} 
 	${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} ${message_state} ${COMMITURL} 
 	${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} ${AUTOMERGE} 
-	${MERGE}"  > /dev/null
+	${MERGE}" > /dev/null
 
 # Options
 function flags() {
@@ -132,7 +134,7 @@ while [[ ${1:-unset} = -?* ]]; do
 		-d|--debug) DEBUG=1 ;;
 		-F|--force) FORCE=1 ;;
 		-m|--merge) MERGE=1 ;; 
-		--automate) FORCE=1; UPGRADE=1; MERGE=1; QUIET=1 ;;
+		--automate) FORCE=1; UPGRADE=1; MERGE=1; QUIET=1; AUTOMATE=1 ;;
 		--slack-test) SLACKTEST=1; APP="null";;
 		--function-list) FUNCTIONLIST=1; APP="null";;
 		--variable-list) VARIABLELIST=1; APP="null";;

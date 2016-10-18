@@ -43,7 +43,7 @@ function gitStart() {
 	# Check for active files
 	if [[ "${FORCE}" == "1" ]] && [[ "${UPGRADE}" == "1" ]] && [[ "${QUIET}" == "1" ]] && [ "${ACTIVECHECK}" = "TRUE" ]; then
 		trace "Checking for active files"
-		active_files=$(find "${WORKPATH}/${APP}" -mmin -"${CHECKTIME}")
+		active_files=$(find "${WORKPATH}/${APP}" -mmin -"${CHECKTIME}" ! -path "${WORKPATH}/${APP}/public/app/wflogs/*" ! -path "${WORKPATH}/${APP}/.git/*" ! -path "${WORKPATH}/${APP}/.git")
 		if [ ! -z "${active_files}" ]; then
 			trace "Recently changed files: ${active_files}"
 			error "Code base has changed within the last 10 minutes. Halting deployment."

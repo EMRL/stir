@@ -52,8 +52,13 @@ function wpPkg() {
 
 					if [ "${FORCE}" = "1" ] || yesno --default no "Proceed with updates? [y/N] "; then
 						# If ACFPRO needs an update, do it first via wget
-						acfUpdate &
-						spinner $!
+						if [ "${QUIET}" != "1" ]; then
+							acfUpdate &
+							spinner $!
+						else
+							acfUpdate
+						fi
+
 						# Let's get to work
 						if [ "${QUIET}" != "1" ]; then
 							$WPCLI/wp plugin update --all --no-color &>> $logFile &

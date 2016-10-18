@@ -70,38 +70,56 @@ function makeLog {
 			if [ "${AUTOMATEDONLY}" == "TRUE" ] && [ "${AUTOMATE}" != "1" ]; then
 				trace "Skipping client notification"
 			else
-				cat "${deployPath}/html/emrl/head.html" "${trshFile}" "${deployPath}/html/emrl/foot.html" > "${clientEmail}"
-				# Email to client
-				mail -s "$(echo -e "${SUBJECT} - ${APP}\nMIME-Version: 1.0\nContent-Type: text/html")" "${CLIENTEMAIL}" < "${clientEmail}"
+				# If a commit hash exists and there were no errors, we assume 
+				# success and compile and send the client email
+				if [ -n "${COMMITHASH}" ] && [ "${message_state}" != "ERROR" ]; then
+					cat "${deployPath}/html/emrl/head.html" "${trshFile}" "${deployPath}/html/emrl/foot.html" > "${clientEmail}"
+					mail -s "$(echo -e "${SUBJECT} - ${APP}\nMIME-Version: 1.0\nContent-Type: text/html")" "${CLIENTEMAIL}" < "${clientEmail}"
+				fi
 			fi
 		fi
 	fi
 
 	# Remote log function 
 	if [ "${REMOTELOG}" == "TRUE" ]; then
-		# Compile the head, log information, and footer into a single html file
-		cat "${deployPath}/html/emrl/head.html" "${trshFile}" "${logFile}" "${deployPath}/html/emrl/foot.html" > "${htmlFile}"
-		trace "Posting logs to remote server"
-		# scp "${htmlFile}" emrl@web521.webfaction.com:/home/emrl/webapps/emrl/current/public/deploy/
-		# Copy to home directory to help with debugging
-		if [ "${POSTTOLOCALHOST}" == "TRUE" ]; then
-			cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}.html"
+		if [ -n "${COMMITHASH}" ] || [ "${message_state}" == "ERROR" ]; then
+			# Compile the head, log information, and footer into a single html file
+			cat "${deployPath}/html/emrl/head.html" "${trshFile}" "${logFile}" "${deployPath}/html/emrl/foot.html" > "${htmlFile}"
+			trace "Posting remote logs"
+
+			# Send the files through SCP
+			if [ "SCPPOST" == "TRUE" ]; then
+				if [ -n "${SCPPASS}" ]; then
+					sshpass -p "${SCPPASS}" scp -o StrictHostKeyChecking=no "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}.html" &> /dev/null
+				else
+					scp "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}.html" &> /dev/null
+				fi
+			fi
+
+			# Post to localhost by simply copying files
+			if [ "${LOCALHOSTPOST}" == "TRUE" ]; then
+				cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}.html"
+				# Attempt to make sure the files are readable by all
+				chmod a+r "${LOCALHOSTPATH}/${APP}.html" &> /dev/null
+			fi
 		fi
 	fi
 }
 
 function mailLog {
-	if [ "${EMAILHTML}" == "TRUE" ]; then
-		# Compile full log information into a single html file
-		cat "${deployPath}/html/emrl/head.html" "${trshFile}" > "${htmlEmail}"
-		echo "<pre style=\"font: 100% courier,monospace; border: 1px solid #ccc; overflow: auto; overflow-x: scroll; width: 540px; padding: 0 1em 1em 1em; background: #eee; color: #000;\"><code style=\"font-size: 80%; word-wrap:break-word;\">" >> "${htmlEmail}"
-		cat "${logFile}" >> "${htmlEmail}"
-		echo "</code></pre>" >> "${htmlEmail}"
-		cat "${deployPath}/html/emrl/foot.html" >> "${htmlEmail}"
-		# This is just to help debugging
-		cp "${htmlEmail}" ~/"${APP}".html
-		mail -s "$(echo -e "${SUBJECT} - ${APP}""\n"MIME-Version: 1.0"\n"Content-Type: text/html)" "${TO}" < "${htmlEmail}"
-	else
-		mail -s "$(echo -e "${SUBJECT} - ${APP}""\n"Content-Type: text/plain)" "${TO}" < "${logFile}"
+	# Only send email if a commit has been made, or there has been an error
+	if [ -n "${COMMITHASH}" ] || [ "${message_state}" == "ERROR" ]; then
+		if [ "${EMAILHTML}" == "TRUE" ]; then
+			# Compile full log information into a single html file
+			cat "${deployPath}/html/emrl/head.html" "${trshFile}" > "${htmlEmail}"
+			echo "<pre style=\"font: 100% courier,monospace; border: 1px solid #ccc; overflow: auto; overflow-x: scroll; width: 540px; padding: 0 1em 1em 1em; background: #eee; color: #000;\"><code style=\"font-size: 80%; word-wrap:break-word;\">" >> "${htmlEmail}"
+			cat "${logFile}" >> "${htmlEmail}"
+			echo "</code></pre>" >> "${htmlEmail}"
+			cat "${deployPath}/html/emrl/foot.html" >> "${htmlEmail}"
+			# Send the email
+			mail -s "$(echo -e "${SUBJECT} - ${APP}""\n"MIME-Version: 1.0"\n"Content-Type: text/html)" "${TO}" < "${htmlEmail}"
+		else
+			mail -s "$(echo -e "${SUBJECT} - ${APP}""\n"Content-Type: text/plain)" "${TO}" < "${logFile}"
+		fi
 	fi
 }
