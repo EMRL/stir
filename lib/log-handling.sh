@@ -73,7 +73,7 @@ function makeLog {
 				# If a commit hash exists and there were no errors, we assume 
 				# success and compile and send the client email
 				if [ -n "${COMMITHASH}" ] && [ "${message_state}" != "ERROR" ]; then
-					cat "${deployPath}/html/emrl/head.html" "${trshFile}" "${deployPath}/html/emrl/foot.html" > "${clientEmail}"
+					cat "${deployPath}/html/${EMAILTEMPLATE}/head.html" "${trshFile}" "${deployPath}/html/${EMAILTEMPLATE}/foot.html" > "${clientEmail}"
 					mail -s "$(echo -e "${SUBJECT} - ${APP}\nMIME-Version: 1.0\nContent-Type: text/html")" "${CLIENTEMAIL}" < "${clientEmail}"
 				fi
 			fi
@@ -84,7 +84,7 @@ function makeLog {
 	if [ "${REMOTELOG}" == "TRUE" ]; then
 		if [ -n "${COMMITHASH}" ] || [ "${message_state}" == "ERROR" ]; then
 			# Compile the head, log information, and footer into a single html file
-			cat "${deployPath}/html/emrl/head.html" "${trshFile}" "${logFile}" "${deployPath}/html/emrl/foot.html" > "${htmlFile}"
+			cat "${deployPath}/html/${EMAILTEMPLATE}/head.html" "${trshFile}" "${logFile}" "${deployPath}/html/${EMAILTEMPLATE}/foot.html" > "${htmlFile}"
 			trace "Posting remote logs"
 
 			# Send the files through SCP
@@ -111,11 +111,11 @@ function mailLog {
 	if [ -n "${COMMITHASH}" ] || [ "${message_state}" == "ERROR" ]; then
 		if [ "${EMAILHTML}" == "TRUE" ]; then
 			# Compile full log information into a single html file
-			cat "${deployPath}/html/emrl/head.html" "${trshFile}" > "${htmlEmail}"
+			cat "${deployPath}/html/${EMAILTEMPLATE}/head.html" "${trshFile}" > "${htmlEmail}"
 			echo "<pre style=\"font: 100% courier,monospace; border: 1px solid #ccc; overflow: auto; overflow-x: scroll; width: 540px; padding: 0 1em 1em 1em; background: #eee; color: #000;\"><code style=\"font-size: 80%; word-wrap:break-word;\">" >> "${htmlEmail}"
 			cat "${logFile}" >> "${htmlEmail}"
 			echo "</code></pre>" >> "${htmlEmail}"
-			cat "${deployPath}/html/emrl/foot.html" >> "${htmlEmail}"
+			cat "${deployPath}/html/${EMAILTEMPLATE}/foot.html" >> "${htmlEmail}"
 			# Send the email
 			mail -s "$(echo -e "${SUBJECT} - ${APP}""\n"MIME-Version: 1.0"\n"Content-Type: text/html)" "${TO}" < "${htmlEmail}"
 		else

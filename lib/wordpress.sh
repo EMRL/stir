@@ -48,7 +48,10 @@ function wpPkg() {
 					sed '/Available/d' $wpFile > $trshFile && mv $trshFile $wpFile;
 					# Work around for the odd "REQUEST:" occuring
 					sed '/REQUEST:/d' $wpFile > $trshFile && mv $trshFile $wpFile;
-					cat $wpFile; emptyLine
+					# Display plugin list is not running in --quiet
+					if [ "${QUIET}" != "1" ]; then
+						cat $wpFile; emptyLine
+					fi
 
 					if [ "${FORCE}" = "1" ] || yesno --default no "Proceed with updates? [y/N] "; then
 						# If ACFPRO needs an update, do it first via wget

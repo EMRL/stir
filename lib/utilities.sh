@@ -38,7 +38,7 @@ function go() {
 	fi
 	if [ "${DONOTDEPLOY}" = "TRUE" ]; then
 		info "This project is currently locked, and can't be deployed."
-		warning "Cancelling."; quickExit
+		warning "Canceling."; quickExit
 	fi
 
 	# Force sudo password input if needed

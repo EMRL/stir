@@ -34,6 +34,12 @@
 # NOTIFYCLIENT="TRUE"
 # CLIENTEMAIL="client@client.com"
 #
+# If you're sending HTML emails and you want to use an email template 
+# unique to this project, define it below. HTML templates are stored in 
+# separate folders in /etc/deploy/html. The value used below should be the 
+# folder name of your template.
+# EMAILTEMPLATE="default"
+#
 # If you want the client to only receive these emails when running scheduled 
 # updates (for example a weekly cron using deploy --automate) Set the following
 # to "TRUE"

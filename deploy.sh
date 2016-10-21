@@ -315,7 +315,6 @@ else
 		nano ~/.deployrc
 		clear; sleep 1
 		console "Loading user configuration."
-		# shellcheck disable=1090
 		source ~/.deployrc
 		# quickExit
 	else
@@ -323,7 +322,7 @@ else
 	fi
 fi
 
-# Does a project configuration exit?
+# Does a project configuration exist?
 if [ "${APPRC}" == "1" ]; then
 	trace "Loading project configuration from ${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
 else
@@ -333,8 +332,6 @@ fi
 # Are we using "smart" *cough* commits?
 if [ "${SMARTCOMMIT}" == "TRUE" ]; then
 	trace "Smart commits are enabled"
-else
-	trace "Smart commits are disabled"
 fi
 
 # Are any integrations setup?
@@ -342,9 +339,7 @@ if [ "${POSTTOSLACK}" == "TRUE" ]; then
 	trace "Slack integration enabled, using ${SLACKURL}"
 fi
 POSTEMAIL="${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL}"
-if [[ -z "${POSTEMAIL}" ]]; then
-	trace "No email integration found"
-else
+if [[ -n "${POSTEMAIL}" ]]; then
 	trace "Email integration enabled, using ${POSTEMAIL}"
 fi
 
@@ -355,12 +350,6 @@ fi
 
 # General info
 trace "Log file is ${logFile}"
-trace "Plugin updates log is ${wpFile}"
-trace "Core upgrade log is ${coreFile}"
-trace "Post file is ${postFile}"
-trace "Trash file is ${trshFile}"
-trace "Stat file is ${statFile}"
-trace "URL file is ${urlFile}"
 trace "Development workpath is ${WORKPATH}"
 
 # Are we planning on "fixing" permissions?
@@ -384,7 +373,7 @@ function appDeploy() {
 	gitStart		# Check for a valid git project and get set up
 	lock			# Create lock file
 	go				# Start a deployment work session
-	server_check	# Check that servers are up and running
+	#server_check	# Check that servers are up and running
 	permFix			# Fix permissions
 	gitChkMstr		# Checkout master branch
 	gitGarbage		# If needed, clean up the trash
