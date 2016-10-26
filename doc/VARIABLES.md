@@ -80,6 +80,7 @@ SCPHOSTPATH
 SCPPASS
 LOGMSG
 EXPIRELOGS
+SERVERCHECK
 ```
 
 ## Variables (Format needs to change)
