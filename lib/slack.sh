@@ -14,7 +14,7 @@ function slackPost () {
 	else
 		# Add a link to the online logs, if they are setup.
 		if [ -n "${REMOTEURL}" ] && [ -n "${REMOTELOG}" ] ; then
-			slack_message="${USER} deployed updates to ${APP} (<${REMOTEURL}/${APP}.html|View logs>)\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+			slack_message="${USER} deployed updates to ${APP} (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
 		else
 			slack_message="${USER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
 		fi
