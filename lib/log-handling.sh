@@ -91,7 +91,7 @@ function makeLog {
 			# Compile the head, log information, and footer into a single html file
 			# cat "${deployPath}/html/${EMAILTEMPLATE}/head-email.html" "${trshFile}" "${logFile}" "${deployPath}/html/${EMAILTEMPLATE}/foot.html" > "${htmlFile}"
 			cat "${deployPath}/html/${EMAILTEMPLATE}/head-logfile.html" "${trshFile}" > "${htmlFile}"
-			echo "<pre style=\"font: 100% courier,monospace; border: 1px solid #ccc; overflow: auto; overflow-x: scroll; width: 930px; padding: 0 1em 1em 1em; background: #eee; color: #000;\"><code style=\"font-size: 80%; word-wrap:break-word;\">" >> "${htmlFile}"
+			echo "<pre style=\"font: 100% courier,monospace; border: none; overflow: auto; overflow-x: scroll; width: 930px; padding: 0 1em 1em 1em; background: #eee; color: #000;\"><code style=\"font-size: 80%; word-wrap:break-word;\">" >> "${htmlFile}"
 			cat "${logFile}" >> "${htmlFile}"
 			echo "</code></pre>" >> "${htmlFile}"
 			cat "${deployPath}/html/${EMAILTEMPLATE}/foot.html" >> "${htmlFile}"
@@ -123,7 +123,7 @@ function mailLog {
 		if [ "${EMAILHTML}" == "TRUE" ]; then
 			# Compile full log information into a single html file
 			cat "${deployPath}/html/${EMAILTEMPLATE}/head-email.html" "${trshFile}" > "${htmlEmail}"
-			echo "<pre style=\"font: 100% courier,monospace; border: 1px solid #ccc; overflow: auto; overflow-x: scroll; width: 540px; padding: 0 1em 1em 1em; background: #eee; color: #000;\"><code style=\"font-size: 80%; word-wrap:break-word;\">" >> "${htmlEmail}"
+			echo "<pre style=\"font: 100% courier,monospace; border: none; overflow: auto; overflow-x: scroll; width: 540px; padding: 0 1em 1em 1em; background: #eee; color: #000;\"><code style=\"font-size: 80%; word-wrap:break-word;\">" >> "${htmlEmail}"
 			cat "${logFile}" >> "${htmlEmail}"
 			echo "</code></pre>" >> "${htmlEmail}"
 			cat "${deployPath}/html/${EMAILTEMPLATE}/foot.html" >> "${htmlEmail}"

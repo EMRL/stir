@@ -135,7 +135,7 @@ while [[ ${1:-unset} = -?* ]]; do
 		-F|--force) FORCE=1 ;;
 		-m|--merge) MERGE=1 ;; 
 		--automate) FORCE=1; UPGRADE=1; MERGE=1; QUIET=1; AUTOMATE=1 ;;
-		--slack-test) SLACKTEST=1; APP="null";;
+		--slack-test) SLACKTEST=1 ;;
 		--function-list) FUNCTIONLIST=1; APP="null";;
 		--variable-list) VARIABLELIST=1; APP="null";;
 		--endopts) shift; break ;;
@@ -363,11 +363,6 @@ fi
 trace "Current project is ${APP}"
 trace "Current user is ${DEV}"
 trace "Git lock at ${gitLock}"
-
-# Slack test
-if [ "${SLACKTEST}" == "1" ]; then
-	slackTest; quickExit
-fi
 
 # Setup the core application
 function appDeploy() {

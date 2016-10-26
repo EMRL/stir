@@ -30,6 +30,11 @@ function go() {
 		fi
 	fi
 
+	# Slack test
+	if [ "${SLACKTEST}" == "1" ]; then
+		slackTest; quickExit
+	fi
+
 	# Chill and wait for user to confirm project
 	if  [ "${FORCE}" = "1" ] || yesno --default yes "Continue? [Y/n] "; then
 		trace "Loading project."

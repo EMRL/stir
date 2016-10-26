@@ -20,9 +20,12 @@ function wpPkg() {
 				trace "Wordpress found."
 				cd $WORKPATH/$APP/public; \
 				
+				# Check for Wordfence
+				wfCheck
+				
 				# Look for updates
 				if [ "${QUIET}" != "1" ]; then
-					wfCheck; wpCheck &
+					wpCheck &
 					spinner $!
 				else
 					$WPCLI/wp plugin status --no-color >> $logFile
