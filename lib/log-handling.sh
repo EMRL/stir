@@ -78,9 +78,8 @@ function makeLog {
 				# If a commit hash exists and there were no errors, we assume 
 				# success and compile and send the client email
 				if [ -n "${COMMITHASH}" ] && [ "${message_state}" != "ERROR" ]; then
-					cat "${deployPath}/html/${EMAILTEMPLATE}/head-email.html" "${trshFile}" > "${clientEmail}"
-					cal "${deployPath}/html/${EMAILTEMPLATE}/foot.html" > "${clientEmail}"
-					mail -s "$(echo -e "${SUBJECT} - ${APP}\nMIME-Version: 1.0\nContent-Type: text/html")" "${CLIENTEMAIL}" < "${clientEmail}"
+					cat "${deployPath}/html/${EMAILTEMPLATE}/head-email.html" "${trshFile}" "${deployPath}/html/${EMAILTEMPLATE}/foot.html" > "${clientEmail}"
+					mail -s "$(echo -e "[SUCCESS] ${SUBJECT} - ${APP}\nMIME-Version: 1.0\nContent-Type: text/html")" "${CLIENTEMAIL}" < "${clientEmail}"
 				fi
 			fi
 		fi
