@@ -85,7 +85,7 @@ Options:
 
 Other Options:
   --automate             For unattended deployment, equivalent to -Fuq 
-  --slack-test           Test global Slack integration
+  --slack-test           Test Slack integration
   --function-list        Output a list of all functions()
   --variable-list        Output a list of all variables used by deploy 
 
@@ -281,11 +281,6 @@ else
 	exit 1
 fi
 
-# Slack test
-if [ "${SLACKTEST}" == "1" ]; then
-	slackTest; quickExit
-fi
-
 # Function list
 if [ "${FUNCTIONLIST}" == "1" ]; then
 	compgen -A function | more; quickExit
@@ -338,6 +333,7 @@ fi
 if [ "${POSTTOSLACK}" == "TRUE" ]; then
 	trace "Slack integration enabled, using ${SLACKURL}"
 fi
+
 POSTEMAIL="${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL}"
 if [[ -n "${POSTEMAIL}" ]]; then
 	trace "Email integration enabled, using ${POSTEMAIL}"
@@ -368,12 +364,17 @@ trace "Current project is ${APP}"
 trace "Current user is ${DEV}"
 trace "Git lock at ${gitLock}"
 
+# Slack test
+if [ "${SLACKTEST}" == "1" ]; then
+	slackTest; quickExit
+fi
+
 # Setup the core application
 function appDeploy() {
 	gitStart		# Check for a valid git project and get set up
 	lock			# Create lock file
 	go				# Start a deployment work session
-	#server_check	# Check that servers are up and running
+	server_check	# Check that servers are up and running
 	permFix			# Fix permissions
 	gitChkMstr		# Checkout master branch
 	gitGarbage		# If needed, clean up the trash

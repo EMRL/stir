@@ -36,12 +36,11 @@ function slackPost () {
 
 function slackTest {
 	console "Testing Slack integration..."
-
 	if [[ -z "${SLACKURL}" ]]; then
-		warning "No global Slack configuration found."; emptyLine
-		exit 1
+		warning "No Slack configuration found."; emptyLine
+		cleanUp; exit 1
 	else
-		curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration from deploy ${VERSION}\nhttps://github.com/EMRL/deploy\"}" "${SLACKURL}"
+		curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration of ${APP} from deploy ${VERSION}\nhttps://github.com/EMRL/deploy\"}" "${SLACKURL}"
 		emptyLine
 	fi
 }

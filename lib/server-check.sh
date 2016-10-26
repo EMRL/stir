@@ -6,46 +6,48 @@
 trace "Loading server checks"
 
 function server_check() {
-	notice "Checking servers..."
-	# Set SERVERFAIL to 0
-	SERVERFAIL="0"
-	if [[ -z "${REPO}" ]]; then
-		trace "No repo name set, skipping check"
-	else
-		# For now, we'll use 200, 301, or 401 to indicate all is working well cause 
-		# Bitbucket is being a noob; I'll make this better later
-		REPOURL="${REPOHOST}/${REPO}/"
-		if curl -s --head "${REPOHOST}" | grep -E "200|301|401" > /dev/null; then
-			info " $REPOHOST/$REPO/ ${tan}OK${endColor}";
+	if [ "${SERVERCHECK}" == "TRUE" ]; then
+		notice "Checking servers..."
+		# Set SERVERFAIL to 0
+		SERVERFAIL="0"
+		if [[ -z "${REPO}" ]]; then
+			trace "No repo name set, skipping check"
 		else
-			info " $REPOHOST/$REPO/ ${red}FAIL${endColor}"; SERVERFAIL="1"
+			# For now, we'll use 200, 301, or 401 to indicate all is working well cause 
+			# Bitbucket is being a noob; I'll make this better later
+			REPOURL="${REPOHOST}/${REPO}/"
+			if curl -s --head "${REPOHOST}" | grep -E "200|301|401" > /dev/null; then
+				info " $REPOHOST/$REPO/ ${tan}OK${endColor}";
+			else
+				info " $REPOHOST/$REPO/ ${red}FAIL${endColor}"; SERVERFAIL="1"
+			fi
 		fi
-	fi
 
-	if [[ -z "${DEVURL}" ]]; then
-		trace "No development URL set, skipping check"
-	else
-		# Should return "200 OK" if all is working well
-		if curl -s --head "${DEVURL}" | grep "200 OK" > /dev/null; then
-			info " ${DEVURL} (development) ${tan}OK${endColor}";
+		if [[ -z "${DEVURL}" ]]; then
+			trace "No development URL set, skipping check"
 		else
-			info " ${DEVURL} (development) ${red}FAIL${endColor}"; SERVERFAIL="1"
+			# Should return "200 OK" if all is working well
+			if curl -s --head "${DEVURL}" | grep "200 OK" > /dev/null; then
+				info " ${DEVURL} (development) ${tan}OK${endColor}";
+			else
+				info " ${DEVURL} (development) ${red}FAIL${endColor}"; SERVERFAIL="1"
+			fi
 		fi
-	fi
 
-	if [[ -z "${PRODURL}" ]]; then
-		trace "No production URL set, skipping check"
-	else
-		# Should return "200 OK" if all is working well
-		if curl -s --head "${PRODURL}" | grep "200 OK" > /dev/null; then
-			info " ${PRODURL} (production) ${tan}OK${endColor}"
+		if [[ -z "${PRODURL}" ]]; then
+			trace "No production URL set, skipping check"
 		else
-			info " ${PRODURL} (production) ${red}FAIL${endColor}"; SERVERFAIL="1"
+			# Should return "200 OK" if all is working well
+			if curl -s --head "${PRODURL}" | grep "200 OK" > /dev/null; then
+				info " ${PRODURL} (production) ${tan}OK${endColor}"
+			else
+				info " ${PRODURL} (production) ${red}FAIL${endColor}"; SERVERFAIL="1"
+			fi
 		fi
-	fi
 
-	# Did anything fail?
-	if [ "${SERVERFAIL}" == "1" ]; then
-		console; error "Fix server issues before continuing.";
+		# Did anything fail?
+		if [ "${SERVERFAIL}" == "1" ]; then
+			console; error "Fix server issues before continuing.";
+		fi
 	fi
 }
