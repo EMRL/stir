@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Deployment Logfile</title>
+</head>
+
+<body>
+<table style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important;" border="0" width="100%" cellspacing="0" cellpadding="0" align="center">
+  <tbody>
+    <tr>
+      <td style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;" align="center" valign="top" bgcolor="#FFFFFF">
+      <!--// BEGIN TEMPLATE //-->  
+        <table id="templateContainer" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 600px; border: none; border-collapse: collapse !important;" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+            <tr>
+              <td style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;" align="center" valign="top">
+              <!--// BEGIN BODY //-->
+                <table id="templateBody" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f4f4f4;" border="0" width="100%" cellspacing="0" cellpadding="0">
+                  <tbody>
+                    <tr>
+                      <td class="bodyContent" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #505050; font-family: Arial, sans-serif; font-size: 16px; line-height: 150%; text-align: left; padding: 20px 50px 20px 50px;" valign="top" bgcolor="#FFFFFF"><h1 style="display: block; font-family: Arial, sans-serif; font-size: 44px; font-style: normal; font-weight: bold; line-height: 100%; letter-spacing: -2px; text-align: left; color: #000000 !important; margin: 0 0 10px 0;">Deployment Log</h1>
+
+							<!--// VARIABLE INPUT: This section is embedded in lib/log-handling.sh and is only here for reference.	
+							//-->
+							<p style="font-family: Arial, sans-serif; font-style: normal; font-weight: 400; color: #000;"><strong>Date:</strong> ${NOW}<br /><strong>Project:</strong> ${PROJNAME} (${PROJCLIENT})
+							<br /><strong>Production URL:</strong> <a style="color: #47ACDF; text-decoration:none; font-weight: bold;" href="${PRODURL}">${PRODURL}</a></p>
+							<table style="background-color: #CC2233;" border="0" width="100%" cellspacing="0" cellpadding="0" height="60">
+								<tr>
+									<td width="82" height="82" style="padding-left:20px;">
+										<div style="width: 60px; height: 60px; position: relative; overflow: hidden; -webkit-border-radius: 50%; -moz-border-radius: 50%; -ms-border-radius: 50%; -o-border-radius: 50%; border-radius: 50%;"><img style="display: inline; margin: 0 auto; height: 100%; width: auto;" src="${CLIENTLOGO}" alt="${PROJNAME}" title="${PROJNAME}" />
+										</div>
+									</td>
+									<td>
+										<a href="${COMMITURL}" style="font-family: Arial, sans-serif; font-style: normal; font-weight: 700; color: #fff; text-decoration: none;">Commit #${COMMITHASH}</a>
+									</td>
+									<td align="right" style="padding-right: 20px;">
+										<a href="${REMOTEURL}/${APP}.html"><img src="http://emrl.co/assets/img/open.png" height="32" width="32" alt="Open Details" title="Open Details" /></a>
+									</td>
+								</tr>
+								<tr>
+								<td colspan="3" valign="middle" style="background-color: #eee; padding: 20px;">
+									<p style="font-family: Arial, sans-serif; font-style: normal; font-weight: 400; color: #000;"><strong>Message:</strong> ${notes}</p>
+									<p style="font-family: Arial, sans-serif; font-style: normal; color: #000;">If you have any comments or questions, <a style="color: #47ACDF; text-decoration:none;" href="mailto: ${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL}?subject=Question%20on%20deployment%20${COMMITHASH}">send them over</a>.</p>
+								</td>
+							</tr>
+						</table>
+                        <!--// FOOTER //-->
+                       </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table id="templateFooter" style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;" border="0" width="600" cellspacing="0" cellpadding="0">
+                  <tbody>
+                    <tr>
+                      <td style="-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #808080; font-family: Helvetica; font-size: 10px; line-height: 150%; padding: 20px;" valign="top" width="100%"><center>
+                          <a href="http://emrl.com"><img class="aligncenter" src="http://emrl.co/assets/img/emrlsq.jpg" alt="EMRL" /></a>
+                        </center>
+                        <!--// For now this info is hard wired into the html template. I'll fix that later. //-->
+                        <p style="text-align: center; font-family: Arial, sans-serif;"><a style="color: #000000; text-decoration: none;" href="http://emrl.com">EMRL</a> &bull; 1020 Tenth Street &bull; Sacramento, CA 95814 &bull; (916) 446-2440<br />
+                          <a style="color: #47ACDF; text-decoration:none; text-transform: uppercase; font-weight: bold;" href="http://emrl.com/support">We <span style="color: #CC2233">&hearts;</span> your code</a></p></td>
+                    </tr>
+                  </tbody>
+                </table>  
+                <!--// END BODY //-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!--// END TEMPLATE //-->
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
+						

@@ -12,7 +12,12 @@ function slackPost () {
 		fi
 		slack_message="${USER} attempted to deploy changes to ${APP}\nERROR: *${error_msg}*"
 	else
-		slack_message="${USER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+		# Add a link to the online logs, if they are setup.
+		if [ -n "${REMOTEURL}" ] && [ -n "${REMOTELOG}" ] ; then
+			slack_message="${USER} deployed updates to ${APP} (<${REMOTEURL}/${APP}.html|View logs>)\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+		else
+			slack_message="${USER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+		fi
 	fi
 
 	# Set icon for message state
@@ -25,8 +30,8 @@ function slackPost () {
  			;;
 	esac
 
-	# Create payload 
-	curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" > /dev/null 2>&1
+	# Send payload 
+	curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" > /dev/null; errorStatus # 2>&1; errorStatus
 }
 
 function slackTest {

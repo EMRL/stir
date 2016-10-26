@@ -7,7 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Recently changed file checks are now more accurate
 - Added ability to save HTML logs to local filesystem
 - Added ability to post log files to a remote host with scp
-- Added HTML email log option, with custom templates assignable either globally or by project 
+- Added HTML email log option, with custom templates assignable either globally or by project
+- Added link to detailed log files from Slack messages 
 - Logs are now only emailed and posted when something noteworthy has occured - e.g. a commit has been made or an error has occurred
 - Changed checkout behavior - master branch is now only checked out when needed
 - Cleaned up log output
