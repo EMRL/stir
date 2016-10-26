@@ -32,6 +32,33 @@ function gitStart() {
 		exit 1
 	fi
 
+	# Make sure the defined branch(es) exist
+	if [ -n "${MASTER}" ]; then
+		git rev-parse --verify "${MASTER}" >> /dev/null
+		EXITCODE=$?; 
+		if [[ "${EXITCODE}" != 0 ]]; then 
+			warning "Exiting on error code ${EXITCODE}: branch ${MASTER} does not exist"
+			error_msg="Exited on error code ${EXITCODE}: branch ${MASTER} does not exist"
+			errorExit
+		fi
+
+		if [ -n "${PRODUCTION}" ]; then
+			git rev-parse --verify "${PRODUCTION}" >> /dev/null
+			EXITCODE=$?; 
+			if [[ "${EXITCODE}" != 0 ]]; then 
+				warning "Exiting on error code ${EXITCODE}: branch ${PRODUCTION} does not exist"
+				error_msg="Exited on error code ${EXITCODE}: branch ${PRODUCTION} does not exist"
+				errorExit
+			fi
+		fi
+	else
+		warning "Exiting on error code ${EXITCODE}: master branch must be defined"
+		error_msg="Exited on error code ${EXITCODE}: master branch must be defined"
+		errorExit
+	fi
+
+
+
 	# If CHECKBRANCH is set, make sure current branch is correct.
 	if [ -n "${CHECKBRANCH}" ]; then 
 		current_branch="$(git rev-parse --abbrev-ref HEAD)"

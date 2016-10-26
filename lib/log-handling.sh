@@ -96,7 +96,7 @@ function makeLog {
 			echo "</code></pre>" >> "${htmlFile}"
 			cat "${deployPath}/html/${EMAILTEMPLATE}/foot.html" >> "${htmlFile}"
 
-			# Send the files through SCP
+			# Send the files through SCP (not yet enabled)
 			if [ "SCPPOST" == "TRUE" ]; then
 				if [ -n "${SCPPASS}" ]; then
 					sshpass -p "${SCPPASS}" scp -o StrictHostKeyChecking=no "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}${COMMITHASH}.html" &> /dev/null
@@ -128,7 +128,7 @@ function mailLog {
 			echo "</code></pre>" >> "${htmlEmail}"
 			cat "${deployPath}/html/${EMAILTEMPLATE}/foot.html" >> "${htmlEmail}"
 			# Send the email
-			# Check for errors rewrite this garbage
+			# Check for errors - ewwwwwww rewrite this garbage
 			if [ "${message_state}" == "ERROR" ]; then
 				mail -s "$(echo -e "[ERROR] ${SUBJECT} - ${APP}""\n"MIME-Version: 1.0"\n"Content-Type: text/html)" "${TO}" < "${htmlEmail}"
 			else

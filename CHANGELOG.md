@@ -17,6 +17,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed a small bug when repo name is undeclared when not running ```deploy --current```
 - Added more robust branch checking
 - Added option to enforce server check
+- Existence of all defined branches is now confirmed before starting deployment process
 
 ## [3.4] - 07-07-2016
 - Added a more reliable method of updating Advanced Custom Fields Pro

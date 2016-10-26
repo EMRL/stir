@@ -31,7 +31,7 @@ function slackPost () {
 	esac
 
 	# Send payload 
-	curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" > /dev/null; errorStatus # 2>&1; errorStatus
+	curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" 2>&1; errorStatus
 }
 
 function slackTest {

@@ -57,14 +57,14 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	urlFile htmlFile htmlEmail clientEMail deployPath etcLocation libLocation \
 	POSTEMAIL current_branch error_msg active_files notes UPDCORE TASKLOG PCA \
 	PCB PCC PCD PLUGINS slack_icon APPRC message_state COMMITURL COMMITHASH \
-	UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE <<< ""
+	UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlEmail} ${clientEMail} 
 	${deployPath} ${etcLocation} ${libLocation} ${POSTEMAIL} ${current_branch} 
 	${error_msg} ${active_files} ${notes} ${UPDCORE} ${TASKLOG} ${PCA} ${PCB} 
 	${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} ${message_state} ${COMMITURL} 
 	${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} ${AUTOMERGE} 
-	${MERGE}" > /dev/null
+	${MERGE} ${EXITCODE}" > /dev/null
 
 # Options
 function flags() {
