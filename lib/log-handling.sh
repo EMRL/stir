@@ -45,6 +45,7 @@ function makeLog {
 		if [ "${message_state}" == "ERROR" ]; then
 			echo "DEPLOYMENT ERROR" >> "${trshFile}"
 			notes="${error_msg}"
+			COMMITHASH="-ERROR-${RANDOM}"
 		else
 			echo "Commit #${COMMITHASH}" >> "${trshFile}"
 		fi
