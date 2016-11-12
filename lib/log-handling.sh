@@ -17,9 +17,12 @@ function makeLog {
 	if [ "${EMAILHTML}" == "TRUE" ] || [ "${REMOTELOG}" == "TRUE" ] || [ "${NOTIFYCLIENT}" == "TRUE" ]; then
 		echo "<!--// VARIABLE INPUT //--><p style=\"font-family: Arial, sans-serif; font-style: normal; font-weight: 400; color: #000;\"><strong>Date:</strong> ${NOW}<br /><strong>Project:</strong> ${PROJNAME} (${PROJCLIENT})" > "${trshFile}"
 
-		# If this is a website, display the production URL, otherwise skip it
+		# If this is a website, display the development/production URLs, otherwise skip them
+		if [ -n "${DEVURL}" ]; then
+			echo "<br /><strong>Staging:</strong> <a style=\"color: #47ACDF; text-decoration:none; font-weight: bold;\" href=\"${DEVURL}\">${DEVURL}</a>" >> "${trshFile}"
+		fi
 		if [ -n "${PRODURL}" ]; then
-			echo "<br /><strong>Production URL:</strong> <a style=\"color: #47ACDF; text-decoration:none; font-weight: bold;\" href=\"${PRODURL}\">${PRODURL}</a>" >> "${trshFile}"
+			echo "<br /><strong>Production:</strong> <a style=\"color: #47ACDF; text-decoration:none; font-weight: bold;\" href=\"${PRODURL}\">${PRODURL}</a>" >> "${trshFile}"
 		fi
 		echo "</p><table style=\"background-color: " >> "${trshFile}"
 

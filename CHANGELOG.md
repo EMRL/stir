@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.5] - 11-11-2016
 - Added ```deploy ---automate``` for scheduled update deployments. Equivalent to ```deploy --force --update --quiet``` with the addition of a flag to enable sending a scheduled update email notice to clients
 - Recently changed file checks are now more accurate
 - Added ability to save HTML logs to local filesystem
