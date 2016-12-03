@@ -26,7 +26,7 @@ Options:
 
 Other Options:
   --automate             For unattended deployment, equivalent to -Fuq 
-  --slack-test           Test global Slack integration
+  --slack-test           Test Slack integration
   --function-list        Output a list of all functions()
   --variable-list        Output a list of all variables used by deploy
 ```

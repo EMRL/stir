@@ -144,7 +144,7 @@ function wpPkg() {
 								$WPCLI/wp core update --no-color &>> $logFile
 							fi
 
-							# Double check upgrade was successfull if we still see 'version' 
+							# Double check upgrade was successful if we still see 'version' 
 							# in the output, we must have missed the upgrade somehow
 							$WPCLI/wp core check-update --quiet --no-color &> $trshFile
 							if grep -q "version" $trshFile; then
