@@ -25,4 +25,3 @@ function errorStatus() {
 		trace "OK"
 	fi
 }
-

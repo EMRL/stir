@@ -14,7 +14,7 @@ function preDeploy() {
 		# If running in --force mode we will not allow deployment to continue
 		if [[ "${FORCE}" = "1" ]]; then
 			emptyLine
-			error "There are previously undeployed changes in this project, deployment can not continue."
+			error "There are previously undeployed changes in this project, automatic deployment can not continue."
 		else
 			emptyLine
 			warning "There are previously undeployed changes in this project."
@@ -48,7 +48,6 @@ function pkgDeploy() {
 		hash "${deploy_cmd}" 2>/dev/null || {
 			warning "Your deployment command ${deploy_cmd} cannot be found.";
 		}
-
 
 		if [ "${FORCE}" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
 			# Deploy via deployment command specified in configuration

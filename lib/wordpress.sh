@@ -220,7 +220,7 @@ function wfCheck() {
 	fi
 }
 
-# For future use, ACF is a pain
+# Since ACF Pro can be a pain, we can update it outside of the normal WP mechanism
 function acfUpdate() {
 	if grep -q "advanced-custom-fields-pro" $wpFile; then
 		ACFFILE="/tmp/acfpro.zip"

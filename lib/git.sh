@@ -197,7 +197,6 @@ function gitCommit() {
 					info "Using auto-generated commit message: ${COMMITMSG}"
 					notes=${COMMITMSG}
 				fi
-				trace "Oh gosh. Nested if/thens. Halp."
 			fi
 		fi
 		git commit -m "${notes}" &>> "${logFile}"; errorChk
