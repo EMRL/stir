@@ -30,7 +30,7 @@ function postCommit() {
 	gitStats
 	# Is Slack integration configured?
 	if [ "${POSTTOSLACK}" == "TRUE" ]; then
-		trace "Slack integration seems to be configured. Posting to ${SLACKURL}"
+		trace "Posting to Slack"
 		buildLog; slackPost > /dev/null 2>&1
 	fi
 	# Check to see if there's an email integration setup

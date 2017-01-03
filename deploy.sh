@@ -331,12 +331,12 @@ fi
 
 # Are any integrations setup?
 if [ "${POSTTOSLACK}" == "TRUE" ]; then
-	trace "Slack integration enabled, using ${SLACKURL}"
+	trace "Slack integration enabled"
 fi
 
 POSTEMAIL="${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL}"
 if [[ -n "${POSTEMAIL}" ]]; then
-	trace "Email integration enabled, using ${POSTEMAIL}"
+	trace "Email integration enabled (${POSTEMAIL})"
 fi
 
 # Remote logging?
