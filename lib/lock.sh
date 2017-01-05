@@ -2,8 +2,7 @@
 #
 # lock()
 #
-# Checks if project uses node.js, and runs package manager if needed.
-# Also checks for Grunt, for backward compatibility with CAA.
+# Process locking
 trace "Locking process"
 
 # Define lock file location
