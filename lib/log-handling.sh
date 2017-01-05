@@ -6,7 +6,7 @@
 trace "Loading log handling"
 
 # Log via email, needs work
-function makeLog {
+function makeLog() {
 	# Filter raw log output as configured by user
 	if [ "${NOPHP}" == "TRUE" ]; then
 		grep -vE "(PHP |Notice:|Warning:|Strict Standards:)" "${logFile}" > "${postFile}"
@@ -83,7 +83,16 @@ function makeLog {
 				# success and compile and send the client email
 				if [ -n "${COMMITHASH}" ] && [ "${message_state}" != "ERROR" ]; then
 					cat "${deployPath}/html/${EMAILTEMPLATE}/head-email.html" "${trshFile}" "${deployPath}/html/${EMAILTEMPLATE}/foot.html" > "${clientEmail}"
-					mail -s "$(echo -e "[SUCCESS] ${SUBJECT} - ${APP}\nMIME-Version: 1.0\nContent-Type: text/html")" "${CLIENTEMAIL}" < "${clientEmail}"
+					# Load the email into a variable
+					clientSendmail=$(<"${clientEmail}")
+					# Fire up sendmail
+					(
+					echo "To: ${CLIENTEMAIL}"
+					echo "Subject: [SUCCESS] ${SUBJECT} - ${APP}"
+					echo "Content-Type: text/html"
+					echo
+					echo "${clientSendmail}";
+					) | /usr/sbin/sendmail -t
 				fi
 			fi
 		fi
@@ -121,7 +130,7 @@ function makeLog {
 	fi
 }
 
-function mailLog {
+function mailLog() {
 	# Only send email if a commit has been made, or there has been an error
 	if [ -n "${COMMITHASH}" ] || [ "${message_state}" == "ERROR" ]; then
 		if [ "${EMAILHTML}" == "TRUE" ]; then

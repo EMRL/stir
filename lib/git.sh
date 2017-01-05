@@ -330,7 +330,6 @@ function gitPushProd() {
 		fi
 
 		# This is here temporarily to doubleplus force through a buggish situation
-		trace "Forcing a second push..."
 		git checkout production &>> "${logFile}"
 		git merge master &>> "${logFile}"
 		git push &>> "${logFile}"

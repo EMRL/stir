@@ -26,7 +26,7 @@ function postCommit() {
 		info "Upgrading production database..."; lynx -dump "${PRODURL}"/system/wp-admin/upgrade.php?step=1 > "${trshFile}"
 	fi
 
-	# just for yuks, display git stats for this user (user can override this if it annoys them)
+	# Just for yuks, display git stats for this user (user can override this if it annoys them)
 	gitStats
 	# Is Slack integration configured?
 	if [ "${POSTTOSLACK}" == "TRUE" ]; then

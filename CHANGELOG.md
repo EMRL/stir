@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Emails are now sent using Sendmail
 - Slack webhook URL is no longer displayed in logs
 
 ## [3.5] - 11-11-2016
