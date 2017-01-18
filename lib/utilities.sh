@@ -35,6 +35,11 @@ function go() {
 		slackTest; quickExit
 	fi
 
+	# Email test
+	if [ "${EMAILTEST}" == "1" ]; then
+		emailTest; quickExit
+	fi
+
 	# Chill and wait for user to confirm project
 	if  [ "${FORCE}" = "1" ] || yesno --default yes "Continue? [Y/n] "; then
 		trace "Loading project."

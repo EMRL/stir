@@ -3,7 +3,7 @@
 # deploy: A simple bash script for deploying sites.
 #
 IFS=$'\n\t'
-VERSION="3.5.1"
+VERSION="3.5.2"
 NOW=$(date +"%m/%d/%Y (%r)")
 DEV=$USER"@"$HOSTNAME
 
@@ -15,10 +15,10 @@ DEV=$USER"@"$HOSTNAME
 set -uo pipefail
 # Startup variables
 read -r UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
-	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE <<< ""
+	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST <<< ""
 echo "${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
 	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
-	${AUTOMATE}" > /dev/null
+	${AUTOMATE} ${EMAILTEST}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -34,7 +34,7 @@ echo "${pid} ${delay} ${spinstr}" > /dev/null
 # Constants and environment variables
 read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
 	EMAILHTML NOPHP FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP TO \
-	SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT FROMDOMAIN FROMUSER \
+	FROM SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT FROMDOMAIN FROMUSER \
 	POSTEMAILHEAD POSTEMAILTAIL POSTTOSLACK SLACKURL SLACKERROR POSTURL NOKEY \
 	PROJNAME PROJCLIENT DEVURL PRODURL REPO MASTER PRODUCTION COMMITMSG DEPLOY \
 	DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME GARBAGE WFCHECK ACFKEY \
@@ -43,7 +43,7 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
 	SCPPASS	LOGMSG EXPIRELOGS SERVERCHECK <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
 	${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
-	${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${SUBJECT} ${EMAILERROR} 
+	${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${FROM} ${SUBJECT} ${EMAILERROR} 
 	${EMAILSUCCESS} ${EMAILQUIT} ${FROMDOMAIN} ${FROMUSER} ${POSTEMAILHEAD} 
 	${POSTEMAILTAIL} ${POSTTOSLACK} ${SLACKURL} ${SLACKERROR} ${POSTURL} ${NOKEY} 
 	${PROJNAME} ${PROJCLIENT} ${DEVURL} ${PRODURL} ${REPO} ${MASTER} ${PRODUCTION} 
@@ -51,7 +51,7 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
 	${CHECKTIME} ${GARBAGE} ${WFCHECK} ${ACFKEY} ${WFOFF} ${REMOTELOG}
 	${POSTTOLOCALHOST} ${LOCALHOSTPATH} ${NOTIFYCLIENT} ${CLIENTEMAIL}
 	${CLIENTLOGO} ${REMOTEURL} ${AUTOMATEDONLY} ${SCPPOST} ${SCPUSER} ${SCPHOST} 
-	${SCPHOSTPATH} ${SCPPASS} ${LOGMSG} ${EXPIRELOGS} ${SERVERCHECK}"> /dev/null
+	${SCPHOSTPATH} ${SCPPASS} ${LOGMSG} ${EXPIRELOGS} ${SERVERCHECK}" > /dev/null
 # Internal variables
 read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	urlFile htmlFile htmlEmail clientEMail deployPath etcLocation libLocation \
@@ -86,8 +86,8 @@ Options:
 Other Options:
   --automate             For unattended deployment, equivalent to -Fuq 
   --slack-test           Test Slack integration
+  --email-test           Test email configuration
   --function-list        Output a list of all functions()
-  --variable-list        Output a list of all variables used by deploy 
 
 More information at https://github.com/EMRL/deploy
 "
@@ -136,8 +136,8 @@ while [[ ${1:-unset} = -?* ]]; do
 		-m|--merge) MERGE=1 ;; 
 		--automate) FORCE=1; UPGRADE=1; MERGE=1; QUIET=1; AUTOMATE=1 ;;
 		--slack-test) SLACKTEST=1 ;;
+		--email-test) EMAILTEST=1 ;;
 		--function-list) FUNCTIONLIST=1; APP="null";;
-		--variable-list) VARIABLELIST=1; APP="null";;
 		--endopts) shift; break ;;
 		*) echo "Invalid option: '$1'" 1>&2 ; exit 1 ;;
 	esac
@@ -288,11 +288,6 @@ if [ "${FUNCTIONLIST}" == "1" ]; then
 	#tr '\n' ' ' < /tmp/func.list;  echo
 	#quickExit
 fi
-
-# Variable list
-# if [ "${VARIABLELIST}" == "1" ]; then
-#	( set -o posix ; set ) | more; quickExit
-# fi
 
 # Spam all the things!
 trace "Version ${VERSION}"

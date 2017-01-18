@@ -73,7 +73,7 @@ function gitStart() {
 		active_files=$(find "${WORKPATH}/${APP}" -mmin -"${CHECKTIME}" ! -path "${WORKPATH}/${APP}/public/app/wflogs/*" ! -path "${WORKPATH}/${APP}/.git/*" ! -path "${WORKPATH}/${APP}/.git")
 		if [ ! -z "${active_files}" ]; then
 			trace "Recently changed files: ${active_files}"
-			error "Code base has changed within the last 10 minutes. Halting deployment."
+			error "Code base has changed within the last ${CHECKTIME} minutes. Halting deployment."
 		fi
 	fi
 

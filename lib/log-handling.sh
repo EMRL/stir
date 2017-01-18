@@ -87,6 +87,7 @@ function makeLog() {
 					clientSendmail=$(<"${clientEmail}")
 					# Fire up sendmail
 					(
+					echo "From: ${FROM}"
 					echo "To: ${CLIENTEMAIL}"
 					echo "Subject: [SUCCESS] ${SUBJECT} - ${APP}"
 					echo "Content-Type: text/html"
@@ -140,19 +141,85 @@ function mailLog() {
 			cat "${logFile}" >> "${htmlEmail}"
 			echo "</code></pre>" >> "${htmlEmail}"
 			cat "${deployPath}/html/${EMAILTEMPLATE}/foot.html" >> "${htmlEmail}"
+			htmlSendmail=$(<"${htmlEmail}")
 			# Send the email
 			# Check for errors - ewwwwwww rewrite this garbage
 			if [ "${message_state}" == "ERROR" ]; then
-				mail -s "$(echo -e "[ERROR] ${SUBJECT} - ${APP}""\n"MIME-Version: 1.0"\n"Content-Type: text/html)" "${TO}" < "${htmlEmail}"
+				# mail -s "$(echo -e "[ERROR] ${SUBJECT} - ${APP}""\n"MIME-Version: 1.0"\n"Content-Type: text/html)" "${TO}" < "${htmlEmail}"
+				(
+				echo "From: ${FROM}"
+				echo "To: ${TO}"
+				echo "Subject: [ERROR] ${SUBJECT} - ${APP}"
+				echo "Content-Type: text/html"
+				echo
+				echo "${htmlSendmail}";
+				) | /usr/sbin/sendmail -t
 			else
-				mail -s "$(echo -e "[SUCCESS] ${SUBJECT} - ${APP}""\n"MIME-Version: 1.0"\n"Content-Type: text/html)" "${TO}" < "${htmlEmail}"
+				# mail -s "$(echo -e "[SUCCESS] ${SUBJECT} - ${APP}""\n"MIME-Version: 1.0"\n"Content-Type: text/html)" "${TO}" < "${htmlEmail}"
+				(
+				echo "From: ${FROM}"
+				echo "To: ${TO}"
+				echo "Subject: [SUCCESS] ${SUBJECT} - ${APP}"
+				echo "Content-Type: text/html"
+				echo
+				echo "${htmlSendmail}";
+				) | /usr/sbin/sendmail -t
 			fi
 		else
 			if [ "${message_state}" == "ERROR" ]; then
-				mail -s "$(echo -e "[ERROR] ${SUBJECT} - ${APP}""\n"Content-Type: text/plain)" "${TO}" < "${logFile}"
+				# mail -s "$(echo -e "[ERROR] ${SUBJECT} - ${APP}""\n"Content-Type: text/plain)" "${TO}" < "${logFile}"
+				(
+				echo "From: ${FROM}"
+				echo "To: ${TO}"
+				echo "Subject: [ERROR] ${SUBJECT} - ${APP}"
+				echo "Content-Type: text/plain"
+				echo
+				echo "${htmlSendmail}";
+				) | /usr/sbin/sendmail -t
 			else
-				mail -s "$(echo -e "[SUCCESS] ${SUBJECT} - ${APP}""\n"Content-Type: text/plain)" "${TO}" < "${logFile}"	
+				# mail -s "$(echo -e "[SUCCESS] ${SUBJECT} - ${APP}""\n"Content-Type: text/plain)" "${TO}" < "${logFile}"	
+				(
+				echo "From: ${FROM}"
+				echo "To: ${TO}"
+				echo "Subject: [SUCCESS] ${SUBJECT} - ${APP}"
+				echo "Content-Type: text/plain"
+				echo
+				echo "${htmlSendmail}";
+				) | /usr/sbin/sendmail -t
 			fi
 		fi
+	fi
+}
+
+function emailTest() {
+	console "Testing email..."
+	if [[ -z "${TO}" ]]; then
+		warning "No recipient address found."; emptyLine
+		cleanUp; exit 1
+	else
+		# Fire up sendmail
+		# Send HTML mail
+		(
+		echo "From: ${FROM}"
+		echo "To: ${TO}"
+		echo "Subject: [TESTING] ${SUBJECT} - ${APP}"
+		echo "Content-Type: text/html"
+		echo
+		echo "This is a test HTML email from <a href=\"https://github.com/EMRL/deploy/\">deploy</a>.<br /><br />"
+		echo "Current project is ${APP}<br />"
+		echo "Current user is ${DEV}";
+		) | /usr/sbin/sendmail -t
+		# Send Text mail
+		(
+		echo "From: ${FROM}"
+		echo "To: ${TO}"
+		echo "Subject: [TESTING] ${SUBJECT} - ${APP}"
+		echo "Content-Type: text/plain"
+		echo
+		echo "This is a test TEXT email from deploy (https://github.com/EMRL/deploy/)"
+		echo
+		echo "Current project is ${APP}"
+		echo "Current user is ${DEV}";
+		) | /usr/sbin/sendmail -t
 	fi
 }
