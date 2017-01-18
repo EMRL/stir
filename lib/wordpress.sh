@@ -12,7 +12,7 @@ function wpPkg() {
 	if [ "${SKIPUPDATE}" != "1" ]; then
 
 		# Is wp-cli installed? 
-		if hash wp 2>/dev/null; then
+		if hash "${WPCLI}"/wp 2>/dev/null; then
 		trace "wp-cli found, checking for Wordpress."
 
 			# Check for Wordpress
