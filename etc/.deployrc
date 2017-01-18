@@ -22,7 +22,7 @@
 # Log settings
 #
 # Strips the bulk of nasty PHP debug messages out of the 
-# log files that are emailed unpon deployment.
+# log files that are emailed upon deployment.
 # NOPHP="TRUE" 
 #
 # Set the address that should receive your log files
