@@ -40,7 +40,7 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
 	DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME GARBAGE WFCHECK ACFKEY \
 	WFOFF REMOTELOG POSTTOLOCALHOST LOCALHOSTPATH NOTIFYCLIENT CLIENTEMAIL \
 	CLIENTLOGO REMOTEURL AUTOMATEDONLY SCPPOST SCPUSER SCPHOST SCPHOSTPATH \
-	SCPPASS	LOGMSG EXPIRELOGS SERVERCHECK <<< ""
+	SCPPASS	LOGMSG EXPIRELOGS SERVERCHECK STASH <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
 	${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
 	${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${FROM} ${SUBJECT} ${EMAILERROR} 
@@ -51,20 +51,21 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
 	${CHECKTIME} ${GARBAGE} ${WFCHECK} ${ACFKEY} ${WFOFF} ${REMOTELOG}
 	${POSTTOLOCALHOST} ${LOCALHOSTPATH} ${NOTIFYCLIENT} ${CLIENTEMAIL}
 	${CLIENTLOGO} ${REMOTEURL} ${AUTOMATEDONLY} ${SCPPOST} ${SCPUSER} ${SCPHOST} 
-	${SCPHOSTPATH} ${SCPPASS} ${LOGMSG} ${EXPIRELOGS} ${SERVERCHECK}" > /dev/null
+	${SCPHOSTPATH} ${SCPPASS} ${LOGMSG} ${EXPIRELOGS} ${SERVERCHECK}
+	${STASH}" > /dev/null
 # Internal variables
 read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	urlFile htmlFile htmlEmail clientEMail deployPath etcLocation libLocation \
 	POSTEMAIL current_branch error_msg active_files notes UPDCORE TASKLOG PCA \
 	PCB PCC PCD PLUGINS slack_icon APPRC message_state COMMITURL COMMITHASH \
-	UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE <<< ""
+	UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE currentStash <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlEmail} ${clientEMail} 
 	${deployPath} ${etcLocation} ${libLocation} ${POSTEMAIL} ${current_branch} 
 	${error_msg} ${active_files} ${notes} ${UPDCORE} ${TASKLOG} ${PCA} ${PCB} 
 	${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} ${message_state} ${COMMITURL} 
 	${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} ${AUTOMERGE} 
-	${MERGE} ${EXITCODE}" > /dev/null
+	${MERGE} ${EXITCODE} ${currentStash}" > /dev/null
 
 # Options
 function flags() {

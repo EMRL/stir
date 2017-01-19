@@ -8,13 +8,24 @@ trace "Loading deployment functions"
 function preDeploy() {
 	# If there are changes waiting in the repo, stop and ask for user input
 	# This should probably be it's own function
+	currentStash="0"
 	if [[ -z $(git status --porcelain) ]]; then
 		trace "Status looks good"
 	else
 		# If running in --force mode we will not allow deployment to continue
 		if [[ "${FORCE}" = "1" ]]; then
-			emptyLine
-			error "There are previously undeployed changes in this project, automatic deployment can not continue."
+			trace "Checking for files that need stashing"
+			# Stash the dirty bits
+			if [ "${STASH}" == "TRUE" ]; then
+				emptyLine
+				trace "Stashing dirty files"
+				git stash >> "${logFile}"; errorChk
+				currentStash="1"
+			else
+				emptyLine
+				error "There are previously undeployed changes in this project, automatic deployment can not continue."
+			fi
+
 		else
 			emptyLine
 			warning "There are previously undeployed changes in this project."
@@ -67,11 +78,13 @@ function pkgDeploy() {
 }
 
 function postDeploy() {
-	# We just attempted to deploy, check for changes sitll waiting in the repo
+	# We just attempted to deploy, check for changes still waiting in the repo
 	# if we find any, something went wrong.
 	if [[ -z $(git status -uno --porcelain) ]]; then
 		# Run integration hooks
-		postCommit; info "Deployment Success."
+		postCommit	
+		# This needs a check.
+		info "Deployment Success."
 	else
 		info ""
 		if yesno --default yes "Deployment succeeded, but something unexpected happened. View status? [Y/n] "; then

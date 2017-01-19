@@ -70,6 +70,12 @@
 # PRODUCTION branches when deploying, set AUTOMERGE to TRUE.
 # AUTOMERGE="TRUE"
 
+# If dirty (yet to be committed) files exist in the repo, deploy will normally not halt
+# execution when running with the --automate flag. If you prefer to have the dirty files 
+# stashed and proceed with updates set the below value to TRUE. Files will be unstashed
+# after the deployment is complete.  
+# STASH="TRUE"
+
 # Define CHECKBRANCH if you only want deploy to run when the set branch is 
 # currently checked out; e.g. if CHECKBRANCH="master" and the current branch is 
 # "production", deployment will halt.

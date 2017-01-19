@@ -61,6 +61,11 @@ function quietExit() {
 }
 
 function cleanUp() {
+	# If anything is stashed, unstash it.
+	if [[ "${currentStash}" = "1" ]]; then
+		git stash pop >> "${logFile}"
+		currentStash="0"
+	fi	
 	[[ -f $logFile ]] && rm "$logFile"
 	[[ -f $trshFile ]] && rm "$trshFile"
 	[[ -f $postFile ]] && rm "$postFile"
