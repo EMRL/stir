@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed output from ```deploy --function-list``` and ```deploy --variable-list [project]```
 - Added the option to stash dirty files during unsupervised deployment of Wordpress updates
 - Added configurable From: email address for log files
-- Fixed missing path variable that kept ```deploy ---automate``` from running correctly
+- Fixed missing path variable that kept ```deploy --automate``` from running correctly
 - Emails are now sent using Sendmail
 - Slack webhook URL is no longer displayed in logs
 
