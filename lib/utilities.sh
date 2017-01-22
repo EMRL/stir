@@ -94,5 +94,26 @@ function fixIndex() {
 
 # Check that dependencies exist
 function depCheck() {
-	hash git 2>/dev/null || { echo >&2 "I require git but it's not installed. Aborting."; exit 1; }
+	# Is git installed?
+	hash git 2>/dev/null || {
+		error "deploy ${VERSION} requires git to function properly." 
+	}
+
+	# If a deploy command is declared, check that it actually exists.
+	# This is probably not the best way to do this but for now it works. It 
+	# strips everything after the first space that is declared in DEPLOY and
+	# then checks that it's a valid command.
+	if [ ! -z "${DEPLOY}" ]; then
+		deploy_cmd=$(echo "$DEPLOY" | head -n1 | awk '{print $1;}')
+		hash "${deploy_cmd}" 2>/dev/null || { 
+			error >&2 "Unknown deployment command: ${DEPLOY} (${deploy_cmd} not found)"; 
+		}
+	fi
+
+	# Do we need Sendmail, and if so can we find it?
+	if [ "${EMAILERROR}" == "TRUE" ] || [ "${EMAILSUCCESS}" == "TRUE" ] || [ "${EMAILQUIT}" == "TRUE" ] || [ "${NOTIFYCLIENT}" == "TRUE" ]; then
+		hash sendmail 2>/dev/null || {
+			error "deploy ${VERSION} requires sendmail to function properly with your current configuration."
+		}
+	fi
 }

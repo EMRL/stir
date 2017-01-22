@@ -18,11 +18,9 @@ function pkgMgr() {
 					cd "${WORKPATH}"/"${APP}" || errorCheck
 		
 					if [[ "${VERBOSE}" -eq 1 ]]; then
-						# sudo /usr/local/bin/grunt build --force 2>&1 | tee --append $trshFile
 						/usr/local/bin/grunt build --force 2>&1 | tee --append "${trshFile}"
 						trace "Output from grunt is not currently being logged, sorry."           
 					else
-						# sudo /usr/local/bin/grunt build --force &>> $trshFile &
 						/usr/local/bin/grunt build --force &>> "${trshFile}" &
 						spinner $!
 						trace "Output from grunt is not currently being logged, sorry."

@@ -55,17 +55,18 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
 	${STASH}" > /dev/null
 # Internal variables
 read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
-	urlFile htmlFile htmlEmail clientEMail deployPath etcLocation libLocation \
+	urlFile htmlFile htmlEmail clientEmail deployPath etcLocation libLocation \
 	POSTEMAIL current_branch error_msg active_files notes UPDCORE TASKLOG PCA \
 	PCB PCC PCD PLUGINS slack_icon APPRC message_state COMMITURL COMMITHASH \
-	UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE currentStash <<< ""
+	UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE currentStash \
+	deploy_cmd deps <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
-	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlEmail} ${clientEMail} 
+	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlEmail} ${clientEmail} 
 	${deployPath} ${etcLocation} ${libLocation} ${POSTEMAIL} ${current_branch} 
 	${error_msg} ${active_files} ${notes} ${UPDCORE} ${TASKLOG} ${PCA} ${PCB} 
 	${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} ${message_state} ${COMMITURL} 
 	${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} ${AUTOMERGE} 
-	${MERGE} ${EXITCODE} ${currentStash}" > /dev/null
+	${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps}" > /dev/null
 
 # Options
 function flags() {
@@ -89,6 +90,7 @@ Other Options:
   --slack-test           Test Slack integration
   --email-test           Test email configuration
   --function-list        Output a list of all functions()
+  --variable-list        Output a project's declared variables 
 
 More information at https://github.com/EMRL/deploy
 "
@@ -138,7 +140,8 @@ while [[ ${1:-unset} = -?* ]]; do
 		--automate) FORCE=1; UPGRADE=1; MERGE=1; QUIET=1; AUTOMATE=1 ;;
 		--slack-test) SLACKTEST=1 ;;
 		--email-test) EMAILTEST=1 ;;
-		--function-list) FUNCTIONLIST=1; APP="null";;
+		--function-list) FUNCTIONLIST=1; CURRENT="1";;
+		--variable-list) VARIABLELIST=1 ;;
 		--endopts) shift; break ;;
 		*) echo "Invalid option: '$1'" 1>&2 ; exit 1 ;;
 	esac
@@ -290,6 +293,11 @@ if [ "${FUNCTIONLIST}" == "1" ]; then
 	#quickExit
 fi
 
+# Variable list
+if [ "${VARIABLELIST}" == "1" ]; then
+	( set -o posix ; set ) | cat -v; quickExit
+fi
+
 # Spam all the things!
 trace "Version ${VERSION}"
 trace "Running from ${deployPath}"
@@ -362,10 +370,11 @@ trace "Git lock at ${gitLock}"
 
 # Setup the core application
 function appDeploy() {
+	depCheck		# Check that required commands are available
 	gitStart		# Check for a valid git project and get set up
 	lock			# Create lock file
-	go				# Start a deployment work session
-	server_check	# Check that servers are up and running
+	go 				# Start a deployment work session
+	srvCheck 		# Check that servers are up and running
 	permFix			# Fix permissions
 	gitChkMstr		# Checkout master branch
 	gitGarbage		# If needed, clean up the trash

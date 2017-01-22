@@ -29,6 +29,7 @@ Other Options:
   --slack-test           Test Slack integration
   --email-test           Test email configuration
   --function-list        Output a list of all functions()
+  --variable-list        Output a project's declared variables
 ```
 
 ## How It Works

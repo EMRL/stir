@@ -10,12 +10,6 @@ gitLock="$WORKPATH/$APP/.git/index.lock"
 
 # Make sure we're in a git repository.
 function gitStart() {
-	# Is git installed?
-	hash git 2>/dev/null || {
-		info "deploy ${VERSION} requires git to function properly."; 
-		exit 1
-	}
-
 	# Directory exists?
 	if [ ! -d "${WORKPATH}/${APP}" ]; then
 		info "${WORKPATH}/${APP} is not a valid directory."

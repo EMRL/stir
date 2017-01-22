@@ -5,7 +5,7 @@
 # Check to see if production environment is online and running its Apache server
 trace "Loading server checks"
 
-function server_check() {
+function srvCheck() {
 	if [ "${SERVERCHECK}" == "TRUE" ]; then
 		notice "Checking servers..."
 		# Set SERVERFAIL to 0
