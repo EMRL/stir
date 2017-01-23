@@ -93,7 +93,7 @@ function makeLog() {
 					echo "Content-Type: text/html"
 					echo
 					echo "${clientSendmail}";
-					) | /usr/sbin/sendmail -t
+					) | "${MAILPATH}"/sendmail -t
 				fi
 			fi
 		fi
@@ -153,7 +153,7 @@ function mailLog() {
 				echo "Content-Type: text/html"
 				echo
 				echo "${htmlSendmail}";
-				) | /usr/sbin/sendmail -t
+				) | "${MAILPATH}"/sendmail -t
 			else
 				# mail -s "$(echo -e "[SUCCESS] ${SUBJECT} - ${APP}""\n"MIME-Version: 1.0"\n"Content-Type: text/html)" "${TO}" < "${htmlEmail}"
 				(
@@ -163,7 +163,7 @@ function mailLog() {
 				echo "Content-Type: text/html"
 				echo
 				echo "${htmlSendmail}";
-				) | /usr/sbin/sendmail -t
+				) | "${MAILPATH}"/sendmail -t
 			fi
 		else
 			if [ "${message_state}" == "ERROR" ]; then
@@ -175,7 +175,7 @@ function mailLog() {
 				echo "Content-Type: text/plain"
 				echo
 				echo "${htmlSendmail}";
-				) | /usr/sbin/sendmail -t
+				) | "${MAILPATH}"/sendmail -t
 			else
 				# mail -s "$(echo -e "[SUCCESS] ${SUBJECT} - ${APP}""\n"Content-Type: text/plain)" "${TO}" < "${logFile}"	
 				(
@@ -185,7 +185,7 @@ function mailLog() {
 				echo "Content-Type: text/plain"
 				echo
 				echo "${htmlSendmail}";
-				) | /usr/sbin/sendmail -t
+				) | "${MAILPATH}"/sendmail -t
 			fi
 		fi
 	fi
@@ -208,7 +208,7 @@ function emailTest() {
 		echo "This is a test HTML email from <a href=\"https://github.com/EMRL/deploy/\">deploy</a>.<br /><br />"
 		echo "Current project is ${APP}<br />"
 		echo "Current user is ${DEV}";
-		) | /usr/sbin/sendmail -t
+		) | "${MAILPATH}"/sendmail -t
 		# Send Text mail
 		(
 		echo "From: ${FROM}"
@@ -220,6 +220,6 @@ function emailTest() {
 		echo
 		echo "Current project is ${APP}"
 		echo "Current user is ${DEV}";
-		) | /usr/sbin/sendmail -t
+		) | "${MAILPATH}"/sendmail -t
 	fi
 }
