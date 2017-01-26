@@ -51,12 +51,10 @@ function gitStart() {
 		errorExit
 	fi
 
-
-
 	# If CHECKBRANCH is set, make sure current branch is correct.
+	start_branch="$(git rev-parse --abbrev-ref HEAD)"
 	if [ -n "${CHECKBRANCH}" ]; then 
-		current_branch="$(git rev-parse --abbrev-ref HEAD)"
-		if [[ "${current_branch}" != "${CHECKBRANCH}" ]]; then
+		if [[ "${start_branch}" != "${CHECKBRANCH}" ]]; then
 			error "Must be on ${CHECKBRANCH} branch to continue deployment.";
 		fi
 	fi

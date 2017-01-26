@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Upon exit, deploy will now return the repo's current active branch to its original state, instead of assuming checkout of master
 - Improved dependency checks
 - Fixed output from ```deploy --function-list``` and ```deploy --variable-list [project]```
 - Added the option to stash dirty files during unsupervised deployment of Wordpress updates

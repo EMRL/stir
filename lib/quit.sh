@@ -80,11 +80,17 @@ function cleanUp() {
 	# Attempt to reset the terminal
 	# echo -e \\033c
 
+	# Make sure we leave the repo as we found it
+	current_branch="$(git rev-parse --abbrev-ref HEAD)"
+	if [[ "${current_branch}" != "${start_branch}" ]]; then
+		git checkout "${start_branch}" &>> "${logFile}" &
+	fi
+
 	# If Wordfence was an issue, restart the plugin
 	if [[ "${WFOFF}" = "1" ]]; then
 		"${WPCLI}"/wp plugin activate --no-color wordfence &>> $logFile; errorChk
 	fi
-	if [ "$QUIET" != "1" ]; then
+	if [ "${QUIET}" != "1" ]; then
 		tput cnorm
 	fi
 }
