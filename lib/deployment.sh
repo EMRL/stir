@@ -39,7 +39,6 @@ function preDeploy() {
 				else
 					userExit
 				fi
-				trace "Continuing deploy"
 			fi
 		fi
 	fi

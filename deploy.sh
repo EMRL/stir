@@ -59,7 +59,7 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	POSTEMAIL current_branch error_msg active_files notes UPDCORE TASKLOG PCA \
 	PCB PCC PCD PLUGINS slack_icon APPRC message_state COMMITURL COMMITHASH \
 	UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE currentStash \
-	deploy_cmd deps start_branch <<< ""
+	deploy_cmd deps start_branch postSendmail <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlEmail} ${clientEmail} 
 	${deployPath} ${etcLocation} ${libLocation} ${POSTEMAIL} ${current_branch} 
@@ -67,7 +67,7 @@ echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile}
 	${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} ${message_state} ${COMMITURL} 
 	${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} ${AUTOMERGE} 
 	${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps} 
-	${start_branch}" > /dev/null
+	${start_branch} ${postSendmail}" > /dev/null
 
 # Options
 function flags() {

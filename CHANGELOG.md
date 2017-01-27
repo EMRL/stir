@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added configurable From: email address for log files
 - Fixed missing path variable that kept ```deploy --automate``` from running correctly
 - Emails are now sent using Sendmail
+- When run as a cron (```---automate```) integration emails are now sent from the default email address, not the spoofed user's email
 - Slack webhook URL is no longer displayed in logs
 
 ## [3.5] - 11-11-2016

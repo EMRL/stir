@@ -16,7 +16,20 @@ function buildLog() {
 function mailPost() {
 	echo "${COMMITURL}" >> "${postFile}"
 	# Make this better
-	(cat "${postFile}") | mail -r "${USER}@${FROMDOMAIN}" -s "$(echo -e ${SUBJECT} "-" ${APP}"\nContent-Type: text/plain")" "${POSTEMAIL}"
+	# (cat "${postFile}") | mail -r "${USER}@${FROMDOMAIN}" -s "$(echo -e ${SUBJECT} "-" ${APP}"\nContent-Type: text/plain")" "${POSTEMAIL}"
+	postSendmail=$(<"${postFile}")
+	(
+	if [ "$AUTOMATE" = "1" ]; then
+		echo "From: ${FROM}"
+	else
+		echo "From: ${USER}@${FROMDOMAIN}"
+	fi
+	echo "To: ${POSTEMAIL}"
+	echo "Subject: ${SUBJECT} - ${APP}"
+	echo "Content-Type: text/html"
+	echo
+	echo "${postSendmail}";
+	) | "${MAILPATH}"/sendmail -t
 }
 
 # Post via email
