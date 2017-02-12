@@ -13,10 +13,9 @@ function buildLog() {
 	echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${postFile}"
 }
 
+# Post via email
 function mailPost() {
 	echo "${COMMITURL}" >> "${postFile}"
-	# Make this better
-	# (cat "${postFile}") | mail -r "${USER}@${FROMDOMAIN}" -s "$(echo -e ${SUBJECT} "-" ${APP}"\nContent-Type: text/plain")" "${POSTEMAIL}"
 	postSendmail=$(<"${postFile}")
 	(
 	if [ "$AUTOMATE" = "1" ]; then
@@ -32,7 +31,7 @@ function mailPost() {
 	) | "${MAILPATH}"/sendmail -t
 }
 
-# Post via email
+
 function postCommit() {
 	# Check for a Wordpress core update, update production database if needed
 	if [ "$UPDCORE" = "1" ]; then
@@ -41,6 +40,7 @@ function postCommit() {
 
 	# Just for yuks, display git stats for this user (user can override this if it annoys them)
 	gitStats
+
 	# Is Slack integration configured?
 	if [ "${POSTTOSLACK}" == "TRUE" ]; then
 		trace "Posting to Slack"

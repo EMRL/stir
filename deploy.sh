@@ -3,7 +3,7 @@
 # deploy: A simple bash script for deploying sites.
 #
 IFS=$'\n\t'
-VERSION="3.5.3"
+VERSION="3.5.4"
 NOW=$(date +"%m/%d/%Y (%r)")
 DEV=$USER"@"$HOSTNAME
 
@@ -59,7 +59,7 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	POSTEMAIL current_branch error_msg active_files notes UPDCORE TASKLOG PCA \
 	PCB PCC PCD PLUGINS slack_icon APPRC message_state COMMITURL COMMITHASH \
 	UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE currentStash \
-	deploy_cmd deps start_branch postSendmail <<< ""
+	deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlEmail} ${clientEmail} 
 	${deployPath} ${etcLocation} ${libLocation} ${POSTEMAIL} ${current_branch} 
@@ -67,7 +67,7 @@ echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile}
 	${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} ${message_state} ${COMMITURL} 
 	${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} ${AUTOMERGE} 
 	${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps} 
-	${start_branch} ${postSendmail}" > /dev/null
+	${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK}" > /dev/null
 
 # Options
 function flags() {
@@ -87,7 +87,8 @@ Options:
   -v, --version          Output version information and exit
 
 Other Options:
-  --automate             For unattended deployment, equivalent to -Fuq 
+  --automate             For unattended deployment, equivalent to -Fuq
+  --no-check             Override active file and server checks 
   --slack-test           Test Slack integration
   --email-test           Test email configuration
   --function-list        Output a list of all functions()
@@ -141,6 +142,7 @@ while [[ ${1:-unset} = -?* ]]; do
 		--automate) FORCE=1; UPGRADE=1; MERGE=1; QUIET=1; AUTOMATE=1 ;;
 		--slack-test) SLACKTEST=1 ;;
 		--email-test) EMAILTEST=1 ;;
+		--no-check) NOCHECK=1 ;;
 		--function-list) FUNCTIONLIST=1; CURRENT="1";;
 		--variable-list) VARIABLELIST=1 ;;
 		--endopts) shift; break ;;
@@ -368,6 +370,11 @@ fi
 trace "Current project is ${APP}"
 trace "Current user is ${DEV}"
 trace "Git lock at ${gitLock}"
+
+if [ "${NOCHECK}" == "1" ]; then
+	SERVERCHECK="FALSE";
+	ACTIVECHECK="FALSE"
+fi
 
 # Setup the core application
 function appDeploy() {

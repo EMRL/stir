@@ -5,18 +5,25 @@
 trace "Loading Slack integration"
 
 function slackPost () {
+	# If running in --automate, change the user name
+	if [ "$AUTOMATE" = "1" ]; then
+		SLACKUSER="Scheduled update:"
+	else
+		SLACKUSER=${USER}
+	fi
+	
 	# Format the message 
 	if [ "${message_state}" == "ERROR" ]; then
 		if [ -z "${notes}" ]; then
 			notes="Something went wrong."
 		fi
-		slack_message="${USER} attempted to deploy changes to ${APP}\nERROR: *${error_msg}*"
+		slack_message="${SLACKUSER} attempted to deploy changes to ${APP}\nERROR: *${error_msg}*"
 	else
 		# Add a link to the online logs, if they are setup.
 		if [ -n "${REMOTEURL}" ] && [ -n "${REMOTELOG}" ] ; then
-			slack_message="${USER} deployed updates to ${APP} (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+			slack_message="${SLACKUSER} deployed updates to ${APP} (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
 		else
-			slack_message="${USER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+			slack_message="${SLACKUSER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
 		fi
 	fi
 

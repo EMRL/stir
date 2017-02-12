@@ -26,6 +26,7 @@ Options:
 
 Other Options:
   --automate             For unattended deployment, equivalent to -Fuq 
+  --no-check             Override active file and server checks 
   --slack-test           Test Slack integration
   --email-test           Test email configuration
   --function-list        Output a list of all functions()
