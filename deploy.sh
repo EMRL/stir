@@ -3,7 +3,7 @@
 # deploy: A simple bash script for deploying sites.
 #
 IFS=$'\n\t'
-VERSION="3.5.4"
+VERSION="3.5.5"
 NOW=$(date +"%m/%d/%Y (%r)")
 DEV=$USER"@"$HOSTNAME
 
@@ -55,18 +55,18 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
 	${STASH} ${MAILPATH}" > /dev/null
 # Internal variables
 read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
-	urlFile htmlFile htmlEmail clientEmail deployPath etcLocation libLocation \
-	POSTEMAIL current_branch error_msg active_files notes UPDCORE TASKLOG PCA \
-	PCB PCC PCD PLUGINS slack_icon APPRC message_state COMMITURL COMMITHASH \
-	UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE currentStash \
-	deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK <<< ""
+	urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail deployPath \
+	etcLocation libLocation POSTEMAIL current_branch error_msg active_files notes \
+	UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC message_state \
+	COMMITURL COMMITHASH UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE \
+	currentStash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
-	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlEmail} ${clientEmail} 
-	${deployPath} ${etcLocation} ${libLocation} ${POSTEMAIL} ${current_branch} 
-	${error_msg} ${active_files} ${notes} ${UPDCORE} ${TASKLOG} ${PCA} ${PCB} 
-	${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} ${message_state} ${COMMITURL} 
-	${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} ${AUTOMERGE} 
-	${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps} 
+	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
+	${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
+	${POSTEMAIL} ${current_branch} ${error_msg} ${active_files} ${notes} ${UPDCORE} 
+	${TASKLOG} ${PCA} ${PCB} ${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} 
+	${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} 
+	${AUTOMERGE} ${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps} 
 	${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK}" > /dev/null
 
 # Options

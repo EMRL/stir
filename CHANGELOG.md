@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Fixed a bug with text-format emails not including complete logs
 - Fixed issue with passing user variable to Slack integration when an error is triggered
 - Added ```--no-check``` swith to override active file and server checks
 - Upon exit, deploy will now return the repo's current active branch to its original state, instead of assuming checkout of master

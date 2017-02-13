@@ -143,50 +143,43 @@ function mailLog() {
 			cat "${deployPath}/html/${EMAILTEMPLATE}/foot.html" >> "${htmlEmail}"
 			htmlSendmail=$(<"${htmlEmail}")
 			# Send the email
-			# Check for errors - ewwwwwww rewrite this garbage
+			(
+			echo "Sender: ${FROM}"
+			echo "From: ${FROM} <${FROM}>"
+			echo "Reply-To: ${FROM} <${FROM}>"
+			echo "To: ${TO}"
+
+			# Is this an error email?
 			if [ "${message_state}" == "ERROR" ]; then
-				# mail -s "$(echo -e "[ERROR] ${SUBJECT} - ${APP}""\n"MIME-Version: 1.0"\n"Content-Type: text/html)" "${TO}" < "${htmlEmail}"
-				(
-				echo "From: ${FROM}"
-				echo "To: ${TO}"
 				echo "Subject: [ERROR] ${SUBJECT} - ${APP}"
-				echo "Content-Type: text/html"
-				echo
-				echo "${htmlSendmail}";
-				) | "${MAILPATH}"/sendmail -t
 			else
-				# mail -s "$(echo -e "[SUCCESS] ${SUBJECT} - ${APP}""\n"MIME-Version: 1.0"\n"Content-Type: text/html)" "${TO}" < "${htmlEmail}"
-				(
-				echo "From: ${FROM}"
-				echo "To: ${TO}"
 				echo "Subject: [SUCCESS] ${SUBJECT} - ${APP}"
-				echo "Content-Type: text/html"
-				echo
-				echo "${htmlSendmail}";
-				) | "${MAILPATH}"/sendmail -t
 			fi
+				
+			echo "Content-Type: text/html"
+			echo
+			echo "${htmlSendmail}";
+			) | "${MAILPATH}"/sendmail -t
 		else
+			# Compile and send text format email
+			textSendmail=$(<"${logFile}")
+			(
+			echo "Sender: ${FROM}"
+			echo "From: ${FROM} <${FROM}>"
+			echo "Reply-To: ${FROM} <${FROM}>"
+			echo "To: ${TO}"
+			
+			# Is this an error email?
 			if [ "${message_state}" == "ERROR" ]; then
-				# mail -s "$(echo -e "[ERROR] ${SUBJECT} - ${APP}""\n"Content-Type: text/plain)" "${TO}" < "${logFile}"
-				(
-				echo "From: ${FROM}"
-				echo "To: ${TO}"
 				echo "Subject: [ERROR] ${SUBJECT} - ${APP}"
-				echo "Content-Type: text/plain"
-				echo
-				echo "${htmlSendmail}";
-				) | "${MAILPATH}"/sendmail -t
 			else
-				# mail -s "$(echo -e "[SUCCESS] ${SUBJECT} - ${APP}""\n"Content-Type: text/plain)" "${TO}" < "${logFile}"	
-				(
-				echo "From: ${FROM}"
-				echo "To: ${TO}"
 				echo "Subject: [SUCCESS] ${SUBJECT} - ${APP}"
-				echo "Content-Type: text/plain"
-				echo
-				echo "${htmlSendmail}";
-				) | "${MAILPATH}"/sendmail -t
 			fi
+			
+			echo "Content-Type: text/plain"
+			echo
+			echo "${textSendmail}";
+			) | "${MAILPATH}"/sendmail -t
 		fi
 	fi
 }
@@ -200,23 +193,27 @@ function emailTest() {
 		# Fire up sendmail
 		# Send HTML mail
 		(
-		echo "From: ${FROM}"
+		echo "Sender: ${FROM}"
+		echo "From: ${FROM} <${FROM}>"
+		echo "Reply-To: ${FROM} <${FROM}>"
 		echo "To: ${TO}"
 		echo "Subject: [TESTING] ${SUBJECT} - ${APP}"
 		echo "Content-Type: text/html"
 		echo
-		echo "This is a test HTML email from <a href=\"https://github.com/EMRL/deploy/\">deploy</a>.<br /><br />"
+		echo "This is a test HTML email from <a href=\"https://github.com/EMRL/deploy/\">deploy ${VERSION}</a>.<br /><br />"
 		echo "Current project is ${APP}<br />"
 		echo "Current user is ${DEV}";
 		) | "${MAILPATH}"/sendmail -t
 		# Send Text mail
 		(
-		echo "From: ${FROM}"
+		echo "Sender: ${FROM}"
+		echo "From: ${FROM} <${FROM}>"
+		echo "Reply-To: ${FROM} <${FROM}>"
 		echo "To: ${TO}"
 		echo "Subject: [TESTING] ${SUBJECT} - ${APP}"
 		echo "Content-Type: text/plain"
 		echo
-		echo "This is a test TEXT email from deploy (https://github.com/EMRL/deploy/)"
+		echo "This is a test TEXT email from deploy ${VERSION} (https://github.com/EMRL/deploy/)"
 		echo
 		echo "Current project is ${APP}"
 		echo "Current user is ${DEV}";
