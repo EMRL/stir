@@ -10,7 +10,13 @@ function buildLog() {
 	trace "Posting ${TASKLOG}"
 	# OK let's grab the short version of the commit hash
 	COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL="${REPOHOST}/${REPO}/commits/${COMMITHASH}"
-	echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${postFile}"
+
+	# Is this just an approval or a full commit?
+	if [ "${APPROVE}" == "1" ]; then
+		echo "<strong>Commit ${COMMITHASH}</strong>: Marked as approved and deployed" > "${postFile}"
+	else
+		echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${postFile}"
+	fi
 }
 
 # Post via email

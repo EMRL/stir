@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+- Added `deploy --approve` for deploying current production code to live environment
+
 ## [3.5.5]
 - Fixed a bug with text-format emails not including complete logs
 - Fixed issue with passing user variable to Slack integration when an error is triggered

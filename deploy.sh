@@ -3,7 +3,7 @@
 # deploy: A simple bash script for deploying sites.
 #
 IFS=$'\n\t'
-VERSION="3.5.5"
+VERSION="3.5.6"
 NOW=$(date +"%m/%d/%Y (%r)")
 DEV=$USER"@"$HOSTNAME
 
@@ -15,10 +15,10 @@ DEV=$USER"@"$HOSTNAME
 set -uo pipefail
 # Startup variables
 read -r UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
-	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST <<< ""
+	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE <<< ""
 echo "${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
 	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
-	${AUTOMATE} ${EMAILTEST}" > /dev/null
+	${AUTOMATE} ${EMAILTEST} ${APPROVE}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -76,6 +76,7 @@ function flags() {
 Options:
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
   -S, --skip-update      Skip any Wordpress core/plugin updates
+  -A. --approve          Approve current codebase and deploy to live
   -u, --update           If no available Wordpress updates, halt deployment
   -m, --merge            Force merge of branches
   -c, --current          Deploy a project from current working directory          
@@ -130,6 +131,7 @@ while [[ ${1:-unset} = -?* ]]; do
 	case $1 in
 		-h|--help) flags >&2; exit ;;
 		-u|--update) UPGRADE=1 ;;
+		-A|--approve) APPROVE=1 ;;
 		-S|--skip-update) SKIPUPDATE=1 ;;
 		-c|--current) CURRENT=1 ;;
 		-v|--version) echo "$(basename "${0}") ${VERSION}"; exit ;;
@@ -367,6 +369,13 @@ if [ "${AUTOMERGE}" == "TRUE" ]; then
 	trace "Automerge is enabled"
 fi
 
+# Check for approval vs. user input
+if [[ "${APPROVE}" == "1" ]]; then
+	if [[ "${FORCE}" == "1" ]] || [[ "${QUIET}" == "1" ]]; then
+		error "You can not approve deployment without user interaction, exiting deployment."
+	fi
+fi
+
 trace "Current project is ${APP}"
 trace "Current user is ${DEV}"
 trace "Git lock at ${gitLock}"
@@ -384,20 +393,24 @@ function appDeploy() {
 	go 				# Start a deployment work session
 	srvCheck 		# Check that servers are up and running
 	permFix			# Fix permissions
-	gitChkMstr		# Checkout master branch
-	gitGarbage		# If needed, clean up the trash
-	preDeploy		# Get the status
-	wpPkg			# Run Wordpress upgrades if needed
-	pkgMgr			# Run node package management, or grunt
-	gitStatus		# Make sure there's anything here to commit
-	gitStage		# Stage files
-	gitCommit		# Commit, with message
-	gitPushMstr		# Push master to Bit Bucket
-	gitChkProd		# Checkout production branch
-	gitMerge		# Merge master into production
-	gitPushProd		# Push production to Bit Bucket
-	gitChkMstr		# Checkout master once again  
-	pkgDeploy		# Deploy project to live server   
+	if [[ "${APPROVE}" == "1" ]]; then
+		pkgDeploy		# Deploy project to live server
+	else
+		gitChkMstr		# Checkout master branch
+		gitGarbage		# If needed, clean up the trash
+		preDeploy		# Get the status
+		wpPkg			# Run Wordpress upgrades if needed
+		pkgMgr			# Run node package management, or grunt
+		gitStatus		# Make sure there's anything here to commit
+		gitStage		# Stage files
+		gitCommit		# Commit, with message
+		gitPushMstr		# Push master to Bit Bucket
+		gitChkProd		# Checkout production branch
+		gitMerge		# Merge master into production
+		gitPushProd		# Push production to Bit Bucket
+		gitChkMstr		# Checkout master once again  
+		pkgDeploy		# Deploy project to live server
+	fi   
 }
 
 # Trapping stuff

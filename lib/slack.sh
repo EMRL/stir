@@ -19,11 +19,20 @@ function slackPost () {
 		fi
 		slack_message="${SLACKUSER} attempted to deploy changes to ${APP}\nERROR: *${error_msg}*"
 	else
+
 		# Add a link to the online logs, if they are setup.
 		if [ -n "${REMOTEURL}" ] && [ -n "${REMOTELOG}" ] ; then
-			slack_message="${SLACKUSER} deployed updates to ${APP} (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+			if [ "${APPROVE}" == "1" ] && [ -n "${PRODURL}" ]; then
+				slack_message="${SLACKUSER} approved updates to <${PRODURL}|${APP}> and published commit <${COMMITURL}|${COMMITHASH}> (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)"
+			else
+				slack_message="${SLACKUSER} deployed updates to ${APP} (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+			fi
 		else
-			slack_message="${SLACKUSER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+			if [ "${APPROVE}" == "1" ] && [ -n "${PRODURL}" ]; then
+				slack_message="${SLACKUSER} approved updates to <${PRODURL}|${APP}> and published commit <${COMMITURL}|${COMMITHASH}>"
+			else
+				slack_message="${SLACKUSER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+			fi
 		fi
 	fi
 

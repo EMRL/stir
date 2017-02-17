@@ -81,17 +81,24 @@ function pkgDeploy() {
 }
 
 function postDeploy() {
-	# We just attempted to deploy, check for changes still waiting in the repo
-	# if we find any, something went wrong.
-	if [[ -z $(git status -uno --porcelain) ]]; then
-		# Run integration hooks
-		postCommit	
-		# This needs a check.
-		info "Deployment Success."
-	else
-		info ""
-		if yesno --default yes "Deployment succeeded, but something unexpected happened. View status? [Y/n] "; then
-			git status
+	if [[ "${APPROVE}" != "1" ]]; then
+		# We just attempted to deploy, check for changes still waiting in the repo
+		# if we find any, something went wrong.
+		if [[ -z $(git status -uno --porcelain) ]]; then
+			# Run integration hooks
+			postCommit	
+			# This needs a check.
+			info "Deployment Success."
+		else
+			info ""
+			if yesno --default yes "Deployment succeeded, but something unexpected happened. View status? [Y/n] "; then
+				git status
+			fi
 		fi
+	else
+		# Run integration hooks
+		postCommit
+		# This needs a check.
+		info "Deployment approved and pushed to ${PRODURL}"	
 	fi
 } 
