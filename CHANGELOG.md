@@ -2,10 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.5.5]
 - Fixed a bug with text-format emails not including complete logs
 - Fixed issue with passing user variable to Slack integration when an error is triggered
-- Added ```--no-check``` swith to override active file and server checks
+- Added ```--no-check``` switch to override active file and server checks
 - Upon exit, deploy will now return the repo's current active branch to its original state, instead of assuming checkout of master
 - Improved dependency checks
 - Fixed output from ```deploy --function-list``` and ```deploy --variable-list [project]```
@@ -78,7 +78,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.5...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.5.5...HEAD
+[3.5.5]: https://github.com/EMRL/deploy/compare/v3.5...v3.5.5
 [3.5]: https://github.com/EMRL/deploy/compare/v3.4...v3.5
 [3.4]: https://github.com/EMRL/deploy/compare/v3.3.4...v3.4
 [3.3.4]: https://github.com/EMRL/deploy/compare/v3.3.3...v3.3.4

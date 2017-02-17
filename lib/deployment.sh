@@ -19,7 +19,11 @@ function preDeploy() {
 			if [ "${STASH}" == "TRUE" ]; then
 				emptyLine
 				trace "Stashing dirty files"
-				git stash >> "${logFile}"; errorChk
+				if [[ "${VERBOSE}" == "1" ]] && [[ "${QUIET}" != "1" ]]; then
+					git stash | tee --append "${logFile}"; errorChk 
+				else
+					git stash >> "${logFile}"; errorChk
+				fi
 				currentStash="1"
 			else
 				emptyLine
