@@ -24,14 +24,17 @@ function mailPost() {
 	echo "${COMMITURL}" >> "${postFile}"
 	postSendmail=$(<"${postFile}")
 	(
-	if [ "$AUTOMATE" = "1" ]; then
-		echo "From: ${FROM}"
+	if [ "${AUTOMATE}" = "1" ]; then
+		if [[ -z "${TASKUSER}" ]]; then
+			echo "From: ${FROM}"
+		else
+			echo "From: ${TASKUSER}"
+			echo "Subject: ${ADDTIME}"
+		fi
 	else
-		#echo "From: ${USER}@${FROMDOMAIN}"
-		echo "From: deploy@emrl.com"
+		echo "From: ${USER}@${FROMDOMAIN}"
 	fi
 	echo "To: ${POSTEMAIL}"
-	echo "Subject: ${ADDTIME}"
 	echo "Content-Type: text/plain"
 	echo
 	echo "${postSendmail}";
