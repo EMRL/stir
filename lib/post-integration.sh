@@ -27,16 +27,16 @@ function mailPost() {
 	if [ "$AUTOMATE" = "1" ]; then
 		echo "From: ${FROM}"
 	else
-		echo "From: ${USER}@${FROMDOMAIN}"
+		#echo "From: ${USER}@${FROMDOMAIN}"
+		echo "From: deploy@emrl.com"
 	fi
 	echo "To: ${POSTEMAIL}"
 	echo "Subject: ${SUBJECT} - ${APP}"
-	echo "Content-Type: text/html"
+	echo "Content-Type: text/plain"
 	echo
 	echo "${postSendmail}";
 	) | "${MAILPATH}"/sendmail -t
 }
-
 
 function postCommit() {
 	# Check for a Wordpress core update, update production database if needed
