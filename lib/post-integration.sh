@@ -31,7 +31,7 @@ function mailPost() {
 		echo "From: deploy@emrl.com"
 	fi
 	echo "To: ${POSTEMAIL}"
-	echo "Subject: ${SUBJECT} - ${APP}"
+	echo "Subject: ${ADDTIME}"
 	echo "Content-Type: text/plain"
 	echo
 	echo "${postSendmail}";
