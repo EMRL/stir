@@ -107,6 +107,14 @@
 # being the task identification number for the project being deployed.
 # TASK="task"
 
+# If you wish to have automated deployments add tracked time to your project 
+# management system, uncomment and configure the two values below. TASKUSER 
+# should be the email address of the user that the time will be logged as,
+# and ADDTIME is the amount of time to be added for each deployment. Time 
+# formats can in hh:mm (02:23) or HhMm (2h23m) format.
+# TASKUSER="deploy@emrl.com"
+# ADDTIME="10m"
+
 # Slack Integration
 # 
 # You'll need to set up an "Incoming Webhook" custom integration on the Slack 

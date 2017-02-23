@@ -60,7 +60,8 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	etcLocation libLocation POSTEMAIL current_branch error_msg active_files notes \
 	UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC message_state \
 	COMMITURL COMMITHASH UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE \
-	currentStash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK <<< ""
+	currentStash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
+	ACFFILE <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
 	${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -68,7 +69,7 @@ echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile}
 	${TASKLOG} ${PCA} ${PCB} ${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} 
 	${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} 
 	${AUTOMERGE} ${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps} 
-	${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK}" > /dev/null
+	${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK} ${ACFFILE}" > /dev/null
 
 # Options
 function flags() {

@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Fixed a bug in which ADvanced Custom Fields Pro could create an empty smart commit message
+- Added the ability to add time to task management systems via email integration
 - Added `deploy --approve` for deploying current production code to live environment
 
 ## [3.5.5]

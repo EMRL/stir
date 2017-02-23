@@ -31,6 +31,13 @@ function smrtCommit() {
 			COMMITMSG="$PCC ($PLUGINS)"
 		fi
 
+		# Is this an ACF-only update?
+		if [[ -n "${ACFFILE}" ]] && [[ -z "${PCA}" ]]; then
+			PCC="Updated 1/1 plugin"
+			PLUGINS="advanced-custom-fields-pro"
+			COMMITMSG="$PCC ($PLUGINS)"
+		fi
+
 		# So what about a Wordpress core upgrade?
 		if [[ $UPDCORE == "1" ]]; then
 			if [[ -z "$PCC" ]]; then 
