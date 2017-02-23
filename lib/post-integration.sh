@@ -19,19 +19,22 @@ function buildLog() {
 	fi
 }
 
-# Post via email
+# Post integration via email
 function mailPost() {
 	echo "${COMMITURL}" >> "${postFile}"
 	postSendmail=$(<"${postFile}")
 	(
+	# Is this an automated deployment?
 	if [ "${AUTOMATE}" = "1" ]; then
-		if [[ -z "${TASKUSER}" ]]; then
+		# Is the project configured to log task time
+		if [[ -z "${TASKUSER}" ]] || [[ -z "${ADDTIME}" ]]; then
 			echo "From: ${FROM}"
 		else
 			echo "From: ${TASKUSER}"
 			echo "Subject: ${ADDTIME}"
 		fi
 	else
+		# If not an automated deployment, use current user email address
 		echo "From: ${USER}@${FROMDOMAIN}"
 	fi
 	echo "To: ${POSTEMAIL}"
