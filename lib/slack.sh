@@ -25,13 +25,11 @@ function slackPost () {
 			if [ "${APPROVE}" == "1" ] && [ -n "${PRODURL}" ]; then
 				slack_message="${SLACKUSER} approved updates to <${PRODURL}|${APP}> and published commit <${COMMITURL}|${COMMITHASH}> (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)"
 			else
-				slack_message="${SLACKUSER} deployed updates to ${APP} (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
-			fi
-		else
-			if [ "${APPROVE}" == "1" ] && [ -n "${PRODURL}" ]; then
-				slack_message="${SLACKUSER} approved updates to <${PRODURL}|${APP}> and published commit <${COMMITURL}|${COMMITHASH}>"
-			else
-				slack_message="${SLACKUSER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+				if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -n "${PRODURL}" ]]; then
+					slack_message="${SLACKUSER}'s updates to ${APP} are awaiting approval (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+				else
+					slack_message="${SLACKUSER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+				fi
 			fi
 		fi
 	fi

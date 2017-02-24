@@ -89,8 +89,8 @@
 # DEPLOY="mina deploy"				
 
 # To require approval before pushing this project's code to a live production
-# environment, set APPROVALQUEUE="TRUE"
-# APPROVALQUEUE="TRUE"
+# environment, set REQUIREAPPROVAL="TRUE"
+# REQUIREAPPROVAL="TRUE"
 
 # If this project needs logs mailed to an address other than the one configured
 # globally, set it below. 

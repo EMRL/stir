@@ -63,17 +63,24 @@ function pkgDeploy() {
 			warning "Your deployment command ${deploy_cmd} cannot be found.";
 		}
 
-		if [ "${FORCE}" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
-			# Deploy via deployment command specified in configuration
-			if [[ "${VERBOSE}" -eq 1 ]]; then
-				eval "${DEPLOY}" | tee --append "${logFile}"
-			else
-				if [ "${QUIET}" != "1" ]; then
-					eval "${DEPLOY}" &>> "${logFile}" &
-					spinner $!
+		if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
+			# If we don't require approval to push to live, keep going
+			if [ "${FORCE}" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
+				# Deploy via deployment command specified in configuration
+				if [[ "${VERBOSE}" -eq 1 ]]; then
+					eval "${DEPLOY}" | tee --append "${logFile}"
 				else
-					eval "${DEPLOY}" &>> "${logFile}"
+					if [ "${QUIET}" != "1" ]; then
+						eval "${DEPLOY}" &>> "${logFile}" &
+						spinner $!
+					else
+						eval "${DEPLOY}" &>> "${logFile}"
+					fi
 				fi
+			fi
+		else
+			if [[ "${APPROVE}" != "1" ]]; then
+				info "The project requires approval before pushing to ${PRODURL}"
 			fi
 		fi
 	fi
@@ -88,7 +95,7 @@ function postDeploy() {
 			# Run integration hooks
 			postCommit	
 			# This needs a check.
-			info "Deployment Success."
+			# info "Deployment Success."
 		else
 			info ""
 			if yesno --default yes "Deployment succeeded, but something unexpected happened. View status? [Y/n] "; then
@@ -99,6 +106,9 @@ function postDeploy() {
 		# Run integration hooks
 		postCommit
 		# This needs a check.
-		info "Deployment approved and pushed to ${PRODURL}"	
+		if [[ "${APPROVE}" == "1" ]] || [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
+			trace ""
+			info "Deployment approved and pushed to ${PRODURL}"
+		fi
 	fi
 } 
