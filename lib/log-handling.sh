@@ -123,7 +123,7 @@ function makeLog() {
 			if [ "${LOCALHOSTPOST}" == "TRUE" ]; then
 				cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}${COMMITHASH}.html"
 				# Attempt to make sure the files are readable by all
-				chmod a+r "${LOCALHOSTPATH}/${APP}${COMMITHASH}.html" &> /dev/null
+				chmod a+rw "${LOCALHOSTPATH}/${APP}${COMMITHASH}.html" &> /dev/null
 				# Remove logs older then X days
 				find "${LOCALHOSTPATH}"* -mtime +"${EXPIRELOGS}" -exec rm {} \;
 			fi

@@ -17,9 +17,10 @@ function srvCheck() {
 			# Bitbucket is being a noob; I'll make this better later
 			REPOURL="${REPOHOST}/${REPO}/"
 			if curl -sL --head "${REPOHOST}" | grep -E "200|301|401" > /dev/null; then
-				info " $REPOHOST/$REPO/ ${tan}OK${endColor}";
+				console " $REPOHOST/$REPO/ ${tan}OK${endColor}";
 			else
-				info " $REPOHOST/$REPO/ ${red}FAIL${endColor}"; SERVERFAIL="1"
+				console " $REPOHOST/$REPO/ ${red}FAIL${endColor}"
+				trace " $REPOHOST/$REPO/ FAIL"; SERVERFAIL="1"
 			fi
 		fi
 
@@ -28,9 +29,10 @@ function srvCheck() {
 		else
 			# Should return "200 OK" if all is working well
 			if curl -sL --head "${DEVURL}" | grep "200 OK" > /dev/null; then
-				info " ${DEVURL} (development) ${tan}OK${endColor}";
+				console " ${DEVURL} (development) ${tan}OK${endColor}";
 			else
-				info " ${DEVURL} (development) ${red}FAIL${endColor}"; SERVERFAIL="1"
+				console " ${DEVURL} (development) ${red}FAIL${endColor}"
+				trace " ${DEVURL} (development) FAIL"; SERVERFAIL="1"
 			fi
 		fi
 
@@ -39,15 +41,18 @@ function srvCheck() {
 		else
 			# Should return "200 OK" if all is working well
 			if curl -sL --head "${PRODURL}" | grep "200 OK" > /dev/null; then
-				info " ${PRODURL} (production) ${tan}OK${endColor}"
+				console " ${PRODURL} (production) ${tan}OK${endColor}"
 			else
-				info " ${PRODURL} (production) ${red}FAIL${endColor}"; SERVERFAIL="1"
+				console " ${PRODURL} (production) ${red}FAIL${endColor}"
+				trace " ${PRODURL} (production) FAIL"; SERVERFAIL="1"
 			fi
 		fi
 
 		# Did anything fail?
 		if [ "${SERVERFAIL}" == "1" ]; then
 			console; error "Fix server issues before continuing.";
+		else
+			trace "Servers return OK"
 		fi
 	fi
 }

@@ -7,15 +7,6 @@
 <meta name="x-apple-disable-message-reformatting">
 <title></title>
 
-<!--//
-        /* Color codes
-            Green: #325A3F;
-			Blue: #80B2E0;           
-            Yellow: #FFCC02; 
-            Light Green: #97C93C;
-            Purple: #521A61;
-        */ //-->
-
 <!--// Try to reset CSS //-->
 <style>
 html, body {
@@ -60,7 +51,6 @@ img {
 <style>
 /* Hover styles for buttons, it could happen */
 
-
 .button-td, .button-a {
 	transition: all 100ms ease-in;
 	padding: 0px 8px 0px 8px;
@@ -70,9 +60,7 @@ img {
 	border-color: #3E97C3 !important;
 }
 
-        /* Import web fonts. This *should* work in many clients */
-        @import url('https://fonts.googleapis.com/css?family=Rubik');
- @media screen and (max-width: 600px) {
+@media screen and (max-width: 600px) {
 .email-container {
 	width: 100% !important;
 	margin: auto !important;
@@ -122,25 +110,21 @@ table.center-on-narrow {
       <!--// ONE COLUMN: BEGIN //-->
       <tr>
         <td bgcolor="#ffffff" style="padding: 40px; text-align: left; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;"><h1 style="display: block; font-family: Arial, sans-serif; font-size: 44px; font-style: normal; font-weight: bold; line-height: 100%; letter-spacing: -2px; text-align: left; color: #000000 !important; margin: 0 0 10px 0;">Deployment Log</h1>
-          <p style="font-family: Arial, sans-serif; font-size: 18px; line-height: 26px; font-style: normal; font-weight: 400;"><strong>Date:</strong> 10/16/2016 (07:00:00 PM)<br />
+          <img src="http://emrl.com/app/themes/emrl/assets/img/apple-touch-icon-144x144.png" style="width: 100px; float: right; -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px;
+    overflow: hidden;" alt="EMRL" title="EMRL">
+          <p style="font-family: Arial, sans-serif; font-size: 18px; line-height: 26px; font-style: normal; font-weight: 400;"><strong>Date:</strong> 03/01/2017 (07:58:19 PM)<br />
             <strong>Project:</strong> EMRL Website (EMRL) <br />
             <strong>Staging URL:</strong> <a style="color: #47ACDF; text-decoration:none; font-weight: bold;" href="http://emrl.mx/">http://emrl.mx/</a><br />
-            <strong> Production URL:</strong> <a style="color: #47ACDF; text-decoration:none; font-weight: bold;" href="http://emrl.com/">http://emrl.com/</a> </p>
-          
-          <p><strong>Message:</strong> Updated 2 of 2 plugins (advanced-custom-fields-pro 5.5.8, siteorigin-panels 2.4.25)</p>
+            <strong>Production URL:</strong> <a style="color: #47ACDF; text-decoration:none; font-weight: bold;" href="http://emrl.com/">http://emrl.com/</a> </p>
+          <p><strong>Commit:</strong> <a style="color: #47ACDF; text-decoration:none; font-weight: bold;" href="{COMMITURL}">#9454136</a><br />
+          Updated 2 of 2 plugins (advanced-custom-fields-pro 5.5.9, akismet 3.3, wordfence 6.3.2)</p>
           
           <!--// BUTTON: BEGIN //-->
-          
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="left" style="margin: auto">
             <tr>
-              <td style="border-radius: 3px; background: #5D6D7E; text-align: center;" class="button-td"><a href="http://emrl.mx" style="background: #5D6D7E; border: 15px solid #5D6D7E; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a"> <span style="color: #ffffff;">Review</span> </a></td>
-              
-              <td style="width: 10px;"></td>
-               <td style="border-radius: 3px; background: #47ACDF; text-align: center;" class="button-td"><a href="http://emrl.com" style="background: #47ACDF; border: 15px solid #47ACDF; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a"> <span style="color: #ffffff;">Approve</span> </a></td>
-               
+              <td style="border-radius: 3px; background: #47ACDF; text-align: center;" class="button-td"><a href="{LOGURL}" style="background: #47ACDF; border: 15px solid #47ACDF; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a"> <span style="color: #ffffff;">Details</span> </a></td>
             </tr>
           </table>
-          
           <!--// BUTTON: END //--></td>
       </tr>
       <!--// ONE COLUMN: END //--> 
@@ -149,7 +133,8 @@ table.center-on-narrow {
       <tr>
         <td><table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
-              <td style="padding-left: 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;"><pre style="font: 100% courier,monospace; border: none; overflow: auto; overflow-x: scroll; width: 600px; color: #000;"><code style="font-size: 80%;">
+              <td style="padding-left: 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;"><pre style="font: 100% courier,monospace; border: none; width: 600px; overflow: auto; overflow-x: scroll;  width: 600px; color: #000;"><code style="font-size: 80%;">
+
 Deployment logfile for EMRL - 10/16/2016 (07:00:00 PM)
 
 TRACE: Loading deployment functions
@@ -196,9 +181,9 @@ TRACE: Creating lockfile
 TRACE: Loading project.
 
 Checking servers...
- https://bitbucket.org/emrl/emrl/ [33mOK\e[0m
- http://emrl.mx/ (development) [33mOK\e[0m
- http://emrl.com/ (production) [33mOK\e[0m
+ https://bitbucket.org/emrl/emrl/ [33mOK\e[0m
+ http://emrl.mx/ (development) [33mOK\e[0m
+ http://emrl.com/ (production) [33mOK\e[0m
 
 Checking out master branch...
 TRACE: Checking Index
@@ -227,18 +212,9 @@ TRACE: Posting logs to remote server
     <!--// FOOTER (Style 2): BEGIN //-->
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="680" style="margin: auto;" class="email-container">
       <tr>
-        <td style="padding: 40px 10px;width: 100%;font-size: 12px; font-family: sans-serif; mso-height-rule: exactly; line-height:18px; text-align: center; color: #888888;">
-        
-        
-        
-        <a href="http://emrl.com"><img class="aligncenter" src="http://emrl.co/assets/img/emrlsq.jpg" alt="EMRL" /></a>
-        <p style="text-align: center; font-family: Arial, sans-serif;"><a style="color: #000000; text-decoration: none;" href="http://emrl.com">EMRL</a> &bull; 1020 Tenth Street &bull; Sacramento, CA 95814 &bull; (916) 446-2440<br />
-          <a style="color: #47ACDF; text-decoration:none; text-transform: uppercase; font-weight: bold;" href="#">We <span style="color: #CC2233">&hearts;</span> your website</a></p>
-                          
-                          
-                          
-        
-        </td>
+        <td style="padding: 40px 10px;width: 100%;font-size: 12px; font-family: sans-serif; mso-height-rule: exactly; line-height:18px; text-align: center; color: #888888;"><a href="http://emrl.com"><img class="aligncenter" src="http://emrl.co/assets/img/emrlsq.jpg" alt="EMRL" /></a>
+          <p style="text-align: center; font-family: Arial, sans-serif;"><a style="color: #000000; text-decoration: none;" href="http://emrl.com">EMRL</a> &bull; 1020 Tenth Street &bull; Sacramento, CA 95814 &bull; (916) 446-2440<br />
+            <a style="color: #47ACDF; text-decoration:none; text-transform: uppercase; font-weight: bold;" href="#">We <span style="color: #CC2233">&hearts;</span> your code</a></p></td>
       </tr>
     </table>
     <!--// FOOTER (Style 2): END //--> 
