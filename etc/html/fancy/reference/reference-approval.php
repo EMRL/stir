@@ -1,5 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<?php
+function approval()
+{
+    $file = '.approved';
+    // Does the file already exist?
+    if ( ! is_file($file)) {
+        // Compile the script that cron will fire
+        /*$contents = "#!/bin/bash
+        export TERM=$\{TERM:-dumb}
+        source $\{HOME}/.bash_profile 2>&1
+        source $\{HOME}/.keychain/$\{HOSTNAME}-sh 2>&1
+        deploy --approve $\{APP}";
+        // Save the file
+        file_put_contents($file, $contents);*/
+        touch($file);
+    }
+}
+
+function denial()
+{
+    $file = '.denied';
+
+    if ( ! is_file($file)) {
+        touch($file);
+    }
+}
+?>
+<!doctype html>
+<html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
@@ -96,17 +123,17 @@ table.center-on-narrow {
 
 <body bgcolor="#f0f0f0" width="100%" style="margin: 0;">
 <center style="width: 100%; background: #f0f0f0;">
-  <div style="max-width: 680px; margin: auto;"> 
-    <!--// More Microsoft stuff =[ //--> 
+  <div style="max-width: 680px; margin: auto;">
+    <!--// More Microsoft stuff =[ //-->
     <!--[if mso]>
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="680" align="center">
             <tr>
             <td>
-            <![endif]--> 
-    
+            <![endif]-->
+
     <!--// BODY: BEGIN //-->
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px;">
-      
+
       <!--// ONE COLUMN: BEGIN //-->
       <tr>
         <td bgcolor="#ffffff" style="padding: 40px; text-align: left; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;"><h1 style="display: block; font-family: Arial, sans-serif; font-size: 44px; font-style: normal; font-weight: bold; line-height: 100%; letter-spacing: -2px; text-align: left; color: #000000 !important; margin: 0 0 10px 0;">Deployment Approval</h1>
@@ -119,12 +146,15 @@ table.center-on-narrow {
           <p><strong>Proposed Commit</strong><br />
             Updated 2 of 2 plugins (advanced-custom-fields-pro 5.5.9, akismet 3.3, wordfence 6.3.2)</p>
           <?php
-session_start();
 $run_func = '';
 
-if ($_GET['approval'] == 'yes') { 
-    approval(); 
-} else { 
+if (isset($_GET['approval']) && $_GET['approval'] === 'yes') {
+    approval();
+    echo 'You have approved this commit and it will be deployed soon.';
+} elseif (isset($_GET['approval']) && $_GET['approval'] === 'no') {
+    denial();
+    echo 'You have denied this commit and it will not be deployed.';
+} else {
     echo '<!--// BUTTONS: BEGIN //-->
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="left" style="margin: auto">
             <tr>
@@ -134,30 +164,12 @@ if ($_GET['approval'] == 'yes') {
             </tr>
           </table>
           <!--// BUTTONS: END //-->
-	'; 
-} 
-
-function approval()  
-{ 
-// Output file
-$file = 'approved.sh';
- 
-// Does the file already exist?
-if(!is_file($file)){
-    // Compile the script that cron will fire
-    $contents = '#!/bin/bash\n
-export TERM=${TERM:-dumb}\n
-source ${HOME}/.bash_profile 2>&1\n
-source ${HOME}/.keychain/${HOSTNAME}-sh 2>&1\n
-deploy --approve ${APP}';
-    // Save the file
-    file_put_contents($file, $contents);
-}
+	';
 }
 ?></td>
       </tr>
-      <!--// ONE COLUMN: END //--> 
-      
+      <!--// ONE COLUMN: END //-->
+
       <!--// TEXT BLOCK: BEGIN //-->
       <tr>
         <td><table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -234,10 +246,10 @@ TRACE: Posting logs to remote server
           </table></td>
       </tr>
       <!--// TEXT BLOCK: END //-->
-      
+
     </table>
-    <!--// BODY: END //--> 
-    
+    <!--// BODY: END //-->
+
     <!--// FOOTER (Style 2): BEGIN //-->
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="680" style="margin: auto;" class="email-container">
       <tr>
@@ -246,8 +258,8 @@ TRACE: Posting logs to remote server
             <a style="color: #47ACDF; text-decoration:none; text-transform: uppercase; font-weight: bold;" href="#">We <span style="color: #CC2233">&hearts;</span> your code</a></p></td>
       </tr>
     </table>
-    <!--// FOOTER (Style 2): END //--> 
-    
+    <!--// FOOTER (Style 2): END //-->
+
   </div>
 </center>
 </body>

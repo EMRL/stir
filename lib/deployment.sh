@@ -88,7 +88,7 @@ function pkgDeploy() {
 }
 
 function postDeploy() {
-	if [[ "${APPROVE}" != "1" ]]; then
+	if [[ "${APPROVE}" != "1" ]] && [[ "${PUBLISH}" != "1" ]]; then
 		# We just attempted to deploy, check for changes still waiting in the repo
 		# if we find any, something went wrong.
 		if [[ -z $(git status -uno --porcelain) ]]; then

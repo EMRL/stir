@@ -3,7 +3,7 @@
 # deploy: A simple bash script for deploying sites.
 #
 IFS=$'\n\t'
-VERSION="3.5.61"
+VERSION="3.5.7"
 NOW=$(date +"%m/%d/%Y (%r)")
 DEV=$USER"@"$HOSTNAME
 
@@ -15,10 +15,11 @@ DEV=$USER"@"$HOSTNAME
 set -uo pipefail
 # Startup variables
 read -r UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
-	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE <<< ""
+	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
+	PUBLISH <<< ""
 echo "${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
 	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
-	${AUTOMATE} ${EMAILTEST} ${APPROVE}" > /dev/null
+	${AUTOMATE} ${EMAILTEST} ${APPROVE} ${PUBLISH}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -77,9 +78,10 @@ function flags() {
 
 Options:
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
-  -S, --skip-update      Skip any Wordpress core/plugin updates
-  -A. --approve          Approve current codebase and deploy to live
+  -A, --approve          Approve current codebase and deploy to live
+  -P, --publish          Publish current production code to live environment
   -u, --update           If no available Wordpress updates, halt deployment
+  -S, --skip-update      Skip any Wordpress core/plugin updates
   -m, --merge            Force merge of branches
   -c, --current          Deploy a project from current working directory          
   -V, --verbose          Output more process information to screen
@@ -134,6 +136,7 @@ while [[ ${1:-unset} = -?* ]]; do
 		-h|--help) flags >&2; exit ;;
 		-u|--update) UPGRADE=1 ;;
 		-A|--approve) APPROVE=1 ;;
+		-P|--publish) PUBLISH=1 ;;
 		-S|--skip-update) SKIPUPDATE=1 ;;
 		-c|--current) CURRENT=1 ;;
 		-v|--version) echo "$(basename "${0}") ${VERSION}"; exit ;;
@@ -332,7 +335,7 @@ fi
 if [ "${APPRC}" == "1" ]; then
 	trace "Loading project configuration from ${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
 else
-	trace "No project config file found"
+	trace "No project configuration file found"
 fi
 
 # Are we using "smart" *cough* commits?
@@ -372,9 +375,9 @@ if [ "${AUTOMERGE}" == "TRUE" ]; then
 fi
 
 # Check for approval vs. user input
-if [[ "${APPROVE}" == "1" ]]; then
+if [[ "${APPROVE}" == "1" ]] || [[ "${PUBLISH}" == "1" ]]; then
 	if [[ "${FORCE}" == "1" ]] || [[ "${QUIET}" == "1" ]]; then
-		error "You can not approve deployment without user interaction, exiting deployment."
+		error "You can not approve or publish production code without user interaction, exiting deployment."
 	fi
 fi
 
@@ -395,7 +398,7 @@ function appDeploy() {
 	go 				# Start a deployment work session
 	srvCheck 		# Check that servers are up and running
 	permFix			# Fix permissions
-	if [[ "${APPROVE}" == "1" ]]; then
+	if [[ "${PUBLISH}" == "1" ]]; then
 		pkgDeploy		# Deploy project to live server
 	else
 		gitChkMstr		# Checkout master branch

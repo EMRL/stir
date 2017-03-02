@@ -6,32 +6,45 @@ trace "Loading Slack integration"
 
 function slackPost () {
 	# If running in --automate, change the user name
-	if [ "$AUTOMATE" = "1" ]; then
+	if [[ "$AUTOMATE" == "1" ]]; then
 		SLACKUSER="Scheduled update:"
 	else
 		SLACKUSER=${USER}
 	fi
-	
-	# Format the message 
+
+	# Setup the payload w/ the baseline language
+	slack_message="*${SLACKUSER}* deployed updates to ${APP}"
+
+	# Is this a simple publish of existing code to live?
+	if [[ "${PUBLISH}" == "1" ]]; then
+		slack_message="*${SLACKUSER}* published the current production codebase (commit <${COMMITURL}|${COMMITHASH}>) to <${PRODURL}|${APP}>"
+	fi	
+
+	# Does this need approval?
+	if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]]; then
+		slack_message="*${SLACKUSER}* queued updates to <${DEVURL}|${APP}> for approval"
+	fi
+
+	# Is this being approved?
+	if [[ "${APPROVE}" == "1" ]]; then
+		slack_message="*${SLACKUSER}* approved updates <${COMMITURL}|${COMMITHASH}> and deployed to <${PRODURL}|${APP}>"
+	fi		
+
+	# Add a details link to online logfiles if they exist
+	if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]]; then
+		slack_message="${slack_message} (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)"
+	fi
+
+	if [[ "${PUBLISH}" != "1" ]] && [[ "${AUTOMATE}" != "1" ]] && [[ -n "${notes}" ]] && [[ "${APPROVE}" != "1" ]]; then
+		slack_message="${slack_message}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+	fi
+
+	# Has there been an error?
 	if [ "${message_state}" == "ERROR" ]; then
 		if [ -z "${notes}" ]; then
 			notes="Something went wrong."
 		fi
-		slack_message="${SLACKUSER} attempted to deploy changes to ${APP}\nERROR: *${error_msg}*"
-	else
-
-		# Add a link to the online logs, if they are setup.
-		if [ -n "${REMOTEURL}" ] && [ -n "${REMOTELOG}" ] ; then
-			if [ "${APPROVE}" == "1" ] && [ -n "${PRODURL}" ]; then
-				slack_message="${SLACKUSER} approved updates to <${PRODURL}|${APP}> and published commit <${COMMITURL}|${COMMITHASH}> (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)"
-			else
-				if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -n "${PRODURL}" ]]; then
-					slack_message="${SLACKUSER}'s updates to ${APP} are awaiting approval (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
-				else
-					slack_message="${SLACKUSER} deployed updates to ${APP}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
-				fi
-			fi
-		fi
+		slack_message="*${SLACKUSER}* attempted to deploy changes to ${APP}\nERROR: ${error_msg}"
 	fi
 
 	# Set icon for message state

@@ -12,7 +12,14 @@ function buildLog() {
 	COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL="${REPOHOST}/${REPO}/commits/${COMMITHASH}"
 
 	# Is this just an approval or a full commit?
-	if [ "${APPROVE}" == "1" ]; then
+	if [[ "${PUBLISH}" == "1" ]]; then
+		echo "<strong>Commit ${COMMITHASH}</strong>: Marked as deployed" > "${postFile}"
+	else
+		echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${postFile}"
+	fi
+
+	# Is this just an approval or a full commit?
+	if [[ "${APPROVE}" == "1" ]]; then
 		echo "<strong>Commit ${COMMITHASH}</strong>: Marked as approved and deployed" > "${postFile}"
 	else
 		echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${postFile}"
