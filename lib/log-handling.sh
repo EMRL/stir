@@ -17,14 +17,6 @@ function makeLog() {
 	VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
 	LOGURL="${REMOTEURL}/${APP}${COMMITHASH}.html"	
 
-	if [[ -z "${DEVURL}" ]]; then
-		DEVURL="N/A"
-	fi
-
-	if [[ -z "${PRODURL}" ]]; then
-		PRODURL="N/A"
-	fi
-
 	# IF we're using HTML emails, let's get to work
 	if [[ "${EMAILHTML}" == "TRUE" ]]; then
 		htmlBuild
@@ -99,6 +91,15 @@ function processLog() {
 		-e "s^{{LOGURL}}^${LOGURL}^g" \
 		-e "s^{{VIEWPORTPRE}}^${VIEWPORTPRE}^g" \
 		"${trshFile}" > "${htmlFile}"
+
+	# Clean up header we don't need
+	if [[ -z "${DEVURL}" ]]; then
+		sed -i '/<strong>Staging URL:/d' "${htmlFile}"
+	fi
+
+	if [[ -z "${PRODURL}" ]]; then
+		sed -i '/<strong>Production URL:/d' "${htmlFile}"
+	fi
 }
 
 # Remote log function 
