@@ -62,7 +62,7 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC message_state \
 	COMMITURL COMMITHASH UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE \
 	currentStash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
-	ACFFILE VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP <<< ""
+	ACFFILE VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
 	${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -71,7 +71,7 @@ echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile}
 	${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} 
 	${AUTOMERGE} ${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps} 
 	${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK} ${ACFFILE} ${VIEWPORT} 
-	${VIEWPORTPRE} ${LOGTITLE} ${LOGURL} ${TIMESTAMP}" > /dev/null
+	${VIEWPORTPRE} ${LOGTITLE} ${LOGURL} ${TIMESTAMP} ${STARTUP}" > /dev/null
 
 # Options
 function flags() {
@@ -151,7 +151,7 @@ while [[ ${1:-unset} = -?* ]]; do
 		--slack-test) SLACKTEST=1 ;;
 		--email-test) EMAILTEST=1 ;;
 		--no-check) NOCHECK=1 ;;
-		--function-list) FUNCTIONLIST=1; CURRENT="1";;
+		--function-list) FUNCTIONLIST=1; CURRENT=1 ;;
 		--variable-list) VARIABLELIST=1 ;;
 		--endopts) shift; break ;;
 		*) echo "Invalid option: '$1'" 1>&2 ; exit 1 ;;
@@ -184,6 +184,25 @@ if [ -z "${@}" ] && [ "${CURRENT}" != "1" ]; then
 	exit 1
 fi
 
+# Get the active switches for display in logfiles
+if [[ "${UPGRADE}" == 1 ]]; then STARTUP="${STARTUP} --update"; fi
+if [[ "${APPROVE}" == 1 ]]; then STARTUP="${STARTUP} --approve"; fi
+if [[ "${PUBLISH}" == 1 ]]; then STARTUP="${STARTUP} --publish"; fi
+if [[ "${SKIPUPDATE}" == 1 ]]; then STARTUP="${STARTUP} --skip-update"; fi
+if [[ "${CURRENT}" == 1 ]]; then STARTUP="${STARTUP} --current"; fi
+if [[ "${VERBOSE}" == 1 ]]; then STARTUP="${STARTUP} --verbose"; fi
+if [[ "${QUIET}" == 1 ]]; then STARTUP="${STARTUP} --quiet"; fi
+if [[ "${STRICT}" == 1 ]]; then STARTUP="${STARTUP} --strict"; fi
+if [[ "${DEBUG}" == 1 ]]; then STARTUP="${STARTUP} --debug"; fi
+if [[ "${FORCE}" == 1 ]]; then STARTUP="${STARTUP} --force "; fi
+if [[ "${NOCHECK}" == 1 ]]; then STARTUP="${STARTUP} --no-check"; fi
+
+# Probably not relevant but included because reasons
+if [[ "${SLACKTEST}" == 1 ]]; then STARTUP="${STARTUP} --slack-test"; fi
+if [[ "${EMAILTEST}" == 1 ]]; then STARTUP="${STARTUP} --email-test"; fi
+if [[ "${FUNCTIONLIST}" == 1 ]]; then STARTUP="${STARTUP} --function-list"; fi	
+if [[ "${VARIABLELIST}" == 1 ]]; then STARTUP="${STARTUP} --debug"; fi
+
 # Fire up temporary log files. Consolidate this shit better someday, geez.
 # 
 # Main log file
@@ -203,7 +222,8 @@ coreFile="/tmp/$APP.core-$RANDOM.log"
 	exit 1
 }
 # WTF IS THIS
-echo -e "Deployment logfile for ${APP^^} - $NOW\r\r" >> "${logFile}"
+echo -e "Deployment logfile for ${APP^^} - $NOW\r" >> "${logFile}"
+echo -e "Launching deploy${STARTUP}\n" >> "${logFile}"
 postFile="/tmp/$APP.wtf-$RANDOM.log"
 (umask 077 && touch "${postFile}") || {
 	echo "Could not create temporary file, exiting."
