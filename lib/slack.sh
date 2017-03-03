@@ -30,11 +30,6 @@ function slackPost () {
 		slack_message="*${SLACKUSER}* approved updates <${COMMITURL}|${COMMITHASH}> and deployed to <${PRODURL}|${APP}>"
 	fi		
 
-	# Add a details link to online logfiles if they exist
-	if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]]; then
-		slack_message="${slack_message} (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)"
-	fi
-
 	if [[ "${PUBLISH}" != "1" ]] && [[ "${AUTOMATE}" != "1" ]] && [[ -n "${notes}" ]] && [[ "${APPROVE}" != "1" ]]; then
 		slack_message="${slack_message}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
 	fi
@@ -45,6 +40,11 @@ function slackPost () {
 			notes="Something went wrong."
 		fi
 		slack_message="*${SLACKUSER}* attempted to deploy changes to ${APP}\nERROR: ${error_msg}"
+	fi
+
+	# Add a details link to online logfiles if they exist
+	if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]]; then
+		slack_message="${slack_message} (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)"
 	fi
 
 	# Set icon for message state

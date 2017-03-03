@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Fixed issues with HTML log on mobile devices
 - Updated default HTML theme
 - Logged output is now time stamped
 - Rewrote Slack integration
