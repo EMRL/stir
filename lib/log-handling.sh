@@ -37,9 +37,10 @@ function makeLog() {
 		# For web logs, VIEWPORT should be 960
 		VIEWPORT="960"
 		VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
-		htmlBuild; postLog
+		htmlBuild
 		# Strip out the buttons that self-link
 		sed -e "s^BUTTON: BEGIN //-->^${VIEWPORT}^g" -i "${htmlFile}"
+		postLog
 	fi
 }
 
