@@ -108,7 +108,7 @@ function postDeploy() {
 		# This needs a check.
 		if [[ "${APPROVE}" == "1" ]] || [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
 			trace ""
-			info "Deployment pushed to ${PRODURL}"
+			info "Deployed to ${PRODURL}"
 		fi
 	fi
 } 
