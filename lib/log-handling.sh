@@ -17,6 +17,14 @@ function makeLog() {
 	VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
 	LOGURL="${REMOTEURL}/${APP}${COMMITHASH}.html"	
 
+	if [[ -z "${DEVURL}" ]]; then
+		DEVURL="N/A"
+	fi
+
+	if [[ -z "${PRODURL}" ]]; then
+		PRODURL="N/A"
+	fi
+
 	# IF we're using HTML emails, let's get to work
 	if [[ "${EMAILHTML}" == "TRUE" ]]; then
 		htmlBuild
@@ -30,6 +38,8 @@ function makeLog() {
 		VIEWPORT="960"
 		VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
 		htmlBuild; postLog
+		# Strip out the buttons that self-link
+		sed -e "s^BUTTON: BEGIN //-->^${VIEWPORT}^g" -i "${htmlFile}"
 	fi
 }
 

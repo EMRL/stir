@@ -4,7 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 - Updated default HTML theme
-- Rewrote Slack integration to have more flexible output
+- Logged output is now time stamped
+- Rewrote Slack integration
 - Fixed a bug in which an Advanced Custom Fields Pro update could create an empty smart commit message
 - Added the ability to add time to task management systems via email integration
 - Added `deploy --publish` for deploying current production code to live environment
