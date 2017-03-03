@@ -85,6 +85,7 @@ function processLog() {
 		-e "s^{{EXITCODE}}^${EXITCODE}^g" \
 		-e "s^{{COMMITHASH}}^${COMMITHASH}^g" \
 		-e "s^{{NOTES}}^${notes}^g" \
+		-e "s^{{USER}}^${USER}^g" \
 		-e "s^{{LOGURL}}^${LOGURL}^g" \
 		-e "s^{{VIEWPORTPRE}}^${VIEWPORTPRE}^g" \
 		"${trshFile}" > "${htmlFile}"

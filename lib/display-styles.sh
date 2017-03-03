@@ -65,7 +65,7 @@ function error() {
 	else
 		echo -e "$@"
 	fi
-	echo "ERROR: $*" >> "${logFile}"
+	echo -e "\nERROR: $*" >> "${logFile}"
 	error_msg="$*"
 	errorExit
 }

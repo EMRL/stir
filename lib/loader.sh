@@ -19,10 +19,12 @@ fi
 # Creating this function first, so verbose output option is usable early
 function trace () {
 	if [[ "${VERBOSE}" -eq 1 ]]; then
-		echo -e "$(tput setaf 3)TRACE:$(tput sgr0) $*"
-		echo "TRACE: $*" >> "${logFile}"
+		TIMESTAMP="$(date '+%H:%M:%S')"
+		echo -e "$(tput setaf 3)${TIMESTAMP}$(tput sgr0) $*"
+		echo "${TIMESTAMP} $*" >> "${logFile}"
 	else
-		echo "TRACE: $*" >> "${logFile}"
+		TIMESTAMP="$(date '+%H:%M:%S')"
+		echo "${TIMESTAMP} $*" >> "${logFile}"
 	fi
 }
 

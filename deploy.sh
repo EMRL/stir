@@ -62,7 +62,7 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC message_state \
 	COMMITURL COMMITHASH UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE \
 	currentStash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
-	ACFFILE VIEWPORT VIEWPORTPRE LOGTITLE LOGURL <<< ""
+	ACFFILE VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
 	${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -71,7 +71,7 @@ echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile}
 	${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} 
 	${AUTOMERGE} ${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps} 
 	${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK} ${ACFFILE} ${VIEWPORT} 
-	${VIEWPORTPRE} ${LOGTITLE} ${LOGURL}" > /dev/null
+	${VIEWPORTPRE} ${LOGTITLE} ${LOGURL} ${TIMESTAMP}" > /dev/null
 
 # Options
 function flags() {
@@ -79,10 +79,10 @@ function flags() {
 
 Options:
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
-  -A, --approve          Approve current codebase and deploy to live
-  -P, --publish          Publish current production code to live environment
-  -u, --update           If no available Wordpress updates, halt deployment
+  -A, --approve          Approve current codebase and queue for deployment
   -S, --skip-update      Skip any Wordpress core/plugin updates
+  -u, --update           If no available Wordpress updates, halt deployment
+  -P, --publish          Publish current production code to live environment
   -m, --merge            Force merge of branches
   -c, --current          Deploy a project from current working directory          
   -V, --verbose          Output more process information to screen

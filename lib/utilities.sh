@@ -113,7 +113,7 @@ function depCheck() {
 	# Do we need Sendmail, and if so can we find it?
 	if [ "${EMAILERROR}" == "TRUE" ] || [ "${EMAILSUCCESS}" == "TRUE" ] || [ "${EMAILQUIT}" == "TRUE" ] || [ "${NOTIFYCLIENT}" == "TRUE" ]; then
 		hash "${MAILPATH}"/sendmail 2>/dev/null || {
-			error "deploy ${VERSION} requires sendmail to function properly with your current configuration."
+			error "deploy ${VERSION} requires Sendmail to function properly with your current configuration."
 		}
 	fi
 }
