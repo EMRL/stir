@@ -3,9 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- Updated default HTML theme
+- Rewrote Slack integration to have more flexible output
 - Fixed a bug in which an Advanced Custom Fields Pro update could create an empty smart commit message
 - Added the ability to add time to task management systems via email integration
-- Added `deploy --approve` for deploying current production code to live environment
+- Added `deploy --publish` for deploying current production code to live environment
 
 ## [3.5.5]
 - Fixed a bug with text-format emails not including complete logs

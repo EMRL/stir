@@ -1,28 +1,23 @@
 <?php
-function approval()
-{
-    $file = '.approved';
-    // Does the file already exist?
-    if ( ! is_file($file)) {
-        // Compile the script that cron will fire
-        /*$contents = "#!/bin/bash
-        export TERM=$\{TERM:-dumb}
-        source $\{HOME}/.bash_profile 2>&1
-        source $\{HOME}/.keychain/$\{HOSTNAME}-sh 2>&1
-        deploy --approve $\{APP}";
-        // Save the file
-        file_put_contents($file, $contents);*/
-        touch($file);
-    }
-}
 
-function denial()
+function approved()
 {
-    $file = '.denied';
+    $denied_file = '.denied';
+    $approved_file = '.approved';
+    $status = isset($_GET['approval']) ? $_GET['approval'] : null;
 
-    if ( ! is_file($file)) {
-        touch($file);
+    if ($status === 'yes') {
+        $status = true;
+        @unlink($denied_file);
+        touch($approved_file);
+    } elseif ($status === 'no') {
+        $status = false;
+        @unlink($approved_file);
+        touch($denied_file);
     }
+
+    // returns true for approved, false for denied, or null for neither
+    return $status;
 }
 ?>
 <!doctype html>
@@ -145,26 +140,24 @@ table.center-on-narrow {
             <strong>Production URL:</strong> <a style="color: #47ACDF; text-decoration:none; font-weight: bold;" href="http://emrl.com/">http://emrl.com/</a> </p>
           <p><strong>Proposed Commit</strong><br />
             Updated 2 of 2 plugins (advanced-custom-fields-pro 5.5.9, akismet 3.3, wordfence 6.3.2)</p>
-          <?php
-$run_func = '';
+<?php
+$approved = approved();
 
-if (isset($_GET['approval']) && $_GET['approval'] === 'yes') {
-    approval();
-    echo 'You have approved this commit and it will be deployed soon.';
-} elseif (isset($_GET['approval']) && $_GET['approval'] === 'no') {
-    denial();
-    echo 'You have denied this commit and it will not be deployed.';
-} else {
+if (is_null($approved)) {
     echo '<!--// BUTTONS: BEGIN //-->
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="left" style="margin: auto">
             <tr>
               <td style="border-radius: 3px; background: #CC2233; text-align: center;" class="button-td"><a href="?approval=no" style="background: #CC2233; border: 15px solid #CC2233; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a"> <span style="color: #ffffff;">Deny</span> </a></td>
-          	  <td style="width: 10px;"></td>
+              <td style="width: 10px;"></td>
               <td style="border-radius: 3px; background: #47ACDF; text-align: center;" class="button-td"><a href="?approval=yes" style="background: #47ACDF; border: 15px solid #47ACDF; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a"> <span style="color: #ffffff;">Approve</span> </a></td>
             </tr>
           </table>
           <!--// BUTTONS: END //-->
-	';
+    ';
+} elseif ($approved) {
+    echo 'You have approved this commit and it will be deployed soon.';
+} else {
+    echo 'You have denied this commit and it will not be deployed.';
 }
 ?></td>
       </tr>

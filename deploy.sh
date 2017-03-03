@@ -62,7 +62,7 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC message_state \
 	COMMITURL COMMITHASH UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE \
 	currentStash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
-	ACFFILE <<< ""
+	ACFFILE VIEWPORT VIEWPORTPRE LOGTITLE LOGURL <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
 	${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -70,7 +70,8 @@ echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile}
 	${TASKLOG} ${PCA} ${PCB} ${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} 
 	${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} 
 	${AUTOMERGE} ${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps} 
-	${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK} ${ACFFILE}" > /dev/null
+	${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK} ${ACFFILE} ${VIEWPORT} 
+	${VIEWPORTPRE} ${LOGTITLE} ${LOGURL}" > /dev/null
 
 # Options
 function flags() {
@@ -415,7 +416,7 @@ function appDeploy() {
 		gitPushProd		# Push production to Bit Bucket
 		gitChkMstr		# Checkout master once again  
 		pkgDeploy		# Deploy project to live server
-	fi   
+	fi  
 }
 
 # Trapping stuff
