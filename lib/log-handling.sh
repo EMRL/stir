@@ -12,11 +12,10 @@ function makeLog() {
 		cat "${postFile}" > "${logFile}"
 	fi
 
+	# Setup a couple of variables
 	VIEWPORT="680"
 	VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
 	LOGURL="${REMOTEURL}/${APP}${COMMITHASH}.html"	
-	# Just for testing
-	EMAILTEMPLATE="fancy"
 
 	# IF we're using HTML emails, let's get to work
 	if [[ "${EMAILHTML}" == "TRUE" ]]; then
