@@ -81,9 +81,11 @@ function cleanUp() {
 	# echo -e \\033c
 
 	# Make sure we leave the repo as we found it
-	current_branch="$(git rev-parse --abbrev-ref HEAD)"
-	if [[ "${current_branch}" != "${start_branch}" ]]; then
-		git checkout "${start_branch}" &>> "${logFile}" &
+	if [[ -n "${start_branch}" ]]; then
+		current_branch="$(git rev-parse --abbrev-ref HEAD)"
+		if [[ "${current_branch}" != "${start_branch}" ]]; then
+			git checkout "${start_branch}" &>> "${logFile}" &
+		fi
 	fi
 
 	# If Wordfence was an issue, restart the plugin

@@ -2,8 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.5.7]
 - Fixed issues with HTML log on mobile devices
+- Fixed a bug with restoring previously checked out branch
 - Updated default HTML theme
 - Logged output is now time stamped
 - Rewrote Slack integration
@@ -88,7 +89,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.5.5...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.5.7...HEAD
+[3.5.7]: https://github.com/EMRL/deploy/compare/v3.5.5...v3.5.7
 [3.5.5]: https://github.com/EMRL/deploy/compare/v3.5...v3.5.5
 [3.5]: https://github.com/EMRL/deploy/compare/v3.4...v3.5
 [3.4]: https://github.com/EMRL/deploy/compare/v3.3.4...v3.4
