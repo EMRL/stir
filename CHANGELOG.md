@@ -2,7 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.5.7]
+## Unreleased
+- Fixed a bug with Slack not including commit messages when using `deploy --automate`
+
+## [3.5.7] - 03-03-2017
 - Fixed issues with HTML log on mobile devices
 - Fixed a bug with restoring previously checked out branch
 - Updated default HTML theme
@@ -13,7 +16,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added the ability to add time to task management systems via email integration
 - Added `deploy --publish` for deploying current production code to live environment
 
-## [3.5.5]
+## [3.5.5] - 02-12-2017
 - Fixed a bug with text-format emails not including complete logs
 - Fixed issue with passing user variable to Slack integration when an error is triggered
 - Added ```--no-check``` switch to override active file and server checks

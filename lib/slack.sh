@@ -30,7 +30,11 @@ function slackPost () {
 		slack_message="*${SLACKUSER}* approved updates <${COMMITURL}|${COMMITHASH}> and deployed to <${PRODURL}|${APP}>"
 	fi		
 
-	if [[ "${PUBLISH}" != "1" ]] && [[ "${AUTOMATE}" != "1" ]] && [[ -n "${notes}" ]] && [[ "${APPROVE}" != "1" ]]; then
+	# This is broken
+	# if [[ "${PUBLISH}" != "1" ]] && [[ "${AUTOMATE}" != "1" ]] && [[ -n "${notes}" ]] && [[ "${APPROVE}" != "1" ]]; then
+
+	# If there's a commit, AND there are notes/commit message. spam this
+	if [[ -n "${notes}" ]] && [[ -n "${COMMITHASH}" ]]; then
 		slack_message="${slack_message}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
 	fi
 
