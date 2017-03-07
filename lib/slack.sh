@@ -17,7 +17,7 @@ function slackPost () {
 
 	# Is this a simple publish of existing code to live?
 	if [[ "${PUBLISH}" == "1" ]]; then
-		slack_message="*${SLACKUSER}* published the current production codebase (commit <${COMMITURL}|${COMMITHASH}>) to <${PRODURL}|${APP}>"
+		slack_message="*${SLACKUSER}* published commit <${COMMITURL}|${COMMITHASH}> to <${PRODURL}|${APP}>"
 	fi	
 
 	# Does this need approval?

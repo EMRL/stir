@@ -185,6 +185,7 @@ if [ -z "${@}" ] && [ "${CURRENT}" != "1" ]; then
 fi
 
 # Get the active switches for display in logfiles
+if [[ "${AUTOMATE}" == 1 ]]; then STARTUP="${STARTUP} --automate"; fi
 if [[ "${UPGRADE}" == 1 ]]; then STARTUP="${STARTUP} --update"; fi
 if [[ "${APPROVE}" == 1 ]]; then STARTUP="${STARTUP} --approve"; fi
 if [[ "${PUBLISH}" == 1 ]]; then STARTUP="${STARTUP} --publish"; fi
@@ -195,6 +196,7 @@ if [[ "${QUIET}" == 1 ]]; then STARTUP="${STARTUP} --quiet"; fi
 if [[ "${STRICT}" == 1 ]]; then STARTUP="${STARTUP} --strict"; fi
 if [[ "${DEBUG}" == 1 ]]; then STARTUP="${STARTUP} --debug"; fi
 if [[ "${FORCE}" == 1 ]]; then STARTUP="${STARTUP} --force "; fi
+if [[ "${MERGE}" == 1 ]]; then STARTUP="${STARTUP} --merge "; fi
 if [[ "${NOCHECK}" == 1 ]]; then STARTUP="${STARTUP} --no-check"; fi
 
 # Probably not relevant but included because reasons
