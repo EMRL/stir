@@ -88,14 +88,14 @@ function pkgDeploy() {
 }
 
 function postDeploy() {
+	# Check for Mina fail
+	if grep -q "ERROR: Deploy failed." "${logFile}"; then
+		error "Deploy failed."
+	fi
+
 	if [[ "${APPROVE}" != "1" ]] && [[ "${PUBLISH}" != "1" ]]; then
 		# We just attempted to deploy, check for changes still waiting in the repo
 		# if we find any, something went wrong.
-
-		# Check for Mina fail
-		if grep -q "ERROR: Deploy failed." "${logFile}"; then
-			error "Deploy failed."
-		fi
 
 		if [[ -z $(git status -uno --porcelain) ]]; then
 			# Run integration hooks
