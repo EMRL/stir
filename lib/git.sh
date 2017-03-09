@@ -110,7 +110,10 @@ function gitGarbage() {
 function gitStatus() {
 	trace "Check Status"
 	if [[ -z $(git status --porcelain) ]]; then
-		console "Nothing to commit, working directory clean."; quietExit
+		console "Nothing to commit, working directory clean."
+		if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
+			quietExit
+		fi
 	fi
 }
 

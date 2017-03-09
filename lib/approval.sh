@@ -5,10 +5,17 @@
 # Handles deployment approval queue
 trace "Loading approval functions"   
 
-function approve() {
-	trace ""
+function queue() {
+	# Make sure there's something to do
+	gitStatus
+	info "Queuing proposed updates for approval"
+	slackPost
 }
 
-function reject() {
-	trace ""
+function approve() {
+	info "Approving proposed updates"
+}
+
+function deny() {
+	info "Denying proposed updates"
 }

@@ -7,7 +7,6 @@ trace "Loading integration services"
 
 # Compile commit message with other stuff for integration
 function buildLog() {
-	trace "Posting ${TASKLOG}"
 	# OK let's grab the short version of the commit hash
 	COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL="${REPOHOST}/${REPO}/commits/${COMMITHASH}"
 

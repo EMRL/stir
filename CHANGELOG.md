@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+- Improved language for consistency in some functions
 - Fixed a bug with Slack not including commit messages when using `deploy --automate`
 
 ## [3.5.7] - 03-03-2017

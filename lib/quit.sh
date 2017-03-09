@@ -66,17 +66,17 @@ function cleanUp() {
 		git stash pop >> "${logFile}"
 		currentStash="0"
 	fi	
-	[[ -f $logFile ]] && rm "$logFile"
-	[[ -f $trshFile ]] && rm "$trshFile"
-	[[ -f $postFile ]] && rm "$postFile"
-	[[ -f $statFile ]] && rm "$statFile"
-	[[ -f $wpFile ]] && rm "$wpFile"
-	[[ -f $urlFile ]] && rm "$urlFile"
-	[[ -f $htmlFile ]] && rm "$htmlFile"
-	[[ -f $htmlEmail ]] && rm "$htmlEmail"
-	[[ -f $clientEmail ]] && rm "$clientEmail"
-	[[ -f $coreFile ]] && rm "$coreFile"
-	# [[ -f $gitLock ]] && rm "$gitLock"
+	[[ -f "${logFile}" ]] && rm "${logFile}"
+	[[ -f "${trshFile}" ]] && rm "${trshFile}"
+	[[ -f "${postFile}" ]] && rm "${postFile}"
+	[[ -f "${statFile}" ]] && rm "${statFile}"
+	[[ -f "${wpFile}" ]] && rm "${wpFile}"
+	[[ -f "${urlFile}" ]] && rm "${urlFile}"
+	[[ -f "${htmlFile}" ]] && rm "${htmlFile}"
+	[[ -f "${htmlEmail}" ]] && rm "${htmlEmail}"
+	[[ -f "${clientEmail}" ]] && rm "${clientEmail}"
+	[[ -f "${coreFile}" ]] && rm "${coreFile}"
+	# [[ -f "${gitLock}" ]] && rm "${gitLock}"
 	# Attempt to reset the terminal
 	# echo -e \\033c
 
@@ -92,6 +92,8 @@ function cleanUp() {
 	if [[ "${WFOFF}" = "1" ]]; then
 		"${WPCLI}"/wp plugin activate --no-color wordfence &>> $logFile; errorChk
 	fi
+
+	# Attempt to reset the console when running --quiet
 	if [ "${QUIET}" != "1" ]; then
 		tput cnorm
 	fi

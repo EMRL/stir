@@ -5,6 +5,7 @@
 # Handles deployment-related tasks
 trace "Loading deployment functions"   
 
+# Housekeeping tasks to run before final deployment
 function preDeploy() {
 	# If there are changes waiting in the repo, stop and ask for user input
 	# This should probably be it's own function
@@ -113,7 +114,6 @@ function postDeploy() {
 		postCommit
 		# This needs a check.
 		if [[ "${APPROVE}" == "1" ]] || [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
-			trace ""
 			info "Deployed to ${PRODURL}"
 		fi
 	fi

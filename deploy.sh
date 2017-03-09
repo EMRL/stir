@@ -16,10 +16,10 @@ set -uo pipefail
 # Startup variables
 read -r UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
 	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
-	PUBLISH <<< ""
+	DENY PUBLISH <<< ""
 echo "${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
 	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
-	${AUTOMATE} ${EMAILTEST} ${APPROVE} ${PUBLISH}" > /dev/null
+	${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -79,7 +79,6 @@ function flags() {
 
 Options:
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
-  -A, --approve          Approve current codebase and queue for deployment
   -S, --skip-update      Skip any Wordpress core/plugin updates
   -u, --update           If no available Wordpress updates, halt deployment
   -P, --publish          Publish current production code to live environment
@@ -93,6 +92,8 @@ Options:
   -v, --version          Output version information and exit
 
 Other Options:
+  --approve              Approve proposed changes and queue for deployment
+  --deny              Deny proposed changes
   --automate             For unattended deployment, equivalent to -Fuq
   --no-check             Override active file and server checks 
   --slack-test           Test Slack integration
@@ -136,7 +137,6 @@ while [[ ${1:-unset} = -?* ]]; do
 	case $1 in
 		-h|--help) flags >&2; exit ;;
 		-u|--update) UPGRADE=1 ;;
-		-A|--approve) APPROVE=1 ;;
 		-P|--publish) PUBLISH=1 ;;
 		-S|--skip-update) SKIPUPDATE=1 ;;
 		-c|--current) CURRENT=1 ;;
@@ -147,6 +147,8 @@ while [[ ${1:-unset} = -?* ]]; do
 		-d|--debug) DEBUG=1 ;;
 		-F|--force) FORCE=1 ;;
 		-m|--merge) MERGE=1 ;; 
+		--approve) APPROVE=1 ;;
+		--deny) DENY=1 ;;
 		--automate) FORCE=1; UPGRADE=1; MERGE=1; QUIET=1; AUTOMATE=1 ;;
 		--slack-test) SLACKTEST=1 ;;
 		--email-test) EMAILTEST=1 ;;
@@ -160,12 +162,12 @@ while [[ ${1:-unset} = -?* ]]; do
 done
 
 # Run in debug mode, if set
-if [ "${DEBUG}" == "1" ]; then
+if [[ "${DEBUG}" == "1" ]]; then
 	set -x
 fi
 
 # Exit on empty variable, will possibly get confused by git output
-if [ "${STRICT}" == "1" ]; then
+if [[ "${STRICT}" == "1" ]]; then
 	set -e
 fi
 
@@ -173,13 +175,13 @@ fi
 APP+=("${@}")
 
 # Check to see if the user is deploying from current working directory
-if [ "${CURRENT}" == "1" ]; then
+if [[ "${CURRENT}" == "1" ]]; then
 	WORKPATH="$(dirname "${PWD}")"
 	APP="${PWD##*/}"
 fi
 
 # If not trying to deploy current directory, and no repo is named, exit
-if [ -z "${@}" ] && [ "${CURRENT}" != "1" ]; then
+if [[ -z "${@}" ]] && [[ "${CURRENT}" != "1" ]]; then
 	echo "Choose a valid project, or use the --current flag to deploy from the current directory."
 	exit 1
 fi
@@ -187,7 +189,8 @@ fi
 # Get the active switches for display in logfiles
 if [[ "${AUTOMATE}" == 1 ]]; then STARTUP="${STARTUP} --automate"; fi
 if [[ "${UPGRADE}" == 1 ]]; then STARTUP="${STARTUP} --update"; fi
-if [[ "${APPROVE}" == 1 ]]; then STARTUP="${STARTUP} --approve"; fi
+if [[ "${APPROVE}" == 1 ]]; then STARTUP="${STARTUP} --approve"; FORCE="1"; fi
+if [[ "${DENY}" == 1 ]]; then STARTUP="${STARTUP} --deny"; FORCE="1"; fi
 if [[ "${PUBLISH}" == 1 ]]; then STARTUP="${STARTUP} --publish"; fi
 if [[ "${SKIPUPDATE}" == 1 ]]; then STARTUP="${STARTUP} --skip-update"; fi
 if [[ "${CURRENT}" == 1 ]]; then STARTUP="${STARTUP} --current"; fi
@@ -283,7 +286,7 @@ libLocation="${deployPath}/lib/loader.sh"
 etcLocation="${deployPath}/deploy.conf"
 
 # System wide configuration files
-if [ -f "${etcLocation}" ]; then
+if [[ -f "${etcLocation}" ]]; then
 	# shellcheck disable=1090
 	source "${etcLocation}"
 else
@@ -292,25 +295,25 @@ else
 fi
 
 # Check to see if the user is deploying from current working directory
-if [ "${CURRENT}" == "1" ]; then
+if [[ "${CURRENT}" == "1" ]]; then
 	WORKPATH="$(dirname "${PWD}")"
 	APP="${PWD##*/}"
 fi
 
 # Load per-user configuration, if it exists
-if [ -r ~/.deployrc ]; then
+if [[ -r ~/.deployrc ]]; then
 	# shellcheck disable=1090
 	source ~/.deployrc; USERRC=1
 fi
 
 # Load per-project configuration, if it exists
-if [ -r "${WORKPATH}/${APP}/config/deploy.sh" ]; then
+if [[ -r "${WORKPATH}/${APP}/config/deploy.sh" ]]; then
 	# shellcheck disable=1090
 	source "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"; APPRC=1
 fi
 
 # Load libraries, or die
-if [ -f "${libLocation}" ]; then
+if [[ -f "${libLocation}" ]]; then
 	# shellcheck disable=1090
 	source "${libLocation}"
 else
@@ -319,7 +322,7 @@ else
 fi
 
 # Function list
-if [ "${FUNCTIONLIST}" == "1" ]; then
+if [[ "${FUNCTIONLIST}" == "1" ]]; then
 	compgen -A function | more; quickExit
 	#compgen -A function > /tmp/func.list
 	#tr '\n' ' ' < /tmp/func.list;  echo
@@ -327,7 +330,7 @@ if [ "${FUNCTIONLIST}" == "1" ]; then
 fi
 
 # Variable list
-if [ "${VARIABLELIST}" == "1" ]; then
+if [[ "${VARIABLELIST}" == "1" ]]; then
 	( set -o posix ; set ) | cat -v; quickExit
 fi
 
@@ -337,7 +340,7 @@ trace "Running from ${deployPath}"
 trace "Loading system configuration file from ${etcLocation}"
 
 # Does a user configuration exit?
-if [ "${USERRC}" == "1" ]; then
+if [[ "${USERRC}" == "1" ]]; then
 	trace "Loading user configuration from ~/.deployrc"
 else
 	trace "User configuration not found, creating."
@@ -355,19 +358,19 @@ else
 fi
 
 # Does a project configuration exist?
-if [ "${APPRC}" == "1" ]; then
+if [[ "${APPRC}" == "1" ]]; then
 	trace "Loading project configuration from ${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
 else
 	trace "No project configuration file found"
 fi
 
 # Are we using "smart" *cough* commits?
-if [ "${SMARTCOMMIT}" == "TRUE" ]; then
+if [[ "${SMARTCOMMIT}" == "TRUE" ]]; then
 	trace "Smart commits are enabled"
 fi
 
 # Are any integrations setup?
-if [ "${POSTTOSLACK}" == "TRUE" ]; then
+if [[ "${POSTTOSLACK}" == "TRUE" ]]; then
 	trace "Slack integration enabled"
 fi
 
@@ -377,7 +380,7 @@ if [[ -n "${POSTEMAIL}" ]]; then
 fi
 
 # Remote logging?
-if [ "${REMOTELOG}" == "TRUE" ]; then
+if [[ "${REMOTELOG}" == "TRUE" ]]; then
 	trace "Remote log posting enabled"
 fi
 
@@ -386,31 +389,52 @@ trace "Log file is ${logFile}"
 trace "Development workpath is ${WORKPATH}"
 
 # Are we planning on "fixing" permissions?
-if [ "${FIXPERMISSIONS}" == "TRUE" ]; then
+if [[ "${FIXPERMISSIONS}" == "TRUE" ]]; then
 	trace "Lead developer permissions are ${DEVUSER}.${DEVGROUP}"
 	trace "Apache permissions are ${APACHEUSER}.${APACHEGROUP}"
 fi
 
 # Check for upcoming merge
-if [ "${AUTOMERGE}" == "TRUE" ]; then
+if [[ "${AUTOMERGE}" == "TRUE" ]]; then
 	MERGE="1"
 	trace "Automerge is enabled"
 fi
 
-# Check for approval vs. user input
-if [[ "${APPROVE}" == "1" ]] || [[ "${PUBLISH}" == "1" ]]; then
-	if [[ "${FORCE}" == "1" ]] || [[ "${QUIET}" == "1" ]]; then
-		error "You can not approve or publish production code without user interaction, exiting deployment."
-	fi
+if [[ "${NOCHECK}" == "1" ]]; then
+	SERVERCHECK="FALSE";
+	ACTIVECHECK="FALSE"
 fi
 
 trace "Current project is ${APP}"
 trace "Current user is ${DEV}"
 trace "Git lock at ${gitLock}"
 
-if [ "${NOCHECK}" == "1" ]; then
-	SERVERCHECK="FALSE";
-	ACTIVECHECK="FALSE"
+# Start checking for errors
+# Check for publishing vs. user input
+if [[ "${PUBLISH}" == "1" ]]; then
+	if [[ "${FORCE}" == "1" ]] || [[ "${QUIET}" == "1" ]]; then
+		error "You can not publish production code without user interaction."
+	fi
+fi
+
+# If approval required, are smart commits enabled?
+if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${SMARTCOMMIT}" != "TRUE" ]]; then
+	SMARTCOMMIT="TRUE"
+	trace "Enabling smart commits for approval queue"	
+fi
+
+# Is someone trying to approve and deny at the same time? :trollface:
+if [[ "${APPROVE}" == "1" ]] && [[ "${DENY}" == "1" ]]; then
+	error "The --approve and --deny switches can not be used together."
+fi
+
+# Check if approval is queued
+if [[ "${APPROVE}" == "1" ]] && [[ ! -f "${WORKPATH}/${APP}/.approval" ]]; then
+	if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
+		error "This project is not configured to require approval."	
+	else	
+		error "No outstanding approval request found."
+	fi
 fi
 
 # Setup the core application
@@ -428,16 +452,33 @@ function appDeploy() {
 		gitGarbage		# If needed, clean up the trash
 		preDeploy		# Get the status
 		wpPkg			# Run Wordpress upgrades if needed
-		pkgMgr			# Run node package management, or grunt
-		gitStatus		# Make sure there's anything here to commit
-		gitStage		# Stage files
-		gitCommit		# Commit, with message
-		gitPushMstr		# Push master to Bit Bucket
-		gitChkProd		# Checkout production branch
-		gitMerge		# Merge master into production
-		gitPushProd		# Push production to Bit Bucket
-		gitChkMstr		# Checkout master once again  
-		pkgDeploy		# Deploy project to live server
+
+		# Check for approval/deny/queue
+		if [[ "${REQUIREAPPROVAL}" == "TRUE" ]]; then
+			if [[ "${APPROVE}" == "1" ]] && [[ -f "${WORKPATH}/${APP}/.approved" ]]; then 
+				approve 		# Approve proposed changes
+			else
+				if [[ "${DENY}" == "1" ]] && [[ -f "${WORKPATH}/${APP}/.denied" ]]; then 
+					deny 		# Deny proposed changes
+ 				else
+					if [[ ! -f "${WORKPATH}/${APP}/.approvalqueue" ]]; then
+						queue	# Queue for approval
+					fi
+				fi
+			fi
+		else
+			# Continue normally
+			pkgMgr			# Run node package management, or grunt
+			gitStatus		# Make sure there's anything here to commit
+			gitStage		# Stage files
+			gitCommit		# Commit, with message
+			gitPushMstr		# Push master to Bit Bucket
+			gitChkProd		# Checkout production branch
+			gitMerge		# Merge master into production
+			gitPushProd		# Push production to Bit Bucket
+			gitChkMstr		# Checkout master once again  
+			pkgDeploy		# Deploy project to live server
+		fi
 	fi  
 }
 

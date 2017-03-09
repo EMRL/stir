@@ -26,14 +26,14 @@ function smrtCommit() {
 			awk '{print $1, $2}' "${wpFile}" > "${trshFile}" && mv "${trshFile}" "${wpFile}";
 			# Add commas between the plugins with this
 			sed ':a;N;$!ba;s/\n/, /g' "${wpFile}" > "${trshFile}" && mv "${trshFile}" "${wpFile}";
-			# Replace current commit message with Plugin upgrade info 
+			# Replace current commit message with plugin upgrade info 
 			PLUGINS=$(<"${wpFile}")
 			COMMITMSG="$PCC ($PLUGINS)"
 		fi
 
 		# Is this an ACF-only update?
 		if [[ -n "${ACFFILE}" ]] && [[ -z "${PCA}" ]]; then
-			PCC="Updated 1/1 plugin"
+			PCC="Updated 1 of 1 plugin"
 			PLUGINS="advanced-custom-fields-pro"
 			COMMITMSG="$PCC ($PLUGINS)"
 		fi

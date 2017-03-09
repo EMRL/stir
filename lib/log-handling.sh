@@ -31,7 +31,7 @@ function makeLog() {
 		VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
 		htmlBuild
 		# Strip out the buttons that self-link
-		sed -e "s^BUTTON: BEGIN //-->^BUTTON HIDE^g" -i "${htmlFile}"
+		sed -e "s^// BUTTON: BEGIN //-->^BUTTON HIDE^g" -i "${htmlFile}"
 		postLog
 	fi
 }

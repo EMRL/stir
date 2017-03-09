@@ -42,7 +42,7 @@ function go() {
 
 	# Chill and wait for user to confirm project
 	if  [ "${FORCE}" = "1" ] || yesno --default yes "Continue? [Y/n] "; then
-		trace "Loading project."
+		trace "Loading project"
 	else
 		quickExit
 	fi
@@ -78,12 +78,12 @@ function fixIndex() {
 	if [[ "${FIXINDEX}" == "TRUE" ]]; then
 		trace "Checking index..."
 		if [ -w "${WORKPATH}/${APP}/.git/index" ]; then
-			trace "Looks good."
+			trace "OK"
 		else
 			trace "Index is not writable, attempting to fix..."
 			sudo chmod 777 "${WORKPATH}/${APP}/.git/index" ; errorChk
 			if [ -w "${WORKPATH}/${APP}/.git/index" ]; then
-				trace "Looks good."
+				trace "OK"
 			else
 				error "Unable to write new index file."; 
 			fi
