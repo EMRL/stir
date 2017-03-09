@@ -53,7 +53,7 @@ function mailPost() {
 
 function postCommit() {
 	# Check for a Wordpress core update, update production database if needed
-	if [[ "${UPDCORE}" == "1" ]] && [[ -z "${PRODUCTION}" ]] && [[ -z "${PRODURL}" ]] && [[ -z "${DEPLOY}" ]]; then
+	if [[ "${UPDCORE}" == "1" ]] && [[ -n "${PRODUCTION}" ]] && [[ -n "${PRODURL}" ]] && [[ -n "${DEPLOY}" ]]; then
 		info "Upgrading production database..."; lynx -dump "${PRODURL}"/system/wp-admin/upgrade.php?step=1 > "${trshFile}"
 	fi
 
