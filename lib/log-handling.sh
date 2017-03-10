@@ -6,6 +6,11 @@
 trace "Loading log handling"
 
 function makeLog() {
+	# Clean up stuff that is most likely there
+	sed -i "/git reset HEAD/d" "${logFile}"
+	sed -i "/Checking out files:/d" "${logFile}"
+	sed -i "/Unpacking objects:/d" "${logFile}"
+
 	# Filter raw log output as configured by user
 	if [ "${NOPHP}" == "TRUE" ]; then
 		grep -vE "(PHP |Notice:|Warning:|Strict Standards:)" "${logFile}" > "${postFile}"
