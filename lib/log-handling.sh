@@ -12,6 +12,28 @@ function makeLog() {
 		cat "${postFile}" > "${logFile}"
 	fi
 
+	# Clean up mina's goobers
+	if [[ "${DEPLOY}" == "mina deploy" ]]; then
+		sed -i "/0m Creating a temporary build path/c\Creating a temporary build path" "${logFile}"
+		sed	-i "/0m Fetching new git commits/c\Fetching new git commits" "${logFile}"
+		sed	-i "/0m Using git branch '${PRODUCTION}'/c\Using git branch '${PRODUCTION}'" "${logFile}"
+
+
+		sed -i "/0m Using this git commit/c\Using this git commit" "${logFile}"
+		sed -i "/0m Cleaning up old releases/c\Cleaning up old releases" "${logFile}"
+		sed -i "/0m Build finished/c\Build finished" "${logFile}"
+
+		# Totally remove these lines
+		sed -i "/----->/d" "${logFile}"
+		sed -i "/\[31m/d" "${logFile}"
+		sed -i "/\[96m/d" "${logFile}"
+		sed -i "/0m/d" "${logFile}"
+		sed -i "/Resolving deltas:/d" "${logFile}"
+		sed -i "/remote: Compressing objects:/d" "${logFile}"
+		sed -i "/Receiving objects:/d" "${logFile}"
+		sed -i "/Resolving deltas:/d" "${logFile}"
+	fi
+
 	# Setup a couple of variables
 	VIEWPORT="680"
 	VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
