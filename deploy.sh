@@ -198,8 +198,8 @@ if [[ "${VERBOSE}" == 1 ]]; then STARTUP="${STARTUP} --verbose"; fi
 if [[ "${QUIET}" == 1 ]]; then STARTUP="${STARTUP} --quiet"; fi
 if [[ "${STRICT}" == 1 ]]; then STARTUP="${STARTUP} --strict"; fi
 if [[ "${DEBUG}" == 1 ]]; then STARTUP="${STARTUP} --debug"; fi
-if [[ "${FORCE}" == 1 ]]; then STARTUP="${STARTUP} --force "; fi
-if [[ "${MERGE}" == 1 ]]; then STARTUP="${STARTUP} --merge "; fi
+if [[ "${FORCE}" == 1 ]]; then STARTUP="${STARTUP} --force"; fi
+if [[ "${MERGE}" == 1 ]]; then STARTUP="${STARTUP} --merge"; fi
 if [[ "${NOCHECK}" == 1 ]]; then STARTUP="${STARTUP} --no-check"; fi
 
 # Probably not relevant but included because reasons

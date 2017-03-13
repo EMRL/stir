@@ -10,19 +10,17 @@ function buildLog() {
 	# OK let's grab the short version of the commit hash
 	COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL="${REPOHOST}/${REPO}/commits/${COMMITHASH}"
 
-	# Is this just an approval or a full commit?
-	if [[ "${PUBLISH}" == "1" ]]; then
-		echo "<strong>Commit ${COMMITHASH}</strong>: Marked as deployed" > "${postFile}"
-	else
-		echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${postFile}"
+	# Is this a publish only?
+	if [[ "${PUBLISH}" == "1" ]] && [[ -z "${notes}" ]]; then	
+		notes="Published to production and marked as deployed"
 	fi
 
-	# Is this just an approval or a full commit?
-	if [[ "${APPROVE}" == "1" ]]; then
-		echo "<strong>Commit ${COMMITHASH}</strong>: Marked as approved and deployed" > "${postFile}"
-	else
-		echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${postFile}"
+	# Is this just an approval?
+	if [[ "${APPROVE}" == "1" ]] && [[ -z "${notes}" ]]; then
+		notes="Marked as approved and deployed" 
 	fi
+
+	echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${postFile}"
 }
 
 # Post integration via email

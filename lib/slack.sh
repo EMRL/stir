@@ -46,6 +46,11 @@ function slackPost () {
 		slack_message="*${SLACKUSER}* attempted to deploy changes to ${APP}\nERROR: ${error_msg}"
 	fi
 
+	# Has there been an error?
+	if [ "${message_state}" == "NOTICE" ]; then
+		slack_message="*${SLACKUSER}* nothing to do for ${APP}\nNOTICE: ${notes}"
+	fi
+
 	# Add a details link to online logfiles if they exist
 	if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]]; then
 		slack_message="${slack_message} (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)"

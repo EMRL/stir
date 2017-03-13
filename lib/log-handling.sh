@@ -11,32 +11,42 @@ function makeLog() {
 	sed -i "/Checking out files:/d" "${logFile}"
 	sed -i "/Unpacking objects:/d" "${logFile}"
 
-	# Filter raw log output as configured by user
-	if [ "${NOPHP}" == "TRUE" ]; then
-		grep -vE "(PHP |Notice:|Warning:|Strict Standards:)" "${logFile}" > "${postFile}"
-		cat "${postFile}" > "${logFile}"
-	fi
+	# Clean up stuff that has a small chance of being there
+	sed -i "/--:--:--/d" "${logFile}"
+	sed -i "/% Received/d" "${logFile}"
+	sed -i "/\Dload/d" "${logFile}"
+	sed -i "/\[34m/d" "${logFile}"
+	sed -i "/\[31m/d" "${logFile}"
+	sed -i "/\[32m/d" "${logFile}"
+	sed -i "/\[96m/d" "${logFile}"
 
 	# Clean up mina's goobers
 	if [[ "${DEPLOY}" == "mina deploy" ]]; then
 		sed -i "/0m Creating a temporary build path/c\Creating a temporary build path" "${logFile}"
 		sed	-i "/0m Fetching new git commits/c\Fetching new git commits" "${logFile}"
 		sed	-i "/0m Using git branch '${PRODUCTION}'/c\Using git branch '${PRODUCTION}'" "${logFile}"
-
-
 		sed -i "/0m Using this git commit/c\Using this git commit" "${logFile}"
 		sed -i "/0m Cleaning up old releases/c\Cleaning up old releases" "${logFile}"
 		sed -i "/0m Build finished/c\Build finished" "${logFile}"
 
 		# Totally remove these lines
 		sed -i "/----->/d" "${logFile}"
-		sed -i "/\[31m/d" "${logFile}"
-		sed -i "/\[96m/d" "${logFile}"
 		sed -i "/0m/d" "${logFile}"
 		sed -i "/Resolving deltas:/d" "${logFile}"
 		sed -i "/remote: Compressing objects:/d" "${logFile}"
 		sed -i "/Receiving objects:/d" "${logFile}"
 		sed -i "/Resolving deltas:/d" "${logFile}"
+	fi
+
+	# Filter raw log output as configured by user
+	if [[ "${NOPHP}" == "TRUE" ]]; then
+		grep -vE "(PHP |Notice:|Warning:|Strict Standards:)" "${logFile}" > "${postFile}"
+		cat "${postFile}" > "${logFile}"
+	fi
+
+	# Is this a publish only?
+	if [[ "${PUBLISH}" == "1" ]] && [[ -z "${notes}" ]]; then	
+		notes="Published to production and marked as deployed"
 	fi
 
 	# Setup a couple of variables
@@ -78,13 +88,20 @@ function htmlBuild() {
 			LOGTITLE="Deployment Approval"
 			cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${deployPath}/html/${EMAILTEMPLATE}/approve.html" > "${htmlFile}"
 		else
-			# Looks like we've got a normal successful deployment
-			message_state="SUCCESS"
-			# Is this a scheduled updated?
-			if [[ "${AUTOMATE}" == "1" ]]; then
+			if [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" = "1" ]] && [[ "${UPD2}" = "1" ]]; then
+				message_state="NOTICE"
 				LOGTITLE="Scheduled Deployment"
+				notes="No updates available for deployment"
 			else
-				LOGTITLE="Deployment Log"
+				# Looks like we've got a normal successful deployment
+				message_state="SUCCESS"
+				# Is this a scheduled updated?
+				if [[ "${AUTOMATE}" == "1" ]]; then
+					LOGTITLE="Scheduled Deployment"
+				else
+
+					LOGTITLE="Deployment Log"
+				fi
 			fi
 			cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${deployPath}/html/${EMAILTEMPLATE}/success.html" > "${htmlFile}"
 		fi
@@ -119,7 +136,7 @@ function processLog() {
 		-e "s^{{VIEWPORTPRE}}^${VIEWPORTPRE}^g" \
 		"${trshFile}" > "${htmlFile}"
 
-	# Clean up header we don't need
+	# Clean up header stuff that we don't need
 	if [[ -z "${DEVURL}" ]]; then
 		sed -i '/<strong>Staging URL:/d' "${htmlFile}"
 	fi
@@ -127,6 +144,10 @@ function processLog() {
 	if [[ -z "${PRODURL}" ]]; then
 		sed -i '/<strong>Production URL:/d' "${htmlFile}"
 	fi
+
+	if [[ -z "${CLIENTLOGO}" ]]; then
+		sed -i '/CLIENTLOGO/d' "${htmlFile}"
+	fi          
 }
 
 # Remote log function 
@@ -154,7 +175,7 @@ function postLog() {
 
 function mailLog() {
 	# Only send email if a commit has been made, an approval is required, or there has been an error
-	if [[ -n "${COMMITHASH}" ]] || [[ "${message_state}" == "ERROR" ]] || [[ "${message_state}" == "APPROVAL NEEDED" ]]; then
+	if [[ -n "${COMMITHASH}" ]] || [[ "${message_state}" == "ERROR" ]] || [[ "${message_state}" == "APPROVAL NEEDED" ]] || [[ "${AUTOMATE}" == "1" ]]; then
 		if [[ "${EMAILHTML}" == "TRUE" ]]; then
 			# Send the email
 			(

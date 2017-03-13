@@ -173,7 +173,7 @@ function wpPkg() {
 
 		# If running in Wordpress update-only mode, bail out
 		if [ "$UPGRADE" = "1" ] && [ "$UPD1" = "1" ] && [ "$UPD2" = "1" ]; then
-			notice "No updates available, halting deployment."
+			notice "No updates available, halting."
 			safeExit
 		fi
 	fi
