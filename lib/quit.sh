@@ -53,7 +53,7 @@ function safeExit() {
 	# Ghetto but will do for now
 	if [[ "${POSTTOSLACK}" == "TRUE" ]] &&  [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" = "1" ]] && [[ "${UPD2}" = "1" ]]; then
 		message_state="NOTICE"
-		notes="No updates available for deployment."
+		notes="No updates available for deployment"
 		slackPost
 	fi
 

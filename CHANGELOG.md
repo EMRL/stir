@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+- Added email and Slack notification for automated deployments when no updates are available
+- Missing client logos no longer break HTML emails and logs
 - Improved language for consistency in some functions
 - Fixed a bug with Slack not including commit messages when using `deploy --automate`
 
