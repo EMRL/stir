@@ -85,6 +85,16 @@
 # always be editable before finalizing commit.	
 # COMMITMSG="This is a default commit message"
 
+# Wordpress configuration
+#
+# Some developers employ a file structure that separates Wordpress core from 
+# their application code. If you're using non-standard file paths, define the 
+# root, system, and app (plugin/theme) directories below. Note that the forward
+# slash is required. Just about everyone on the planet can leave this alone.
+# WPROOT="/public"
+# WPAPP="/app"
+# WPSYSTEM="/system"
+
 # The command to finalize deployment of your project(s)
 # DEPLOY="mina deploy"				
 

@@ -22,7 +22,7 @@ function wpPkg() {
 
 				# Database check
 				trace "Checking database..."
-				"${WPCLI}"/wp db check 2> /dev/null; EXITCODE=$?; 
+				"${WPCLI}"/wp db check &>> /dev/null; EXITCODE=$?; 
 				if [[ "${EXITCODE}" != 0 ]]; then 
 					"${WPCLI}"/wp db check &>> "${logFile}"; 
 					error "There is a problem with your Wordpress installation, check your configuration."
@@ -197,6 +197,14 @@ function wpPkg() {
 			safeExit
 		fi
 	fi
+}
+
+function wpPlugin() {
+	trace "Empty function"	
+}
+
+function wpCore() {
+	trace "Empty function"	
 }
 
 function wpCheck() {
