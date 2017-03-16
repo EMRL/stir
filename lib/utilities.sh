@@ -14,22 +14,6 @@ function go() {
 	console "deploy ${VERSION}"
 	console "Current working path is ${WORKPATH}/${APP}"
 
-	# Does a configuration file for this repo exist?
-	if [ -z "${APPRC}" ]; then
-		if [ ! -d "${WORKPATH}/${APP}/config" ]; then
-			mkdir "${WORKPATH}/${APP}/config"
-		fi
-		emptyLine; info "Project configuration not found, creating."; sleep 2
-		cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/${CONFIGDIR}/"
-		if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
-			nano "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
-			clear; sleep 1
-			quickExit
-		else
-			info "You can change configuration later by editing ${WORKPATH}/${APP}/config/deploy.sh"
-		fi
-	fi
-
 	# Slack test
 	if [ "${SLACKTEST}" == "1" ]; then
 		slackTest; quickExit
@@ -99,6 +83,22 @@ function depCheck() {
 		error "deploy ${VERSION} requires git to function properly." 
 	}
 
+	# Does a configuration file for this repo exist?
+	if [ -z "${APPRC}" ]; then
+		if [ ! -d "${WORKPATH}/${APP}/config" ]; then
+			mkdir "${WORKPATH}/${APP}/config"
+		fi
+		emptyLine; info "Project configuration not found, creating."; sleep 2
+		cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/${CONFIGDIR}/"
+		if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
+			nano "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
+			clear; sleep 1
+			quickExit
+		else
+			info "You can change configuration later by editing ${WORKPATH}/${APP}/config/deploy.sh"
+		fi
+	fi
+	
 	# If a deploy command is declared, check that it actually exists.
 	# This is probably not the best way to do this but for now it works. It 
 	# strips everything after the first space that is declared in DEPLOY and

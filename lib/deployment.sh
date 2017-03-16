@@ -54,7 +54,7 @@ function pkgDeploy() {
 	# broke the deployment command getting passed through. Looks like I need to do some 
 	# stuff with eval, see http://emrl.co/s6chq
 	emptyLine
-	if [ -n "${DEPLOY}" ]; then
+	if [[ -n "${DEPLOY}" ]]; then
 		# Add ssh keys and double check directoy
 		cd "${WORKPATH}/${APP}" || errorChk
 		trace "Launching deployment from ${PWD}"; fixIndex

@@ -11,7 +11,7 @@ gitLock="$WORKPATH/$APP/.git/index.lock"
 # Make sure we're in a git repository.
 function gitStart() {
 	# Directory exists?
-	if [ ! -d "${WORKPATH}/${APP}" ]; then
+	if [[ ! -d "${WORKPATH}/${APP}" ]]; then
 		info "${WORKPATH}/${APP} is not a valid directory."
 		exit 1
 	else
@@ -19,51 +19,26 @@ function gitStart() {
 	fi
 
 	# Check that .git exists
-	if [ -f "${WORKPATH}/${APP}/.git/index" ]; then
+	if [[ -f "${WORKPATH}/${APP}/.git/index" ]]; then
 		sleep 1
 	else
 		info "There is nothing at ${WORKPATH}/${APP} to deploy."
 		exit 1
 	fi
 
-	# Make sure the defined branch(es) exist
-	if [ -n "${MASTER}" ]; then
-		git rev-parse --verify "${MASTER}" >> /dev/null
-		EXITCODE=$?; 
-		if [[ "${EXITCODE}" != 0 ]]; then 
-			warning "Exiting on error code ${EXITCODE}: branch ${MASTER} does not exist"
-			error_msg="Exited on error code ${EXITCODE}: branch ${MASTER} does not exist"
-			errorExit
-		fi
-
-		if [ -n "${PRODUCTION}" ]; then
-			git rev-parse --verify "${PRODUCTION}" >> /dev/null
-			EXITCODE=$?; 
-			if [[ "${EXITCODE}" != 0 ]]; then 
-				warning "Exiting on error code ${EXITCODE}: branch ${PRODUCTION} does not exist"
-				error_msg="Exited on error code ${EXITCODE}: branch ${PRODUCTION} does not exist"
-				errorExit
-			fi
-		fi
-	else
-		warning "Exiting on error code ${EXITCODE}: master branch must be defined"
-		error_msg="Exited on error code ${EXITCODE}: master branch must be defined"
-		errorExit
-	fi
-
 	# If CHECKBRANCH is set, make sure current branch is correct.
 	start_branch="$(git rev-parse --abbrev-ref HEAD)"
-	if [ -n "${CHECKBRANCH}" ]; then 
+	if [[ -n "${CHECKBRANCH}" ]]; then 
 		if [[ "${start_branch}" != "${CHECKBRANCH}" ]]; then
 			error "Must be on ${CHECKBRANCH} branch to continue deployment.";
 		fi
 	fi
 
 	# Check for active files
-	if [[ "${FORCE}" == "1" ]] && [[ "${UPGRADE}" == "1" ]] && [[ "${QUIET}" == "1" ]] && [ "${ACTIVECHECK}" = "TRUE" ]; then
+	if [[ "${FORCE}" == "1" ]] && [[ "${UPGRADE}" == "1" ]] && [[ "${QUIET}" == "1" ]] && [[ "${ACTIVECHECK}" = "TRUE" ]]; then
 		trace "Checking for active files"
 		active_files=$(find "${WORKPATH}/${APP}" -mmin -"${CHECKTIME}" ! -path "${WORKPATH}/${APP}/public/app/wflogs/*" ! -path "${WORKPATH}/${APP}/.git/*" ! -path "${WORKPATH}/${APP}/.git")
-		if [ ! -z "${active_files}" ]; then
+		if [[ ! -z "${active_files}" ]]; then
 			trace "Recently changed files: ${active_files}"
 			error "Code base has changed within the last ${CHECKTIME} minutes. Halting deployment."
 		fi
@@ -75,7 +50,7 @@ function gitStart() {
 
 # Checkout master
 function gitChkMstr() {
-	if [ -z "${MASTER}" ]; then
+	if [[ -z "${MASTER}" ]]; then
 		emptyLine; error "deploy ${VERSION} requires a master branch to be defined.";
 	else
 		current_branch="$(git rev-parse --abbrev-ref HEAD)"
@@ -84,7 +59,7 @@ function gitChkMstr() {
 			if [[ "${VERBOSE}" -eq 1 ]]; then
 				git checkout master | tee --append "${logFile}"            
 			else
-				if [ "${QUIET}" != "1" ]; then
+				if [[ "${QUIET}" != "1" ]]; then
 					git checkout master &>> "${logFile}" &
 					showProgress
 				else
@@ -97,7 +72,7 @@ function gitChkMstr() {
 
 # Garbage collection
 function gitGarbage() {
-	if [ "${GARBAGE}" = "TRUE" ] && [[ "${QUIET}" != "1" ]]; then 
+	if [[ "${GARBAGE}" = "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then 
 		notice "Preparing repository..."
 		git gc | tee --append "${logFile}"
 		if [[ "${QUIET}" != "1" ]]; then
@@ -124,7 +99,7 @@ function gitStage() {
 		console "Nothing to commit, working directory clean."; quietExit
 	else
 		trace "Staging files"; emptyLine
-		if [ "${FORCE}" = "1" ] || yesno --default yes "Stage files? [Y/n] "; then
+		if [[ "${FORCE}" = "1" ]] || yesno --default yes "Stage files? [Y/n] "; then
 			if [[ "${VERBOSE}" -eq 1 ]]; then
 				git add -A | tee --append "${logFile}"; errorChk              
 			else  
@@ -149,7 +124,7 @@ function gitCommit() {
 	else
 		# Found stuff, let's get a commit message
 		if [[ -z "${COMMITMSG}" ]]; then
-			# while read -p "Enter commit message: " notes && [ -z "$notes" ]; do :; done
+			# while read -p "Enter commit message: " notes && [[ -z "$notes" ]]; do :; done
 			read -rp "Enter commit message: " notes
 			if [[ -z "${notes}" ]]; then
 				console "Commit message must not be empty."
@@ -169,21 +144,21 @@ function gitCommit() {
 		else
 			# If running in -Fu (force updates only) mode, grab the Smart Commit 
 			# message and skip asking for user input. Nice for cron updates. 
-			if [ "${FORCE}" = "1" ] && [ "${UPDATE}" = "1" ]; then
+			if [[ "${FORCE}" = "1" ]] && [[ "${UPDATE}" = "1" ]]; then
 				# We need Smart commits enabled or this can't work
-				if [ "${SMARTCOMMIT}" -ne "TRUE" ]; then
+				if [[ "${SMARTCOMMIT}" -ne "TRUE" ]]; then
 					console "Smart Commits must enabled when forcing updates."
 					console "Set SMARTCOMMIT=TRUE in ${WORKPATH}/${APP}/${CONFIGDIR}deploy.sh"; quietExit
 				else
-					if [ -z "${COMMITMSG}" ]; then
+					if [[ -z "${COMMITMSG}" ]]; then
 						info "Commit message must not be empty."; quietExit
 					else
-						notes=${COMMITMSG}
+						notes="${COMMITMSG}"
 					fi
 				fi
 			else
 				# We want to be able to edit the default commit if available
-				if [[ $FORCE != "1" ]]; then
+				if [[ "${FORCE}" != "1" ]]; then
 					notes=${COMMITMSG}
 					read -rp "Edit commit message: " -e -i "${COMMITMSG}" notes
 					# Update the commit message based on user input ()
@@ -201,15 +176,15 @@ function gitCommit() {
 
 # Push master
 function gitPushMstr() {
-	if [ -n "${MASTER}" ]; then
+	if [[ -n "${MASTER}" ]]; then
 		trace "Pushing master."; fixIndex
 		emptyLine  
 		if [[ "${VERBOSE}" -eq 1 ]]; then
 			git push | tee --append "${logFile}"; errorChk           
 		else
-			if  [ "${FORCE}" = "1" ] || yesno --default yes "Push master branch? [Y/n] "; then
-				if [ "${NOKEY}" != "TRUE" ]; then
-					if [ "${QUIET}" != "1" ]; then
+			if  [[ "${FORCE}" = "1" ]] || yesno --default yes "Push master branch? [Y/n] "; then
+				if [[ "${NOKEY}" != "TRUE" ]]; then
+					if [[ "${QUIET}" != "1" ]]; then
 						git push &>> "${logFile}" &
 						spinner $!
 						info "Success.    "
@@ -228,14 +203,14 @@ function gitPushMstr() {
 
 # Checkout production, now with added -f
 function gitChkProd() {
-	if [ "${MERGE}" = "1" ]; then
-		if [ -n "${PRODUCTION}" ]; then
+	if [[ "${MERGE}" = "1" ]]; then
+		if [[ -n "${PRODUCTION}" ]]; then
 			notice "Checking out production branch..."; fixIndex
 
 			if [[ "${VERBOSE}" -eq 1 ]]; then
 				git checkout "${PRODUCTION}" | tee --append "${logFile}"; errorChk               
 			else
-				if [ "${QUIET}" != "1" ]; then
+				if [[ "${QUIET}" != "1" ]]; then
 					git checkout "${PRODUCTION}" &>> "${logFile}" &
 					spinner $!
 					info "Success.    "
@@ -249,7 +224,7 @@ function gitChkProd() {
 			sleep 3; current_branch="$(git rev-parse --abbrev-ref HEAD)"
 			if [[ "${current_branch}" != "${PRODUCTION}" ]]; then
 				# If we're in that weird stuck mode on master, let's try to "fix" it
-				if  [ "${FORCE}" = "1" ] || yesno --default yes "Current branch is ${current_branch} and should be ${PRODUCTION}, try again? [Y/n] "; then
+				if  [[ "${FORCE}" = "1" ]] || yesno --default yes "Current branch is ${current_branch} and should be ${PRODUCTION}, try again? [Y/n] "; then
 					if [[ "${current_branch}" = "${MASTER}" ]]; then 
 						[[ -f "${gitLock}" ]] && rm "${gitLock}"
 						git add .; git checkout "${PRODUCTION}" &>> "${logFile}" #; errorChk
@@ -272,8 +247,8 @@ function gitChkProd() {
 # Merge master into production
 # git merge --no-edit might be bugging, took it our for now
 function gitMerge() {
-	if [ "${MERGE}" = "1" ]; then
-		if [ -n "${PRODUCTION}" ]; then
+	if [[ "${MERGE}" = "1" ]]; then
+		if [[ -n "${PRODUCTION}" ]]; then
 			notice "Merging master into production..."; fixIndex
 			# Clear out the index.lock file, cause reasons
 			[[ -f "${gitLock}" ]] && rm "${gitLock}"
@@ -282,7 +257,7 @@ function gitMerge() {
 			if [[ "${VERBOSE}" -eq 1 ]]; then
 				git merge "${MASTER}" | tee --append "${logFile}"              
 			else
-				if [ "${QUIET}" != "1" ]; then
+				if [[ "${QUIET}" != "1" ]]; then
 					# git merge --no-edit master &>> "${logFile}" &
 					git merge "${MASTER}" &>> "${logFile}" &
 					showProgress
@@ -296,16 +271,16 @@ function gitMerge() {
 
 # Push production
 function gitPushProd() {
-	if [ "${MERGE}" = "1" ]; then
-		if [ -n "$PRODUCTION" ]; then
+	if [[ "${MERGE}" = "1" ]]; then
+		if [[ -n "$PRODUCTION" ]]; then
 			trace "Push production"; fixIndex
 			emptyLine
 			if [[ "${VERBOSE}" -eq 1 ]]; then
 				git push | tee --append "${logFile}"; errorChk 
 				trace "OK"              
 			else
-				if [ "${FORCE}" = "1" ] || yesno --default yes "Push production branch? [Y/n] "; then
-					if [ "${QUIET}" != "1" ]; then
+				if [[ "${FORCE}" = "1" ]] || yesno --default yes "Push production branch? [Y/n] "; then
+					if [[ "${QUIET}" != "1" ]]; then
 						sleep 1
 						git push &>> "${logFile}" &
 						spinner $!
@@ -333,7 +308,7 @@ function gitPushProd() {
 
 # Get the stats for this git author, just for fun
 function gitStats() {
-	if [ "${GITSTATS}" == "TRUE" ] && [[ "${QUIET}" != "1" ]] && [[ "${PUBLISH}" != "1" ]]; then
+	if [[ "${GITSTATS}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]] && [[ "${PUBLISH}" != "1" ]]; then
 		console "Calculating..."
 		getent passwd "${USER}" | cut -d ':' -f 5 | cut -d ',' -f 1 > "${trshFile}"
 		FULLUSER=$(<"${trshFile}")
