@@ -64,6 +64,9 @@ function pkgDeploy() {
 			warning "Your deployment command ${deploy_cmd} cannot be found.";
 		}
 
+		# Test deployment command before running
+		deployChk
+
 		if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
 			# If we don't require approval to push to live, keep going
 			if [ "${FORCE}" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then

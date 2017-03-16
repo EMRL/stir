@@ -15,6 +15,18 @@ function errorChk() {
 	fi
 }
 
+function deployChk() {
+	if [[ "${DEPLOY}" == *"mina"* ]]; then
+		mina --simulate deploy &>> /dev/null
+		EXITCODE=$?; 
+		if [[ "${EXITCODE}" != 0 ]]; then 
+			warning "Deployment exited due to a configuration problem (Error ${EXITCODE})"
+			error_msg="Deployment exited due to a configuration problem (Error ${EXITCODE})"
+			errorExit
+		fi
+	fi
+}
+
 # Try to get exit/error code, with a hard stop on fail
 function errorStatus() {
 	EXITCODE=$?; 
