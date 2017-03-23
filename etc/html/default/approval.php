@@ -73,7 +73,6 @@ img {
 <style>
 /* Hover styles for buttons, it could happen */
 
-
 .button-td, .button-a {
   transition: all 100ms ease-in;
   padding: 0px 8px 0px 8px;

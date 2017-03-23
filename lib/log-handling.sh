@@ -145,6 +145,10 @@ function processLog() {
 		sed -i '/<strong>Production URL:/d' "${htmlFile}"
 	fi
 
+	if [[ -z "${PROJCLIENT}" ]]; then
+		sed -i 's/()//' "${htmlFile}"
+	fi  
+
 	if [[ -z "${CLIENTLOGO}" ]]; then
 		sed -i '/CLIENTLOGO/d' "${htmlFile}"
 	fi          
