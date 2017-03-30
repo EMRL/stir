@@ -84,7 +84,11 @@ function pkgDeploy() {
 			fi
 		else
 			if [[ "${APPROVE}" != "1" ]]; then
-				info "The project requires approval before pushing to ${PRODURL}"
+				if [[ -z "${PRODURL}" ]]; then 
+					warning "This project requires approval but has no production URL configured."
+				else
+					info "The project requires approval before pushing to ${PRODURL}"
+				fi
 			fi
 		fi
 	fi
@@ -117,7 +121,12 @@ function postDeploy() {
 		postCommit
 		# This needs a check.
 		if [[ "${APPROVE}" == "1" ]] || [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
-			info "Deployed to ${PRODURL}"
+			if [[ -z "${PRODURL}" ]]; then
+				warning "No production URL configured."
+				info "Successfully deployed."
+			else
+				info "Deployed to ${PRODURL}"
+			fi
 		fi
 	fi
 } 
