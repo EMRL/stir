@@ -33,7 +33,7 @@ function makeLog() {
 		sed -i "/----->/d" "${logFile}"
 		sed -i "/0m/d" "${logFile}"
 		sed -i "/Resolving deltas:/d" "${logFile}"
-		sed -i "/remote: Compressing objects:/d" "${logFile}"
+		sed -i "/remote:/d" "${logFile}"
 		sed -i "/Receiving objects:/d" "${logFile}"
 		sed -i "/Resolving deltas:/d" "${logFile}"
 	fi
