@@ -66,7 +66,10 @@ function makeLog() {
 		# For web logs, VIEWPORT should be 960
 		VIEWPORT="960"
 		VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
+		# Build the html email and details pages
 		htmlBuild
+		# Build the commit history page
+		gitHistory
 		# Strip out the buttons that self-link
 		sed -e "s^// BUTTON: BEGIN //-->^BUTTON HIDE^g" -i "${htmlFile}"
 		postLog
@@ -154,16 +157,25 @@ function processLog() {
 	fi          
 }
 
+# Git history function
+function gitHistory() {
+	git log --all --graph > "${trshFile}"
+	cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${trshFile}" "${deployPath}/html/${EMAILTEMPLATE}/footer.html" > "${statFile}"
+}
+
 # Remote log function 
 function postLog() {
 	if [ "${REMOTELOG}" == "TRUE" ]; then
 		# Post to localhost by simply copying files
 		if [[ "${LOCALHOSTPOST}" == "TRUE" ]] && [[ -f "${htmlFile}" ]]; then
 			cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}${COMMITHASH}.html"
+			cp "${statFile}" "${LOCALHOSTPATH}/${APP}-history.html"
 			# Attempt to make sure the files are readable by all
 			chmod a+rw "${LOCALHOSTPATH}/${APP}${COMMITHASH}.html" &> /dev/null
 			# Remove logs older then X days
-			find "${LOCALHOSTPATH}"* -mtime +"${EXPIRELOGS}" -exec rm {} \;
+			if [[ -n "${EXPIRELOGS}" ]]; then
+				find "${LOCALHOSTPATH}"* -mtime +"${EXPIRELOGS}" -exec rm {} \;
+			fi
 		fi
 
 		# Send the files through SCP (not yet enabled)
