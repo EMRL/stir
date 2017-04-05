@@ -317,3 +317,22 @@ function gitStats() {
 		gawk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf "Your total lines of code contributed so far: %s\n(+%s added | -%s deleted)\n",loc,add,subs }' -
 	fi
 } 
+
+function gitFullstats() {
+	hash gitstats 2>/dev/null || {
+	error "gitstats not installed." 
+	}
+	if [[ "${REMOTELOG}" == "TRUE" ]] && [[ "${LOCALHOSTPOST}" == "TRUE" ]]; then
+		if [[ ! -d "${LOCALHOSTPATH}/${APP}" ]]; then
+			mkdir "${LOCALHOSTPATH}/${APP}"
+		fi
+		if [[ ! -d "${LOCALHOSTPATH}/${APP}/stats" ]]; then
+			mkdir "${LOCALHOSTPATH}/${APP}/stats"
+		fi
+		notice "Generating files..."
+		gitstats "${WORKPATH}/${APP}" "${LOCALHOSTPATH}/${APP}/stats" &>> /dev/null &
+		spinner $!
+		info "Success.    "
+		cp "${deployPath}/html/${EMAILTEMPLATE}/stats/gitstats.css" "${LOCALHOSTPATH}/${APP}/stats"
+	fi
+}

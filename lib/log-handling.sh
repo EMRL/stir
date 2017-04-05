@@ -52,7 +52,7 @@ function makeLog() {
 	# Setup a couple of variables
 	VIEWPORT="680"
 	VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
-	LOGURL="${REMOTEURL}/${APP}${COMMITHASH}.html"	
+	LOGURL="${REMOTEURL}/${APP}/${COMMITHASH}.html"	
 
 	# IF we're using HTML emails, let's get to work
 	if [[ "${EMAILHTML}" == "TRUE" ]]; then
@@ -63,6 +63,7 @@ function makeLog() {
 
 	# Create HTML/PHP logs for viewing online
 	if [[ "${REMOTELOG}" == "TRUE" ]]; then
+		htmlDir
 		# For web logs, VIEWPORT should be 960
 		VIEWPORT="960"
 		VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
@@ -159,8 +160,47 @@ function processLog() {
 
 # Git history function
 function gitHistory() {
-	git log --all --graph > "${trshFile}"
-	cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${trshFile}" "${deployPath}/html/${EMAILTEMPLATE}/footer.html" > "${statFile}"
+	htmlDir	
+	# Collect gravatars for all the authors in this repo
+	for AUTHOR in $(git log --pretty=format:"%ae|%an" | sort | uniq); do
+		AUTHOREMAIL=$(echo $AUTHOR | cut -d\| -f1 | tr -d '[[:space:]]' | tr '[:upper:]' '[:lower:]')
+		AUTHORNAME=$(echo $AUTHOR | cut -d\| -f2)
+		GRAVATAR="http://www.gravatar.com/avatar/$(echo -n $AUTHOREMAIL | md5sum)?d=404&s=200"
+		IMGFILE="${LOCALHOSTPATH}/${APP}/avatar/$AUTHORNAME.png"
+		# if [[ ! -f $IMGFILE ]]; then # If you wanna cache?
+	    curl -fso "${IMGFILE}" "${GRAVATAR}"
+		# fi
+	done
+
+	# Attempt to get analytics
+	analytics
+
+	# Assemble the file
+	DIGESTWRAP="$(<${deployPath}/html/${EMAILTEMPLATE}/digest/wrap.html)"
+	git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit %h%nAuthor: %aN%nDate: %aD (%cr)%n%s" --since="7 days ago" > "${statFile}"
+	#sed -i '/commit/i {{DIGESTWRAP}}' "${statFile}"
+	sed -i '/^commit/ s/$/ <\/strong><br>/' "${statFile}"
+	sed -i '/^Author:/ s/$/ <br>/' "${statFile}"
+	sed -i '/^Date:/ s/$/ <br><br>/' "${statFile}"
+	cat "${deployPath}/html/${EMAILTEMPLATE}/digest/header.html" "${statFile}" "${deployPath}/html/${EMAILTEMPLATE}/digest/footer.html" > "${trshFile}"
+	sed -e "s^{{WEEKOF}}^${WEEKOF}^g" \
+	 	-e "s^{{NOW}}^${NOW}^g" \
+		-e "s^{{PROJCLIENT}}^${PROJCLIENT}^g" \
+		-e "s^{{DIGESTWRAP}}^${DIGESTWRAP}^g" \
+		-e "s^{{PROJCLIENT}}^${PROJCLIENT}^g" \
+		-e "s^{{CLIENTLOGO}}^${CLIENTLOGO}^g" \
+		-e "s^{{PRODURL}}^${PRODURL}^g" \
+		-e "s^{{ANALYTICSMSG}}^${ANALYTICSMSG}^g" \
+		-e "s^{{STATURL}}^${REMOTEURL}\/${APP}\/stats^g" \
+		"${trshFile}" > "${statFile}"
+
+	if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
+		sed -i '/ANALYTICS/d' "${statFile}"
+	fi   
+
+	# Need to send this to email
+	cp "${statFile}" "${LOCALHOSTPATH}/${APP}/digest.html"
+	digestSendmail=$(<"${statFile}")
 }
 
 # Remote log function 
@@ -168,13 +208,18 @@ function postLog() {
 	if [ "${REMOTELOG}" == "TRUE" ]; then
 		# Post to localhost by simply copying files
 		if [[ "${LOCALHOSTPOST}" == "TRUE" ]] && [[ -f "${htmlFile}" ]]; then
-			cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}${COMMITHASH}.html"
-			cp "${statFile}" "${LOCALHOSTPATH}/${APP}-history.html"
+			# Check that directory exists
+			if [[ ! -d "${LOCALHOSTPATH}/${APP}" ]]; then
+				mkdir "${LOCALHOSTPATH}/${APP}"
+			fi	
+			cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/${COMMITHASH}.html"
+			cp "${statFile}" "${LOCALHOSTPATH}/${APP}/digest.html"
 			# Attempt to make sure the files are readable by all
-			chmod a+rw "${LOCALHOSTPATH}/${APP}${COMMITHASH}.html" &> /dev/null
+			chmod a+rw "${LOCALHOSTPATH}/${APP}/${COMMITHASH}.html" &> /dev/null
+			chmod a+rw "${LOCALHOSTPATH}/${APP}/digest.html" &> /dev/null
 			# Remove logs older then X days
 			if [[ -n "${EXPIRELOGS}" ]]; then
-				find "${LOCALHOSTPATH}"* -mtime +"${EXPIRELOGS}" -exec rm {} \;
+				find "${LOCALHOSTPATH}/${APP}"* -mtime +"${EXPIRELOGS}" -exec rm {} \;
 			fi
 		fi
 
@@ -183,7 +228,7 @@ function postLog() {
 			if [ -n "${SCPPASS}" ]; then
 				sshpass -p "${SCPPASS}" scp -o StrictHostKeyChecking=no "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}${COMMITHASH}.html" &> /dev/null
 			else
-				scp "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}{COMMITHASH}.html" &> /dev/null
+				scp "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/{COMMITHASH}.html" &> /dev/null
 			fi
 		fi
 	fi
@@ -218,6 +263,21 @@ function mailLog() {
 			echo "${textSendmail}";
 			) | "${MAILPATH}"/sendmail -t
 		fi
+	fi
+
+	# Is this a digest email?
+	if [[ "${NOTIFYCLIENT}" == "TRUE" ]] && [[ -n "${CLIENTEMAIL}" ]] && [[ "${DIGEST}" == "1" ]]; then
+		# Send the email
+		(
+		echo "Sender: ${FROM}"
+		echo "From: ${FROM} <${FROM}>"
+		echo "Reply-To: ${FROM} <${FROM}>"
+		echo "To: ${CLIENTEMAIL}"
+		echo "Subject: ${PROJNAME} updates for the week of ${WEEKOF}"				
+		echo "Content-Type: text/html"
+		echo
+		echo "${digestSendmail}";
+		) | "${MAILPATH}"/sendmail -t
 	fi
 }
 
@@ -254,5 +314,15 @@ function emailTest() {
 		echo "Current project is ${APP}"
 		echo "Current user is ${DEV}";
 		) | "${MAILPATH}"/sendmail -t
+	fi
+}
+
+function htmlDir() {
+	if [[ ! -d "${LOCALHOSTPATH}/${APP}" ]]; then
+		mkdir "${LOCALHOSTPATH}/${APP}"
+	fi
+
+	if [[ ! -d "${LOCALHOSTPATH}/${APP}/avatar" ]]; then
+		mkdir "${LOCALHOSTPATH}/${APP}/avatar"
 	fi
 }

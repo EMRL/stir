@@ -57,7 +57,7 @@ function slackPost () {
 
 	# Add a details link to online logfiles if they exist
 	if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]]; then
-		slack_message="${slack_message} (<${REMOTEURL}/${APP}${COMMITHASH}.html|Details>)"
+		slack_message="${slack_message} (<${REMOTEURL}/${APP}/${COMMITHASH}.html|Details>)"
 	fi
 
 	# Set icon for message state

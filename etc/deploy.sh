@@ -145,3 +145,21 @@
 
 # Post commit logs to this URL.
 # POSTURL=""
+
+# Google Analytics
+#
+# API credentials
+# CLIENTID="#############################################.apps.googleusercontent.com"
+# CLIENTSECRET="########################"
+# REDIRECTURI="http://localhost"
+
+# OAuth authorization will expire after one hour, but will be updated when needed
+# if the tokens below are configured correctly
+# AUTHORIZATIONCODE="##############################################"
+
+# Tokens
+# ACCESSTOKEN="#################################################################################################################################"
+# REFRESHTOKEN="##################################################################"
+
+# Google Analytics ID
+# PROFILEID="########"

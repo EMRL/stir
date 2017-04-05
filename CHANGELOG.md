@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+- Added integration with `gitstats` for generation of graphic statistics
+- Added integration with Google Analytics for web projects
+- Brought back client emails in the form of a weekly digest
 - Added Wordpress database checks
 - Added options to define custom file paths used in your Wordpress projects
 - Added email and Slack notification for automated deployments when no updates are available

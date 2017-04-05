@@ -24,6 +24,16 @@ function go() {
 		emailTest; quickExit
 	fi
 
+	# Test analytics authentication
+	if [ "${ANALYTICSTEST}" == "1" ]; then
+		analyticsTest; quickExit
+	fi
+
+	# Generate git stats
+	if [ "${GITFULLSTATS}" == "1" ]; then
+		gitFullstats; quickExit
+	fi
+
 	# Chill and wait for user to confirm project
 	if  [ "${FORCE}" = "1" ] || yesno --default yes "Continue? [Y/n] "; then
 		trace "Loading project"

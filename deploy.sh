@@ -4,7 +4,10 @@
 #
 IFS=$'\n\t'
 VERSION="3.5.8"
-NOW=$(date +"%m/%d/%Y (%r)")
+NOW=$(date +"%B %d, %Y")
+WEEKOF=$(date -d '7 days ago' +"%B %d, %Y")
+GASTART=$(date -d '7 days ago' "+%Y-%m-%d")
+GAEND=$(date "+%Y-%m-%d")
 DEV=$USER"@"$HOSTNAME
 
 # Initialize and export all startup variables so we can pass ShellCheck tests 
@@ -16,10 +19,11 @@ set -uo pipefail
 # Startup variables
 read -r UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
 	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
-	DENY PUBLISH <<< ""
+	DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST GITFULLSTATS <<< ""
 echo "${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
 	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
-	${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH}" > /dev/null
+	${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
+	${ANALYTICS} ${ANALYTICSTEST} ${GITFULLSTATS}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -42,7 +46,8 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
 	WFOFF REMOTELOG POSTTOLOCALHOST LOCALHOSTPATH NOTIFYCLIENT CLIENTEMAIL \
 	CLIENTLOGO REMOTEURL AUTOMATEDONLY SCPPOST SCPUSER SCPHOST SCPHOSTPATH \
 	SCPPASS	LOGMSG EXPIRELOGS SERVERCHECK STASH MAILPATH REQUIREAPPROVAL \
-	ADDTIME TASKUSER <<< ""
+	ADDTIME TASKUSER CLIENTID CLIENTSECRET REDIRECTURI AUTHORIZATIONCODE \
+	ACCESSTOKEN REFRESHTOKEN PROFILEID METRIC RESULT <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
 	${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
 	${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${FROM} ${SUBJECT} ${EMAILERROR} 
@@ -54,7 +59,9 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
 	${POSTTOLOCALHOST} ${LOCALHOSTPATH} ${NOTIFYCLIENT} ${CLIENTEMAIL}
 	${CLIENTLOGO} ${REMOTEURL} ${AUTOMATEDONLY} ${SCPPOST} ${SCPUSER} ${SCPHOST} 
 	${SCPHOSTPATH} ${SCPPASS} ${LOGMSG} ${EXPIRELOGS} ${SERVERCHECK}
-	${STASH} ${MAILPATH} ${REQUIREAPPROVAL} ${ADDTIME} ${TASKUSER}" > /dev/null
+	${STASH} ${MAILPATH} ${REQUIREAPPROVAL} ${ADDTIME} ${TASKUSER} ${CLIENTID} 
+	${CLIENTSECRET} ${REDIRECTURI} ${AUTHORIZATIONCODE} ${ACCESSTOKEN} 
+	${REFRESHTOKEN} ${PROFILEID} ${METRIC} ${RESULT}" > /dev/null
 # Internal variables
 read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail deployPath \
@@ -63,7 +70,8 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	COMMITURL COMMITHASH UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE \
 	currentStash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
 	ACFFILE VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WPROOT \
-	WPAPP WPSYSTEM gitHistory <<< ""
+	WPAPP WPSYSTEM gitHistory DIGESTWRAP AUTHOR AUTHOREMAIL AUTHORNAME \
+	GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
 	${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -73,7 +81,8 @@ echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile}
 	${AUTOMERGE} ${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps} 
 	${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK} ${ACFFILE} ${VIEWPORT} 
 	${VIEWPORTPRE} ${LOGTITLE} ${LOGURL} ${TIMESTAMP} ${STARTUP} ${WPROOT} ${WPAPP} 
-	${WPSYSTEM} ${gitHistory}" > /dev/null
+	${WPSYSTEM} ${gitHistory} ${DIGESTWRAP} ${AUTHOR} 	${AUTHOREMAIL} ${AUTHORNAME} 
+	${GRAVATAR} ${IMGFILE} ${SIZE} ${RND} ${ANALYTICSMSG} ${digestSendmail}" > /dev/null
 
 # Options
 function flags() {
@@ -95,11 +104,14 @@ Options:
 
 Other Options:
   --approve              Approve proposed changes and queue for deployment
-  --deny              Deny proposed changes
+  --deny                 Deny proposed changes
+  --digest               Create and send weekly digest
   --automate             For unattended deployment, equivalent to -Fuq
   --no-check             Override active file and server checks 
+  --gitstats             Generate git statistics
   --slack-test           Test Slack integration
   --email-test           Test email configuration
+  --analytics-test       Test Google Analytics authentication
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables 
 
@@ -151,9 +163,12 @@ while [[ ${1:-unset} = -?* ]]; do
 		-m|--merge) MERGE=1 ;; 
 		--approve) APPROVE=1 ;;
 		--deny) DENY=1 ;;
+		--digest) DIGEST=1; FORCE=1; QUIET=1 ;;
 		--automate) FORCE=1; UPGRADE=1; MERGE=1; QUIET=1; AUTOMATE=1 ;;
 		--slack-test) SLACKTEST=1 ;;
 		--email-test) EMAILTEST=1 ;;
+		--analytics-test) ANALYTICSTEST=1 ;;
+		--gitstats) GITFULLSTATS=1 ;; 
 		--no-check) NOCHECK=1 ;;
 		--function-list) FUNCTIONLIST=1; CURRENT=1 ;;
 		--variable-list) VARIABLELIST=1 ;;
@@ -445,41 +460,45 @@ function appDeploy() {
 	gitStart		# Check for a valid git project and get set up
 	lock			# Create lock file
 	go 				# Start a deployment work session
-	srvCheck 		# Check that servers are up and running
-	permFix			# Fix permissions
-	if [[ "${PUBLISH}" == "1" ]]; then
-		pkgDeploy		# Deploy project to live server
+	if [[ "${DIGEST}" == "1" ]]; then
+		gitHistory
 	else
-		gitChkMstr		# Checkout master branch
-		gitGarbage		# If needed, clean up the trash
-		preDeploy		# Get the status
-		wpPkg			# Run Wordpress upgrades if needed
+		srvCheck 		# Check that servers are up and running
+		permFix			# Fix permissions
+		if [[ "${PUBLISH}" == "1" ]]; then
+			pkgDeploy		# Deploy project to live server
+		else
+			gitChkMstr		# Checkout master branch
+			gitGarbage		# If needed, clean up the trash
+			preDeploy		# Get the status
+			wpPkg			# Run Wordpress upgrades if needed
 
-		# Check for approval/deny/queue
-		if [[ "${REQUIREAPPROVAL}" == "TRUE" ]]; then
-			if [[ "${APPROVE}" == "1" ]] && [[ -f "${WORKPATH}/${APP}/.approved" ]]; then 
-				approve 		# Approve proposed changes
-			else
-				if [[ "${DENY}" == "1" ]] && [[ -f "${WORKPATH}/${APP}/.denied" ]]; then 
-					deny 		# Deny proposed changes
- 				else
-					if [[ ! -f "${WORKPATH}/${APP}/.approvalqueue" ]]; then
-						queue	# Queue for approval
+			# Check for approval/deny/queue
+			if [[ "${REQUIREAPPROVAL}" == "TRUE" ]]; then
+				if [[ "${APPROVE}" == "1" ]] && [[ -f "${WORKPATH}/${APP}/.approved" ]]; then 
+					approve 		# Approve proposed changes
+				else
+					if [[ "${DENY}" == "1" ]] && [[ -f "${WORKPATH}/${APP}/.denied" ]]; then 
+						deny 		# Deny proposed changes
+	 				else
+						if [[ ! -f "${WORKPATH}/${APP}/.approvalqueue" ]]; then
+							queue	# Queue for approval
+						fi
 					fi
 				fi
+			else
+				# Continue normally
+				pkgMgr			# Run node package management, or grunt
+				gitStatus		# Make sure there's anything here to commit
+				gitStage		# Stage files
+				gitCommit		# Commit, with message
+				gitPushMstr		# Push master to Bit Bucket
+				gitChkProd		# Checkout production branch
+				gitMerge		# Merge master into production
+				gitPushProd		# Push production to Bit Bucket
+				gitChkMstr		# Checkout master once again  
+				pkgDeploy		# Deploy project to live server
 			fi
-		else
-			# Continue normally
-			pkgMgr			# Run node package management, or grunt
-			gitStatus		# Make sure there's anything here to commit
-			gitStage		# Stage files
-			gitCommit		# Commit, with message
-			gitPushMstr		# Push master to Bit Bucket
-			gitChkProd		# Checkout production branch
-			gitMerge		# Merge master into production
-			gitPushProd		# Push production to Bit Bucket
-			gitChkMstr		# Checkout master once again  
-			pkgDeploy		# Deploy project to live server
 		fi
 	fi  
 }
