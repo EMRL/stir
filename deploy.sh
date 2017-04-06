@@ -3,11 +3,12 @@
 # deploy: A simple bash script for deploying sites.
 #
 IFS=$'\n\t'
-VERSION="3.5.8"
-NOW=$(date +"%B %d, %Y")
-WEEKOF=$(date -d '7 days ago' +"%B %d, %Y")
-GASTART=$(date -d '7 days ago' "+%Y-%m-%d")
-GAEND=$(date "+%Y-%m-%d")
+VERSION="3.5.9"
+EPOCH="$(date +%s)"
+NOW="$(date +"%B %d, %Y")"
+WEEKOF="$(date -d '7 days ago' +"%B %d")"
+GASTART="$(date -d '7 days ago' "+%Y-%m-%d")"
+GAEND="$(date "+%Y-%m-%d")"
 DEV=$USER"@"$HOSTNAME
 
 # Initialize and export all startup variables so we can pass ShellCheck tests 

@@ -177,7 +177,7 @@ function gitHistory() {
 
 	# Assemble the file
 	DIGESTWRAP="$(<${deployPath}/html/${EMAILTEMPLATE}/digest/wrap.html)"
-	git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit %h%nAuthor: %aN%nDate: %aD (%cr)%n%s" --since="7 days ago" > "${statFile}"
+	git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: #47ACDF; text-decoration: none; font-weight: bold;\" href=\"http://deploy.emrl.com/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s" --since="7 days ago" > "${statFile}"
 	#sed -i '/commit/i {{DIGESTWRAP}}' "${statFile}"
 	sed -i '/^commit/ s/$/ <\/strong><br>/' "${statFile}"
 	sed -i '/^Author:/ s/$/ <br>/' "${statFile}"
@@ -186,6 +186,7 @@ function gitHistory() {
 	sed -e "s^{{WEEKOF}}^${WEEKOF}^g" \
 	 	-e "s^{{NOW}}^${NOW}^g" \
 		-e "s^{{PROJCLIENT}}^${PROJCLIENT}^g" \
+		-e "s^{{GRAVATARURL}}^${REMOTEURL}\/${APP}\/avatar^g" \
 		-e "s^{{DIGESTWRAP}}^${DIGESTWRAP}^g" \
 		-e "s^{{PROJCLIENT}}^${PROJCLIENT}^g" \
 		-e "s^{{CLIENTLOGO}}^${CLIENTLOGO}^g" \
@@ -198,25 +199,38 @@ function gitHistory() {
 		sed -i '/ANALYTICS/d' "${statFile}"
 	fi   
 
-	# Need to send this to email
-	cp "${statFile}" "${LOCALHOSTPATH}/${APP}/digest.html"
+	if [[ -z "${CLIENTLOGO}" ]]; then
+		sed -i '/CLIENTLOGO/d' "${statFile}"
+	fi   
+
+	# Get the email payload ready
 	digestSendmail=$(<"${statFile}")
 }
 
 # Remote log function 
 function postLog() {
-	if [ "${REMOTELOG}" == "TRUE" ]; then
+	if [[ "${REMOTELOG}" == "TRUE" ]]; then
 		# Post to localhost by simply copying files
 		if [[ "${LOCALHOSTPOST}" == "TRUE" ]] && [[ -f "${htmlFile}" ]]; then
 			# Check that directory exists
-			if [[ ! -d "${LOCALHOSTPATH}/${APP}" ]]; then
-				mkdir "${LOCALHOSTPATH}/${APP}"
-			fi	
-			cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/${COMMITHASH}.html"
-			cp "${statFile}" "${LOCALHOSTPATH}/${APP}/digest.html"
-			# Attempt to make sure the files are readable by all
-			chmod a+rw "${LOCALHOSTPATH}/${APP}/${COMMITHASH}.html" &> /dev/null
-			chmod a+rw "${LOCALHOSTPATH}/${APP}/digest.html" &> /dev/null
+			htmlDir
+
+			# Is there a commit hash?	
+			if [[ -n "${COMMITHASH}" ]]; then
+				cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/${COMMITHASH}.html"
+				chmod a+rw "${LOCALHOSTPATH}/${APP}/${COMMITHASH}.html" &> /dev/null
+			else
+				if [[ "${DIGEST}" != "1" ]]; then
+					cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/${message_state}-${EPOCH}.html"
+				fi
+			fi
+
+			# Post the digest
+			if [[ "${DIGEST}" == "1" ]]; then
+				cp "${statFile}" "${LOCALHOSTPATH}/${APP}/digest-${EPOCH}.html"
+				chmod a+rw "${LOCALHOSTPATH}/${APP}/digest-${EPOCH}.html" &> /dev/null
+			fi
+	
 			# Remove logs older then X days
 			if [[ -n "${EXPIRELOGS}" ]]; then
 				find "${LOCALHOSTPATH}/${APP}"* -mtime +"${EXPIRELOGS}" -exec rm {} \;
@@ -224,8 +238,8 @@ function postLog() {
 		fi
 
 		# Send the files through SCP (not yet enabled)
-		if [ "SCPPOST" == "TRUE" ]; then
-			if [ -n "${SCPPASS}" ]; then
+		if [[ "SCPPOST" == "TRUE" ]]; then
+			if [[ -n "${SCPPASS}" ]]; then
 				sshpass -p "${SCPPASS}" scp -o StrictHostKeyChecking=no "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}${COMMITHASH}.html" &> /dev/null
 			else
 				scp "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/{COMMITHASH}.html" &> /dev/null
@@ -267,10 +281,12 @@ function mailLog() {
 
 	# Is this a digest email?
 	if [[ "${NOTIFYCLIENT}" == "TRUE" ]] && [[ -n "${CLIENTEMAIL}" ]] && [[ "${DIGEST}" == "1" ]]; then
+		# Tweak the WEEKOF for the subject line
+		WEEKOF="$(date -d '7 days ago' +"%B %d, %Y")"
 		# Send the email
 		(
 		echo "Sender: ${FROM}"
-		echo "From: ${FROM} <${FROM}>"
+		echo "From: EMRL <${FROM}>"
 		echo "Reply-To: ${FROM} <${FROM}>"
 		echo "To: ${CLIENTEMAIL}"
 		echo "Subject: ${PROJNAME} updates for the week of ${WEEKOF}"				

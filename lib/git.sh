@@ -330,9 +330,10 @@ function gitFullstats() {
 			mkdir "${LOCALHOSTPATH}/${APP}/stats"
 		fi
 		notice "Generating files..."
-		gitstats "${WORKPATH}/${APP}" "${LOCALHOSTPATH}/${APP}/stats" &>> /dev/null &
+		/usr/bin/gitstats "${WORKPATH}/${APP}" "${LOCALHOSTPATH}/${APP}/stats" &>> /dev/null &
 		spinner $!
 		info "Success.    "
-		cp "${deployPath}/html/${EMAILTEMPLATE}/stats/gitstats.css" "${LOCALHOSTPATH}/${APP}/stats"
+		chmod -R a+rw "${deployPath}/html/${EMAILTEMPLATE}/stats" &> /dev/null
+		cp "${deployPath}/html/${EMAILTEMPLATE}/stats/gitstats.css" "${LOCALHOSTPATH}/${APP}/stats/gitstats.css"
 	fi
 }

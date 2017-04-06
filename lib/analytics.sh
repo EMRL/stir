@@ -35,7 +35,7 @@ function analyticsTest() {
 
 	if [[ -z "${PROFILEID}" ]]; then
 		emptyLine; warning "Missing Profile ID"
-		console "Your project is not defined."
+		console "Your project's profile ID is not defined."
 		quickExit
 	else
 		console "PROFILEID=${PROFILEID}"
