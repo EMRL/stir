@@ -51,7 +51,7 @@ function safeExit() {
 	fi
 
 	# Is Slack integration configured?
-	if [ "${POSTTOSLACK}" == "TRUE" ]; then
+	if [[ "${POSTTOSLACK}" == "TRUE" ]]; then
 		trace "Posting to Slack"
 		buildLog; slackPost > /dev/null 2>&1
 	fi

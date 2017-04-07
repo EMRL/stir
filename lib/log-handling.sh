@@ -236,7 +236,7 @@ function postLog() {
 
 			# Post the digest
 			if [[ "${DIGEST}" == "1" ]]; then
-				REMOTEFILE="digest-${EPOCH}"
+				REMOTEFILE="digest-${EPOCH}.html"
 				cp "${statFile}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
 				chmod a+rw "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
 			fi

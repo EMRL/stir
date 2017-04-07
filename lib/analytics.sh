@@ -60,6 +60,7 @@ function analyticsTest() {
 	array[1]="percentNewSessions"
 	array[2]="organicSearches"
 	array[3]="avgSessionDuration"
+	array[4]="socialInteractions"
 	SIZE="${#array[@]}"
 	RND="$(($RANDOM % $SIZE))"
 	METRIC="${array[$RND]}"
@@ -82,6 +83,7 @@ function analytics() {
 	array[1]="percentNewSessions"
 	array[2]="organicSearches"
 	array[3]="avgSessionDuration"
+	array[4]="socialInteractions"
 	SIZE="${#array[@]}"
 	RND="$(($RANDOM % $SIZE))"
 	METRIC="${array[$RND]}"
@@ -91,11 +93,8 @@ function analytics() {
 	sed -i '/access_token/!d' "${trshFile}"
  	ACCESSTOKEN="$(awk -F\" '{print $4}' "${trshFile}")"
 
-	# Grab data from Google
-	RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
-
-	# Round if off
-	SIZE="$(printf "%.0f\n" "${RESULT}")"
+ 	# Grab data from Google
+	analyticsData
 
 	if [[ "${RND}" == "0" ]]; then 
 		ANALYTICSMSG="You had <strong>${SIZE}</strong> hits in the last week. Awesome!"
@@ -106,11 +105,38 @@ function analytics() {
 	fi
 
 	if [[ "${RND}" == "2" ]]; then 
-		ANALYTICSMSG="You had traffic come in from <strong>${SIZE}</strong> organic searches last week. Not bad!"
+		if [[ "${SIZE}" -ge "30" ]]; then
+			ANALYTICSMSG="You had traffic come in from <strong>${SIZE}</strong> organic searches last week. Not bad!"
+		else
+			analyticsFail			
+		fi
 	fi
 
 	if [[ "${RND}" == "3" ]]; then 
 		RESULT="$((${SIZE} / 60))"
-		ANALYTICSMSG="This week your users spent an average of <strong>${RESULT}</strong> minutes each on your site. Nice!"
+		if [[ "${SIZE}" -gt "2" ]]; then
+			ANALYTICSMSG="Last week visitors averaged over <strong>${RESULT}</strong> minutes each on your site. Nice!"
+		else
+			analyticsFail
+		fi
 	fi
+
+	if [[ "${RND}" == "4" ]]; then 
+		if [[ "${SIZE}" -ge "20" ]]; then
+			ANALYTICSMSG="Your site had <strong>${SIZE}</strong> social media interactions in the last week!"
+		else
+			analyticsFail
+		fi
+	fi
+}
+
+function analyticsData() {
+	RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+	SIZE="$(printf "%.0f\n" "${RESULT}")"
+}
+
+function analyticsFail() {
+	METRIC="hits"
+	analyticsData
+	ANALYTICSMSG="You had <strong>${SIZE}</strong> hits in the last week. Awesome!"
 }
