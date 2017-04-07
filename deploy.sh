@@ -72,7 +72,8 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	currentStash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
 	ACFFILE VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WPROOT \
 	WPAPP WPSYSTEM gitHistory DIGESTWRAP AUTHOR AUTHOREMAIL AUTHORNAME \
-	GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail <<< ""
+	GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail MINAUSER MINADOMAIN \
+	SSHTARGET SSHSTATUS REMOTEFILE <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
 	${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -83,7 +84,8 @@ echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile}
 	${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK} ${ACFFILE} ${VIEWPORT} 
 	${VIEWPORTPRE} ${LOGTITLE} ${LOGURL} ${TIMESTAMP} ${STARTUP} ${WPROOT} ${WPAPP} 
 	${WPSYSTEM} ${gitHistory} ${DIGESTWRAP} ${AUTHOR} 	${AUTHOREMAIL} ${AUTHORNAME} 
-	${GRAVATAR} ${IMGFILE} ${SIZE} ${RND} ${ANALYTICSMSG} ${digestSendmail}" > /dev/null
+	${GRAVATAR} ${IMGFILE} ${SIZE} ${RND} ${ANALYTICSMSG} ${digestSendmail} 
+	${MINAUSER} ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} ${REMOTEFILE}" > /dev/null
 
 # Options
 function flags() {

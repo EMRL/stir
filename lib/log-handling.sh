@@ -52,7 +52,6 @@ function makeLog() {
 	# Setup a couple of variables
 	VIEWPORT="680"
 	VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
-	LOGURL="${REMOTEURL}/${APP}/${COMMITHASH}.html"	
 
 	# IF we're using HTML emails, let's get to work
 	if [[ "${EMAILHTML}" == "TRUE" ]]; then
@@ -108,6 +107,20 @@ function htmlBuild() {
 				fi
 			fi
 			cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${deployPath}/html/${EMAILTEMPLATE}/success.html" > "${htmlFile}"
+		fi
+	fi
+
+	# Create URL
+	if [[ "${PUBLISH}" == "1" ]]; then
+		LOGURL="${REMOTEURL}/${APP}/${EPOCH}.html"
+		REMOTEFILE="${EPOCH}.html"
+	else
+		if [[ "${message_state}" != "SUCCESS" ]] || [[ -z "${COMMITHASH}" ]]; then
+			LOGURL="${REMOTEURL}/${APP}/${message_state}-${EPOCH}.html"
+			REMOTEFILE="${message_state}-${EPOCH}.html"
+		else
+			LOGURL="${REMOTEURL}/${APP}/${COMMITHASH}.html"
+			REMOTEFILE="${COMMITHASH}.html"
 		fi
 	fi
 
@@ -216,19 +229,16 @@ function postLog() {
 			htmlDir
 
 			# Is there a commit hash?	
-			if [[ -n "${COMMITHASH}" ]]; then
-				cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/${COMMITHASH}.html"
-				chmod a+rw "${LOCALHOSTPATH}/${APP}/${COMMITHASH}.html" &> /dev/null
-			else
-				if [[ "${DIGEST}" != "1" ]]; then
-					cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/${message_state}-${EPOCH}.html"
-				fi
+			if [[ -n "${REMOTEFILE}" ]]; then
+				cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
+				chmod a+rw "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
 			fi
 
 			# Post the digest
 			if [[ "${DIGEST}" == "1" ]]; then
-				cp "${statFile}" "${LOCALHOSTPATH}/${APP}/digest-${EPOCH}.html"
-				chmod a+rw "${LOCALHOSTPATH}/${APP}/digest-${EPOCH}.html" &> /dev/null
+				REMOTEFILE="digest-${EPOCH}"
+				cp "${statFile}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
+				chmod a+rw "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
 			fi
 	
 			# Remove logs older then X days

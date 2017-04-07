@@ -64,12 +64,11 @@ function pkgDeploy() {
 			warning "Your deployment command ${deploy_cmd} cannot be found.";
 		}
 
-		# Test deployment command before running
-		deployChk
-
 		if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
 			# If we don't require approval to push to live, keep going
-			if [ "${FORCE}" = "1" ] || yesno --default yes "Deploy to live server? [Y/n] "; then
+			if [[ "${FORCE}" = "1" ]] || yesno --default yes "Deploy to live server? [Y/n] "; then
+				# Test deployment command before running
+				deployChk
 				# Deploy via deployment command specified in configuration
 				if [[ "${VERBOSE}" -eq 1 ]]; then
 					eval "${DEPLOY}" | tee --append "${logFile}"
@@ -82,6 +81,10 @@ function pkgDeploy() {
 					fi
 				fi
 			fi
+			# If running --publish exit now
+			#if [[ "${PUBLISH}" == "1" ]]; then
+			#	quietExit
+			#fi
 		else
 			if [[ "${APPROVE}" != "1" ]]; then
 				if [[ -z "${PRODURL}" ]]; then 

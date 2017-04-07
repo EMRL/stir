@@ -57,11 +57,6 @@ function postCommit() {
 	# Just for yuks, display git stats for this user (user can override this if it annoys them)
 	gitStats
 
-	# Is Slack integration configured?
-	if [ "${POSTTOSLACK}" == "TRUE" ]; then
-		trace "Posting to Slack"
-		buildLog; slackPost > /dev/null 2>&1
-	fi
 	# Check to see if there's an email integration setup
 	if [[ -z "$POSTEMAIL" ]]; then
 		trace "No email integration setup"

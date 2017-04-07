@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+- Fixed a rare bug with saving HTML logs
+- Added ssh configuration check when deploying to live environments via Mina
 - Added integration with `gitstats` for generation of graphic statistics
 - Added integration with Google Analytics for web projects
 - Brought back client emails in the form of a weekly digest
