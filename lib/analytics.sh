@@ -114,7 +114,7 @@ function analytics() {
 
 	if [[ "${RND}" == "3" ]]; then 
 		RESULT="$((${SIZE} / 60))"
-		if [[ "${SIZE}" -gt "2" ]]; then
+		if [[ "${RESULT}" -gt "2" ]]; then
 			ANALYTICSMSG="Last week visitors averaged over <strong>${RESULT}</strong> minutes each on your site. Nice!"
 		else
 			analyticsFail
