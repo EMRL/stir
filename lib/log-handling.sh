@@ -150,6 +150,7 @@ function processLog() {
 		-e "s^{{NOTES}}^${notes}^g" \
 		-e "s^{{USER}}^${USER}^g" \
 		-e "s^{{LOGURL}}^${LOGURL}^g" \
+		-e "s^{{REMOTEURL}}^${REMOTEURL}^g" \
 		-e "s^{{VIEWPORTPRE}}^${VIEWPORTPRE}^g" \
 		"${trshFile}" > "${htmlFile}"
 
@@ -190,7 +191,7 @@ function gitHistory() {
 
 	# Assemble the file
 	DIGESTWRAP="$(<${deployPath}/html/${EMAILTEMPLATE}/digest/wrap.html)"
-	git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: #47ACDF; text-decoration: none; font-weight: bold;\" href=\"http://deploy.emrl.com/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s" --since="7 days ago" > "${statFile}"
+	git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: #47ACDF; text-decoration: none; font-weight: bold;\" href=\"http://deploy.emrl.com/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${statFile}"
 	#sed -i '/commit/i {{DIGESTWRAP}}' "${statFile}"
 	sed -i '/^commit/ s/$/ <\/strong><br>/' "${statFile}"
 	sed -i '/^Author:/ s/$/ <br>/' "${statFile}"
@@ -204,6 +205,7 @@ function gitHistory() {
 		-e "s^{{PROJCLIENT}}^${PROJCLIENT}^g" \
 		-e "s^{{CLIENTLOGO}}^${CLIENTLOGO}^g" \
 		-e "s^{{PRODURL}}^${PRODURL}^g" \
+		-e "s^{{REMOTEURL}}^${REMOTEURL}^g" \
 		-e "s^{{ANALYTICSMSG}}^${ANALYTICSMSG}^g" \
 		-e "s^{{STATURL}}^${REMOTEURL}\/${APP}\/stats^g" \
 		"${trshFile}" > "${statFile}"
