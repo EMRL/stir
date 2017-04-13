@@ -13,7 +13,6 @@ Usage: deploy [options] [target] ...
 
 Options:
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
-  -A, --approve          Approve current codebase and queue for deployment
   -S, --skip-update      Skip any Wordpress core/plugin updates
   -u, --update           If no available Wordpress updates, halt deployment
   -P, --publish          Publish current production code to live environment
@@ -21,16 +20,21 @@ Options:
   -c, --current          Deploy a project from current working directory          
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
-  -d, --debug            Run in debug mode
-  -s, --strict           Any error will halt deployment completely
   -h, --help             Display this help and exit
   -v, --version          Output version information and exit
 
 Other Options:
+  --approve              Approve proposed changes and queue for deployment
+  --deny                 Deny proposed changes
   --automate             For unattended deployment, equivalent to -Fuq
+  --digest               Create and send weekly digest
   --no-check             Override active file and server checks 
-  --slack-test           Test Slack integration
+  --gitstats             Generate git statistics
+  --strict               Any error will halt deployment completely
+  --debug                Run in debug mode
   --email-test           Test email configuration
+  --slack-test           Test Slack integration
+  --analytics-test       Test Google Analytics authentication
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables 
 ```

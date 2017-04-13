@@ -73,7 +73,7 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	ACFFILE VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WPROOT \
 	WPAPP WPSYSTEM gitHistory DIGESTWRAP AUTHOR AUTHOREMAIL AUTHORNAME \
 	GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail MINAUSER MINADOMAIN \
-	SSHTARGET SSHSTATUS REMOTEFILE <<< ""
+	SSHTARGET SSHSTATUS REMOTEFILE GREETING <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
 	${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -85,7 +85,8 @@ echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile}
 	${VIEWPORTPRE} ${LOGTITLE} ${LOGURL} ${TIMESTAMP} ${STARTUP} ${WPROOT} ${WPAPP} 
 	${WPSYSTEM} ${gitHistory} ${DIGESTWRAP} ${AUTHOR} 	${AUTHOREMAIL} ${AUTHORNAME} 
 	${GRAVATAR} ${IMGFILE} ${SIZE} ${RND} ${ANALYTICSMSG} ${digestSendmail} 
-	${MINAUSER} ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} ${REMOTEFILE}" > /dev/null
+	${MINAUSER} ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} ${REMOTEFILE}
+	${GREETING}" > /dev/null
 
 # Options
 function flags() {
@@ -100,20 +101,20 @@ Options:
   -c, --current          Deploy a project from current working directory          
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
-  -d, --debug            Run in debug mode
-  -s, --strict           Any error will halt deployment completely
   -h, --help             Display this help and exit
   -v, --version          Output version information and exit
 
 Other Options:
   --approve              Approve proposed changes and queue for deployment
   --deny                 Deny proposed changes
-  --digest               Create and send weekly digest
   --automate             For unattended deployment, equivalent to -Fuq
+  --digest               Create and send weekly digest
   --no-check             Override active file and server checks 
   --gitstats             Generate git statistics
-  --slack-test           Test Slack integration
+  --strict               Any error will halt deployment completely
+  --debug                Run in debug mode
   --email-test           Test email configuration
+  --slack-test           Test Slack integration
   --analytics-test       Test Google Analytics authentication
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables 
@@ -160,8 +161,8 @@ while [[ ${1:-unset} = -?* ]]; do
 		-v|--version) echo "$(basename "${0}") ${VERSION}"; exit ;;
 		-V|--verbose) VERBOSE=1 ;;
 		-q|--quiet) QUIET=1 ;;
-		-s|--strict) STRICT=1 ;;
-		-d|--debug) DEBUG=1 ;;
+		--strict) STRICT=1 ;;
+		--debug) DEBUG=1 ;;
 		-F|--force) FORCE=1 ;;
 		-m|--merge) MERGE=1 ;; 
 		--approve) APPROVE=1 ;;

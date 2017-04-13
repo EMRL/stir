@@ -69,7 +69,7 @@ function makeLog() {
 		# Build the html email and details pages
 		htmlBuild
 		# Build the commit history page
-		gitHistory
+		# gitHistory
 		# Strip out the buttons that self-link
 		sed -e "s^// BUTTON: BEGIN //-->^BUTTON HIDE^g" -i "${htmlFile}"
 		postLog
@@ -86,7 +86,7 @@ function htmlBuild() {
 		cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${deployPath}/html/${EMAILTEMPLATE}/error.html" > "${htmlFile}"
 	else
 		# Does this project need to be approved before finalizing deployment?
-		if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]]; then
+		if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
 			message_state="APPROVAL NEEDED"
 			LOGTITLE="Deployment Approval"
 			cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${deployPath}/html/${EMAILTEMPLATE}/approve.html" > "${htmlFile}"
@@ -191,35 +191,55 @@ function gitHistory() {
 
 	# Assemble the file
 	DIGESTWRAP="$(<${deployPath}/html/${EMAILTEMPLATE}/digest/wrap.html)"
-	git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: #47ACDF; text-decoration: none; font-weight: bold;\" href=\"http://deploy.emrl.com/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${statFile}"
-	#sed -i '/commit/i {{DIGESTWRAP}}' "${statFile}"
-	sed -i '/^commit/ s/$/ <\/strong><br>/' "${statFile}"
-	sed -i '/^Author:/ s/$/ <br>/' "${statFile}"
-	sed -i '/^Date:/ s/$/ <br><br>/' "${statFile}"
-	cat "${deployPath}/html/${EMAILTEMPLATE}/digest/header.html" "${statFile}" "${deployPath}/html/${EMAILTEMPLATE}/digest/footer.html" > "${trshFile}"
-	sed -e "s^{{WEEKOF}}^${WEEKOF}^g" \
-	 	-e "s^{{NOW}}^${NOW}^g" \
-		-e "s^{{PROJCLIENT}}^${PROJCLIENT}^g" \
-		-e "s^{{GRAVATARURL}}^${REMOTEURL}\/${APP}\/avatar^g" \
-		-e "s^{{DIGESTWRAP}}^${DIGESTWRAP}^g" \
-		-e "s^{{PROJCLIENT}}^${PROJCLIENT}^g" \
-		-e "s^{{CLIENTLOGO}}^${CLIENTLOGO}^g" \
-		-e "s^{{PRODURL}}^${PRODURL}^g" \
-		-e "s^{{REMOTEURL}}^${REMOTEURL}^g" \
-		-e "s^{{ANALYTICSMSG}}^${ANALYTICSMSG}^g" \
-		-e "s^{{STATURL}}^${REMOTEURL}\/${APP}\/stats^g" \
-		"${trshFile}" > "${statFile}"
 
-	if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
-		sed -i '/ANALYTICS/d' "${statFile}"
-	fi   
+	# If there have been no commits in the last week, skip creating the digest
+	if [[ $(git log --since="7 days ago") ]]; then
+		git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: #47ACDF; text-decoration: none; font-weight: bold;\" href=\"http://deploy.emrl.com/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${statFile}"
+		sed -i '/^commit/ s/$/ <\/strong><br>/' "${statFile}"
+		sed -i '/^Author:/ s/$/ <br>/' "${statFile}"
+		sed -i '/^Date:/ s/$/ <br><br>/' "${statFile}"
+		cat "${deployPath}/html/${EMAILTEMPLATE}/digest/header.html" "${statFile}" "${deployPath}/html/${EMAILTEMPLATE}/digest/footer.html" > "${trshFile}"
 
-	if [[ -z "${CLIENTLOGO}" ]]; then
-		sed -i '/CLIENTLOGO/d' "${statFile}"
-	fi   
+		# Randomize a positive Monday thought
+		array[0]="Hope you had a good weekend!"
+		array[1]="Alright, it's Monday. Let's do this."
+		array[2]="Oh, hello Monday."
+		array[3]="New Monday, new week, new goals."
+		array[4]="Happy Monday and welcome back!"
+		array[5]="Hello and good morning!"
+		SIZE="${#array[@]}"
+		RND="$(($RANDOM % $SIZE))"
+		GREETING="${array[$RND]}"
 
-	# Get the email payload ready
-	digestSendmail=$(<"${statFile}")
+		# Process and replace variables
+		sed -e "s^{{WEEKOF}}^${WEEKOF}^g" \
+		 	-e "s^{{NOW}}^${NOW}^g" \
+			-e "s^{{PROJCLIENT}}^${PROJCLIENT}^g" \
+			-e "s^{{GRAVATARURL}}^${REMOTEURL}\/${APP}\/avatar^g" \
+			-e "s^{{DIGESTWRAP}}^${DIGESTWRAP}^g" \
+			-e "s^{{PROJCLIENT}}^${PROJCLIENT}^g" \
+			-e "s^{{CLIENTLOGO}}^${CLIENTLOGO}^g" \
+			-e "s^{{PRODURL}}^${PRODURL}^g" \
+			-e "s^{{GREETING}}^${GREETING}^g" \
+			-e "s^{{REMOTEURL}}^${REMOTEURL}^g" \
+			-e "s^{{ANALYTICSMSG}}^${ANALYTICSMSG}^g" \
+			-e "s^{{STATURL}}^${REMOTEURL}\/${APP}\/stats^g" \
+			"${trshFile}" > "${statFile}"
+
+		if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
+			sed -i '/ANALYTICS/d' "${statFile}"
+		fi   
+
+		if [[ -z "${CLIENTLOGO}" ]]; then
+			sed -i '/CLIENTLOGO/d' "${statFile}"
+		fi   
+
+		# Get the email payload ready
+		digestSendmail=$(<"${statFile}")
+	else
+		echo "No activity found, canceling digest."
+		safeExit
+	fi
 }
 
 # Remote log function 
@@ -292,7 +312,7 @@ function mailLog() {
 	fi
 
 	# Is this a digest email?
-	if [[ "${NOTIFYCLIENT}" == "TRUE" ]] && [[ -n "${CLIENTEMAIL}" ]] && [[ "${DIGEST}" == "1" ]]; then
+	if [[ "${NOTIFYCLIENT}" == "TRUE" ]] && [[ -n "${CLIENTEMAIL}" ]] && [[ "${DIGEST}" == "1" ]] && [[ -n "${digestSendmail}" ]]; then
 		# Tweak the WEEKOF for the subject line
 		WEEKOF="$(date -d '7 days ago' +"%B %d, %Y")"
 		# Send the email
