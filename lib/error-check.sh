@@ -38,15 +38,18 @@ function deployChk() {
 			# Not authorized, no key etc.
 			error "Connection refused for ${SSHTARGET}"
 		else
-			warning "Connection for ${SSHTARGET} not established, an unknown error occurred."
-			# Ok now re-run mina in verbose mode if someone is at the console
-
-			# If FORCE=1 then simply exit
-			if [[ "${FORCE}" = "1" ]] || yesno --default yes "Retry ${DEPLOY} in verbose mode? [Y/n] "; then
-				eval "${DEPLOY}" | tee --append "${logFile}"
+			if [[ "${AUTOMATE}" == "1" ]]; then
+				error "Connection for ${SSHTARGET} not established, an unknown error occurred."
 			else
-				error_msg="Connection for ${SSHTARGET} not established, an unknown error occurred."
-				errorExit
+				warning "Connection for ${SSHTARGET} not established, an unknown error occurred."
+				# Ok now re-run mina in verbose mode if someone is at the console
+
+				# If FORCE=1 then simply exit
+				if [[ "${FORCE}" == "1" ]] || yesno --default yes "Retry ${DEPLOY} in verbose mode? [Y/n] "; then
+					eval "${DEPLOY}" | tee --append "${logFile}"
+				else
+					error "Connection for ${SSHTARGET} not established, an unknown error occurred."
+				fi
 			fi
 		fi
 

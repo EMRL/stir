@@ -21,7 +21,7 @@ function makeLog() {
 	sed -i "/\[96m/d" "${logFile}"
 
 	# Clean up mina's goobers
-	if [[ "${DEPLOY}" == "mina deploy" ]]; then
+	if [[ "${DEPLOY}" == *"mina"* ]]; then
 		sed -i "/0m Creating a temporary build path/c\Creating a temporary build path" "${logFile}"
 		sed	-i "/0m Fetching new git commits/c\Fetching new git commits" "${logFile}"
 		sed	-i "/0m Using git branch '${PRODUCTION}'/c\Using git branch '${PRODUCTION}'" "${logFile}"
@@ -202,9 +202,9 @@ function gitHistory() {
 
 		# Randomize a positive Monday thought
 		array[0]="Hope you had a good weekend!"
-		array[1]="Alright, it's Monday. Let's do this."
+		array[1]="Alright Monday, let's do this."
 		array[2]="Oh, hello Monday."
-		array[3]="New Monday, new week, new goals."
+		array[3]="Welcome back, how was your weekend?"
 		array[4]="Happy Monday and welcome back!"
 		array[5]="Hello and good morning!"
 		SIZE="${#array[@]}"
