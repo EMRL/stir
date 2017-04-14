@@ -194,7 +194,7 @@ function gitHistory() {
 
 	# If there have been no commits in the last week, skip creating the digest
 	if [[ $(git log --since="7 days ago") ]]; then
-		git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: #47ACDF; text-decoration: none; font-weight: bold;\" href=\"http://deploy.emrl.com/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${statFile}"
+		git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: #47ACDF; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${statFile}"
 		sed -i '/^commit/ s/$/ <\/strong><br>/' "${statFile}"
 		sed -i '/^Author:/ s/$/ <br>/' "${statFile}"
 		sed -i '/^Date:/ s/$/ <br><br>/' "${statFile}"

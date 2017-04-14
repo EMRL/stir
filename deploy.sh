@@ -201,12 +201,6 @@ if [[ "${CURRENT}" == "1" ]]; then
 	APP="${PWD##*/}"
 fi
 
-# If not trying to deploy current directory, and no repo is named, exit
-if [[ -z "${@}" ]] && [[ "${CURRENT}" != "1" ]]; then
-	echo "Choose a valid project, or use the --current flag to deploy from the current directory."
-	exit 1
-fi
-
 # Get the active switches for display in logfiles
 if [[ "${AUTOMATE}" == 1 ]]; then STARTUP="${STARTUP} --automate"; fi
 if [[ "${UPGRADE}" == 1 ]]; then STARTUP="${STARTUP} --update"; fi
@@ -296,8 +290,8 @@ clientEmail="/tmp/$APP.shortemail-$RANDOM.html"
 }
 
 # Path of the script; I should flip this check to make it more useful
-if [ -d /etc/deploy ]; then
-	deployPath=/etc/deploy
+if [ -d "/etc/deploy" ]; then
+	deployPath="/etc/deploy"
 else
 	deployPath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 fi
@@ -321,6 +315,18 @@ if [[ "${CURRENT}" == "1" ]]; then
 	APP="${PWD##*/}"
 fi
 
+# If not trying to deploy current directory, and no repo is named, exit
+if [[ "${CURRENT}" != "1" ]]; then
+	if [[ -z "${@}" ]]; then
+		echo "Choose a valid project, or use the --current flag to deploy from the current directory."
+		exit 1
+	else
+		if [[ ! -d "${WORKPATH}/${APP}" ]]; then
+			echo "${WORKPATH}/${APP} is not a valid project."
+			exit 1
+		fi
+	fi
+fi
 # Load per-user configuration, if it exists
 if [[ -r ~/.deployrc ]]; then
 	# shellcheck disable=1090
@@ -387,7 +393,7 @@ fi
 
 # Are we using "smart" *cough* commits?
 if [[ "${SMARTCOMMIT}" == "TRUE" ]]; then
-	trace "Smart commits are enabled"
+	trace "Smart commits enabled"
 fi
 
 # Are any integrations setup?
