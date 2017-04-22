@@ -73,7 +73,7 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	ACFFILE VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WPROOT \
 	WPAPP WPSYSTEM gitHistory DIGESTWRAP AUTHOR AUTHOREMAIL AUTHORNAME \
 	GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail MINAUSER MINADOMAIN \
-	SSHTARGET SSHSTATUS REMOTEFILE GREETING <<< ""
+	SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX QUEUED <<< ""
 echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
 	${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -86,7 +86,7 @@ echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile}
 	${WPSYSTEM} ${gitHistory} ${DIGESTWRAP} ${AUTHOR} 	${AUTHOREMAIL} ${AUTHORNAME} 
 	${GRAVATAR} ${IMGFILE} ${SIZE} ${RND} ${ANALYTICSMSG} ${digestSendmail} 
 	${MINAUSER} ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} ${REMOTEFILE}
-	${GREETING}" > /dev/null
+	${GREETING} ${LOGSUFFIX} ${QUEUED}" > /dev/null
 
 # Options
 function flags() {
@@ -105,9 +105,9 @@ Options:
   -v, --version          Output version information and exit
 
 Other Options:
-  --approve              Approve proposed changes and queue for deployment
-  --deny                 Deny proposed changes
-  --automate             For unattended deployment, equivalent to -Fuq
+  --automate             For unattended deployment via cron
+  --approve              Approve and deploy queued code changes
+  --deny                 Deny queued code changes
   --digest               Create and send weekly digest
   --no-check             Override active file and server checks 
   --gitstats             Generate git statistics
@@ -165,7 +165,7 @@ while [[ ${1:-unset} = -?* ]]; do
 		--debug) DEBUG=1 ;;
 		-F|--force) FORCE=1 ;;
 		-m|--merge) MERGE=1 ;; 
-		--approve) APPROVE=1 ;;
+		--approve) APPROVE=1; FORCE=1 ;;
 		--deny) DENY=1 ;;
 		--digest) DIGEST=1; FORCE=1; QUIET=1 ;;
 		--automate) FORCE=1; UPGRADE=1; MERGE=1; QUIET=1; AUTOMATE=1 ;;
@@ -450,13 +450,25 @@ if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${SMARTCOMMIT}" != "TRUE" ]]; the
 	trace "Enabling smart commits for approval queue"	
 fi
 
+# Has this repo already been approved?
+if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]] && [[ -f "${WORKPATH}/${APP}/.approved" ]]; then 
+	APPROVE="1"; FORCE="1"
+fi
+
 # Is someone trying to approve and deny at the same time? :trollface:
 if [[ "${APPROVE}" == "1" ]] && [[ "${DENY}" == "1" ]]; then
 	error "The --approve and --deny switches can not be used together."
 fi
 
+# Check if a deployment is queued
+if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
+	if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
+		error "There is changed code already queued. Approve or deny it before attempting another deployment."
+	fi
+fi
+
 # Check if approval is queued
-if [[ "${APPROVE}" == "1" ]] && [[ ! -f "${WORKPATH}/${APP}/.approval" ]]; then
+if [[ "${APPROVE}" == "1" ]] && [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
 	if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
 		error "This project is not configured to require approval."	
 	else	
@@ -480,35 +492,42 @@ function appDeploy() {
 		else
 			gitChkMstr		# Checkout master branch
 			gitGarbage		# If needed, clean up the trash
-			preDeploy		# Get the status
-			wpPkg			# Run Wordpress upgrades if needed
+
+			if [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
+				preDeploy		# Get the status
+			fi
 
 			# Check for approval/deny/queue
-			if [[ "${REQUIREAPPROVAL}" == "TRUE" ]]; then
-				if [[ "${APPROVE}" == "1" ]] && [[ -f "${WORKPATH}/${APP}/.approved" ]]; then 
+			if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
+				if [[ "${APPROVE}" == "1" ]]; then
 					approve 		# Approve proposed changes
 				else
-					if [[ "${DENY}" == "1" ]] && [[ -f "${WORKPATH}/${APP}/.denied" ]]; then 
+					if [[ "${DENY}" == "1" ]]; then 
 						deny 		# Deny proposed changes
-	 				else
-						if [[ ! -f "${WORKPATH}/${APP}/.approvalqueue" ]]; then
-							queue	# Queue for approval
-						fi
 					fi
 				fi
-			else
-				# Continue normally
-				pkgMgr			# Run node package management, or grunt
-				gitStatus		# Make sure there's anything here to commit
-				gitStage		# Stage files
-				gitCommit		# Commit, with message
-				gitPushMstr		# Push master to Bit Bucket
-				gitChkProd		# Checkout production branch
-				gitMerge		# Merge master into production
-				gitPushProd		# Push production to Bit Bucket
-				gitChkMstr		# Checkout master once again  
-				pkgDeploy		# Deploy project to live server
 			fi
+			# Continue normally
+			if [[ "${APPROVE}" != "1" ]]; then
+				wpPkg			# Run Wordpress upgrades if needed
+				pkgMgr			# Run node package management, or grunt
+				gitStatus		# Make sure there's anything here to commit					
+			fi
+
+			if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
+				queue
+			fi
+
+			if [[ "${APPROVE}" != "1" ]] && [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
+				gitStage		# Stage files			
+				gitCommit		# Commit, with message
+			fi
+			gitPushMstr		# Push master to Bit Bucket
+			gitChkProd		# Checkout production branch
+			gitMerge		# Merge master into production
+			gitPushProd		# Push production to Bit Bucket
+			gitChkMstr		# Checkout master once again  
+			pkgDeploy		# Deploy project to live server
 		fi
 	fi  
 }

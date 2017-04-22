@@ -14,10 +14,10 @@ function preDeploy() {
 		trace "Status looks good"
 	else
 		# If running in --force mode we will not allow deployment to continue
-		if [[ "${FORCE}" = "1" ]]; then
+		if [[ "${FORCE}" == "1" ]] && [[ "${APPROVE}" != "1" ]]; then
 			trace "Checking for files that need stashing"
 			# Stash the dirty bits
-			if [ "${STASH}" == "TRUE" ]; then
+			if [[ "${STASH}" == "TRUE" ]]; then
 				emptyLine
 				trace "Stashing dirty files"
 				if [[ "${VERBOSE}" == "1" ]] && [[ "${QUIET}" != "1" ]]; then
@@ -86,11 +86,15 @@ function pkgDeploy() {
 			#	quietExit
 			#fi
 		else
-			if [[ "${APPROVE}" != "1" ]]; then
-				if [[ -z "${PRODURL}" ]]; then 
-					warning "This project requires approval but has no production URL configured."
-				else
-					info "The project requires approval before pushing to ${PRODURL}"
+			if [[ "${APPROVE}" == "1" ]]; then
+				eval "${DEPLOY}" &>> "${logFile}"
+			else
+				if [[ "${APPROVE}" != "1" ]]; then
+					if [[ -z "${PRODURL}" ]]; then 
+						warning "This project requires approval but has no production URL configured."
+					else
+						info "The project requires approval before pushing to ${PRODURL}"
+					fi
 				fi
 			fi
 		fi

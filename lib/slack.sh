@@ -25,13 +25,17 @@ function slackPost () {
 	fi	
 
 	# Does this need approval?
-	if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]]; then
+	if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
 		slack_message="*${SLACKUSER}* queued updates to <${DEVURL}|${APP}> for approval"
 	fi
 
 	# Is this being approved?
 	if [[ "${APPROVE}" == "1" ]]; then
-		slack_message="*${SLACKUSER}* approved updates <${COMMITURL}|${COMMITHASH}> and deployed to <${PRODURL}|${APP}>"
+		if [[ -z "${PRODURL}" ]]; then
+			slack_message="*${SLACKUSER}* approved updates <${COMMITURL}|${COMMITHASH}> and deployed to ${APP}"
+		else
+			slack_message="*${SLACKUSER}* approved updates <${COMMITURL}|${COMMITHASH}> and deployed to <${PRODURL}|${APP}>"
+		fi
 	fi		
 
 	# This is broken
@@ -39,7 +43,12 @@ function slackPost () {
 
 	# If there's a commit, AND there are notes/commit message. spam this
 	if [[ -n "${notes}" ]] && [[ -n "${COMMITHASH}" ]]; then
-		slack_message="${slack_message}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+		# Is this a queue for approval?
+		if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
+			slack_message="${slack_message}\nProposed commit message: ${notes}"
+		else
+			slack_message="${slack_message}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+		fi
 	fi
 
 	# Has there been an error?

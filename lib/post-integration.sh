@@ -25,27 +25,32 @@ function buildLog() {
 
 # Post integration via email
 function mailPost() {
-	echo "${COMMITURL}" >> "${postFile}"
-	postSendmail=$(<"${postFile}")
-	(
-	# Is this an automated deployment?
-	if [ "${AUTOMATE}" = "1" ]; then
-		# Is the project configured to log task time
-		if [[ -z "${TASKUSER}" ]] || [[ -z "${ADDTIME}" ]]; then
-			echo "From: ${FROM}"
-		else
-			echo "From: ${TASKUSER}"
-			echo "Subject: ${ADDTIME}"
-		fi
+	# If this is an outstanding approval, don't post
+	if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
+		trace "Approval required, skipping integration."
 	else
-		# If not an automated deployment, use current user email address
-		echo "From: ${USER}@${FROMDOMAIN}"
+		echo "${COMMITURL}" >> "${postFile}"
+		postSendmail=$(<"${postFile}")
+		(
+		# Is this an automated deployment?
+		if [ "${AUTOMATE}" = "1" ]; then
+			# Is the project configured to log task time
+			if [[ -z "${TASKUSER}" ]] || [[ -z "${ADDTIME}" ]]; then
+				echo "From: ${FROM}"
+			else
+				echo "From: ${TASKUSER}"
+				echo "Subject: ${ADDTIME}"
+			fi
+		else
+			# If not an automated deployment, use current user email address
+			echo "From: ${USER}@${FROMDOMAIN}"
+		fi
+		echo "To: ${POSTEMAIL}"
+		echo "Content-Type: text/plain"
+		echo
+		echo "${postSendmail}";
+		) | "${MAILPATH}"/sendmail -t
 	fi
-	echo "To: ${POSTEMAIL}"
-	echo "Content-Type: text/plain"
-	echo
-	echo "${postSendmail}";
-	) | "${MAILPATH}"/sendmail -t
 }
 
 function postCommit() {

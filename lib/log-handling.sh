@@ -19,6 +19,10 @@ function makeLog() {
 	sed -i "/\[31m/d" "${logFile}"
 	sed -i "/\[32m/d" "${logFile}"
 	sed -i "/\[96m/d" "${logFile}"
+	sed -i "/no changes added to commit/d" "${logFile}"
+	sed -i "/to update what/d" "${logFile}"
+	sed -i "/to discard changes/d" "${logFile}"
+	sed -i "/Changes not staged for/d" "${logFile}"
 
 	# Clean up mina's goobers
 	if [[ "${DEPLOY}" == *"mina"* ]]; then
@@ -78,6 +82,7 @@ function makeLog() {
 
 function htmlBuild() {
 	# Build out the HTML
+	LOGSUFFIX="html"
 	if [ "${message_state}" == "ERROR" ]; then
 		# Oh man, this is an error
 		notes="${error_msg}"
@@ -86,12 +91,15 @@ function htmlBuild() {
 		cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${deployPath}/html/${EMAILTEMPLATE}/error.html" > "${htmlFile}"
 	else
 		# Does this project need to be approved before finalizing deployment?
+		#if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
 		if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
 			message_state="APPROVAL NEEDED"
-			LOGTITLE="Deployment Approval"
-			cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${deployPath}/html/${EMAILTEMPLATE}/approve.html" > "${htmlFile}"
+			LOGTITLE="Approval Needed"
+			LOGSUFFIX="php"
+			# cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${deployPath}/html/${EMAILTEMPLATE}/approve.html" > "${htmlFile}"
+			cat "${deployPath}/html/${EMAILTEMPLATE}/approval.php" > "${htmlFile}"
 		else
-			if [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" = "1" ]] && [[ "${UPD2}" = "1" ]]; then
+			if [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" == "1" ]] && [[ "${UPD2}" == "1" ]]; then
 				message_state="NOTICE"
 				LOGTITLE="Scheduled Deployment"
 				notes="No updates available for deployment"
@@ -102,7 +110,6 @@ function htmlBuild() {
 				if [[ "${AUTOMATE}" == "1" ]]; then
 					LOGTITLE="Scheduled Deployment"
 				else
-
 					LOGTITLE="Deployment Log"
 				fi
 			fi
@@ -112,15 +119,15 @@ function htmlBuild() {
 
 	# Create URL
 	if [[ "${PUBLISH}" == "1" ]]; then
-		LOGURL="${REMOTEURL}/${APP}/${EPOCH}.html"
-		REMOTEFILE="${EPOCH}.html"
+		LOGURL="${REMOTEURL}/${APP}/${EPOCH}.${LOGSUFFIX}"
+		REMOTEFILE="${EPOCH}.${LOGSUFFIX}"
 	else
 		if [[ "${message_state}" != "SUCCESS" ]] || [[ -z "${COMMITHASH}" ]]; then
-			LOGURL="${REMOTEURL}/${APP}/${message_state}-${EPOCH}.html"
-			REMOTEFILE="${message_state}-${EPOCH}.html"
+			LOGURL="${REMOTEURL}/${APP}/${message_state}-${EPOCH}.${LOGSUFFIX}"
+			REMOTEFILE="${message_state}-${EPOCH}.${LOGSUFFIX}"
 		else
-			LOGURL="${REMOTEURL}/${APP}/${COMMITHASH}.html"
-			REMOTEFILE="${COMMITHASH}.html"
+			LOGURL="${REMOTEURL}/${APP}/${COMMITHASH}.${LOGSUFFIX}"
+			REMOTEFILE="${COMMITHASH}.${LOGSUFFIX}"
 		fi
 	fi
 
@@ -152,6 +159,7 @@ function processLog() {
 		-e "s^{{LOGURL}}^${LOGURL}^g" \
 		-e "s^{{REMOTEURL}}^${REMOTEURL}^g" \
 		-e "s^{{VIEWPORTPRE}}^${VIEWPORTPRE}^g" \
+		-e "s^{{PATHTOREPO}}^${WORKPATH}/${APP}^g" \
 		"${trshFile}" > "${htmlFile}"
 
 	# Clean up header stuff that we don't need

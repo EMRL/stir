@@ -65,6 +65,11 @@ function go() {
 			fi
 		fi
 	fi
+	
+	# Outstanding approval?
+	if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]] && [[ -f "${WORKPATH}/${APP}/.approved" ]]; then 
+		notice "Processing outstanding approval..."
+	fi
 }
 
 function fixIndex() {

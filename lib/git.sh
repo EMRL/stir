@@ -6,7 +6,7 @@
 trace "Loading git functions"
 
 # Assign a variable to represent .git/index.lock
-gitLock="$WORKPATH/$APP/.git/index.lock"
+gitLock="${WORKPATH}/${APP}/.git/index.lock"
 
 # Make sure we're in a git repository.
 function gitStart() {
@@ -85,8 +85,12 @@ function gitGarbage() {
 function gitStatus() {
 	trace "Check Status"
 	if [[ -z $(git status --porcelain) ]]; then
-		console "Nothing to commit, working directory clean."
-		if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
+		if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
+			if [[ "${REQUIREAPPROVAL}" == "TRUE" ]]; then
+				console "Nothing to queue, working directory clean."
+			else
+				console "Nothing to commit, working directory clean."
+			fi
 			quietExit
 		fi
 	fi
@@ -159,18 +163,24 @@ function gitCommit() {
 			else
 				# We want to be able to edit the default commit if available
 				if [[ "${FORCE}" != "1" ]]; then
-					notes=${COMMITMSG}
+					notes="${COMMITMSG}"
 					read -rp "Edit commit message: " -e -i "${COMMITMSG}" notes
 					# Update the commit message based on user input ()
-					notes=${notes:-$COMMITMSG}
+					notes="${notes:-$COMMITMSG}"
 				else
 					info "Using auto-generated commit message: ${COMMITMSG}"
-					notes=${COMMITMSG}
+					notes="${COMMITMSG}"
 				fi
 			fi
 		fi
-		git commit -m "${notes}" &>> "${logFile}"; errorChk
-		trace "Commit message: ${notes}"
+
+		if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then 
+			trace "Queuing commit message"
+			echo "${notes}" > "${WORKPATH}/${APP}/.queued"
+		else
+			git commit -m "${notes}" &>> "${logFile}"; errorChk
+			trace "Commit message: ${notes}"
+		fi
 	fi
 }
 

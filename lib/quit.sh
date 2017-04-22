@@ -107,6 +107,16 @@ function cleanUp() {
 		"${WPCLI}"/wp plugin activate --no-color wordfence &>> $logFile; errorChk
 	fi
 
+	# Was this an approval?
+	if [[ "${APPROVE}" == "1" ]]; then
+		if [[ -f "${WORKPATH}/${APP}/.queued" ]]; then 
+			rm "${WORKPATH}/${APP}/.queued"
+		fi
+		if [[ -f "${WORKPATH}/${APP}/.approved" ]]; then
+			rm "${WORKPATH}/${APP}/.approved"
+		fi
+	fi
+
 	# Attempt to reset the console when running --quiet
 	if [ "${QUIET}" != "1" ]; then
 		tput cnorm
