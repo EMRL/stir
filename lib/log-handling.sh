@@ -60,9 +60,19 @@ function makeLog() {
 	# IF we're using HTML emails, let's get to work
 	if [[ "${EMAILHTML}" == "TRUE" ]]; then
 		htmlBuild
+		cat "${htmlFile}" > "${trshFile}"
+
+		# If this is an approval email, strip out PHP
+		if [[ "${message_state}" == "APPROVAL NEEDED" ]]; then 
+			sed -i '/<?php/,/?>/d' "${trshFile}"
+			sed -e "s^EMAIL BUTTONS: BEGIN^EMAIL BUTTONS: BEGIN //-->^g" -i "${trshFile}"
+		fi
+
 		# Load the email into a variable
-		htmlSendmail=$(<"${htmlFile}")
+		htmlSendmail=$(<"${trshFile}")
 	fi
+
+
 
 	# Create HTML/PHP logs for viewing online
 	if [[ "${REMOTELOG}" == "TRUE" ]]; then

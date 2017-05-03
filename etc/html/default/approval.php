@@ -1,3 +1,4 @@
+<!--[PHP: BEGIN]-->
 <?php
 
 function approved()
@@ -20,6 +21,7 @@ function approved()
 		return $status;
 }
 ?>
+<!--[PHP: END]-->
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -78,17 +80,18 @@ function approved()
 				<![endif]-->  
 					<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: {{VIEWPORT}}px;">
 							<tr>
-							<td bgcolor="#ffffff" style="padding: 40px; text-align: left; font-family: Arimo, sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;"><h1 style="display: block; font-family: Arimo, sans-serif; font-size: 44px; font-style: normal; font-weight: bold; line-height: 100%;  text-align: left; color: #000000 !important; margin: 0 0 10px 0;">{{LOGTITLE}}</h1>
-								<style>@media (max-width: 768px) {.hide {display:none; !important}}</style>
-								<!--[CLIENTLOGO]--><img src="{{CLIENTLOGO}}" class="hide" style="width: 20%; min-width: 32px; max-width: 192px; float: right; -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; overflow: hidden; margin-left: 1.0em;" alt="{{PROJCLIENT}}" title="{{PROJCLIENT}}">
-								<p style="font-family: Arimo, sans-serif; font-size: 18px; line-height: 26px; font-style: normal; font-weight: 400;"><strong>Date:</strong> {{NOW}}<br />
-								<strong>Project:</strong> {{PROJNAME}} ({{PROJCLIENT}}) <br />
-								<strong>Staging URL:</strong> <a style="color: #47ACDF; text-decoration:none; font-weight: bold;" href="{{DEVURL}}">{{DEVURL}}</a><br />
-								<strong>Production URL:</strong> <a style="color: #47ACDF; text-decoration:none; font-weight: bold;" href="{{PRODURL}}">{{PRODURL}}</a>
-								</p>
+								<td bgcolor="#ffffff" style="padding: 40px; text-align: left; font-family: Arimo, sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;"><h1 style="display: block; font-family: Arimo, sans-serif; font-size: 44px; font-style: normal; font-weight: bold; line-height: 100%;  text-align: left; color: #000000 !important; margin: 0 0 10px 0;">{{LOGTITLE}}</h1>
+									<style>@media (max-width: 768px) {.hide {display:none; !important}}</style>
+									<!--[CLIENTLOGO]--><img src="{{CLIENTLOGO}}" class="hide" style="width: 20%; min-width: 32px; max-width: 192px; float: right; -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; overflow: hidden; margin-left: 1.0em;" alt="{{PROJCLIENT}}" title="{{PROJCLIENT}}">
+									<p style="font-family: Arimo, sans-serif; font-size: 18px; line-height: 26px; font-style: normal; font-weight: 400;"><strong>Date:</strong> {{NOW}}<br />
+									<strong>Project:</strong> {{PROJNAME}} ({{PROJCLIENT}}) <br />
+									<strong>Staging URL:</strong> <a style="color: #47ACDF; text-decoration:none; font-weight: bold;" href="{{DEVURL}}">{{DEVURL}}</a><br />
+									<strong>Production URL:</strong> <a style="color: #47ACDF; text-decoration:none; font-weight: bold;" href="{{PRODURL}}">{{PRODURL}}</a>
+									</p>
 
-					<p><strong>Proposed commit from {{USER}}</strong><br />
-						{{NOTES}}</p>
+									<p><strong>Proposed commit from {{USER}}</strong><br />
+									{{NOTES}}</p>
+									<!--[BUTTONS: BEGIN]-->
 <?php
 $approved = approved();
 
@@ -109,13 +112,25 @@ if (is_null($approved)) {
 		echo 'You have denied this commit and it will not be deployed.';
 }
 ?>
-				</td>
-			</tr>
-			<!--// ONE COLUMN: END //-->
+								<!--// EMAIL BUTTONS: BEGIN 
+								<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="left" style="margin: auto">
+									<tr>
+										<td style="border-radius: 3px; background: #5D6D7E; text-align: center;" class="button-td"><a target="_blank" href="{{DEVURL}}" style="background: #5D6D7E; border: 15px solid #5D6D7E; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a"> <span style="color: #ffffff;">Review Staging</span> </a></td>
+										<td style="width: 10px;"></td>
+										<td style="border-radius: 3px; background: #CC2233; text-align: center;" class="button-td"><a href="{{LOGURL}}?approval=no" style="background: #CC2233; border: 15px solid #CC2233; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a"> <span style="color: #ffffff;">Deny</span> </a></td>
+										<td style="width: 10px;"></td>
+										<td style="border-radius: 3px; background: #47ACDF; text-align: center;" class="button-td"><a href="{{LOGURL}}?approval=yes" style="background: #47ACDF; border: 15px solid #47ACDF; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a"> <span style="color: #ffffff;">Approve</span> </a></td>
+									</tr>
+								</table>
+								<!--// EMAIL BUTTONS: END //-->
+								<!--[BUTTONS: END]-->
+								</td>
+							</tr>
+							<!--// ONE COLUMN: END //-->
 
-			<!--// TEXT BLOCK: BEGIN //-->
-			<tr>
-				<td>
-					<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-						<tr>
-			  				<td style="background: #f0f0f0; padding-left: 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;"><pre style="font: 100% courier,monospace; border: none; overflow: auto; overflow-x: scroll;  max-width: {{VIEWPORTPRE}}px; color: #000; background: #f0f0f0;"><code style="font-size: 80%;">
+							<!--// TEXT BLOCK: BEGIN //-->
+							<tr>
+								<td>
+									<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+										<tr>
+							  				<td style="background: #f0f0f0; padding-left: 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;"><pre style="font: 100% courier,monospace; border: none; overflow: auto; overflow-x: scroll;  max-width: {{VIEWPORTPRE}}px; color: #000; background: #f0f0f0;"><code style="font-size: 80%;">
