@@ -18,11 +18,11 @@ function errorChk() {
 function deployChk() {
 	if [[ "${DEPLOY}" == *"mina"* ]]; then
 		# Get variables organized
-		grep -n "user" "${WORKPATH}/${APP}"/config/deploy.rb > "${trshFile}"
+		grep -n "set :user" "${WORKPATH}/${APP}"/config/deploy.rb > "${trshFile}"
 		MINAUSER=$(awk -F\' '{print $2,$4}' ${trshFile})
 		echo -n "${MINAUSER}" > "${statFile}"
 		echo -n "@" >> ${statFile}
-		grep -n "domain" "${WORKPATH}/${APP}"/config/deploy.rb > "${trshFile}"
+		grep -n "set :domain" "${WORKPATH}/${APP}"/config/deploy.rb > "${trshFile}"
 		MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trshFile})
 		echo -n "${MINADOMAIN}" >> "${statFile}"
 		SSHTARGET=$(sed -r 's/\s+//g' ${statFile})

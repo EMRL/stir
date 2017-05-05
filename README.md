@@ -32,6 +32,7 @@ Other Options:
   --gitstats             Generate git statistics
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
+  --unlock               Delete expired lock files
   --email-test           Test email configuration
   --slack-test           Test Slack integration
   --analytics-test       Test Google Analytics authentication

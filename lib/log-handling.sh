@@ -208,7 +208,7 @@ function gitHistory() {
 	analytics
 
 	# Assemble the file
-	DIGESTWRAP="$(<${deployPath}/html/${EMAILTEMPLATE}/digest/wrap.html)"
+	DIGESTWRAP="$(<${deployPath}/html/${EMAILTEMPLATE}/digest/commit.html)"
 
 	# If there have been no commits in the last week, skip creating the digest
 	if [[ $(git log --since="7 days ago") ]]; then

@@ -20,11 +20,11 @@ set -uo pipefail
 # Startup variables
 read -r UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
 	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
-	DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST GITFULLSTATS <<< ""
+	DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST GITFULLSTATS UNLOCK <<< ""
 echo "${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
 	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
 	${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
-	${ANALYTICS} ${ANALYTICSTEST} ${GITFULLSTATS}" > /dev/null
+	${ANALYTICS} ${ANALYTICSTEST} ${GITFULLSTATS} ${UNLOCK}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -113,6 +113,7 @@ Other Options:
   --gitstats             Generate git statistics
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
+  --unlock               Delete expired lock files
   --email-test           Test email configuration
   --slack-test           Test Slack integration
   --analytics-test       Test Google Analytics authentication
@@ -173,6 +174,7 @@ while [[ ${1:-unset} = -?* ]]; do
 		--email-test) EMAILTEST=1 ;;
 		--analytics-test) ANALYTICSTEST=1 ;;
 		--gitstats) GITFULLSTATS=1 ;; 
+		--unlock) UNLOCK=1 ;;
 		--no-check) NOCHECK=1 ;;
 		--function-list) FUNCTIONLIST=1; CURRENT=1 ;;
 		--variable-list) VARIABLELIST=1 ;;
@@ -216,12 +218,13 @@ if [[ "${DEBUG}" == 1 ]]; then STARTUP="${STARTUP} --debug"; fi
 if [[ "${FORCE}" == 1 ]]; then STARTUP="${STARTUP} --force"; fi
 if [[ "${MERGE}" == 1 ]]; then STARTUP="${STARTUP} --merge"; fi
 if [[ "${NOCHECK}" == 1 ]]; then STARTUP="${STARTUP} --no-check"; fi
+if [[ "${UNLOCK}" == 1 ]]; then STARTUP="${STARTUP} --unlock"; fi
 
 # Probably not relevant but included because reasons
 if [[ "${SLACKTEST}" == 1 ]]; then STARTUP="${STARTUP} --slack-test"; fi
 if [[ "${EMAILTEST}" == 1 ]]; then STARTUP="${STARTUP} --email-test"; fi
 if [[ "${FUNCTIONLIST}" == 1 ]]; then STARTUP="${STARTUP} --function-list"; fi	
-if [[ "${VARIABLELIST}" == 1 ]]; then STARTUP="${STARTUP} --debug"; fi
+if [[ "${VARIABLELIST}" == 1 ]]; then STARTUP="${STARTUP} --variable-list"; fi
 
 # Fire up temporary log files. Consolidate this shit better someday, geez.
 # 

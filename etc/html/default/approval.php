@@ -133,4 +133,4 @@ if (is_null($approved)) {
 								<td>
 									<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
 										<tr>
-							  				<td style="background: #f0f0f0; padding-left: 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;"><pre style="font: 100% courier,monospace; border: none; overflow: auto; overflow-x: scroll;  max-width: {{VIEWPORTPRE}}px; color: #000; background: #f0f0f0;"><code style="font-size: 80%;">
+							  				<td style="background: #f0f0f0; padding: 20px 40px; font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;"><pre style="font: 100% courier,monospace; border: none; overflow: auto; overflow-x: scroll;  max-width: {{VIEWPORTPRE}}px; color: #000; background: #f0f0f0;"><code style="font-size: 80%;">
