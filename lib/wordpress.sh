@@ -64,6 +64,7 @@ function wpPkg() {
 						sed '/Available/d' "${wpFile}" > "${trshFile}" && mv "${trshFile}" "${wpFile}";
 						# Work around for the odd "REQUEST:" occuring
 						sed '/REQUEST:/d' "${wpFile}" > "${trshFile}" && mv "${trshFile}" "${wpFile}";
+						cat "${wpFile}" >> "${logFile}"
 						# Display plugin list is not running in --quiet
 						if [[ "${QUIET}" != "1" ]]; then
 							cat "${wpFile}"; emptyLine

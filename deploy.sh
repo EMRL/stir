@@ -468,14 +468,20 @@ if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]
 	if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
 		error "There is changed code already queued. Approve or deny it before attempting another deployment."
 	fi
+	if [[ "${DENY}" == "1" ]] || [[ -f "${WORKPATH}/${APP}/.denied" ]]; then
+		deny
+	fi
 fi
 
 # Check if approval is queued
-if [[ "${APPROVE}" == "1" ]] && [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
-	if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
-		error "This project is not configured to require approval."	
-	else	
-		error "No outstanding approval request found."
+if [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
+	if [[ "${APPROVE}" == "1" ]] || [[ "${DENY}" == "1" ]]; then
+		if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
+			warning "This project is not configured to require approval."	
+		else	
+			warning "No outstanding approval request found."
+		fi
+		quietExit
 	fi
 fi
 
@@ -502,10 +508,10 @@ function appDeploy() {
 
 			# Check for approval/deny/queue
 			if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
-				if [[ "${APPROVE}" == "1" ]]; then
+				if [[ "${APPROVE}" == "1" ]] || [[ -f "${WORKPATH}/${APP}/.approved" ]]; then
 					approve 		# Approve proposed changes
 				else
-					if [[ "${DENY}" == "1" ]]; then 
+					if [[ "${DENY}" == "1" ]] || [[ -f "${WORKPATH}/${APP}/.denied" ]]; then 
 						deny 		# Deny proposed changes
 					fi
 				fi

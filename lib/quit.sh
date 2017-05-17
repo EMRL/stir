@@ -109,7 +109,7 @@ function cleanUp() {
 
 	# Was this an approval?
 	if [[ "${APPROVE}" == "1" ]]; then
-		if [[ -f "${WORKPATH}/${APP}/.queued" ]]; then 
+		if [[ -f "${WORKPATH}/${APP}/.queued" ]] && [[ "${message_state}" != "ERROR" ]]; then 
 			rm "${WORKPATH}/${APP}/.queued"
 		fi
 		if [[ -f "${WORKPATH}/${APP}/.approved" ]]; then

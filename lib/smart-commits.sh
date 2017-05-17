@@ -13,11 +13,17 @@ function smrtCommit() {
 		# we find updates, grab the relevant line of text from the logs
 		# Looks like this changed somehow, new version of wp-cli maybe?
 		PCA=$(grep '\<Success: Updated' "${logFile}" | grep 'plugins')
+ 
+		if [[ -z "${PCA}" ]] && [[ -n "${ACFKEY}" ]]; then
+			if grep -q "${ACFKEY}" "${logFile}"; then
+				PCA="1"
+			fi
+		fi
 
 		if [[ ! -z "${PCA}" ]] || [[ ! -z "${UPDCORE}" ]]; then
 			trace "Building commit message"
 
-			if [[ -z "${PCA}" ]]; then
+			if [[ -z "${PCA}" ]] && [[ -z "${ACFFILE}" ]]; then
 				trace "No plugin updates"
 			else
 				# How many plugins have we updated? First, strip out the Success:
@@ -35,7 +41,8 @@ function smrtCommit() {
 			fi
 
 			# Is this an ACF-only update?
-			if [[ -n "${ACFFILE}" ]] && [[ -z "${PCA}" ]]; then
+			if [[ "${PCA}" == "1" ]]; then
+				trace "Creating ACF commit message"
 				PCC="Updated 1 of 1 plugin"
 				PLUGINS="advanced-custom-fields-pro"
 				COMMITMSG="$PCC ($PLUGINS)"

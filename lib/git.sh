@@ -322,7 +322,7 @@ function gitStats() {
 		console "Calculating..."
 		getent passwd "${USER}" | cut -d ':' -f 5 | cut -d ',' -f 1 > "${trshFile}"
 		FULLUSER=$(<"${trshFile}")
-		git log --author="$FULLUSER" --pretty=tformat: --numstat | \
+		git log --author="${FULLUSER}" --pretty=tformat: --numstat | \
 		# The single quotes were messing with trying to line break this one
 		gawk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf "Your total lines of code contributed so far: %s\n(+%s added | -%s deleted)\n",loc,add,subs }' -
 	fi
@@ -340,6 +340,7 @@ function gitFullstats() {
 			mkdir "${LOCALHOSTPATH}/${APP}/stats"
 		fi
 		notice "Generating files..."
+		# /usr/bin/gitstats -c style="${deployPath}/html/${EMAILTEMPLATE}/stats/gitstats.css" "${WORKPATH}/${APP}" "${LOCALHOSTPATH}/${APP}/stats" &>> /dev/null &
 		/usr/bin/gitstats "${WORKPATH}/${APP}" "${LOCALHOSTPATH}/${APP}/stats" &>> /dev/null &
 		spinner $!
 		info "Success.    "
