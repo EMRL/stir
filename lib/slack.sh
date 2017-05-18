@@ -12,6 +12,11 @@ function slackPost () {
 		SLACKUSER=${USER}
 	fi
 
+	# If using --current, use the REPO value instead of the APP (current directory)
+	if [[ "${CURRENT}" == "1" ]]; then
+		APP="${REPO}"
+	fi
+
 	# Setup the payload w/ the baseline language
 	slack_message="*${SLACKUSER}* deployed updates to ${APP}"
 

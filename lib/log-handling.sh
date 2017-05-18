@@ -301,6 +301,12 @@ function postLog() {
 function mailLog() {
 	# Only send email if a commit has been made, an approval is required, or there has been an error
 	if [[ -n "${COMMITHASH}" ]] || [[ "${message_state}" == "ERROR" ]] || [[ "${message_state}" == "APPROVAL NEEDED" ]] || [[ "${AUTOMATE}" == "1" ]]; then
+
+		# If using --current, use the REPO value instead of the APP (current directory)
+		if [[ "${CURRENT}" == "1" ]]; then
+			APP="${REPO}"
+		fi
+
 		if [[ "${EMAILHTML}" == "TRUE" ]]; then
 			# Send the email
 			(

@@ -187,12 +187,12 @@ function gitCommit() {
 # Push master
 function gitPushMstr() {
 	if [[ -n "${MASTER}" ]]; then
-		trace "Pushing master."; fixIndex
+		trace "Pushing ${MASTER}"; fixIndex
 		emptyLine  
 		if [[ "${VERBOSE}" -eq 1 ]]; then
 			git push | tee --append "${logFile}"; errorChk           
 		else
-			if  [[ "${FORCE}" = "1" ]] || yesno --default yes "Push master branch? [Y/n] "; then
+			if  [[ "${FORCE}" = "1" ]] || yesno --default yes "Push ${MASTER} branch? [Y/n] "; then
 				if [[ "${NOKEY}" != "TRUE" ]]; then
 					if [[ "${QUIET}" != "1" ]]; then
 						git push &>> "${logFile}" &
@@ -215,7 +215,7 @@ function gitPushMstr() {
 function gitChkProd() {
 	if [[ "${MERGE}" = "1" ]]; then
 		if [[ -n "${PRODUCTION}" ]]; then
-			notice "Checking out production branch..."; fixIndex
+			notice "Checking out ${PRODUCTION} branch..."; fixIndex
 
 			if [[ "${VERBOSE}" -eq 1 ]]; then
 				git checkout "${PRODUCTION}" | tee --append "${logFile}"; errorChk               
@@ -259,7 +259,7 @@ function gitChkProd() {
 function gitMerge() {
 	if [[ "${MERGE}" = "1" ]]; then
 		if [[ -n "${PRODUCTION}" ]]; then
-			notice "Merging master into production..."; fixIndex
+			notice "Merging ${MASTER} into ${PRODUCTION}..."; fixIndex
 			# Clear out the index.lock file, cause reasons
 			[[ -f "${gitLock}" ]] && rm "${gitLock}"
 			# Bonus add, just because. Ugh.
@@ -282,14 +282,14 @@ function gitMerge() {
 # Push production
 function gitPushProd() {
 	if [[ "${MERGE}" = "1" ]]; then
-		if [[ -n "$PRODUCTION" ]]; then
-			trace "Push production"; fixIndex
+		if [[ -n "${PRODUCTION}" ]]; then
+			trace "Push ${PRODUCTION}"; fixIndex
 			emptyLine
 			if [[ "${VERBOSE}" -eq 1 ]]; then
 				git push | tee --append "${logFile}"; errorChk 
 				trace "OK"              
 			else
-				if [[ "${FORCE}" = "1" ]] || yesno --default yes "Push production branch? [Y/n] "; then
+				if [[ "${FORCE}" = "1" ]] || yesno --default yes "Push ${PRODUCTION} branch? [Y/n] "; then
 					if [[ "${QUIET}" != "1" ]]; then
 						sleep 1
 						git push &>> "${logFile}" &

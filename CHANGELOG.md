@@ -9,8 +9,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added integration with `gitstats` for generation of graphic statistics
 - Improved rendering of emails in Windows 10 Mail client
 - Added integration with Google Analytics for web projects
+- Fixed a visual bug that displayed incorrect branch names to the user 
 - Brought back client emails in the form of a weekly digest
 - Added Wordpress database checks
+- When deploying using the `--current` directory, instead of app directory name, the actual repo name will be used to identify the project in Slack and email notifications
 - Added `deploy --unlock` to make it easier remove stale .lock files
 - Added options to define custom file paths used in your Wordpress projects
 - Added email and Slack notification for automated deployments when no updates are available
