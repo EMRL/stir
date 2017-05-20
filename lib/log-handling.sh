@@ -42,6 +42,11 @@ function makeLog() {
 		sed -i "/Resolving deltas:/d" "${logFile}"
 	fi
 
+	# Filter out ACF license key
+	if [[ -n "${ACFKEY}" ]]; then
+		sed -i "s^${ACFKEY}^############^g" "${logFile}"
+	fi
+
 	# Filter raw log output as configured by user
 	if [[ "${NOPHP}" == "TRUE" ]]; then
 		grep -vE "(PHP |Notice:|Warning:|Strict Standards:)" "${logFile}" > "${postFile}"
@@ -116,7 +121,7 @@ function htmlBuild() {
 			else
 				# Looks like we've got a normal successful deployment
 				message_state="SUCCESS"
-				# Is this a scheduled updated?
+				# Is this a scheduled update?
 				if [[ "${AUTOMATE}" == "1" ]]; then
 					LOGTITLE="Scheduled Deployment"
 				else

@@ -485,6 +485,19 @@ if [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
 	fi
 fi
 
+# If user is trying to merge, make sure a second branch is configured
+if [[ "${MERGE}" == "1" ]] && [[ -z "${PRODUCTION}" ]]; then
+	if [[ "${AUTOMERGE}" == "TRUE" ]]; then
+		if [[ "${AUTOMATE}" == "1" ]]; then
+			error "Automated deployment requires a code merge, but a target branch is not defined."
+		fi
+		warning "This project is configured to automatically merge branches, but a target branch is not defined."
+	else
+		warning "You are attempting to merge branches, but a target branch is not defined."
+	fi
+	quietExit
+fi
+
 # Setup the core application
 function appDeploy() {
 	depCheck		# Check that required commands are available
