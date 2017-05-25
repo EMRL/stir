@@ -435,6 +435,12 @@ if [[ "${NOCHECK}" == "1" ]]; then
 	ACTIVECHECK="FALSE"
 fi
 
+# If using --automate, force checking of master branch
+if [[ "${AUTOMATE}" == "1" ]]; then
+	CHECKBRANCH="${MASTER}";
+	trace "Enforcing branch checking: ${MASTER}"
+fi
+
 trace "Current project is ${APP}"
 trace "Current user is ${DEV}"
 trace "Git lock at ${gitLock}"
