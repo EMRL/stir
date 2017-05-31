@@ -237,69 +237,28 @@ fi
 
 # Fire up temporary log files. Consolidate this shit better someday, geez.
 # 
+# Crash and burn
+function logFail() {
+	echo "Could not create temporary file, exiting."; exit 1
+}
 # Main log file
 logFile="/tmp/$APP.log-$RANDOM.log"
-(umask 077 && touch "${logFile}") || {
-	echo "Could not create temporary file, exiting."
-	exit 1
-}
-wpFile="/tmp/$APP.wp-$RANDOM.log"
-(umask 077 && touch "${wpFile}") || {
-	echo "Could not create temporary file, exiting."
-	exit 1
-}
-coreFile="/tmp/$APP.core-$RANDOM.log"
-(umask 077 && touch "${coreFile}") || {
-	echo "Could not create temporary file, exiting."
-	exit 1
-}
-# WTF IS THIS
+(umask 077 && touch "${logFile}") || logFail
+wpFile="/tmp/$APP.wp-$RANDOM.log"; (umask 077 && touch "${wpFile}" &> /dev/null) || logFail
+coreFile="/tmp/$APP.core-$RANDOM.log"; (umask 077 && touch "${coreFile}" &> /dev/null) || logFail
+
+# Start writing the logfile
 echo -e "Deployment logfile for ${APP^^} - $NOW\r" >> "${logFile}"
 echo -e "Launching deploy${STARTUP}\n" >> "${logFile}"
-postFile="/tmp/$APP.wtf-$RANDOM.log"
-(umask 077 && touch "${postFile}") || {
-	echo "Could not create temporary file, exiting."
-	exit 1
-}
-# Logfile for random trash, might go away
-trshFile="/tmp/$APP.trsh-$RANDOM.log"
-(umask 077 && touch "${trshFile}") || {
-	echo "Could not create temporary file, exiting."
-	exit 1
-}
-# Stat file, prolly will go away as well
-statFile="/tmp/$APP.stat-$RANDOM.log"
-(umask 077 && touch "${statFile}") || {
-	echo "Could not create temporary file, exiting."
-	exit 1
-}
-# Short URL temp file
-urlFile="/tmp/$APP.url-$RANDOM.log"
-(umask 077 && touch "${urlFile}") || {
-	echo "Could not create temporary file, exiting."
-	exit 1
-}
 
-# HTML log temp file
-htmlFile="/tmp/$APP.log-$RANDOM.html"
-(umask 077 && touch "${htmlFile}") || {
-	echo "Could not create temporary file, exiting."
-	exit 1
-}
-
-# HTML log temp file
-htmlEmail="/tmp/$APP.email-$RANDOM.html"
-(umask 077 && touch "${htmlEmail}") || {
-	echo "Could not create temporary file, exiting."
-	exit 1
-}
-
-# Client HTML email temp file
-clientEmail="/tmp/$APP.shortemail-$RANDOM.html"
-(umask 077 && touch "${clientEmail}") || {
-	echo "Could not create temporary file, exiting."
-	exit 1
-}
+# More crappy tmp files
+postFile="/tmp/$APP.wtf-$RANDOM.log"; (umask 077 && touch "${postFile}" &> /dev/null) || logFail
+trshFile="/tmp/$APP.trsh-$RANDOM.log"; (umask 077 && touch "${trshFile}" &> /dev/null) || logFail
+statFile="/tmp/$APP.stat-$RANDOM.log"; (umask 077 && touch "${statFile}" &> /dev/null) || logFail 
+urlFile="/tmp/$APP.url-$RANDOM.log"; (umask 077 && touch "${urlFile}" &> /dev/null) || logFail
+htmlFile="/tmp/$APP.log-$RANDOM.html"; (umask 077 && touch "${htmlFile}" &> /dev/null) || logFail
+htmlEmail="/tmp/$APP.email-$RANDOM.html"; (umask 077 && touch "${htmlEmail}" &> /dev/null) || logFail
+clientEmail="/tmp/$APP.shortemail-$RANDOM.html"; (umask 077 && touch "${clientEmail}" &> /dev/null) || logFail
 
 # Path of the script; I should flip this check to make it more useful
 if [ -d "/etc/deploy" ]; then
@@ -350,7 +309,7 @@ fi
 # Load per-project configuration, if it exists
 if [[ -r "${WORKPATH}/${APP}/config/deploy.sh" ]]; then
 	# shellcheck disable=1090
-	source "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"; APPRC=1
+	source "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"; APPRC="1"
 fi
 
 # Load libraries, or die
@@ -365,9 +324,6 @@ fi
 # Function list
 if [[ "${FUNCTIONLIST}" == "1" ]]; then
 	compgen -A function | more; quickExit
-	#compgen -A function > /tmp/func.list
-	#tr '\n' ' ' < /tmp/func.list;  echo
-	#quickExit
 fi
 
 # Variable list
@@ -504,10 +460,12 @@ fi
 
 # If user is trying to merge, make sure a second branch is configured
 if [[ "${MERGE}" == "1" ]] && [[ -z "${PRODUCTION}" ]]; then
+	# If using --automate, shut 'em down'
+	if [[ "${AUTOMATE}" == "1" ]]; then
+		error "Automated deployment requires a code merge, but a target branch is not defined."
+	fi
+	# If not, spit out warnings and begin walk of shame
 	if [[ "${AUTOMERGE}" == "TRUE" ]]; then
-		if [[ "${AUTOMATE}" == "1" ]]; then
-			error "Automated deployment requires a code merge, but a target branch is not defined."
-		fi
 		warning "This project is configured to automatically merge branches, but a target branch is not defined."
 	else
 		warning "You are attempting to merge branches, but a target branch is not defined."
