@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added Wordpress database checks
 - Added another failsafe check; `deploy --automate` will not deploy unless repo is on master branch
 - When deploying using the `--current` directory, instead of app directory name, the actual repo name will be used to identify the project in Slack and email notifications
+- Added project information to test emails sent with the `--email-test` switch
 - Added `deploy --unlock` to make it easier remove stale .lock files
 - Added options to define custom file paths used in your Wordpress projects
 - Added email and Slack notification for automated deployments when no updates are available

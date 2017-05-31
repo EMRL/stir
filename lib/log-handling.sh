@@ -373,9 +373,41 @@ function emailTest() {
 		echo "Subject: [TESTING] ${SUBJECT} - ${APP}"
 		echo "Content-Type: text/html"
 		echo
-		echo "This is a test HTML email from <a href=\"https://github.com/EMRL/deploy/\">deploy ${VERSION}</a>.<br /><br />"
-		echo "Current project is ${APP}<br />"
-		echo "Current user is ${DEV}";
+		echo "This is a test HTML email from <a href=\"https://github.com/EMRL/deploy/\">deploy ${VERSION}</a>.<br />"
+		echo "Current user is ${DEV}<br /><br />";
+		echo
+		echo "<strong>Project Information</strong><br />"
+		echo "Name: ${PROJNAME}<br />"
+		echo "Client: ${PROJCLIENT}<br />"
+		echo "Logo: ${CLIENTLOGO}<br />"
+		echo "Digest email(s): ${CLIENTEMAIL}<br />"
+		echo "Staging URL: ${DEVURL}<br />"
+		echo "Production URL: ${PRODURL}<br /><br />"
+		echo
+		echo "<strong>Git Configuration</strong><br />"
+		echo "Repo: ${REPOHOST}/${REPO}<br />"
+		echo "Master branch: ${MASTER}<br />"
+		echo "Production branch: ${PRODUCTION}<br />"
+		echo "Auto merge: ${AUTOMERGE}<br />"
+		echo "File Stashing: ${STASH}<br />"
+		echo "Force branch checking: ${CHECKBRANCH}<br /><br />"
+		echo
+		echo "<strong>Wordpress Setup</strong><br />"
+		echo "Wordpress root: ${WPROOT}<br />"
+		echo "Wordpress application: ${WPAPP}<br />"
+		echo "Wordpress system: ${WPSYSTEM}<br /><br />"
+		echo
+		echo "<strong>Deployment Configuration</strong><br />"
+		echo "Deploy command: ${DEPLOY}<br />"
+		echo "Disallow deployment: ${DONOTDEPLOY}<br /><br />"
+		echo 
+		echo "<strong>Integration</strong><br />"
+		echo "Task #: ${TASK}<br />"
+		echo "Task user: ${TASKUSER}<br />"
+		echo "Task time: ${ADDTIME}<br />"
+		echo "Post to Slack: ${POSTTOSLACK}<br />"
+		echo "Post errors to Slack: ${SLACKERROR}<br />"
+		echo "Google Analytics ID: ${PROFILEID}";
 		) | "${MAILPATH}"/sendmail -t
 		# Send Text mail
 		(
@@ -387,9 +419,45 @@ function emailTest() {
 		echo "Content-Type: text/plain"
 		echo
 		echo "This is a test TEXT email from deploy ${VERSION} (https://github.com/EMRL/deploy/)"
-		echo
-		echo "Current project is ${APP}"
 		echo "Current user is ${DEV}";
+		echo
+		echo "Project Information"
+		echo "-------------------"
+		echo "Name: ${PROJNAME}"
+		echo "Client: ${PROJCLIENT}"
+		echo "Logo: ${CLIENTLOGO}"
+		echo "Digest email(s): ${CLIENTEMAIL}"
+		echo "Staging URL: ${DEVURL}"
+		echo "Production URL: ${PRODURL}"
+		echo
+		echo "Git Configuration"
+		echo "-----------------"
+		echo "Repo: ${REPOHOST}/${REPO}"
+		echo "Master branch: ${MASTER}"
+		echo "Production branch: ${PRODUCTION}"
+		echo "Auto merge: ${AUTOMERGE}"
+		echo "File Stashing: ${STASH}"
+		echo "Force branch checking: ${CHECKBRANCH}"
+		echo
+		echo "Wordpress Setup"
+		echo "-----------------------"
+		echo "Wordpress root: ${WPROOT}"
+		echo "Wordpress application: ${WPAPP}"
+		echo "Wordpress system: ${WPSYSTEM}"
+		echo
+		echo "Deployment Configuration"
+		echo "------------------------"
+		echo "Deploy command: ${DEPLOY}"
+		echo "Disallow deployment: ${DONOTDEPLOY}"
+		echo 
+		echo "Integration"
+		echo "-----------"
+		echo "Task #: ${TASK}"
+		echo "Task user: ${TASKUSER}"
+		echo "Task time: ${ADDTIME}"
+		echo "Post to Slack: ${POSTTOSLACK}"
+		echo "Post errors to Slack: ${SLACKERROR}"
+		echo "Google Analytics ID: ${PROFILEID}";
 		) | "${MAILPATH}"/sendmail -t
 	fi
 }

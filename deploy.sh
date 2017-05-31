@@ -10,6 +10,7 @@ WEEKOF="$(date -d '7 days ago' +"%B %d")"
 GASTART="$(date -d '7 days ago' "+%Y-%m-%d")"
 GAEND="$(date "+%Y-%m-%d")"
 DEV=$USER"@"$HOSTNAME
+APP="null"
 
 # Initialize and export all startup variables so we can pass ShellCheck tests 
 # as well as run in strict mode - this seems super clunky, there has to be a 
@@ -17,11 +18,12 @@ DEV=$USER"@"$HOSTNAME
 #
 # Set mode
 set -uo pipefail
+
 # Startup variables
-read -r UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
+read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
 	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
 	DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST GITFULLSTATS UNLOCK <<< ""
-echo "${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
+echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
 	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
 	${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
 	${ANALYTICS} ${ANALYTICSTEST} ${GITFULLSTATS} ${UNLOCK}" > /dev/null
@@ -176,8 +178,8 @@ while [[ ${1:-unset} = -?* ]]; do
 		--gitstats) GITFULLSTATS=1 ;; 
 		--unlock) UNLOCK=1 ;;
 		--no-check) NOCHECK=1 ;;
-		--function-list) FUNCTIONLIST=1; CURRENT=1 ;;
-		--variable-list) VARIABLELIST=1 ;;
+		--function-list) FUNCTIONLIST=1; CURRENT=1 ;; # Spoofs --current
+		--variable-list) VARIABLELIST=1; CURRENT=1 ;; # Spoofs --current
 		--endopts) shift; break ;;
 		*) echo "Invalid option: '$1'" 1>&2 ; exit 1 ;;
 	esac
@@ -195,7 +197,9 @@ if [[ "${STRICT}" == "1" ]]; then
 fi
 
 # Store the remaining part as arguments.
-APP+=("${@}")
+APP=("${@}")
+# Originally I had it like this, I can't remember why @.@
+# APP+=("${@}")
 
 # Check to see if the user is deploying from current working directory
 if [[ "${CURRENT}" == "1" ]]; then
@@ -225,6 +229,11 @@ if [[ "${SLACKTEST}" == 1 ]]; then STARTUP="${STARTUP} --slack-test"; fi
 if [[ "${EMAILTEST}" == 1 ]]; then STARTUP="${STARTUP} --email-test"; fi
 if [[ "${FUNCTIONLIST}" == 1 ]]; then STARTUP="${STARTUP} --function-list"; fi	
 if [[ "${VARIABLELIST}" == 1 ]]; then STARTUP="${STARTUP} --variable-list"; fi
+
+# If not trying to deploy current directory, and no repo is named in the startup command, exit
+if [[ "${CURRENT}" != "1" ]] && [[ -z "${@}" ]]; then
+	echo "Choose a valid project, or use the --current flag to deploy from the current directory."; exit 1
+fi
 
 # Fire up temporary log files. Consolidate this shit better someday, geez.
 # 
@@ -320,7 +329,8 @@ fi
 
 # If not trying to deploy current directory, and no repo is named, exit
 if [[ "${CURRENT}" != "1" ]]; then
-	if [[ -z "${@}" ]]; then
+	# if [[ -z "${@}" ]]; then
+	if [[ -z "${APP}" ]]; then
 		echo "Choose a valid project, or use the --current flag to deploy from the current directory."
 		exit 1
 	else
@@ -330,6 +340,7 @@ if [[ "${CURRENT}" != "1" ]]; then
 		fi
 	fi
 fi
+
 # Load per-user configuration, if it exists
 if [[ -r ~/.deployrc ]]; then
 	# shellcheck disable=1090
