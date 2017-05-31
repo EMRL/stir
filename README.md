@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/EMRL/deploy.svg?branch=master)](https://travis-ci.org/EMRL/deploy)
 
-This is a multi-use deployment script, with a focus on publishing web apps to live environments. This script is in daily use at [EMRL](http://emrl.com), an advertising, design, and development agency in northern California. If you have any questions, please feel free to contact us.
+`deploy` is a shell script designed to speed up and automate project deployment. Its main focus is Wordpress websites, but it can be used with any code repository. This script is in daily use at [EMRL](http://emrl.com), an advertising, design, and development agency in northern California. If you have any questions, please feel free to contact us.
+
+Please note that our documentation here is nearly useless, and there is quite a bit of setup involved in getting this running reliably. A full setup guide is coming soon™.
 
 [View Changelog](https://github.com/EMRL/deploy/blob/master/CHANGELOG.md)
 
@@ -17,18 +19,18 @@ Options:
   -u, --update           If no available Wordpress updates, halt deployment
   -P, --publish          Publish current production code to live environment
   -m, --merge            Force merge of branches
-  -c, --current          Deploy a project from current working directory          
+  -c, --current          Deploy a project from current working directory
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
   -h, --help             Display this help and exit
   -v, --version          Output version information and exit
 
 Other Options:
-  --approve              Approve proposed changes and queue for deployment
-  --deny                 Deny proposed changes
-  --automate             For unattended deployment, equivalent to -Fuq
+  --automate             For unattended deployment via cron
+  --approve              Approve and deploy queued code changes
+  --deny                 Deny queued code changes
   --digest               Create and send weekly digest
-  --no-check             Override active file and server checks 
+  --no-check             Override active file and server checks
   --gitstats             Generate git statistics
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
@@ -37,7 +39,7 @@ Other Options:
   --slack-test           Test Slack integration
   --analytics-test       Test Google Analytics authentication
   --function-list        Output a list of all functions()
-  --variable-list        Output a project's declared variables 
+  --variable-list        Output a project's declared variables
 ```
 
 ## How It Works
@@ -61,7 +63,7 @@ Repositories can each have their own deploy configuration. An example of this fi
 
 ## Integration
 
-For workgroups and teams that use it `deploy` is able to integrate with Slack. You'll need to set up an "Incoming Webhook" custom integration on the Slack side to get this ready to roll. See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get going. Once you think you've got Slack configured, run `deploy --slack-test` to test.
+For workgroups and teams that use it `deploy` is able to integrate with Slack. You'll need to set up an "Incoming Webhook" custom integration on the Slack side to get this ready to roll. See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get going. Once you think you've got Slack configured, run `deploy --slack-test [project]` to test.
 
 ## Running on Autopilot
 

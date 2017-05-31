@@ -75,7 +75,6 @@ function go() {
 function fixIndex() {
 	# A rather brutal fix for index permissions issues
 	if [[ "${FIXINDEX}" == "TRUE" ]]; then
-		trace "Checking index..."
 		if [ -w "${WORKPATH}/${APP}/.git/index" ]; then
 			trace "OK"
 		else
