@@ -102,8 +102,9 @@ function gitStage() {
 	if [[ -z $(git status --porcelain) ]]; then
 		console "Nothing to commit, working directory clean."; quietExit
 	else
-		trace "Staging files"; emptyLine
+		emptyLine
 		if [[ "${FORCE}" = "1" ]] || yesno --default yes "Stage files? [Y/n] "; then
+			trace "Staging files"
 			if [[ "${VERBOSE}" -eq 1 ]]; then
 				git add -A | tee --append "${logFile}"; errorChk              
 			else  

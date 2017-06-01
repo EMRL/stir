@@ -27,7 +27,7 @@ function buildLog() {
 function mailPost() {
 	# If this is an outstanding approval, don't post
 	if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
-		trace "Approval required, skipping integration."
+		trace "Approval required, skipping integration"
 	else
 		echo "${COMMITURL}" >> "${postFile}"
 		postSendmail=$(<"${postFile}")
@@ -63,15 +63,13 @@ function postCommit() {
 	gitStats
 
 	# Check to see if there's an email integration setup
-	if [[ -z "$POSTEMAIL" ]]; then
-		trace "No email integration setup"
-	else
+	if [[ -n "$POSTEMAIL" ]]; then
 		# Is it a valid email address? Ghetto check but better than nothing
 		if [[ "$POSTEMAIL" == ?*@?*.?* ]]; then
 			trace "Running email integration"
 			buildLog; mailPost
 		else
-			trace "Integration email address ${POSTEMAIL} does not look valid. Check your configuration."
+			trace "Integration email address ${POSTEMAIL} does not look valid"
 		fi
 	fi
 }

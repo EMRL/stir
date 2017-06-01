@@ -10,7 +10,7 @@ function userExit() {
 	rm "${WORKPATH}/${APP}/.git/index.lock" &> /dev/null
 	trace "Exit on user request"
 	# Check email settings
-	if [ "${EMAILQUIT}" == "TRUE" ]; then
+	if [[ "${EMAILQUIT}" == "TRUE" ]]; then
 	   mailLog
 	fi
 	# Clean up your mess
@@ -27,12 +27,12 @@ function quickExit() {
 function errorExit() {
 	message_state="ERROR"; makeLog # Compile log
 	# Check email settings
-	if [ "${EMAILERROR}" == "TRUE" ]; then
+	if [[ "${EMAILERROR}" == "TRUE" ]]; then
 		mailLog
 	fi
 
 	# Check Slack settings
-	if [ "${POSTTOSLACK}" == "TRUE" ] && [ "${SLACKERROR}" == "TRUE" ]; then
+	if [[ "${POSTTOSLACK}" == "TRUE" ]] && [[ "${SLACKERROR}" == "TRUE" ]]; then
 		message_state="ERROR"
 		slackPost
 	fi

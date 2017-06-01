@@ -57,7 +57,7 @@ function slackPost () {
 	fi
 
 	# Has there been an error?
-	if [ "${message_state}" == "ERROR" ]; then
+	if [[ "${message_state}" == "ERROR" ]]; then
 		if [ -z "${notes}" ]; then
 			notes="Something went wrong."
 		fi
@@ -65,7 +65,7 @@ function slackPost () {
 	fi
 
 	# Has there been an error?
-	if [ "${message_state}" == "NOTICE" ]; then
+	if [[ "${message_state}" == "NOTICE" ]]; then
 		slack_message="*${SLACKUSER}* nothing to do for ${APP}\nNOTICE: ${notes}"
 	fi
 
@@ -90,6 +90,7 @@ function slackPost () {
 	fi
 }
 
+# Slack configuration test
 function slackTest {
 	console "Testing Slack integration..."
 	echo "${SLACKURL}"

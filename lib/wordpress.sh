@@ -13,11 +13,11 @@ function wpPkg() {
 
 		# Is wp-cli installed? 
 		if hash "${WPCLI}"/wp 2>/dev/null; then
-		trace "wp-cli found, checking for Wordpress."
+		trace "wp-cli found, checking for Wordpress..."
 
 			# Check for Wordpress
 			if [[ -f "${WORKPATH}"/"${APP}${WPROOT}${WPSYSTEM}"/wp-settings.php ]]; then
-				trace "Wordpress found."
+				trace "Wordpress found!"
 				cd "${WORKPATH}"/"${APP}${WPROOT}${WPAPP}"; \
 
 				# Database check
@@ -192,10 +192,10 @@ function wpPkg() {
 					fi
 				fi
 			else
-				trace "Wordpress not found."
+				trace "Wordpress not found"
 			fi
 		else
-			trace "wp-cli not found."
+			trace "wp-cli not found"
 		fi
 
 		# If running in Wordpress update-only mode, bail out
@@ -229,7 +229,7 @@ function wfCheck() {
 	# Check for signs of Wordfence
 	if [[ "${WFCHECK}" == "TRUE" ]]; then
 		if [[ -f "${WORKPATH}/${APP}${WPROOT}${WPAPP}/wflogs/config.php" ]]; then
-			trace "Wordfence found."; emptyLine
+			trace "Wordfence detected"; emptyLine
 			warning "Wordfence firewall detected, and may cause issues with deployment."
 			if [[ "${FORCE}" = "1" ]] || [[ "${QUIET}" = "1" ]]; then
 				error "Deployment can not continue while Wordfence firewall is enabled."

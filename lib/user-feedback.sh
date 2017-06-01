@@ -3,17 +3,17 @@
 # user-feedback.sh
 #
 # Handles interface components
-trace "Loading user feedback"
+trace "Loading interface"
 
 # Progress spinner; we'll see if this works
 function spinner() {
-	if [ "${QUIET}" != "1" ]; then
+	if [[ "${QUIET}" != "1" ]]; then
 		local pid=$1
 		local delay=0.15
 		# Is ther ea better way to format this thing?  It's wonky
 		local spinstr='|/-\'
 		tput civis;
-		while [ "$(ps a | awk '{print $1}' | grep ${pid})" ]; do
+		while [[ "$(ps a | awk '{print $1}' | grep ${pid})" ]]; do
 			local temp=${spinstr#?}
 			printf "Working... %c  " "$spinstr"
 			local spinstr=$temp${spinstr%"$temp"}
@@ -39,9 +39,10 @@ function progressBar() {
 	# Switch back to strict
 	# set -e
 }
+
 # Display progress bar
 function showProgress() {
-	if [ "${QUIET}" != "1" ]; then
+	if [[ "${QUIET}" != "1" ]]; then
 		_start=1
 		_end=100
 		for number in $(seq ${_start} ${_end})

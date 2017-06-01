@@ -7,11 +7,11 @@
 trace "Loading permissions fixes"
 
 function permFix() {
-	if [ "${FIXPERMISSIONS}" == "TRUE" ]; then
+	if [[ "${FIXPERMISSIONS}" == "TRUE" ]]; then
 		notice "Setting permissions..."    
   
 		# /lib is obsolete for future repositories
-		if [ -d "$WORKPATH/$APP/lib" ]; then
+		if [[ -d "$WORKPATH/$APP/lib" ]]; then
 			sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/lib; #errorChk
 			info " ${APP}/lib/"
 		else
@@ -19,7 +19,7 @@ function permFix() {
 		fi
 
 		# Set permissions
-	  	if [ -f "${WORKPATH}"/"${APP}"/.gitignore ]; then
+	  	if [[ -f "${WORKPATH}"/"${APP}"/.gitignore ]]; then
 			sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/.gitignore; > /dev/null;
 	  	fi
 	  

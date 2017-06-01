@@ -10,4 +10,3 @@ function sshChk() {
 	ssh -oStrictHostKeyChecking=no git@bitbucket.org
 	ssh -oStrictHostKeyChecking=no git@github.org
 }
-

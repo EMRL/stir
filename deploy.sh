@@ -340,7 +340,7 @@ trace "Loading system configuration file from ${etcLocation}"
 if [[ "${USERRC}" == "1" ]]; then
 	trace "Loading user configuration from ~/.deployrc"
 else
-	trace "User configuration not found, creating."
+	trace "User configuration not found, creating"
 	cp "${deployPath}"/.deployrc ~/.deployrc
 	console "User configuration file missing, creating ~/.deployrc"
 	if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
