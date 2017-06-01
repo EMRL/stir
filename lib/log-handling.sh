@@ -341,7 +341,7 @@ function mailLog() {
 	fi
 
 	# Is this a digest email?
-	if [[ "${NOTIFYCLIENT}" == "TRUE" ]] && [[ -n "${CLIENTEMAIL}" ]] && [[ "${DIGEST}" == "1" ]] && [[ -n "${digestSendmail}" ]]; then
+	if [[ -n "${DIGESTEMAIL}" ]] && [[ "${DIGEST}" == "1" ]] && [[ -n "${digestSendmail}" ]]; then
 		# Tweak the WEEKOF for the subject line
 		WEEKOF="$(date -d '7 days ago' +"%B %d, %Y")"
 		# Send the email
@@ -349,7 +349,7 @@ function mailLog() {
 		echo "Sender: ${FROM}"
 		echo "From: EMRL <${FROM}>"
 		echo "Reply-To: ${FROM} <${FROM}>"
-		echo "To: ${CLIENTEMAIL}"
+		echo "To: ${DIGESTEMAIL}"
 		echo "Subject: ${PROJNAME} updates for the week of ${WEEKOF}"				
 		echo "Content-Type: text/html"
 		echo

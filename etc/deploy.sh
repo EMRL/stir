@@ -26,24 +26,16 @@
 # If you are using html logfiles, define the full URL to the client's logo
 # CLIENTLOGO="http://client.com/assets/img/logo.png"
 
-# Client Notification Emails
-#
-# If you'd like to send short, branded HTML emails to someone on the client
-# side, set NOTIFYCLIENT to "TRUE" below, and define their email address.
-# Email value can also be a comma separated string of multiple addresses. 
-# NOTIFYCLIENT="TRUE"
-# CLIENTEMAIL="client@client.com"
-#
-# If you're sending HTML emails and you want to use an email template 
-# unique to this project, define it below. HTML templates are stored in 
+# If you'd like to send branded HTML emails using the `deploy --digest [project]` 
+# command, enter the recipient's email address below. Email value can be a comma 
+# separated string of multiple addresses. 
+# DIGESTEMAIL="digest@email.com"
+
+# If you want to use an email template unique to this project (instead of the 
+# globally configured template) define it below. HTML templates are stored in 
 # separate folders in /etc/deploy/html. The value used below should be the 
 # folder name of your template.
 # EMAILTEMPLATE="default"
-#
-# If you want the client to only receive these emails when running scheduled 
-# updates (for example a weekly cron using deploy --automate) Set the following
-# to "TRUE"
-# AUTOMATEDONLY="TRUE"
 
 # Development project URL, including http:// or https:// 
 # DEVURL="http://devurl.com"
