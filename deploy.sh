@@ -65,7 +65,7 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
 	${CLIENTSECRET} ${REDIRECTURI} ${AUTHORIZATIONCODE} ${ACCESSTOKEN} 
 	${REFRESHTOKEN} ${PROFILEID} ${METRIC} ${RESULT}" > /dev/null
 # Internal variables
-read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
+read -r var optstring options logFile wpFile coreFile postFile trshFile statFile \
 	urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail deployPath \
 	etcLocation libLocation POSTEMAIL current_branch error_msg active_files notes \
 	UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC message_state \
@@ -75,7 +75,7 @@ read -r optstring options logFile wpFile coreFile postFile trshFile statFile \
 	WPAPP WPSYSTEM gitHistory DIGESTWRAP AUTHOR AUTHOREMAIL AUTHORNAME \
 	GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail MINAUSER MINADOMAIN \
 	SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX QUEUED <<< ""
-echo "${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
+echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
 	${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
 	${POSTEMAIL} ${current_branch} ${error_msg} ${active_files} ${notes} ${UPDCORE} 
@@ -359,6 +359,15 @@ if [[ "${APPRC}" == "1" ]]; then
 else
 	trace "No project configuration file found"
 fi
+
+# Make sure variables are set up correctly
+for var in "${REPOHOST} ${CLIENTLOGO}" "${DEVURL}" "${PRODURL}"; do
+	if [[ -n "${var}" ]]; then
+		if [[ "${var}" != *"http"*"://"* ]]; then
+			error "The URL in your configuration ($var) must be preceded by either http:// or https:// - check your setup."
+		fi
+	fi
+done
 
 # Are we using "smart" *cough* commits?
 if [[ "${SMARTCOMMIT}" == "TRUE" ]]; then
