@@ -56,7 +56,7 @@ function go() {
 		warning "Found ${gitLock}"
 		# If running in --force mode we will not allow deployment to continue
 		if [[ "${FORCE}" = "1" ]]; then
-			warning "Can't continue deployment in --force mode."; quietExit
+			warning "Can't continue deployment using --force."; quietExit
 		else
 			if yesno --default no "Remove lockfile? [y/N] "; then
 				rm -f "${gitLock}" 2>/dev/null

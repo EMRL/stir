@@ -240,6 +240,7 @@ fi
 function logFail() {
 	echo "Could not create temporary file, exiting."; exit 1
 }
+
 # Main log file
 logFile="/tmp/$APP.log-$RANDOM.log"
 (umask 077 && touch "${logFile}") || logFail
@@ -410,7 +411,7 @@ if [[ "${NOCHECK}" == "1" ]]; then
 	ACTIVECHECK="FALSE"
 fi
 
-# If using --automate, force checking of master branch
+# If using --automate, force branch checking
 if [[ "${AUTOMATE}" == "1" ]]; then
 	CHECKBRANCH="${MASTER}";
 	trace "Enforcing branch checking: ${MASTER}"
@@ -527,10 +528,10 @@ function appDeploy() {
 				gitStage		# Stage files			
 				gitCommit		# Commit, with message
 			fi
-			gitPushMstr		# Push master to Bit Bucket
+			gitPushMstr		# Push master branch
 			gitChkProd		# Checkout production branch
 			gitMerge		# Merge master into production
-			gitPushProd		# Push production to Bit Bucket
+			gitPushProd		# Push production branch
 			gitChkMstr		# Checkout master once again  
 			pkgDeploy		# Deploy project to live server
 		fi

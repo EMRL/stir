@@ -28,7 +28,7 @@ function gitStart() {
 
 	# If CHECKBRANCH is set, make sure current branch is correct.
 	start_branch="$(git rev-parse --abbrev-ref HEAD)"
-	if [[ -n "${CHECKBRANCH}" ]]; then 
+	if [[ -n "${CHECKBRANCH}" ]] && [[ "${DIGEST}" != "1" ]] && [[ "${GITFULLSTATS}" != "1" ]] && [[ "${EMAILTEST}" != "1" ]] && [[ "${SLACKTEST}" != "1" ]]; then 
 		if [[ "${start_branch}" != "${CHECKBRANCH}" ]]; then
 			error "Must be on ${CHECKBRANCH} branch to continue deployment.";
 		fi
