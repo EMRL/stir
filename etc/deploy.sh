@@ -17,6 +17,10 @@
 # password in the console, set NOKEY to exactly "TRUE"
 # NOKEY="TRUE"
 
+# By default deploy will check for valid SSH keys; if you want to override this
+# behavior, set DISABLESSHCHECK to TRUE
+# DISABLESSHCHECK="FALSE"
+
 # A human readable project name
 # PROJNAME="Best Webapp Ever"	
 

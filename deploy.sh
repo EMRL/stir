@@ -22,11 +22,12 @@ set -uo pipefail
 # Startup variables
 read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
 	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
-	DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST GITFULLSTATS UNLOCK <<< ""
+	DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST GITFULLSTATS UNLOCK  \
+	SSHTEST <<< ""
 echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
 	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
 	${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
-	${ANALYTICS} ${ANALYTICSTEST} ${GITFULLSTATS} ${UNLOCK}" > /dev/null
+	${ANALYTICS} ${ANALYTICSTEST} ${GITFULLSTATS} ${UNLOCK} ${SSHTEST}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -74,7 +75,7 @@ read -r var optstring options logFile wpFile coreFile postFile trshFile statFile
 	ACFFILE VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WPROOT \
 	WPAPP WPSYSTEM gitHistory DIGESTWRAP AUTHOR AUTHOREMAIL AUTHORNAME \
 	GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail MINAUSER MINADOMAIN \
-	SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX QUEUED <<< ""
+	SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX QUEUED DISABLESSHCHECK <<< ""
 echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
 	${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
 	${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -87,7 +88,7 @@ echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile
 	${WPSYSTEM} ${gitHistory} ${DIGESTWRAP} ${AUTHOR} 	${AUTHOREMAIL} ${AUTHORNAME} 
 	${GRAVATAR} ${IMGFILE} ${SIZE} ${RND} ${ANALYTICSMSG} ${digestSendmail} 
 	${MINAUSER} ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} ${REMOTEFILE}
-	${GREETING} ${LOGSUFFIX} ${QUEUED}" > /dev/null
+	${GREETING} ${LOGSUFFIX} ${QUEUED} ${DISABLESSHCHECK}" > /dev/null
 
 # Options
 function flags() {
@@ -115,6 +116,7 @@ Other Options:
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
   --unlock               Delete expired lock files
+  --ssh-test             Validate SSH key setup
   --email-test           Test email configuration
   --slack-test           Test Slack integration
   --analytics-test       Test Google Analytics authentication
@@ -171,6 +173,7 @@ while [[ ${1:-unset} = -?* ]]; do
 		--deny) DENY=1 ;;
 		--digest) DIGEST=1; FORCE=1; QUIET=1 ;;
 		--automate) FORCE=1; UPGRADE=1; MERGE=1; QUIET=1; AUTOMATE=1 ;;
+		--ssh-test) SSHTEST=1 ;;
 		--slack-test) SLACKTEST=1 ;;
 		--email-test) EMAILTEST=1 ;;
 		--analytics-test) ANALYTICSTEST=1 ;;
@@ -492,6 +495,9 @@ function appDeploy() {
 		gitHistory
 	else
 		srvCheck 		# Check that servers are up and running
+		if [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then
+			sshChk		# Check keys
+		fi
 		permFix			# Fix permissions
 		if [[ "${PUBLISH}" == "1" ]]; then
 			pkgDeploy		# Deploy project to live server

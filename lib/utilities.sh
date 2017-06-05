@@ -29,6 +29,17 @@ function go() {
 		analyticsTest; quickExit
 	fi
 
+	# Test SSH key authentication
+	if [[ "${SSHTEST}" == "1" ]]; then
+		if [[ "${NOKEY}" != "TRUE" ]]; then
+			notice "Checking SSH Configuration..."
+			sshChk
+		else
+			warning "This project is not configured to use SSH keys, no check needed."
+		fi
+		quickExit
+	fi
+
 	# Generate git stats
 	if [[ "${GITFULLSTATS}" == "1" ]]; then
 		gitFullstats; quickExit

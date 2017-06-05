@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## Unreleased
 - Added experimental approval/denial code queue functions
 - Fixed a rare bug with saving HTML logs
+- Added ssh key checking when required, upon starting each deployment session
 - Added ssh configuration check when deploying to live environments via Mina
 - Added integration with `gitstats` for generation of graphic statistics
 - Improved rendering of emails in Windows 10 Mail client
