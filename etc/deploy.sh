@@ -90,6 +90,9 @@
 # WPROOT="/public"
 # WPAPP="/app"
 # WPSYSTEM="/system"
+#
+# If you do not want to allow Wordpress core updates, set DONOTUPDATEWP to TRUE.
+# DONOTUPDATEWP="FALSE"
 
 # The command to finalize deployment of your project(s)
 # DEPLOY="mina deploy"				

@@ -83,7 +83,6 @@ function gitGarbage() {
 
 # Does anything need to be committed? (Besides me?)
 function gitStatus() {
-	trace "Check Status"
 	if [[ -z $(git status --porcelain) ]]; then
 		if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
 			if [[ "${REQUIREAPPROVAL}" == "TRUE" ]]; then

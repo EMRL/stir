@@ -42,9 +42,10 @@ function makeLog() {
 		sed -i "/Resolving deltas:/d" "${logFile}"
 	fi
 
-	# Filter out ACF license key
+	# Filter out ACF license key & wget stuff
 	if [[ -n "${ACFKEY}" ]]; then
 		sed -i "s^${ACFKEY}^############^g" "${logFile}"
+		# sed -i "/........../d" "${logFile}"
 	fi
 
 	# Filter raw log output as configured by user
@@ -380,7 +381,7 @@ function emailTest() {
 		echo "Name: ${PROJNAME}<br />"
 		echo "Client: ${PROJCLIENT}<br />"
 		echo "Logo: ${CLIENTLOGO}<br />"
-		echo "Digest email(s): ${CLIENTEMAIL}<br />"
+		echo "Digest email(s): ${DIGESTEMAIL}<br />"
 		echo "Staging URL: ${DEVURL}<br />"
 		echo "Production URL: ${PRODURL}<br /><br />"
 		echo
@@ -426,7 +427,7 @@ function emailTest() {
 		echo "Name: ${PROJNAME}"
 		echo "Client: ${PROJCLIENT}"
 		echo "Logo: ${CLIENTLOGO}"
-		echo "Digest email(s): ${CLIENTEMAIL}"
+		echo "Digest email(s): ${DIGESTEMAIL}"
 		echo "Staging URL: ${DEVURL}"
 		echo "Production URL: ${PRODURL}"
 		echo

@@ -23,6 +23,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Improved readability of full logs
 - Improved language for consistency in some functions
 - Fixed a bug with Slack not including commit messages when using `deploy --automate`
+- Added the ability to disable Wordpress core updates for sites that require it
 
 ## [3.5.7] - 03-03-2017
 - Fixed issues with HTML log on mobile devices
