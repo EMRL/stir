@@ -20,6 +20,7 @@ Options:
   -P, --publish          Publish current production code to live environment
   -m, --merge            Force merge of branches
   -c, --current          Deploy a project from current working directory
+  -t, --time             Add time to project management integration
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
   -h, --help             Display this help and exit
@@ -45,7 +46,7 @@ Other Options:
 
 ## How It Works
 
-Basically, this thing is a wrapper that simplifies web app deployment from a development environment to a production server. At the moment is mostly focused on Wordpress projects but in theory it should work for other stuff too.
+Basically, this thing is a wrapper that simplifies web app deployment from a development or staging environment to a production server. At the moment is mostly focused on Wordpress projects but in it should work for other stuff too.
 
 This script requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
 
@@ -64,11 +65,11 @@ Repositories can each have their own deploy configuration. An example of this fi
 
 ## Integration
 
-For workgroups and teams that use it `deploy` is able to integrate with Slack. You'll need to set up an "Incoming Webhook" custom integration on the Slack side to get this ready to roll. See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get going. Once you think you've got Slack configured, run `deploy --slack-test [project]` to test.
+For workgroups and teams that use it, `deploy` is able to integrate with Slack. You'll need to set up an "Incoming Webhook" custom integration on the Slack side to get this ready to roll. See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get going. Once you think you've got Slack configured, run `deploy --slack-test [project]` to test.
 
 ## Running on Autopilot
 
-As of 3.5, the proper method of running automated deployments is `deploy --automate` as opposed to the previous method which was `deploy --force --upgrade --quiet`. The new method adds a flag to optionally deliver an email after the automated update. The old wmethod can still be used but will not trigger the email. 
+As of 3.5, the proper method of running automated deployments is `deploy --automate` as opposed to the previous method which was `deploy --force --upgrade --quiet`. The new method adds a flag to optionally deliver an email after the automated update. The old method can still be used but will not trigger the email. 
 
 `deploy --automate` works well for unattended updates of Wordpress sites; great for maintaining updates via a crontab. An example cron script can be [found here](https://github.com/EMRL/deploy/blob/master/etc/cron/deploy.cron.example). Running in this mode, the project will only be deployed if there are Wordpress core or plugin updates. If other code changes are detected the project will not be auto-updated. Smart Commits must be enabled or nothing will be deployed.
 

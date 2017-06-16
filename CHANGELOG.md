@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Brought back client emails in the form of a weekly digest
 - Added Wordpress database checks
 - Added another failsafe check; `deploy --automate` will not deploy unless repo is on master branch
+- Added `--time` switch to allowing tracking work time when deploying manually
 - When deploying using the `--current` directory, instead of app directory name, the actual repo name will be used to identify the project in Slack and email notifications
 - Added project information to test emails sent with the `--email-test` switch
 - Added `deploy --unlock` to make it easier remove stale .lock files

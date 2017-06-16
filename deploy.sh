@@ -23,11 +23,12 @@ set -uo pipefail
 read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
 	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
 	DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST GITFULLSTATS UNLOCK  \
-	SSHTEST <<< ""
+	SSHTEST TIME <<< ""
 echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
 	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
 	${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
-	${ANALYTICS} ${ANALYTICSTEST} ${GITFULLSTATS} ${UNLOCK} ${SSHTEST}" > /dev/null
+	${ANALYTICS} ${ANALYTICSTEST} ${GITFULLSTATS} ${UNLOCK} ${SSHTEST} 
+	${TIME}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -102,6 +103,7 @@ Options:
   -P, --publish          Publish current production code to live environment
   -m, --merge            Force merge of branches
   -c, --current          Deploy a project from current working directory          
+  -t, --time             Add time to project management integration
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
   -h, --help             Display this help and exit
@@ -170,6 +172,7 @@ while [[ ${1:-unset} = -?* ]]; do
 		--debug) DEBUG=1 ;;
 		-F|--force) FORCE=1 ;;
 		-m|--merge) MERGE=1 ;; 
+		-t|--time) TIME=1 ;;
 		--approve) APPROVE=1; FORCE=1 ;;
 		--deny) DENY=1 ;;
 		--digest) DIGEST=1; FORCE=1; QUIET=1 ;;
@@ -217,6 +220,7 @@ if [[ "${APPROVE}" == 1 ]]; then STARTUP="${STARTUP} --approve"; FORCE="1"; fi
 if [[ "${DENY}" == 1 ]]; then STARTUP="${STARTUP} --deny"; FORCE="1"; fi
 if [[ "${PUBLISH}" == 1 ]]; then STARTUP="${STARTUP} --publish"; fi
 if [[ "${SKIPUPDATE}" == 1 ]]; then STARTUP="${STARTUP} --skip-update"; fi
+if [[ "${TIME}" == 1 ]]; then STARTUP="${STARTUP} --time"; fi
 if [[ "${CURRENT}" == 1 ]]; then STARTUP="${STARTUP} --current"; fi
 if [[ "${VERBOSE}" == 1 ]]; then STARTUP="${STARTUP} --verbose"; fi
 if [[ "${QUIET}" == 1 ]]; then STARTUP="${STARTUP} --quiet"; fi

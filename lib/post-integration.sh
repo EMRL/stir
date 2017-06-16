@@ -42,8 +42,16 @@ function mailPost() {
 				echo "Subject: ${ADDTIME}"
 			fi
 		else
-			# If not an automated deployment, use current user email address
-			echo "From: ${USER}@${FROMDOMAIN}"
+			# If not an automated deployment, use address from .deployrc, or current user email address
+			if [[ -n "${FROMUSER}" ]]; then
+				echo "From: ${FROMUSER}@${FROMDOMAIN}"
+			else
+				echo "From: ${USER}@${FROMDOMAIN}"
+			fi
+			# If deployment happened with the --time switch active, add time to subject line
+			if [[ -n "${TIME}" ]] && [[ -n "${ADDTIME}" ]]; then
+				echo "Subject: ${ADDTIME}"
+			fi
 		fi
 		echo "To: ${POSTEMAIL}"
 		echo "Content-Type: text/plain"
@@ -66,7 +74,6 @@ function postCommit() {
 	if [[ -n "$POSTEMAIL" ]]; then
 		# Is it a valid email address? Ghetto check but better than nothing
 		if [[ "$POSTEMAIL" == ?*@?*.?* ]]; then
-			trace "Running email integration"
 			buildLog; mailPost
 		else
 			trace "Integration email address ${POSTEMAIL} does not look valid"
