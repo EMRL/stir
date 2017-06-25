@@ -18,7 +18,7 @@ fi
 
 # Creating this function first, so verbose output option is usable early
 function trace() {
-	if [[ "${VERBOSE}" -eq 1 ]]; then
+	if [[ "${VERBOSE}" == "1" ]]; then
 		TIMESTAMP="$(date '+%H:%M:%S')"
 		echo -e "$(tput setaf 3)${TIMESTAMP}$(tput sgr0) $*"
 		echo "${TIMESTAMP} $*" >> "${logFile}"
@@ -42,12 +42,12 @@ SOURCEPATH="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
 	fi
 	for LIBRARIES in "${SOURCEPATH}"/*.sh
 	do
-	if [[ -e "${LIBRARIES}" ]]; then
-		# Don't source yourself, silly script
-		if [[ "${LIBRARIES}" == *"loader.sh"* ]]; then
-			continue
+		if [[ -e "${LIBRARIES}" ]]; then
+			# Don't source yourself, silly script
+			if [[ "${LIBRARIES}" == *"loader.sh"* ]]; then
+				continue
+			fi
+			# shellcheck disable=1090
+			source "$LIBRARIES"
 		fi
-		# shellcheck disable=1090
-		source "$LIBRARIES"
-	fi
-done
+	done

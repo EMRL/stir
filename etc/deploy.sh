@@ -35,6 +35,10 @@
 # separated string of multiple addresses. 
 # DIGESTEMAIL="digest@email.com"
 
+# If you'd like to post a Slack notification with a URL to view the weekly digest  
+# enter the incoming webhook URL below
+# DIGESTSLACK="https://hooks.slack.com/services/###################/########################"
+
 # If you want to use an email template unique to this project (instead of the 
 # globally configured template) define it below. HTML templates are stored in 
 # separate folders in /etc/deploy/html. The value used below should be the 

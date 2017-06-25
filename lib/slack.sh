@@ -87,6 +87,10 @@ function slackPost () {
 	# Send payload 
 	if [[ "${DIGEST}" != "1" ]]; then
 		curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" > /dev/null 2>&1; errorStatus
+	else
+		slack_icon=":black_small_square:"
+		slack_message="<${PRODURL}|${PROJNAME}> updates for the week of ${WEEKOF} (<${DIGESTURL}|View>)"
+		curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" > /dev/null 2>&1; errorStatus
 	fi
 }
 

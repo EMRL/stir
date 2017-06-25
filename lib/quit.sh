@@ -43,7 +43,6 @@ function errorExit() {
 
 # Clean exit
 function safeExit() {
-	info "Exiting."; console
 	makeLog # Compile log
 	# Check email settings
 	if [[ "${EMAILSUCCESS}" == "TRUE" ]]; then
@@ -69,14 +68,14 @@ function safeExit() {
 
 # Clean exit, nothing to commit
 function quietExit() {
-	info "Exiting."; console
 	# Clean up your mess
 	cleanUp; exit 0
 }
 
 function cleanUp() {
 	# If anything is stashed, unstash it.
-	if [[ "${currentStash}" = "1" ]]; then
+	if [[ "${currentStash}" == "1" ]]; then
+		trace "Unstashing files"
 		git stash pop >> "${logFile}"
 		currentStash="0"
 	fi	
@@ -118,7 +117,10 @@ function cleanUp() {
 	fi
 
 	# Attempt to reset the console when running --quiet
-	if [ "${QUIET}" != "1" ]; then
+	if [[ "${QUIET}" != "1" ]]; then
 		tput cnorm
 	fi
+
+	# Say goodnight, Gracie. Goodnight Gracie.
+	info "Exiting."; console
 }

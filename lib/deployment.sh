@@ -28,7 +28,7 @@ function preDeploy() {
 				currentStash="1"
 			else
 				emptyLine
-				error "There are previously undeployed changes in this project, automatic deployment can not continue."
+				error "There are previously undeployed changes in this project, deployment can not continue."
 			fi
 
 		else
