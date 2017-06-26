@@ -41,7 +41,9 @@ function go() {
 	fi
 
 	# Generate git stats
-	if [[ "${GITFULLSTATS}" == "1" ]]; then
+	if [[ "${GITCHART}" == "1" ]]; then
+		gitChart; quickExit
+	elif [[ "${GITFULLSTATS}" == "1" ]]; then
 		gitFullstats; quickExit
 	fi
 

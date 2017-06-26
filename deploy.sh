@@ -22,13 +22,13 @@ set -uo pipefail
 # Startup variables
 read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
 	SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
-	DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST GITFULLSTATS UNLOCK  \
+	DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST GITFULLSTATS GITCHART UNLOCK  \
 	SSHTEST TIME <<< ""
 echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT} 	
 	${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
 	${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
-	${ANALYTICS} ${ANALYTICSTEST} ${GITFULLSTATS} ${UNLOCK} ${SSHTEST} 
-	${TIME}" > /dev/null
+	${ANALYTICS} ${ANALYTICSTEST} ${GITFULLSTATS} ${GITCHART} ${UNLOCK} 
+	${SSHTEST} ${TIME}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -115,8 +115,8 @@ Other Options:
   --approve              Approve and deploy queued code changes
   --deny                 Deny queued code changes
   --digest               Create and send weekly digest
-  --no-check             Override active file and server checks 
-  --gitstats             Generate git statistics
+  --no-check             Override active file and server checks
+  --gitchart             Generate git statistics using gitchart
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
   --unlock               Delete expired lock files
@@ -183,6 +183,7 @@ while [[ ${1:-unset} = -?* ]]; do
 		--email-test) EMAILTEST=1 ;;
 		--analytics-test) ANALYTICSTEST=1 ;;
 		--gitstats) GITFULLSTATS=1 ;; 
+		--gitchart) GITCHART=1 ;;
 		--unlock) UNLOCK=1 ;;
 		--no-check) NOCHECK=1 ;;
 		--function-list) FUNCTIONLIST=1; CURRENT=1 ;; # Spoofs --current

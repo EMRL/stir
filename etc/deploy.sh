@@ -36,8 +36,9 @@
 # DIGESTEMAIL="digest@email.com"
 
 # If you'd like to post a Slack notification with a URL to view the weekly digest  
-# enter the incoming webhook URL below
-# DIGESTSLACK="https://hooks.slack.com/services/###################/########################"
+# set the following to TRUE. IF you want to use an incoming webhook other than the 
+# one defined in SLACKURL below, enter that here *instead* of TRUE.
+# DIGESTSLACK="TRUE"
 
 # If you want to use an email template unique to this project (instead of the 
 # globally configured template) define it below. HTML templates are stored in 

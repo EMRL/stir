@@ -78,8 +78,6 @@ function makeLog() {
         htmlSendmail=$(<"${trshFile}")
     fi
 
-
-
     # Create HTML/PHP logs for viewing online
     if [[ "${REMOTELOG}" == "TRUE" ]]; then
         htmlDir
