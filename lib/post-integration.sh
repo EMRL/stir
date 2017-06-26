@@ -7,20 +7,22 @@ trace "Loading integration services"
 
 # Compile commit message with other stuff for integration
 function buildLog() {
-	# OK let's grab the short version of the commit hash
-	COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL="${REPOHOST}/${REPO}/commits/${COMMITHASH}"
+	if [[ "${DIGEST}" != "1" ]]; then 
+		# OK let's grab the short version of the commit hash
+		COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL="${REPOHOST}/${REPO}/commits/${COMMITHASH}"
 
-	# Is this a publish only?
-	if [[ "${PUBLISH}" == "1" ]] && [[ -z "${notes}" ]]; then	
-		notes="Published to production and marked as deployed"
+		# Is this a publish only?
+		if [[ "${PUBLISH}" == "1" ]] && [[ -z "${notes}" ]]; then	
+			notes="Published to production and marked as deployed"
+		fi
+
+		# Is this just an approval?
+		if [[ "${APPROVE}" == "1" ]] && [[ -z "${notes}" ]]; then
+			notes="Marked as approved and deployed" 
+		fi
+
+		echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${postFile}"
 	fi
-
-	# Is this just an approval?
-	if [[ "${APPROVE}" == "1" ]] && [[ -z "${notes}" ]]; then
-		notes="Marked as approved and deployed" 
-	fi
-
-	echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${postFile}"
 }
 
 # Post integration via email

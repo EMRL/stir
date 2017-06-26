@@ -5,6 +5,14 @@
 trace "Loading Slack integration"
 
 function slackPost () {
+	trace "${DIGESTSLACK}"
+	# Messy but whatever
+	#if [[ "${DIGEST}" == "1" ]]; then 
+	#	if [[ "${DIGESTSLACK}" != "TRUE" ]] || [[ "${DIGESTSLACK}" != *"slack"* ]]; then
+	#		return
+	#	fi
+	#fi
+
     # If running in --automate, change the user name
     if [[ "$AUTOMATE" == "1" ]]; then
         SLACKUSER="Scheduled update:"
@@ -76,7 +84,7 @@ function slackPost () {
 
     # Create payload for digests
     if [[ "${DIGEST}" == "1" ]] && [[ -n "${DIGESTURL}" ]]; then
-        if [[ -n "${DIGESTSLACK}" ]] || [[ "${DIGESTSLACK}" == "TRUE" ]]; then
+        if [[ -n "${DIGESTSLACK}" ]] && [[ "${DIGESTSLACK}" != "FALSE" ]]; then
             message_state="DIGEST"
             if [[ "${DIGESTSLACK}" == *"slack"* ]]; then
                 SLACKURL="${DIGESTSLACK}"
@@ -87,6 +95,8 @@ function slackPost () {
             else
                 slack_message="*${PROJNAME}* updates for the week of ${WEEKOF} (<${DIGESTURL}|View>)"               
             fi
+                else
+        	return
         fi
     fi
 
