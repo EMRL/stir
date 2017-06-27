@@ -378,6 +378,7 @@ function gitChart() {
             sed -i '/CLIENTLOGO/d' "${trshFile}"
         fi 
 
+        # Clean this up later
         sed -e "s^{{NOW}}^${NOW}^g" \
             -e "s^{{PROJNAME}}^${PROJNAME}^g" \
             -e "s^{{CLIENTLOGO}}^${CLIENTLOGO}^g" \
@@ -385,6 +386,7 @@ function gitChart() {
             -e "s^{{PRODURL}}^${PRODURL}^g" \
             "${trshFile}" > "${LOCALHOSTPATH}/${APP}/stats/index.html"
 
+        # Create the charts
         /usr/bin/gitchart -r "${WORKPATH}/${APP}" authors "${LOCALHOSTPATH}/${APP}/stats/authors.svg" &>> /dev/null &
         /usr/bin/gitchart -r "${WORKPATH}/${APP}" commits_day "${LOCALHOSTPATH}/${APP}/stats/commits_day.svg" &>> /dev/null &
         /usr/bin/gitchart -r "${WORKPATH}/${APP}" commits_day_week "${LOCALHOSTPATH}/${APP}/stats/commits_day_week.svg" &>> /dev/null &
@@ -395,8 +397,9 @@ function gitChart() {
         /usr/bin/gitchart -r "${WORKPATH}/${APP}" commits_year_month "${LOCALHOSTPATH}/${APP}/stats/commits_year_month.svg" &>> /dev/null &
         /usr/bin/gitchart -r "${WORKPATH}/${APP}" files_type "${LOCALHOSTPATH}/${APP}/stats/files_type.svg" &>> /dev/null &
         spinner $!
-        info "Success.    "
+
+        # Process primary chart color and setpermissions if needed
+        sleep 1; find "${LOCALHOSTPATH}/${APP}/stats/" -type f -exec sed -i 's/#9999ff/#47ACDF/g' {} \;
         chmod -R a+rw "${deployPath}/html/${EMAILTEMPLATE}/stats" &> /dev/null
     fi
 }
-

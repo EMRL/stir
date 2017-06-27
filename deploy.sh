@@ -499,7 +499,7 @@ function appDeploy() {
 	lock			# Create lock file
 	go 				# Start a deployment work session
 	if [[ "${DIGEST}" == "1" ]]; then
-		gitHistory
+		createDigest
 	else
 		srvCheck 		# Check that servers are up and running
 		if [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then
