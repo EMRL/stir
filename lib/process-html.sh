@@ -1,8 +1,10 @@
 #!/bin/bash
 #
-# log-handling.sh
+# process-html.sh
 #
+###############################################################################
 # Filters through html templates to inject our project's variables
+###############################################################################
 trace "Loading html handling"
 
 function processHTML() {

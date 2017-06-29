@@ -6,8 +6,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added experimental approval/denial code queue functions
 - Fixed a rare bug with saving HTML logs
 - Added ssh key checking when required, upon starting each deployment session
-- Added ssh configuration check when deploying to live environments via Mina
-- Added integration with `gitstats` for generation of graphic statistics
+- Added ssh configuration check when deploying to live environments via `mina`
+- Added integration with `gitchart` for generation of graphic statistics
 - Improved rendering of emails in Windows 10 Mail client
 - Added integration with Google Analytics for web projects
 - Fixed a visual bug that displayed incorrect branch names to the user 

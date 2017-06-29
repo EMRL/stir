@@ -3,13 +3,13 @@
 # deploy: A simple bash script for deploying sites.
 
 IFS=$'\n\t'
-VERSION="3.6-rc.2"
+VERSION="3.6-rc.3"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 WEEKOF="$(date -d '7 days ago' +"%B %d")"
 GASTART="$(date -d '7 days ago' "+%Y-%m-%d")"
 GAEND="$(date "+%Y-%m-%d")"
-DEV=$USER"@"$HOSTNAME
+DEV="${USER}@${HOSTNAME}"
 APP="null"
 
 # Set mode

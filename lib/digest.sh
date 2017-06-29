@@ -59,6 +59,9 @@ function createDigest() {
     RND="$(($RANDOM % $SIZE))"
     GREETING="${array[$RND]}"
 
+    # Git some stats
+    # git log --no-merges  --since="7 days ago" --reverse --stat | grep -Eo "[0-9]{1,} files? changed" | grep -Eo "[0-9]{1,}" | awk "{ sum += \$1 } END { print sum }"
+
     processHTML
 
     if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then

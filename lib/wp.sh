@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# wordpress.sh
+# wp.sh
 #
 ###############################################################################
 # Checks for Wordpress upgrades, and executes upgrades if needed

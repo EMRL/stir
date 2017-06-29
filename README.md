@@ -19,7 +19,7 @@ Options:
   -u, --update           If no available Wordpress updates, halt deployment
   -P, --publish          Publish current production code to live environment
   -m, --merge            Force merge of branches
-  -c, --current          Deploy a project from current working directory
+  -c, --current          Deploy a project from current working directory          
   -t, --time             Add time to project management integration
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
@@ -32,7 +32,7 @@ Other Options:
   --deny                 Deny queued code changes
   --digest               Create and send weekly digest
   --no-check             Override active file and server checks
-  --gitstats             Generate git statistics
+  --stats                Generate project statistics pages
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
   --unlock               Delete expired lock files
@@ -41,7 +41,7 @@ Other Options:
   --slack-test           Test Slack integration
   --analytics-test       Test Google Analytics authentication
   --function-list        Output a list of all functions()
-  --variable-list        Output a project's declared variables
+  --variable-list        Output a project's declared variables 
 ```
 
 ## How It Works
