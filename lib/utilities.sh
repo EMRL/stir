@@ -41,10 +41,8 @@ function go() {
 	fi
 
 	# Generate git stats
-	if [[ "${GITCHART}" == "1" ]]; then
-		gitChart; quickExit
-	elif [[ "${GITFULLSTATS}" == "1" ]]; then
-		gitFullstats; quickExit
+	if [[ "${PROJSTATS}" == "1" ]]; then
+		projStats; quickExit
 	fi
 
 	# Chill and wait for user to confirm project

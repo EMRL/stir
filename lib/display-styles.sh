@@ -1,6 +1,10 @@
 #!/bin/bash
 #
 # display-styles.sh
+#
+###############################################################################
+# Handles text colors and other screen output
+############################################################################### 
 trace "Loading console styles"
 
 # Define color codes
@@ -15,73 +19,73 @@ white='\E[37;47m'
 endColor='\e[0m'
 
 # Only define these codes if not running in --quiet (for crontab)
-if [[ $QUIET != "1" ]]; then
-	bold=$(tput bold)
-	underline=$(tput sgr 0 1)
-	reset=$(tput sgr0)
-	purple=$(tput setaf 171)
-	tan=$(tput setaf 3)
+if [[ "${QUIET}" != "1" ]]; then
+  bold=$(tput bold)
+  underline=$(tput sgr 0 1)
+  reset=$(tput sgr0)
+  purple=$(tput setaf 171)
+  tan=$(tput setaf 3)
 fi
 
 #  Standard text output only to console
 function console() {
-	if [[ $QUIET != "1" ]]; then
-		echo -e "${reset}$*${endColor}"
-	fi
+  if [[ "${QUIET}" != "1" ]]; then
+    echo -e "${reset}$*${endColor}"
+  fi
 }
 
 # Standard text output to console and logfile
 function info() {
-	if [[ $QUIET != "1" ]]; then
-		echo -e "${reset}$*${endColor}"
-	fi
-	echo "$@" >> "${logFile}"
+  if [[ "${QUIET}" != "1" ]]; then
+    echo -e "${reset}$*${endColor}"
+  fi
+  echo "$@" >> "${logFile}"
 }
 
 # Standard text output only to log
 function log() {
-	echo "$@" >> "${logFile}"
+  echo "$@" >> "${logFile}"
 }
 
 function input() {
-	if [[ $QUIET != "1" ]]; then
-		echo -e "${reset}$*${endColor}"
-	fi
+  if [[ "${QUIET}" != "1" ]]; then
+    echo -e "${reset}$*${endColor}"
+  fi
 }
 
 # Sectional header
 function notice() {
-	if [[ $QUIET != "1" ]]; then
-		echo; echo -e "${green}$*${endColor}"
-	fi
-	echo "" >> "${logFile}"; echo "$@" >> "${logFile}"
+  if [[ "${QUIET}" != "1" ]]; then
+    echo; echo -e "${green}$*${endColor}"
+  fi
+  echo "" >> "${logFile}"; echo "$@" >> "${logFile}"
 }
 
 function error() {
-	# Set to ERROR
-	message_state="ERROR"
-	if [[ $QUIET != "1" ]]; then
-		echo -e "${red}$*${endColor}"
-	else
-		echo -e "$@"
-	fi
-	echo -e "\nERROR: $*" >> "${logFile}"
-	error_msg="$*"
-	errorExit
+  # Set to ERROR
+  message_state="ERROR"
+  if [[ "${QUIET}" != "1" ]]; then
+    echo -e "${red}$*${endColor}"
+  else
+    echo -e "$@"
+  fi
+  echo -e "\nERROR: $*" >> "${logFile}"
+  error_msg="$*"
+  errorExit
 }
 
 function warning() {
-	if [[ $QUIET != "1" ]]; then
-		echo -e "${red}$*${endColor}"
-	fi
-	echo "WARNING: $*" >> "${logFile}"
+  if [[ "${QUIET}" != "1" ]]; then
+    echo -e "${red}$*${endColor}"
+  fi
+  echo "WARNING: $*" >> "${logFile}"
 }
 
 function emptyLine() {
-	if [[ $QUIET != "1" ]]; then
-		echo ""
-		echo "" >> "${logFile}"
-	else
-		echo "" >> "${logFile}"
-	fi
+  if [[ "${QUIET}" != "1" ]]; then
+    echo ""
+    echo "" >> "${logFile}"
+  else
+    echo "" >> "${logFile}"
+  fi
 }

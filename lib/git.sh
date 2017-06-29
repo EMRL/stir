@@ -28,7 +28,7 @@ function gitStart() {
 
     # If CHECKBRANCH is set, make sure current branch is correct.
     start_branch="$(git rev-parse --abbrev-ref HEAD)"
-    if [[ -n "${CHECKBRANCH}" ]] && [[ "${DIGEST}" != "1" ]] && [[ "${GITCHART}" != "1" ]] && [[ "${GITFULLSTATS}" != "1" ]] && [[ "${EMAILTEST}" != "1" ]] && [[ "${SLACKTEST}" != "1" ]]; then 
+    if [[ -n "${CHECKBRANCH}" ]] && [[ "${DIGEST}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]] && [[ "${EMAILTEST}" != "1" ]] && [[ "${SLACKTEST}" != "1" ]]; then 
         if [[ "${start_branch}" != "${CHECKBRANCH}" ]]; then
             error "Must be on ${CHECKBRANCH} branch to continue deployment.";
         fi
@@ -332,74 +332,3 @@ function gitStats() {
         gawk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf "Your total lines of code contributed so far: %s\n(+%s added | -%s deleted)\n",loc,add,subs }' -
     fi
 } 
-
-function gitFullstats() {
-    hash gitstats 2>/dev/null || {
-    error "gitstats not installed." 
-    }
-    if [[ "${REMOTELOG}" == "TRUE" ]] && [[ "${LOCALHOSTPOST}" == "TRUE" ]]; then
-        if [[ ! -d "${LOCALHOSTPATH}/${APP}" ]]; then
-            mkdir "${LOCALHOSTPATH}/${APP}"
-        fi
-        if [[ ! -d "${LOCALHOSTPATH}/${APP}/stats" ]]; then
-            mkdir "${LOCALHOSTPATH}/${APP}/stats"
-        fi
-        notice "Generating files..."
-        # /usr/bin/gitstats -c style="${deployPath}/html/${EMAILTEMPLATE}/stats/gitstats.css" "${WORKPATH}/${APP}" "${LOCALHOSTPATH}/${APP}/stats" &>> /dev/null &
-        /usr/bin/gitstats "${WORKPATH}/${APP}" "${LOCALHOSTPATH}/${APP}/stats" &>> /dev/null &
-        spinner $!
-        info "Success.    "
-        chmod -R a+rw "${deployPath}/html/${EMAILTEMPLATE}/stats" &> /dev/null
-        cp "${deployPath}/html/${EMAILTEMPLATE}/stats/gitstats.css" "${LOCALHOSTPATH}/${APP}/stats/gitstats.css"
-    fi
-}
-
-function gitChart() {
-    hash gitchart 2>/dev/null || {
-    error "gitchart not installed." 
-    }
-    if [[ "${REMOTELOG}" == "TRUE" ]] && [[ "${LOCALHOSTPOST}" == "TRUE" ]]; then
-        if [[ ! -d "${LOCALHOSTPATH}/${APP}" ]]; then
-            mkdir "${LOCALHOSTPATH}/${APP}"
-        fi
-        if [[ ! -d "${LOCALHOSTPATH}/${APP}/stats" ]]; then
-            mkdir "${LOCALHOSTPATH}/${APP}/stats"
-        fi
-        notice "Generating files..."
-
-        # Process the HTML
-        cat "${deployPath}/html/${EMAILTEMPLATE}/stats/index.html" > "${trshFile}"
-
-        if [[ -z "${PRODURL}" ]]; then
-            sed -i '/PRODURL/d' "${trshFile}"
-        fi
-
-        if [[ -z "${CLIENTLOGO}" ]]; then
-            sed -i '/CLIENTLOGO/d' "${trshFile}"
-        fi 
-
-        # Clean this up later
-        sed -e "s^{{NOW}}^${NOW}^g" \
-            -e "s^{{PROJNAME}}^${PROJNAME}^g" \
-            -e "s^{{CLIENTLOGO}}^${CLIENTLOGO}^g" \
-            -e "s^{{DEVURL}}^${DEVURL}^g" \
-            -e "s^{{PRODURL}}^${PRODURL}^g" \
-            "${trshFile}" > "${LOCALHOSTPATH}/${APP}/stats/index.html"
-
-        # Create the charts
-        /usr/bin/gitchart -r "${WORKPATH}/${APP}" authors "${LOCALHOSTPATH}/${APP}/stats/authors.svg" &>> /dev/null &
-        /usr/bin/gitchart -r "${WORKPATH}/${APP}" commits_day "${LOCALHOSTPATH}/${APP}/stats/commits_day.svg" &>> /dev/null &
-        /usr/bin/gitchart -r "${WORKPATH}/${APP}" commits_day_week "${LOCALHOSTPATH}/${APP}/stats/commits_day_week.svg" &>> /dev/null &
-        /usr/bin/gitchart -r "${WORKPATH}/${APP}" commits_hour_day "${LOCALHOSTPATH}/${APP}/stats/commits_hour_day.svg" &>> /dev/null &
-        /usr/bin/gitchart -r "${WORKPATH}/${APP}" commits_hour_week "${LOCALHOSTPATH}/${APP}/stats/commits_hour_week.svg" &>> /dev/null &
-        /usr/bin/gitchart -r "${WORKPATH}/${APP}" commits_month "${LOCALHOSTPATH}/${APP}/stats/commits_month.svg" &>> /dev/null &
-        /usr/bin/gitchart -r "${WORKPATH}/${APP}" commits_year "${LOCALHOSTPATH}/${APP}/stats/commits_year.svg" &>> /dev/null &
-        /usr/bin/gitchart -r "${WORKPATH}/${APP}" commits_year_month "${LOCALHOSTPATH}/${APP}/stats/commits_year_month.svg" &>> /dev/null &
-        /usr/bin/gitchart -r "${WORKPATH}/${APP}" files_type "${LOCALHOSTPATH}/${APP}/stats/files_type.svg" &>> /dev/null &
-        spinner $!
-
-        # Process primary chart color and setpermissions if needed
-        sleep 1; find "${LOCALHOSTPATH}/${APP}/stats/" -type f -exec sed -i 's/#9999ff/#47ACDF/g' {} \;
-        chmod -R a+rw "${deployPath}/html/${EMAILTEMPLATE}/stats" &> /dev/null
-    fi
-}

@@ -2,7 +2,9 @@
 #
 # deployment.sh
 #
+###############################################################################
 # Handles deployment-related tasks
+###############################################################################
 trace "Loading deployment functions"   
 
 # Housekeeping tasks to run before final deployment
@@ -80,11 +82,10 @@ function pkgDeploy() {
 						eval "${DEPLOY}" &>> "${logFile}"
 					fi
 				fi
+			else
+				# If running --publish exit now
+				[[ "${PUBLISH}" == "1" ]] && quietExit
 			fi
-			# If running --publish exit now
-			#if [[ "${PUBLISH}" == "1" ]]; then
-			#	quietExit
-			#fi
 		else
 			if [[ "${APPROVE}" == "1" ]]; then
 				eval "${DEPLOY}" &>> "${logFile}"

@@ -2,7 +2,9 @@
 #
 # approval.sh
 #
+###############################################################################
 # Handles deployment approval queue
+###############################################################################
 trace "Loading approval functions"   
 
 function queue() {

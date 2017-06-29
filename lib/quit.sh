@@ -122,5 +122,5 @@ function cleanUp() {
 	fi
 
 	# Say goodnight, Gracie. Goodnight Gracie.
-	info "Exiting."; console
+	# info "Exiting."; console
 }

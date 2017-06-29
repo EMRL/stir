@@ -7,31 +7,34 @@ trace "Loading log handling"
 
 function makeLog() {
     # Clean up stuff that is most likely there
-    sed -i "/git reset HEAD/d" "${logFile}"
-    sed -i "/Checking out files:/d" "${logFile}"
-    sed -i "/Unpacking objects:/d" "${logFile}"
+    sed -i -e '/git reset HEAD/d' \
+        -e '/Checking out files:/d' \
+        -e '/Unpacking objects:/d' \
+        "${logFile}"
 
     # Clean up stuff that has a small chance of being there
-    sed -i "/--:--:--/d" "${logFile}"
-    sed -i "/% Received/d" "${logFile}"
-    sed -i "/\Dload/d" "${logFile}"
-    sed -i "/\[34m/d" "${logFile}"
-    sed -i "/\[31m/d" "${logFile}"
-    sed -i "/\[32m/d" "${logFile}"
-    sed -i "/\[96m/d" "${logFile}"
-    sed -i "/no changes added to commit/d" "${logFile}"
-    sed -i "/to update what/d" "${logFile}"
-    sed -i "/to discard changes/d" "${logFile}"
-    sed -i "/Changes not staged for/d" "${logFile}"
+    sed -i -e '/--:--:--/d'  \
+        -e '/% Received/d' \
+        -e '/\Dload/d' \
+        -e '/\[34m/d' \
+        -e '/\[31m/d' \
+        -e '/\[32m/d' \
+        -e '/\[96m/d' \
+        -e '/no changes added to commit/d' \
+        -e '/to update what/d' \
+        -e '/to discard changes/d' \
+        -e '/Changes not staged for/d' \
+        "${logFile}"
 
     # Clean up mina's goobers
     if [[ "${DEPLOY}" == *"mina"* ]]; then
-        sed -i "/0m Creating a temporary build path/c\Creating a temporary build path" "${logFile}"
-        sed -i "/0m Fetching new git commits/c\Fetching new git commits" "${logFile}"
-        sed -i "/0m Using git branch '${PRODUCTION}'/c\Using git branch '${PRODUCTION}'" "${logFile}"
-        sed -i "/0m Using this git commit/c\Using this git commit" "${logFile}"
-        sed -i "/0m Cleaning up old releases/c\Cleaning up old releases" "${logFile}"
-        sed -i "/0m Build finished/c\Build finished" "${logFile}"
+        sed -i -e '/0m Creating a temporary build path/c\Creating a temporary build path' \
+            -e '/0m Fetching new git commits/c\Fetching new git commits' \
+            -e '/0m Using git branch ${PRODUCTION}/c\Using git branch ${PRODUCTION}' \
+            -e '/0m Using this git commit/c\Using this git commit' \
+            -e '/0m Cleaning up old releases/c\Cleaning up old releases' \
+            -e '/0m Build finished/c\Build finished' \
+            "${logFile}"
 
         # Totally remove these lines
         sed -i "/----->/d" "${logFile}"
@@ -65,7 +68,7 @@ function makeLog() {
 
     # IF we're using HTML emails, let's get to work
     if [[ "${EMAILHTML}" == "TRUE" ]]; then
-        htmlBuild
+        [[ "${message_state}" != "DIGEST" ]] && htmlBuild
         cat "${htmlFile}" > "${trshFile}"
 
         # If this is an approval email, strip out PHP
@@ -87,7 +90,7 @@ function makeLog() {
         VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
 
         # Build the html email and details pages
-        htmlBuild
+        # htmlBuild
 
         # Strip out the buttons that self-link
         sed -e "s^// BUTTON: BEGIN //-->^BUTTON HIDE^g" -i "${htmlFile}"
@@ -147,52 +150,10 @@ function htmlBuild() {
     fi
 
     # Process the variables before we add the full log because sed
-    cat "${htmlFile}" > "${trshFile}"
-    processLog
+    processHTML
 
     # Insert the full deployment logfile & button it all up
     cat "${logFile}" "${deployPath}/html/${EMAILTEMPLATE}/footer.html" >> "${htmlFile}"
-}
-
-# Filters through html templates to inject our project's variables
-function processLog() {
-    sed -e "s^{{VIEWPORT}}^${VIEWPORT}^g" \
-        -e "s^{{NOW}}^${NOW}^g" \
-        -e "s^{{DEV}}^${DEV}^g" \
-        -e "s^{{LOGTITLE}}^${LOGTITLE}^g" \
-        -e "s^{{USER}}^${USER}^g" \
-        -e "s^{{PROJNAME}}^${PROJNAME}^g" \
-        -e "s^{{PROJCLIENT}}^${PROJCLIENT}^g" \
-        -e "s^{{CLIENTLOGO}}^${CLIENTLOGO}^g" \
-        -e "s^{{DEVURL}}^${DEVURL}^g" \
-        -e "s^{{PRODURL}}^${PRODURL}^g" \
-        -e "s^{{COMMITURL}}^${COMMITURL}^g" \
-        -e "s^{{EXITCODE}}^${EXITCODE}^g" \
-        -e "s^{{COMMITHASH}}^${COMMITHASH}^g" \
-        -e "s^{{NOTES}}^${notes}^g" \
-        -e "s^{{USER}}^${USER}^g" \
-        -e "s^{{LOGURL}}^${LOGURL}^g" \
-        -e "s^{{REMOTEURL}}^${REMOTEURL}^g" \
-        -e "s^{{VIEWPORTPRE}}^${VIEWPORTPRE}^g" \
-        -e "s^{{PATHTOREPO}}^${WORKPATH}/${APP}^g" \
-        "${trshFile}" > "${htmlFile}"
-
-    # Clean up header stuff that we don't need
-    if [[ -z "${DEVURL}" ]]; then
-        sed -i '/<strong>Staging URL:/d' "${htmlFile}"
-    fi
-
-    if [[ -z "${PRODURL}" ]]; then
-        sed -i '/<strong>Production URL:/d' "${htmlFile}"
-    fi
-
-    if [[ -z "${PROJCLIENT}" ]]; then
-        sed -i 's/()//' "${htmlFile}"
-    fi  
-
-    if [[ -z "${CLIENTLOGO}" ]]; then
-        sed -i '/CLIENTLOGO/d' "${htmlFile}"
-    fi          
 }
 
 # Remote log function 
@@ -212,7 +173,7 @@ function postLog() {
             # Post the digest
             if [[ "${DIGEST}" == "1" ]]; then
                 REMOTEFILE="digest-${EPOCH}.html"
-                cp "${statFile}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
+                cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
                 chmod a+rw "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
                 DIGESTURL="${REMOTEURL}/${APP}/${REMOTEFILE}"
             fi
