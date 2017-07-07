@@ -20,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added `deploy --unlock` to make it easier remove stale .lock files
 - Added options to define custom file paths used in your Wordpress projects
 - Added email and Slack notification for automated deployments when no updates are available
+- Added email integration test
 - Missing client logos no longer break HTML emails and logs
 - Improved readability of full logs
 - Improved language for consistency in some functions

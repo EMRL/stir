@@ -354,6 +354,31 @@ function emailTest() {
     echo "Google Analytics ID: ${PROFILEID}";
     ) | "${MAILPATH}"/sendmail -t
   fi
+
+  # If an integration is setup, let's test it
+  if [[ ! -z "${TASK}" ]]; then
+    sleep 2
+    if [[ "${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL}" == ?*@?*.?* ]]; then
+      console "Testing integration to ${POSTEMAIL}"
+      (
+      if [[ -z "${TASKUSER}" ]] || [[ -z "${ADDTIME}" ]]; then
+        echo "From: ${FROM}"
+      else
+        echo "From: ${TASKUSER}"
+      fi
+      echo "Reply-To: ${FROM} <${FROM}>"
+      echo "To: ${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL}"
+      echo "Subject: [TESTING] ${SUBJECT} - ${APP}"
+      echo "Content-Type: text/plain"
+      echo
+      echo "This is a test email integration from deploy ${VERSION}"
+      echo "(https://github.com/EMRL/deploy/)"
+      ) | "${MAILPATH}"/sendmail -t
+      quietExit
+    else
+      console "Integration email address ${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL} does not look valid"; quietExit
+    fi
+  fi
 }
 
 function htmlDir() {

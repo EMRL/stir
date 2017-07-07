@@ -50,6 +50,6 @@ do
       continue
     fi
     # shellcheck disable=1090
-    source "$LIBRARIES"
+    source "${LIBRARIES}"
   fi
 done

@@ -8,7 +8,6 @@
 ###############################################################################
 
 function wfCheck() {
-  # Check for signs of Wordfence
   if [[ "${WFCHECK}" == "TRUE" ]]; then
     if [[ -f "${WORKPATH}/${APP}${WPROOT}${WPAPP}/wflogs/config.php" ]]; then
       trace "Wordfence detected"; emptyLine

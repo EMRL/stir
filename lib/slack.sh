@@ -17,7 +17,7 @@ function slackPost () {
   #fi
 
   # If running in --automate, change the user name
-  if [[ "$AUTOMATE" == "1" ]]; then
+  if [[ "${AUTOMATE}" == "1" ]]; then
     SLACKUSER="Scheduled update:"
   else
     SLACKUSER="${USER}"

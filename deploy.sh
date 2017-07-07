@@ -1,6 +1,13 @@
 #!/bin/bash
 #
-# deploy: A simple bash script for deploying sites.
+# deploy.sh
+#
+###############################################################################
+# A shell script designed to speed up and automate deployment of (primarily) 
+# Wordpress websites, while integrating with third-party communication tools.
+#
+# https://github.com/EMRL/deploy
+###############################################################################
 
 IFS=$'\n\t'
 VERSION="3.6-rc.3"
@@ -497,8 +504,8 @@ fi
 function appDeploy() {
   depCheck    # Check that required commands are available
   gitStart    # Check for a valid git project and get set up
-  lock      # Create lock file
-  go        # Start a deployment work session
+  lock        # Create lock file
+  go          # Start a deployment work session
   if [[ "${DIGEST}" == "1" ]]; then
     createDigest
   else
@@ -520,7 +527,7 @@ function appDeploy() {
       # Check for approval/deny/queue
       if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
         if [[ "${APPROVE}" == "1" ]] || [[ -f "${WORKPATH}/${APP}/.approved" ]]; then
-          approve     # Approve proposed changes
+          approve   # Approve proposed changes
         else
           if [[ "${DENY}" == "1" ]] || [[ -f "${WORKPATH}/${APP}/.denied" ]]; then 
             deny    # Deny proposed changes
@@ -529,7 +536,7 @@ function appDeploy() {
       fi
       # Continue normally
       if [[ "${APPROVE}" != "1" ]]; then
-        wpPkg     # Run Wordpress upgrades if needed
+        wpPkg       # Run Wordpress upgrades if needed
         pkgMgr      # Run node package management, or grunt
         gitStatus   # Make sure there's anything here to commit         
       fi
@@ -544,10 +551,10 @@ function appDeploy() {
       fi
       gitPushMstr   # Push master branch
       gitChkProd    # Checkout production branch
-      gitMerge    # Merge master into production
+      gitMerge      # Merge master into production
       gitPushProd   # Push production branch
       gitChkMstr    # Checkout master once again  
-      pkgDeploy   # Deploy project to live server
+      pkgDeploy     # Deploy project to live server
     fi
   fi  
 }

@@ -8,7 +8,7 @@
 trace "Loading html handling"
 
 function processHTML() {
-    # Clean up stuff we don't need
+    # Clean out the variables stuff we don't need
     [[ -z "${DEVURL}" ]] && sed -i '/<strong>Staging URL:/d' "${htmlFile}"
     [[ -z "${PRODURL}" ]] && sed -i '/PRODURL/d' "${htmlFile}"
     [[ -z "${PROJCLIENT}" ]] && sed -i 's/()//' "${htmlFile}"
@@ -16,6 +16,7 @@ function processHTML() {
     [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]] && sed -i '/ANALYTICS/d' "${htmlFile}"
     [[ -z "${SMOOCHID}" ]] && sed -i '/SMOOCHID/d' "${htmlFile}"
 
+    # Get to work
     sed -i -e "s^{{VIEWPORT}}^${VIEWPORT}^g" \
         -e "s^{{NOW}}^${NOW}^g" \
         -e "s^{{DEV}}^${DEV}^g" \
