@@ -2,30 +2,33 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## [Unreleased]
+### Added
 - Added experimental approval/denial code queue functions
-- Fixed a rare bug with saving HTML logs
 - Added ssh key checking when required, upon starting each deployment session
 - Added ssh configuration check when deploying to live environments via `mina`
 - Added integration with `gitchart` for generation of graphic statistics
-- Improved rendering of emails in Windows 10 Mail client
 - Added integration with Google Analytics for web projects
-- Fixed a visual bug that displayed incorrect branch names to the user 
-- Brought back client emails in the form of a weekly digest
 - Added Wordpress database checks
 - Added another failsafe check; `deploy --automate` will not deploy unless repo is on master branch
 - Added `--time` switch to allowing tracking work time when deploying manually
-- When deploying using the `--current` directory, instead of app directory name, the actual repo name will be used to identify the project in Slack and email notifications
 - Added project information to test emails sent with the `--email-test` switch
 - Added `deploy --unlock` to make it easier remove stale .lock files
 - Added options to define custom file paths used in your Wordpress projects
 - Added email and Slack notification for automated deployments when no updates are available
 - Added email integration test
-- Missing client logos no longer break HTML emails and logs
+- Added the ability to disable Wordpress core updates for sites that require it
+### Changed
+- Improved rendering of emails in Windows 10 Mail client
+- Brought back client emails in the form of a weekly digest
+- When deploying using the `--current` directory; instead of app directory name, the actual repo name will be used to identify the project in Slack and email notifications
 - Improved readability of full logs
 - Improved language for consistency in some functions
+### Fixed
+- Fixed a rare bug with saving HTML logs
+- Fixed a visual bug that displayed incorrect branch names to the user 
+- Missing client logos no longer break HTML emails and logs
 - Fixed a bug with Slack not including commit messages when using `deploy --automate`
-- Added the ability to disable Wordpress core updates for sites that require it
 
 ## [3.5.7] - 03-03-2017
 - Fixed issues with HTML log on mobile devices
