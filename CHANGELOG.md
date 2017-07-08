@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.6] - 07-08-2017
 ### Added
 - Added experimental approval/denial code queue functions
 - Added ssh key checking when required, upon starting each deployment session
@@ -31,71 +31,88 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed a bug with Slack not including commit messages when using `deploy --automate`
 
 ## [3.5.7] - 03-03-2017
-- Fixed issues with HTML log on mobile devices
-- Fixed a bug with restoring previously checked out branch
+### Added
+- Added the ability to add time to task management systems via email integration
+- Added `deploy --publish` for deploying current production code to live environment
+### Changed
 - Updated default HTML theme
 - Logged output is now time stamped
 - Rewrote Slack integration
 - Improved log details
+### Fixed
+- Fixed issues with HTML log on mobile devices
+- Fixed a bug with restoring previously checked out branch
 - Fixed a bug in which an Advanced Custom Fields Pro update could create an empty smart commit message
-- Added the ability to add time to task management systems via email integration
-- Added `deploy --publish` for deploying current production code to live environment
 
 ## [3.5.5] - 02-12-2017
-- Fixed a bug with text-format emails not including complete logs
-- Fixed issue with passing user variable to Slack integration when an error is triggered
+### Added
 - Added `--no-check` switch to override active file and server checks
-- Upon exit, deploy will now return the repo's current active branch to its original state, instead of assuming checkout of master
-- Improved dependency checks
-- Fixed output from `deploy --function-list` and `deploy --variable-list [project]`
 - Added the option to stash dirty files during unsupervised deployment of Wordpress updates
 - Added configurable From: email address for log files
-- Fixed missing path variable that kept `deploy --automate` from running correctly
+### Changed
+- Upon exit, deploy will now return the repo's current active branch to its original state, instead of assuming checkout of master
+- Improved dependency checks
 - Emails are now sent using Sendmail
 - When run as a cron (`--automate`) integration emails are now sent from the default email address, not the spoofed user's email
 - Slack webhook URL is no longer displayed in logs
+### Fixed
+- Fixed a bug with text-format emails not including complete logs
+- Fixed issue with passing user variable to Slack integration when an error is triggered
+- Fixed output from `deploy --function-list` and `deploy --variable-list [project]`
+- Fixed missing path variable that kept `deploy --automate` from running correctly
 
 ## [3.5] - 11-11-2016
+### Added
 - Added `deploy --automate` for scheduled update deployments. Equivalent to `deploy --force --update --quiet` with the addition of a flag to enable sending a scheduled update email notice to clients
-- Recently changed file checks are now more accurate
 - Added ability to save HTML logs to local filesystem
 - Added ability to post log files to a remote host with scp
 - Added option to delete log files after a certain amount of days
 - Added HTML email log option, with custom templates assignable either globally or by project
-- Added link to detailed log files from Slack messages 
+- Added link to detailed log files from Slack messages
+- Added more robust branch checking
+- Added option to enforce server check
+### Changed
+- Recently changed file checks are now more accurate
 - Logs are now only emailed and posted when something noteworthy has occured - e.g. a commit has been made or an error has occurred
 - Changed checkout behavior - master branch is now only checked out when needed
 - Cleaned up log output
-- Changed default merge behavior - deploy will no longer perform automatic merges unless ran as `deploy --merge` or `AUTOMERGE="TRUE"` is defined in `config/deploy.sh` 
-- Fixed a small bug when repo name is undeclared when not running `deploy --current`
-- Added more robust branch checking
-- Added option to enforce server check
+- Changed default merge behavior - deploy will no longer perform automatic merges unless ran as `deploy --merge` or `AUTOMERGE="TRUE"` is defined in `config/deploy.sh`
 - Existence of all defined branches is now confirmed before starting deployment process
+### Fixed 
+- Fixed a small bug when repo name is undeclared when not running `deploy --current`
 
 ## [3.4] - 07-07-2016
+### Added
 - Added a more reliable method of updating Advanced Custom Fields Pro
 - Added "Garbage Collection" mode to help keep your repo neat and tidy
-- Fixed some issues that can cause permission problems in certain environments
 - Added optional fix for Wordfence firewall permission problems
 - Added check for .git/index permission issues
+### Fixed
+- Fixed some issues that can cause permission problems in certain environments
 
 ## [3.3.4] - 05-16-2016
-- Fixed issue with pkgDeploy() not executing deployment command correctly
-- Exit codes pass more reliably to Slack messages 
+### Added
 - Added [Travis CI](https://travis-ci.org/EMRL/deploy) tests
+- Added `deploy --function-list` to list all available functions() for help debugging with in the future
+### Changed
 - Cleaned up many functions
 - Cleaned up configuration files
-- Added `deploy --function-list` to list all available functions() for help debugging with in the future
+- Exit codes now pass more reliably to Slack messages 
+### Fixed
+- Fixed issue with pkgDeploy() not executing deployment command correctly
 
 ## [3.3.3] - 02-11-2016
+### Added
 - Added active file check as another failsafe when running as cron (`deploy --force --update --quiet`) to stop potential issues that may come up in multi-developer environments
-- Added change log
-- Running `deploy --current` will now deploy the current directory and no longer needs to be launched as `deploy --current [project name]`
-- Option to include error messages in Slack integration
+- Added a new option to include error messages in Slack integration
 - Option added to projects' `config/deploy.sh` to enforce repo to have a certain branch checked out before beginning deployment session. 
 - Added `deploy --slack-test` to allow testing of Slack integration
+- Added change log
+### Changed
+- Running `deploy --current` will now deploy the current directory and no longer needs to be launched as `deploy --current [project name]`
 
 ## [3.3] - 02-03-2016
+### Added
 - Added ssh key detection, allows manual login to repo host if keys not found
 - Added Slack integration
 - Added `deploy --force --update --quiet` for unattended Wordpress plugin/core updates via cron scheduling 
@@ -103,21 +120,24 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added `deploy --skip-update`
 
 ## [3.1] - 11-12-2015
+### Added
 - Added install script
 - Added progress indicators
-- Extended verbose output
 - Implemented logging
 - Added "Smart Commits" - commit messages are generated automatically based on Wordpress core/plugin updates that have occured
+### Changed
+- Increased detail of verbose output
 - Configuration files for both the user, and the project are now automatically created if not found 
 
 ## [3.0] - 10-21-2015
-- Old monolithic script rewritten
+### Added
 - Basic `wp-cli` integration  
+### Changed
+- Old monolithic script rewritten
 
 
-
-
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.5.7...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.6...HEAD
+[3.5.7]: https://github.com/EMRL/deploy/compare/v3.5.7...v3.6
 [3.5.7]: https://github.com/EMRL/deploy/compare/v3.5.5...v3.5.7
 [3.5.5]: https://github.com/EMRL/deploy/compare/v3.5...v3.5.5
 [3.5]: https://github.com/EMRL/deploy/compare/v3.4...v3.5
