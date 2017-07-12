@@ -39,10 +39,8 @@ function createDigest() {
     grep -oP "(?<=href=\")[^\"]+(?=\")" "${statFile}" > "${trshFile}"
     while read URL; do
       CODE=$(curl -o /dev/null --silent --head --write-out '%{http_code}' "$URL")
-      echo "${CODE}"
       if [[ "${CODE}" != "200" ]]; then 
-        echo "Trying to remove ${URL}"
-        sed -i "s^${URL}^#^g" "${statFile}"
+        sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${statFile}"
       fi
     done < "${trshFile}"
 
