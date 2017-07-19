@@ -47,15 +47,20 @@ function go() {
   fi
 
   # Chill and wait for user to confirm project
-  if  [[ "${FORCE}" = "1" ]] || yesno --default yes "Continue? [Y/n] "; then
+  if  [[ "${FORCE}" == "1" ]] || yesno --default yes "Continue? [Y/n] "; then
     trace "Loading project"
   else
     quickExit
   fi
 
   # Is this project locked?
-  if [[ "${DONOTDEPLOY}" = "TRUE" ]]; then
+  if [[ "${DONOTDEPLOY}" == "TRUE" ]]; then
     warning "This project is currently locked, and can't be deployed."; quickExit
+  fi
+
+  # Is the user root?
+  if [[ "${ALLOWROOT}" != "TRUE" ]] && [[ "${EUID}" -eq "0" ]]; then
+    warning "Can't continue deployment as root."; quickExit
   fi
 
   # Force sudo password input if needed
