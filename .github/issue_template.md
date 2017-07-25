@@ -21,6 +21,4 @@ The more details the better...
  
 ### Log errors: 
 
-_Please check for related errors in the latest log file in [mautic root]/app/log/ and/or the web server's logs and post them here. Be sure to remove sensitive information if applicable._ 
-
-
+_Please check for related errors in your log files._ 
