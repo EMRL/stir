@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+- Added option for email notification to be sent "clean," without full logging information
+### Changed
+- Running as root is no longer allowed; this can be overridden by setting `ALLOWROOT="TRUE"`
+
 ## [3.6] - 07-08-2017
 ### Added
 - Added experimental approval/denial code queue functions

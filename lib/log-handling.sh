@@ -79,6 +79,11 @@ function makeLog() {
       sed -e "s^EMAIL BUTTONS: BEGIN^EMAIL BUTTONS: BEGIN //-->^g" -i "${trshFile}"
     fi
 
+    # Strip out logs if necessary
+    if [[ "${SHORTEMAIL}" == "TRUE" ]]; then
+      sed -i '/LOG: BEGIN/,/LOG: END/d' "${trshFile}"
+    fi
+
     # Load the email into a variable
     htmlSendmail=$(<"${trshFile}")
   fi

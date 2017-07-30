@@ -37,6 +37,11 @@
 # EMAILSUCCESS="TRUE"				
 # EMAILQUIT="TRUE"					
 
+# If you want your emails to be sent "clean" (with no detailed logging) set 
+# SHORTEMAIL to TRUE. Full logs will still be posted to web logs. Error emails
+# will continue to contain full logs.
+# SHORTEMAIL="FALSE"	
+
 # Send log file in HTML?
 # EMAILHTML="FALSE"
 
