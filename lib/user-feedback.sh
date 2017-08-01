@@ -9,6 +9,7 @@ trace "Loading interface"
 
 # Progress spinner; we'll see if this works
 function spinner() {
+  errorChk
   if [[ "${QUIET}" != "1" ]]; then
     local pid=$1
     local delay=0.15

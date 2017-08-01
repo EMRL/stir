@@ -86,7 +86,7 @@ read -r var optstring options logFile wpFile coreFile postFile trshFile statFile
   WPAPP WPSYSTEM DONOTUPDATEWP gitHistory DIGESTWRAP AUTHOR AUTHOREMAIL \
   AUTHORNAME GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail MINAUSER \
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX QUEUED \
-  DISABLESSHCHECK URL CODE <<< ""
+  DISABLESSHCHECK URL CODE DEPLOYPID <<< ""
 echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
   ${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
   ${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -100,7 +100,7 @@ echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile
   ${AUTHORNAME} ${GRAVATAR} ${IMGFILE} ${SIZE} ${RND} ${ANALYTICSMSG} 
   ${digestSendmail} ${MINAUSER} ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} 
   ${REMOTEFILE} ${GREETING} ${LOGSUFFIX} ${QUEUED} ${DISABLESSHCHECK}
-  ${URL} ${CODE}" > /dev/null
+  ${URL} ${CODE} ${DEPLOYPID}" > /dev/null
 
 # Options
 function flags() {

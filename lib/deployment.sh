@@ -72,16 +72,24 @@ function pkgDeploy() {
         # Test deployment command before running
         deployChk
         # Deploy via deployment command specified in configuration
-        if [[ "${VERBOSE}" -eq 1 ]]; then
+        if [[ "${VERBOSE}" == "1" ]]; then
           eval "${DEPLOY}" | tee --append "${logFile}"
+          errorChk
         else
-          if [ "${QUIET}" != "1" ]; then
+          if [[ "${QUIET}" != "1" ]]; then
             eval "${DEPLOY}" &>> "${logFile}" &
             spinner $!
           else
             eval "${DEPLOY}" &>> "${logFile}"
+            errorChk
           fi
         fi
+
+        # Check for deployment failure
+        if [[ "${EXITCODE}" == "0" ]]; then
+          trace "Deployment success"
+        fi
+
       else
         # If running --publish exit now
         [[ "${PUBLISH}" == "1" ]] && quietExit
@@ -104,7 +112,7 @@ function pkgDeploy() {
 }
 
 function postDeploy() {
-  # Check for Mina fail
+  # Check for deployment failure
   if grep -q "ERROR: Deploy failed." "${logFile}"; then
     error "Deploy failed."
   fi
