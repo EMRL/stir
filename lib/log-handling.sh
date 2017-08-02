@@ -187,12 +187,12 @@ function postLog() {
   
       # Remove logs older then X days
       if [[ -n "${EXPIRELOGS}" ]]; then
-        find "${LOCALHOSTPATH}/${APP}"* -mtime +"${EXPIRELOGS}" -exec rm {} \;
+        find "${LOCALHOSTPATH}/${APP}"* -mtime +"${EXPIRELOGS}" -exec rm {} \; &> /dev/null
       fi
     fi
 
     # Send the files through SCP (not yet enabled)
-    if [[ "SCPPOST" == "TRUE" ]]; then
+    if [[ "${SCPPOST}" == "TRUE" ]]; then
       if [[ -n "${SCPPASS}" ]]; then
         sshpass -p "${SCPPASS}" scp -o StrictHostKeyChecking=no "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}${COMMITHASH}.html" &> /dev/null
       else
