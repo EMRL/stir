@@ -5,9 +5,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Added option for email notification to be sent "clean," without full logging information
+- HTML theme colors can be configured in `[theme root]\theme.conf` 
 ### Changed
 - Running as root is no longer allowed; this can be overridden by setting `ALLOWROOT="TRUE"`
-- Slightly improved error checking
+- Slightly improved deployment error checking
+### Fixed
+- All HTML email variables are now correctly post-processed
 
 ## [3.6] - 07-08-2017
 ### Added

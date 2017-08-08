@@ -10,7 +10,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.6.1"
+VERSION="3.6.2"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 WEEKOF="$(date -d '7 days ago' +"%B %d")"
@@ -399,9 +399,9 @@ if [[ -n "${POSTEMAIL}" ]]; then
 fi
 
 # Load HTML theme configuration
-if [[ -n "${deployPath}/html/${EMAILTEMPLATE}/theme.conf" ]]; then
+if [[ -n "${deployPath}/html/${HTMLTEMPLATE}/theme.conf" ]]; then
   # shellcheck disable=1090
-  source "${deployPath}/html/${EMAILTEMPLATE}/theme.conf"
+  source "${deployPath}/html/${HTMLTEMPLATE}/theme.conf"
 fi
 
 # Remote logging?

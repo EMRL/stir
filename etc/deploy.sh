@@ -30,10 +30,17 @@
 # If you are using html logfiles, define the full URL to the client's logo
 # CLIENTLOGO="http://client.com/assets/img/logo.png"
 
+# If you need to send logfiles and email alerts to address(es) other 
+# than those configured globally, enter them below.
+# TO="notify@client.com"
+
 # If you'd like to send branded HTML emails using the `deploy --digest [project]` 
 # command, enter the recipient's email address below. Email value can be a comma 
 # separated string of multiple addresses. 
 # DIGESTEMAIL="digest@email.com"
+
+# If you are using a digest theme that includes a cover image, at the URL below.
+# DIGESTCOVER="http://client.com/assets/img/cover.jpg"
 
 # If you'd like to post a Slack notification with a URL to view the weekly digest  
 # set the following to TRUE. IF you want to use an incoming webhook other than the 
@@ -44,7 +51,7 @@
 # globally configured template) define it below. HTML templates are stored in 
 # separate folders in /etc/deploy/html. The value used below should be the 
 # folder name of your template.
-# EMAILTEMPLATE="default"
+# HTMLTEMPLATE="default"
 
 # Development project URL, including http:// or https:// 
 # DEVURL="http://devurl.com"

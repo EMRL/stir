@@ -113,7 +113,7 @@ function htmlBuild() {
     notes="${error_msg}"
     LOGTITLE="Deployment Error"
     # Create the header
-    cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${deployPath}/html/${EMAILTEMPLATE}/error.html" > "${htmlFile}"
+    cat "${deployPath}/html/${HTMLTEMPLATE}/header.html" "${deployPath}/html/${HTMLTEMPLATE}/error.html" > "${htmlFile}"
   else
     # Does this project need to be approved before finalizing deployment?
     #if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
@@ -121,8 +121,8 @@ function htmlBuild() {
       message_state="APPROVAL NEEDED"
       LOGTITLE="Approval Needed"
       LOGSUFFIX="php"
-      # cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${deployPath}/html/${EMAILTEMPLATE}/approve.html" > "${htmlFile}"
-      cat "${deployPath}/html/${EMAILTEMPLATE}/approval.php" > "${htmlFile}"
+      # cat "${deployPath}/html/${HTMLTEMPLATE}/header.html" "${deployPath}/html/${HTMLTEMPLATE}/approve.html" > "${htmlFile}"
+      cat "${deployPath}/html/${HTMLTEMPLATE}/approval.php" > "${htmlFile}"
     else
       if [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" == "1" ]] && [[ "${UPD2}" == "1" ]]; then
         message_state="NOTICE"
@@ -138,7 +138,7 @@ function htmlBuild() {
           LOGTITLE="Deployment Log"
         fi
       fi
-      cat "${deployPath}/html/${EMAILTEMPLATE}/header.html" "${deployPath}/html/${EMAILTEMPLATE}/success.html" > "${htmlFile}"
+      cat "${deployPath}/html/${HTMLTEMPLATE}/header.html" "${deployPath}/html/${HTMLTEMPLATE}/success.html" > "${htmlFile}"
     fi
   fi
 
@@ -157,10 +157,11 @@ function htmlBuild() {
   fi
 
   # Process the variables before we add the full log because sed
-  processHTML
+  # processHTML
 
   # Insert the full deployment logfile & button it all up
-  cat "${logFile}" "${deployPath}/html/${EMAILTEMPLATE}/footer.html" >> "${htmlFile}"
+  cat "${logFile}" "${deployPath}/html/${HTMLTEMPLATE}/footer.html" >> "${htmlFile}"
+  processHTML
 }
 
 # Remote log function 

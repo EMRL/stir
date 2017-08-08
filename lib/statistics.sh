@@ -17,7 +17,7 @@ function projStats() {
 		notice "Generating files..."
 
 		# Process the HTML
-		cat "${deployPath}/html/${EMAILTEMPLATE}/stats/index.html" > "${htmlFile}"
+		cat "${deployPath}/html/${HTMLTEMPLATE}/stats/index.html" > "${htmlFile}"
 		processHTML
 		cat "${htmlFile}" > "${LOCALHOSTPATH}/${APP}/stats/index.html"
 
@@ -35,6 +35,6 @@ function projStats() {
 
 		# Process primary chart color and set permissions if needed
 		sleep 1; find "${LOCALHOSTPATH}/${APP}/stats/" -type f -exec sed -i "s/#9999ff/${PRIMARYC}/g" {} \;
-		chmod -R a+rw "${deployPath}/html/${EMAILTEMPLATE}/stats" &> /dev/null
+		chmod -R a+rw "${deployPath}/html/${HTMLTEMPLATE}/stats" &> /dev/null
 	fi
 }

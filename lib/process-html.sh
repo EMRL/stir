@@ -53,6 +53,7 @@ function processHTML() {
         -e "s^{{REMOTEURL}}^${REMOTEURL}^g" \
         -e "s^{{ANALYTICSMSG}}^${ANALYTICSMSG}^g" \
         -e "s^{{STATURL}}^${REMOTEURL}\/${APP}\/stats^g" \
+        -e "s^{{DIGESTCOVER}}^${DIGESTCOVER}^g" \
         -e "s^{{WEEKOF}}^${WEEKOF}^g" \
         "${htmlFile}"        
 }

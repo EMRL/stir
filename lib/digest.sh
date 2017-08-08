@@ -26,7 +26,7 @@ function createDigest() {
   analytics
 
   # Assemble the file
-  DIGESTWRAP="$(<${deployPath}/html/${EMAILTEMPLATE}/digest/commit.html)"
+  DIGESTWRAP="$(<${deployPath}/html/${HTMLTEMPLATE}/digest/commit.html)"
 
   # If there have been no commits in the last week, skip creating the digest
   if [[ $(git log --since="7 days ago") ]]; then
@@ -44,7 +44,7 @@ function createDigest() {
       fi
     done < "${trshFile}"
 
-    cat "${deployPath}/html/${EMAILTEMPLATE}/digest/header.html" "${statFile}" "${deployPath}/html/${EMAILTEMPLATE}/digest/footer.html" > "${htmlFile}"
+    cat "${deployPath}/html/${HTMLTEMPLATE}/digest/header.html" "${statFile}" "${deployPath}/html/${HTMLTEMPLATE}/digest/footer.html" > "${htmlFile}"
 
     # Randomize a positive Monday thought
     array[0]="Hope you had a good weekend!"
