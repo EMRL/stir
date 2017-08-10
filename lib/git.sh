@@ -37,14 +37,7 @@ function gitStart() {
   fi
 
   # Check for active files
-  if [[ "${FORCE}" == "1" ]] && [[ "${UPGRADE}" == "1" ]] && [[ "${QUIET}" == "1" ]] && [[ "${ACTIVECHECK}" = "TRUE" ]]; then
-    trace "Checking for active files"
-    active_files=$(find "${WORKPATH}/${APP}" -mmin -"${CHECKTIME}" ! -path "${WORKPATH}/${APP}/public/app/wflogs/*" ! -path "${WORKPATH}/${APP}/.git/*" ! -path "${WORKPATH}/${APP}/.git")
-    if [[ ! -z "${active_files}" ]]; then
-      trace "Recently changed files: ${active_files}"
-      error "Code base has changed within the last ${CHECKTIME} minutes. Halting deployment."
-    fi
-  fi
+  activeChk
 
   # Try to clear out old git processes owned by this user, if they exist
   killall -9 git &>> /dev/null || true
@@ -85,7 +78,7 @@ function gitGarbage() {
 
 # Does anything need to be committed? (Besides me?)
 function gitStatus() {
-  if [[ -z $(git status --porcelain) ]]; then
+  if [[ -z "$(git status --porcelain)" ]]; then
     if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
       if [[ "${REQUIREAPPROVAL}" == "TRUE" ]]; then
         console "Nothing to queue, working directory clean."
