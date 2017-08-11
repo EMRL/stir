@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added option for email notification to be sent "clean," without full logging information
 - HTML theme colors can be configured in `[theme root]\theme.conf` 
 ### Changed
+- Recently changed files that are .gitignored will no longer halt automated deployment
 - Running as root is no longer allowed; this can be overridden by setting `ALLOWROOT="TRUE"`
 - Slightly improved deployment error checking
 ### Fixed
