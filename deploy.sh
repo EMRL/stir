@@ -501,14 +501,11 @@ if [[ "${MERGE}" == "1" ]] && [[ -z "${PRODUCTION}" ]]; then
   quietExit
 fi
 
-# Run the core application
+# Execute the deploy process
 coreApp
 
 # Trapping stuff
 trap userExit INT
-
-# Execute the deploy process
-appDeploy
 
 # All done
 safeExit
