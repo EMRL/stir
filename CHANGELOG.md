@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Recently changed files that are .gitignored will no longer halt automated deployment
 - Running as root is no longer allowed; this can be overridden by setting `ALLOWROOT="TRUE"`
 - Slightly improved deployment error checking
+- Tightened up many functions
 ### Fixed
 - All HTML email variables are now correctly post-processed
 
