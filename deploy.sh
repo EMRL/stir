@@ -79,7 +79,7 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
 read -r var optstring options logFile wpFile coreFile postFile trshFile statFile \
   urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail deployPath \
   etcLocation libLocation POSTEMAIL current_branch error_msg active_files notes \
-  UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC message_state \
+  UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC USERRC message_state \
   COMMITURL COMMITHASH UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE \
   currentStash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
   ACFFILE VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WPROOT \
@@ -91,7 +91,7 @@ echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile
   ${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
   ${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
   ${POSTEMAIL} ${current_branch} ${error_msg} ${active_files} ${notes} ${UPDCORE} 
-  ${TASKLOG} ${PCA} ${PCB} ${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} 
+  ${TASKLOG} ${PCA} ${PCB} ${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} ${USERRC} 
   ${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} 
   ${AUTOMERGE} ${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps} 
   ${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK} ${ACFFILE} ${VIEWPORT} 
@@ -318,12 +318,6 @@ if [[ -r ~/.deployrc ]]; then
   source ~/.deployrc; USERRC=1
 fi
 
-# Load per-project configuration, if it exists
-if [[ -r "${WORKPATH}/${APP}/config/deploy.sh" ]]; then
-  # shellcheck disable=1090
-  source "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"; APPRC="1"
-fi
-
 # Load libraries, or die
 if [[ -f "${libLocation}" ]]; then
   # shellcheck disable=1090
@@ -366,12 +360,24 @@ else
   fi
 fi
 
-# Does a project configuration exist?
-if [[ "${APPRC}" == "1" ]]; then
+# Load per-project configuration, if it exists
+if [[ -f "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh" ]]; then
   trace "Loading project configuration from ${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
+  # shellcheck disable=1090
+  source "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"; APPRC="1"
+  # Fallback to configuration file in the root directory if it exists
+elif [[ -f "${WORKPATH}/${APP}/deploy.sh" ]]; then
+  trace "Loading project configuration from ${WORKPATH}/${APP}/deploy.sh"
+  # shellcheck disable=1090
+  source "${WORKPATH}/${APP}/deploy.sh"; APPRC="1"
 else
   trace "No project configuration file found"
 fi
+
+# Does a project configuration exist?
+#if [[ "${APPRC}" != "1" ]]; then
+#  trace "No project configuration file found"
+#fi
 
 # Make sure variables are set up correctly
 for var in "${REPOHOST} ${CLIENTLOGO}" "${DEVURL}" "${PRODURL}"; do

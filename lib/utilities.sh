@@ -113,8 +113,8 @@ function depCheck() {
 
   # Does a configuration file for this repo exist?
   if [[ -z "${APPRC}" ]]; then
-    if [[ ! -d "${WORKPATH}/${APP}/config" ]]; then
-      mkdir "${WORKPATH}/${APP}/config"
+    if [[ ! -d "${WORKPATH}/${APP}/${CONFIGDIR}" ]]; then
+      mkdir "${WORKPATH}/${APP}/${CONFIGDIR}"
     fi
     emptyLine; info "Project configuration not found, creating."; sleep 2
     cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/${CONFIGDIR}/"
@@ -123,7 +123,7 @@ function depCheck() {
       clear; sleep 1
       quickExit
     else
-      info "You can change configuration later by editing ${WORKPATH}/${APP}/config/deploy.sh"
+      info "You can change configuration later by editing ${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
     fi
   fi
   
