@@ -70,8 +70,6 @@ For workgroups and teams that use it, `deploy` is able to integrate with Slack. 
 
 ## Running on Autopilot
 
-As of 3.5, the proper method of running automated deployments is `deploy --automate` as opposed to the previous method which was `deploy --force --upgrade --quiet`. The new method adds a flag to optionally deliver an email after the automated update. The old method can still be used but will not trigger the email. 
-
 `deploy --automate` works well for unattended updates of Wordpress sites; great for maintaining updates via a crontab. An example cron script can be [found here](https://github.com/EMRL/deploy/blob/master/etc/cron/deploy.cron.example). Running in this mode, the project will only be deployed if there are Wordpress core or plugin updates. If other code changes are detected the project will not be auto-updated. Smart Commits must be enabled or nothing will be deployed.
 
 ## Contact
