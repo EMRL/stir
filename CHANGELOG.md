@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Added `--update-only` switch, allowing for the deployment of only Wordpress plugin/core updates, while skipping over local code changes
 - Added option for email notification to be sent "clean," without full logging information
 - Added a default check for a configuration file (`deploy.sh`) in project root directory
 - HTML theme colors can be configured in `[theme root]/theme.conf` 
@@ -45,7 +46,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.5.7] - 03-03-2017
 ### Added
-- Added the ability to add time to task management systems via email integration
+- Added the ability to add time to task management system worklogs via email integration
 - Added `deploy --publish` for deploying current production code to live environment
 ### Changed
 - Updated default HTML theme

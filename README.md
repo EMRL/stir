@@ -18,6 +18,7 @@ Options:
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
   -S, --skip-update      Skip any Wordpress core/plugin updates
   -u, --update           If no available Wordpress updates, halt deployment
+  -U, --update-only      Deploy only Wordpresss plugin/core updates
   -P, --publish          Publish current production code to live environment
   -m, --merge            Force merge of branches
   -c, --current          Deploy a project from current working directory          

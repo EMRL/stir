@@ -10,7 +10,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.6.3"
+VERSION="3.6.4"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 WEEKOF="$(date -d '7 days ago' +"%B %d")"
@@ -27,12 +27,12 @@ set -uo pipefail
 read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
   SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
   DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST PROJSTATS UNLOCK  \
-  SSHTEST TIME <<< ""
+  SSHTEST TIME UPDATEONLY <<< ""
 echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT}  
   ${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
   ${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
   ${ANALYTICS} ${ANALYTICSTEST} ${PROJSTATS} ${UNLOCK} 
-  ${SSHTEST} ${TIME}" > /dev/null
+  ${SSHTEST} ${TIME} ${UPDATEONLY}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -110,6 +110,7 @@ Options:
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
   -S, --skip-update      Skip any Wordpress core/plugin updates
   -u, --update           If no available Wordpress updates, halt deployment
+  -U, --update-only     Deploy only Wordpresss plugin/core updates
   -P, --publish          Publish current production code to live environment
   -m, --merge            Force merge of branches
   -c, --current          Deploy a project from current working directory          
@@ -172,6 +173,7 @@ while [[ ${1:-unset} = -?* ]]; do
   case $1 in
     -h|--help) flags >&2; exit ;;
     -u|--update) UPGRADE="1" ;;
+    -U|--update-only) UPDATEONLY="1" ;;
     -P|--publish) PUBLISH="1" ;;
     -S|--skip-update) SKIPUPDATE="1" ;;
     -c|--current) CURRENT="1" ;;
@@ -234,6 +236,7 @@ fi
 [[ "${MERGE}" == "1" ]] && STARTUP="${STARTUP} --merge"
 [[ "${NOCHECK}" == "1" ]] && STARTUP="${STARTUP} --no-check"
 [[ "${UNLOCK}" == "1" ]] && STARTUP="${STARTUP} --unlock"
+[[ "${UPDATEONLY}" == "1" ]] && STARTUP="${STARTUP} --update-only"
 
 # Probably not relevant but included because reasons
 [[ "${SLACKTEST}" == "1" ]] && STARTUP="${STARTUP} --slack-test"
