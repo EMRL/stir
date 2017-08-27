@@ -48,7 +48,7 @@ function coreApp() {
       fi
 
       if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
-        queued 		# Queue for approval if needed
+        queue 		# Queue for approval if needed
       fi
 
       if [[ "${APPROVE}" != "1" ]] && [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
