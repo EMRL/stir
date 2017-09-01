@@ -7,7 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added `--update-only` switch, allowing for the deployment of only Wordpress plugin/core updates, while skipping over local code changes
 - Added option for email notification to be sent "clean," without full logging information
 - Added a default check for a configuration file (`deploy.sh`) in project root directory
-- HTML theme colors can be configured in `[theme root]/theme.conf` 
+- HTML theme colors can be configured in `[theme root]/theme.conf`
+- Added error handling for projects with no commits
 ### Changed
 - Recently changed files that are .gitignored will no longer halt automated deployment
 - Running as root is no longer allowed; this can be overridden by setting `ALLOWROOT="TRUE"`

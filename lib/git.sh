@@ -28,11 +28,17 @@ function gitStart() {
     exit 1
   fi
 
-  # If CHECKBRANCH is set, make sure current branch is correct.
-  start_branch="$(git rev-parse --abbrev-ref HEAD)"
-  if [[ -n "${CHECKBRANCH}" ]] && [[ "${DIGEST}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]] && [[ "${EMAILTEST}" != "1" ]] && [[ "${SLACKTEST}" != "1" ]]; then 
-    if [[ "${start_branch}" != "${CHECKBRANCH}" ]]; then
-      error "Must be on ${CHECKBRANCH} branch to continue deployment.";
+  # Make sure there has been at least one commit previously made
+  git rev-parse --abbrev-ref HEAD &>> "${trshFile}"
+  if grep -q "fatal" "${trshFile}"; then 
+    error "Unable to start deployment, push your first commit manually and try again."
+  else  
+    # If CHECKBRANCH is set, make sure current branch is correct.
+    start_branch="$(git rev-parse --abbrev-ref HEAD)"
+    if [[ -n "${CHECKBRANCH}" ]] && [[ "${DIGEST}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]] && [[ "${EMAILTEST}" != "1" ]] && [[ "${SLACKTEST}" != "1" ]]; then 
+      if [[ "${start_branch}" != "${CHECKBRANCH}" ]]; then
+        error "Must be on ${CHECKBRANCH} branch to continue deployment.";
+      fi
     fi
   fi
 
