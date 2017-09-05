@@ -16,6 +16,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Tightened up many functions
 ### Fixed
 - All HTML email variables are now correctly post-processed
+- Digests no longer post to Slack when there's been no activity
 
 ## [3.6] - 07-08-2017
 ### Added

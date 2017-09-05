@@ -41,7 +41,7 @@ function slackPost () {
   fi  
 
   # Does this need approval?
-  if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
+  if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
     slack_message="*${SLACKUSER}* queued updates to <${DEVURL}|${APP}> for approval"
   fi
 
@@ -86,7 +86,7 @@ function slackPost () {
   fi
 
   # Create payload for digests
-  if [[ "${DIGEST}" == "1" ]] && [[ -n "${DIGESTURL}" ]]; then
+  if [[ "${DIGEST}" == "1" ]] && [[ -n "${DIGESTURL}" ]] && [[ -n "${GREETING}" ]]; then
     if [[ -n "${DIGESTSLACK}" ]] && [[ "${DIGESTSLACK}" != "FALSE" ]]; then
       message_state="DIGEST"
       if [[ "${DIGESTSLACK}" == *"slack"* ]]; then
@@ -116,8 +116,12 @@ function slackPost () {
       ;;
   esac
 
-  # Send payload 
-   curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" > /dev/null 2>&1; errorStatus 
+  # Send payload
+  if [[ "${DIGEST}" == "1" ]] && [[ -z "${GREETING}" ]]; then
+    trace "No activity found, canceling digest."
+  else
+    curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" > /dev/null 2>&1; errorStatus
+  fi
 }
 
 # Slack configuration test
