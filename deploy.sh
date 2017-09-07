@@ -391,6 +391,9 @@ for var in "${REPOHOST} ${CLIENTLOGO}" "${DEVURL}" "${PRODURL}"; do
   fi
 done
 
+# Check variables for weird characters
+validateVar
+
 # Are we using "smart" *cough* commits?
 if [[ "${SMARTCOMMIT}" == "TRUE" ]]; then
   trace "Smart commits enabled"
