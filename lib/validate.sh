@@ -8,8 +8,6 @@
 trace "Loading validation tests"
 
 function validateVar() {
-#!/bin/bash
-# declare an array called array and define 3 vales
   array=( "${PROJNAME}" "${PROJCLIENT}" )
   for i in "${array[@]}"
   do
