@@ -12,7 +12,7 @@ function validateVar() {
   for i in "${array[@]}"
   do
     if [ `expr "$i" : ".*[!@#\$%^\&*()_+].*"` -gt 0 ]; then 
-      warning "Problem with value: ${i}\nCheck your project configuration, remove any special characters [!@#\$%^\&*()_+] and try again."; quietExit 
+      warning "Problem with value: ${i}\nCheck your project configuration and remove any special characters [!@#\$%^\&*()_+] from the value above."; quietExit 
     fi
   done
 }
