@@ -19,6 +19,8 @@ function sshChk() {
       fi
     elif [[ "${REPOHOST}" == *"github"* ]]; then
       ssh -oStrictHostKeyChecking=no git@github.org &> /dev/null; errorStatus
+      #ssh -T git@github.com &> /dev/null; errorStatus
+      
       if [[ "${EXITCODE}" != "0" ]]; then
         error "git@github.org: SSH check failed (Error code ${EXITCODE})"
       else

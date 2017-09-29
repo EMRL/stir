@@ -86,7 +86,7 @@ read -r var optstring options logFile wpFile coreFile postFile trshFile statFile
   WPAPP WPSYSTEM DONOTUPDATEWP gitHistory DIGESTWRAP AUTHOR AUTHOREMAIL \
   AUTHORNAME GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail MINAUSER \
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX QUEUED \
-  DISABLESSHCHECK URL CODE DEPLOYPID <<< ""
+  DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST <<< ""
 echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
   ${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
   ${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -100,7 +100,7 @@ echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile
   ${AUTHORNAME} ${GRAVATAR} ${IMGFILE} ${SIZE} ${RND} ${ANALYTICSMSG} 
   ${digestSendmail} ${MINAUSER} ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} 
   ${REMOTEFILE} ${GREETING} ${LOGSUFFIX} ${QUEUED} ${DISABLESSHCHECK}
-  ${URL} ${CODE} ${DEPLOYPID}" > /dev/null
+  ${URL} ${CODE} ${DEPLOYPID} ${DEPLOYTEST}" > /dev/null
 
 # Options
 function flags() {
@@ -373,6 +373,8 @@ elif [[ -f "${WORKPATH}/${APP}/deploy.sh" ]]; then
   trace "Loading project configuration from ${WORKPATH}/${APP}/deploy.sh"
   # shellcheck disable=1090
   source "${WORKPATH}/${APP}/deploy.sh"; APPRC="1"
+  # Zero out the configdir variable
+  CONFIGDIR=""
 else
   trace "No project configuration file found"
 fi
