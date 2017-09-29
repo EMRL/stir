@@ -11,7 +11,14 @@ trace "Loading integration"
 function buildLog() {
   if [[ "${DIGEST}" != "1" ]]; then 
     # OK let's grab the short version of the commit hash
-    COMMITHASH="$(git rev-parse --short HEAD)"; COMMITURL="${REPOHOST}/${REPO}/commits/${COMMITHASH}"
+    COMMITHASH="$(git rev-parse --short HEAD)"; 
+
+    # Create commit URL
+    if [[ "${REPOHOST}" == *"bitbucket"* ]]; then
+      COMMITURL="${REPOHOST}/${REPO}/commits/${COMMITHASH}"
+    elif [[ "${REPOHOST}" == *"github"* ]]; then
+      COMMITURL="${REPOHOST}/${REPO}/commit/${COMMITHASH}"
+    fi
 
     # Is this a publish only?
     if [[ "${PUBLISH}" == "1" ]] && [[ -z "${notes}" ]]; then 

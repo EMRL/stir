@@ -72,15 +72,17 @@ function deployChk() {
     fi
 
     # Try to --simulate the command
-    trace "Testing deployment command: ${DEPLOYTEST}"
-    "${DEPLOYTEST}" &>> /dev/null
-    EXITCODE=$?; 
-    if [[ "${EXITCODE}" != 0 ]]; then 
-      warning "Deployment exited due to a configuration problem (Error ${EXITCODE})"
-      error_msg="Deployment exited due to a configuration problem (Error ${EXITCODE})"
-      errorExit
+    if [[ "${DEPLOY}" != *"bundle"* ]]; then
+      trace "Testing deployment command: ${DEPLOYTEST}"
+      "${DEPLOYTEST}" &>> /dev/null
+      EXITCODE=$?; 
+      if [[ "${EXITCODE}" != 0 ]]; then 
+        warning "Deployment exited due to a configuration problem (Error ${EXITCODE})"
+        error_msg="Deployment exited due to a configuration problem (Error ${EXITCODE})"
+        errorExit
+      fi
+      trace "OK"
     fi
-    trace "OK"
   fi
 }
 

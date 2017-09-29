@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Fixed
+- Links to Github commits now use the correct URL
+- Using `bundle` in deployment command should now pass checks more accurately
+
 ## [3.6.4] - 09-14-2017
 ### Added
 - Added `--update-only` switch, allowing for the deployment of only Wordpress plugin/core updates, while skipping over local code changes
@@ -152,7 +157,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Old monolithic script rewritten
 
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.6/4...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.6.4...HEAD
 [3.6.4]: https://github.com/EMRL/deploy/compare/v3.6...v3.6.4
 [3.6]: https://github.com/EMRL/deploy/compare/v3.5.7...v3.6
 [3.5.7]: https://github.com/EMRL/deploy/compare/v3.5.5...v3.5.7
