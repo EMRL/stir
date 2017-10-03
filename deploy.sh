@@ -500,6 +500,11 @@ if [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
   fi
 fi
 
+# Disable SSH check for those that will never need it
+if [[ "${NOKEY}"="TRUE" ]]; then
+  DISABLESSHCHECK="TRUE"
+fi
+
 # If user is trying to merge, make sure a second branch is configured
 if [[ "${MERGE}" == "1" ]] && [[ -z "${PRODUCTION}" ]]; then
   # If using --automate, shut 'em down'
