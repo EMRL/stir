@@ -72,17 +72,31 @@ function deployChk() {
     fi
 
     # Try to --simulate the command
-    #if [[ "${DEPLOY}" != *"bundle"* ]]; then
-      trace "Testing deployment command: ${DEPLOYTEST}"
-      eval "${DEPLOYTEST}" &>> /dev/null
-      EXITCODE=$?; 
-      if [[ "${EXITCODE}" != 0 ]]; then 
-        warning "Deployment exited due to a configuration problem (Error ${EXITCODE})"
-        error_msg="Deployment exited due to a configuration problem (Error ${EXITCODE})"
-        errorExit
+    trace "Testing deployment command: ${DEPLOYTEST}"
+
+    # When using bundle, make sure it exists
+    if [[ "${DEPLOYTEST}" == *"bundle"* ]]; then
+      eval "bundle check" &>> /dev/null
+      EXITCODE=$?;
+      if [[ "${EXITCODE}" != 0 ]]; then
+        warning "Could not locate Gemfile or .bundle/ directory, installing..." 
+        eval "bundle install" | tee --append "${logFile}"
+        eval "bundle check" &>> /dev/null
+        EXITCODE=$?;
+        if [[ "${EXITCODE}" != 0 ]]; then
+          error "Problem with bundle gem (Error ${EXITCODE})"
+        fi
       fi
-      trace "OK"
-    #fi
+    fi
+
+    eval "${DEPLOYTEST}" &>> /dev/null
+    EXITCODE=$?; 
+    if [[ "${EXITCODE}" != 0 ]]; then 
+      warning "Deployment exited due to a configuration problem (Error ${EXITCODE})"
+      error_msg="Deployment exited due to a configuration problem (Error ${EXITCODE})"
+      errorExit
+    fi
+    trace "OK"
   fi
 }
 
