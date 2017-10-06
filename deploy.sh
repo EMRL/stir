@@ -375,6 +375,12 @@ elif [[ -f "${WORKPATH}/${APP}/deploy.sh" ]]; then
   source "${WORKPATH}/${APP}/deploy.sh"; APPRC="1"
   # Zero out the configdir variable
   CONFIGDIR=""
+elif [[ -f "${WORKPATH}/${APP}/.deploy.sh" ]]; then
+  trace "Loading project configuration from ${WORKPATH}/${APP}/.deploy.sh"
+  # shellcheck disable=1090
+  source "${WORKPATH}/${APP}/.deploy.sh"; APPRC="1"
+  # Zero out the configdir variable
+  CONFIGDIR=""
 else
   trace "No project configuration file found"
 fi
@@ -413,7 +419,7 @@ if [[ -n "${POSTEMAIL}" ]]; then
 fi
 
 # Load HTML theme configuration
-if [[ -n "${deployPath}/html/${HTMLTEMPLATE}/theme.conf" ]]; then
+if [[ -f "${deployPath}/html/${HTMLTEMPLATE}/theme.conf" ]]; then
   # shellcheck disable=1090
   source "${deployPath}/html/${HTMLTEMPLATE}/theme.conf"
 fi
