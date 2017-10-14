@@ -3,8 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-### Fixed
+### Added
 - Project configuration files can be named either `deploy.sh` or `.deploy.sh`
+### Fixed
 - Links to Github commits now use the correct URL
 - Using `bundle` in deployment command should now pass checks more accurately
 
