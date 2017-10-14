@@ -6,7 +6,10 @@
 export TERM=${TERM:-dumb}
 
 # Define the home directory; the cron task should be run as the user that owns this 
-HOME=/home/[user name]
+HOME="/home/[user name]"
+
+# Define the path required to make everything work properly
+PATH="[required path]:$PATH"
 
 # Read in the user's profile keychain - learn more about setting up
 # a keychain at http://www.funtoo.org

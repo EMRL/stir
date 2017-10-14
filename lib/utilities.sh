@@ -20,6 +20,11 @@ function go() {
     slackTest; quickExit
   fi
 
+  # Webhook POST test
+  if [[ "${POSTTEST}" == "1" ]]; then
+    postTest; quickExit
+  fi
+
   # Email test
   if [[ "${EMAILTEST}" == "1" ]]; then
     emailTest; quickExit

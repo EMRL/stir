@@ -27,12 +27,12 @@ set -uo pipefail
 read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
   SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
   DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST PROJSTATS UNLOCK  \
-  SSHTEST TIME UPDATEONLY <<< ""
+  SSHTEST TIME UPDATEONLY POSTTEST <<< ""
 echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT}  
   ${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
   ${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
   ${ANALYTICS} ${ANALYTICSTEST} ${PROJSTATS} ${UNLOCK} 
-  ${SSHTEST} ${TIME} ${UPDATEONLY}" > /dev/null
+  ${SSHTEST} ${TIME} ${UPDATEONLY} ${POSTTEST}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -133,6 +133,7 @@ Other Options:
   --ssh-test             Validate SSH key setup
   --email-test           Test email configuration
   --slack-test           Test Slack integration
+  --post-test            Test webhook integration  
   --analytics-test       Test Google Analytics authentication
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables 
@@ -192,6 +193,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --ssh-test) SSHTEST="1" ;;
     --slack-test) SLACKTEST="1" ;;
     --email-test) EMAILTEST="1" ;;
+    --post-test) POSTTEST="1" ;;
     --analytics-test) ANALYTICSTEST="1" ;; 
     --stats) PROJSTATS="1" ;;
     --unlock) UNLOCK="1" ;;
@@ -240,6 +242,7 @@ fi
 
 # Probably not relevant but included because reasons
 [[ "${SLACKTEST}" == "1" ]] && STARTUP="${STARTUP} --slack-test"
+[[ "${POSTTEST}" == "1" ]] && STARTUP="${STARTUP} --post-test"
 [[ "${EMAILTEST}" == "1" ]] && STARTUP="${STARTUP} --email-test"
 [[ "${FUNCTIONLIST}" == "1" ]] && STARTUP="${STARTUP} --function-list"
 [[ "${VARIABLELIST}" == "1" ]] && STARTUP="${STARTUP} --variable-list"
