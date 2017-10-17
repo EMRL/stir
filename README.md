@@ -5,7 +5,7 @@
 
 `deploy` is a shell script designed to speed up and automate project deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
 
-[![asciicast](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP.png)](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP)
+[![asciicast](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP.png)](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP?t=0)
 
 This script is in daily use at [EMRL](http://emrl.com), an advertising, design, and development agency in northern California. If you have any questions, please feel free to contact us.
 
