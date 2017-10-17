@@ -3,6 +3,8 @@
 [![release](https://img.shields.io/badge/release-v3.6.4-blue.svg?style=flat)](https://github.com/EMRL/deploy/releases/latest)
 [![Build Status](https://travis-ci.org/EMRL/deploy.svg?branch=master)](https://travis-ci.org/EMRL/deploy)
 
+[![asciicast](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP.png)](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP)
+
 `deploy` is a shell script designed to speed up and automate project deployment. Its main focus is Wordpress websites, but it can be used with any code repository. This script is in daily use at [EMRL](http://emrl.com), an advertising, design, and development agency in northern California. If you have any questions, please feel free to contact us.
 
 Please note that our documentation here is nearly useless, and there is quite a bit of setup involved in getting this running reliably. A full setup guide is coming soon™.
@@ -41,6 +43,7 @@ Other Options:
   --ssh-test             Validate SSH key setup
   --email-test           Test email configuration
   --slack-test           Test Slack integration
+  --post-test            Test webhook integration  
   --analytics-test       Test Google Analytics authentication
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables 
