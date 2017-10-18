@@ -59,7 +59,7 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   CLIENTLOGO REMOTEURL SCPPOST SCPUSER SCPHOST SCPHOSTPATH SCPPASS LOGMSG EXPIRELOGS \
   SERVERCHECK STASH MAILPATH REQUIREAPPROVAL ADDTIME TASKUSER CLIENTID CLIENTSECRET \
   REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN REFRESHTOKEN PROFILEID METRIC \
-  RESULT ALLOWROOT SHORTEMAIL DIGESTCOVER <<< ""
+  RESULT ALLOWROOT SHORTEMAIL DIGESTCOVER INCOGNITO <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
   ${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
   ${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${FROM} ${SUBJECT} ${EMAILERROR} 
@@ -74,7 +74,7 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
   ${STASH} ${MAILPATH} ${REQUIREAPPROVAL} ${ADDTIME} ${TASKUSER} ${CLIENTID} 
   ${CLIENTSECRET} ${REDIRECTURI} ${AUTHORIZATIONCODE} ${ACCESSTOKEN} 
   ${REFRESHTOKEN} ${PROFILEID} ${METRIC} ${RESULT}" "${ALLOWROOT} 
-  ${SHORTEMAIL} ${DIGESTCOVER}" > /dev/null
+  ${SHORTEMAIL} ${DIGESTCOVER} ${INCOGNITO}" > /dev/null
 # Internal variables
 read -r var optstring options logFile wpFile coreFile postFile trshFile statFile \
   urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail deployPath \
@@ -345,12 +345,16 @@ fi
 
 # Spam all the things!
 trace "Version ${VERSION}"
-trace "Running from ${deployPath}"
-trace "Loading system configuration file from ${etcLocation}"
+if [[ "${INCOGNITO}" != "TRUE" ]]; then
+  trace "Running from ${deployPath}"
+  trace "Loading system configuration file from ${etcLocation}"
+fi
 
 # Does a user configuration exit?
 if [[ "${USERRC}" == "1" ]]; then
-  trace "Loading user configuration from ~/.deployrc"
+  if [[ "${INCOGNITO}" != "TRUE" ]]; then
+    trace "Loading user configuration from ~/.deployrc"
+  fi
 else
   trace "User configuration not found, creating"
   cp "${deployPath}"/.deployrc ~/.deployrc
@@ -368,18 +372,24 @@ fi
 
 # Load per-project configuration, if it exists
 if [[ -f "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh" ]]; then
-  trace "Loading project configuration from ${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
+  if [[ "${INCOGNITO}" != "TRUE" ]]; then
+    trace "Loading project configuration from ${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
+  fi
   # shellcheck disable=1090
   source "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"; APPRC="1"
   # Fallback to configuration file in the root directory if it exists
 elif [[ -f "${WORKPATH}/${APP}/deploy.sh" ]]; then
-  trace "Loading project configuration from ${WORKPATH}/${APP}/deploy.sh"
+  if [[ "${INCOGNITO}" != "TRUE" ]]; then
+    trace "Loading project configuration from ${WORKPATH}/${APP}/deploy.sh"
+  fi
   # shellcheck disable=1090
   source "${WORKPATH}/${APP}/deploy.sh"; APPRC="1"
   # Zero out the configdir variable
   CONFIGDIR=""
 elif [[ -f "${WORKPATH}/${APP}/.deploy.sh" ]]; then
-  trace "Loading project configuration from ${WORKPATH}/${APP}/.deploy.sh"
+  if [[ "${INCOGNITO}" != "TRUE" ]]; then
+    trace "Loading project configuration from ${WORKPATH}/${APP}/.deploy.sh"
+  fi
   # shellcheck disable=1090
   source "${WORKPATH}/${APP}/.deploy.sh"; APPRC="1"
   # Zero out the configdir variable
@@ -418,7 +428,11 @@ fi
 # Integration email
 POSTEMAIL="${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL}"
 if [[ -n "${POSTEMAIL}" ]]; then
-  trace "Email integration enabled (${POSTEMAIL})"
+  if [[ "${INCOGNITO}" != "TRUE" ]]; then
+    trace "Email integration enabled (${POSTEMAIL})"
+  else
+    trace "Email integration enabled"
+  fi
 fi
 
 # Load HTML theme configuration
@@ -433,13 +447,14 @@ if [[ "${REMOTELOG}" == "TRUE" ]]; then
 fi
 
 # General info
-trace "Log file is ${logFile}"
-trace "Development workpath is ${WORKPATH}"
-
-# Are we planning on "fixing" permissions?
-if [[ "${FIXPERMISSIONS}" == "TRUE" ]]; then
-  trace "Lead developer permissions are ${DEVUSER}.${DEVGROUP}"
-  trace "Apache permissions are ${APACHEUSER}.${APACHEGROUP}"
+if [[ "${INCOGNITO}" != "TRUE" ]]; then
+  trace "Log file is ${logFile}"
+  trace "Development workpath is ${WORKPATH}"
+  # Are we planning on "fixing" permissions?
+  if [[ "${FIXPERMISSIONS}" == "TRUE" ]]; then
+    trace "Lead developer permissions are ${DEVUSER}.${DEVGROUP}"
+    trace "Apache permissions are ${APACHEUSER}.${APACHEGROUP}"
+  fi
 fi
 
 # Check for upcoming merge
@@ -460,8 +475,10 @@ if [[ "${AUTOMATE}" == "1" ]]; then
 fi
 
 trace "Current project is ${APP}"
-trace "Current user is ${DEV}"
-trace "Git lock at ${gitLock}"
+if [[ "${INCOGNITO}" != "TRUE" ]]; then
+  trace "Current user is ${DEV}"
+  trace "Git lock at ${gitLock}"
+fi
 
 # Start checking for errors
 # Check for publishing vs. user input

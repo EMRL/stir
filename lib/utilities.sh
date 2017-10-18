@@ -13,7 +13,9 @@ function go() {
     tput cnorm;
   fi
   console "deploy ${VERSION}"
-  console "Current working path is ${WORKPATH}/${APP}"
+  if [[ "${INCOGNITO}" != "TRUE" ]]; then
+    console "Current working path is ${WORKPATH}/${APP}"
+  fi
 
   # Slack test
   if [[ "${SLACKTEST}" == "1" ]]; then

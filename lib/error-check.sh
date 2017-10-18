@@ -31,7 +31,11 @@ function deployChk() {
       echo -n "${MINADOMAIN}" >> "${statFile}"
       SSHTARGET=$(sed -r 's/\s+//g' ${statFile})
       # SSH check
-      trace "Testing connection for ${SSHTARGET}"
+      if [[ "${INCOGNITO}" != "TRUE" ]]; then
+        trace "Testing connection for ${SSHTARGET}"
+      else
+        trace "Testing connection"
+      fi
       SSHSTATUS=$(ssh -o BatchMode=yes -o ConnectTimeout=10 ${SSHTARGET} echo ok 2>&1)
 
     elif [[ -f "${WORKPATH}/${APP}/.deploy.yml" ]]; then
@@ -45,7 +49,11 @@ function deployChk() {
       echo -n "${MINADOMAIN}" >> "${statFile}"
       SSHTARGET=$(sed -r 's/\s+//g' ${statFile})  
       # SSH check
-      trace "Testing connection for ${SSHTARGET}"
+      if [[ "${INCOGNITO}" != "TRUE" ]]; then
+        trace "Testing connection for ${SSHTARGET}"
+      else
+        trace "Testing connection"
+      fi
       SSHSTATUS=$(ssh -o BatchMode=yes -o ConnectTimeout=10 ${SSHTARGET} echo ok 2>&1)
     fi
 

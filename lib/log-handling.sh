@@ -45,6 +45,11 @@ function makeLog() {
     sed -i "/remote:/d" "${logFile}"
     sed -i "/Receiving objects:/d" "${logFile}"
     sed -i "/Resolving deltas:/d" "${logFile}"
+
+    # If incognito, remove this stuff for privacy
+    if [[ "${INCOGNITO}" == "TRUE" ]]; then
+      sed -i "/Using cached file/d" "${logFile}"
+    fi
   fi
 
   # Filter out ACF license key & wget stuff

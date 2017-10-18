@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Project configuration files can be named either `deploy.sh` or `.deploy.sh`
+- New configuration switch `INCOGNITO` strips emails and file paths from verbose output and log files for greater security
 ### Fixed
 - Links to Github commits now use the correct URL
 - Using `bundle` in deployment command should now pass checks more accurately

@@ -59,7 +59,13 @@ function pkgDeploy() {
   if [[ -n "${DEPLOY}" ]]; then
     # Add ssh keys and double check directoy
     cd "${WORKPATH}/${APP}" || errorChk
-    trace "Launching deployment from ${PWD}"; fixIndex
+    if [[ "${INCOGNITO}" != "TRUE" ]]; then
+      trace "Launching deployment"
+    else
+      trace "Launching deployment from ${PWD}"
+    fi
+    fixIndex
+    
     # Make sure the project's deploy command is going to work
     deploy_cmd=$(echo "${DEPLOY}" | awk '{print $1;}')
     hash "${deploy_cmd}" 2>/dev/null || {
@@ -72,7 +78,7 @@ function pkgDeploy() {
         # Test deployment command before running
         deployChk
         # Deploy via deployment command specified in configuration
-        if [[ "${VERBOSE}" == "1" ]]; then
+        if [[ "${VERBOSE}" == "1" ]] && [[ "${INCOGNITO}" != "TRUE" ]]; then
           eval "${DEPLOY}" | tee --append "${logFile}"
           errorChk
         else

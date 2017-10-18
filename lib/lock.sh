@@ -11,7 +11,6 @@ trace "Locking process"
 LOCK_FILE="/tmp/$APP.lock"
 
 function lock() {
-
   if [[ -f "${LOCK_FILE}" ]]; then
     # Unlock?
     if [[ "${UNLOCK}" == "1" ]]; then
