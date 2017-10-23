@@ -378,20 +378,20 @@ if [[ -f "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh" ]]; then
   # shellcheck disable=1090
   source "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"; APPRC="1"
   # Fallback to configuration file in the root directory if it exists
-elif [[ -f "${WORKPATH}/${APP}/deploy.sh" ]]; then
-  if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    trace "Loading project configuration from ${WORKPATH}/${APP}/deploy.sh"
-  fi
-  # shellcheck disable=1090
-  source "${WORKPATH}/${APP}/deploy.sh"; APPRC="1"
-  # Zero out the configdir variable
-  CONFIGDIR=""
 elif [[ -f "${WORKPATH}/${APP}/.deploy.sh" ]]; then
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
     trace "Loading project configuration from ${WORKPATH}/${APP}/.deploy.sh"
   fi
   # shellcheck disable=1090
   source "${WORKPATH}/${APP}/.deploy.sh"; APPRC="1"
+  # Zero out the configdir variable
+  CONFIGDIR=""
+elif [[ -f "${WORKPATH}/${APP}/deploy.sh" ]]; then
+  if [[ "${INCOGNITO}" != "TRUE" ]]; then
+    trace "Loading project configuration from ${WORKPATH}/${APP}/deploy.sh"
+  fi
+  # shellcheck disable=1090
+  source "${WORKPATH}/${APP}/deploy.sh"; APPRC="1"
   # Zero out the configdir variable
   CONFIGDIR=""
 else

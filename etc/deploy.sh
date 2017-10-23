@@ -117,6 +117,10 @@
 # globally, set it below. 
 # TO="deploy@emrl.com"
 
+# IF INCOGNITO is set to true, log files as well as verbose output to screen 
+# will be stripped of details such as email addresses and system file paths.
+# INCOGNITO="TRUE"
+
 # Disallow deployment; set to TRUE to enable. Double negative, it's tricky.
 # DONOTDEPLOY="TRUE"	
 

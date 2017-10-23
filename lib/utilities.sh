@@ -120,17 +120,33 @@ function depCheck() {
 
   # Does a configuration file for this repo exist?
   if [[ -z "${APPRC}" ]]; then
-    if [[ ! -d "${WORKPATH}/${APP}/${CONFIGDIR}" ]]; then
-      mkdir "${WORKPATH}/${APP}/${CONFIGDIR}"
-    fi
-    emptyLine; info "Project configuration not found, creating."; sleep 2
-    cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/${CONFIGDIR}/"
-    if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
-      nano "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
-      clear; sleep 1
-      quickExit
+    # Make sure app directory is writable
+    if [[ -w "${WORKPATH}/${APP}" ]]; then
+      emptyLine; info "Project configuration not found, creating."; sleep 2
+      # If configuration directory is defined
+      if [[ -n "${CONFIGDIR}" ]]; then
+        if [[ ! -d "${WORKPATH}/${APP}/${CONFIGDIR}" ]]; then
+          mkdir "${WORKPATH}/${APP}/${CONFIGDIR}"
+        fi
+        cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/${CONFIGDIR}/"
+        APPRC="${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
+      else
+        # If using root directory for .deploy.sh
+        cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/.deploy.sh"
+        APPRC="${WORKPATH}/${APP}/.deploy.sh"
+      fi
+      # Ask the user if they would like to edit
+      if [[ -x "$(command -v nano)" ]]; then
+        if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
+          nano "${APPRC}"
+          clear; sleep 1
+          quickExit
+        fi
+        info "You can change configuration later by editing ${APPRC}"
+      fi
     else
-      info "You can change configuration later by editing ${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
+      # Error out if directory is not writable
+      error "Project directory is not writable."
     fi
   fi
   
