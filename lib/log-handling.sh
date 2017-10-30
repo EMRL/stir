@@ -247,8 +247,6 @@ function mailLog() {
 
   # Is this a digest email?
   if [[ -n "${DIGESTEMAIL}" ]] && [[ "${DIGEST}" == "1" ]] && [[ -n "${digestSendmail}" ]]; then
-    # Tweak the WEEKOF for the subject line
-    WEEKOF="$(date -d '7 days ago' +"%B %d, %Y")"
     # Send the email
     (
     echo "Sender: ${FROM}"

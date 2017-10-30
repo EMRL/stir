@@ -1,5 +1,6 @@
 /config/
 /etc/deploy.conf
+/original
 /*.sublime-workspace
 .DS_Store
 .deploy.sh
