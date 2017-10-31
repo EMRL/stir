@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Links to Github commits now use the correct URL
 - Using `bundle` in deployment command should now pass checks more accurately
+- Poor analytics results are now correctly filtered from digests
 
 ## [3.6.4] - 09-14-2017
 ### Added

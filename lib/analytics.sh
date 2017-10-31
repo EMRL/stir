@@ -30,12 +30,21 @@ function analytics() {
   # Grab data from Google
   analyticsData
 
-  if [[ "${RND}" == "0" ]]; then 
-    ANALYTICSMSG="You had <strong>${SIZE}</strong> hits in the last week. Awesome!"
+  if [[ "${RND}" == "0" ]]; then
+    if [[ "${RESULT}" -gt "499" ]]; then
+      ANALYTICSMSG="You had <strong>${SIZE}</strong> hits in the last week. Awesome!"
+    else
+      analyticsFail
+    fi
   fi
 
-  if [[ "${RND}" == "1" ]]; then 
-    ANALYTICSMSG="Last week <strong>${SIZE}</strong> percent of your users were first time visitors. That's great!"
+  if [[ "${RND}" == "1" ]]; then
+    if [[ "${SIZE}" -gt "50" ]]; then
+      ANALYTICSMSG="Last week <strong>${SIZE}</strong> percent of your users were first time visitors. That's great!"
+    else
+      RESULT="$((100 - ${SIZE}))"
+      ANALYTICSMSG="Last week <strong>${RESULT}</strong> percent of your users were return visitors. That's great!"
+    fi
   fi
 
   if [[ "${RND}" == "2" ]]; then 
@@ -72,7 +81,7 @@ function analyticsData() {
 function analyticsFail() {
   METRIC="hits"
   analyticsData
-  ANALYTICSMSG="You had <strong>${SIZE}</strong> hits in the last week. Awesome!"
+  ANALYTICSMSG="You had <strong>${SIZE}</strong> hits in the last week."
 }
 
 function analyticsTest() {
