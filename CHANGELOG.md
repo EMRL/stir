@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Project configuration files can be named either `deploy.sh` or `.deploy.sh`
 - New configuration switch `INCOGNITO` strips emails and file paths from verbose output and log files for greater security
+- Added Webhook integration for SMS digests using [Zapier](https://zapier.com/zapbook/sms/webhook/)
 ### Fixed
 - Links to Github commits now use the correct URL
 - Using `bundle` in deployment command should now pass checks more accurately

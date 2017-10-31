@@ -64,6 +64,9 @@ function safeExit() {
     fi
   fi
 
+  # Fire webhook
+  postWebhook
+
   # Clean up your mess
   cleanUp; exit 0
 }
