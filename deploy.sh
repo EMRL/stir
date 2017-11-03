@@ -36,12 +36,12 @@ echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT}
   ${SSHTEST} ${TIME} ${UPDATEONLY} ${POSTTEST} ${REPORT}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
-echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
+echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile}
   ${urlFile}" > /dev/null
 # Console Colors
 read -r black red green yellow blue magenta cyan white endColor bold underline \
   reset purple tan <<< ""
-echo "${black} ${red} ${green} ${yellow} ${blue} ${magenta} ${cyan} ${white} \
+echo "${black} ${red} ${green} ${yellow} ${blue} ${magenta} ${cyan} ${white}
   ${endColor} ${bold} ${underline} ${reset} ${purple} ${tan}" > /dev/null
 # User feedback
 read -r pid delay spinstr <<< ""
@@ -58,7 +58,7 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   PROJNAME PROJCLIENT DEVURL PRODURL REPO MASTER PRODUCTION COMMITMSG DEPLOY \
   DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME GARBAGE WFCHECK ACFKEY \
   WFOFF REMOTELOG POSTTOLOCALHOST LOCALHOSTPATH DIGESTEMAIL DIGESTSLACK DIGESTURL \
-  CLIENTLOGO REMOTEURL SCPPOST SCPUSER SCPHOST SCPHOSTPATH SCPPASS LOGMSG \ 
+  CLIENTLOGO REMOTEURL SCPPOST SCPUSER SCPHOST SCPHOSTPATH SCPPASS LOGMSG \
   EXPIRELOGS SERVERCHECK STASH MAILPATH REQUIREAPPROVAL ADDTIME TASKUSER CLIENTID \
   CLIENTSECRET REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN REFRESHTOKEN PROFILEID \
   METRIC RESULT ALLOWROOT SHORTEMAIL DIGESTCOVER INCOGNITO REPORTURL \
