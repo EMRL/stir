@@ -30,6 +30,9 @@
 # If you are using html logfiles, define the full URL to the client's logo
 # CLIENTLOGO="http://client.com/assets/img/logo.png"
 
+# First and last name of the primary contact for this client 
+# CLIENTCONTACT="First Last"
+
 # If you need to send logfiles and email alerts to address(es) other 
 # than those configured globally, enter them below.
 # TO="notify@client.com"

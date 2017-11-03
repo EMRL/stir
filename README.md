@@ -37,6 +37,7 @@ Other Options:
   --approve              Approve and deploy queued code changes
   --deny                 Deny queued code changes
   --digest               Create and send weekly digest
+  --report               Create a monthly activity report
   --no-check             Override active file and server checks
   --stats                Generate project statistics pages
   --strict               Any error will halt deployment completely

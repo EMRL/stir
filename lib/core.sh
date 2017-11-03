@@ -13,6 +13,8 @@ function coreApp() {
   go          # Start a deployment work session
   if [[ "${DIGEST}" == "1" ]]; then
     createDigest
+  elif [[ "${REPORT}" == "1" ]]; then
+    createReport
   else
     srvCheck    # Check that servers are up and running
     if [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then

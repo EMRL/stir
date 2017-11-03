@@ -113,7 +113,7 @@ function makeLog() {
 function htmlBuild() {
   # Build out the HTML
   LOGSUFFIX="html"
-  if [ "${message_state}" == "ERROR" ]; then
+  if [[ "${message_state}" == "ERROR" ]]; then
     # Oh man, this is an error
     notes="${error_msg}"
     LOGTITLE="Deployment Error"
@@ -122,7 +122,7 @@ function htmlBuild() {
   else
     # Does this project need to be approved before finalizing deployment?
     #if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
-    if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
+    if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]  && [[ "${REPORT}" != "1" ]]; then
       message_state="APPROVAL NEEDED"
       LOGTITLE="Approval Needed"
       LOGSUFFIX="php"
@@ -143,7 +143,9 @@ function htmlBuild() {
           LOGTITLE="Deployment Log"
         fi
       fi
-      cat "${deployPath}/html/${HTMLTEMPLATE}/header.html" "${deployPath}/html/${HTMLTEMPLATE}/success.html" > "${htmlFile}"
+      if [[ "${DIGEST}" != "1" ]] && [[ "${REPORT}" != "1" ]]; then
+        cat "${deployPath}/html/${HTMLTEMPLATE}/header.html" "${deployPath}/html/${HTMLTEMPLATE}/success.html" > "${htmlFile}"
+      fi
     fi
   fi
 
@@ -161,12 +163,11 @@ function htmlBuild() {
     fi
   fi
 
-  # Process the variables before we add the full log because sed
-  # processHTML
-
   # Insert the full deployment logfile & button it all up
-  cat "${logFile}" "${deployPath}/html/${HTMLTEMPLATE}/footer.html" >> "${htmlFile}"
-  processHTML
+  if [[ "${REPORT}" != "1" ]]; then
+    cat "${logFile}" "${deployPath}/html/${HTMLTEMPLATE}/footer.html" >> "${htmlFile}"
+    processHTML
+  fi
 }
 
 # Remote log function 
@@ -178,7 +179,7 @@ function postLog() {
       htmlDir
 
       # Is there a commit hash?   
-      if [[ -n "${REMOTEFILE}" ]]; then
+      if [[ -n "${REMOTEFILE}" ]] && [[ -n "${COMMITHASH}" ]]; then
         cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
         chmod a+rw "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
       fi
@@ -190,7 +191,15 @@ function postLog() {
         chmod a+rw "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
         DIGESTURL="${REMOTEURL}/${APP}/${REMOTEFILE}"
       fi
-  
+
+      # Post the report
+      if [[ "${REPORT}" == "1" ]]; then
+        REMOTEFILE="${EPOCH}.php"
+        cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/report/${REMOTEFILE}"
+        chmod a+rw "${LOCALHOSTPATH}/${APP}/report/${REMOTEFILE}" &> /dev/null
+        REPORTURL="${REMOTEURL}/${APP}/report/${REMOTEFILE}"
+      fi
+
       # Remove logs older then X days
       if [[ -n "${EXPIRELOGS}" ]]; then
         find "${LOCALHOSTPATH}/${APP}"* -mtime +"${EXPIRELOGS}" -exec rm {} \; &> /dev/null
@@ -397,5 +406,15 @@ function htmlDir() {
 
   if [[ ! -d "${LOCALHOSTPATH}/${APP}/avatar" ]]; then
     mkdir "${LOCALHOSTPATH}/${APP}/avatar"
+  fi
+
+  if [[ "${message_state}" == "REPORT" ]]; then 
+    if [[ ! -d "${LOCALHOSTPATH}/${APP}/report" ]]; then
+      mkdir "${LOCALHOSTPATH}/${APP}/report"; errorChk
+      mkdir "${LOCALHOSTPATH}/${APP}/report/css"; errorChk
+      mkdir "${LOCALHOSTPATH}/${APP}/report/js"; errorChk
+      cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/css" "${LOCALHOSTPATH}/${APP}/report"; errorChk
+      cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/js" "${LOCALHOSTPATH}/${APP}/report"; errorChk
+    fi
   fi
 }

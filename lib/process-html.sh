@@ -13,6 +13,8 @@ function processHTML() {
     [[ -z "${PRODURL}" ]] && sed -i '/PRODURL/d' "${htmlFile}"
     [[ -z "${PROJCLIENT}" ]] && sed -i 's/()//' "${htmlFile}"
     [[ -z "${CLIENTLOGO}" ]] && sed -i '/CLIENTLOGO/d' "${htmlFile}"
+    [[ -z "${CLIENTCONTACT}" ]] && sed -i '/CLIENTCONTACT/d' "${htmlFile}"
+
     [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]] && sed -i '/ANALYTICS/d' "${htmlFile}"
     [[ -z "${SMOOCHID}" ]] && sed -i '/SMOOCHID/d' "${htmlFile}"
 
@@ -37,7 +39,7 @@ function processHTML() {
         -e "s^{{VIEWPORTPRE}}^${VIEWPORTPRE}^g" \
         -e "s^{{PATHTOREPO}}^${WORKPATH}/${APP}^g" \
         -e "s^{{PROJNAME}}^${PROJNAME}^g" \
-        -e "s^{{CLIENTLOGO}}^${CLIENTLOGO}^g" \
+        -e "s^{{CLIENTCONTACT}}^${CLIENTCONTACT}^g" \
         -e "s^{{DEVURL}}^${DEVURL}^g" \
         -e "s^{{PRODURL}}^${PRODURL}^g" \
         -e "s^{{DEFAULT}}^${DEFAULTC}^g" \
@@ -55,5 +57,6 @@ function processHTML() {
         -e "s^{{STATURL}}^${REMOTEURL}\/${APP}\/stats^g" \
         -e "s^{{DIGESTCOVER}}^${DIGESTCOVER}^g" \
         -e "s^{{WEEKOF}}^${WEEKOF}^g" \
+        -e "s^{{LASTMONTH}}^${LASTMONTH}^g" \
         "${htmlFile}"        
 }

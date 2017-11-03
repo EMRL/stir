@@ -13,6 +13,7 @@ IFS=$'\n\t'
 VERSION="3.6.4"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
+LASTMONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
 WEEKOF="$(date -d '7 days ago' +"%B %d, %Y")"
 GASTART="$(date -d '7 days ago' "+%Y-%m-%d")"
 GAEND="$(date "+%Y-%m-%d")"
@@ -27,12 +28,12 @@ set -uo pipefail
 read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
   SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
   DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST PROJSTATS UNLOCK  \
-  SSHTEST TIME UPDATEONLY POSTTEST <<< ""
+  SSHTEST TIME UPDATEONLY POSTTEST REPORT <<< ""
 echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT}  
   ${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
   ${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
   ${ANALYTICS} ${ANALYTICSTEST} ${PROJSTATS} ${UNLOCK} 
-  ${SSHTEST} ${TIME} ${UPDATEONLY} ${POSTTEST}" > /dev/null
+  ${SSHTEST} ${TIME} ${UPDATEONLY} ${POSTTEST} ${REPORT}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile} \
@@ -47,7 +48,8 @@ read -r pid delay spinstr <<< ""
 echo "${pid} ${delay} ${spinstr}" > /dev/null
 # HTML Themes
 read -r DEFAULTC PRIMARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID <<< ""
-echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} ${SMOOCHID}"
+echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} 
+	${SMOOCHID}"
 # Constants and environment variables
 read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   EMAILHTML NOPHP FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP TO \
@@ -56,10 +58,11 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   PROJNAME PROJCLIENT DEVURL PRODURL REPO MASTER PRODUCTION COMMITMSG DEPLOY \
   DONOTDEPLOY TASK CHECKBRANCH ACTIVECHECK CHECKTIME GARBAGE WFCHECK ACFKEY \
   WFOFF REMOTELOG POSTTOLOCALHOST LOCALHOSTPATH DIGESTEMAIL DIGESTSLACK DIGESTURL \
-  CLIENTLOGO REMOTEURL SCPPOST SCPUSER SCPHOST SCPHOSTPATH SCPPASS LOGMSG EXPIRELOGS \
-  SERVERCHECK STASH MAILPATH REQUIREAPPROVAL ADDTIME TASKUSER CLIENTID CLIENTSECRET \
-  REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN REFRESHTOKEN PROFILEID METRIC \
-  RESULT ALLOWROOT SHORTEMAIL DIGESTCOVER INCOGNITO <<< ""
+  CLIENTLOGO REMOTEURL SCPPOST SCPUSER SCPHOST SCPHOSTPATH SCPPASS LOGMSG \ 
+  EXPIRELOGS SERVERCHECK STASH MAILPATH REQUIREAPPROVAL ADDTIME TASKUSER CLIENTID \
+  CLIENTSECRET REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN REFRESHTOKEN PROFILEID \
+  METRIC RESULT ALLOWROOT SHORTEMAIL DIGESTCOVER INCOGNITO REPORTURL \
+  CLIENTCONTACT <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
   ${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
   ${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${FROM} ${SUBJECT} ${EMAILERROR} 
@@ -74,7 +77,7 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
   ${STASH} ${MAILPATH} ${REQUIREAPPROVAL} ${ADDTIME} ${TASKUSER} ${CLIENTID} 
   ${CLIENTSECRET} ${REDIRECTURI} ${AUTHORIZATIONCODE} ${ACCESSTOKEN} 
   ${REFRESHTOKEN} ${PROFILEID} ${METRIC} ${RESULT}" "${ALLOWROOT} 
-  ${SHORTEMAIL} ${DIGESTCOVER} ${INCOGNITO}" > /dev/null
+  ${SHORTEMAIL} ${DIGESTCOVER} ${INCOGNITO} ${REPORTURL} ${CLIENTCONTACT}" > /dev/null
 # Internal variables
 read -r var optstring options logFile wpFile coreFile postFile trshFile statFile \
   urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail deployPath \
@@ -86,7 +89,7 @@ read -r var optstring options logFile wpFile coreFile postFile trshFile statFile
   WPAPP WPSYSTEM DONOTUPDATEWP gitHistory DIGESTWRAP AUTHOR AUTHOREMAIL \
   AUTHORNAME GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail MINAUSER \
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX QUEUED \
-  DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST payload <<< ""
+  DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile <<< ""
 echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
   ${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
   ${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -100,7 +103,7 @@ echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile
   ${AUTHORNAME} ${GRAVATAR} ${IMGFILE} ${SIZE} ${RND} ${ANALYTICSMSG} 
   ${digestSendmail} ${MINAUSER} ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} 
   ${REMOTEFILE} ${GREETING} ${LOGSUFFIX} ${QUEUED} ${DISABLESSHCHECK}
-  ${URL} ${CODE} ${DEPLOYPID} ${DEPLOYTEST} ${payload}" > /dev/null
+  ${URL} ${CODE} ${DEPLOYPID} ${DEPLOYTEST} ${payload} ${reportFile}" > /dev/null
 
 # Options
 function flags() {
@@ -125,6 +128,7 @@ Other Options:
   --approve              Approve and deploy queued code changes
   --deny                 Deny queued code changes
   --digest               Create and send weekly digest
+  --report               Create a monthly activity report
   --no-check             Override active file and server checks
   --stats                Generate project statistics pages
   --strict               Any error will halt deployment completely
@@ -189,6 +193,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --approve) APPROVE="1"; FORCE="1" ;;
     --deny) DENY="1"; FORCE="1" ;;
     --digest) DIGEST="1"; FORCE="1"; QUIET="1" ;;
+    --report) REPORT="1"; FORCE="1"; QUIET="1" ;;
     --automate) FORCE="1"; UPGRADE="1"; MERGE="1"; QUIET="1"; AUTOMATE="1" ;;
     --ssh-test) SSHTEST="1" ;;
     --slack-test) SLACKTEST="1" ;;

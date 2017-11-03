@@ -85,6 +85,15 @@ function slackPost () {
     slack_message="${slack_message} (<${LOGURL}|Details>)"
   fi
 
+  # Create payload for reports
+  if [[ "${REPORT}" == "1" ]]; then
+    if [[ -n "${PRODURL}" ]]; then 
+      slack_message="Monthly report for <${PRODURL}|${PROJNAME}> created (<${REPORTURL}|View>)"
+    else
+      slack_message="Monthly report for *${PROJNAME}* created (<${REPORTURL}|View>)"               
+    fi
+  fi
+
   # Create payload for digests
   if [[ "${DIGEST}" == "1" ]] && [[ -n "${DIGESTURL}" ]] && [[ -n "${GREETING}" ]]; then
     if [[ -n "${DIGESTSLACK}" ]] && [[ "${DIGESTSLACK}" != "FALSE" ]]; then

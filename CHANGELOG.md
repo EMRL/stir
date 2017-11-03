@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Monthly reports can now be generated using `deploy --report [project name]`
 - Project configuration files can be named either `deploy.sh` or `.deploy.sh`
 - New configuration switch `INCOGNITO` strips emails and file paths from verbose output and log files for greater security
 - Added Webhook integration for SMS digests using [Zapier](https://zapier.com/zapbook/sms/webhook/)
