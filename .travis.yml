@@ -2,7 +2,7 @@ language: bash
 
 before_script:
     - curl -L "http://downloads.sourceforge.net/shunit2/shunit2-2.0.3.tgz" | tar zx
-    -  wget https://raw.github.com/lehmannro/assert.sh/v1.1/assert.sh
+    - wget https://raw.github.com/lehmannro/assert.sh/v1.1/assert.sh
 
 script:
     - bash test/test.sh
