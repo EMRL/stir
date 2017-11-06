@@ -170,7 +170,7 @@ function htmlBuild() {
   fi
 }
 
-# Remote log function 
+# Remote log function; this really neexds to be rewritten
 function postLog() {
   if [[ "${REMOTELOG}" == "TRUE" ]]; then
     # Post to localhost by simply copying files
@@ -178,8 +178,8 @@ function postLog() {
       # Check that directory exists
       htmlDir
 
-      # Is there a commit hash?   
-      if [[ -n "${REMOTEFILE}" ]] && [[ -n "${COMMITHASH}" ]]; then
+      # Post the file   
+      if [[ -n "${REMOTEFILE}" ]] && [[ "${REPORT}" != "1" ]]; then #&& [[ -n "${COMMITHASH}" ]]; then
         cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
         chmod a+rw "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
       fi
