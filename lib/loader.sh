@@ -3,7 +3,7 @@
 # loader.sh
 #
 ###############################################################################
-# A sub-wrapper for loading external functions.
+# A sub-wrapper for loading external functions
 ###############################################################################
 
 # Save current contents of the terminal

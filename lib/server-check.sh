@@ -3,7 +3,7 @@
 # server-check.sh
 #
 ###############################################################################
-# Check to see if production environment is online and running its Apache server
+# Check to see if production environment is online and running web server
 ###############################################################################
 trace "Loading server checks"
 

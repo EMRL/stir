@@ -52,9 +52,6 @@ function preDeploy() {
 } 
 
 function pkgDeploy() {
-  # There are problems with code right now. The changes I made to pass shellcheck
-  # broke the deployment command getting passed through. Looks like I need to do some 
-  # stuff with eval, see http://emrl.co/s6chq
   emptyLine
   if [[ -n "${DEPLOY}" ]]; then
     # Add ssh keys and double check directoy

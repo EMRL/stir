@@ -3,7 +3,7 @@
 # active-check.sh
 #
 ###############################################################################
-# Repairs potential permission issues before deployment
+# Checks for recently active project files that may cause deployment issues
 ###############################################################################
 trace "Loading activity checking"
 
