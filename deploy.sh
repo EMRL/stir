@@ -10,7 +10,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.6.4"
+VERSION="3.6.5rc"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 LASTMONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
@@ -28,12 +28,12 @@ set -uo pipefail
 read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
   SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
   DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST PROJSTATS UNLOCK  \
-  SSHTEST TIME UPDATEONLY POSTTEST REPORT <<< ""
+  SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR <<< ""
 echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT}  
   ${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
   ${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
   ${ANALYTICS} ${ANALYTICSTEST} ${PROJSTATS} ${UNLOCK} 
-  ${SSHTEST} ${TIME} ${UPDATEONLY} ${POSTTEST} ${REPORT}" > /dev/null
+  ${SSHTEST} ${TIME} ${UPDATEONLY} ${POSTTEST} ${REPORT} ${REPAIR}" > /dev/null
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile}
@@ -134,6 +134,7 @@ Other Options:
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
   --unlock               Delete expired lock files
+  --repair               Repair a deployment after key failure
   --ssh-test             Validate SSH key setup
   --email-test           Test email configuration
   --slack-test           Test Slack integration
@@ -202,6 +203,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --analytics-test) ANALYTICSTEST="1" ;; 
     --stats) PROJSTATS="1" ;;
     --unlock) UNLOCK="1" ;;
+    --repair) REPAIR="1"; FORCE="1"; MERGE="1"; STASH="TRUE" ;;
     --no-check) NOCHECK="1" ;;
     --function-list) FUNCTIONLIST="1"; CURRENT="1" ;; # Spoofs --current
     --variable-list) VARIABLELIST="1"; CURRENT="1" ;; # Spoofs --current
@@ -243,6 +245,7 @@ fi
 [[ "${MERGE}" == "1" ]] && STARTUP="${STARTUP} --merge"
 [[ "${NOCHECK}" == "1" ]] && STARTUP="${STARTUP} --no-check"
 [[ "${UNLOCK}" == "1" ]] && STARTUP="${STARTUP} --unlock"
+[[ "${REPAIR}" == "1" ]] && STARTUP="${STARTUP} --repair"
 [[ "${UPDATEONLY}" == "1" ]] && STARTUP="${STARTUP} --update-only"
 
 # Probably not relevant but included because reasons
@@ -474,7 +477,7 @@ if [[ "${NOCHECK}" == "1" ]]; then
 fi
 
 # If using --automate, force branch checking
-if [[ "${AUTOMATE}" == "1" ]]; then
+if [[ "${AUTOMATE}" == "1" ]] || [[ "${REPAIR}" == "1" ]]; then
   CHECKBRANCH="${MASTER}";
   trace "Enforcing branch checking: ${MASTER}"
 fi

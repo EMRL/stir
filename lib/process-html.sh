@@ -14,6 +14,7 @@ function processHTML() {
   [[ -z "${PROJCLIENT}" ]] && sed -i 's/()//' "${htmlFile}"
   [[ -z "${CLIENTLOGO}" ]] && sed -i '/CLIENTLOGO/d' "${htmlFile}"
   [[ -z "${CLIENTCONTACT}" ]] && sed -i '/CLIENTCONTACT/d' "${htmlFile}"
+  [[ -z "${notes}" ]] && sed -i '/NOTES/d' "${htmlFile}"
 
   [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]] && sed -i '/ANALYTICS/d' "${htmlFile}"
   [[ -z "${SMOOCHID}" ]] && sed -i '/SMOOCHID/d' "${htmlFile}"

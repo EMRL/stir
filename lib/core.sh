@@ -27,7 +27,17 @@ function coreApp() {
       gitChkMstr    # Checkout master branch
       gitGarbage    # If needed, clean up the trash
 
-      if [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
+      # A simple way to repair a failed push
+      if [[ "${REPAIR}" == "1" ]]; then 
+        preDeploy     # Get the status
+        gitPushMstr   # Push master branch
+        gitChkProd    # Checkout production branch
+        gitMerge      # Merge master into production
+        gitPushProd   # Push production branch
+        gitChkMstr    # Checkout master once again  
+        pkgDeploy     # Deploy project to live server
+        return 0
+      elif [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
         preDeploy   # Get the status
       fi
 

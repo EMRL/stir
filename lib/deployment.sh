@@ -16,7 +16,7 @@ function preDeploy() {
     trace "Status looks good"
   else
     # If running in --force mode we will not allow deployment to continue
-    if [[ "${FORCE}" == "1" && "${APPROVE}" != "1" ]] || [[ "${UPDATEONLY}" == "1" ]]; then
+    if [[ "${FORCE}" == "1" && "${APPROVE}" != "1" ]] || [[ "${UPDATEONLY}" == "1" ]] || [[ "${REPAIR}" = "1" ]]; then
       trace "Checking for files that need stashing"
       # Stash the dirty bits
       if [[ "${STASH}" == "TRUE" ]] || [[ "${UPDATEONLY}" == "1" ]]; then # Bah, clunky
