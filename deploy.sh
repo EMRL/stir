@@ -89,7 +89,8 @@ read -r var optstring options logFile wpFile coreFile postFile trshFile statFile
   WPAPP WPSYSTEM DONOTUPDATEWP gitHistory DIGESTWRAP AUTHOR AUTHOREMAIL \
   AUTHORNAME GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail MINAUSER \
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX QUEUED \
-  DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile <<< ""
+  DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile CURMTH \
+  CURYR PRVMTH PRVYR LASTDY <<< ""
 echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
   ${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
   ${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -103,7 +104,8 @@ echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile
   ${AUTHORNAME} ${GRAVATAR} ${IMGFILE} ${SIZE} ${RND} ${ANALYTICSMSG} 
   ${digestSendmail} ${MINAUSER} ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} 
   ${REMOTEFILE} ${GREETING} ${LOGSUFFIX} ${QUEUED} ${DISABLESSHCHECK}
-  ${URL} ${CODE} ${DEPLOYPID} ${DEPLOYTEST} ${payload} ${reportFile}" > /dev/null
+  ${URL} ${CODE} ${DEPLOYPID} ${DEPLOYTEST} ${payload} ${reportFile} ${CURMTH} ${CURYR} 
+  ${PRVMTH} ${PRVYR} ${LASTDY}" > /dev/null
 
 # Options
 function flags() {
@@ -203,7 +205,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --analytics-test) ANALYTICSTEST="1" ;; 
     --stats) PROJSTATS="1" ;;
     --unlock) UNLOCK="1" ;;
-    --repair) REPAIR="1"; FORCE="1"; MERGE="1"; STASH="TRUE" ;;
+    --repair) REPAIR="1"; FORCE="1"; MERGE="1"; STASH="TRUE"; VERBOSE="1" ;;
     --no-check) NOCHECK="1" ;;
     --function-list) FUNCTIONLIST="1"; CURRENT="1" ;; # Spoofs --current
     --variable-list) VARIABLELIST="1"; CURRENT="1" ;; # Spoofs --current

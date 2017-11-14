@@ -144,6 +144,9 @@ function htmlBuild() {
         fi
       fi
       if [[ "${DIGEST}" != "1" ]] && [[ "${REPORT}" != "1" ]]; then
+        if [[ "${REPAIR}" == "1" ]] && [[ -z "${notes}" ]]; then
+          notes="Repaired and deployed codebase"
+        fi
         cat "${deployPath}/html/${HTMLTEMPLATE}/header.html" "${deployPath}/html/${HTMLTEMPLATE}/success.html" > "${htmlFile}"
       fi
     fi
