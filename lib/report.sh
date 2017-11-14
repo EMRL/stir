@@ -34,7 +34,7 @@ LASTDY=`cal ${PRVMTH} ${PRVYR} | egrep "28|29|30|31" |tail -1 |awk '{print $NF}'
 #    git log --before={'date "+%Y-%m-01"'} --after={'date --date="$(date +%Y-%m-01) -1 month"'} --pretty=format:"<tr class=\"item-row\"><td class=\"item-name\">%h</td><td class=\"description\">%s</td></tr>" --since="last month" > "${statFile}"
 
   if [[ $(git log --before={'date "+%Y-%m-01"'} --after=${PRVYR}-${PRVMTH}-31) ]]; then
-    git log --all --no-merges --first-parent --before={'date "+%Y-%m-01"'} --after="${PRVYR}-${PRVMTH}-31 00:00" --pretty=format:"<tr class=\"item-row\"><td class=\"item-name\">%h</td><td class=\"description\">%s</td></tr>" > "${statFile}"
+    git log --all --no-merges --first-parent --before={'date "+%Y-%m-01"'} --after="${PRVYR}-${PRVMTH}-31 00:00" --pretty=format:"<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">%h<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\">%s</td></tr>" > "${statFile}"
 
     # Compile full report 
     cat "${deployPath}/html/${HTMLTEMPLATE}/report/header.html" "${statFile}" "${deployPath}/html/${HTMLTEMPLATE}/report/footer.html" > "${htmlFile}"
