@@ -15,11 +15,16 @@
 <body>
 	<div id="page-wrap">	
 		<div style="clear:both"></div>
-		<strong>{{LASTMONTH}} Maintenance Report for</strong> <a style="color: {{PRIMARY}}; text-decoration:none; font-weight: bold;" href="{{PRODURL}}">{{PRODURL}}</a>
+		<strong>{{LASTMONTH}} report for</strong> <a style="color: {{PRIMARY}}; text-decoration:none; font-weight: bold;" href="{{PRODURL}}">{{PRODURL}}</a>
 		<div id="customer">
             <h1>{{PROJCLIENT}}<br />
-            <!--[CLIENTCONTACT]--><textarea style="font-size: 20px;">c/o Charlotte King</textarea>
+            <!--[CLIENTCONTACT]--><textarea style="font-size: 20px;">c/o {{CLIENTCONTACT}}</textarea>
             </h1>
+
+            <div id="desc">
+            	<p>This report for the month of {{LASTMONTH}} includes notes on system updates, security patches, and other code changes we have made at your request.</p>
+            </div>
+
             <table id="meta">
                 <tr>
                     <td class="meta-head">Invoice #</td>
