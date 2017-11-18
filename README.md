@@ -1,6 +1,6 @@
 # Deploy
 
-[![release](https://img.shields.io/badge/release-v3.6.4-blue.svg?style=flat)](https://github.com/EMRL/deploy/releases/latest)
+[![release](https://img.shields.io/badge/release-v3.6.5-blue.svg?style=flat)](https://github.com/EMRL/deploy/releases/latest)
 [![Build Status](https://travis-ci.org/EMRL/deploy.svg?branch=master)](https://travis-ci.org/EMRL/deploy)
 
 `deploy` is a shell script designed to speed up and automate project deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
