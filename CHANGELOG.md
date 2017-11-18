@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.6.5] - 11-17-2017
 ### Added
 - Monthly reports can now be generated using `deploy --report [project name]`
 - Project configuration files can be named either `deploy.sh` or `.deploy.sh`
@@ -164,7 +164,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Old monolithic script rewritten
 
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.6.4...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.6.5...HEAD
+[3.6.5]: https://github.com/EMRL/deploy/compare/v3.6.4...3.6.5
 [3.6.4]: https://github.com/EMRL/deploy/compare/v3.6...v3.6.4
 [3.6]: https://github.com/EMRL/deploy/compare/v3.5.7...v3.6
 [3.5.7]: https://github.com/EMRL/deploy/compare/v3.5.5...v3.5.7
