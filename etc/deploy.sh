@@ -33,6 +33,11 @@
 # First and last name of the primary contact for this client 
 # CLIENTCONTACT="First Last"
 
+# Include hosting as a line item on monthly reports? If set to TRUE, the report
+# line item will read "Monthly web hosting"; customize the text included in
+# report by setting it to any other value.
+# INCLUDEHOSTING="TRUE"
+
 # If you need to send logfiles and email alerts to address(es) other 
 # than those configured globally, enter them below.
 # TO="notify@client.com"
