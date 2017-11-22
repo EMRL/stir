@@ -105,7 +105,7 @@ $(document).ready(function() {
   $("#paid").blur(update_balance);
    
   $("#addrow").click(function(){
-    $(".item-row:last").after('<tr class="item-row"><td class="item-name"><div class="delete-wpr"><textarea>Name</textarea><a class="delete" href="javascript:;" title="Remove row">X</a></div></td><td class="description"><textarea>Description</textarea></td></tr>');
+    $(".item-row:last").after('<tr class="item-row"><td class="item-name"><div class="delete-wpr"><div contenteditable class="editable">Item ID</div><a class="delete" href="javascript:;" title="Remove row">X</a></div></td><td class="description"><div contenteditable class="editable">Description</div></td></tr>');
     if ($(".delete").length > 0) $(".delete").show();
     bind();
   });

@@ -30,14 +30,16 @@ function createReport() {
 	LASTDY=`cal ${PRVMTH} ${PRVYR} | egrep "28|29|30|31" |tail -1 |awk '{print $NF}'`
 
 	if [[ -n "${INCLUDEHOSTING}" ]] && [[ "${INCLUDEHOSTING}" != "FALSE" ]]; then
+		# If INCLUDEHOSTING is equal to something other than TRUE, its value 
+		# will be used as the text string in the report 
 		if [[ "${INCLUDEHOSTING}" == "TRUE" ]]; then
-			INCLUDEHOSTING="Monthly web hosting"
+			INCLUDEHOSTING="Web hosting for the month of ${LASTMONTH}"
 		fi
-		echo "<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">${TASK}<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\">Web hosting for the month of ${LASTMONTH}</td></tr>" >> "${statFile}"
+		echo "<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">${TASK}<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">${INCLUDEHOSTING}</div></td></tr>" >> "${statFile}"
 	fi
 
 	#if [[ $(git log --before={'date "+%Y-%m-01"'} --after=${PRVYR}-${PRVMTH}-31) ]]; then
-	git log --all --no-merges --first-parent --before={'date "+%Y-%m-01"'} --after="${PRVYR}-${PRVMTH}-31 00:00" --pretty=format:"<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">%h<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\">%s</td></tr>" >> "${statFile}"
+	git log --all --no-merges --first-parent --before={'date "+%Y-%m-01"'} --after="${PRVYR}-${PRVMTH}-31 00:00" --pretty=format:"<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">%h<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">%s</div></td></tr>" >> "${statFile}"
 
 	# If it's an empty report, this empty row will keep the javascript from breaking. Kludgy I know.
 	if [[ ! -s "${statFile}" ]]; then
