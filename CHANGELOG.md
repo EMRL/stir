@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Option to include web hosting as a line item on monthly reports
+### Changed
+- Item descriptions are now editable in reports 
 
 ## [3.6.5] - 11-17-2017
 ### Added

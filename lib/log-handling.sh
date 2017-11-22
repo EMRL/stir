@@ -173,7 +173,7 @@ function htmlBuild() {
   fi
 }
 
-# Remote log function; this really neexds to be rewritten
+# Remote log function; this really needs to be rewritten
 function postLog() {
   if [[ "${REMOTELOG}" == "TRUE" ]]; then
     # Post to localhost by simply copying files
@@ -416,8 +416,8 @@ function htmlDir() {
       mkdir "${LOCALHOSTPATH}/${APP}/report"; errorChk
       mkdir "${LOCALHOSTPATH}/${APP}/report/css"; errorChk
       mkdir "${LOCALHOSTPATH}/${APP}/report/js"; errorChk
+    fi
       cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/css" "${LOCALHOSTPATH}/${APP}/report"; errorChk
       cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/js" "${LOCALHOSTPATH}/${APP}/report"; errorChk
-    fi
   fi
 }
