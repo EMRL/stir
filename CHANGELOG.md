@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+- Option to include web hosting as a line item on monthly reports
+
 ## [3.6.5] - 11-17-2017
 ### Added
 - Monthly reports can now be generated using `deploy --report [project name]`
