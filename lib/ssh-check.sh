@@ -6,6 +6,8 @@
 # SSH checks for both Bitbucket and Github
 ###############################################################################
 
+# TODO: Rewrite this to store git@domain stuff in a variable, allow for other
+# repohosts to work (Gitlab etc.) and shorten the entire function
 function sshChk() {
   if [[ "${NOKEY}" != "TRUE" ]]; then
     trace "Checking SSH configuration"
@@ -18,9 +20,7 @@ function sshChk() {
         trace "git@bitbucket.org: OK"
       fi
     elif [[ "${REPOHOST}" == *"github"* ]]; then
-      ssh -oStrictHostKeyChecking=no git@github.org &> /dev/null; errorStatus
-      #ssh -T git@github.com &> /dev/null; errorStatus
-      
+      ssh -oStrictHostKeyChecking=no git@github.org &> /dev/null; errorStatus     
       if [[ "${EXITCODE}" != "0" ]]; then
         error "git@github.org: SSH check failed (Error code ${EXITCODE})"
       else

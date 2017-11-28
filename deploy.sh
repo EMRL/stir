@@ -538,7 +538,7 @@ if [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
 fi
 
 # Disable SSH check for those that will never need it
-if [[ "${NOKEY}"="TRUE" ]]; then
+if [[ "${NOKEY}" == "TRUE" ]]; then
   DISABLESSHCHECK="TRUE"
 fi
 

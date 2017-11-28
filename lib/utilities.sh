@@ -37,9 +37,9 @@ function go() {
     analyticsTest; quickExit
   fi
 
-  # Test SSH key authentication
+  # Test SSH key authentication using the --ssh-check flag
   if [[ "${SSHTEST}" == "1" ]]; then
-    if [[ "${NOKEY}" != "TRUE" ]]; then
+    if [[ "${NOKEY}" != "TRUE" ]] && [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then
       notice "Checking SSH Configuration..."
       sshChk
     else
@@ -140,7 +140,8 @@ function depCheck() {
         if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
           nano "${APPRC}"
           clear; sleep 1
-          quickExit
+          $(basename ${APP}) && exit
+          # exec "/usr/local/bin/deploy ${STARTUP} ${APP}"
         fi
         info "You can change configuration later by editing ${APPRC}"
       fi
