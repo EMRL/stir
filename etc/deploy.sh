@@ -166,8 +166,39 @@
 # Enable the settings below to post on WARNiNG and/or ERROR.
 # SLACKERROR="FALSE"
 
+# Logging
+#
+# Post HTML logs to remote server. This needs to be set to "TRUE" even you
+# are only posting to LOCALHOST.
+# REMOTELOG="TRUE"
+#
+# Define the root url where the deploy log will be accessible with no 
+# trailing slash
+# REMOTEURL="http://deploy.domain.com"
+#
+# If using HTML logs, define which template you'd like to use. HTML templates
+# are stored in separate folders in /etc/deploy/html. The value used below 
+# should be the folder name of your template.
+# REMOTETEMPLATE="default"
+#
+# Post logs via SCP
+# SCPPOST="TRUE"
+# SCPUSER="user"
+# SCPHOST="hostname.com"
+# SCPHOSTPATH="/full/path/to/file"
+#
+# DANGER DANGER: If for some reason you absolutely can't use an SSH key you 
+# can configure your password here
+# SCPPASS="password"
+#
 # Post commit logs to this URL.
 # POSTURL=""
+#
+# If you're posting logs to a place on the same machine you're deploying from,
+# set POSTTOLOCALHOST to "TRUE" and define the path where you want to store 
+# the HTML logs.
+# LOCALHOSTPOST="TRUE"
+# LOCALHOSTPATH="/var/www/production/deploy"
 
 # Google Analytics
 #

@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Option to include web hosting as a line item on monthly reports
+- Remote servers can now host project logs, digests, statistics, and reports
 ### Changed
 - Item descriptions are now editable in reports 
 ### Fixed 

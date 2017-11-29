@@ -16,10 +16,15 @@ function createDigest() {
     AUTHOREMAIL=$(echo $AUTHOR | cut -d\| -f1 | tr -d '[[:space:]]' | tr '[:upper:]' '[:lower:]')
     AUTHORNAME=$(echo $AUTHOR | cut -d\| -f2)
     GRAVATAR="http://www.gravatar.com/avatar/$(echo -n $AUTHOREMAIL | md5sum)?d=404&s=200"
-    IMGFILE="${LOCALHOSTPATH}/${APP}/avatar/$AUTHORNAME.png"
-    # if [[ ! -f $IMGFILE ]]; then # If you wanna cache?
+    if [[ "${SCPPOST}" != "TRUE" ]]; then 
+      IMGFILE="${LOCALHOSTPATH}/${APP}/avatar/$AUTHORNAME.png"
+    else
+      if [[ ! -d "/tmp/avatar" ]]; then
+        umask 077 && mkdir /tmp/avatar &> /dev/null
+      fi
+      IMGFILE="/tmp/avatar/${AUTHORNAME}.png"
+    fi
     curl -fso "${IMGFILE}" "${GRAVATAR}"
-    # fi
   done
 
   # Attempt to get analytics
@@ -59,7 +64,6 @@ function createDigest() {
 
     # Git some stats
     # git log --no-merges  --since="7 days ago" --reverse --stat | grep -Eo "[0-9]{1,} files? changed" | grep -Eo "[0-9]{1,}" | awk "{ sum += \$1 } END { print sum }"
-
     processHTML
 
     if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
