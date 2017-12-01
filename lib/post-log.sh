@@ -12,7 +12,7 @@ function postLog() {
   if [[ "${REMOTELOG}" == "TRUE" ]]; then
 
     # Post to localhost by simply copying files
-    if [[ "${LOCALHOSTPOST}" == "TRUE" ]] && [[ -f "${htmlFile}" ]]; then
+    if [[ "${LOCALHOSTPOST}" == "TRUE" ]] && [[ -n "${LOCALHOSTPATH}" ]] && [[ -f "${htmlFile}" ]]; then
       
       # Check that directory exists
       htmlDir
@@ -71,6 +71,8 @@ function postLog() {
       eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}"
 
       if [[ "${DIGEST}" == "1" ]]; then
+        REMOTEFILE="digest-${EPOCH}.html"
+        DIGESTURL="${REMOTEURL}/${APP}/${REMOTEFILE}"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/avatar"
         eval "${SCPCMD} -r" "/tmp/avatar/" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}"
         # Clean up your mess
@@ -89,6 +91,8 @@ function postLog() {
       fi
 
       if [[ "${REPORT}" == "1" ]]; then
+        REMOTEFILE="${EPOCH}.php"
+        REPORTURL="${REMOTEURL}/${APP}/report/${REMOTEFILE}"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report/css"
         eval "${SCPCMD} -r" "${deployPath}/html/${HTMLTEMPLATE}/report/css" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report"
@@ -107,21 +111,25 @@ function postLog() {
 }
 
 function htmlDir() {
-  if [[ ! -d "${LOCALHOSTPATH}/${APP}" ]]; then
-    mkdir "${LOCALHOSTPATH}/${APP}"
-  fi
+  # Yet another if/then to cover my ass. What a mess!
+  if [[ "${LOCALHOSTPOST}" == "TRUE" ]] && [[ -n "${LOCALHOSTPATH}" ]]; then
 
-  if [[ ! -d "${LOCALHOSTPATH}/${APP}/avatar" ]]; then
-    mkdir "${LOCALHOSTPATH}/${APP}/avatar"
-  fi
-
-  if [[ "${message_state}" == "REPORT" ]]; then 
-    if [[ ! -d "${LOCALHOSTPATH}/${APP}/report" ]]; then
-      mkdir "${LOCALHOSTPATH}/${APP}/report"; errorChk
-      mkdir "${LOCALHOSTPATH}/${APP}/report/css"; errorChk
-      mkdir "${LOCALHOSTPATH}/${APP}/report/js"; errorChk
+    if [[ ! -d "${LOCALHOSTPATH}/${APP}" ]]; then
+      mkdir "${LOCALHOSTPATH}/${APP}"
     fi
-      cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/css" "${LOCALHOSTPATH}/${APP}/report"; errorChk
-      cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/js" "${LOCALHOSTPATH}/${APP}/report"; errorChk
+
+    if [[ ! -d "${LOCALHOSTPATH}/${APP}/avatar" ]]; then
+      mkdir "${LOCALHOSTPATH}/${APP}/avatar"
+    fi
+
+    if [[ "${message_state}" == "REPORT" ]]; then 
+      if [[ ! -d "${LOCALHOSTPATH}/${APP}/report" ]]; then
+        mkdir "${LOCALHOSTPATH}/${APP}/report"; errorChk
+        mkdir "${LOCALHOSTPATH}/${APP}/report/css"; errorChk
+        mkdir "${LOCALHOSTPATH}/${APP}/report/js"; errorChk
+      fi
+        cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/css" "${LOCALHOSTPATH}/${APP}/report"; errorChk
+        cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/js" "${LOCALHOSTPATH}/${APP}/report"; errorChk
+    fi
   fi
 }
