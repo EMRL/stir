@@ -324,7 +324,7 @@ function gitPushProd() {
 
 # Get the stats for this git author, just for fun
 function gitStats() {
-  if [[ "${GITSTATS}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]] && [[ "${PUBLISH}" != "1" ]]; then
+  if [[ "${GITSTATS}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]] && [[ "${PUBLISH}" != "1" ]] && [[ "${APPROVE}" != "1" ]]; then
     console "Calculating..."
     getent passwd "${USER}" | cut -d ':' -f 5 | cut -d ',' -f 1 > "${trshFile}"
     FULLUSER=$(<"${trshFile}")
