@@ -79,37 +79,66 @@ function emailTest() {
     echo "Current user is ${DEV}<br /><br />";
     echo
     echo "<strong>Project Information</strong><br />"
-    echo "Name: ${PROJNAME}<br />"
-    echo "Client: ${PROJCLIENT}<br />"
-    echo "Logo: ${CLIENTLOGO}<br />"
-    echo "Digest email(s): ${DIGESTEMAIL}<br />"
-    echo "Staging URL: ${DEVURL}<br />"
-    echo "Production URL: ${PRODURL}<br /><br />"
-    echo
-    echo "<strong>Git Configuration</strong><br />"
-    echo "Repo: ${REPOHOST}/${REPO}<br />"
-    echo "Master branch: ${MASTER}<br />"
-    echo "Production branch: ${PRODUCTION}<br />"
-    echo "Auto merge: ${AUTOMERGE}<br />"
-    echo "File Stashing: ${STASH}<br />"
-    echo "Force branch checking: ${CHECKBRANCH}<br /><br />"
-    echo
-    echo "<strong>Wordpress Setup</strong><br />"
-    echo "Wordpress root: ${WPROOT}<br />"
-    echo "Wordpress application: ${WPAPP}<br />"
-    echo "Wordpress system: ${WPSYSTEM}<br /><br />"
-    echo
-    echo "<strong>Deployment Configuration</strong><br />"
-    echo "Deploy command: ${DEPLOY}<br />"
-    echo "Disallow deployment: ${DONOTDEPLOY}<br /><br />"
-    echo 
-    echo "<strong>Integration</strong><br />"
-    echo "Task #: ${TASK}<br />"
-    echo "Task user: ${TASKUSER}<br />"
-    echo "Task time: ${ADDTIME}<br />"
-    echo "Post to Slack: ${POSTTOSLACK}<br />"
-    echo "Post errors to Slack: ${SLACKERROR}<br />"
-    echo "Google Analytics ID: ${PROFILEID}";
+   	[[ -n "${PROJNAME}" ]] && echo "Name: ${PROJNAME}<br />"
+    [[ -n "${PROJCLIENT}" ]] && echo "Client: ${PROJCLIENT}<br />"
+    [[ -n "${CLIENTLOGO}" ]] && echo "Logo: ${CLIENTLOGO}<br />"
+    [[ -n "${DIGESTEMAIL}" ]] && echo "Digest email(s): ${DIGESTEMAIL}<br />"
+    [[ -n "${DEVURL}" ]] && echo "Staging URL: ${DEVURL}<br />"
+    [[ -n "${PRODURL}" ]] && echo "Production URL: ${PRODURL}<br />"
+    echo "<br />"
+    # Git
+    if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECKBRANCH}" ]]; then
+	    echo "<strong>Git Configuration</strong><br />"
+	    [[ -n "${REPO}" ]] && echo "Repo: ${REPOHOST}/${REPO}<br />"
+	    [[ -n "${MASTER}" ]] && echo "Master branch: ${MASTER}<br />"
+	    [[ -n "${PRODUCTION}" ]] && echo "Production branch: ${PRODUCTION}<br />"
+	    [[ -n "${AUTOMERGE}" ]] && echo "Auto merge: ${AUTOMERGE}<br />"
+	    [[ -n "${STASH}" ]] && echo "File Stashing: ${STASH}<br />"
+	    [[ -n "${CHECKBRANCH}" ]] && echo "Force branch checking: ${CHECKBRANCH}<br />"
+	    echo "<br />"
+  	fi
+  	# Wordpress
+  	if [[ -n "${WPROOT}" ]] || [[ -n "${WPAPP}" ]] || [[ -n "${WPSYSTEM}" ]]; then
+	    echo "<strong>Wordpress Setup</strong><br />"
+	    [[ -n "${WPROOT}" ]] && echo "Wordpress root: ${WPROOT}<br />"
+	    [[ -n "${WPAPP}" ]] && echo "Wordpress application: ${WPAPP}<br />"
+	    [[ -n "${WPSYSTEM}" ]] && echo "Wordpress system: ${WPSYSTEM}<br />"
+	    echo "<br />"
+	  fi
+  	# Deployment
+	  if [[ -n "${DEPLOY}" ]] || [[ -n "${DONOTDEPLOY}" ]]; then
+	    echo "<strong>Deployment Configuration</strong><br />"
+	    [[ -n "${DEPLOY}" ]] && echo "Deploy command: ${DEPLOY}<br />"
+	    [[ -n "${DONOTDEPLOY}" ]] && echo "Disallow deployment: ${DONOTDEPLOY}<br />"
+	    echo "<br />"
+	  fi
+  	# Integration
+	  if [[ -n "${TASK}" ]] || [[ -n "${TASKUSER}" ]] || [[ -n "${ADDTIME}" ]] || [[ -n "${POSTTOSLACK}" ]] || [[ -n "${SLACKERROR}" ]] || [[ -n "${PROFILEID}" ]] || [[ -n "${POSTURL}" ]]; then
+	    echo "<strong>Integration</strong><br />"
+	    [[ -n "${TASK}" ]] && echo "Task #: ${TASK}<br />"
+	    [[ -n "${TASKUSER}" ]] && echo "Task user: ${TASKUSER}<br />"
+	    [[ -n "${ADDTIME}" ]] && echo "Task time: ${ADDTIME}<br />"
+	    [[ -n "${POSTTOSLACK}" ]] && echo "Post to Slack: ${POSTTOSLACK}<br />"
+	    [[ -n "${SLACKERROR}" ]] && echo "Post errors to Slack: ${SLACKERROR}<br />"
+	    [[ -n "${POSTURL}" ]] && echo "Webhook URL: ${POSTURL}<br />"
+	    [[ -n "${PROFILEID}" ]] && echo "Google Analytics ID: ${PROFILEID}<br />"
+	    echo "<br />"
+	  fi
+	  # Logging
+	  if [[ -n "${REMOTELOG}" ]] || [[ -n "${REMOTEURL}" ]] || [[ -n "${EXPIRELOGS}" ]] || [[ -n "${LOCALHOSTPOST}" ]] || [[ -n "${LOCALHOSTPATH}" ]] || [[ -n "${SCPPOST}" ]] || [[ -n "${SCPUSER}" ]] || [[ -n "${SCPHOST}" ]] || [[ -n "${SCPHOSTPATH}" ]] || [[ -n "${SCPPASS}" ]] || [[ -n "${REMOTETEMPLATE}" ]] || [[ -n "${REMOTETEMPLATE}" ]]; then
+			echo "<strong>Logging</strong><br />"
+			[[ -n "${REMOTELOG}" ]] && echo "Web logs: ${REMOTELOG}<br />"
+			[[ -n "${REMOTEURL}" ]] && echo "Address: ${REMOTEURL} <br />"
+			[[ -n "${EXPIRELOGS}" ]] && echo "Log expiration: ${EXPIRELOGS} days <br />"
+			[[ -n "${LOCALHOSTPOST}" ]] && echo "Save logs locally: ${LOCALHOSTPOST}<br />"
+			[[ -n "${LOCALHOSTPATH}" ]] && echo "Path to local logs: ${}LOCALHOSTPATH<br />"
+			[[ -n "${SCPPOST}" ]] && echo "Post with SCP/SSH: ${SCPPOST}<br />"
+			[[ -n "${SCPUSER}" ]] && echo "SCP user: ${SCPUSER}<br />"
+			[[ -n "${SCPHOST}" ]] && echo "Remote log host: ${SCPHOST}<br />"
+			[[ -n "${SCPHOSTPATH}" ]] && echo "Remote log path: ${SCPHOSTPATH}<br />"
+			[[ -n "${REMOTETEMPLATE}" ]] && echo "Log template: ${REMOTETEMPLATE}<br />"
+			echo "<br />"
+		fi
     ) | "${MAILPATH}"/sendmail -t
     # Send Text mail
     (
@@ -125,41 +154,73 @@ function emailTest() {
     echo
     echo "Project Information"
     echo "-------------------"
-    echo "Name: ${PROJNAME}"
-    echo "Client: ${PROJCLIENT}"
-    echo "Logo: ${CLIENTLOGO}"
-    echo "Digest email(s): ${DIGESTEMAIL}"
-    echo "Staging URL: ${DEVURL}"
-    echo "Production URL: ${PRODURL}"
-    echo
-    echo "Git Configuration"
-    echo "-----------------"
-    echo "Repo: ${REPOHOST}/${REPO}"
-    echo "Master branch: ${MASTER}"
-    echo "Production branch: ${PRODUCTION}"
-    echo "Auto merge: ${AUTOMERGE}"
-    echo "File Stashing: ${STASH}"
-    echo "Force branch checking: ${CHECKBRANCH}"
-    echo
-    echo "Wordpress Setup"
-    echo "-----------------------"
-    echo "Wordpress root: ${WPROOT}"
-    echo "Wordpress application: ${WPAPP}"
-    echo "Wordpress system: ${WPSYSTEM}"
-    echo
-    echo "Deployment Configuration"
-    echo "------------------------"
-    echo "Deploy command: ${DEPLOY}"
-    echo "Disallow deployment: ${DONOTDEPLOY}"
+   	[[ -n "${PROJNAME}" ]] && echo "Name: ${PROJNAME}"
+    [[ -n "${PROJCLIENT}" ]] && echo "Client: ${PROJCLIENT}"
+    [[ -n "${CLIENTLOGO}" ]] && echo "Logo: ${CLIENTLOGO}"
+    [[ -n "${DIGESTEMAIL}" ]] && echo "Digest email(s): ${DIGESTEMAIL}"
+    [[ -n "${DEVURL}" ]] && echo "Staging URL: ${DEVURL}"
+    [[ -n "${PRODURL}" ]] && echo "Production URL: ${PRODURL}"
     echo 
-    echo "Integration"
-    echo "-----------"
-    echo "Task #: ${TASK}"
-    echo "Task user: ${TASKUSER}"
-    echo "Task time: ${ADDTIME}"
-    echo "Post to Slack: ${POSTTOSLACK}"
-    echo "Post errors to Slack: ${SLACKERROR}"
-    echo "Google Analytics ID: ${PROFILEID}";
+    # Git
+    if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECKBRANCH}" ]]; then
+	    echo "Git Configuration"
+	    echo "-----------------"
+	    [[ -n "${REPO}" ]] && echo "Repo: ${REPOHOST}/${REPO}"
+	    [[ -n "${MASTER}" ]] && echo "Master branch: ${MASTER}"
+	    [[ -n "${PRODUCTION}" ]] && echo "Production branch: ${PRODUCTION}"
+	    [[ -n "${AUTOMERGE}" ]] && echo "Auto merge: ${AUTOMERGE}"
+	    [[ -n "${STASH}" ]] && echo "File Stashing: ${STASH}"
+	    [[ -n "${CHECKBRANCH}" ]] && echo "Force branch checking: ${CHECKBRANCH}"
+	    echo
+  	fi
+  	# Wordpress
+  	if [[ -n "${WPROOT}" ]] || [[ -n "${WPAPP}" ]] || [[ -n "${WPSYSTEM}" ]]; then
+	    echo "Wordpress Setup"
+	    echo "---------------"
+	    [[ -n "${WPROOT}" ]] && echo "Wordpress root: ${WPROOT}"
+	    [[ -n "${WPAPP}" ]] && echo "Wordpress application: ${WPAPP}"
+	    [[ -n "${WPSYSTEM}" ]] && echo "Wordpress system: ${WPSYSTEM}"
+	    echo
+	  fi
+  	# Deployment
+	  if [[ -n "${DEPLOY}" ]] || [[ -n "${DONOTDEPLOY}" ]]; then
+	    echo "Deployment Configuration"
+	    echo "------------------------"
+	    [[ -n "${DEPLOY}" ]] && echo "Deploy command: ${DEPLOY}"
+	    [[ -n "${DONOTDEPLOY}" ]] && echo "Disallow deployment: ${DONOTDEPLOY}"
+	    echo
+	  fi
+  	# Integration
+	  if [[ -n "${TASK}" ]] || [[ -n "${TASKUSER}" ]] || [[ -n "${ADDTIME}" ]] || [[ -n "${POSTTOSLACK}" ]] || [[ -n "${SLACKERROR}" ]] || [[ -n "${PROFILEID}" ]] || [[ -n "${POSTURL}" ]]; then
+	    echo "Integration"
+	    echo "-----------"
+	    [[ -n "${TASK}" ]] && echo "Task #: ${TASK}"
+	    [[ -n "${TASKUSER}" ]] && echo "Task user: ${TASKUSER}"
+	    [[ -n "${ADDTIME}" ]] && echo "Task time: ${ADDTIME}"
+	    [[ -n "${POSTTOSLACK}" ]] && echo "Post to Slack: ${POSTTOSLACK}"
+	    [[ -n "${SLACKERROR}" ]] && echo "Post errors to Slack: ${SLACKERROR}"
+	    [[ -n "${POSTURL}" ]] && echo "Webhook URL: ${POSTURL}"
+	    [[ -n "${PROFILEID}" ]] && echo "Google Analytics ID: ${PROFILEID}"
+	    echo
+	  fi
+	  # Logging
+	  if [[ -n "${REMOTELOG}" ]] || [[ -n "${REMOTEURL}" ]] || [[ -n "${EXPIRELOGS}" ]] || [[ -n "${LOCALHOSTPOST}" ]] || [[ -n "${LOCALHOSTPATH}" ]] || [[ -n "${SCPPOST}" ]] || [[ -n "${SCPUSER}" ]] || [[ -n "${SCPHOST}" ]] || [[ -n "${SCPHOSTPATH}" ]] || [[ -n "${SCPPASS}" ]] || [[ -n "${REMOTETEMPLATE}" ]] || [[ -n "${REMOTETEMPLATE}" ]]; then
+			echo "Logging"
+			echo "-------"
+			[[ -n "${REMOTELOG}" ]] && echo "Web logs: ${REMOTELOG}"
+			[[ -n "${REMOTEURL}" ]] && echo "Address: ${REMOTEURL}"
+			[[ -n "${EXPIRELOGS}" ]] && echo "Log expiration: ${EXPIRELOGS} days"
+			[[ -n "${LOCALHOSTPOST}" ]] && echo "Save logs locally: ${LOCALHOSTPOST}"
+			[[ -n "${LOCALHOSTPATH}" ]] && echo "Path to local logs: ${}LOCALHOSTPATH"
+			[[ -n "${SCPPOST}" ]] && echo "Post with SCP/SSH: ${SCPPOST}"
+			[[ -n "${SCPUSER}" ]] && echo "SCP user: ${SCPUSER}"
+			[[ -n "${SCPHOST}" ]] && echo "Remote log host: ${SCPHOST}"
+			[[ -n "${SCPHOSTPATH}" ]] && echo "Remote log path: ${SCPHOSTPATH}"
+			[[ -n "${REMOTETEMPLATE}" ]] && echo "Log template: ${REMOTETEMPLATE}s"
+			echo
+		fi
+
+
     ) | "${MAILPATH}"/sendmail -t
   fi
 
