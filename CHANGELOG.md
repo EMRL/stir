@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Remote servers can now host project logs, digests, statistics, and reports
 ### Changed
 - Item descriptions are now editable in reports 
+- Cleaned up email output generated using `deploy --email-test`
 ### Fixed 
 - Fixed a bug that kept SSH keys from being properly checked 
 
