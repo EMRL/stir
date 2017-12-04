@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Cleaned up email output generated using `deploy --email-test`
 ### Fixed 
 - Fixed a bug that kept SSH keys from being properly checked 
+- Added a workaround for Google potentially displaying over 100% of user sessions as new
 
 ## [3.6.5] - 11-17-2017
 ### Added
