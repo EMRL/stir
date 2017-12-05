@@ -46,7 +46,7 @@ function gitStart() {
   activeChk
 
   # Try to clear out old git processes owned by this user, if they exist
-  killall -9 git &>> /dev/null || true
+  pkill -f git &>> /dev/null || true
 }
 
 # Checkout master
