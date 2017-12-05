@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# install.sh
+# doinst.sh
 #
 ###############################################################################
 # Installs and configures deploy 
@@ -49,12 +49,12 @@ function check_os() {
 
 function check_program() {
   printf "%-40s" "Checking for ${1}..."
-  whereis $1 >/dev/null 2>&1 && echo "${YES}" || { echo "${NOT}"; message+="${1} "; }
+  command -v $1 >/dev/null 2>&1 && echo "${YES}" || { echo "${NOT}"; message+="${1} "; }
 }
 
 function check_optional() {
   printf "%-40s" "Checking for ${1}..."
-  whereis $1 >/dev/null 2>&1 && echo "${YES}" || { echo "${NOT}"; message+="${1} "; }
+  command -v $1 >/dev/null 2>&1 && echo "${YES}" || { echo "${NOT}"; message+="${1} "; }
 }
 
 function errorChk() {
