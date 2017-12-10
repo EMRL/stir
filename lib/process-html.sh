@@ -8,14 +8,15 @@
 trace "Loading html handling"
 
 function processHTML() {
-  # Clean out the variables stuff we don't need
+  # Clean out the stuff we don't need
   [[ -z "${DEVURL}" ]] && sed -i '/<strong>Staging URL:/d' "${htmlFile}"
   [[ -z "${PRODURL}" ]] && sed -i '/PRODURL/d' "${htmlFile}"
+  [[ -z "${UPTIME}" ]] && sed -i '/UPTIME/d' "${htmlFile}"
+  [[ -z "${LATENCY}" ]] && sed -i '/LATENCY/d' "${htmlFile}"  
   [[ -z "${PROJCLIENT}" ]] && sed -i 's/()//' "${htmlFile}"
   [[ -z "${CLIENTLOGO}" ]] && sed -i '/CLIENTLOGO/d' "${htmlFile}"
   [[ -z "${CLIENTCONTACT}" ]] && sed -i '/CLIENTCONTACT/d' "${htmlFile}"
   [[ -z "${notes}" ]] && sed -i '/NOTES/d' "${htmlFile}"
-
   [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]] && sed -i '/ANALYTICS/d' "${htmlFile}"
   [[ -z "${SMOOCHID}" ]] && sed -i '/SMOOCHID/d' "${htmlFile}"
 
@@ -59,5 +60,7 @@ function processHTML() {
     -e "s^{{DIGESTCOVER}}^${DIGESTCOVER}^g" \
     -e "s^{{WEEKOF}}^${WEEKOF}^g" \
     -e "s^{{LASTMONTH}}^${LASTMONTH}^g" \
+    -e "s^{{UPTIME}}^${UPTIME}^g" \
+    -e "s^{{LATENCY}}^${LATENCY}^g" \
     "${htmlFile}"        
 }

@@ -174,6 +174,7 @@ function htmlBuild() {
   # Insert the full deployment logfile & button it all up
   if [[ "${REPORT}" != "1" ]]; then
     cat "${logFile}" "${deployPath}/html/${HTMLTEMPLATE}/footer.html" >> "${htmlFile}"
+    # There's probably a better place for this.
     processHTML
   fi
 }
