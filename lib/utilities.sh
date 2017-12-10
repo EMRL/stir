@@ -37,6 +37,11 @@ function go() {
     analyticsTest; quickExit
   fi
 
+  # Test server monitoring
+  if [[ "${MONITORTEST}" == "1" ]]; then
+    server_monitor_test; quickExit
+  fi
+
   # Test SSH key authentication using the --ssh-check flag
   if [[ "${SSHTEST}" == "1" ]]; then
     if [[ "${NOKEY}" != "TRUE" ]] && [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then
@@ -95,6 +100,9 @@ function go() {
   if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]] && [[ -f "${WORKPATH}/${APP}/.approved" ]]; then 
     notice "Processing outstanding approval..."
   fi
+
+  # Weird spot for this I know
+  server_monitor
 }
 
 function fixIndex() {

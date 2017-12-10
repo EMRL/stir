@@ -200,20 +200,39 @@
 # LOCALHOSTPOST="TRUE"
 # LOCALHOSTPATH="/var/www/production/deploy"
 
+# Server Monitoring
+#
+# Uptime and average latency can be included in logs, digests, and reports when 
+# integrating with PHP Server Monitor, and an add-on API. 
+# See https://github.com/EMRL/deploy/wiki/Integration for more information. 
+#
+# Full API URL
+# MONITORURL="https://your.phpservermonitor.com/api/monitorapi.php"
+#
+# Email/password of the user that will access the API. Password can be stored in
+# a file outside of the project repo for security reasons
+# MONITORUSER="user@domain.com"
+# MONITORPASS="/path/to/password/file"
+# 
+# Server ID to monitor. When viewing the server on your web console, your URL will
+# look something like https://monitor.com/?&mod=server&action=view&id=3 - in this 
+# case SERVERID would be "3" (notice the &id=3 at the end of the URL)
+# SERVERID="###"
+
 # Google Analytics
 #
 # API credentials
 # CLIENTID="#############################################.apps.googleusercontent.com"
 # CLIENTSECRET="########################"
 # REDIRECTURI="http://localhost"
-
+#
 # OAuth authorization will expire after one hour, but will be updated when needed
 # if the tokens below are configured correctly
 # AUTHORIZATIONCODE="##############################################"
-
+#
 # Tokens
 # ACCESSTOKEN="#################################################################################################################################"
 # REFRESHTOKEN="##################################################################"
-
+#
 # Google Analytics ID
 # PROFILEID="########"

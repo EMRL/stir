@@ -124,6 +124,14 @@ function emailTest() {
 	    [[ -n "${PROFILEID}" ]] && echo "Google Analytics ID: ${PROFILEID}<br />"
 	    echo "<br />"
 	  fi
+    # Server monitoring
+    if [[ -n "${MONITORURL}" ]] || [[ -n "${MONITORUSER}" ]] || [[ -n "${SERVERID}" ]]; then
+      echo "<strong>Server Monitoring</strong><br />"
+      [[ -n "${TASK}" ]] && echo "Monitor URL: ${MONITORURL}<br />"
+      [[ -n "${TASK}" ]] && echo "User: ${MONITORUSER}<br />"
+      [[ -n "${TASK}" ]] && echo "Server ID: ${SERVERID}<br />"
+      echo "<br />"
+    fi
 	  # Logging
 	  if [[ -n "${REMOTELOG}" ]] || [[ -n "${REMOTEURL}" ]] || [[ -n "${EXPIRELOGS}" ]] || [[ -n "${LOCALHOSTPOST}" ]] || [[ -n "${LOCALHOSTPATH}" ]] || [[ -n "${SCPPOST}" ]] || [[ -n "${SCPUSER}" ]] || [[ -n "${SCPHOST}" ]] || [[ -n "${SCPHOSTPATH}" ]] || [[ -n "${SCPPASS}" ]] || [[ -n "${REMOTETEMPLATE}" ]] || [[ -n "${REMOTETEMPLATE}" ]]; then
 			echo "<strong>Logging</strong><br />"
@@ -203,6 +211,15 @@ function emailTest() {
 	    [[ -n "${PROFILEID}" ]] && echo "Google Analytics ID: ${PROFILEID}"
 	    echo
 	  fi
+    # Server monitoring
+    if [[ -n "${MONITORURL}" ]] || [[ -n "${MONITORUSER}" ]] || [[ -n "${SERVERID}" ]]; then
+      echo "Server Monitoring"
+      echo "-----------------"
+      [[ -n "${TASK}" ]] && echo "Monitor URL: ${MONITORURL}"
+      [[ -n "${TASK}" ]] && echo "User: ${MONITORUSER}"
+      [[ -n "${TASK}" ]] && echo "Server ID: ${SERVERID}"
+      echo
+    fi
 	  # Logging
 	  if [[ -n "${REMOTELOG}" ]] || [[ -n "${REMOTEURL}" ]] || [[ -n "${EXPIRELOGS}" ]] || [[ -n "${LOCALHOSTPOST}" ]] || [[ -n "${LOCALHOSTPATH}" ]] || [[ -n "${SCPPOST}" ]] || [[ -n "${SCPUSER}" ]] || [[ -n "${SCPHOST}" ]] || [[ -n "${SCPHOSTPATH}" ]] || [[ -n "${SCPPASS}" ]] || [[ -n "${REMOTETEMPLATE}" ]] || [[ -n "${REMOTETEMPLATE}" ]]; then
 			echo "Logging"

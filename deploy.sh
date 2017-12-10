@@ -91,7 +91,8 @@ read -r var optstring options logFile wpFile coreFile postFile trshFile statFile
   AUTHORNAME GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail MINAUSER \
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX QUEUED \
   DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile CURMTH \
-  CURYR PRVMTH PRVYR LASTDY TMP <<< ""
+  CURYR PRVMTH PRVYR LASTDY TMP MONITORURL MONITORUSER MONITORPASS SERVERID \
+  MONITORHOURS LATENCY UPTIME MONITORTEST MONITORAPI <<< ""
 echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
   ${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
   ${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -106,7 +107,9 @@ echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile
   ${digestSendmail} ${MINAUSER} ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} 
   ${REMOTEFILE} ${GREETING} ${LOGSUFFIX} ${QUEUED} ${DISABLESSHCHECK}
   ${URL} ${CODE} ${DEPLOYPID} ${DEPLOYTEST} ${payload} ${reportFile} ${CURMTH} ${CURYR} 
-  ${PRVMTH} ${PRVYR} ${LASTDY} ${TMP}" > /dev/null
+  ${PRVMTH} ${PRVYR} ${LASTDY} ${TMP} ${MONITORURL} ${MONITORUSER} ${MONITORPASS} 
+  ${SERVERID} ${MONITORHOURS} ${LATENCY} ${UPTIME} ${MONITORTEST} 
+  ${MONITORAPI}" > /dev/null
 
 # Options
 function flags() {
@@ -143,6 +146,7 @@ Other Options:
   --slack-test           Test Slack integration
   --post-test            Test webhook integration  
   --analytics-test       Test Google Analytics authentication
+  --monitor-test         Test production server uptime and latency monitoring
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables 
 
@@ -204,6 +208,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --email-test) EMAILTEST="1" ;;
     --post-test) POSTTEST="1" ;;
     --analytics-test) ANALYTICSTEST="1" ;; 
+    --monitor-test) MONITORTEST="1" ;;
     --stats) PROJSTATS="1" ;;
     --unlock) UNLOCK="1" ;;
     --repair) REPAIR="1"; FORCE="1"; MERGE="1"; STASH="TRUE"; VERBOSE="1" ;;
