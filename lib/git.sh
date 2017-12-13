@@ -330,6 +330,6 @@ function gitStats() {
     FULLUSER=$(<"${trshFile}")
     git log --author="${FULLUSER}" --pretty=tformat: --numstat | \
     # The single quotes were messing with trying to line break this one
-    gawk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf "Your total lines of code contributed so far: %s\n(+%s added | -%s deleted)\n",loc,add,subs }' -
+    awk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf "Your total lines of code contributed so far: %s\n(+%s added | -%s deleted)\n",loc,add,subs }' -
   fi
 } 
