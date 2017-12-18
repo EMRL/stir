@@ -41,7 +41,7 @@ function analytics() {
   if [[ "${RND}" == "1" ]]; then
     # Sometimes Google reports confusion percentages that exceed 
     # 100%, let's kill those results
-    if [[ "${}" -gt "100" ]]; then
+    if [[ "${SIZE}" -gt "100" ]]; then
       analyticsFail
     elif [[ "${SIZE}" -gt "50" ]]; then
       ANALYTICSMSG="Last week <strong>${SIZE}</strong> percent of your users were first time visitors. That's great!"

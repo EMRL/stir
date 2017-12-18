@@ -48,7 +48,7 @@ function server_monitor_test() {
 }
 
 function server_monitor_log() {
-	# :oad the password and setup the curl command
+	# Load the password and setup the curl command
 	MONITORPASS=$(<$MONITORPASS)
   MONITORAPI="${MONITORURL}?tag=serveruptime&email=${MONITORUSER}&app_password=${MONITORPASS}&server_id=${SERVERID}&HoursUnit=${MONITORHOURS}"
 	curl -s --request GET "${MONITORAPI}" -o "${trshFile}"
@@ -59,6 +59,10 @@ function server_monitor_log() {
 	UPTIME="$(sed 's/^[^:]*://g' <<< "${UPTIME}")"
 	# Round to two decimal places
 	UPTIME="$(printf '%0.2f\n' "${UPTIME}")"
+	# Lop off the .00 if we're at 100%
+	if [[ "${UPTIME}" == "100.00" ]]; then
+		UPTIME="100"
+	fi
 
 	# Latency
 	LATENCY="$(grep -Po '"average_latency":.*?[^\\]",' ${trshFile})"
