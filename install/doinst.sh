@@ -75,7 +75,7 @@ else
 fi
 
 # Declare dependencies
-dependencies=(awk cat curl echo eval gawk git grep pkill printf read sed sendmail sleep tput wget)
+dependencies=(awk cat curl echo eval git grep pkill printf read sed sendmail sleep tput wget)
 
 # Declare optional stuff
 options=(gitchart grunt npm scp ssh sshpass wp)
@@ -110,7 +110,7 @@ for k in "${options[@]}" ; do
 done
 
 if [[ -n "${message}" ]] ; then
-  echo "${fg_red}WARNING: Some extended functions will not be available${reset}"
+  echo "${fg_red}WARNING: Some extended functionality may not be available${reset}"
   # echo ${message};
 fi
 
