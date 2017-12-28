@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Server health information now included in email/html logs via integration with [PHP Server Monitor](http://www.phpservermonitor.org/) using this [API](https://github.com/skydiver/PHP-Server-Monitor-API)
 - Option to include web hosting as a line item on monthly reports
 - Remote servers can now host project logs, digests, statistics, and reports
 ### Changed
