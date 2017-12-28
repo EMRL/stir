@@ -17,9 +17,12 @@ function server_monitor() {
 			# which is dealing with the last calendar month, but oh well we get what we pay
 			# for. The PHP Monitor API has no ability to look up results in that way 
 			MONITORHOURS="720"
-		else
-			# Default to last 7 days
+		elif [[ "${DIGEST}" == "1" ]] || [[ "${PROJSTATS}" == "1" ]]; then
+			# Digests and reports should average the 7 days
 			MONITORHOURS="168"
+		else
+			# Anything else defaults to 24 hours
+			MONITORHOURS="24"
 		fi
 		server_monitor_log
 		trace "Uptime: ${UPTIME} / Latency: ${LATENCY} (avg. over last ${MONITORHOURS} hours)"
@@ -39,10 +42,10 @@ function server_monitor_test() {
   fi
 
   # Check last 7 days for the sake of the test
-	MONITORHOURS="168"
+	MONITORHOURS="24"
 	server_monitor_log
-  console "API: ${MONITORAPI}"	
-	notice "Results (last 7 days)"
+  	console "API: ${MONITORAPI}"	
+	notice "Results (last 24 hours)"
 	console "Uptime: ${UPTIME}%"
 	console "Latency: ${LATENCY}s"
 }
