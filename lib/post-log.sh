@@ -91,7 +91,7 @@ function postLog() {
       fi
 
       if [[ "${REPORT}" == "1" ]]; then
-        REMOTEFILE="${EPOCH}.php"
+        REMOTEFILE="${CURYR}-${CURMTH}.php"
         REPORTURL="${REMOTEURL}/${APP}/report/${REMOTEFILE}"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report/css"
