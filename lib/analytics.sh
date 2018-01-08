@@ -82,6 +82,7 @@ function analyticsData() {
   SIZE="$(printf "%.0f\n" "${RESULT}")"
 }
 
+# If no other results are worht displaying, fall back to displaying hits
 function analyticsFail() {
   METRIC="hits"
   analyticsData
