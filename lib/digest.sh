@@ -66,8 +66,13 @@ function createDigest() {
     # git log --no-merges  --since="7 days ago" --reverse --stat | grep -Eo "[0-9]{1,} files? changed" | grep -Eo "[0-9]{1,}" | awk "{ sum += \$1 } END { print sum }"
     processHTML
 
+    # Strip out useless analytics results
     if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
       sed -i '/ANALYTICS/d' "${htmlFile}"
+    else
+      if [[ "${METRIC}" == "hits" ]] && [[ "${RESULT}" -lt "499" ]]; then
+        sed -i '/ANALYTICS/d' "${htmlFile}"
+      fi
     fi   
 
     # Get the email payload ready
