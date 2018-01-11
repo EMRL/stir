@@ -92,7 +92,8 @@ read -r var optstring options logFile wpFile coreFile postFile trshFile statFile
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX QUEUED \
   DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile CURMTH \
   CURYR PRVMTH PRVYR LASTDY TMP MONITORURL MONITORUSER MONITORPASS SERVERID \
-  MONITORHOURS LATENCY UPTIME MONITORTEST MONITORAPI <<< ""
+  MONITORHOURS LATENCY UPTIME MONITORTEST MONITORAPI RELEASE RELEASENOTES \
+  RELEASEURL <<< ""
 echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
   ${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
   ${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -109,7 +110,7 @@ echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile
   ${URL} ${CODE} ${DEPLOYPID} ${DEPLOYTEST} ${payload} ${reportFile} ${CURMTH} ${CURYR} 
   ${PRVMTH} ${PRVYR} ${LASTDY} ${TMP} ${MONITORURL} ${MONITORUSER} ${MONITORPASS} 
   ${SERVERID} ${MONITORHOURS} ${LATENCY} ${UPTIME} ${MONITORTEST} 
-  ${MONITORAPI}" > /dev/null
+  ${MONITORAPI} ${RELEASE} ${RELEASENOTES} ${RELEASEURL}" > /dev/null
 
 # Options
 function flags() {
