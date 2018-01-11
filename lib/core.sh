@@ -7,10 +7,11 @@
 ###############################################################################
 
 function coreApp() {
-  depCheck    # Check that required commands are available
-  gitStart    # Check for a valid git project and get set up
-  lock        # Create lock file
-  go          # Start a deployment work session
+  depCheck      # Check that required commands are available
+  release_check # Check for newer version at Github
+  gitStart      # Check for a valid git project and get set up
+  lock          # Create lock file
+  go            # Start a deployment work session
   if [[ "${DIGEST}" == "1" ]]; then
     createDigest
   elif [[ "${REPORT}" == "1" ]]; then
