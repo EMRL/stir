@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.6.6] - 01-13-2018
 ### Added
 - Server health information now included in email/html logs via integration with [PHP Server Monitor](http://www.phpservermonitor.org/) using this [API](https://github.com/skydiver/PHP-Server-Monitor-API)
 - Option to include web hosting as a line item on monthly reports
@@ -179,7 +179,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Old monolithic script rewritten
 
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.6.5...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.6.6...HEAD
+[3.6.8]: https://github.com/EMRL/deploy/compare/v3.6.7...3.6.8
+[3.6.7]: https://github.com/EMRL/deploy/compare/v3.6.6...3.6.7
+[3.6.6]: https://github.com/EMRL/deploy/compare/v3.6.5...3.6.6
 [3.6.5]: https://github.com/EMRL/deploy/compare/v3.6.4...3.6.5
 [3.6.4]: https://github.com/EMRL/deploy/compare/v3.6...v3.6.4
 [3.6]: https://github.com/EMRL/deploy/compare/v3.5.7...v3.6
