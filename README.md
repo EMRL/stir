@@ -1,17 +1,15 @@
 # Deploy
 
-[![release](https://img.shields.io/badge/release-v3.6.5-blue.svg?style=flat)](https://github.com/EMRL/deploy/releases/latest)
+[![release](https://img.shields.io/badge/release-v3.6.6-blue.svg?style=flat)](https://github.com/EMRL/deploy/releases/latest)
 [![Build Status](https://travis-ci.org/EMRL/deploy.svg?branch=master)](https://travis-ci.org/EMRL/deploy)
 
 `deploy` is a shell script designed to speed up and automate project deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
 
-[![asciicast](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP.png)](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP?t=0)
+[Changelog](https://github.com/EMRL/deploy/blob/master/CHANGELOG.md)
 
 This script is in daily use at [EMRL](http://emrl.com), an advertising, design, and development agency in northern California. If you have any questions, please feel free to contact us.
 
 Please note that our documentation here is nearly useless, and there is quite a bit of setup involved in getting this running reliably. A full setup guide is coming soon™.
-
-[View Changelog](https://github.com/EMRL/deploy/blob/master/CHANGELOG.md)
 
 ## Startup Options
 
@@ -51,6 +49,8 @@ Other Options:
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables 
 ```
+
+[![asciicast](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP.png)](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP?t=0)
 
 ## How It Works
 
