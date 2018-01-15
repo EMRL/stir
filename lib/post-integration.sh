@@ -8,7 +8,7 @@
 trace "Loading integration"
 
 # Compile commit message with other stuff for integration
-function buildLog() {
+function build_log() {
   if [[ "${DIGEST}" != "1" ]]; then 
     # OK let's grab the short version of the commit hash
     COMMITHASH="$(git rev-parse --short HEAD)"; 
@@ -86,7 +86,7 @@ function postCommit() {
   if [[ -n "$POSTEMAIL" ]]; then
     # Is it a valid email address? Ghetto check but better than nothing
     if [[ "$POSTEMAIL" == ?*@?*.?* ]]; then
-      buildLog; mailPost
+      build_log; mailPost
     else
       trace "Integration email address ${POSTEMAIL} does not look valid"
     fi

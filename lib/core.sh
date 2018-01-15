@@ -6,16 +6,16 @@
 # The core application
 ###############################################################################
 
-function coreApp() {
-  depCheck      # Check that required commands are available
-  release_check # Check for newer version at Github
-  gitStart      # Check for a valid git project and get set up
-  lock          # Create lock file
-  go            # Start a deployment work session
+function core() {
+  dependency_check  # Check that required commands are available
+  release_check     # Check for newer version at Github
+  gitStart          # Check for a valid git project and get set up
+  lock              # Create lock file
+  go                # Start a deployment work session
   if [[ "${DIGEST}" == "1" ]]; then
-    createDigest
+    create_digest
   elif [[ "${REPORT}" == "1" ]]; then
-    createReport
+    create_report
   else
     srvCheck    # Check that servers are up and running
     if [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then

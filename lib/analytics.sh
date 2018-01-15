@@ -28,13 +28,13 @@ function analytics() {
   ACCESSTOKEN="$(awk -F\" '{print $4}' "${trshFile}")"
 
   # Grab data from Google
-  analyticsData
+  ga_data
 
   if [[ "${RND}" == "0" ]]; then
     if [[ "${RESULT}" -gt "499" ]]; then
       ANALYTICSMSG="You had <strong>${SIZE}</strong> hits in the last week. Awesome!"
     else
-      analyticsFail
+      ga_fail
     fi
   fi
 
@@ -42,7 +42,7 @@ function analytics() {
     # Sometimes Google reports confusion percentages that exceed 
     # 100%, let's kill those results
     if [[ "${SIZE}" -gt "100" ]]; then
-      analyticsFail
+      ga_fail
     elif [[ "${SIZE}" -gt "50" ]]; then
       ANALYTICSMSG="Last week <strong>${SIZE}</strong> percent of your users were first time visitors. That's great!"
     else
@@ -55,7 +55,7 @@ function analytics() {
     if [[ "${SIZE}" -ge "30" ]]; then
       ANALYTICSMSG="You had traffic from <strong>${SIZE}</strong> organic searches last week. Not bad!"
     else
-      analyticsFail     
+      ga_fail     
     fi
   fi
 
@@ -64,7 +64,7 @@ function analytics() {
     if [[ "${RESULT}" -gt "2" ]]; then
       ANALYTICSMSG="Last week visitors averaged over <strong>${RESULT}</strong> minutes each on your site. Nice!"
     else
-      analyticsFail
+      ga_fail
     fi
   fi
 
@@ -72,24 +72,24 @@ function analytics() {
     if [[ "${SIZE}" -ge "20" ]]; then
       ANALYTICSMSG="Your site had <strong>${SIZE}</strong> social media interactions in the last week!"
     else
-      analyticsFail
+      ga_fail
     fi
   fi
 }
 
-function analyticsData() {
+function ga_data() {
   RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
   SIZE="$(printf "%.0f\n" "${RESULT}")"
 }
 
 # If no other results are worht displaying, fall back to displaying hits
-function analyticsFail() {
+function ga_fail() {
   METRIC="hits"
   analyticsData
   ANALYTICSMSG="You had <strong>${SIZE}</strong> hits in the last week."
 }
 
-function analyticsTest() {
+function ga_test() {
   emptyLine
   if [[ -z "${CLIENTID}" ]] || [[ -z "${CLIENTSECRET}" ]];  then
     warning "Define API project"

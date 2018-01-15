@@ -57,7 +57,7 @@ function check_optional() {
   command -v $1 >/dev/null 2>&1 && echo "${YES}" || { echo "${NOT}"; message+="${1} "; }
 }
 
-function errorChk() {
+function error_check() {
   EXITCODE=$?; 
   if [[ "${EXITCODE}" != "0" ]]; then 
     echo "Error ${EXITCODE}: deploy not installed."
@@ -119,27 +119,27 @@ echo; sleep 1
 if [[ ! -d /etc/deploy ]] && [[ ! -d /etc/deploy/lib ]] && [[ ! -d /etc/deploy/crontab ]]; then
   echo "Creating directories"
   if [[ ! -d /etc/deploy ]]; then
-    sudo mkdir /etc/deploy; errorChk
+    sudo mkdir /etc/deploy; error_check
   fi
 
   if [[ ! -d /etc/deploy/lib ]]; then
-    sudo mkdir /etc/deploy/lib; errorChk
+    sudo mkdir /etc/deploy/lib; error_check
   fi
 
   if [[ ! -d /etc/deploy/lib/crontab ]]; then
-    sudo mkdir /etc/deploy/lib/crontab; errorChk
+    sudo mkdir /etc/deploy/lib/crontab; error_check
   fi
 fi
 
 echo "Installing configuration files"
-sudo cp -R etc/* /etc/deploy; errorChk
-sudo cp etc/.deployrc /etc/deploy; errorChk
+sudo cp -R etc/* /etc/deploy; error_check
+sudo cp etc/.deployrc /etc/deploy; error_check
 
 if [[ ! -f /etc/deploy/deploy.conf ]]; then
-  cp /etc/deploy/deploy-example.conf /etc/deploy/deploy.conf; errorChk
+  cp /etc/deploy/deploy-example.conf /etc/deploy/deploy.conf; error_check
 fi
 
-cp -R lib/* /etc/deploy/lib; errorChk
-cp deploy.sh /usr/local/bin/deploy; errorChk
-sudo chmod 755 /usr/local/bin/deploy; errorChk
+cp -R lib/* /etc/deploy/lib; error_check
+cp deploy.sh /usr/local/bin/deploy; error_check
+sudo chmod 755 /usr/local/bin/deploy; error_check
 echo "Successfully installed, try typing 'deploy' for help."

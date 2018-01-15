@@ -16,17 +16,17 @@ function userExit() {
      mailLog
   fi
   # Clean up your mess
-  cleanUp; exit 0
+  clean_up; exit 0
 }
 
 # Quick exit, never send log. Ever.
 function quickExit() {
   # Clean up your mess
-  cleanUp; exit 0
+  clean_up; exit 0
 }
 
 # Exit on error
-function errorExit() {
+function error_exit() {
   message_state="ERROR"; makeLog # Compile log
   # Check email settings
   if [[ "${EMAILERROR}" == "TRUE" ]]; then
@@ -40,7 +40,7 @@ function errorExit() {
   fi
 
     # Clean up your mess
-  cleanUp; exit 1
+  clean_up; exit 1
 }
 
 # Clean exit
@@ -60,7 +60,7 @@ function safeExit() {
   else
     if [[ "${POSTTOSLACK}" == "TRUE" ]]; then
       trace "Posting to Slack"
-      buildLog; slackPost > /dev/null 2>&1
+      build_log; slackPost > /dev/null 2>&1
     fi
   fi
 
@@ -68,16 +68,16 @@ function safeExit() {
   postWebhook
 
   # Clean up your mess
-  cleanUp; exit 0
+  clean_up; exit 0
 }
 
 # Clean exit, nothing to commit
 function quietExit() {
   # Clean up your mess
-  cleanUp; exit 0
+  clean_up; exit 0
 }
 
-function cleanUp() {
+function clean_up() {
   # If anything is stashed, unstash it.
   if [[ "${currentStash}" == "1" ]]; then
     trace "Unstashing files"
@@ -108,7 +108,7 @@ function cleanUp() {
 
   # If Wordfence was an issue, restart the plugin
   if [[ "${WFOFF}" = "1" ]]; then
-    "${WPCLI}"/wp plugin activate --no-color wordfence &>> $logFile; errorChk
+    "${WPCLI}"/wp plugin activate --no-color wordfence &>> $logFile; error_check
   fi
 
   # Was this an approval?

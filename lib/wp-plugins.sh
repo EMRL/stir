@@ -33,10 +33,10 @@ function wpPlugins() {
   if [[ "${FORCE}" = "1" ]] || yesno --default no "Proceed with updates? [y/N] "; then
     # If ACFPRO needs an update, do it first via wget
     if [[ "${QUIET}" != "1" ]]; then
-      acfUpdate &
+      acf_update &
       spinner $!
     else
-      acfUpdate
+      acf_update
     fi
 
     # Let's get to work

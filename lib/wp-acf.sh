@@ -6,7 +6,7 @@
 # Handle ACF Pro updates in more reliable way than wp-cli
 ###############################################################################
 
-function acfUpdate() {
+function acf_update() {
   if grep -q "advanced-custom-fields-pro" "${wpFile}"; then
     ACFFILE="/tmp/acfpro.zip"
     # Download the ACF Pro upgrade file

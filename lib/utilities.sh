@@ -29,7 +29,7 @@ function go() {
 
   # Email test
   if [[ "${EMAILTEST}" == "1" ]]; then
-    emailTest; quickExit
+    email_test; quickExit
   fi
 
   # Test analytics authentication
@@ -110,7 +110,7 @@ function fixIndex() {
   if [[ "${FIXINDEX}" == "TRUE" ]]; then
     if [[ ! -w "${WORKPATH}/${APP}/.git/index" ]]; then
       trace "Index is not writable, attempting to fix..."
-      sudo chmod 777 "${WORKPATH}/${APP}/.git/index"; errorChk
+      sudo chmod 777 "${WORKPATH}/${APP}/.git/index"; error_check
       if [[ ! -w "${WORKPATH}/${APP}/.git/index" ]]; then
         error "Unable to write new index file."; 
       fi
@@ -120,7 +120,7 @@ function fixIndex() {
 }
 
 # Check that dependencies exist
-function depCheck() {
+function dependency_check() {
   # Is git installed?
   hash git 2>/dev/null || {
     error "deploy ${VERSION} requires git to function properly." 

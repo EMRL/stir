@@ -7,7 +7,7 @@
 ###############################################################################
 trace "Loading digest handling"
 
-function createDigest() {
+function create_digest() {
   message_state="DIGEST"
   htmlDir
 
