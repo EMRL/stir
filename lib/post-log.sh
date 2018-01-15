@@ -124,12 +124,12 @@ function htmlDir() {
 
     if [[ "${message_state}" == "REPORT" ]]; then 
       if [[ ! -d "${LOCALHOSTPATH}/${APP}/report" ]]; then
-        mkdir "${LOCALHOSTPATH}/${APP}/report"; errorChk
-        mkdir "${LOCALHOSTPATH}/${APP}/report/css"; errorChk
-        mkdir "${LOCALHOSTPATH}/${APP}/report/js"; errorChk
+        mkdir "${LOCALHOSTPATH}/${APP}/report"; error_check
+        mkdir "${LOCALHOSTPATH}/${APP}/report/css"; error_check
+        mkdir "${LOCALHOSTPATH}/${APP}/report/js"; error_check
       fi
-        cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/css" "${LOCALHOSTPATH}/${APP}/report"; errorChk
-        cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/js" "${LOCALHOSTPATH}/${APP}/report"; errorChk
+        cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/css" "${LOCALHOSTPATH}/${APP}/report"; error_check
+        cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/js" "${LOCALHOSTPATH}/${APP}/report"; error_check
     fi
   fi
 }

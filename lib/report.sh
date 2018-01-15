@@ -7,7 +7,7 @@
 ###############################################################################
 trace "Loading report handling"
 
-function createReport() {
+function create_report() {
   message_state="REPORT"
   htmlDir
 

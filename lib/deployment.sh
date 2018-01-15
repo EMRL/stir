@@ -23,9 +23,9 @@ function preDeploy() {
         emptyLine
         trace "Stashing dirty files"
         if [[ "${VERBOSE}" == "1" ]] && [[ "${QUIET}" != "1" ]]; then
-          git stash | tee --append "${logFile}"; errorChk 
+          git stash | tee --append "${logFile}"; error_check 
         else
-          git stash >> "${logFile}"; errorChk
+          git stash >> "${logFile}"; error_check
         fi
         currentStash="1"
       else
@@ -55,7 +55,7 @@ function pkgDeploy() {
   emptyLine
   if [[ -n "${DEPLOY}" ]]; then
     # Add ssh keys and double check directoy
-    cd "${WORKPATH}/${APP}" || errorChk
+    cd "${WORKPATH}/${APP}" || error_check
     if [[ "${INCOGNITO}" != "TRUE" ]]; then
       trace "Launching deployment"
     else
@@ -73,18 +73,18 @@ function pkgDeploy() {
       # If we don't require approval to push to live, keep going
       if [[ "${FORCE}" = "1" ]] || yesno --default yes "Deploy to live server? [Y/n] "; then
         # Test deployment command before running
-        deployChk
+        deploy_check
         # Deploy via deployment command specified in configuration
         if [[ "${VERBOSE}" == "1" ]] && [[ "${INCOGNITO}" != "TRUE" ]]; then
           eval "${DEPLOY}" | tee --append "${logFile}"
-          errorChk
+          error_check
         else
           if [[ "${QUIET}" != "1" ]]; then
             eval "${DEPLOY}" &>> "${logFile}" &
             spinner $!
           else
             eval "${DEPLOY}" &>> "${logFile}"
-            errorChk
+            error_check
           fi
         fi
 

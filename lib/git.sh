@@ -17,7 +17,7 @@ function gitStart() {
     info "${WORKPATH}/${APP} is not a valid directory."
     exit 1
   else
-    cd "${WORKPATH}/${APP}" || errorChk
+    cd "${WORKPATH}/${APP}" || error_check
   fi
 
   # Check that .git exists
@@ -43,7 +43,7 @@ function gitStart() {
   fi
 
   # Check for active files
-  activeChk
+  active_check
 
   # Try to clear out old git processes owned by this user, if they exist
   pkill -f git &>> /dev/null || true
@@ -106,9 +106,9 @@ function gitStage() {
     if [[ "${FORCE}" = "1" ]] || yesno --default yes "Stage files? [Y/n] "; then
       trace "Staging files"
       if [[ "${VERBOSE}" -eq 1 ]]; then
-        git add -A | tee --append "${logFile}"; errorChk              
+        git add -A | tee --append "${logFile}"; error_check              
       else  
-        git add -A &>> "${logFile}"; errorChk
+        git add -A &>> "${logFile}"; error_check
       fi
     else
       trace "Exiting without staging files"; userExit    
@@ -179,7 +179,7 @@ function gitCommit() {
       trace "Queuing commit message"
       echo "${notes}" > "${WORKPATH}/${APP}/.queued"
     else
-      git commit -m "${notes}" &>> "${logFile}"; errorChk
+      git commit -m "${notes}" &>> "${logFile}"; error_check
       trace "Commit message: ${notes}"
     fi
   fi
@@ -196,7 +196,7 @@ function gitPushMstr() {
     trace "Pushing ${MASTER}"; fixIndex
     emptyLine  
     if [[ "${VERBOSE}" -eq 1 ]]; then
-      git push | tee --append "${logFile}"; errorChk           
+      git push | tee --append "${logFile}"; error_check           
     else
       if  [[ "${FORCE}" = "1" ]] || yesno --default yes "Push ${MASTER} branch? [Y/n] "; then
         if [[ "${NOKEY}" != "TRUE" ]]; then
@@ -205,10 +205,10 @@ function gitPushMstr() {
             spinner $!
             info "Success.    "
           else
-            git push &>> "${logFile}"; errorChk
+            git push &>> "${logFile}"; error_check
           fi
         else
-          git push &>> "${logFile}"; errorChk
+          git push &>> "${logFile}"; error_check
         fi
       else
         safeExit
@@ -224,14 +224,14 @@ function gitChkProd() {
       notice "Checking out ${PRODUCTION} branch..."; fixIndex
 
       if [[ "${VERBOSE}" -eq 1 ]]; then
-        git checkout "${PRODUCTION}" | tee --append "${logFile}"; errorChk               
+        git checkout "${PRODUCTION}" | tee --append "${logFile}"; error_check               
       else
         if [[ "${QUIET}" != "1" ]]; then
           git checkout "${PRODUCTION}" &>> "${logFile}" &
           spinner $!
           info "Success.    "
         else
-          git checkout "${PRODUCTION}" &>> "${logFile}"; errorChk
+          git checkout "${PRODUCTION}" &>> "${logFile}"; error_check
         fi
       fi
 
@@ -243,7 +243,7 @@ function gitChkProd() {
         if  [[ "${FORCE}" = "1" ]] || yesno --default yes "Current branch is ${current_branch} and should be ${PRODUCTION}, try again? [Y/n] "; then
           if [[ "${current_branch}" = "${MASTER}" ]]; then 
             [[ -f "${gitLock}" ]] && rm "${gitLock}"
-            git add .; git checkout "${PRODUCTION}" &>> "${logFile}" #; errorChk
+            git add .; git checkout "${PRODUCTION}" &>> "${logFile}" #; error_check
           fi
         else
           safeExit
@@ -269,7 +269,7 @@ function gitMerge() {
       # Clear out the index.lock file, cause reasons
       [[ -f "${gitLock}" ]] && rm "${gitLock}"
       # Bonus add, just because. Ugh.
-      # git add -A; errorChk 
+      # git add -A; error_check 
       if [[ "${VERBOSE}" -eq 1 ]]; then
         git merge "${MASTER}" | tee --append "${logFile}"              
       else
@@ -278,7 +278,7 @@ function gitMerge() {
           git merge "${MASTER}" &>> "${logFile}" &
           showProgress
         else
-          git merge "${MASTER}"&>> "${logFile}"; errorChk
+          git merge "${MASTER}"&>> "${logFile}"; error_check
         fi
       fi
     fi
@@ -292,7 +292,7 @@ function gitPushProd() {
       trace "Push ${PRODUCTION}"; fixIndex
       emptyLine
       if [[ "${VERBOSE}" -eq 1 ]]; then
-        git push | tee --append "${logFile}"; errorChk 
+        git push | tee --append "${logFile}"; error_check 
         trace "OK"              
       else
         if [[ "${FORCE}" = "1" ]] || yesno --default yes "Push ${PRODUCTION} branch? [Y/n] "; then
@@ -302,7 +302,7 @@ function gitPushProd() {
             spinner $!
             info "Success.    "
           else
-            git push &>> "${logFile}"; errorChk
+            git push &>> "${logFile}"; error_check
           fi
           sleep 1
           if [[ $(git status --porcelain) ]]; then

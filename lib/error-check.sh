@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# errorChk()
+# error_check()
 #
 ###############################################################################
 # Handles various exit code checking
@@ -8,16 +8,16 @@
 trace "Loading error checking"
 
 # Try to get exit/error code, with a hard stop on fail
-function errorChk() {
+function error_check() {
   EXITCODE=$?; 
   if [[ "${EXITCODE}" != 0 ]]; then 
     warning "Exiting on error code ${EXITCODE}"
     error_msg="Exited on error code ${EXITCODE}"
-    errorExit
+    error_exit
   fi
 }
 
-function deployChk() {
+function deploy_check() {
   if [[ "${DEPLOY}" == *"mina"* ]]; then # && [[ "${DEPLOY}" != *"bundle"* ]]; then
     DEPLOYTEST="mina --simulate deploy"
     # Get variables organized
@@ -102,14 +102,14 @@ function deployChk() {
     if [[ "${EXITCODE}" != 0 ]]; then 
       warning "Deployment exited due to a configuration problem (Error ${EXITCODE})"
       error_msg="Deployment exited due to a configuration problem (Error ${EXITCODE})"
-      errorExit
+      error_exit
     fi
     trace "OK"
   fi
 }
 
 # Try to get exit/error code, with a hard stop on fail
-function errorStatus() {
+function error_status() {
   EXITCODE=$?; 
   if [[ "${EXITCODE}" != 0 ]]; then 
     error_msg="WARNING: Error code ${EXITCODE}"

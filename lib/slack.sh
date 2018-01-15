@@ -123,7 +123,7 @@ function slackPost () {
   if [[ "${DIGEST}" == "1" ]] && [[ -z "${GREETING}" ]]; then
     trace "No activity found, canceling digest."
   else
-    curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" > /dev/null 2>&1; errorStatus
+    curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" > /dev/null 2>&1; error_status
   fi
 }
 
@@ -133,7 +133,7 @@ function slackTest {
   echo "${SLACKURL}"
   if [[ -z "${SLACKURL}" ]]; then
     warning "No Slack configuration found."; emptyLine
-    cleanUp; exit 1
+    clean_up; exit 1
   else
     curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration of ${APP} from deploy ${VERSION}\nhttps://github.com/EMRL/deploy\"}" "${SLACKURL}"
     emptyLine

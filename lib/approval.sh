@@ -35,7 +35,7 @@ function approve() {
       git add "${QUEUED}" | tee --append "${logFile}"
     fi
   done < "${WORKPATH}/${APP}/.queued"
-  git commit -m "${notes}" &>> "${logFile}"; errorChk
+  git commit -m "${notes}" &>> "${logFile}"; error_check
   trace "Commit message: ${notes}"
 }
 

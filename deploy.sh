@@ -564,7 +564,7 @@ if [[ "${MERGE}" == "1" ]] && [[ -z "${PRODUCTION}" ]]; then
 fi
 
 # Execute the deploy process
-coreApp
+core
 
 # Trapping stuff
 trap userExit INT

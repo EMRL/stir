@@ -13,7 +13,7 @@ function permFix() {
   
     # /lib is obsolete for future repositories
     if [[ -d "$WORKPATH/$APP/lib" ]]; then
-      sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/lib; #errorChk
+      sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/lib; #error_check
       info " ${APP}/lib/"
     else
       sleep 1
@@ -28,13 +28,13 @@ function permFix() {
       sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/.gitmodules; > /dev/null; 
     fi
   
-    sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/.git; #errorChk
+    sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/.git; #error_check
     info " ${APP}/.git"
-    sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/public/system; #errorChk
+    sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/public/system; #error_check
     info " ${APP}/public/system/"
-    sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/public/app; #errorChk
+    sudo chown -R "${DEVUSER}"."${DEVGROUP}" "${WORKPATH}"/"${APP}"/public/app; #error_check
     info " ${APP}/public/app/"
-    sudo chown -R "${APACHEUSER}"."${APACHEGROUP}" "${WORKPATH}"/"${APP}"/public/app; #errorChk
+    sudo chown -R "${APACHEUSER}"."${APACHEGROUP}" "${WORKPATH}"/"${APP}"/public/app; #error_check
     info " ${APP}/public/app/plugins"
   fi
 }

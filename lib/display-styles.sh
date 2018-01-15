@@ -71,7 +71,7 @@ function error() {
   fi
   echo -e "\nERROR: $*" >> "${logFile}"
   error_msg="$*"
-  errorExit
+  error_exit
 }
 
 function warning() {
