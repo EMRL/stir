@@ -7,7 +7,7 @@
 ###############################################################################
 trace "Loading activity checking"
 
-# Declare needed variables
+# Initialize variables
 read -r active_files <<< ""
 echo "${active_files}" > /dev/null
 

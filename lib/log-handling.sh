@@ -175,6 +175,6 @@ function htmlBuild() {
   if [[ "${REPORT}" != "1" ]]; then
     cat "${logFile}" "${deployPath}/html/${HTMLTEMPLATE}/footer.html" >> "${htmlFile}"
     # There's probably a better place for this.
-    processHTML
+    process_html
   fi
 }

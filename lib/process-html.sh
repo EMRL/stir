@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # process-html.sh
 #
@@ -7,7 +7,12 @@
 ###############################################################################
 trace "Loading html handling"
 
-function processHTML() {
+# Initialize variables 
+read -r DEFAULTC PRIMARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID <<< ""
+echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} 
+  ${SMOOCHID}"
+
+function process_html() {
   # Clean out the stuff we don't need
   [[ -z "${DEVURL}" ]] && sed -i '/<strong>Staging URL:/d' "${htmlFile}"
   [[ -z "${PRODURL}" ]] && sed -i '/PRODURL/d' "${htmlFile}"

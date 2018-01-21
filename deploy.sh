@@ -44,13 +44,8 @@ read -r black red green yellow blue magenta cyan white endColor bold underline \
   reset purple tan <<< ""
 echo "${black} ${red} ${green} ${yellow} ${blue} ${magenta} ${cyan} ${white}
   ${endColor} ${bold} ${underline} ${reset} ${purple} ${tan}" > /dev/null
-# User feedback
-read -r pid delay spinstr <<< ""
-echo "${pid} ${delay} ${spinstr}" > /dev/null
-# HTML Themes
-read -r DEFAULTC PRIMARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID <<< ""
-echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} 
-	${SMOOCHID}"
+
+
 # Constants and environment variables
 read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   EMAILHTML NOPHP FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP TO \
@@ -89,7 +84,7 @@ read -r var optstring options logFile wpFile coreFile postFile trshFile statFile
   currentStash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
   VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WPROOT \
   WPAPP WPSYSTEM DONOTUPDATEWP gitHistory ANALYTICSMSG digestSendmail MINAUSER \
-  MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX QUEUED \
+  MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX \
   DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile CURMTH \
   CURYR PRVMTH PRVYR LASTDY TMP MONITORURL MONITORUSER MONITORPASS SERVERID \
   MONITORHOURS LATENCY UPTIME MONITORTEST MONITORAPI RELEASE RELEASENOTES \
@@ -105,7 +100,7 @@ echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile
   ${VIEWPORTPRE} ${LOGTITLE} ${LOGURL} ${TIMESTAMP} ${STARTUP} ${WPROOT} ${WPAPP} 
   ${WPSYSTEM} ${DONOTUPDATEWP} ${gitHistory} ${ANALYTICSMSG} 
   ${digestSendmail} ${MINAUSER} ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} 
-  ${REMOTEFILE} ${GREETING} ${LOGSUFFIX} ${QUEUED} ${DISABLESSHCHECK}
+  ${REMOTEFILE} ${GREETING} ${LOGSUFFIX} ${DISABLESSHCHECK}
   ${URL} ${CODE} ${DEPLOYPID} ${DEPLOYTEST} ${payload} ${reportFile} ${CURMTH} ${CURYR} 
   ${PRVMTH} ${PRVYR} ${LASTDY} ${TMP} ${MONITORURL} ${MONITORUSER} ${MONITORPASS} 
   ${SERVERID} ${MONITORHOURS} ${LATENCY} ${UPTIME} ${MONITORTEST} 

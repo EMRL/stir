@@ -7,6 +7,10 @@
 ###############################################################################
 trace "Loading interface"
 
+# Initialize variables 
+read -r pid delay spinstr temp <<< ""
+echo "${pid} ${delay} ${spinstr} %{temp}" > /dev/null
+
 # Progress spinner; we'll see if this works
 function spinner() {
   if [[ "${QUIET}" != "1" ]]; then
