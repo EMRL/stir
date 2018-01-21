@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # active-check.sh
 #
@@ -6,6 +6,10 @@
 # Checks for recently active project files that may cause deployment issues
 ###############################################################################
 trace "Loading activity checking"
+
+# Declare needed variables
+read -r active_files <<< ""
+echo "${active_files}" > /dev/null
 
 function active_check() { 
   if [[ "${FORCE}" == "1" ]] && [[ "${UPGRADE}" == "1" ]] && [[ "${QUIET}" == "1" ]] && [[ "${ACTIVECHECK}" = "TRUE" ]]; then

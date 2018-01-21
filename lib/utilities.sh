@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # utilities.sh
 #
@@ -34,7 +34,7 @@ function go() {
 
   # Test analytics authentication
   if [[ "${ANALYTICSTEST}" == "1" ]]; then
-    analyticsTest; quickExit
+    ga_test; quickExit
   fi
 
   # Test server monitoring
@@ -105,14 +105,14 @@ function go() {
   server_monitor
 }
 
-function fixIndex() {
+function fix_index() {
   # A rather brutal fix for index permissions issues
   if [[ "${FIXINDEX}" == "TRUE" ]]; then
     if [[ ! -w "${WORKPATH}/${APP}/.git/index" ]]; then
       trace "Index is not writable, attempting to fix..."
       sudo chmod 777 "${WORKPATH}/${APP}/.git/index"; error_check
       if [[ ! -w "${WORKPATH}/${APP}/.git/index" ]]; then
-        error "Unable to write new index file."; 
+        error "Unable to write new index file."
       fi
     fi
     sleep 1

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # validate.sh
 #
@@ -7,7 +7,7 @@
 ###############################################################################
 trace "Loading validation tests"
 
-function validateVar() {
+function validate_conf() {
   array=( "${PROJNAME}" "${PROJCLIENT}" )
   for i in "${array[@]}"
   do

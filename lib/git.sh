@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # git.sh
 #
@@ -56,7 +56,7 @@ function gitChkMstr() {
   else
     current_branch="$(git rev-parse --abbrev-ref HEAD)"
     if [[ "${current_branch}" != "${MASTER}" ]]; then
-      notice "Checking out master branch..."; fixIndex
+      notice "Checking out master branch..."; fix_index
       if [[ "${VERBOSE}" -eq 1 ]]; then
         git checkout master | tee --append "${logFile}"            
       else
@@ -193,7 +193,7 @@ function gitCommit() {
 # Push master
 function gitPushMstr() {
   if [[ -n "${MASTER}" ]]; then
-    trace "Pushing ${MASTER}"; fixIndex
+    trace "Pushing ${MASTER}"; fix_index
     emptyLine  
     if [[ "${VERBOSE}" -eq 1 ]]; then
       git push | tee --append "${logFile}"; error_check           
@@ -221,7 +221,7 @@ function gitPushMstr() {
 function gitChkProd() {
   if [[ "${MERGE}" = "1" ]]; then
     if [[ -n "${PRODUCTION}" ]]; then
-      notice "Checking out ${PRODUCTION} branch..."; fixIndex
+      notice "Checking out ${PRODUCTION} branch..."; fix_index
 
       if [[ "${VERBOSE}" -eq 1 ]]; then
         git checkout "${PRODUCTION}" | tee --append "${logFile}"; error_check               
@@ -265,7 +265,7 @@ function gitChkProd() {
 function gitMerge() {
   if [[ "${MERGE}" = "1" ]]; then
     if [[ -n "${PRODUCTION}" ]]; then
-      notice "Merging ${MASTER} into ${PRODUCTION}..."; fixIndex
+      notice "Merging ${MASTER} into ${PRODUCTION}..."; fix_index
       # Clear out the index.lock file, cause reasons
       [[ -f "${gitLock}" ]] && rm "${gitLock}"
       # Bonus add, just because. Ugh.
@@ -289,7 +289,7 @@ function gitMerge() {
 function gitPushProd() {
   if [[ "${MERGE}" = "1" ]]; then
     if [[ -n "${PRODUCTION}" ]]; then
-      trace "Push ${PRODUCTION}"; fixIndex
+      trace "Push ${PRODUCTION}"; fix_index
       emptyLine
       if [[ "${VERBOSE}" -eq 1 ]]; then
         git push | tee --append "${logFile}"; error_check 

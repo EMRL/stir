@@ -1,10 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # wp-acf.sh
 #
 ###############################################################################
 # Handle ACF Pro updates in more reliable way than wp-cli
 ###############################################################################
+
+# Declare needed variables
+read -r ACFFILE <<< ""
+echo "${ACFFILE}" > /dev/null
 
 function acf_update() {
   if grep -q "advanced-custom-fields-pro" "${wpFile}"; then
