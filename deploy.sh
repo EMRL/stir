@@ -206,7 +206,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --monitor-test) MONITORTEST="1" ;;
     --stats) PROJSTATS="1" ;;
     --unlock) UNLOCK="1" ;;
-    --repair) REPAIR="1"; FORCE="1"; MERGE="1"; STASH="TRUE"; VERBOSE="1" ;;
+    --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="1" ;;
     --no-check) NOCHECK="1" ;;
     --function-list) FUNCTIONLIST="1"; CURRENT="1" ;; # Spoofs --current
     --variable-list) VARIABLELIST="1"; CURRENT="1" ;; # Spoofs --current
