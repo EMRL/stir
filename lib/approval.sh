@@ -7,11 +7,14 @@
 ###############################################################################
 trace "Loading approval functions"   
 
+# Initialize variables
+read -r QUEUED <<< ""
+echo "${QUEUED}" > /dev/null
+
 function queue() {
   # Make sure there's something to do
   gitStatus
   gitCommit
-  #(git status --porcelain | sed '/^ D /d' | sed s/^...//) >> "${WORKPATH}/${APP}/.queued"
   (git status --porcelain | sed s/^...//) >> "${WORKPATH}/${APP}/.queued"
 
   info "Queuing proposed updates for approval"

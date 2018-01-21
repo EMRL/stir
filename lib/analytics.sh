@@ -7,7 +7,7 @@
 ###############################################################################
 trace "Loading analytics functions"   
 
-# Initializa needed variables
+# Initialize variables
 read -r SIZE RND METRIC RESULT <<< ""
 echo "${SIZE} ${RND} ${METRIC} ${RESULT}" > /dev/null
 

@@ -8,6 +8,15 @@
 # https://github.com/EMRL/deploy
 ###############################################################################
 
+# Set mode
+set -uo pipefail
+
+# Initialize variables 
+read -r OS VER EXITCODE dependencies option message fg_green fg_red reset \
+  YES NO NOT i k <<< ""
+echo "${OS} ${VER} ${EXITCODE} ${dependencies} ${option} ${message} ${fg_green} 
+  ${fg_red} ${reset} ${YES} ${NO} ${NOT} ${i} ${k}" > /dev/null
+
 # No root, no fun
 if [[ "${EUID}" -ne 0 ]]; then
   echo "You must have root access to install - try 'sudo install/doinst.sh'" 2>&1
@@ -17,7 +26,8 @@ fi
 function check_os() {
   # Try to discover the OS flavor 
   if [[ -f /etc/os-release ]]; then
-    # freedesktop.org and systemd
+    # freedesktop.org and systemd 
+    # shellcheck disable=SC1091
     . /etc/os-release
     OS="${NAME}"
     VER="${VERSION_ID}"
@@ -27,6 +37,7 @@ function check_os() {
     VER="$(lsb_release -sr)"
   elif [[ -f /etc/lsb-release ]]; then
     # For some versions of Debian/Ubuntu without lsb_release command
+    # shellcheck disable=SC1091
     . /etc/lsb-release
     OS="${DISTRIB_ID}"
     VER="${DISTRIB_RELEASE}"
@@ -49,12 +60,13 @@ function check_os() {
 
 function check_program() {
   printf "%-40s" "Checking for ${1}..."
-  command -v $1 >/dev/null 2>&1 && echo "${YES}" || { echo "${NOT}"; message+="${1} "; }
-}
-
-function check_optional() {
-  printf "%-40s" "Checking for ${1}..."
-  command -v $1 >/dev/null 2>&1 && echo "${YES}" || { echo "${NOT}"; message+="${1} "; }
+  # There's potential for non-global stuff to fail this check so here's a
+  # fairly kludgey way to hopefully allow those to pass
+  if [[ "${1}" =~ ^(wp|grunt|npm)$ ]]; then
+    command -v $(type -p "${1}") >/dev/null 2>&1 && echo "${YES}" || { echo "${NOT}"; message+="${1} "; }
+  else
+    command -v "${1}" >/dev/null 2>&1 && echo "${YES}" || { echo "${NOT}"; message+="${1} "; }
+  fi
 }
 
 function error_check() {
@@ -81,9 +93,9 @@ dependencies=(awk cat curl echo eval git grep pkill printf read sed sendmail sle
 options=(gitchart grunt npm scp ssh sshpass wp)
 
 message=''
-fg_red=`tput setaf 1`
-fg_green=`tput setaf 2`
-reset=`tput sgr0`
+fg_red="$(tput setaf 1)"
+fg_green="$(tput setaf 2)"
+reset="$(tput sgr0)"
 
 # Common messages
 YES="${fg_green}OK${reset}"
@@ -92,7 +104,7 @@ NOT="${fg_red}NOT FOUND${reset}"
 
 echo; echo "=> Checking for required dependencies:"; sleep 1
 for i in "${dependencies[@]}" ; do
-  check_program $i
+  check_program "${i}"
 done
 
 if [[ -z "${message}" ]] ; then
@@ -106,7 +118,7 @@ fi
 
 echo; echo "=> Checking optional dependencies:"; sleep 1
 for k in "${options[@]}" ; do
-  check_optional $k
+  check_program "${k}"
 done
 
 if [[ -n "${message}" ]] ; then
@@ -114,9 +126,9 @@ if [[ -n "${message}" ]] ; then
   # echo ${message};
 fi
 
-# Start the install: First check for root
+# Start the install
 echo; sleep 1
-if [[ ! -d /etc/deploy ]] && [[ ! -d /etc/deploy/lib ]] && [[ ! -d /etc/deploy/crontab ]]; then
+if [[ ! -d /etc/deploy ]] || [[ ! -d /etc/deploy/lib ]] || [[ ! -d /etc/deploy/crontab ]]; then
   echo "Creating directories"
   if [[ ! -d /etc/deploy ]]; then
     sudo mkdir /etc/deploy; error_check
@@ -139,7 +151,7 @@ if [[ ! -f /etc/deploy/deploy.conf ]]; then
   cp /etc/deploy/deploy-example.conf /etc/deploy/deploy.conf; error_check
 fi
 
-cp -R lib/* /etc/deploy/lib; error_check
-cp deploy.sh /usr/local/bin/deploy; error_check
-sudo chmod 755 /usr/local/bin/deploy; error_check
+cp -R lib/* /etc/deploy/lib || error_check
+cp deploy.sh /usr/local/bin/deploy || error_check
+sudo chmod 755 /usr/local/bin/deploy || error_check
 echo "Successfully installed, try typing 'deploy' for help."

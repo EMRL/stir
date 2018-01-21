@@ -50,5 +50,5 @@ function create_report() {
   cat "${deployPath}/html/${HTMLTEMPLATE}/report/header.html" "${statFile}" "${deployPath}/html/${HTMLTEMPLATE}/report/footer.html" > "${htmlFile}"
 
   # Filter and replace template variables
-  processHTML
+  process_html
 }

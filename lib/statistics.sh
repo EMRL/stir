@@ -21,7 +21,7 @@ function projStats() {
 
     # Process the HTML
     cat "${deployPath}/html/${HTMLTEMPLATE}/stats/index.html" > "${htmlFile}"
-    processHTML
+    process_html
     cat "${htmlFile}" > "/tmp/stats/index.html"
 
     # Create the charts

@@ -1,10 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Here are examples of settings you might need to change on a per-project 
-# basis. This file should be placed in config/deploy.sh in your projects' 
-# root folder. Project settings will override both system & per-user settings.
-# 
-# If any value set here will override both global and per-user settings.
+# basis. This file should be placed in either the project's root folder,
+# or in /config/. Settings configured in this file will override both 
+# system & user settings.
 
 
 ###############################################################################
@@ -22,15 +21,6 @@
 
 # Production, or "Live" project URL, including http:// or https://
 # PRODURL="http://productionurl.com"
-
-# If you want to use an email template unique to this project (instead of the 
-# globally configured template) define it below. HTML templates are stored in 
-# separate folders in /etc/deploy/html. The value used below should be the 
-# folder name of your template.
-# HTMLTEMPLATE="default"
-
-# If you are using html logfiles, define the full URL to the client's logo
-# CLIENTLOGO="http://client.com/assets/img/logo.png"
 
 
 ###############################################################################
@@ -120,16 +110,16 @@
 
 
 ###############################################################################
-# Integration
+# Notifications
 ###############################################################################
 
 # Project Management 
-#
+# ------------------
 # Task#: This is used to post deploy logs to project management systems 
-# that can external email input. For examples, for our task management system 
+# that can accept external email input. For examples, our task management system 
 # accepts emails in the format task-####@projects.emrl.com, with the #### 
 # being the task identification number for the project being deployed.
-# TASK="task"
+# TASK="####"
 #
 # If you wish to have automated deployments add tracked time to your project 
 # management system, uncomment and configure the two values below. TASKUSER 
@@ -140,7 +130,7 @@
 # ADDTIME="10m"
 
 # Slack
-# 
+# -----
 # You'll need to set up an "Incoming Webhook" custom integration on the Slack 
 # side to get this ready to roll. 
 # See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get 
@@ -156,46 +146,16 @@
 # Normally only successful deployments are posted to Slack.
 # Enable the settings below to post on WARNiNG and/or ERROR.
 # SLACKERROR="FALSE"
+#
+# If you'd like to post a Slack notification with a URL to view the weekly digest  
+# set the following to TRUE. If you want to use an incoming webhook other than the 
+# one defined in SLACKURL, enter that here *instead* of TRUE.
+# DIGESTSLACK="FALSE"
 
-# Google Analytics
-#
-# API credentials
-# CLIENTID="#############################################.apps.googleusercontent.com"
-# CLIENTSECRET="########################"
-# REDIRECTURI="http://localhost"
-#
-# OAuth authorization will expire after one hour, but will be updated when needed
-# if the tokens below are configured correctly
-# AUTHORIZATIONCODE="##############################################"
-#
-# Tokens
-# ACCESSTOKEN="#################################################################################################################################"
-# REFRESHTOKEN="##################################################################"
-#
-# Google Analytics ID
-# PROFILEID="########"
-
-
-###############################################################################
-# Server Monitoring
-###############################################################################
-
-# Uptime and average latency can be included in logs, digests, and reports when 
-# integrating with PHP Server Monitor, and an add-on API. 
-# See https://github.com/EMRL/deploy/wiki/Integration for more information. 
-#
-# Full API URL
-# MONITORURL="https://your.phpservermonitor.com/api/monitorapi.php"
-#
-# Email/password of the user that will access the API. Password can be stored in
-# a file outside of the project repo for security reasons
-# MONITORUSER="user@domain.com"
-# MONITORPASS="/path/to/password/file"
-# 
-# Server ID to monitor. When viewing the server on your web console, your URL 
-# will be something like https://monitor.com/?&mod=server&action=view&id=3 - in 
-# this case SERVERID would be "3" (notice the &id=3 at the end of the URL)
-# SERVERID="###"
+# Webhooks
+# --------
+# Post event notifications to this URL.
+# POSTURL=""
 
 
 ###############################################################################
@@ -205,6 +165,18 @@
 # If you need to send logfiles and email alerts to address(es) other 
 # than those configured globally, enter them below.
 # TO="notify@client.com"
+
+# If you want to use an email template unique to this project (instead of the 
+# globally configured template) define it below. HTML templates are stored in 
+# separate folders in /etc/deploy/html. The value used below should be the 
+# folder name of your template.
+# HTMLTEMPLATE="default"
+
+# If you are using html logfiles, define the full URL to the client's logo
+# CLIENTLOGO="http://client.com/assets/img/logo.png"
+
+# If you are using a digest theme that includes a cover image, at the URL below.
+# COVER="http://client.com/assets/img/cover.jpg"
 
 # IF INCOGNITO is set to true, log files as well as verbose output to screen 
 # will be stripped of details such as email addresses and system file paths.
@@ -230,11 +202,8 @@
 # SCPHOSTPATH="/full/path/to/file"
 
 # DANGER DANGER: If for some reason you absolutely can't use an SSH key you 
-# can configure your password here
+# can configure the path to a text file containing *only* your password.
 # SCPPASS="password"
-
-# Post commit logs to this URL.
-# POSTURL=""
 
 # If you're posting logs to a place on the same machine you're deploying from,
 # set POSTTOLOCALHOST to "TRUE" and define the path where you want to store 
@@ -252,14 +221,6 @@
 # separated string of multiple addresses. 
 # DIGESTEMAIL="digest@email.com"
 
-# If you are using a digest theme that includes a cover image, at the URL below.
-# DIGESTCOVER="http://client.com/assets/img/cover.jpg"
-
-# If you'd like to post a Slack notification with a URL to view the weekly digest  
-# set the following to TRUE. IF you want to use an incoming webhook other than the 
-# one defined in SLACKURL below, enter that here *instead* of TRUE.
-# DIGESTSLACK="TRUE"
-
 
 ###############################################################################
 # Monthly Reporting
@@ -272,3 +233,46 @@
 # line item will read "Monthly web hosting"; customize the text included in
 # report by setting it to any other value.
 # INCLUDEHOSTING="TRUE"
+
+
+###############################################################################
+# Google Analytics
+###############################################################################
+
+# API credentials
+# CLIENTID="#############################################.apps.googleusercontent.com"
+# CLIENTSECRET="########################"
+# REDIRECTURI="http://localhost"
+#
+# OAuth authorization will expire after one hour, but will be updated when needed
+# if the tokens below are configured correctly
+# AUTHORIZATIONCODE="##############################################"
+#
+# Tokens
+# ACCESSTOKEN="#################################################################################################################################"
+# REFRESHTOKEN="##################################################################"
+#
+# Google Analytics ID
+# PROFILEID="########"
+
+
+###############################################################################
+# Server Monitoring
+###############################################################################
+
+# Uptime and average latency can be included in logs, digests, and reports when 
+# integrating with PHP Server Monitor, and an add-on API. 
+# See https://github.com/EMRL/deploy/wiki/Integration for more information. 
+
+# Full API URL
+# MONITORURL="https://your.phpservermonitor.com/api/monitorapi.php"
+
+# Email/password of the user that will access the API. Password can be stored in
+# a file outside of the project repo for security reasons
+# MONITORUSER="user@domain.com"
+# MONITORPASS="/path/to/password/file"
+
+# Server ID to monitor. When viewing the server on your web console, your URL 
+# will be something like https://monitor.com/?&mod=server&action=view&id=3 - in 
+# this case SERVERID would be "3" (notice the &id=3 at the end of the URL)
+# SERVERID="###"
