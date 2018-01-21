@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # deployment.sh
 #
@@ -61,7 +61,7 @@ function pkgDeploy() {
     else
       trace "Launching deployment from ${PWD}"
     fi
-    fixIndex
+    fix_index
     
     # Make sure the project's deploy command is going to work
     deploy_cmd=$(echo "${DEPLOY}" | awk '{print $1;}')

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # mail-log.sh
 #
@@ -236,7 +236,6 @@ function email_test() {
 			[[ -n "${REMOTETEMPLATE}" ]] && echo "Log template: ${REMOTETEMPLATE}s"
 			echo
 		fi
-
 
     ) | "${MAILPATH}"/sendmail -t
   fi

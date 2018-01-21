@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # digest.sh
 #
@@ -6,6 +6,11 @@
 # Handles parsing and creating logs
 ###############################################################################
 trace "Loading digest handling"
+
+# Initializa needed variables
+read -r AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMGFILE DIGESTWRAP <<< ""
+echo "${AUTHOR} ${AUTHOREMAIL} ${AUTHORNAME} ${GRAVATAR} ${IMGFILE} 
+  ${DIGESTWRAP}" > /dev/null
 
 function create_digest() {
   message_state="DIGEST"

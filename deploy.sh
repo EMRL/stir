@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # deploy.sh
 #
@@ -23,7 +23,7 @@ APP="null"
 # Set mode
 set -uo pipefail
 
-# Initialize and export all variables 
+# Initialize variables 
 # Startup switches
 read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
   SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
@@ -34,6 +34,7 @@ echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT}
   ${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
   ${ANALYTICS} ${ANALYTICSTEST} ${PROJSTATS} ${UNLOCK} 
   ${SSHTEST} ${TIME} ${UPDATEONLY} ${POSTTEST} ${REPORT} ${REPAIR}" > /dev/null
+
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile}
@@ -61,7 +62,7 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   DIGESTURL CLIENTLOGO REMOTEURL SCPPOST SCPUSER SCPHOST SCPHOSTPATH SCPPASS SCPCMD \
   SSHCMD LOGMSG EXPIRELOGS SERVERCHECK STASH MAILPATH REQUIREAPPROVAL ADDTIME \
   TASKUSER CLIENTID CLIENTSECRET REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN \
-  REFRESHTOKEN PROFILEID METRIC RESULT ALLOWROOT SHORTEMAIL DIGESTCOVER INCOGNITO \
+  REFRESHTOKEN PROFILEID ALLOWROOT SHORTEMAIL DIGESTCOVER INCOGNITO \
   REPORTURL CLIENTCONTACT INCLUDEHOSTING <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
   ${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
@@ -76,19 +77,18 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
   ${SCPHOSTPATH} ${SCPPASS} ${SCPCMD} ${SSHCMD} ${LOGMSG} ${EXPIRELOGS} 
   ${SERVERCHECK} ${STASH} ${MAILPATH} ${REQUIREAPPROVAL} ${ADDTIME} ${TASKUSER} 
   ${CLIENTID} ${CLIENTSECRET} ${REDIRECTURI} ${AUTHORIZATIONCODE} ${ACCESSTOKEN} 
-  ${REFRESHTOKEN} ${PROFILEID} ${METRIC} ${RESULT}" "${ALLOWROOT} 
+  ${REFRESHTOKEN} ${PROFILEID} ${ALLOWROOT} 
   ${SHORTEMAIL} ${DIGESTCOVER} ${INCOGNITO} ${REPORTURL} ${CLIENTCONTACT}
   ${INCLUDEHOSTING}" > /dev/null
 # Internal variables
 read -r var optstring options logFile wpFile coreFile postFile trshFile statFile \
   urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail deployPath \
-  etcLocation libLocation POSTEMAIL current_branch error_msg active_files notes \
+  etcLocation libLocation POSTEMAIL current_branch error_msg notes \
   UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC USERRC message_state \
   COMMITURL COMMITHASH UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE \
   currentStash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
-  ACFFILE VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WPROOT \
-  WPAPP WPSYSTEM DONOTUPDATEWP gitHistory DIGESTWRAP AUTHOR AUTHOREMAIL \
-  AUTHORNAME GRAVATAR IMGFILE SIZE RND ANALYTICSMSG digestSendmail MINAUSER \
+  VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WPROOT \
+  WPAPP WPSYSTEM DONOTUPDATEWP gitHistory ANALYTICSMSG digestSendmail MINAUSER \
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX QUEUED \
   DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile CURMTH \
   CURYR PRVMTH PRVYR LASTDY TMP MONITORURL MONITORUSER MONITORPASS SERVERID \
@@ -97,14 +97,13 @@ read -r var optstring options logFile wpFile coreFile postFile trshFile statFile
 echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
   ${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
   ${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
-  ${POSTEMAIL} ${current_branch} ${error_msg} ${active_files} ${notes} ${UPDCORE} 
+  ${POSTEMAIL} ${current_branch} ${error_msg} ${notes} ${UPDCORE} 
   ${TASKLOG} ${PCA} ${PCB} ${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} ${USERRC} 
   ${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} 
   ${AUTOMERGE} ${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps} 
-  ${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK} ${ACFFILE} ${VIEWPORT} 
+  ${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK} ${VIEWPORT} 
   ${VIEWPORTPRE} ${LOGTITLE} ${LOGURL} ${TIMESTAMP} ${STARTUP} ${WPROOT} ${WPAPP} 
-  ${WPSYSTEM} ${DONOTUPDATEWP} ${gitHistory} ${DIGESTWRAP} ${AUTHOR} ${AUTHOREMAIL} 
-  ${AUTHORNAME} ${GRAVATAR} ${IMGFILE} ${SIZE} ${RND} ${ANALYTICSMSG} 
+  ${WPSYSTEM} ${DONOTUPDATEWP} ${gitHistory} ${ANALYTICSMSG} 
   ${digestSendmail} ${MINAUSER} ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} 
   ${REMOTEFILE} ${GREETING} ${LOGSUFFIX} ${QUEUED} ${DISABLESSHCHECK}
   ${URL} ${CODE} ${DEPLOYPID} ${DEPLOYTEST} ${payload} ${reportFile} ${CURMTH} ${CURYR} 
@@ -112,7 +111,7 @@ echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile
   ${SERVERID} ${MONITORHOURS} ${LATENCY} ${UPTIME} ${MONITORTEST} 
   ${MONITORAPI} ${RELEASE} ${RELEASENOTES} ${RELEASEURL}" > /dev/null
 
-# Options
+# Display command options
 function flags() {
   echo -n "Usage: deploy [options] [target] ...
 
@@ -272,28 +271,28 @@ fi
 # Fire up temporary log files. Consolidate this shit better someday, geez.
 # 
 # Crash and burn
-function logFail() {
+function log_fail() {
   echo "Could not create temporary file, exiting."; exit 1
 }
 
 # Main log file
 logFile="/tmp/$APP.log-$RANDOM.log"
-(umask 077 && touch "${logFile}") || logFail
-wpFile="/tmp/$APP.wp-$RANDOM.log"; (umask 077 && touch "${wpFile}" &> /dev/null) || logFail
-coreFile="/tmp/$APP.core-$RANDOM.log"; (umask 077 && touch "${coreFile}" &> /dev/null) || logFail
+(umask 077 && touch "${logFile}") || log_fail
+wpFile="/tmp/$APP.wp-$RANDOM.log"; (umask 077 && touch "${wpFile}" &> /dev/null) || log_fail
+coreFile="/tmp/$APP.core-$RANDOM.log"; (umask 077 && touch "${coreFile}" &> /dev/null) || log_fail
 
 # Start writing the logfile
 echo -e "Deployment logfile for ${APP^^} - $NOW\r" >> "${logFile}"
 echo -e "Launching deploy${STARTUP}\n" >> "${logFile}"
 
 # More crappy tmp files
-postFile="/tmp/$APP.wtf-$RANDOM.log"; (umask 077 && touch "${postFile}" &> /dev/null) || logFail
-trshFile="/tmp/$APP.trsh-$RANDOM.log"; (umask 077 && touch "${trshFile}" &> /dev/null) || logFail
-statFile="/tmp/$APP.stat-$RANDOM.log"; (umask 077 && touch "${statFile}" &> /dev/null) || logFail 
-urlFile="/tmp/$APP.url-$RANDOM.log"; (umask 077 && touch "${urlFile}" &> /dev/null) || logFail
-htmlFile="/tmp/$APP.log-$RANDOM.html"; (umask 077 && touch "${htmlFile}" &> /dev/null) || logFail
-htmlEmail="/tmp/$APP.email-$RANDOM.html"; (umask 077 && touch "${htmlEmail}" &> /dev/null) || logFail
-clientEmail="/tmp/$APP.shortemail-$RANDOM.html"; (umask 077 && touch "${clientEmail}" &> /dev/null) || logFail
+postFile="/tmp/$APP.wtf-$RANDOM.log"; (umask 077 && touch "${postFile}" &> /dev/null) || log_fail
+trshFile="/tmp/$APP.trsh-$RANDOM.log"; (umask 077 && touch "${trshFile}" &> /dev/null) || log_fail
+statFile="/tmp/$APP.stat-$RANDOM.log"; (umask 077 && touch "${statFile}" &> /dev/null) || log_fail 
+urlFile="/tmp/$APP.url-$RANDOM.log"; (umask 077 && touch "${urlFile}" &> /dev/null) || log_fail
+htmlFile="/tmp/$APP.log-$RANDOM.html"; (umask 077 && touch "${htmlFile}" &> /dev/null) || log_fail
+htmlEmail="/tmp/$APP.email-$RANDOM.html"; (umask 077 && touch "${htmlEmail}" &> /dev/null) || log_fail
+clientEmail="/tmp/$APP.shortemail-$RANDOM.html"; (umask 077 && touch "${clientEmail}" &> /dev/null) || log_fail
 
 # Path of the script; I should flip this check to make it more useful
 if [ -d "/etc/deploy" ]; then
@@ -430,7 +429,7 @@ for var in "${REPOHOST} ${CLIENTLOGO}" "${DEVURL}" "${PRODURL}"; do
 done
 
 # Check variables for weird characters
-validateVar
+validate_conf
 
 # Are we using "smart" *cough* commits?
 if [[ "${SMARTCOMMIT}" == "TRUE" ]]; then

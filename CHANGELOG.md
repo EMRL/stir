@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Changed
+- Configuration files restructred for better readability 
+- Many function and variable names changed for better consistency
+### Fixed
+- Google analytics no longer incorrectly display for projects that do not use them 
+
 ## [3.6.6] - 01-13-2018
 ### Added
 - Server health information now included in email/html logs via integration with [PHP Server Monitor](http://www.phpservermonitor.org/) using this [API](https://github.com/skydiver/PHP-Server-Monitor-API)
