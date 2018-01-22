@@ -55,6 +55,6 @@ function showProgress() {
     do
     progressBar "${number}" ${_end}
     done;
-    emptyLine; sleep 3
+    empty_line; sleep 3
   fi
 }

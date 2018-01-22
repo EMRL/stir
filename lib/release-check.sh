@@ -27,7 +27,7 @@ function release_check() {
 
       # User feedback
       info "\r\nNew release found: ${RELEASE}"
-      printf "${RELEASENOTES}" | fold --spaces -w 78; emptyLine
+      printf "${RELEASENOTES}" | fold --spaces -w 78; empty_line
       # Update?
       if yesno --default yes "Would you like to download now? [Y/n] "; then
         # Get latest

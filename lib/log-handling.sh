@@ -75,7 +75,7 @@ function makeLog() {
 
   # IF we're using HTML emails, let's get to work
   if [[ "${EMAILHTML}" == "TRUE" ]]; then
-    [[ "${message_state}" != "DIGEST" ]] && htmlBuild
+    [[ "${message_state}" != "DIGEST" ]] && build_html
     cat "${htmlFile}" > "${trshFile}"
 
     # If this is an approval email, strip out PHP
@@ -102,7 +102,7 @@ function makeLog() {
     VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
 
     # Build the html email and details pages
-    # htmlBuild
+    # build_html
 
     # Strip out the buttons that self-link
     sed -e "s^// BUTTON: BEGIN //-->^BUTTON HIDE^g" -i "${htmlFile}"
@@ -110,7 +110,7 @@ function makeLog() {
   fi
 }
 
-function htmlBuild() {
+function build_html() {
   # Build out the HTML
   LOGSUFFIX="html"
   if [[ "${message_state}" == "ERROR" ]]; then

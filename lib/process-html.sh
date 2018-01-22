@@ -8,9 +8,9 @@
 trace "Loading html handling"
 
 # Initialize variables 
-read -r DEFAULTC PRIMARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID <<< ""
+read -r DEFAULTC PRIMARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID COVER <<< ""
 echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} 
-  ${SMOOCHID}"
+  ${SMOOCHID} ${COVER}"
 
 function process_html() {
   # Clean out the stuff we don't need
@@ -62,9 +62,9 @@ function process_html() {
     -e "s^{{REMOTEURL}}^${REMOTEURL}^g" \
     -e "s^{{ANALYTICSMSG}}^${ANALYTICSMSG}^g" \
     -e "s^{{STATURL}}^${REMOTEURL}\/${APP}\/stats^g" \
-    -e "s^{{DIGESTCOVER}}^${DIGESTCOVER}^g" \
+    -e "s^{{COVER}}^${COVER}^g" \
     -e "s^{{WEEKOF}}^${WEEKOF}^g" \
-    -e "s^{{LASTMONTH}}^${LASTMONTH}^g" \
+    -e "s^{{LASTMONTH}}^${LAST_MONTH}^g" \
     -e "s^{{UPTIME}}^${UPTIME}^g" \
     -e "s^{{LATENCY}}^${LATENCY}^g" \
     "${htmlFile}"        

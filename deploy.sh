@@ -13,7 +13,7 @@ IFS=$'\n\t'
 VERSION="3.6.6"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
-LASTMONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
+LAST_MONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
 WEEKOF="$(date -d '7 days ago' +"%B %d, %Y")"
 GASTART="$(date -d '7 days ago' "+%Y-%m-%d")"
 GAEND="$(date "+%Y-%m-%d")"
@@ -45,7 +45,6 @@ read -r black red green yellow blue magenta cyan white endColor bold underline \
 echo "${black} ${red} ${green} ${yellow} ${blue} ${magenta} ${cyan} ${white}
   ${endColor} ${bold} ${underline} ${reset} ${purple} ${tan}" > /dev/null
 
-
 # Constants and environment variables
 read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   EMAILHTML NOPHP FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP TO \
@@ -57,7 +56,7 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   DIGESTURL CLIENTLOGO REMOTEURL SCPPOST SCPUSER SCPHOST SCPHOSTPATH SCPPASS SCPCMD \
   SSHCMD LOGMSG EXPIRELOGS SERVERCHECK STASH MAILPATH REQUIREAPPROVAL ADDTIME \
   TASKUSER CLIENTID CLIENTSECRET REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN \
-  REFRESHTOKEN PROFILEID ALLOWROOT SHORTEMAIL DIGESTCOVER INCOGNITO \
+  REFRESHTOKEN PROFILEID ALLOWROOT SHORTEMAIL INCOGNITO \
   REPORTURL CLIENTCONTACT INCLUDEHOSTING <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
   ${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
@@ -73,7 +72,7 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
   ${SERVERCHECK} ${STASH} ${MAILPATH} ${REQUIREAPPROVAL} ${ADDTIME} ${TASKUSER} 
   ${CLIENTID} ${CLIENTSECRET} ${REDIRECTURI} ${AUTHORIZATIONCODE} ${ACCESSTOKEN} 
   ${REFRESHTOKEN} ${PROFILEID} ${ALLOWROOT} 
-  ${SHORTEMAIL} ${DIGESTCOVER} ${INCOGNITO} ${REPORTURL} ${CLIENTCONTACT}
+  ${SHORTEMAIL} ${INCOGNITO} ${REPORTURL} ${CLIENTCONTACT}
   ${INCLUDEHOSTING}" > /dev/null
 # Internal variables
 read -r var optstring options logFile wpFile coreFile postFile trshFile statFile \
@@ -259,7 +258,7 @@ fi
 [[ "${VARIABLELIST}" == "1" ]] && STARTUP="${STARTUP} --variable-list"
 
 # If not trying to deploy current directory, and no repo is named in the startup command, exit
-if [[ "${CURRENT}" != "1" ]] && [[ -z "${@}" ]]; then
+if [[ "${CURRENT}" != "1" ]] && [[ -z "${*}" ]]; then
   echo "Choose a valid project, or use the --current flag to deploy from the current directory."; exit 1
 fi
 
@@ -271,23 +270,23 @@ function log_fail() {
 }
 
 # Main log file
-logFile="/tmp/$APP.log-$RANDOM.log"
+logFile="/tmp/${APP}.log-$RANDOM.log"
 (umask 077 && touch "${logFile}") || log_fail
-wpFile="/tmp/$APP.wp-$RANDOM.log"; (umask 077 && touch "${wpFile}" &> /dev/null) || log_fail
-coreFile="/tmp/$APP.core-$RANDOM.log"; (umask 077 && touch "${coreFile}" &> /dev/null) || log_fail
+wpFile="/tmp/${APP}.wp-$RANDOM.log"; (umask 077 && touch "${wpFile}" &> /dev/null) || log_fail
+coreFile="/tmp/${APP}.core-$RANDOM.log"; (umask 077 && touch "${coreFile}" &> /dev/null) || log_fail
 
 # Start writing the logfile
 echo -e "Deployment logfile for ${APP^^} - $NOW\r" >> "${logFile}"
 echo -e "Launching deploy${STARTUP}\n" >> "${logFile}"
 
 # More crappy tmp files
-postFile="/tmp/$APP.wtf-$RANDOM.log"; (umask 077 && touch "${postFile}" &> /dev/null) || log_fail
-trshFile="/tmp/$APP.trsh-$RANDOM.log"; (umask 077 && touch "${trshFile}" &> /dev/null) || log_fail
-statFile="/tmp/$APP.stat-$RANDOM.log"; (umask 077 && touch "${statFile}" &> /dev/null) || log_fail 
-urlFile="/tmp/$APP.url-$RANDOM.log"; (umask 077 && touch "${urlFile}" &> /dev/null) || log_fail
-htmlFile="/tmp/$APP.log-$RANDOM.html"; (umask 077 && touch "${htmlFile}" &> /dev/null) || log_fail
-htmlEmail="/tmp/$APP.email-$RANDOM.html"; (umask 077 && touch "${htmlEmail}" &> /dev/null) || log_fail
-clientEmail="/tmp/$APP.shortemail-$RANDOM.html"; (umask 077 && touch "${clientEmail}" &> /dev/null) || log_fail
+postFile="/tmp/${APP}.wtf-$RANDOM.log"; (umask 077 && touch "${postFile}" &> /dev/null) || log_fail
+trshFile="/tmp/${APP}.trsh-$RANDOM.log"; (umask 077 && touch "${trshFile}" &> /dev/null) || log_fail
+statFile="/tmp/${APP}.stat-$RANDOM.log"; (umask 077 && touch "${statFile}" &> /dev/null) || log_fail 
+urlFile="/tmp/${APP}.url-$RANDOM.log"; (umask 077 && touch "${urlFile}" &> /dev/null) || log_fail
+htmlFile="/tmp/${APP}.log-$RANDOM.html"; (umask 077 && touch "${htmlFile}" &> /dev/null) || log_fail
+htmlEmail="/tmp/${APP}.email-$RANDOM.html"; (umask 077 && touch "${htmlEmail}" &> /dev/null) || log_fail
+clientEmail="/tmp/${APP}.shortemail-$RANDOM.html"; (umask 077 && touch "${clientEmail}" &> /dev/null) || log_fail
 
 # Path of the script; I should flip this check to make it more useful
 if [ -d "/etc/deploy" ]; then
@@ -374,6 +373,7 @@ else
     nano ~/.deployrc
     clear; sleep 1
     console "Loading user configuration."
+    # shellcheck source=/dev/null
     source ~/.deployrc
     # quickExit
   else

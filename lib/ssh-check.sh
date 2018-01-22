@@ -8,7 +8,7 @@
 
 # TODO: Rewrite this to store git@domain stuff in a variable, allow for other
 # repohosts to work (Gitlab etc.) and shorten the entire function
-function sshChk() {
+function ssh_check() {
   if [[ "${NOKEY}" != "TRUE" ]]; then
     trace "Checking SSH configuration"
     if [[ "${REPOHOST}" == *"bitbucket"* ]]; then

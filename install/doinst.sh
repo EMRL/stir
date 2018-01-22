@@ -59,7 +59,7 @@ function check_os() {
 }
 
 function check_program() {
-  printf "%-40s" "Checking for ${1}..."
+  printf "%-40s" "Checking for ${1}..."; read -p "" -t 0.03
   # There's potential for non-global stuff to fail this check so here's a
   # fairly kludgey way to hopefully allow those to pass
   if [[ "${1}" =~ ^(wp|grunt|npm)$ ]]; then
@@ -79,7 +79,7 @@ function error_check() {
 
 echo; check_os
 if [[ -n "${OS}" ]] && [[ -n "${VER}" ]]; then
-  echo "=> Checking operating system: "; sleep 1
+  echo "=> Checking operating system: "; sleep .3
   echo "${OS} ${VER}"; sleep 1
 else
   # No values, crash out for now
@@ -87,10 +87,10 @@ else
 fi
 
 # Declare dependencies
-dependencies=(awk cat curl echo eval git grep pkill printf read sed sendmail sleep tput wget)
+dependencies=(awk cat curl echo eval git grep pkill printf read sed sendmail sleep tput)
 
 # Declare optional stuff
-options=(gitchart grunt npm scp ssh sshpass wp)
+options=(gitchart grunt npm scp ssh sshpass wget wp)
 
 message=''
 fg_red="$(tput setaf 1)"
@@ -102,7 +102,7 @@ YES="${fg_green}OK${reset}"
 NO="${fg_red}NO${reset}"
 NOT="${fg_red}NOT FOUND${reset}"
 
-echo; echo "=> Checking for required dependencies:"; sleep 1
+echo; echo "=> Checking for required dependencies:"
 for i in "${dependencies[@]}" ; do
   check_program "${i}"
 done
@@ -116,7 +116,7 @@ else
   exit 1
 fi
 
-echo; echo "=> Checking optional dependencies:"; sleep 1
+echo; echo "=> Checking optional dependencies:"
 for k in "${options[@]}" ; do
   check_program "${k}"
 done

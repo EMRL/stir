@@ -97,7 +97,7 @@ function ga_fail() {
 }
 
 function ga_test() {
-  emptyLine
+  empty_line
   if [[ -z "${CLIENTID}" ]] || [[ -z "${CLIENTSECRET}" ]];  then
     warning "Define API project"
     console "Analytics API project not defined. Check https://console.developers.google.com/"
@@ -108,7 +108,7 @@ function ga_test() {
   fi
 
   if [[ -z "${AUTHORIZATIONCODE}" ]]; then
-    emptyLine; warning "Authorization required"
+    empty_line; warning "Authorization required"
     console "Point your browser to this link: https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fanalytics&redirect_uri=${REDIRECTURI}&response_type=code&client_id=${CLIENTID}"
     quickExit
   else
@@ -116,7 +116,7 @@ function ga_test() {
   fi
 
   if [[ -z "${ACCESSTOKEN}" ]] || [[ -z "${REFRESHTOKEN}" ]]; then
-    emptyLine; warning "Create an access token"
+    empty_line; warning "Create an access token"
     console "Run this command: curl -H \"Content-Type: application/x-www-form-urlencoded\" -d code=${AUTHORIZATIONCODE} -d client_id=${CLIENTID} -d client_secret=${CLIENTSECRET} -d redirect_uri=${REDIRECTURI} -d grant_type=authorization_code https://accounts.google.com/o/oauth2/token"
     quickExit
   else
@@ -125,7 +125,7 @@ function ga_test() {
   fi
 
   if [[ -z "${PROFILEID}" ]]; then
-    emptyLine; warning "Missing Profile ID"
+    empty_line; warning "Missing Profile ID"
     console "Your project's profile ID is not defined."
     quickExit
   else
@@ -158,12 +158,12 @@ function ga_test() {
 
   notice "Retrieving ${METRIC}..."  
   console "Running: printf \"${METRIC} (Last 7 days): \"; curl -s \"https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN\"" # | tr , '\n' | grep \"totalsForAllResults\" | cut -d'\"' -f6"
-  #emptyLine; analytics
+  #empty_line; analytics
   sleep 3
   printf "${METRIC} (Last 7 days): "; curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6
-  emptyLine
+  empty_line
   console "Verbose output"
   console "--------------"
   curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN"
-  emptyLine
+  empty_line
 }

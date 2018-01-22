@@ -63,7 +63,7 @@ function mailLog() {
 function email_test() {
   console "Testing email..."
   if [[ -z "${TO}" ]]; then
-    warning "No recipient address found."; emptyLine
+    warning "No recipient address found."; empty_line
     clean_up; exit 1
   else
     # Send HTML mail

@@ -17,6 +17,18 @@ function error_check() {
   fi
 }
 
+# I'm not sure why this is here, figure it out!
+# Try to get exit/error code, with a hard stop on fail
+function error_status() {
+  EXITCODE=$?; 
+  if [[ "${EXITCODE}" != 0 ]]; then 
+    error_msg="WARNING: Error code ${EXITCODE}"
+    trace "${error_msg}"
+  else
+    trace "OK"
+  fi
+}
+
 function deploy_check() {
   if [[ "${DEPLOY}" == *"mina"* ]]; then # && [[ "${DEPLOY}" != *"bundle"* ]]; then
     DEPLOYTEST="mina --simulate deploy"
@@ -104,17 +116,6 @@ function deploy_check() {
       error_msg="Deployment exited due to a configuration problem (Error ${EXITCODE})"
       error_exit
     fi
-    trace "OK"
-  fi
-}
-
-# Try to get exit/error code, with a hard stop on fail
-function error_status() {
-  EXITCODE=$?; 
-  if [[ "${EXITCODE}" != 0 ]]; then 
-    error_msg="WARNING: Error code ${EXITCODE}"
-    trace "${error_msg}"
-  else
     trace "OK"
   fi
 }

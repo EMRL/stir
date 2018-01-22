@@ -30,10 +30,10 @@ function postTest {
   console "Testing POST integration..."
   echo "${POSTURL}"
   if [[ -z "${POSTURL}" ]]; then
-    warning "No webhook URL found."; emptyLine
+    warning "No webhook URL found."; empty_line
     clean_up; exit 1
   else
     curl -X POST --data "payload={\"text\": \"Testing POST integration of ${APP} from deploy ${VERSION}\nhttps://github.com/EMRL/deploy\"}" "${POSTURL}"
-    emptyLine
+    empty_line
   fi
 }

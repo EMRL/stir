@@ -10,7 +10,7 @@
 function wfCheck() {
   if [[ "${WFCHECK}" == "TRUE" ]]; then
     if [[ -f "${WORKPATH}/${APP}${WPROOT}${WPAPP}/wflogs/config.php" ]]; then
-      trace "Wordfence detected"; emptyLine
+      trace "Wordfence detected"; empty_line
       warning "Wordfence firewall detected, and may cause issues with deployment."
       if [[ "${FORCE}" = "1" ]] || [[ "${QUIET}" = "1" ]]; then
         error "Deployment can not continue while Wordfence firewall is enabled."
