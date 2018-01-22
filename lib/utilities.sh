@@ -46,7 +46,7 @@ function go() {
   if [[ "${SSHTEST}" == "1" ]]; then
     if [[ "${NOKEY}" != "TRUE" ]] && [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then
       notice "Checking SSH Configuration..."
-      sshChk
+      ssh_check
     else
       warning "This project is not configured to use SSH keys, no check needed."
     fi
@@ -130,7 +130,7 @@ function dependency_check() {
   if [[ -z "${APPRC}" ]]; then
     # Make sure app directory is writable
     if [[ -w "${WORKPATH}/${APP}" ]]; then
-      emptyLine; info "Project configuration not found, creating."; sleep 2
+      empty_line; info "Project configuration not found, creating."; sleep 2
       # If configuration directory is defined
       if [[ -n "${CONFIGDIR}" ]]; then
         if [[ ! -d "${WORKPATH}/${APP}/${CONFIGDIR}" ]]; then

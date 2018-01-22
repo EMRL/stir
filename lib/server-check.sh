@@ -7,7 +7,7 @@
 ###############################################################################
 trace "Loading server checks"
 
-function srvCheck() {
+function server_check() {
   if [ "${SERVERCHECK}" == "TRUE" ]; then
     notice "Checking servers..."
     # Set SERVERFAIL to 0

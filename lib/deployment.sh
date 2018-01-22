@@ -20,7 +20,7 @@ function preDeploy() {
       trace "Checking for files that need stashing"
       # Stash the dirty bits
       if [[ "${STASH}" == "TRUE" ]] || [[ "${UPDATEONLY}" == "1" ]]; then # Bah, clunky
-        emptyLine
+        empty_line
         trace "Stashing dirty files"
         if [[ "${VERBOSE}" == "1" ]] && [[ "${QUIET}" != "1" ]]; then
           git stash | tee --append "${logFile}"; error_check 
@@ -29,12 +29,12 @@ function preDeploy() {
         fi
         currentStash="1"
       else
-        emptyLine
+        empty_line
         error "There are previously undeployed changes in this project, deployment can not continue."
       fi
 
     else
-      emptyLine
+      empty_line
       warning "There are previously undeployed changes in this project."
 
       if yesno --default no "View unresolved files? [y/N] "; then
@@ -52,7 +52,7 @@ function preDeploy() {
 } 
 
 function pkgDeploy() {
-  emptyLine
+  empty_line
   if [[ -n "${DEPLOY}" ]]; then
     # Add ssh keys and double check directoy
     cd "${WORKPATH}/${APP}" || error_check

@@ -33,7 +33,7 @@ function create_report() {
     # If INCLUDEHOSTING is equal to something other than TRUE (And not FALSE), 
     # its value will be used as the text string in the report 
     if [[ "${INCLUDEHOSTING}" == "TRUE" ]]; then
-      INCLUDEHOSTING="Web hosting for the month of ${LASTMONTH} ${PRVYR}"
+      INCLUDEHOSTING="Web hosting for the month of ${LAST_MONTH} ${PRVYR}"
     fi
     echo "<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">${TASK}<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">${INCLUDEHOSTING}</div></td></tr>" >> "${statFile}"
   fi

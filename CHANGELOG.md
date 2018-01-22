@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Changed
-- Configuration files restructred for better readability 
+- Configuration files restructured for better readability 
 - Many function and variable names changed for better consistency
 ### Fixed
 - Google analytics no longer incorrectly display for projects that do not use them 

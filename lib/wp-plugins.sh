@@ -27,7 +27,7 @@ function wpPlugins() {
 
   # Display plugin list
   if [[ "${QUIET}" != "1" ]]; then
-    cat "${wpFile}"; emptyLine
+    cat "${wpFile}"; empty_line
   fi
 
   if [[ "${FORCE}" = "1" ]] || yesno --default no "Proceed with updates? [y/N] "; then

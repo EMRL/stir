@@ -17,9 +17,9 @@ function core() {
   elif [[ "${REPORT}" == "1" ]]; then
     create_report
   else
-    srvCheck    # Check that servers are up and running
+    server_check      # Check that servers are up and running
     if [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then
-      sshChk    # Check keys
+      ssh_check   # Check keys
     fi
     permFix     # Fix permissions
     if [[ "${PUBLISH}" == "1" ]]; then

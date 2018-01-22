@@ -52,7 +52,7 @@ function gitStart() {
 # Checkout master
 function gitChkMstr() {
   if [[ -z "${MASTER}" ]]; then
-    emptyLine; error "deploy ${VERSION} requires a master branch to be defined.";
+    empty_line; error "deploy ${VERSION} requires a master branch to be defined.";
   else
     current_branch="$(git rev-parse --abbrev-ref HEAD)"
     if [[ "${current_branch}" != "${MASTER}" ]]; then
@@ -102,7 +102,7 @@ function gitStage() {
   if [[ -z $(git status --porcelain) ]]; then
     console "Nothing to commit, working directory clean."; quietExit
   else
-    emptyLine
+    empty_line
     if [[ "${FORCE}" = "1" ]] || yesno --default yes "Stage files? [Y/n] "; then
       trace "Staging files"
       if [[ "${VERBOSE}" -eq 1 ]]; then
@@ -119,7 +119,7 @@ function gitStage() {
 # Commit, with message
 function gitCommit() {
   # Smart commit stuff
-  smrtCommit; emptyLine
+  smrtCommit; empty_line
 
   # Do a dry run; check for anything to commit
   git commit --dry-run &>> "${logFile}" 
@@ -194,7 +194,7 @@ function gitCommit() {
 function gitPushMstr() {
   if [[ -n "${MASTER}" ]]; then
     trace "Pushing ${MASTER}"; fix_index
-    emptyLine  
+    empty_line  
     if [[ "${VERBOSE}" -eq 1 ]]; then
       git push | tee --append "${logFile}"; error_check           
     else
@@ -290,7 +290,7 @@ function gitPushProd() {
   if [[ "${MERGE}" = "1" ]]; then
     if [[ -n "${PRODUCTION}" ]]; then
       trace "Push ${PRODUCTION}"; fix_index
-      emptyLine
+      empty_line
       if [[ "${VERBOSE}" -eq 1 ]]; then
         git push | tee --append "${logFile}"; error_check 
         trace "OK"              
