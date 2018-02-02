@@ -7,6 +7,10 @@
 ###############################################################################
 trace "Loading report handling"
 
+# Initialize variables
+read -r CURMTH CURYR PRVMTH PRVYR LASTDY <<< ""
+echo "${CURMTH} ${CURYR} ${PRVMTH} ${PRVYR} ${LASTDY}" > /dev/null
+
 function create_report() {
   message_state="REPORT"
   htmlDir
@@ -17,6 +21,9 @@ function create_report() {
 
   if [[ "${CURMTH}" -eq 1 ]]; then
     PRVMTH="11"
+    PRVYR=`expr "${CURYR}" - 1`
+  elif [[ "${CURMTH}" -eq 2 ]]; then
+    PRVMTH="12"
     PRVYR=`expr "${CURYR}" - 1`
   else PRVMTH=`expr "${CURMTH}" - 2`
     PRVYR="${CURYR}"
@@ -33,7 +40,7 @@ function create_report() {
     # If INCLUDEHOSTING is equal to something other than TRUE (And not FALSE), 
     # its value will be used as the text string in the report 
     if [[ "${INCLUDEHOSTING}" == "TRUE" ]]; then
-      INCLUDEHOSTING="Web hosting for the month of ${LAST_MONTH} ${PRVYR}"
+      INCLUDEHOSTING="Web hosting for the month of ${LAST_MONTH}"
     fi
     echo "<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">${TASK}<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">${INCLUDEHOSTING}</div></td></tr>" >> "${statFile}"
   fi

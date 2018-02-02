@@ -10,7 +10,7 @@ trace "Loading html handling"
 # Initialize variables 
 read -r DEFAULTC PRIMARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID COVER <<< ""
 echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} 
-  ${SMOOCHID} ${COVER}"
+  ${SMOOCHID} ${COVER}" > /dev/null
 
 function process_html() {
   # Clean out the stuff we don't need
