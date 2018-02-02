@@ -87,7 +87,7 @@ else
 fi
 
 # Declare dependencies
-dependencies=(awk cat curl echo eval git grep pkill printf read sed sendmail sleep tput)
+dependencies=(awk cal cat curl echo eval git grep pkill printf read sed sendmail sleep tput)
 
 # Declare optional stuff
 options=(gitchart grunt npm scp ssh sshpass wget wp)
