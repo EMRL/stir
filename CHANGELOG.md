@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Configuration files restructured for better readability 
 - Many function and variable names changed for better consistency
 ### Fixed
+- Fixed a crash that could occur when creating statistics for projects with code in approval queue
+- Reports for the month of Januray now generate correctly 
 - Google analytics no longer incorrectly display for projects that do not use them 
 
 ## [3.6.6] - 01-13-2018

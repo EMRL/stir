@@ -115,12 +115,13 @@
 
 # Project Management 
 # ------------------
+
 # Task#: This is used to post deploy logs to project management systems 
 # that can accept external email input. For examples, our task management system 
 # accepts emails in the format task-####@projects.emrl.com, with the #### 
 # being the task identification number for the project being deployed.
 # TASK="####"
-#
+
 # If you wish to have automated deployments add tracked time to your project 
 # management system, uncomment and configure the two values below. TASKUSER 
 # should be the email address of the user that the time will be logged as,
@@ -131,22 +132,23 @@
 
 # Slack
 # -----
+
 # You'll need to set up an "Incoming Webhook" custom integration on the Slack 
 # side to get this ready to roll. 
 # See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get 
 # going. Once your Slack webhook is setup, run # 'deploy --slack-test' to 
 # test your configuration.
-#
+
 # Set POSTTOSLACK to "TRUE" to enable Slack integration.
 # POSTTOSLACK="TRUE"
-#
+
 # Add your full Webhook URL below, including https://
 # SLACKURL="https://hooks.slack.com/services/###################/########################"
-#
+
 # Normally only successful deployments are posted to Slack.
 # Enable the settings below to post on WARNiNG and/or ERROR.
 # SLACKERROR="FALSE"
-#
+
 # If you'd like to post a Slack notification with a URL to view the weekly digest  
 # set the following to TRUE. If you want to use an incoming webhook other than the 
 # one defined in SLACKURL, enter that here *instead* of TRUE.
@@ -243,15 +245,15 @@
 # CLIENTID="#############################################.apps.googleusercontent.com"
 # CLIENTSECRET="########################"
 # REDIRECTURI="http://localhost"
-#
+
 # OAuth authorization will expire after one hour, but will be updated when needed
 # if the tokens below are configured correctly
 # AUTHORIZATIONCODE="##############################################"
-#
+
 # Tokens
 # ACCESSTOKEN="#################################################################################################################################"
 # REFRESHTOKEN="##################################################################"
-#
+
 # Google Analytics ID
 # PROFILEID="########"
 
