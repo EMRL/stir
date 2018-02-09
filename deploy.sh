@@ -10,7 +10,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.6.6"
+VERSION="3.6.7-alpha.2"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 LAST_MONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
@@ -518,7 +518,7 @@ fi
 # Check if a deployment is queued
 if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
   if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
-    error "There is changed code already queued. Approve or deny it before attempting another deployment."
+    queue_check
   fi
   if [[ "${DENY}" == "1" ]] || [[ -f "${WORKPATH}/${APP}/.denied" ]]; then
     deny
