@@ -29,9 +29,10 @@ function wpCore() {
     # messing up output with PHP crap
     sed '/^\s*$/d' "${coreFile}" > "${trshFile}" && mv "${trshFile}" "${coreFile}";
     
-    # Remove line breaks, value should noe equal 'version x.x.x' or 
-    # some such.
-    sed ':a;N;$!ba;s/\n/ /g' "${coreFile}" > "${trshFile}" && mv "${trshFile}" "${coreFile}";
+    # Remove line breaks, value should noe equal 'version x.x.x' or some such.
+    sed ':a;N;$!ba;s/\n/ /g' "${coreFile}" > "${trshFile}" && mv "${trshFile}" "${coreFile}"
+    # Remove everything up to and including the first space (in case of multiple core updates)
+    sed -i 's/[^ ]* //' "${coreFile}"
     COREUPD=$(<$coreFile)
 
     if [[ -n "${COREUPD}" ]]; then
