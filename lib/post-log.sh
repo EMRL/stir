@@ -105,6 +105,12 @@ function postLog() {
       if [[ "${REPORT}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]]; then 
         eval "${SCPCMD}" "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
       fi
+
+      # Remove logs older then X days
+      if [[ -n "${EXPIRELOGS}" ]]; then
+        eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "'find ${SCPHOSTPATH}/${APP}* -mtime +${EXPIRELOGS} -exec rm {} \;' &> /dev/null"
+      fi
+
       eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "chmod -R 755 ${SCPHOSTPATH}/${APP}/"
     fi
   fi
