@@ -86,8 +86,7 @@ read -r var optstring options logFile wpFile coreFile postFile trshFile statFile
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE GREETING LOGSUFFIX \
   DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile \
   TMP MONITORURL MONITORUSER MONITORPASS SERVERID \
-  MONITORHOURS LATENCY UPTIME MONITORTEST MONITORAPI RELEASE RELEASENOTES \
-  RELEASEURL <<< ""
+  MONITORHOURS LATENCY UPTIME MONITORTEST MONITORAPI <<< ""
 echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
   ${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
   ${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
@@ -103,7 +102,7 @@ echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile
   ${URL} ${CODE} ${DEPLOYPID} ${DEPLOYTEST} ${payload} ${reportFile} 
   ${TMP} ${MONITORURL} ${MONITORUSER} ${MONITORPASS} 
   ${SERVERID} ${MONITORHOURS} ${LATENCY} ${UPTIME} ${MONITORTEST} 
-  ${MONITORAPI} ${RELEASE} ${RELEASENOTES} ${RELEASEURL}" > /dev/null
+  ${MONITORAPI}" > /dev/null
 
 # Display command options
 function flags() {
@@ -558,7 +557,7 @@ if [[ "${MERGE}" == "1" ]] && [[ -z "${PRODUCTION}" ]]; then
 fi
 
 # Execute the deploy process
-core
+main
 
 # Trapping stuff
 trap userExit INT

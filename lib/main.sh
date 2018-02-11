@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 #
-# core.sh
+# main.sh
 #
 ###############################################################################
-# The core application
+# The main application
 ###############################################################################
 
-function core() {
+function main() {
   dependency_check  # Check that required commands are available
   release_check     # Check for newer version at Github
   gitStart          # Check for a valid git project and get set up
   lock              # Create lock file
   go                # Start a deployment work session
+
   if [[ "${DIGEST}" == "1" ]]; then
     create_digest
   elif [[ "${REPORT}" == "1" ]]; then
