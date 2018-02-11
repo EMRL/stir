@@ -48,9 +48,7 @@ function wpPkg() {
           # Check the logs
           #if grep -q "U = Update Available" "${logFile}"; then
           if grep -q "Available plugin updates:" "${wpFile}"; then    
-                        wpPlugins
-
-
+            wpPlugins
           else
             # Was there a database glitch?
             if grep -q 'plugins can not be updated' "${wpFile}"; then

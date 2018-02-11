@@ -49,7 +49,10 @@ function postLog() {
 
       # Remove logs older then X days
       if [[ -n "${EXPIRELOGS}" ]]; then
-        find "${LOCALHOSTPATH}/${APP}"* -mtime +"${EXPIRELOGS}" -exec rm {} \; &> /dev/null
+        is_integer "${EXPIRELOGS}"
+        if [[ "${integer_check}" != "1" ]]; then
+          find "${LOCALHOSTPATH}/${APP}"* -mtime +"${EXPIRELOGS}" -exec rm {} \; &> /dev/null
+        fi
       fi
     fi
 
@@ -108,9 +111,13 @@ function postLog() {
 
       # Remove logs older then X days
       if [[ -n "${EXPIRELOGS}" ]]; then
-        eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "'find ${SCPHOSTPATH}/${APP}* -mtime +${EXPIRELOGS} -exec rm {} \;' &> /dev/null"
+        is_integer "${EXPIRELOGS}"
+        if [[ "${integer_check}" != "1" ]]; then
+          eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "'find ${SCPHOSTPATH}/${APP}* -mtime +${EXPIRELOGS} -exec rm {} \;' &> /dev/null"
+        fi
       fi
 
+      # Set permissions
       eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "chmod -R 755 ${SCPHOSTPATH}/${APP}/"
     fi
   fi

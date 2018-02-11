@@ -7,12 +7,18 @@
 ###############################################################################
 trace "Loading utilities"
 
+# Initialize variables
+read -r integer_check <<< ""
+echo "${integer_check}" > /dev/null
+
 # Open a deployment session, ask for user confirmation before beginning
 function go() {
   if [[ "${QUIET}" != "1" ]]; then
     tput cnorm;
   fi
+
   console "deploy ${VERSION}"
+
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
     console "Current working path is ${WORKPATH}/${APP}"
   fi
@@ -118,6 +124,15 @@ function fix_index() {
     sleep 1
   fi
 }
+
+# Check that a variable is an integer
+function is_integer() {
+  declare arg1="$1"; integer_check="0"
+  if [[ ! "${arg1}" =~ ^[0-9]+$ ]] ; then
+    integer_check="1"
+  fi
+}
+
 
 # Check that dependencies exist
 function dependency_check() {

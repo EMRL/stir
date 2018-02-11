@@ -15,7 +15,7 @@ function gitStart() {
   # Directory exists?
   if [[ ! -d "${WORKPATH}/${APP}" ]]; then
     info "${WORKPATH}/${APP} is not a valid directory."
-    exit 1
+    clean_up; exit 1
   else
     cd "${WORKPATH}/${APP}" || error_check
   fi
@@ -25,7 +25,7 @@ function gitStart() {
     sleep 1
   else
     info "There is nothing at ${WORKPATH}/${APP} to deploy."
-    exit 1
+    clean_up; exit 1
   fi
 
   # Make sure there has been at least one commit previously made
@@ -123,6 +123,7 @@ function gitCommit() {
 
   # Do a dry run; check for anything to commit
   git commit --dry-run &>> "${logFile}" 
+
   if grep -q "nothing to commit, working directory clean" "${logFile}"; then 
     info "Nothing to commit, working directory clean."
     safeExit
