@@ -18,7 +18,7 @@ function pkgMgr() {
         if  [[ "${FORCE}" = "1" ]] || yesno --default no "Build assets? [y/N] "; then
           cd "${WORKPATH}"/"${APP}" || errorCheck
     
-          if [[ "${VERBOSE}" -eq 1 ]]; then
+          if [[ "${VERBOSE}" == "TRUE" ]]; then
             /usr/local/bin/grunt build --force 2>&1 | tee --append "${trshFile}"           
           else
             /usr/local/bin/grunt build --force &>> "${trshFile}" &
@@ -39,7 +39,7 @@ function pkgMgr() {
           if  [[ "${FORCE}" = "1" ]] || yesno --default no "Build assets? [y/N] "; then
             cd "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/${APP}" || errorCheck
 
-            if [[ $VERBOSE -eq 1 ]]; then
+            if [[ "${VERBOSE}" == "TRUE" ]]; then
               npm run build | tee --append "${trshFile}"               
             else
               npm run build &>> "${trshFile}" &

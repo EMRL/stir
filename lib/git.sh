@@ -57,7 +57,7 @@ function gitChkMstr() {
     current_branch="$(git rev-parse --abbrev-ref HEAD)"
     if [[ "${current_branch}" != "${MASTER}" ]]; then
       notice "Checking out master branch..."; fix_index
-      if [[ "${VERBOSE}" -eq 1 ]]; then
+      if [[ "${VERBOSE}" == "TRUE" ]]; then
         git checkout master | tee --append "${logFile}"            
       else
         if [[ "${QUIET}" != "1" ]]; then
@@ -105,7 +105,7 @@ function gitStage() {
     empty_line
     if [[ "${FORCE}" = "1" ]] || yesno --default yes "Stage files? [Y/n] "; then
       trace "Staging files"
-      if [[ "${VERBOSE}" -eq 1 ]]; then
+      if [[ "${VERBOSE}" == "TRUE" ]]; then
         git add -A | tee --append "${logFile}"; error_check              
       else  
         git add -A &>> "${logFile}"; error_check
@@ -196,7 +196,7 @@ function gitPushMstr() {
   if [[ -n "${MASTER}" ]]; then
     trace "Pushing ${MASTER}"; fix_index
     empty_line  
-    if [[ "${VERBOSE}" -eq 1 ]]; then
+    if [[ "${VERBOSE}" == "TRUE" ]]; then
       git push | tee --append "${logFile}"; error_check           
     else
       if  [[ "${FORCE}" = "1" ]] || yesno --default yes "Push ${MASTER} branch? [Y/n] "; then
@@ -224,7 +224,7 @@ function gitChkProd() {
     if [[ -n "${PRODUCTION}" ]]; then
       notice "Checking out ${PRODUCTION} branch..."; fix_index
 
-      if [[ "${VERBOSE}" -eq 1 ]]; then
+      if [[ "${VERBOSE}" == "TRUE" ]]; then
         git checkout "${PRODUCTION}" | tee --append "${logFile}"; error_check               
       else
         if [[ "${QUIET}" != "1" ]]; then
@@ -271,7 +271,7 @@ function gitMerge() {
       [[ -f "${gitLock}" ]] && rm "${gitLock}"
       # Bonus add, just because. Ugh.
       # git add -A; error_check 
-      if [[ "${VERBOSE}" -eq 1 ]]; then
+      if [[ "${VERBOSE}" == "TRUE" ]]; then
         git merge "${MASTER}" | tee --append "${logFile}"              
       else
         if [[ "${QUIET}" != "1" ]]; then
@@ -292,7 +292,7 @@ function gitPushProd() {
     if [[ -n "${PRODUCTION}" ]]; then
       trace "Push ${PRODUCTION}"; fix_index
       empty_line
-      if [[ "${VERBOSE}" -eq 1 ]]; then
+      if [[ "${VERBOSE}" == "TRUE" ]]; then
         git push | tee --append "${logFile}"; error_check 
         trace "OK"              
       else

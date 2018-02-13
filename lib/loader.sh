@@ -7,19 +7,19 @@
 ###############################################################################
 
 # Save current contents of the terminal
-if [ "${QUIET}" != "1" ]; then
-  if [ "${CLEARSCREEN}" == "TRUE" ]; then
+if [[ "${CLEARSCREEN}" == "TRUE" ]]; then
+  if [[ "${QUIET}" != "1" ]] && [[ "${VERBOSE}" != "TRUE" ]]; then
     tput smcup; clear
   fi
-else
-  if [[ "${FORCE}" != "1" ]] && [[ "${QUIET}" = "1" ]]; then
-    echo "To deploy using the --quiet flag, you must also use --force."; exit 1
-  fi
+fi
+
+if [[ "${FORCE}" != "1" ]] && [[ "${QUIET}" = "1" ]]; then
+  echo "To deploy using the --quiet flag, you must also use --force."; exit 1
 fi
 
 # Creating this function first, so verbose output option is usable early
 function trace() {
-  if [[ "${VERBOSE}" == "1" ]]; then
+  if [[ "${VERBOSE}" == "TRUE" ]]; then
     TIMESTAMP="$(date '+%H:%M:%S')"
     echo -e "$(tput setaf 3)${TIMESTAMP}$(tput sgr0) $*"
     echo "${TIMESTAMP} $*" >> "${logFile}"

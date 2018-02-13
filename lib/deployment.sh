@@ -22,7 +22,7 @@ function preDeploy() {
       if [[ "${STASH}" == "TRUE" ]] || [[ "${UPDATEONLY}" == "1" ]]; then # Bah, clunky
         empty_line
         trace "Stashing dirty files"
-        if [[ "${VERBOSE}" == "1" ]] && [[ "${QUIET}" != "1" ]]; then
+        if [[ "${VERBOSE}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then
           git stash | tee --append "${logFile}"; error_check 
         else
           git stash >> "${logFile}"; error_check
@@ -75,7 +75,7 @@ function pkgDeploy() {
         # Test deployment command before running
         deploy_check
         # Deploy via deployment command specified in configuration
-        if [[ "${VERBOSE}" == "1" ]] && [[ "${INCOGNITO}" != "TRUE" ]]; then
+        if [[ "${VERBOSE}" == "TRUE" ]] && [[ "${INCOGNITO}" != "TRUE" ]]; then
           eval "${DEPLOY}" | tee --append "${logFile}"
           error_check
         else

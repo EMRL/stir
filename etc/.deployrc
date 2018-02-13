@@ -8,65 +8,12 @@
 # settings will override those settings found here. Anything you leave
 # commented out or unset in this file will use the global configuration.
 
-# Miscellaneous settings
-#
-# Activate "Smart Commits"; this feature tries to create automatic 
-# commit messages by parsing the log files generated during 
-# Wordpress updates. Set to exactly "TRUE" to activate.
-# SMARTCOMMIT="TRUE"	
-#
+# Clear screen on startup, when not running with --quiet or --verbose switch
+# CLEARSCREEN="{{CLEARSCREEN}}"
+
+# Verbose output to console?
+# VERBOSE="{{VERBOSE}}"
+
 # If you want to see statistics about your recent git activity,
 # set this value to exactly "TRUE"
-# GITSTATS="TRUE" 		
-
-# Log settings
-#
-# Strips the bulk of nasty PHP debug messages out of the 
-# log files that are emailed upon deployment.
-# NOPHP="TRUE" 
-#
-# Set the address that should receive your log files
-# TO="deploy@emrl.com"
-#
-# Email log subject line "- project name" is appended to this, creating
-# a subject line such as "Project deployed - Project Name"
-# SUBJECT="[EMRL] Deployment"		
-#
-# When should email logs be sent?
-# EMAILERROR="TRUE"
-# EMAILSUCCESS="TRUE"				
-# EMAILQUIT="TRUE"					
-
-# If you want your emails to be sent "clean" (with no detailed logging) set 
-# SHORTEMAIL to TRUE. Full logs will still be posted to web logs. Error emails
-# will continue to contain full logs.
-# SHORTEMAIL="FALSE"	
-
-# Send log file in HTML?
-# EMAILHTML="FALSE"
-
-# Integration options
-# 
-# Set values for where you'd like to post commit messages to 
-# via email. You can use something like Zapier to re-post that
-# to whatever service you like, or if your project tracker allows
-# for input directly via email like ours does, you post directly.
-# Some of these options will definitely need to be set in the 
-# project's deploy.sh, not in a master configuration.
-#
-# Email from domain. Whatever you're integrating with may need
-# a different From: address than that of the the machine you're 
-# actually deploying from.
-# FROMDOMAIN="emrl.com"
-#
-# If you need to specify a user, other than your unix user name
-# to be the in the From: email, do it here. Otherwise Leave blank.
-# FROMUSER=""
-#
-# Post commit logs to this email address. This should probably 
-# be set per-project. For examples, for oour task management 
-# system, this email would be task-####@projects.emrl.com, with 
-# the #### being the task identification number for the project 
-# being deployed.
-# POSTEMAILHEAD="task-"
-# POSTEMAILTAIL="@projects.emrl.com"
+# GITSTATS="{{GITSTATS}}" 		
