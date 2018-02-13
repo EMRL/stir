@@ -204,7 +204,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --monitor-test) MONITORTEST="1" ;;
     --stats) PROJSTATS="1" ;;
     --unlock) UNLOCK="1" ;;
-    --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="1" ;;
+    --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="TRUE" ;;
     --no-check) NOCHECK="1" ;;
     --function-list) FUNCTIONLIST="1"; CURRENT="1" ;; # Spoofs --current
     --variable-list) VARIABLELIST="1"; CURRENT="1" ;; # Spoofs --current
@@ -238,7 +238,7 @@ fi
 [[ "${SKIPUPDATE}" == "1" ]] && STARTUP="${STARTUP} --skip-update"
 [[ "${TIME}" == "1" ]] && STARTUP="${STARTUP} --time"
 [[ "${CURRENT}" == "1" ]] && STARTUP="${STARTUP} --current"
-[[ "${VERBOSE}" == "1" ]] && STARTUP="${STARTUP} --verbose"
+[[ "${VERBOSE}" == "TRUE" ]] && STARTUP="${STARTUP} --verbose"
 [[ "${QUIET}" == "1" ]] && STARTUP="${STARTUP} --quiet"
 [[ "${STRICT}" == "1" ]] && STARTUP="${STARTUP} --strict"
 [[ "${DEBUG}" == "1" ]] && STARTUP="${STARTUP} --debug"
@@ -352,6 +352,8 @@ if [[ "${VARIABLELIST}" == "1" ]]; then
   ( set -o posix ; set ) | cat -v; quickExit
 fi
 
+
+
 # Spam all the things!
 trace "Version ${VERSION}"
 if [[ "${INCOGNITO}" != "TRUE" ]]; then
@@ -369,14 +371,15 @@ else
   cp "${deployPath}"/.deployrc ~/.deployrc
   console "User configuration file missing, creating ~/.deployrc"
   if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
-    nano ~/.deployrc
-    clear; sleep 1
+    # nano ~/.deployrc
+    configure_user; sleep 1
     console "Loading user configuration."
     # shellcheck source=/dev/null
     source ~/.deployrc
     # quickExit
   else
     info "You can change configuration later by editing ~/.deployrc"
+    clear_user
   fi
 fi
 
