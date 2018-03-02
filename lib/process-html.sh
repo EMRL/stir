@@ -22,8 +22,12 @@ function process_html() {
   [[ -z "${CLIENTLOGO}" ]] && sed -i '/CLIENTLOGO/d' "${htmlFile}"
   [[ -z "${CLIENTCONTACT}" ]] && sed -i '/CLIENTCONTACT/d' "${htmlFile}"
   [[ -z "${notes}" ]] && sed -i '/NOTES/d' "${htmlFile}"
-  [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]] && sed -i '/ANALYTICS/d' "${htmlFile}"
   [[ -z "${SMOOCHID}" ]] && sed -i '/SMOOCHID/d' "${htmlFile}"
+
+  if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
+    sed -i '/BEGIN ANALYTICS/,/END ANALYTICS/d' "${htmlFile}"
+    sed -i '/ANALYTICS/d' "${htmlFile}"
+  fi
 
   # Get to work
   sed -i -e "s^{{VIEWPORT}}^${VIEWPORT}^g" \
@@ -67,5 +71,10 @@ function process_html() {
     -e "s^{{LASTMONTH}}^${LAST_MONTH}^g" \
     -e "s^{{UPTIME}}^${UPTIME}^g" \
     -e "s^{{LATENCY}}^${LATENCY}^g" \
+    -e "s^{{GA_HITS}}^${GA_HITS}^g" \
+    -e "s^{{GA_PERCENT}}^${GA_PERCENT}^g" \
+    -e "s^{{GA_SEARCHES}}^${GA_SEARCHES}^g" \
+    -e "s^{{GA_DURATION}}^${GA_DURATION}^g" \
+    -e "s^{{GA_SOCIAL}}^${GA_SOCIAL}^g" \
     "${htmlFile}"        
 }

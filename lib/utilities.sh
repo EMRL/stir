@@ -23,6 +23,9 @@ function go() {
     console "Current working path is ${WORKPATH}/${APP}"
   fi
 
+  # Weird spot for this I know
+  server_monitor
+  
   # Slack test
   if [[ "${SLACKTEST}" == "1" ]]; then
     slackTest; quickExit
@@ -106,9 +109,6 @@ function go() {
   if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]] && [[ -f "${WORKPATH}/${APP}/.approved" ]]; then 
     notice "Processing outstanding approval..."
   fi
-
-  # Weird spot for this I know
-  server_monitor
 }
 
 function fix_index() {
