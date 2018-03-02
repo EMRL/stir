@@ -8,32 +8,37 @@
 trace "Loading configuration"
 
 # Initialize variables
-read -r active_files <<< ""
-echo "${active_files}" > /dev/null
+read -r value <<< ""
+echo "${value}" > /dev/null
 
 function configure_project() {
-  trace "This is an empty function"
+  empty_line
+  arg="${PROJNAME}"; read -rp "Project name:" -e -i "${arg}" value; set_value "${value}"
+  arg="${PROJCLIENT}"; read -rp "Client name:" -e -i "${arg}" value; set_value "${value}"
+  arg="${DEVURL}"; read -rp "Development URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
+  arg="${PRODURL}"; read -rp "Production URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
 }
 
 function configure_user() {
   empty_line
+  target_file="/home/fdiebel/.deployrc"
   arg="CLEARSCREEN"
   if yesno --default yes "Clear screen on startup? [Y/n] "; then
-    set_value
+    set_value TRUE
   else
     unset_value
   fi
 
   arg="VERBOSE"
   if yesno --default no "Always show verbose output on console? [y/N] "; then
-    set_value
+    set_value TRUE
   else
     unset_value
   fi  
 
   arg="GITSTATS"
   if yesno --default yes "Display project statistics after every deployment? [Y/n] "; then
-    set_value
+    set_value TRUE
   else
     unset_value
   fi
@@ -45,8 +50,9 @@ function configure_global() {
 }
 
 function set_value() {
-  sed -i -e "s^{{${arg}}}^TRUE^g" \
-    -e "s^# ${arg}^${arg}^g" \
+  value="$1"
+  sed -i -e "s^{{${arg}}}^${value}^g" \
+    -e "s^# ${arg}^${arg}^g"
     ~/.deployrc      
 }
 

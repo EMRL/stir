@@ -22,6 +22,9 @@ function projStats() {
 
     notice "Generating files..."
 
+    # Attempt to get analytics
+    analytics
+    
     # Process the HTML
     cat "${deployPath}/html/${HTMLTEMPLATE}/stats/index.html" > "${htmlFile}"
     process_html

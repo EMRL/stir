@@ -8,8 +8,8 @@
 trace "Loading analytics functions"   
 
 # Initialize variables
-read -r SIZE RND METRIC RESULT <<< ""
-echo "${SIZE} ${RND} ${METRIC} ${RESULT}" > /dev/null
+read -r SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION GA_SOCIAL <<< ""
+echo "${SIZE} ${RND} ${METRIC} ${RESULT} ${GA_HITS} ${GA_PERCENT} ${GA_SEARCHES} ${GA_DURATION} ${GA_SOCIAL}" > /dev/null
 
 function ga_metrics() {
   array[0]="hits"
@@ -87,6 +87,18 @@ function analytics() {
 function ga_data() {
   RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
   SIZE="$(printf "%.0f\n" "${RESULT}")"
+
+  if [[ "${PROJSTATS}" == "1" ]]; then 
+    GA_HITS=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:hits&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+    GA_PERCENT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:percentNewSessions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+    GA_SEARCHES=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:organicSearches&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+    GA_DURATION=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:avgSessionDuration&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+    GA_SOCIAL=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:socialInteractions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+
+    # Make sure we're only dealing with integers
+    GA_PERCENT="$(printf "%.0f\n" "${GA_PERCENT}")"
+    GA_DURATION="$(printf "%.0f\n" "${GA_DURATION}")"
+  fi
 }
 
 # If no other results are worht displaying, fall back to displaying hits
