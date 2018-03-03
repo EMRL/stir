@@ -7,7 +7,7 @@
 ###############################################################################
 trace "Loading statistics functions"
 
-function projStats() {
+function project_stats() {
   hash gitchart 2>/dev/null || {
   error "gitchart not installed." 
   }

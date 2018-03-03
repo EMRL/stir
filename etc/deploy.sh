@@ -16,7 +16,7 @@
 # A human readable client name
 # PROJCLIENT="Client Name"
 
-# Development project URL, including http:// or https:// 
+# Staging URL, including http:// or https:// 
 # DEVURL="http://devurl.com"
 
 # Production, or "Live" project URL, including http:// or https://
