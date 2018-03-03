@@ -462,7 +462,7 @@ fi
 # General info
 if [[ "${INCOGNITO}" != "TRUE" ]]; then
   trace "Log file is ${logFile}"
-  trace "Development workpath is ${WORKPATH}"
+  trace "Project workpath is ${WORKPATH}"
   # Are we planning on "fixing" permissions?
   if [[ "${FIXPERMISSIONS}" == "TRUE" ]]; then
     trace "Lead developer permissions are ${DEVUSER}.${DEVGROUP}"

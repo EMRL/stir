@@ -27,14 +27,14 @@ function server_check() {
     fi
 
     if [[ -z "${DEVURL}" ]]; then
-      trace "No development URL set, skipping check"
+      trace "No staging URL set, skipping check"
     else
       # Should return "200 OK" if all is working well
       if curl -sL --head "${DEVURL}" | grep "200 OK" > /dev/null; then
-        console " ${DEVURL} (development) ${tan}OK${endColor}";
+        console " ${DEVURL} (staging) ${tan}OK${endColor}";
       else
-        console " ${DEVURL} (development) ${red}FAIL${endColor}"
-        trace " ${DEVURL} (development) FAIL"; SERVERFAIL="1"
+        console " ${DEVURL} (staging) ${red}FAIL${endColor}"
+        trace " ${DEVURL} (staging) FAIL"; SERVERFAIL="1"
       fi
     fi
 

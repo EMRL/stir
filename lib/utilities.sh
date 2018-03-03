@@ -64,7 +64,7 @@ function go() {
 
   # Generate git stats
   if [[ "${PROJSTATS}" == "1" ]]; then
-    projStats; quickExit
+    project_stats; quickExit
   fi
 
   # Chill and wait for user to confirm project

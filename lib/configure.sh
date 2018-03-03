@@ -15,7 +15,7 @@ function configure_project() {
   empty_line
   arg="${PROJNAME}"; read -rp "Project name:" -e -i "${arg}" value; set_value "${value}"
   arg="${PROJCLIENT}"; read -rp "Client name:" -e -i "${arg}" value; set_value "${value}"
-  arg="${DEVURL}"; read -rp "Development URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
+  arg="${DEVURL}"; read -rp "Staging URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
   arg="${PRODURL}"; read -rp "Production URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
 }
 
