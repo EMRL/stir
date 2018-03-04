@@ -9,6 +9,7 @@
 function main() {
   dependency_check  # Check that required commands are available
   release_check     # Check for newer version at Github
+  # env_check      # Check for configuration files that need updating
   gitStart          # Check for a valid git project and get set up
   lock              # Create lock file
   go                # Start a deployment work session

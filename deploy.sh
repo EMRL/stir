@@ -10,7 +10,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.6.7-beta.1"
+VERSION="3.6.7-beta.2"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 LAST_MONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
@@ -57,7 +57,8 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   SSHCMD LOGMSG EXPIRELOGS SERVERCHECK STASH MAILPATH REQUIREAPPROVAL ADDTIME \
   TASKUSER CLIENTID CLIENTSECRET REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN \
   REFRESHTOKEN PROFILEID ALLOWROOT SHORTEMAIL INCOGNITO \
-  REPORTURL CLIENTCONTACT INCLUDEHOSTING <<< ""
+  REPORTURL CLIENTCONTACT INCLUDEHOSTING GLOBAL_VERSION USER_VERSION \
+  PROJECT_VERSION <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
   ${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
   ${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${FROM} ${SUBJECT} ${EMAILERROR} 
@@ -73,7 +74,7 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
   ${CLIENTID} ${CLIENTSECRET} ${REDIRECTURI} ${AUTHORIZATIONCODE} ${ACCESSTOKEN} 
   ${REFRESHTOKEN} ${PROFILEID} ${ALLOWROOT} 
   ${SHORTEMAIL} ${INCOGNITO} ${REPORTURL} ${CLIENTCONTACT}
-  ${INCLUDEHOSTING}" > /dev/null
+  ${INCLUDEHOSTING} ${GLOBAL_VERSION} ${USER_VERSION} ${PROJECT_VERSION}" > /dev/null
 # Internal variables
 read -r var optstring options logFile wpFile coreFile postFile trshFile statFile \
   urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail deployPath \
@@ -388,33 +389,32 @@ if [[ -f "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh" ]]; then
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
     trace "Loading project configuration from ${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
   fi
-  # shellcheck disable=1090
-  source "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"; APPRC="1"
+  project_config="${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
   # Fallback to configuration file in the root directory if it exists
 elif [[ -f "${WORKPATH}/${APP}/.deploy.sh" ]]; then
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
     trace "Loading project configuration from ${WORKPATH}/${APP}/.deploy.sh"
   fi
-  # shellcheck disable=1090
-  source "${WORKPATH}/${APP}/.deploy.sh"; APPRC="1"
-  # Zero out the configdir variable
+  project_config="${WORKPATH}/${APP}/.deploy.sh"
+  # Zero out the global configdir variable
   CONFIGDIR=""
 elif [[ -f "${WORKPATH}/${APP}/deploy.sh" ]]; then
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
     trace "Loading project configuration from ${WORKPATH}/${APP}/deploy.sh"
   fi
   # shellcheck disable=1090
-  source "${WORKPATH}/${APP}/deploy.sh"; APPRC="1"
-  # Zero out the configdir variable
+  project_config="${WORKPATH}/${APP}/deploy.sh"
+  # Zero out the global configdir variable
   CONFIGDIR=""
 else
   trace "No project configuration file found"
 fi
 
-# Does a project configuration exist?
-#if [[ "${APPRC}" != "1" ]]; then
-#  trace "No project configuration file found"
-#fi
+if [[ -n "${project_config}" ]]; then
+  # shellcheck disable=1090 
+  source "${project_config}"
+  APPRC="1"
+fi
 
 # Make sure variables are set up correctly
 for var in "${REPOHOST} ${CLIENTLOGO}" "${DEVURL}" "${PRODURL}"; do

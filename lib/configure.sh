@@ -21,7 +21,8 @@ function configure_project() {
 
 function configure_user() {
   empty_line
-  target_file="/home/fdiebel/.deployrc"
+  #target_file="/tmp/.deployrc"
+  #cp "${deployPath}"/.deployrc "${target_file}"
   arg="CLEARSCREEN"
   if yesno --default yes "Clear screen on startup? [Y/n] "; then
     set_value TRUE
@@ -52,7 +53,7 @@ function configure_global() {
 function set_value() {
   value="$1"
   sed -i -e "s^{{${arg}}}^${value}^g" \
-    -e "s^# ${arg}^${arg}^g"
+    -e "s^# ${arg}^${arg}^g" \
     ~/.deployrc      
 }
 

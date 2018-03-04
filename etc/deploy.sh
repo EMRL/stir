@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 #
+#
 # Here are examples of settings you might need to change on a per-project 
 # basis. This file should be placed in either the project's root folder,
 # or in /config/. Settings configured in this file will override both 
 # system & user settings.
+PROJECT_VERSION="3.6.7"
 
 
 ###############################################################################
