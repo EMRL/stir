@@ -199,10 +199,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 [Unreleased]: https://github.com/EMRL/deploy/compare/v3.6.7...HEAD
-[3.6.8]: https://github.com/EMRL/deploy/compare/v3.6.7...3.6.8
-[3.6.7]: https://github.com/EMRL/deploy/compare/v3.6.6...3.6.7
-[3.6.6]: https://github.com/EMRL/deploy/compare/v3.6.5...3.6.6
-[3.6.5]: https://github.com/EMRL/deploy/compare/v3.6.4...3.6.5
+[3.6.8]: https://github.com/EMRL/deploy/compare/v3.6.7...v3.6.8
+[3.6.7]: https://github.com/EMRL/deploy/compare/v3.6.6...v3.6.7
+[3.6.6]: https://github.com/EMRL/deploy/compare/v3.6.5...v3.6.6
+[3.6.5]: https://github.com/EMRL/deploy/compare/v3.6.4...v3.6.5
 [3.6.4]: https://github.com/EMRL/deploy/compare/v3.6...v3.6.4
 [3.6]: https://github.com/EMRL/deploy/compare/v3.5.7...v3.6
 [3.5.7]: https://github.com/EMRL/deploy/compare/v3.5.5...v3.5.7
