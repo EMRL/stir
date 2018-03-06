@@ -46,6 +46,6 @@ function release_check() {
   fi
 }
 
-function version_compare() { 
+function version_compare() {
   test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; 
 }

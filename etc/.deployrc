@@ -8,6 +8,11 @@
 # settings will override those settings found here. Anything you leave
 # commented out or unset in this file will use the global configuration.
 
+# This value indicates the version number when this file was last changed: 
+# it does not necessarily reflect deploy's current version number.
+# DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
+USER_VERSION="3.6.7"
+
 # Clear screen on startup, when not running with --quiet or --verbose switch
 # CLEARSCREEN="{{CLEARSCREEN}}"
 

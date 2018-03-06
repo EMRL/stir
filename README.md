@@ -1,9 +1,9 @@
 # Deploy
 
-[![release](https://img.shields.io/badge/release-v3.6.6-blue.svg?style=flat)](https://github.com/EMRL/deploy/releases/latest)
+[![release](https://img.shields.io/badge/release-v3.6.7-blue.svg?style=flat)](https://github.com/EMRL/deploy/releases/latest)
 [![Build Status](https://travis-ci.org/EMRL/deploy.svg?branch=master)](https://travis-ci.org/EMRL/deploy)
 
-`deploy` is a shell script designed to speed up and automate project deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
+`deploy` is designed to speed up, automate, and integrate project deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
 
 [Changelog](https://github.com/EMRL/deploy/blob/master/CHANGELOG.md)
 
@@ -54,9 +54,9 @@ Other Options:
 
 ## How It Works
 
-Basically, this thing is a wrapper that simplifies web app deployment from a development or staging environment to a production server. At the moment is mostly focused on Wordpress projects but in it should work for other stuff too.
+Basically, this thing consolidates a boatload of commands into a single command that simplifies web app deployment from a development or staging environment to a production server. 
 
-This script requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
+`deploy` requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
 
 ## Installation
 
@@ -67,15 +67,15 @@ This script requires [`git`](https://git-scm.com/), and will make use of [`wp-cl
 
 ## Configuration
 
-Configuration is handled in the `etc/deploy.conf` file. Individual users can also keep their own settings in `~/.deployrc`
+Configuration is handled globally in the `etc/deploy.conf` file. Individual users also have their own settings in `~/.deployrc`
 
 Repositories can each have their own deploy configuration. An example of this file can be [found here](https://github.com/EMRL/deploy/blob/master/etc/deploy.sh).
 
-## Integration
+## Slack
 
 For workgroups and teams that use it, `deploy` is able to integrate with Slack. You'll need to set up an "Incoming Webhook" custom integration on the Slack side to get this ready to roll. See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get going. Once you think you've got Slack configured, run `deploy --slack-test [project]` to test.
 
-## Running on Autopilot
+## Autopilot
 
 `deploy --automate` works well for unattended updates of Wordpress sites; great for maintaining updates via a crontab. An example cron script can be [found here](https://github.com/EMRL/deploy/blob/master/etc/cron/deploy.cron.example). Running in this mode, the project will only be deployed if there are Wordpress core or plugin updates. If other code changes are detected the project will not be auto-updated. Smart Commits must be enabled or nothing will be deployed.
 
