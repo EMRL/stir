@@ -26,7 +26,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Item descriptions are now editable in reports 
 - Cleaned up email output generated using `deploy --email-test`
-- Report URLs are now writted as `report/YEAR-MONTH.php` instead of using a hard to remember string
+- Report URLs are now formatted `report/YEAR-MONTH.php` instead of using a hard to remember string
 ### Fixed 
 - Fixed a bug with running a report on dates in the previous calendar year
 - Added a workaround for Google potentially displaying over 100% of user sessions as new
