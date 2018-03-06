@@ -2,7 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.6.6] - 03-05-2018
+## [Unreleased]
+### Added
+- Invoice creation is now available via [InvoiceNinja](https://www.invoiceninja.org/)'s API using `deploy --invoice`
+
+## [3.6.7] - 03-05-2018
 ### Added
 - Configuration files now upgrade in place if needed when new versions of `deploy` are released
 - Statistic reports now display server uptime, latency, and a few handy Google analytics stats

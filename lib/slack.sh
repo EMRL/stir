@@ -74,6 +74,17 @@ function slackPost () {
     slack_message="*${SLACKUSER}* nothing to do for ${APP}\nNOTICE: ${notes}"
   fi
 
+  # Create a payload for invoices
+  if [[ "${CREATE_INVOICE}" == "1" ]]; then
+    message_state="NOTICE"
+    # Does a production URL exit?
+    if [[ -n "${PRODURL}" ]]; then 
+      slack_message="${IN_NOTES} invoice created for <${PRODURL}|${PROJNAME}>"
+    else 
+      slack_message="${IN_NOTES} invoice created *${PROJNAME}*"               
+    fi    
+  fi
+
   # Add a details link to online logfiles if they exist
   if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]]; then
     slack_message="${slack_message} (<${LOGURL}|Details>)"
