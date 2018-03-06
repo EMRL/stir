@@ -2,8 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## ## [3.6.6] - 03-05-2018
 ### Added
+- Configuration files now upgrade in place if needed when new versions of `deploy` are released
 - Statistic reports now display server uptime, latency, and a few handy Google analytics stats
 ### Changed
 - Configuration files restructured for better readability 
@@ -13,7 +14,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed a crash that could occur when creating statistics for projects with code in approval queue
 - Reports for the month of January now generate correctly
 - Fixed a bug that could rarely report an incorrect Wordpress version number
-- Google analytics no longer incorrectly display for projects that do not use them 
+- Google analytics no longer incorrectly display for projects that do not use them
+- User configuration files are now created more reliably
 
 ## [3.6.6] - 01-13-2018
 ### Added
@@ -192,7 +194,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Old monolithic script rewritten
 
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.6.6...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.6.7...HEAD
 [3.6.8]: https://github.com/EMRL/deploy/compare/v3.6.7...3.6.8
 [3.6.7]: https://github.com/EMRL/deploy/compare/v3.6.6...3.6.7
 [3.6.6]: https://github.com/EMRL/deploy/compare/v3.6.5...3.6.6
