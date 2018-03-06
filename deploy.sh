@@ -10,7 +10,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.6.7"
+VERSION="3.7-alpha.1"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 LAST_MONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
@@ -28,12 +28,12 @@ set -uo pipefail
 read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
   SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
   DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST PROJSTATS UNLOCK  \
-  SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR <<< ""
+  SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE <<< ""
 echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT}  
   ${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
   ${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
-  ${ANALYTICS} ${ANALYTICSTEST} ${PROJSTATS} ${UNLOCK} 
-  ${SSHTEST} ${TIME} ${UPDATEONLY} ${POSTTEST} ${REPORT} ${REPAIR}" > /dev/null
+  ${ANALYTICS} ${ANALYTICSTEST} ${PROJSTATS} ${UNLOCK} ${SSHTEST} ${TIME} 
+  ${UPDATEONLY} ${POSTTEST} ${REPORT} ${REPAIR} ${CREATE_INVOICE}" > /dev/null
 
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
@@ -131,6 +131,7 @@ Other Options:
   --report               Create a monthly activity report
   --no-check             Override active file and server checks
   --stats                Generate project statistics pages
+  --invoice              Create an invoice
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
   --unlock               Delete expired lock files
@@ -204,6 +205,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --analytics-test) ANALYTICSTEST="1" ;; 
     --monitor-test) MONITORTEST="1" ;;
     --stats) PROJSTATS="1" ;;
+    --invoice) CREATE_INVOICE="1" ;;
     --unlock) UNLOCK="1" ;;
     --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="TRUE" ;;
     --no-check) NOCHECK="1" ;;

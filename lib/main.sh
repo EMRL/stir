@@ -18,6 +18,8 @@ function main() {
     create_digest
   elif [[ "${REPORT}" == "1" ]]; then
     create_report
+  elif [[ "${CREATE_INVOICE}" == "1" ]]; then
+    create_invoice
   else
     server_check      # Check that servers are up and running
     if [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then

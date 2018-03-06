@@ -244,6 +244,32 @@ PROJECT_VERSION="3.6.7"
 
 
 ###############################################################################
+# Invoice Ninja integration
+###############################################################################
+
+# Full url of your Invoice Ninja host, with no trailing slash
+# IN_HOST="{{IN_HOST}}"
+
+# API Token, created at https://yourinvoicehost.com/settings/api_tokens 
+# IN_TOKEN="{{IN_TOKEN}}"
+
+# Client ID number
+# IN_CLIENT_ID="{{IN_CLIENT_ID}}" 
+
+# Default product code
+# IN_PRODUCT="{{IN_PRODUCT}}"
+
+# Default item cost
+# IN_ITEM_COST="{{IN_ITEM_COST}}"
+
+# Default item quantity
+# IN_ITEM_QTY="{{IN_ITEM_QTY}}"
+
+# Default item notes
+# IN_NOTES="{{IN_NOTES}}"
+
+
+###############################################################################
 # Google Analytics
 ###############################################################################
 
