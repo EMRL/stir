@@ -19,6 +19,7 @@ function main() {
   elif [[ "${REPORT}" == "1" ]]; then
     create_report
   elif [[ "${CREATE_INVOICE}" == "1" ]]; then
+    # create_invoice
     create_invoice
   else
     server_check      # Check that servers are up and running
