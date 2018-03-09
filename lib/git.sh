@@ -33,6 +33,10 @@ function gitStart() {
   if grep -q "fatal" "${trshFile}"; then 
     error "Unable to start deployment, push your first commit manually and try again."
   else  
+    # If running --automate, force a branch check
+    if [[ "${AUTOMATE}" ]]; then
+      CHECKBRANCH="${MASTER}"
+    fi
     # If CHECKBRANCH is set, make sure current branch is correct.
     start_branch="$(git rev-parse --abbrev-ref HEAD)"
     if [[ -n "${CHECKBRANCH}" ]] && [[ "${DIGEST}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]] && [[ "${EMAILTEST}" != "1" ]] && [[ "${SLACKTEST}" != "1" ]]; then 

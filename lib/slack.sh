@@ -79,9 +79,9 @@ function slackPost () {
     message_state="NOTICE"
     # Does a production URL exit?
     if [[ -n "${PRODURL}" ]]; then 
-      slack_message="${IN_NOTES} invoice created for <${PRODURL}|${PROJNAME}>"
+      slack_message="${IN_NOTES} invoice (#${current_invoice}) created for <${PRODURL}|${PROJNAME}>"
     else 
-      slack_message="${IN_NOTES} invoice created *${PROJNAME}*"               
+      slack_message="${IN_NOTES} invoice (#${current_invoice}) created *${PROJNAME}*"               
     fi    
   fi
 

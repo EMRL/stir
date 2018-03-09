@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Invoice creation is now available via [InvoiceNinja](https://www.invoiceninja.org/)'s API using `deploy --invoice`
+### Changed
+- Running with the `--automate` switch now requires the branch defined as "master" must be currently checked out. The behavior is the equivalent of setting `CHECKBRANCH="${MASTER}"`
 
 ## [3.6.7] - 03-05-2018
 ### Added

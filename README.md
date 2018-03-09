@@ -38,6 +38,7 @@ Other Options:
   --report               Create a monthly activity report
   --no-check             Override active file and server checks
   --stats                Generate project statistics pages
+  --invoice              Create an invoice
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
   --unlock               Delete expired lock files
