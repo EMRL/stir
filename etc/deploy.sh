@@ -9,7 +9,7 @@
 # This value indicates the version number when this file was last changed: 
 # it does not necessarily reflect deploy's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-PROJECT_VERSION="3.6.7"
+PROJECT_VERSION="3.7"
 
 
 ###############################################################################
@@ -310,3 +310,13 @@ PROJECT_VERSION="3.6.7"
 # will be something like https://monitor.com/?&mod=server&action=view&id=3 - in 
 # this case SERVERID would be "3" (notice the &id=3 at the end of the URL)
 # SERVERID="{{SERVERID}}"
+
+
+###############################################################################
+# Nikto
+###############################################################################
+
+# If you want to make use of nikto for malware/security host scanning, define
+# its full path (including command) as well as its configuration file below
+# NIKTO="{{NIKTO}}"
+# NIKTO_CONFIG="{{NIKTO_CONFIG}}"

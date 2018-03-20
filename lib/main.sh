@@ -21,6 +21,8 @@ function main() {
   elif [[ "${CREATE_INVOICE}" == "1" ]]; then
     # create_invoice
     create_invoice
+  elif [[ "${SCAN}" == "1" ]]; then
+    scan_host
   else
     server_check      # Check that servers are up and running
     if [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then

@@ -28,12 +28,13 @@ set -uo pipefail
 read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
   SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
   DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST PROJSTATS UNLOCK  \
-  SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE <<< ""
+  SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN <<< ""
 echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT}  
   ${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
   ${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
   ${ANALYTICS} ${ANALYTICSTEST} ${PROJSTATS} ${UNLOCK} ${SSHTEST} ${TIME} 
-  ${UPDATEONLY} ${POSTTEST} ${REPORT} ${REPAIR} ${CREATE_INVOICE}" > /dev/null
+  ${UPDATEONLY} ${POSTTEST} ${REPORT} ${REPAIR} ${CREATE_INVOICE} 
+  ${SCAN}" > /dev/null
 
 # Temp files
 read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
@@ -58,7 +59,7 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   TASKUSER CLIENTID CLIENTSECRET REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN \
   REFRESHTOKEN PROFILEID ALLOWROOT SHORTEMAIL INCOGNITO \
   REPORTURL CLIENTCONTACT INCLUDEHOSTING GLOBAL_VERSION USER_VERSION \
-  PROJECT_VERSION <<< ""
+  PROJECT_VERSION NIKTO NIKTO_CONFIG <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
   ${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
   ${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${FROM} ${SUBJECT} ${EMAILERROR} 
@@ -72,9 +73,9 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
   ${SCPHOSTPATH} ${SCPPASS} ${SCPCMD} ${SSHCMD} ${LOGMSG} ${EXPIRELOGS} 
   ${SERVERCHECK} ${STASH} ${MAILPATH} ${REQUIREAPPROVAL} ${ADDTIME} ${TASKUSER} 
   ${CLIENTID} ${CLIENTSECRET} ${REDIRECTURI} ${AUTHORIZATIONCODE} ${ACCESSTOKEN} 
-  ${REFRESHTOKEN} ${PROFILEID} ${ALLOWROOT} 
-  ${SHORTEMAIL} ${INCOGNITO} ${REPORTURL} ${CLIENTCONTACT}
-  ${INCLUDEHOSTING} ${GLOBAL_VERSION} ${USER_VERSION} ${PROJECT_VERSION}" > /dev/null
+  ${REFRESHTOKEN} ${PROFILEID} ${ALLOWROOT} ${SHORTEMAIL} ${INCOGNITO} ${REPORTURL} 
+  ${CLIENTCONTACT} ${INCLUDEHOSTING} ${GLOBAL_VERSION} ${USER_VERSION} 
+  ${PROJECT_VERSION} ${NIKTO} ${NIKTO_CONFIG}" > /dev/null
 # Internal variables
 read -r var optstring options logFile wpFile coreFile postFile trshFile statFile \
   urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail deployPath \
@@ -136,6 +137,7 @@ Other Options:
   --debug                Run in debug mode
   --unlock               Delete expired lock files
   --repair               Repair a deployment after key failure
+  --scan                 Scan production hosts for malware issues
   --ssh-test             Validate SSH key setup
   --email-test           Test email configuration
   --slack-test           Test Slack integration
@@ -208,6 +210,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --invoice) CREATE_INVOICE="1" ;;
     --unlock) UNLOCK="1" ;;
     --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="TRUE" ;;
+    --scan) SCAN="1" ;;
     --no-check) NOCHECK="1" ;;
     --function-list) FUNCTIONLIST="1"; CURRENT="1" ;; # Spoofs --current
     --variable-list) VARIABLELIST="1"; CURRENT="1" ;; # Spoofs --current
