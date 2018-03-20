@@ -481,11 +481,6 @@ if [[ "${AUTOMERGE}" == "TRUE" ]]; then
   trace "Automerge is enabled"
 fi
 
-if [[ "${NOCHECK}" == "1" ]]; then
-  SERVERCHECK="FALSE";
-  ACTIVECHECK="FALSE"
-fi
-
 # If using --automate, force branch checking
 if [[ "${AUTOMATE}" == "1" ]] || [[ "${REPAIR}" == "1" ]]; then
   CHECKBRANCH="${MASTER}";
