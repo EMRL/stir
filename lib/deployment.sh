@@ -63,27 +63,47 @@ function pkgDeploy() {
     fi
     fix_index
     
-    # Make sure the project's deploy command is going to work
-    deploy_cmd=$(echo "${DEPLOY}" | awk '{print $1;}')
-    hash "${deploy_cmd}" 2>/dev/null || {
-      warning "Your deployment command ${deploy_cmd} cannot be found.";
-    }
+    if [[ "${DEPLOY}" != "SCP" ]]; then
+      # Make sure the project's deploy command is going to work
+      deploy_cmd=$(echo "${DEPLOY}" | awk '{print $1;}')
+      hash "${deploy_cmd}" 2>/dev/null || {
+        warning "Your deployment command ${deploy_cmd} cannot be found.";
+      }
+    fi
 
     if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
+
       # If we don't require approval to push to live, keep going
       if [[ "${FORCE}" = "1" ]] || yesno --default yes "Deploy to live server? [Y/n] "; then
+
         # Test deployment command before running
-        deploy_check
+        if [[ "${DEPLOY}" != "SCP" ]]; then
+          deploy_check
+        fi
+
         # Deploy via deployment command specified in configuration
         if [[ "${VERBOSE}" == "TRUE" ]] && [[ "${INCOGNITO}" != "TRUE" ]]; then
-          eval "${DEPLOY}" | tee --append "${logFile}"
+          if [[ "${DEPLOY}" == "SCP" ]]; then
+            deploy_scp
+          else
+            eval "${DEPLOY}" | tee --append "${logFile}"            
+          fi
           error_check
         else
           if [[ "${QUIET}" != "1" ]]; then
-            eval "${DEPLOY}" &>> "${logFile}" &
-            spinner $!
+            if [[ "${DEPLOY}" == "SCP" ]]; then
+              deploy_scp &
+              spinner $!
+            else
+              eval "${DEPLOY}" &>> "${logFile}" &
+              spinner $!
+            fi
           else
-            eval "${DEPLOY}" &>> "${logFile}"
+            if [[ "${DEPLOY}" == "SCP" ]]; then
+              deploy_scp &>> "${logFile}"
+            else
+              eval "${DEPLOY}" &>> "${logFile}"
+            fi
             error_check
           fi
         fi

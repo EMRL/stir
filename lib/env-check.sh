@@ -3,7 +3,7 @@
 # config-check.sh
 #
 ###############################################################################
-# Check to see if configuration files needs to be updated, and update if so
+# Check to see if configuration files need to be updated, and update if so
 ###############################################################################
 
 # Initialize variables
@@ -141,8 +141,9 @@ function update_project() {
     IN_HOST IN_TOKEN IN_CLIENT_ID IN_PRODUCT IN_ITEM_COST IN_ITEM_QTY \
     IN_NOTES CLIENTID CLIENTSECRET REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN \
     REFRESHTOKEN PROFILEID MONITORURL MONITORUSER MONITORPASS SERVERID NIKTO \
-    NIKTO_CONFIG)
-  
+    NIKTO_CONFIG STAGING_DEPLOY_PATH PRODUCTION_DEPLOY_HOST \
+    PRODUCTION_DEPLOY_PATH SCP_DEPLOY_USER SCP_DEPLOY_PASS)
+
   info "Project configuration backup created at ${project_config}.bak"
   cp "${project_config}" "${project_config}.bak"
   cp "${deployPath}"/deploy.sh "${trshFile}"

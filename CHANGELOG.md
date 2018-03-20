@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Invoice creation is now available via [InvoiceNinja](https://www.invoiceninja.org/)'s API using `deploy --invoice`
+- Added a very simple built-in web deployment method for instances when using something like `mina` is unavailble
 - Added malware scanning using (Nikto](https://www.cirt.net/Nikto2)
 ### Changed
 - Running with the `--automate` switch now requires the branch defined as "master" must be currently checked out. The behavior is the equivalent of setting `CHECKBRANCH="${MASTER}"`

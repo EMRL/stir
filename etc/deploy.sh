@@ -104,7 +104,8 @@ PROJECT_VERSION="3.7"
 # Deployment Configuration
 ###############################################################################
 
-# The command to finalize deployment of your project(s)
+# The command to finalize deployment of your project(s); set DEPLOY="SCP" to 
+# use the built-in scp deployment method.
 # DEPLOY="{{DEPLOY}}"				
 
 # To require approval before pushing this project's code to a live production
@@ -113,6 +114,26 @@ PROJECT_VERSION="3.7"
 
 # Disallow deployment; set to TRUE to enable. Double negative, it's tricky.
 # DONOTDEPLOY="{{DONOTDEPLOY}}"
+
+# SCP Deployment
+# --------------
+
+# Staging file path to copy to production host, relative to the project's root 
+# directory (forward slash required)
+# STAGING_DEPLOY_PATH="{{STAGING_DEPLOY_PATH}}"
+
+# Production host info
+# PRODUCTION_DEPLOY_HOST="{{PRODUCTION_DEPLOY_HOST}}"
+
+# Full path path to copy files to on production server 
+# PRODUCTION_DEPLOY_PATH="{{PRODUCTION_DEPLOY_PATH}}"
+
+# Deployement user info
+# SCP_DEPLOY_USER="{{SCP_DEPLOY_USER}}"
+
+# DANGER DANGER: If for some reason you absolutely can't use an SSH key you 
+# can configure the path to a text file containing *only* your password.
+# SCP_DEPLOY_PASS="{{SCP_DEPLOY_PASS}}"
 
 
 ###############################################################################

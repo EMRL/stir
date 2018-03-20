@@ -178,7 +178,7 @@ function dependency_check() {
   # This is probably not the best way to do this but for now it works. It 
   # strips everything after the first space that is declared in DEPLOY and
   # then checks that it's a valid command.
-  if [[ ! -z "${DEPLOY}" ]]; then
+  if [[ ! -z "${DEPLOY}" ]] && [[ "${DEPLOY}" != "SCP" ]]; then
     deploy_cmd=$(echo "$DEPLOY" | head -n1 | awk '{print $1;}')
     hash "${deploy_cmd}" 2>/dev/null || { 
       error >&2 "Unknown deployment command: ${DEPLOY} (${deploy_cmd} not found)"; 
