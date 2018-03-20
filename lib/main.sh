@@ -25,6 +25,7 @@ function main() {
     scan_host
   else
     server_check      # Check that servers are up and running
+    
     if [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then
       ssh_check   # Check keys
     fi

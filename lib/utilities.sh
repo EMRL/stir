@@ -84,6 +84,12 @@ function go() {
     warning "Can't continue deployment as root."; quickExit
   fi
 
+  # Disallow server check?
+  if [[ "${NOCHECK}" == "1" ]]; then
+    SERVERCHECK="FALSE";
+    ACTIVECHECK="FALSE"
+  fi
+
   # Force sudo password input if needed
   if [[ "${FIXPERMISSIONS}" == "TRUE" ]]; then
     sudo sleep 1
