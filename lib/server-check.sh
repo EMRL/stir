@@ -8,7 +8,7 @@
 trace "Loading server checks"
 
 function server_check() {
-  if [ "${SERVERCHECK}" == "TRUE" ]; then
+  if [[ "${SERVERCHECK}" == "TRUE" ]]; then
     notice "Checking servers..."
     # Set SERVERFAIL to 0
     SERVERFAIL="0"
