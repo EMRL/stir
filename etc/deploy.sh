@@ -135,6 +135,9 @@ PROJECT_VERSION="3.7"
 # can configure the path to a text file containing *only* your password.
 # SCP_DEPLOY_PASS="{{SCP_DEPLOY_PASS}}"
 
+# Set your port number if using a port other than the standard 22
+# SCP_DEPLOY_PORT="{{SCP_DEPLOY_PORT}}"
+
 
 ###############################################################################
 # Notifications
@@ -229,6 +232,7 @@ PROJECT_VERSION="3.7"
 # SCPUSER="{{SCPUSER}}"
 # SCPHOST="{{SCPHOST}}"
 # SCPHOSTPATH="{{SCPHOSTPATH}}"
+# SCPPORT="{{SCPPORT}}"
 
 # DANGER DANGER: If for some reason you absolutely can't use an SSH key you 
 # can configure the path to a text file containing *only* your password.

@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added a very simple built-in web deployment method for instances when using something like `mina` is unavailble
 - Added malware scanning using (Nikto](https://www.cirt.net/Nikto2)
 ### Changed
+- Ports other than 22 can be used for SSH/SCP functions
 - Running with the `--automate` switch now requires the branch defined as "master" must be currently checked out. The behavior is the equivalent of setting `CHECKBRANCH="${MASTER}"`
 
 ## [3.6.7] - 03-05-2018

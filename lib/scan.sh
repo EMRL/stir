@@ -7,8 +7,8 @@
 ###############################################################################
 
 # Initialize variables
-read -r NIKTO_CONFIG <<< ""
-echo "${NIKTO_CONFIG}" > /dev/null
+read -r NIKTO NIKTO_CONFIG <<< ""
+echo "${NIKTO} ${NIKTO_CONFIG}" > /dev/null
 
 function scan_host() {
   if [[ -z "${NIKTO}" ]]; then
