@@ -7,6 +7,10 @@
 ###############################################################################
 trace "Loading post functions"
 
+# Initialize variables
+read -r SCPPORT <<< ""
+echo "${SCPPORT}" > /dev/null
+
 # Remote log function; this really needs to be rewritten
 function postLog() {
   if [[ "${REMOTELOG}" == "TRUE" ]]; then
@@ -56,18 +60,23 @@ function postLog() {
       fi
     fi
 
-    # Send the files through SCP (not yet enabled)
+    # Send the files through SSH/SCP
     if [[ "${SCPPOST}" == "TRUE" ]] && [[ -f "${htmlFile}" ]]; then
+
+      # if SCPPORT is empty, set it to 22
+      #if [[ -z "${SCPPORT}" ]]; then
+      #  SCPPORT="22"
+      #fi
 
       # Setup up the proper command, depending on whether we're using key or password
       if [[ -n "${SCPPASS}" ]]; then
         TMP=$(<$SCPPASS)
         SCPPASS="${TMP}"
-        SCPCMD="sshpass -p \"${SCPPASS}\" scp -o StrictHostKeyChecking=no"
-        SSHCMD="sshpass -p \"${SCPPASS}\" ssh"
+        SCPCMD="sshpass -p \"${SCPPASS}\" scp -o StrictHostKeyChecking=no -P \"${SCPPORT}\""
+        SSHCMD="sshpass -p \"${SCPPASS}\" ssh -p \"${SCPPORT}\""
       else
-        SCPCMD="scp"
-        SSHCMD="ssh"
+        SCPCMD="scp -P \"${SCPPORT}\""
+        SSHCMD="ssh -P \"${SCPPORT}\""
       fi
 
       # Loop through the various scenarios, make directories if needed
@@ -96,6 +105,7 @@ function postLog() {
       if [[ "${REPORT}" == "1" ]]; then
         REMOTEFILE="${CURYR}-${CURMTH}.php"
         REPORTURL="${REMOTEURL}/${APP}/report/${REMOTEFILE}"
+        trace "Running \"${SSHCMD}\" \"${SCPUSER}\"@\"${SCPHOST}\" \"mkdir -p ${SCPHOSTPATH}/${APP}/report\""
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report/css"
         eval "${SCPCMD} -r" "${deployPath}/html/${HTMLTEMPLATE}/report/css" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report"

@@ -58,6 +58,13 @@ function makeLog() {
     # sed -i "/........../d" "${logFile}"
   fi
 
+  # Filter out noise from scp deployment method
+  if [[ "${DEPLOY}" == "SCP" ]]; then
+    sed -i "/Sending file modes:/d" "${logFile}"
+    sed -i "/Sink:/d" "${logFile}"
+    sed -i "/debug1:/d" "${logFile}"
+  fi
+
   # Filter raw log output as configured by user
   if [[ "${NOPHP}" == "TRUE" ]]; then
     grep -vE "(PHP |Notice:|Warning:|Strict Standards:)" "${logFile}" > "${postFile}"
