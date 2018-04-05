@@ -102,6 +102,11 @@ function postLog() {
         fi
       fi
 
+      if [[ "${SCAN}" == "1" ]]; then
+        eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/scan"
+        eval "${SCPCMD} -r" "${scan_html}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/scan/index.html"
+      fi
+
       if [[ "${REPORT}" == "1" ]]; then
         REMOTEFILE="${CURYR}-${CURMTH}.php"
         REPORTURL="${REMOTEURL}/${APP}/report/${REMOTEFILE}"

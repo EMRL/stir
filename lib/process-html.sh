@@ -8,9 +8,10 @@
 trace "Loading html handling"
 
 # Initialize variables 
-read -r DEFAULTC PRIMARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID COVER <<< ""
+read -r DEFAULTC PRIMARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID COVER \
+  SCANC <<< ""
 echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} 
-  ${SMOOCHID} ${COVER}" > /dev/null
+  ${SMOOCHID} ${COVER} ${SCANC}" > /dev/null
 
 function process_html() {
   # Clean out the stuff we don't need
@@ -18,6 +19,7 @@ function process_html() {
   [[ -z "${PRODURL}" ]] && sed -i '/PRODURL/d' "${htmlFile}"
   [[ -z "${UPTIME}" ]] && sed -i '/UPTIME/d' "${htmlFile}"
   [[ -z "${LATENCY}" ]] && sed -i '/LATENCY/d' "${htmlFile}"  
+  [[ -z "${SCAN_MSG}" ]] && sed -i '/SCAN_MSG/d' "${htmlFile}" 
   [[ -z "${PROJCLIENT}" ]] && sed -i 's/()//' "${htmlFile}"
   [[ -z "${CLIENTLOGO}" ]] && sed -i '/CLIENTLOGO/d' "${htmlFile}"
   [[ -z "${CLIENTCONTACT}" ]] && sed -i '/CLIENTCONTACT/d' "${htmlFile}"
@@ -59,6 +61,10 @@ function process_html() {
     -e "s^{{INFO}}^${INFOC}^g" \
     -e "s^{{WARNING}}^${WARNINGC}^g" \
     -e "s^{{DANGER}}^${DANGERC}^g" \
+    -e "s^{{SCAN}}^${SCANC}^g" \
+    -e "s^{{SCAN_MSG}}^${SCAN_MSG}^g" \
+    -e "s^{{SCAN_RESULT}}^${SCAN_RESULT}^g" \
+    -e "s^{{SCAN_URL}}^${SCAN_URL}^g" \
     -e "s^{{SMOOCHID}}^${SMOOCHID}^g" \
     -e "s^{{GRAVATARURL}}^${REMOTEURL}\/${APP}\/avatar^g" \
     -e "s^{{DIGESTWRAP}}^${DIGESTWRAP}^g" \

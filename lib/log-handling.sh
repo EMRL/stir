@@ -163,18 +163,19 @@ function build_html() {
   if [[ "${PUBLISH}" == "1" ]]; then
     LOGURL="${REMOTEURL}/${APP}/${EPOCH}.${LOGSUFFIX}"
     REMOTEFILE="${EPOCH}.${LOGSUFFIX}"
-  else
-    if [[ "${message_state}" == "APPROVAL NEEDED" ]]; then
+  elif [[ "${SCAN}" == "1" ]]; then
+    LOGURL="${REMOTEURL}/${APP}/scan"
+    REMOTEFILE="index.html"
+  elif [[ "${message_state}" == "APPROVAL NEEDED" ]]; then
       LOGURL="${REMOTEURL}/${APP}/APPROVAL-${EPOCH}.${LOGSUFFIX}"
       REMOTEFILE="APPROVAL-${EPOCH}.${LOGSUFFIX}"
+  else
+    if [[ "${message_state}" != "SUCCESS" ]] || [[ -z "${COMMITHASH}" ]]; then
+      LOGURL="${REMOTEURL}/${APP}/${message_state}-${EPOCH}.${LOGSUFFIX}"
+      REMOTEFILE="${message_state}-${EPOCH}.${LOGSUFFIX}"
     else
-      if [[ "${message_state}" != "SUCCESS" ]] || [[ -z "${COMMITHASH}" ]]; then
-        LOGURL="${REMOTEURL}/${APP}/${message_state}-${EPOCH}.${LOGSUFFIX}"
-        REMOTEFILE="${message_state}-${EPOCH}.${LOGSUFFIX}"
-      else
-        LOGURL="${REMOTEURL}/${APP}/${COMMITHASH}.${LOGSUFFIX}"
-        REMOTEFILE="${COMMITHASH}.${LOGSUFFIX}"
-      fi
+      LOGURL="${REMOTEURL}/${APP}/${COMMITHASH}.${LOGSUFFIX}"
+      REMOTEFILE="${COMMITHASH}.${LOGSUFFIX}"
     fi
   fi
 

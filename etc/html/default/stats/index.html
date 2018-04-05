@@ -68,8 +68,11 @@
 								<!--[CLIENTLOGO]--><center><img src="{{CLIENTLOGO}}" class="hide" style="display: block; margin-left: auto; margin-right: auto; width: 96; min-width: 32px; max-width: 96px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; overflow: hidden; text-align: center;" alt="{{PROJCLIENT}}" title="{{PROJCLIENT}}" width="96"></center>
 								<!--[END PRODURL]--></a>
 
-								<h3 style="text-align: center; margin-top: 40px; margin-bottom: 10px; line-height: 30px;">Weekly overview</h3><center><div style="font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: {{INFO}}; font-size: 11px; color: #FFFFFF;">Uptime: {{UPTIME}}%</div>
-								<div style="font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: {{INFO}}; font-size: 10px; font-size: 11px ; color: #FFFFFF;">Latency: {{LATENCY}}s</div></center>
+								<h3 style="text-align: center; margin-top: 40px; margin-bottom: 10px; line-height: 30px;">Weekly overview</h3><center>
+								<a href="{{SCAN_URL}}" style="text-decoration: none; font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: {{SCAN}}; font-size: 11px; color: #FFFFFF;">{{SCAN_MSG}} &#10004;</a>
+								<div style="font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: {{INFO}}; font-size: 11px; color: #FFFFFF;">Uptime: {{UPTIME}}%</div>
+								<div style="font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: {{INFO}}; font-size: 10px; font-size: 11px ; color: #FFFFFF;">Latency: {{LATENCY}}s</div>
+								</center>
 							</td>
 						</tr>
 
@@ -164,7 +167,7 @@
 																<tr>
 																	<td style="font-family: Roboto, sans-serif; font-size: 15px; line-height: 20px; color: {{DEFAULTC}}; padding-top: 10px;" class="stack-column-center">
 																		<h1 style="font-size: 48px; line-height: 56px; margin-top: 0px; margin-bottom: -10px;">{{GA_SEARCHES}}</h1>
-																		<p>vistors from organic searches</p>
+																		<p>hits from organic searches</p>
 																	</td>
 																</tr>
 															</table>
