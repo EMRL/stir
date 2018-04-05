@@ -18,7 +18,7 @@ function server_monitor() {
       # for. The PHP Monitor API has no ability to look up results in that way 
       MONITORHOURS="720"
     elif [[ "${DIGEST}" == "1" ]] || [[ "${PROJSTATS}" == "1" ]]; then
-      # Digests and reports should average the 7 days
+      # Digests and stats should average 7 days
       MONITORHOURS="168"
     else
       # Anything else defaults to 24 hours

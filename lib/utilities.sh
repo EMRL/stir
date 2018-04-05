@@ -17,14 +17,15 @@ function go() {
     tput cnorm;
   fi
 
+  # Weird spot for this stuff I know
+  server_monitor
+  scan_check
+
   console "deploy ${VERSION}"
 
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
     console "Current working path is ${WORKPATH}/${APP}"
   fi
-
-  # Weird spot for this I know
-  server_monitor
   
   # Slack test
   if [[ "${SLACKTEST}" == "1" ]]; then

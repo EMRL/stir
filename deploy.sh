@@ -10,7 +10,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.7-alpha.1"
+VERSION="3.7-beta.1"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 LAST_MONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
@@ -37,12 +37,13 @@ echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT}
   ${SCAN}" > /dev/null
 
 # Temp files
-read -r logFile wpFile coreFile postFile trshFile statFile urlFile <<< ""
+read -r logFile wpFile coreFile postFile trshFile scanFile statFile \
+  urlFile <<< ""
 echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile}
-  ${urlFile}" > /dev/null
+  ${scanFile} ${urlFile}" > /dev/null
 # Console Colors
-read -r black red green yellow blue magenta cyan white endColor bold underline \
-  reset purple tan <<< ""
+read -r black red green yellow blue magenta cyan white endColor bold \
+  underline reset purple tan <<< ""
 echo "${black} ${red} ${green} ${yellow} ${blue} ${magenta} ${cyan} ${white}
   ${endColor} ${bold} ${underline} ${reset} ${purple} ${tan}" > /dev/null
 
@@ -210,7 +211,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --invoice) CREATE_INVOICE="1" ;;
     --unlock) UNLOCK="1" ;;
     --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="TRUE" ;;
-    --scan) SCAN="1" ;;
+    --scan) SCAN="1"; FORCE="1" ;;
     --no-check) NOCHECK="1" ;;
     --function-list) FUNCTIONLIST="1"; CURRENT="1" ;; # Spoofs --current
     --variable-list) VARIABLELIST="1"; CURRENT="1" ;; # Spoofs --current
@@ -287,6 +288,7 @@ echo -e "Launching deploy${STARTUP}\n" >> "${logFile}"
 # More crappy tmp files
 postFile="/tmp/${APP}.wtf-$RANDOM.log"; (umask 077 && touch "${postFile}" &> /dev/null) || log_fail
 trshFile="/tmp/${APP}.trsh-$RANDOM.log"; (umask 077 && touch "${trshFile}" &> /dev/null) || log_fail
+scanFile="/tmp/${APP}.scan-$RANDOM.log"; (umask 077 && touch "${scanFile}" &> /dev/null) || log_fail 
 statFile="/tmp/${APP}.stat-$RANDOM.log"; (umask 077 && touch "${statFile}" &> /dev/null) || log_fail 
 urlFile="/tmp/${APP}.url-$RANDOM.log"; (umask 077 && touch "${urlFile}" &> /dev/null) || log_fail
 htmlFile="/tmp/${APP}.log-$RANDOM.html"; (umask 077 && touch "${htmlFile}" &> /dev/null) || log_fail
