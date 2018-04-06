@@ -137,7 +137,7 @@ Other Options:
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
   --unlock               Delete expired lock files
-  --repair               Repair a deployment after key failure
+  --repair               Repair a deployment after merge failure
   --scan                 Scan production hosts for malware issues
   --ssh-test             Validate SSH key setup
   --email-test           Test email configuration

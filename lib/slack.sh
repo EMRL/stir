@@ -85,6 +85,7 @@ function slackPost () {
     fi    
   fi
 
+
   # Add a details link to online logfiles if they exist
   if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]]; then
     slack_message="${slack_message} (<${LOGURL}|Details>)"
@@ -117,6 +118,11 @@ function slackPost () {
     fi
   fi
 
+  # Arf I hate this
+  if [[ "${SCAN}" == "1" ]]; then
+    slack_message="${notes} (<${LOGURL}|Details>)"
+  fi
+
   # Set icon for message state
   case "${message_state}" in
     ERROR)
@@ -124,6 +130,9 @@ function slackPost () {
       ;;
     DIGEST)
       slack_icon=':black_small_square:'
+      ;;
+    PASSED)
+      slack_icon=':heavy_check_mark:'
       ;;
     *)
       slack_icon=''

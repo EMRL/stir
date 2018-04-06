@@ -338,7 +338,7 @@ PROJECT_VERSION="3.7"
 
 
 ###############################################################################
-# Nikto
+# Malware scanning
 ###############################################################################
 
 # If you want to make use of nikto for malware/security host scanning, define
