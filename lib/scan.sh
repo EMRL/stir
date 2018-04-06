@@ -93,16 +93,17 @@ function scan_host() {
   if [[ "${SCAN_MSG}"  == *"0 errors"* ]]; then
     SCANC="${SUCCESSC}"
     SCAN_MSG="Scan Passed"
+    message_state="PASSED"
   else
     SCANC="${DANGERC}"
     SCAN_MSG="Problem Detected"
+    message_state="ERROR"
   fi
 
   process_html
 
   cp "${htmlFile}" "${scan_html}"
-
-  message_state="NOTICE"
+  
   LOGTITLE="Malware Scan"
   notes="Malware scan on ${PRODURL}: ${SCAN_RESULT}"
 
