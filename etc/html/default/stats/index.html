@@ -69,13 +69,20 @@
 								<!--[END PRODURL]--></a>
 
 								<h3 style="text-align: center; margin-top: 40px; margin-bottom: 10px; line-height: 30px;">Weekly overview</h3>
+								<!--[if mso]>
+									<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="" align="center">
+										<tr>
+								<![endif]--> 
 								<div style="width: 100%; margin: auto; text-align: center; padding-top: 10px;">
-									<a href="{{SCAN_URL}}" style="width: 96px; text-decoration: none; font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; background-color: none; font-size: 11px; color: {{DEFAULT}};"><img src="{{REMOTEURL}}/scan.svg" style="width: 48px;"><br /><strong>{{SCAN_MSG}} <span style="color: {{SCAN_STATUS}};">&#9698;</span></strong></a>
+									<!--[if mso]><td></td><td width="120" height="80" align="center" valign="bottom"><![endif]--><div style="width: 96px; text-decoration: none; font-weight: 500; letter-spacing: .05em; display: inline-block; padding: 0px 8px; text-align: center; vertical-align: baseline; background-color: none; font-size: 11px; color: {{DEFAULT}};"><a href="{{SCAN_URL}}"><img src="{{REMOTEURL}}/scan.png" width="48" height="48" style="width: 48px;"></a><br /><strong>{{SCAN_MSG}} <span style="color: {{SCAN_STATUS}};">&#9698;</span></strong></div><!--[if mso]></td><td></td><![endif]-->
 
-									<a href="{{STATURL}}" style="width: 96px; text-decoration: none; font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; background-color: none; font-size: 11px; color: {{DEFAULT}};"><img src="{{REMOTEURL}}/uptime.svg" style="width: 48px;"><br /><strong>{{UPTIME}}% uptime <span style="color: {{UPTIME_STATUS}};">&#9698;</span></strong></a>
+									<!--[if mso]><td></td><td width="120" height="80" align="center" valign="bottom"><![endif]--><div style="width: 96px; text-decoration: none; font-weight: 500; letter-spacing: .05em; display: inline-block; padding: 0px 8px; text-align: center; vertical-align: baseline; background-color: none; font-size: 11px; color: {{DEFAULT}};"><a href="{{STATURL}}"><img src="{{REMOTEURL}}/uptime.png" width="48" height="48" style="width: 48px;"></a><br /><strong>{{UPTIME}}% uptime <span style="color: {{UPTIME_STATUS}}">&#9698;</span></strong></div><!--[if mso]></td><td></td><![endif]-->
 
-									<a href="{{STATURL}}" style="width: 96px; text-decoration: none; font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; background-color: none; font-size: 11px; color: {{DEFAULT}};"><img src="{{REMOTEURL}}/speed.svg" style="width: 48px;"><br /><strong>{{LATENCY}}s latency <span style="color: {{LATENCY_STATUS}};">&#9698;</span></strong></a>
+									<!--[if mso]><td></td><td width="120" height="80" align="center" valign="bottom"><![endif]--><div style="width: 96px; text-decoration: none; font-weight: 500; letter-spacing: .05em; display: inline-block; padding: 0px 8px; text-align: center; vertical-align: baseline; background-color: none; font-size: 11px; color: {{DEFAULT}};"><a href="{{STATURL}}"><img src="{{REMOTEURL}}/speed.png" width="48" height="48" style="width: 48px;"></a><br /><strong>{{LATENCY}}s latency <span style="color: {{LATENCY_STATUS}};">&#9698;</span></strong></div><!--[if mso]></td><td></td><![endif]-->
                 				</div>
+								<!--[if mso]>
+										<tr></table>
+								<![endif]-->
 							</td>
 						</tr>
 
