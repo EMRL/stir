@@ -56,8 +56,8 @@
 				<![endif]--> 	
 					<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 1180px;">
 					  	<tr>
-							<td bgcolor="#ffffff" style="padding: 20px; text-align: left; font-family: Arimo, sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: {{DEFAULTC}};">
-								<h1 style="display: block; padding: 20px 0 0 0; font-family: Arimo, sans-serif; font-size: 2.8em; font-style: normal; font-weight: bold; line-height: 100%;  text-align: center; color: #000000 !important; margin: 0px 0px 10px 0px;">Project Statistics <sup style="font-size: 0.5em; color: {{PRIMARY}}">BETA</sup></h1>
+							<td bgcolor="#ffffff" style="padding: 20px; text-align: left; font-family: Arimo, sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: {{DEFAULT}};">
+								<h1 style="display: block; padding: 20px 0 0 0; font-family: Arimo, sans-serif; font-size: 2.8em; font-style: normal; font-weight: bold; line-height: 100%;  text-align: center; color: #000000 !important; margin: 0px 0px 10px 0px;">Site Smart <sup style="font-size: 0.5em; color: {{PRIMARY}}">BETA</sup></h1>
 								<style>@media (max-width: 480px) {.hide {display:none; !important}}</style>
 								
 								<h2 style="text-align: center; margin-bottom: 0px; line-height: 30px;">Weekly report generated {{NOW}}</h2>
@@ -68,11 +68,14 @@
 								<!--[CLIENTLOGO]--><center><img src="{{CLIENTLOGO}}" class="hide" style="display: block; margin-left: auto; margin-right: auto; width: 96; min-width: 32px; max-width: 96px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; overflow: hidden; text-align: center;" alt="{{PROJCLIENT}}" title="{{PROJCLIENT}}" width="96"></center>
 								<!--[END PRODURL]--></a>
 
-								<h3 style="text-align: center; margin-top: 40px; margin-bottom: 10px; line-height: 30px;">Weekly overview</h3><center>
-								<a href="{{SCAN_URL}}" style="text-decoration: none; font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: {{SCAN}}; font-size: 11px; color: #FFFFFF;">{{SCAN_MSG}} &#10004;</a>
-								<div style="font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: {{INFO}}; font-size: 11px; color: #FFFFFF;">Uptime: {{UPTIME}}%</div>
-								<div style="font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: {{INFO}}; font-size: 10px; font-size: 11px ; color: #FFFFFF;">Latency: {{LATENCY}}s</div>
-								</center>
+								<h3 style="text-align: center; margin-top: 40px; margin-bottom: 10px; line-height: 30px;">Weekly overview</h3>
+								<div style="width: 100%; margin: auto; text-align: center; padding-top: 10px;">
+									<a href="{{SCAN_URL}}" style="width: 96px; text-decoration: none; font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; background-color: none; font-size: 11px; color: {{DEFAULT}};"><img src="{{REMOTEURL}}/scan.svg" style="width: 48px;"><br /><strong>{{SCAN_MSG}} <span style="color: {{SCAN_STATUS}};">&#9698;</span></strong></a>
+
+									<a href="{{STATURL}}" style="width: 96px; text-decoration: none; font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; background-color: none; font-size: 11px; color: {{DEFAULT}};"><img src="{{REMOTEURL}}/uptime.svg" style="width: 48px;"><br /><strong>{{UPTIME}}% uptime <span style="color: {{UPTIME_STATUS}};">&#9698;</span></strong></a>
+
+									<a href="{{STATURL}}" style="width: 96px; text-decoration: none; font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; background-color: none; font-size: 11px; color: {{DEFAULT}};"><img src="{{REMOTEURL}}/speed.svg" style="width: 48px;"><br /><strong>{{LATENCY}}s latency <span style="color: {{LATENCY_STATUS}};">&#9698;</span></strong></a>
+                				</div>
 							</td>
 						</tr>
 
