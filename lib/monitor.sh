@@ -17,7 +17,7 @@ function server_monitor() {
       # which is dealing with the last calendar month, but oh well we get what we pay
       # for. The PHP Monitor API has no ability to look up results in that way 
       MONITORHOURS="720"
-    elif [[ "${DIGEST}" == "1" ]] || [[ "${PROJSTATS}" == "1" ]]; then
+    elif [[ "${DIGEST}" == "1" ]] || [[ "${PROJSTATS}" == "1" ]] || [[ "${SCAN}" == "1" ]]; then
       # Digests and stats should average 7 days
       MONITORHOURS="168"
     else
@@ -25,7 +25,7 @@ function server_monitor() {
       MONITORHOURS="24"
     fi
     server_monitor_log
-    trace "Uptime: ${UPTIME} / Latency: ${LATENCY} (avg. over last ${MONITORHOURS} hours)"
+    trace "Uptime: ${UPTIME}% / Latency: ${LATENCY} (avg. over last ${MONITORHOURS} hours)"
   fi
 }
 
@@ -44,7 +44,7 @@ function server_monitor_test() {
   # Check last 7 days for the sake of the test
   MONITORHOURS="24"
   server_monitor_log
-    console "API: ${MONITORAPI}"  
+  console "API: ${MONITORAPI}"  
   notice "Results (last 24 hours)"
   console "Uptime: ${UPTIME}%"
   console "Latency: ${LATENCY}s"
@@ -74,4 +74,23 @@ function server_monitor_log() {
   LATENCY="$(sed 's/^[^:]*://g' <<< "${LATENCY}")"
   # Round to two decimal places
   LATENCY="$(printf '%0.2f\n' "${LATENCY}")"
+
+  # Set colors for html reports
+  if [[ "${UPTIME}" == "100" ]]; then
+    UPTIMEC="${SUCCESSC}"
+  elif [[ "${UPTIME}" > "97" || "${UPTIME}" == "97" ]]; then
+    UPTIMEC="${SUCCESSC}"
+  elif [[ "${UPTIME}" > "88" && "${UPTIME}" < "97" ]]; then
+    UPTIMEC="${WARNINGC}"
+  else
+    UPTIMEC="${DANGERC}"
+  fi
+
+  if [[ "${LATENCY}" < "2.2" || "${LATENCY}" == "2.2" ]]; then
+    LATENCYC="${SUCCESSC}"
+  elif [[ "${LATENCY}" > "2.2" && "${LATENCY}" < "3.8" ]]; then
+    LATENCYC="${WARNINGC}"
+  else
+    LATENCYC="${DANGERC}"
+  fi
 }

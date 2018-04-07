@@ -9,9 +9,9 @@ trace "Loading html handling"
 
 # Initialize variables 
 read -r DEFAULTC PRIMARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID COVER \
-  SCANC <<< ""
+  SCANC UPTIMEC LATENCYC <<< ""
 echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} 
-  ${SMOOCHID} ${COVER} ${SCANC}" > /dev/null
+  ${SMOOCHID} ${COVER} ${SCANC} ${UPTIMEC} ${LATENCYC}" > /dev/null
 
 function process_html() {
   # Clean out the stuff we don't need
@@ -57,11 +57,14 @@ function process_html() {
     -e "s^{{PRODURL}}^${PRODURL}^g" \
     -e "s^{{DEFAULT}}^${DEFAULTC}^g" \
     -e "s^{{PRIMARY}}^${PRIMARYC}^g" \
+    -e "s^{{SECONDARY}}^${SECONDARYC}^g" \
     -e "s^{{SUCCESS}}^${SUCCESSC}^g" \
     -e "s^{{INFO}}^${INFOC}^g" \
     -e "s^{{WARNING}}^${WARNINGC}^g" \
     -e "s^{{DANGER}}^${DANGERC}^g" \
-    -e "s^{{SCAN}}^${SCANC}^g" \
+    -e "s^{{SCAN_STATUS}}^${SCANC}^g" \
+    -e "s^{{UPTIME_STATUS}}^${UPTIMEC}^g" \
+    -e "s^{{LATENCY_STATUS}}^${LATENCYC}^g" \
     -e "s^{{SCAN_MSG}}^${SCAN_MSG}^g" \
     -e "s^{{SCAN_RESULT}}^${SCAN_RESULT}^g" \
     -e "s^{{SCAN_URL}}^${SCAN_URL}^g" \

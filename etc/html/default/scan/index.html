@@ -57,10 +57,10 @@
 					<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 1180px;">
 					  	<tr>
 							<td bgcolor="#ffffff" style="padding: 20px; text-align: left; font-family: Arimo, sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: {{DEFAULTC}};">
-								<h1 style="display: block; padding: 20px 0 0 0; font-family: Arimo, sans-serif; font-size: 2.8em; font-style: normal; font-weight: bold; line-height: 100%; text-align: center; color: #000000 !important; margin: 0px 0px 10px 0px;">Site Scan <sup style="font-size: 0.5em; color: {{PRIMARY}}">BETA</sup></h1>
+								<h1 style="display: block; padding: 20px 0 0 0; font-family: Arimo, sans-serif; font-size: 2.8em; font-style: normal; font-weight: bold; line-height: 100%;  text-align: center; color: #000000 !important; margin: 0px 0px 10px 0px;">Project Statistics <sup style="font-size: 0.5em; color: {{PRIMARY}}">BETA</sup></h1>
 								<style>@media (max-width: 480px) {.hide {display:none; !important}}</style>
 								
-								<h2 style="text-align: center; margin-bottom: 0px; line-height: 30px;">Report generated {{NOW}}</h2>
+								<h2 style="text-align: center; margin-bottom: 0px; line-height: 30px;">Weekly report generated {{NOW}}</h2>
 								<h2 style="text-align: center; margin-top: 0px; margin-bottom: 30px; line-height: 30px;">{{PROJNAME}} 
 								(<a style="color: {{PRIMARY}}; text-decoration: none;" href="{{PRODURL}}">{{PRODURL}}</a>)
 								</h2>
@@ -68,16 +68,34 @@
 								<!--[CLIENTLOGO]--><center><img src="{{CLIENTLOGO}}" class="hide" style="display: block; margin-left: auto; margin-right: auto; width: 96; min-width: 32px; max-width: 96px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; overflow: hidden; text-align: center;" alt="{{PROJCLIENT}}" title="{{PROJCLIENT}}" width="96"></center>
 								<!--[END PRODURL]--></a>
 
-								<h3 style="text-align: center; margin-top: 40px; margin-bottom: 10px; line-height: 30px;">{{SCAN_RESULT}}</h3>
-								<div style="width: 100%; margin: auto; text-align: center; padding-top: 10px;">
-									<a href="{{SCAN_URL}}" style="width: 96px; text-decoration: none; font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; background-color: none; font-size: 11px; color: {{DEFAULT}};"><img src="{{REMOTEURL}}/scan.svg" style="width: 48px;"><br /><strong>{{SCAN_MSG}} <span style="color: {{SCAN_STATUS}};">&#9698;</span></strong></a>
+								<h3 style="text-align: center; margin-top: 40px; margin-bottom: 10px; line-height: 30px;">Weekly overview</h3><center><div style="font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: #609F43; font-size: 11px; color: #FFFFFF;">Malware: 0 errors &#10004;</div>
 
-									<a href="{{STATURL}}" style="width: 96px; text-decoration: none; font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; background-color: none; font-size: 11px; color: {{DEFAULT}};"><img src="{{REMOTEURL}}/uptime.svg" style="width: 48px;"><br /><strong>{{UPTIME}}% uptime <span style="color: {{UPTIME_STATUS}};">&#9698;</span></strong></a>
-
-									<a href="{{STATURL}}" style="width: 96px; text-decoration: none; font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; background-color: none; font-size: 11px; color: {{DEFAULT}};"><img src="{{REMOTEURL}}/speed.svg" style="width: 48px;"><br /><strong>{{LATENCY}}s latency <span style="color: {{LATENCY_STATUS}};">&#9698;</span></strong></a>
-                				</div>
+                				<div style="font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: {{INFO}}; font-size: 11px; color: #FFFFFF;">Uptime: {{UPTIME}}%</div>
+                				<div style="font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: {{INFO}}; font-size: 10px; font-size: 11px ; color: #FFFFFF;">Latency: {{LATENCY}}s</div>
+                				</center>
 							</td>
 						</tr>
 
 						<tr>
 							<td bgcolor="#ffffff" style="padding: 20px; text-align: left; font-family: Arimo, sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: {{DEFAULTC}};">
+								{{SCAN_RESULTS}}
+							</td>
+						</tr>  
+					</table>
+
+					<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="680" style="margin: auto;" class="email-container">
+						<tr>
+							<td style="padding: 40px 10px;width: 100%;font-size: 12px; font-family: sans-serif; mso-height-rule: exactly; line-height:18px; text-align: center; color: #888888;">
+								<a href="http://emrl.com"><img style="max-width: 40px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; overflow: hidden;" class="aligncenter" src="https://avatars2.githubusercontent.com/u/363789" alt="EMRL" width="40" /></a>
+					  			<p style="text-align: center; font-family: Arimo, sans-serif;"><a style="color: #000000; text-decoration: none;" href="http://emrl.com">EMRL</a> &bull; 1020 Tenth Street &bull; Sacramento, CA 95814 &bull; (916) 446-2440<br />
+								<a style="color: #47ACDF; text-decoration:none; text-transform: uppercase; font-weight: bold;" href="http://emrl.com/">We <span style="color: #CC2233">&hearts;</span> your code</a></p>
+							</td>
+						</tr>
+					</table>
+			  	</div>
+			</td>
+		</tr>
+	</table>
+<script src="https://cdn.smooch.io/smooch.min.js"></script><script>Smooch.init({appToken: '9pobrmwccxk3fozbbdyy9q0eh'});</script>
+</body>
+</html>

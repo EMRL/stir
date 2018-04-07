@@ -17,15 +17,18 @@ function scan_check() {
     SCAN_URL="${REMOTEURL}/${APP}/scan/"
 
     SCAN_RESULT=$(echo "${SCAN_MSG//  <td>}")
-    if curl -Is "${SCAN_URL}" | grep -q "200"; then
-      if curl -s "${SCAN_URL}" | grep -q "0 error"; then
+    # Piping through tac is a workaround to solve a timing issue, see 
+    # https://github.com/EMRL/deploy/issues/134
+    #if curl -LIs --speed-time 900 "${SCAN_URL}" tac | tac | grep -q "200"; then
+    if curl -LIs "${SCAN_URL}"  | grep -q "200"; then
+      if curl -Ls --speed-time 900 "${SCAN_URL}" tac | tac | grep -q "0 error"; then
         SCANC="${SUCCESSC}"
-        SCAN_MSG="Scan Passed"
-      elif curl -s "${SCAN_URL}" | grep -q "error"; then
+        SCAN_MSG="Scan passed"
+      elif curl -Ls --speed-time 900 "${SCAN_URL}" tac | tac | grep -q "error"; then
         SCANC="${DANGERC}"
-        SCAN_MSG="Problem Detected"
+        SCAN_MSG="Problem found"
       fi
-      trace "Malware report: ${SCAN_MSG} (see ${SCAN_URL}"
+      trace "Malware report: ${SCAN_MSG} (see ${SCAN_URL})"
     fi
   fi
 }
@@ -42,10 +45,6 @@ function scan_host() {
 
   # Create temp files
   scan_html="/tmp/${APP}.scan-$RANDOM.html"; (umask 077 && touch "${scan_html}" &> /dev/null) || log_fail
-
-  # Get headers
-  # trace "Header"
-  # curl -X HEAD -i "${PRODURL}" &>> "${logFile}"
   
   # Run the scan
   trace "Scanning ${PRODURL}..."
@@ -92,11 +91,11 @@ function scan_host() {
   # Set the scan result label text and color
   if [[ "${SCAN_MSG}"  == *"0 errors"* ]]; then
     SCANC="${SUCCESSC}"
-    SCAN_MSG="Scan Passed"
+    SCAN_MSG="Scan passed"
     message_state="PASSED"
   else
     SCANC="${DANGERC}"
-    SCAN_MSG="Problem Detected"
+    SCAN_MSG="Problem found"
     message_state="ERROR"
   fi
 

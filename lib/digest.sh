@@ -74,7 +74,7 @@ function create_digest() {
     # Strip out useless analytics results
     if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
       sed -i '/ANALYTICS/d' "${htmlFile}"
-    else
+    # else
       if [[ "${METRIC}" == "hits" ]] && [[ "${RESULT}" -lt "499" ]]; then
         sed -i '/ANALYTICS/d' "${htmlFile}"
       fi
