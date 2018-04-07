@@ -55,11 +55,12 @@ function scan_host() {
   cp "${scanFile}" ~/verbose_scan.txt
 
   # Create and clean up the log
-  sed -i 's/^.*Running/Running/' "${scanFile}"
-  sed -i 's/^.*Loaded/Loaded/' "${scanFile}"
-  sed -i '/^V\:/d' "${scanFile}"
-  sed -i '/^Running average\: Not enough data/d' "${scanFile}"
-  sed -i "s/: currently in plugin 'Nikto Tests'//" "${scanFile}"
+  sed -i -e 's/^.*Running/Running/' "${scanFile}" \
+    -e 's/^.*Loaded/Loaded/' \
+    -e '/^V\:/d' \
+    -e '/^Running average\: Not enough data/d' \
+    -e "s/: currently in plugin 'Nikto Tests'//" \
+    "${scanFile}"
   
   # Strip redirects, can get very spammy on a Wordpress project
   sed -i '/Redirects (301) to/d' "${scanFile}"
@@ -76,6 +77,7 @@ function scan_host() {
   sed -i -n '/Scan Summary/q;p' "${scan_html}" 
   sed -i '1,5d' "${scan_html}" 
   sed -i '/OSVDB/d' "${scan_html}" 
+  sed -i 's^<a href^<a style=\"color: {{PRIMARY}}\" href^g' "${scan_html}" 
   sed -i 's^Host Summary^~^g' "${scan_html}"  
   sed -i -e :a -e '$d;N;2,3ba' -e 'P;D' "${scan_html}"
 
