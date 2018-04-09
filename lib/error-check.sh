@@ -56,7 +56,7 @@ function deploy_check() {
       MINAUSER=$(awk -F\' '{print $2,$4}' ${trshFile})
       echo -n "${MINAUSER}" > "${statFile}"
       echo -n "@" >> ${statFile}
-      grep -n "domain:" "${WORKPATH}/${APP}/${CONFIGDIR}"/.deploy.yml > "${trshFile}"
+      grep -n "domain:" "${WORKPATH}/${APP}"/.deploy.yml > "${trshFile}"
       MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trshFile})
       echo -n "${MINADOMAIN}" >> "${statFile}"
       SSHTARGET=$(sed -r 's/\s+//g' ${statFile})  

@@ -345,3 +345,4 @@ PROJECT_VERSION="3.7"
 # its full path (including command) as well as its configuration file below
 # NIKTO="{{NIKTO}}"
 # NIKTO_CONFIG="{{NIKTO_CONFIG}}"
+# NIKTO_PROXY="{{NIKTO_PROXY}}"

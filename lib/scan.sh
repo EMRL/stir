@@ -8,7 +8,8 @@
 trace "Loading malware scanning utilities"
 
 # Initialize variables
-read -r NIKTO NIKTO_CONFIG scan_html SCAN_RESULT SCAN_MSG SCAN_URL <<< ""
+read -r NIKTO NIKTO_CONFIG NIKTO_PROXY scan_html SCAN_RESULT SCAN_MSG \
+  SCAN_URL <<< ""
 echo "${NIKTO} ${NIKTO_CONFIG} ${scan_html} ${SCAN_RESULT} ${SCAN_MSG}
   ${SCAN_URL}" > /dev/null
 
@@ -48,8 +49,13 @@ function scan_host() {
   
   # Run the scan
   trace "Scanning ${PRODURL}..."
-  "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -output "${scan_html}" -host "${PRODURL}" > "${scanFile}" &
-  spinner $!
+  if [[ -z "${NIKTO_PROXY}" ]]; then
+    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -output "${scan_html}" -host "${PRODURL}" > "${scanFile}" &
+    spinner $!
+  else
+    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -output "${scan_html}" -useproxy "${NIKTO_PROXY}" -host "${PRODURL}" > "${scanFile}" &
+    spinner $!
+  fi
 
   # For testing only
   cp "${scanFile}" ~/verbose_scan.txt

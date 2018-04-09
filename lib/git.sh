@@ -201,19 +201,19 @@ function gitPushMstr() {
     trace "Pushing ${MASTER}"; fix_index
     empty_line  
     if [[ "${VERBOSE}" == "TRUE" ]]; then
-      git push | tee --append "${logFile}"; error_check           
+      git push origin "${MASTER}" | tee --append "${logFile}"; error_check           
     else
       if  [[ "${FORCE}" = "1" ]] || yesno --default yes "Push ${MASTER} branch? [Y/n] "; then
         if [[ "${NOKEY}" != "TRUE" ]]; then
           if [[ "${QUIET}" != "1" ]]; then
-            git push &>> "${logFile}" &
+            git push origin "${MASTER}" &>> "${logFile}" &
             spinner $!
             info "Success.    "
           else
-            git push &>> "${logFile}"; error_check
+            git push origin "${MASTER}" >> "${logFile}"; error_check
           fi
         else
-          git push &>> "${logFile}"; error_check
+          git push origin "${MASTER}" &>> "${logFile}"; error_check
         fi
       else
         safeExit
@@ -297,20 +297,20 @@ function gitPushProd() {
       trace "Push ${PRODUCTION}"; fix_index
       empty_line
       if [[ "${VERBOSE}" == "TRUE" ]]; then
-        git push | tee --append "${logFile}"; error_check 
+        git push origin "${PRODUCTION}" | tee --append "${logFile}"; error_check 
         trace "OK"              
       else
         if [[ "${FORCE}" = "1" ]] || yesno --default yes "Push ${PRODUCTION} branch? [Y/n] "; then
           if [[ "${QUIET}" != "1" ]]; then
             sleep 1
-            git push &>> "${logFile}" &
+            git push origin "${PRODUCTION}" &>> "${logFile}" &
             spinner $!
             info "Success.    "
           else
-            git push &>> "${logFile}"; error_check
+            git push origin "${PRODUCTION}" &>> "${logFile}"; error_check
           fi
           sleep 1
-          if [[ $(git status --porcelain) ]]; then
+          if [[ "$(git status --porcelain)" ]]; then
             sleep 1; git add . &>> "${logFile}"
             git push --force-with-lease  &>> "${logFile}"
           fi
@@ -323,7 +323,7 @@ function gitPushProd() {
     # This is here temporarily to doubleplus force through a buggish situation
     git checkout production &>> "${logFile}"
     git merge master &>> "${logFile}"
-    git push &>> "${logFile}"
+    git push origin "${PRODUCTION}" &>> "${logFile}"
   fi
 }
 
