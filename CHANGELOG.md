@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Digests now inclucde information about recent malware scans, uptime, latency, and backup stats 
 - Invoice creation is now available via [InvoiceNinja](https://www.invoiceninja.org/)'s API using `deploy --invoice`
 - Added a very simple built-in web deployment method for instances when using something like `mina` is unavailble
 - Added malware scanning using [Nikto](https://www.cirt.net/Nikto2)

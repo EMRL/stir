@@ -338,6 +338,23 @@ PROJECT_VERSION="3.7"
 
 
 ###############################################################################
+# Dropbox integration
+###############################################################################
+
+# For functions that require Dropbox integration, define the variables below.
+# Currently this is used for checking when your last backups were made using 
+# the Wordpress BackWPUp plugin, and feeding that data into the stats pages as
+# well as the email digests
+
+# Dropbox API token
+# DB_API_TOKEN="{{DB_API_TOKEN}}"
+
+# Define the *full* path to this project's backup. Do not including "/Home" as 
+# part of the path
+# DB_BACKUP_PATH="{{DB_BACKUP_PATH}}"
+
+
+###############################################################################
 # Malware scanning
 ###############################################################################
 
