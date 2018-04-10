@@ -20,6 +20,7 @@ function go() {
   # Weird spot for this stuff I know
   server_monitor
   scan_check
+  check_backup
 
   console "deploy ${VERSION}"
 
@@ -50,6 +51,11 @@ function go() {
   # Test server monitoring
   if [[ "${MONITORTEST}" == "1" ]]; then
     server_monitor_test; quickExit
+  fi
+
+  # Test analytics authentication
+  if [[ "${CHECK_BACKUP}" == "1" ]]; then
+    check_backup; quickExit
   fi
 
   # Test SSH key authentication using the --ssh-check flag
