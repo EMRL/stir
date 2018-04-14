@@ -8,8 +8,9 @@
 trace "Loading statistics functions"
 
 # Initialize variables
-read -r DB_API_TOKEN DB_BACKUP_PATH LAST_BACKUP <<< ""
-echo "${DB_API_TOKEN} ${DB_BACKUP_PATH} ${LAST_BACKUP}" > /dev/null
+read -r DB_API_TOKEN DB_BACKUP_PATH LAST_BACKUP BACKUP_STATUS <<< ""
+echo "${DB_API_TOKEN} ${DB_BACKUP_PATH} ${LAST_BACKUP} 
+  ${BACKUP_STATUS}" > /dev/null
 
 function project_stats() {
   hash gitchart 2>/dev/null || {
@@ -86,10 +87,20 @@ function check_backup() {
       if [[ $(grep "${var}" "${trshFile}") ]]; then
         if [[ "${i}" == "0" ]]; then 
           LAST_BACKUP="Today"
+          BACKUP_STATUS="${SUCCESSC}"
         elif [[ "${i}" == "1" ]]; then
           LAST_BACKUP="Yesterday" 
+          BACKUP_STATUS="${SUCCESSC}"
         else
-          LAST_BACKUP="${i} days ago" 
+          LAST_BACKUP="${i} days ago"
+          if [[ "${i}" < "5" ]]; then
+            BACKUP_STATUS="${SUCCESSC}"
+          elif [[ "${i}" > "4" && "${i}" < "11" ]]; then
+            BACKUP_STATUS="${WARNINGC}"
+          else
+            BACKUP_STATUS="${DANGERC}"
+          fi
+ 
         fi
         trace "Last backup: ${LAST_BACKUP} (${var}) in ${DB_BACKUP_PATH}"
         return
