@@ -10,7 +10,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.7-beta.3"
+VERSION="3.7"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 LAST_MONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
@@ -147,7 +147,7 @@ Other Options:
   --analytics-test       Test Google Analytics authentication
   --monitor-test         Test production server uptime and latency monitoring
   --function-list        Output a list of all functions()
-  --variable-list        Output a project's declared variables 
+  --variable-list        Output a project's declared variables
 
 More information at https://github.com/EMRL/deploy
 "
