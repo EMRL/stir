@@ -39,12 +39,14 @@ function makeLog() {
       "${logFile}"
 
     # Totally remove these lines
-    sed -i "/----->/d" "${logFile}"
-    sed -i "/0m/d" "${logFile}"
-    sed -i "/Resolving deltas:/d" "${logFile}"
-    sed -i "/remote:/d" "${logFile}"
-    sed -i "/Receiving objects:/d" "${logFile}"
-    sed -i "/Resolving deltas:/d" "${logFile}"
+    sed -i -e "/----->/d" "${logFile}" \
+      -e "/0m/d" "${logFile}" \
+      -e "/Resolving deltas:/d" "${logFile}" \
+      -e "/remote:/d" "${logFile}" \
+      -e "/Receiving objects:/d" "${logFile}" \
+      -e "/Resolving deltas:/d" "${logFile}" \
+      -e "/No Kerberos credentials available/d" \
+      "${logFile}"
 
     # If incognito, remove this stuff for privacy
     if [[ "${INCOGNITO}" == "TRUE" ]]; then
