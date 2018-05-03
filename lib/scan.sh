@@ -79,7 +79,7 @@ function scan_host() {
   sed -i '/<\/div>/d' "${scan_html}"  
   sed -i 's^class=\"dataTable\"^style=\"width: 100%; max-width: 600px;\"><br /^g' "${scan_html}"  
   sed -i 's^<td class=\"column-head\"^<td valign=\"top\" style=\"width: 25%; font-weight: 700;\"^g' "${scan_html}" 
-  sed -i 's^<table class=\"headerTable\"^<br /><table style=\"text-align: left; font-size: 40px;\"^g' "${scan_html}" 
+  sed -i 's^<table class=\"headerTable\"^<br /><table style=\"text-align: left; font-size: 40px; overflow-wrap: break-word; word-wrap: break-word; -ms-word-break: break-all; word-break: break-word;\"^g' "${scan_html}" 
   sed -i -n '/Scan Summary/q;p' "${scan_html}" 
   sed -i '1,5d' "${scan_html}" 
   sed -i '/OSVDB/d' "${scan_html}" 
