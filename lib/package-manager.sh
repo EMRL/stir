@@ -36,7 +36,7 @@ function pkgMgr() {
           trace "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/${APP}/package.json found."
           notice "Found npm configuration!" 
 
-          if  [[ "${FORCE}" = "1" ]] || yesno --default no "Build assets? [y/N] "; then
+          if [[ "${BUILD}" = "1" ]] || yesno --default no "Build assets? [y/N] "; then
             cd "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/${APP}" || errorCheck
 
             if [[ "${VERBOSE}" == "TRUE" ]]; then

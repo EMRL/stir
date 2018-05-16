@@ -12,6 +12,11 @@ gitLock="${WORKPATH}/${APP}/.git/index.lock"
 
 # Make sure we're in a git repository.
 function gitStart() {
+  # If this is just a build, we won't require git repo functions
+  if [[ "${BUILD}" == "1" ]]; then 
+    return 0
+  fi
+  
   # Directory exists?
   if [[ ! -d "${WORKPATH}/${APP}" ]]; then
     info "${WORKPATH}/${APP} is not a valid directory."

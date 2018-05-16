@@ -34,6 +34,7 @@ Other Options:
   --automate             For unattended deployment via cron
   --approve              Approve and deploy queued code changes
   --deny                 Deny queued code changes
+  --build                Build project assets
   --digest               Create and send weekly digest
   --report               Create a monthly activity report
   --no-check             Override active file and server checks
@@ -51,7 +52,7 @@ Other Options:
   --analytics-test       Test Google Analytics authentication
   --monitor-test         Test production server uptime and latency monitoring
   --function-list        Output a list of all functions()
-  --variable-list        Output a project's declared variables 
+  --variable-list        Output a project's declared variables
 ```
 
 [![asciicast](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP.png)](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP?t=0)
