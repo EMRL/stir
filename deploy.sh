@@ -10,7 +10,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.7"
+VERSION="3.7.1-dev"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 LAST_MONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
@@ -27,7 +27,7 @@ set -uo pipefail
 # Startup switches
 read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
   SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
-  DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST PROJSTATS UNLOCK  \
+  DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
   SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
   CHECK_BACKUP <<< ""
 echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT}  
@@ -130,6 +130,7 @@ Other Options:
   --automate             For unattended deployment via cron
   --approve              Approve and deploy queued code changes
   --deny                 Deny queued code changes
+  --build                Build project assets
   --digest               Create and send weekly digest
   --report               Create a monthly activity report
   --no-check             Override active file and server checks
@@ -209,6 +210,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --analytics-test) ANALYTICSTEST="1" ;; 
     --monitor-test) MONITORTEST="1" ;;
     --stats) PROJSTATS="1" ;;
+    --build) BUILD="1"; NOCHECK="1"; FORCE="1" ;;
     --invoice) CREATE_INVOICE="1" ;;
     --unlock) UNLOCK="1" ;;
     --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="TRUE" ;;
@@ -360,8 +362,6 @@ fi
 if [[ "${VARIABLELIST}" == "1" ]]; then
   ( set -o posix ; set ) | cat -v; quickExit
 fi
-
-
 
 # Spam all the things!
 trace "Version ${VERSION}"

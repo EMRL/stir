@@ -24,6 +24,11 @@ function go() {
 
   console "deploy ${VERSION}"
 
+  # Build only
+  if [[ "${BUILD}" == "1" ]]; then
+    pkgMgr; quietExit
+  fi  
+
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
     console "Current working path is ${WORKPATH}/${APP}"
   fi
