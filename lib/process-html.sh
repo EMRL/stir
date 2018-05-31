@@ -9,7 +9,7 @@ trace "Loading html handling"
 
 # Initialize variables 
 read -r DEFAULTC PRIMARYC SECONDARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID \
-  COVER SCANC UPTIMEC LATENCYC <<< ""
+  COVER SCANC UPTIMEC LATENCYC LOGC LOGBC <<< ""
 echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} 
   ${SMOOCHID} ${COVER} ${SCANC} ${UPTIMEC} ${LATENCYC}" > /dev/null
 
@@ -36,9 +36,9 @@ function process_html() {
   sed -i -e '/ERROR/s/$/<\/span>/' \
     -e '/^ERROR/s/^/<span style=\"background-color: {{DANGER}};\">/' \
     -e '/WARNING/s/$/<\/span>/' \
-    -e '/^WARNING/s/^/<span style=\"background-color: {{WARNING}};\">/' \
+    -e '/^WARNING/s/^/<span style=\"color: {{WARNING}};\">/' \
     -e '/SUCCESS/s/$/<\/span>/' \
-    -e '/^SUCCESS/s/^/<span style=\"background-color: {{SUCCESS}};\">/' \
+    -e '/^SUCCESS/s/^/<span style=\"color: {{SUCCESS}};\">/' \
     "${htmlFile}"
 
   # Get to work
@@ -72,6 +72,8 @@ function process_html() {
     -e "s^{{INFO}}^${INFOC}^g" \
     -e "s^{{WARNING}}^${WARNINGC}^g" \
     -e "s^{{DANGER}}^${DANGERC}^g" \
+    -e "s^{{LOG}}^${LOGC}^g" \
+    -e "s^{{LOGBACKGROUND}}^${LOGBC}^g" \
     -e "s^{{SCAN_STATUS}}^${SCANC}^g" \
     -e "s^{{UPTIME_STATUS}}^${UPTIMEC}^g" \
     -e "s^{{LATENCY_STATUS}}^${LATENCYC}^g" \
