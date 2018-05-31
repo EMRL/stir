@@ -32,6 +32,15 @@ function process_html() {
     sed -i '/ANALYTICS/d' "${htmlFile}"
   fi
 
+  # Prettify errors, warning, and successes
+  sed -i -e '/ERROR/s/$/<\/span>/' \
+    -e '/^ERROR/s/^/<span style=\"background-color: {{DANGER}};\">/' \
+    -e '/WARNING/s/$/<\/span>/' \
+    -e '/^WARNING/s/^/<span style=\"background-color: {{WARNING}};\">/' \
+    -e '/SUCCESS/s/$/<\/span>/' \
+    -e '/^SUCCESS/s/^/<span style=\"background-color: {{SUCCESS}};\">/' \
+    "${htmlFile}"
+
   # Get to work
   sed -i -e "s^{{VIEWPORT}}^${VIEWPORT}^g" \
     -e "s^{{NOW}}^${NOW}^g" \
