@@ -5,7 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Added `deploy --build [project name]` for quickly building project assets
+### Changed
 - If a project is using `mina` and configured to build assets on every deployment, `deploy` will skip the redunant build step
+- Test emails now contain more project information
 
 ## [3.7] - 05-03-2018
 ### Added
