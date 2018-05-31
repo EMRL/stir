@@ -17,8 +17,12 @@ function go() {
     tput cnorm;
   fi
 
-  # Weird spot for this stuff I know
-  server_monitor
+  # Get some project data for the logs; we only want to get server monitor 
+  # info if we're not running a monitor test since we already loaded the 
+  # password file contents into a variable
+  if [[ "${MONITORTEST}" != "1" ]]; then
+    server_monitor
+  fi
   scan_check
   check_backup
 
