@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - If a project is using `mina` and configured to build assets on every deployment, `deploy` will skip the redunant build step
 - Test emails now contain more project information
 - Improved readability of HTML log files
+- Improved unit testing
 ### Fixed
 - Trapped an error that prevented `deploy --monitor-test [project]` from working
 
