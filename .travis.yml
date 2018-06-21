@@ -7,5 +7,5 @@ before_script:
 script:
     - bash test/test.sh
     - bash test/extended.sh
-    - bash install/doinst.sh
+    - bash sudo install/doinst.sh
     - bash /usr/local/bin/deploy --version
