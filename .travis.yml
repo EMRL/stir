@@ -1,4 +1,5 @@
 language: bash
+sudo: required
 
 before_script:
     - git clone https://github.com/kward/shunit2.git
