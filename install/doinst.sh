@@ -87,10 +87,10 @@ else
 fi
 
 # Declare dependencies
-dependencies=(awk cal cat curl echo eval git grep pkill printf read sed sendmail sleep tee tput)
+dependencies=(awk cal cat curl echo eval git grep pkill printf read sed sleep tee tput)
 
 # Declare optional stuff
-options=(gitchart grunt npm scp ssh sshpass wget wkhtmltopdf wp)
+options=(gitchart grunt npm scp sendmail ssh sshpass wget wkhtmltopdf wp)
 
 message=''
 fg_red="$(tput setaf 1)"

@@ -151,7 +151,8 @@ function postDeploy() {
       # info "Deployment Success."
     else
       info ""
-      if yesno --default yes "Deployment succeeded, but something unexpected happened. View status? [Y/n] "; then
+      warning "Deployment succeeded, but something unexpected happened."
+      if yesno --default yes "View status? [Y/n] "; then
         git status
       fi
     fi

@@ -39,6 +39,8 @@ function process_html() {
     -e '/^WARNING/s/^/<span style=\"color: {{WARNING}};\">/' \
     -e '/SUCCESS/s/$/<\/span>/' \
     -e '/^SUCCESS/s/^/<span style=\"color: {{SUCCESS}};\">/' \
+    -e '/Deployed to/s/$/<\/span>/' \
+    -e '/^Deployed to/s/^/<span style=\"color: {{SUCCESS}};\">/' \
     "${htmlFile}"
 
   # Get to work
