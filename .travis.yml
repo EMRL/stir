@@ -8,5 +8,5 @@ before_script:
 script:
     - bash test/test.sh
     - bash test/extended.sh
-    - bash sudo install/doinst.sh
+    - sudo bash install/doinst.sh
     - bash /usr/local/bin/deploy --version
