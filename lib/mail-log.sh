@@ -11,6 +11,12 @@ function mailLog() {
   # Only send email if a commit has been made, an approval is required, or there has been an error
   if [[ -n "${COMMITHASH}" ]] || [[ "${message_state}" == "ERROR" ]] || [[ "${message_state}" == "APPROVAL NEEDED" ]] || [[ "${AUTOMATE}" == "1" ]]; then
 
+    # Make sure sendmail exists and is configured 
+    if [[ ! -f "${MAILPATH}/sendmail" ]]; then
+      empty_line; warning "Sendmail misconfigured or not found."
+      quietExit
+    fi
+
     # If using --current, use the REPO value instead of the APP (current directory)
     if [[ "${CURRENT}" == "1" ]]; then
       APP="${REPO}"
@@ -62,9 +68,15 @@ function mailLog() {
 
 function email_test() {
   console "Testing email..."
+
+  # Confirm we have a recipient address
   if [[ -z "${TO}" ]]; then
-    warning "No recipient address found."; empty_line
-    clean_up; exit 1
+    empty_line; warning "No recipient address found."
+    quietExit
+  # Make sure sendmail exists and is configured 
+  elif [[ ! -f "${MAILPATH}/sendmail" ]]; then
+    empty_line; warning "Sendmail misconfigured or not found."
+    quietExit
   else
     # Send HTML mail
     (
