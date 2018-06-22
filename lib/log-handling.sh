@@ -75,18 +75,19 @@ function makeLog() {
 
   # If logs should be terse, remove some more stuff
   if [[ "${TERSE}" == "TRUE" ]]; then
-    sed -i -e '/Loading/d'  \
-      -e "/Enabled/d" "${logFile}" \
-      -e "/enabled/d" "${logFile}" \
-      -e "/Current user/d" "${logFile}" \
-      -e "/Current project/d" "${logFile}" \
-      -e "/Project workpath/d" "${logFile}" \
-      -e "/Locking process/d" "${logFile}" \
-      -e "/Running from/d" "${logFile}" \
-      -e "/lock/d" "${logFile}" \
-      -e "/Checking for deploy updates/d" "${logFile}" \
-      -e "/Log file is/d" "${logFile}" \
-      -e "/lock/d" "${logFile}" \
+    sed -i -e '/Loading/d' \
+      -e "/Enabled/d" \
+      -e "/enabled/d" \
+      -e "/Current user/d" \
+      -e "/Current project/d" \
+      -e "/Project workpath/d" \
+      -e "/Locking process/d" \
+      -e "/Running from/d" \
+      -e "/lock/d" \
+      -e "/Checking for deploy updates/d" \
+      -e "/Log file is/d" \
+      -e "/lock/d" \
+      -e "/not found/d" \
       "${logFile}"
   fi
 
@@ -96,6 +97,13 @@ function makeLog() {
   # Replace empty lines where we want
   sed -i -e '/Checking servers/s/^/\n/' \
     -e '/Launching deployment/s/^/\n/' \
+    -e '/Staging files/s/^/\n/' \
+    -e '/Commit message/s/^/\n/' \
+    -e '/Preparing repository/s/^/\n/' \
+    -e '/Checking for updates/s/^/\n/' \
+    -e '/The following updates/s/^/\n/' \
+    -e '/Building commit message/s/^/\n/' \
+    -e '/installed plugins/s/^/\n/' \
     "${logFile}"
 
   # Is this a publish only?

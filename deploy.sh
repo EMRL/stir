@@ -10,7 +10,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.7.1-dev"
+VERSION="3.7.1-rc"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 LAST_MONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
