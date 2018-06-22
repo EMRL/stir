@@ -67,11 +67,36 @@ function makeLog() {
     sed -i "/debug1:/d" "${logFile}"
   fi
 
-  # Filter raw log output as configured by user
+  # Filter PHP log output as configured by user
   if [[ "${NOPHP}" == "TRUE" ]]; then
     grep -vE "(PHP |Notice:|Warning:|Strict Standards:)" "${logFile}" > "${postFile}"
     cat "${postFile}" > "${logFile}"
   fi
+
+  # If logs should be terse, remove some more stuff
+  if [[ "${TERSE}" == "TRUE" ]]; then
+    sed -i -e '/Loading/d'  \
+      -e "/Enabled/d" "${logFile}" \
+      -e "/enabled/d" "${logFile}" \
+      -e "/Current user/d" "${logFile}" \
+      -e "/Current project/d" "${logFile}" \
+      -e "/Project workpath/d" "${logFile}" \
+      -e "/Locking process/d" "${logFile}" \
+      -e "/Running from/d" "${logFile}" \
+      -e "/lock/d" "${logFile}" \
+      -e "/Checking for deploy updates/d" "${logFile}" \
+      -e "/Log file is/d" "${logFile}" \
+      -e "/lock/d" "${logFile}" \
+      "${logFile}"
+  fi
+
+  # Remove double line breaks
+  sed -i '/^$/d' "${logFile}"
+
+  # Replace empty lines where we want
+  sed -i -e '/Checking servers/s/^/\n/' \
+    -e '/Launching deployment/s/^/\n/' \
+    "${logFile}"
 
   # Is this a publish only?
   if [[ "${PUBLISH}" == "1" ]] && [[ -z "${notes}" ]]; then   

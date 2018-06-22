@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Added `deploy --build [project name]` for quickly building project assets
+- Option to set `TERSE="TRUE"` in `deploy.conf` for slightly cleaner log files 
 ### Changed
 - If a project is using `mina` and configured to build assets on every deployment, `deploy` will skip the redunant build step
 - Test emails now contain more project information

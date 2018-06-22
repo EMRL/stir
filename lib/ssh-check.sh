@@ -24,7 +24,7 @@ function ssh_check() {
       if [[ "${EXITCODE}" != "0" ]]; then
         error "git@github.org: SSH check failed (Error code ${EXITCODE})"
       else
-        [[ "${SSHTEST}" == "1" ]] && console "git@bitbucket.org: OK"
+        [[ "${SSHTEST}" == "1" ]] && console "git@github.org: OK"
         trace "git@github.org: OK"
       fi
     fi
