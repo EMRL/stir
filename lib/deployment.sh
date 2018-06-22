@@ -74,7 +74,7 @@ function pkgDeploy() {
     if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
 
       # If we don't require approval to push to live, keep going
-      if [[ "${FORCE}" = "1" ]] || yesno --default yes "Deploy to live server? [Y/n] "; then
+      if [[ "${FORCE}" == "1" ]] || yesno --default yes "Deploy to live server? [Y/n] "; then
 
         # Test deployment command before running
         if [[ "${DEPLOY}" != "SCP" ]]; then
@@ -160,13 +160,14 @@ function postDeploy() {
     # Run integration hooks
     postCommit
     # This needs a check.
-    if [[ "${APPROVE}" == "1" ]] || [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
+    if [[ "${APPROVE}" == "1" ]]; then
+    	info "Deployment queued for approval."
+    else
       if [[ -z "${PRODURL}" ]]; then
-        warning "No production URL configured."
-        info "Successfully deployed."
+        warning "No production URL configured, but deployment command ran successfully."
       else
         info "Deployed to ${PRODURL}"
       fi
     fi
   fi
-} 
+}

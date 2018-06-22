@@ -76,7 +76,6 @@ function postCommit() {
   # Check for a Wordpress core update, update production database if needed
   if [[ "${UPDCORE}" == "1" ]] && [[ -n "${PRODUCTION}" ]] && [[ -n "${PRODURL}" ]] && [[ -n "${DEPLOY}" ]]; then
     info "Upgrading production database..."; curl --silent "${PRODURL}${WPSYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
-
   fi
 
   # Just for yuks, display git stats for this user (user can override this if it annoys them)
