@@ -59,7 +59,6 @@ function safeExit() {
     slackPost
   else
     if [[ "${POSTTOSLACK}" == "TRUE" ]]; then
-      trace "Posting to Slack"
       build_log; slackPost > /dev/null 2>&1
     fi
   fi

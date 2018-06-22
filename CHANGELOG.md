@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Test emails now contain more project information
 - Improved readability of HTML log files
 - Improved unit testing
+- Cleaned up language for more consistency
 ### Fixed
 - Trapped an error that prevented `deploy --monitor-test [project]` from working
 
