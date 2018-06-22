@@ -24,8 +24,6 @@ function error_status() {
   if [[ "${EXITCODE}" != 0 ]]; then 
     error_msg="WARNING: Error code ${EXITCODE}"
     trace "${error_msg}"
-  else
-    trace "OK"
   fi
 }
 
@@ -71,7 +69,7 @@ function deploy_check() {
 
     if [[ "${SSHSTATUS}" == *"ok"* ]] ; then
       # Continue deploying
-      trace "OK"
+      trace "${SSHTARGET}: OK"
     elif [[ "${SSHSTATUS}" == *"Permission denied"* ]] ; then
       # Not authorized, no key etc.
       error "Connection refused for ${SSHTARGET}"
