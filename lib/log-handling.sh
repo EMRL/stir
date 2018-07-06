@@ -88,6 +88,8 @@ function makeLog() {
       -e "/Log file is/d" \
       -e "/lock/d" \
       -e "/not found/d" \
+      -e "/Checking for/d" \
+      -e "/Continuing deploy/d" \
       "${logFile}"
   fi
 
@@ -102,7 +104,6 @@ function makeLog() {
     -e '/Preparing repository/s/^/\n/' \
     -e '/Checking for updates/s/^/\n/' \
     -e '/The following updates/s/^/\n/' \
-    -e '/Building commit message/s/^/\n/' \
     -e '/installed plugins/s/^/\n/' \
     "${logFile}"
 
