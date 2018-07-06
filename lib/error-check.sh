@@ -32,11 +32,11 @@ function deploy_check() {
     DEPLOYTEST="mina --simulate deploy"
     # Get variables organized
     if [[ -f "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.rb" ]]; then
-      grep -n "set :user" "${WORKPATH}/${APP}/${CONFIGDIR}"/deploy.rb > "${trshFile}"
+      grep -n -w "set :user" "${WORKPATH}/${APP}/${CONFIGDIR}"/deploy.rb > "${trshFile}"
       MINAUSER=$(awk -F\' '{print $2,$4}' ${trshFile})
       echo -n "${MINAUSER}" > "${statFile}"
       echo -n "@" >> ${statFile}
-      grep -n "set :domain" "${WORKPATH}/${APP}/${CONFIGDIR}"/deploy.rb > "${trshFile}"
+      grep -n -w "set :domain" "${WORKPATH}/${APP}/${CONFIGDIR}"/deploy.rb > "${trshFile}"
       MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trshFile})
       echo -n "${MINADOMAIN}" >> "${statFile}"
       SSHTARGET=$(sed -r 's/\s+//g' ${statFile})
@@ -50,11 +50,11 @@ function deploy_check() {
 
     elif [[ -f "${WORKPATH}/${APP}/.deploy.yml" ]]; then
       DEPLOYTEST="bundle exec mina --simulate deploy -f Minafile"
-      grep -n "user:" "${WORKPATH}/${APP}"/.deploy.yml > "${trshFile}"
+      grep -n -w "user:" "${WORKPATH}/${APP}"/.deploy.yml > "${trshFile}"
       MINAUSER=$(awk -F\' '{print $2,$4}' ${trshFile})
       echo -n "${MINAUSER}" > "${statFile}"
       echo -n "@" >> ${statFile}
-      grep -n "domain:" "${WORKPATH}/${APP}"/.deploy.yml > "${trshFile}"
+      grep -n -w "domain:" "${WORKPATH}/${APP}"/.deploy.yml > "${trshFile}"
       MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trshFile})
       echo -n "${MINADOMAIN}" >> "${statFile}"
       SSHTARGET=$(sed -r 's/\s+//g' ${statFile})  
