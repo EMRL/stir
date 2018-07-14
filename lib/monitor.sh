@@ -77,20 +77,20 @@ function server_monitor_log() {
 
   # Set colors for html reports
   if [[ "${UPTIME}" == "100" ]]; then
-    UPTIMEC="${SUCCESSC}"
+    UPTIMEC="${SUCCESSC}"; UPTIME_BTN="btn-success"
   elif [[ "${UPTIME}" > "97" || "${UPTIME}" == "97" ]]; then
-    UPTIMEC="${SUCCESSC}"
+    UPTIMEC="${SUCCESSC}"; UPTIME_BTN="btn-success"
   elif [[ "${UPTIME}" > "88" && "${UPTIME}" < "97" ]]; then
-    UPTIMEC="${WARNINGC}"
+    UPTIMEC="${WARNINGC}"; UPTIME_BTN="btn-warning"
   else
-    UPTIMEC="${DANGERC}"
+    UPTIMEC="${DANGERC}"; UPTIME_BTN="btn-danger"
   fi
 
   if [[ "${LATENCY}" < "2.2" || "${LATENCY}" == "2.2" ]]; then
-    LATENCYC="${SUCCESSC}"
+    LATENCYC="${SUCCESSC}"; LATENCY_BTN="btn-success"
   elif [[ "${LATENCY}" > "2.2" && "${LATENCY}" < "3.8" ]]; then
-    LATENCYC="${WARNINGC}"
+    LATENCYC="${WARNINGC}"; LATENCY_BTN="btn-warning"
   else
-    LATENCYC="${DANGERC}"
+    LATENCYC="${DANGERC}"; LATENCY_BTN="btn-danger"
   fi
 }

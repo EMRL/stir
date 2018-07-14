@@ -23,10 +23,10 @@ function scan_check() {
     #if curl -LIs --speed-time 900 "${SCAN_URL}" tac | tac | grep -q "200"; then
     if curl -LIs "${SCAN_URL}"  | grep -q "200"; then
       if curl -Ls --speed-time 900 "${SCAN_URL}" tac | tac | grep -q "0 error"; then
-        SCANC="${SUCCESSC}"
+        SCANC="${SUCCESSC}"; SCAN_BTN="btn-success"
         SCAN_MSG="Scan passed"
       elif curl -Ls --speed-time 900 "${SCAN_URL}" tac | tac | grep -q "error"; then
-        SCANC="${DANGERC}"
+        SCANC="${DANGERC}"; SCAN_BTN="btn-danger"
         SCAN_MSG="Problem found"
       fi
       trace "Malware report: ${SCAN_MSG} (see ${SCAN_URL})"

@@ -7,6 +7,10 @@
 ###############################################################################
 trace "Loading git functions"
 
+# Initialize variables
+read -r FULLUSER <<< ""
+echo "${FULLUSER}" > /dev/null
+
 # Assign a variable to represent .git/index.lock
 gitLock="${WORKPATH}/${APP}/.git/index.lock"
 
