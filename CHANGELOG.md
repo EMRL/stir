@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.7.1] - 07-13-2018
 ### Added
 - Added `deploy --build [project name]` for quickly building project assets
 - Option to set `TERSE="TRUE"` in `deploy.conf` for slightly cleaner log files 
@@ -217,7 +217,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Old monolithic script rewritten
 
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.7...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.7.1...HEAD
+[3.7.1]: https://github.com/EMRL/deploy/compare/v3.7...v3.7.1
 [3.7]: https://github.com/EMRL/deploy/compare/v3.6.7...v3.7
 [3.6.7]: https://github.com/EMRL/deploy/compare/v3.6.6...v3.6.7
 [3.6.6]: https://github.com/EMRL/deploy/compare/v3.6.5...v3.6.6
