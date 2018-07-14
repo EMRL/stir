@@ -9,9 +9,10 @@ trace "Loading html handling"
 
 # Initialize variables 
 read -r DEFAULTC PRIMARYC SECONDARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID \
-  COVER SCANC UPTIMEC LATENCYC LOGC LOGBC <<< ""
+  COVER SCANC UPTIMEC LATENCYC LOGC LOGBC sed_commits <<< ""
 echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} 
-  ${SMOOCHID} ${COVER} ${SCANC} ${UPTIMEC} ${LATENCYC}" > /dev/null
+  ${SMOOCHID} ${COVER} ${SCANC} ${UPTIMEC} ${LATENCYC} 
+  ${sed_commits}" > /dev/null
 
 function process_html() {
   # Clean out the stuff we don't need
@@ -43,6 +44,10 @@ function process_html() {
     -e '/^Deployed to/s/^/<span style=\"color: {{SUCCESS}};\">/' \
     "${htmlFile}"
 
+  # Insert commits
+  sed_commits=$(echo "sed -e '/{{COMMITS_RECENT}}/ {' -e 'r ${statFile}' -e 'd' -e '}' -i \"${htmlFile}\"")
+  eval "${sed_commits}"
+  
   # Get to work
   sed -i -e "s^{{VIEWPORT}}^${VIEWPORT}^g" \
     -e "s^{{NOW}}^${NOW}^g" \
@@ -101,5 +106,10 @@ function process_html() {
     -e "s^{{GA_SEARCHES}}^${GA_SEARCHES}^g" \
     -e "s^{{GA_DURATION}}^${GA_DURATION}^g" \
     -e "s^{{GA_SOCIAL}}^${GA_SOCIAL}^g" \
-    "${htmlFile}"        
-}
+    -e "s^{{CODE_STATS}}^${CODE_STATS}^g" \
+    -e "s^{{SCAN_BTN}}^${SCAN_BTN}^g" \
+    -e "s^{{UPTIME_BTN}}^${UPTIME_BTN}^g" \
+    -e "s^{{LATENCY_BTN}}^${LATENCY_BTN}^g" \
+    -e "s^{{BACKUP_BTN}}^${BACKUP_BTN}^g" \
+    "${htmlFile}"
+  }
