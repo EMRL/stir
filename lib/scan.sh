@@ -88,7 +88,8 @@ function scan_host() {
   sed -i -e :a -e '$d;N;2,3ba' -e 'P;D' "${scan_html}"
 
   # Create the scan report in the new dashboard format, this is kinda
-  # maybe termporary, it's getting pretty tangled
+  # maybe temporary, it's getting pretty tangled
+  assign_nav
   project_scan
 
   cat "${deployPath}/html/${HTMLTEMPLATE}/scan/header.html" "${scan_html}" "${deployPath}/html/${HTMLTEMPLATE}/scan/footer.html" > "${htmlFile}"
