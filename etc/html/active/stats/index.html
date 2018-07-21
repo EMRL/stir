@@ -30,7 +30,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">{{PROJNAME}}</a>
+				<a class="navbar-brand" href="./">{{PROJNAME}}</a>
 			</div>
 		</div>
 	</div>
@@ -38,18 +38,17 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-3">
-				<!-- Left column -->
-				<strong><i class="glyphicon glyphicon-wrench"></i> Reports</strong>
+				<strong><i class="glyphicon glyphicon-wrench"></i><span style="padding-left: 10px;">Reports</span></strong>
 				<hr>
 				<ul class="nav nav-pills nav-stacked">
 					<li class="nav-header"></li>
-					<li><a href="{{ACTIVITY_URL}}"><i class="glyphicon glyphicon-flash"></i><span>Activity</span></a></li>
-					<li><a href="{{STATURL}}"><i class="glyphicon glyphicon-stats"></i><span>Statistics</span></a></li>
-					<li><a href="{{SCAN_URL}}"><i class="glyphicon glyphicon-ok-circle"></i><span>Malware Scan</span></a></li>
-					<li><a href="#"><i class="glyphicon glyphicon-lock"></i><span>Firewall &amp; Security</span></a></li>
-					<li><a href="#"><i class="glyphicon glyphicon-cloud-upload"></i><span>System Backup</span></a></li>
+					<li><a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-flash"></i><span>Activity</span></a></li>
+					<li><a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-stats"></i><span>Statistics</span></a></li>
+					<li><a href="{{SCAN_NAV}}"><i class="glyphicon glyphicon-ok-circle"></i><span>Malware Scan</span></a></li>
+					<li><a href="{{FIREWALL_NAV}}"><i class="glyphicon glyphicon-lock"></i><span>Firewall &amp; Security</span></a></li>
+					<li><a href="{{BACKUP_NAV}}"><i class="glyphicon glyphicon-cloud-upload"></i><span>System Backup</span></a></li>
 				</ul>
-					<hr>
+				<hr>
 				<ul class="nav nav-stacked">
 					<li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#menu2"> Help &amp; Support <i class="glyphicon glyphicon-chevron-right"></i></a>
 						<ul class="nav nav-stacked collapse" id="menu2">
@@ -64,34 +63,19 @@
 			</div>
 
 			<div class="col-sm-9">
-
 				<ul class="list-inline pull-right">
 					<li><small>Updated {{NOW}}</small></li>
 				</ul>
-
-				<strong><i class="glyphicon glyphicon-dashboard"></i> My Dashboard</strong>
+				<strong><i class="glyphicon glyphicon-dashboard"></i><span style="padding-left: 10px;">My Dashboard</span></strong>
 				<hr>
-
 				<div class="row">
-					<!-- center left-->
 					<div class="col-md-6">
 						<div class="btn-group btn-group-justified">
-							<a data-toggle="modal" href="#scanModal" class="btn {{SCAN_BTN}} col-sm-3">
-								<i class="glyphicon glyphicon-ok-sign"></i>
-								<div class="stat-label">{{SCAN_MSG}}</div>
-							</a>
-							<a href="#" class="btn {{UPTIME_BTN}} col-sm-3">
-								<i class="glyphicon glyphicon-time"></i>
-								<div class="stat-label">{{UPTIME}}% uptime</div>
-							</a>
-							<a href="#" class="btn {{LATENCY_BTN}} col-sm-3">
-								<i class="glyphicon glyphicon-send"></i>
-								<div class="stat-label">{{LATENCY}}s latency</div>
-							</a>
-							<a href="#" class="btn {{BACKUP_BTN}} col-sm-3">
-								<i class="glyphicon glyphicon-cloud-upload"></i>
-								<div class="stat-label">{{LAST_BACKUP}}</div>
-							</a>
+							<!--// Each <a>...</a> below needs to be on ONE line in order to be parsed correctly //-->
+							<a href="{{SCAN_NAV}}" class="btn {{SCAN_BTN}} col-sm-3"><i class="glyphicon glyphicon-ok-sign"></i><div class="stat-label">{{SCAN_MSG}}</div></a>
+							<a href="#" class="btn {{UPTIME_BTN}} col-sm-3"><i class="glyphicon glyphicon-time"></i><div class="stat-label">{{UPTIME}}% uptime</div></a>
+							<a href="#" class="btn {{LATENCY_BTN}} col-sm-3"><i class="glyphicon glyphicon-send"></i><div class="stat-label">{{LATENCY}}s latency</div></a>
+							<a href="{{BACKUP_NAV}}" class="btn {{BACKUP_BTN}} col-sm-3"><i class="glyphicon glyphicon-cloud-upload"></i><div class="stat-label">{{LAST_BACKUP}}</div></a>
 						</div>
 
 						<!--[BEGIN ANALYTICS]-->
@@ -99,7 +83,6 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<div class="panel-title">
-									<!--a href=""><i class="glyphicon glyphicon-link pull-right"></i></a-->
 									<h4>Engagement (Last 7 days)</h4>
 								</div>
 							</div>
@@ -121,19 +104,17 @@
 						<!--[END ANALYTICS]-->
 
 						<hr>
-
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<div class="panel-title">
-									<a href="{{ACTIVITY_URL}}"><i class="glyphicon glyphicon-link pull-right"></i></a>
+									<a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-link pull-right"></i></a>
 									<h4>Recent Activity</h4>
 								</div>
 							</div>
-
 							<div class="panel-body">
 								{{COMMITS_RECENT}}
 								<p class="text-center">
-									<a href="{{ACTIVITY_URL}}">View all</a>
+									<a href="{{ACTIVITY_NAV}}">View all</a>
 								</p>
 							</div>
 						</div>
@@ -142,7 +123,7 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<div class="panel-title">
-									<a href=""><i class="glyphicon glyphicon-link pull-right"></i></a>
+									<a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-link pull-right"></i></a>
 									<h4>Project Stats</h4>
 								</div>
 							</div>
@@ -162,16 +143,17 @@
 							
 							<div class="panel-body">
 								<object style="max-width: 840px;" data="commits_day_week.svg" type="image/svg+xml"></object>
-								<p class="text-center">Commits by day of week</p>
+								<hr>
+								<p class="text-center">
+									<a href="{{STATISTICS_NAV}}">View all</a>
+								</p>
 							</div>
 						</div>
-
 						<hr>
-
-						 <div class="panel panel-default">
+						<div class="panel panel-default">
 							<div class="panel-heading">
 								<div class="panel-title">
-									<i class="glyphicon glyphicon-wrench pull-right"></i>
+									<!--i class="glyphicon glyphicon-wrench pull-right"></i-->
 									<h4>Support Request</h4>
 								</div>
 							</div>
@@ -209,140 +191,17 @@
 									</div>
 								</form>
 							</div>
-							<!--/panel content-->
 						</div>
-						<!--/panel-->
-
 					</div>
-					<!--/col-span-6-->
-
 				</div>
-				<!--/row-->
-
-
-
-				
 			</div>
-			<!--/col-span-9-->
 		</div>
 	</div>
-	<!-- /Main -->
 
 	<footer class="text-center"></footer>
 
-	<!-- Scan details -->
-	<div class="modal" id="scanModal">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h4 class="modal-title">Malware Scan</h4>
-				</div>
-				<div class="modal-body">
-					<p><strong>382 requests, 0 errors, 12 findings</strong></p>
-					<table  style="width: 100%; max-width: 600px;"><br />
-						<tr>
-							<td valign="top" style="width: 25%; font-weight: 700;">Start Time</td>
-							<td>2018-07-07 10:23:20</td>
-						</tr>
-						<tr>
-							<td valign="top" style="width: 25%; font-weight: 700;">End Time</td>
-							<td>2018-07-07 10:27:11</td>
-						</tr>
-						<tr>
-							<td valign="top" style="width: 25%; font-weight: 700;">Elapsed Time</td>
-							<td>231 seconds</td>
-							</tr>
-						<tr>
-							<td valign="top" style="width: 25%; font-weight: 700;">Statistics</td>
-							<td>382 requests, 0 errors, 12 findings</td>
-						</tr>
-					</table>
-				</div>
-				<div class="modal-footer">
-					<a href="#" data-dismiss="modal" class="btn">Close</a>
-					<a href="#" data-dismiss="modal" class="btn btn-primary">View Report</a>
-				</div>
-			</div>
-		</div>
-
-	<!-- Scan details -->
-	<div class="modal" id="scanModal">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h4 class="modal-title">Malware Scan</h4>
-				</div>
-				<div class="modal-body">
-					<p><strong>382 requests, 0 errors, 12 findings</strong></p>
-					<table  style="width: 100%; max-width: 600px;"><br />
-						<tr>
-							<td valign="top" style="width: 25%; font-weight: 700;">Start Time</td>
-							<td>2018-07-07 10:23:20</td>
-						</tr>
-						<tr>
-							<td valign="top" style="width: 25%; font-weight: 700;">End Time</td>
-							<td>2018-07-07 10:27:11</td>
-						</tr>
-						<tr>
-							<td valign="top" style="width: 25%; font-weight: 700;">Elapsed Time</td>
-							<td>231 seconds</td>
-							</tr>
-						<tr>
-							<td valign="top" style="width: 25%; font-weight: 700;">Statistics</td>
-							<td>382 requests, 0 errors, 12 findings</td>
-						</tr>
-					</table>
-				</div>
-				<div class="modal-footer">
-					<a href="#" data-dismiss="modal" class="btn">Close</a>
-					<a href="#" data-dismiss="modal" class="btn btn-primary">View Report</a>
-				</div>
-			</div>
-		</div>
-
-	<!-- Uptime details -->
-	<div class="modal" id="scanModal">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h4 class="modal-title">Uptime</h4>
-				</div>
-				<div class="modal-body">
-					<p><strong>382 requests, 0 errors, 12 findings</strong></p>
-					<table  style="width: 100%; max-width: 600px;"><br />
-						<tr>
-							<td valign="top" style="width: 25%; font-weight: 700;">Start Time</td>
-							<td>2018-07-07 10:23:20</td>
-						</tr>
-						<tr>
-							<td valign="top" style="width: 25%; font-weight: 700;">End Time</td>
-							<td>2018-07-07 10:27:11</td>
-						</tr>
-						<tr>
-							<td valign="top" style="width: 25%; font-weight: 700;">Elapsed Time</td>
-							<td>231 seconds</td>
-							</tr>
-						<tr>
-							<td valign="top" style="width: 25%; font-weight: 700;">Statistics</td>
-							<td>382 requests, 0 errors, 12 findings</td>
-						</tr>
-					</table>
-				</div>
-				<div class="modal-footer">
-					<a href="#" data-dismiss="modal" class="btn">Close</a>
-					<a href="{{REMOTEURL}}/scan" data-dismiss="modal" class="btn btn-primary">View Report</a>
-				</div>
-			</div>
-		</div>
-
-	</div>
-
-	<!-- script references -->
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/scripts.js"></script>
-	</body>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/scripts.js"></script>
+</body>
 </html>

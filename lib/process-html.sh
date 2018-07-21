@@ -9,10 +9,10 @@ trace "Loading html handling"
 
 # Initialize variables 
 read -r DEFAULTC PRIMARYC SECONDARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID \
-  COVER SCANC UPTIMEC LATENCYC LOGC LOGBC sed_commits <<< ""
+  COVER SCANC UPTIMEC LATENCYC LOGC LOGBC sed_commits sed_scan sed_backup <<< ""
 echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} 
   ${SMOOCHID} ${COVER} ${SCANC} ${UPTIMEC} ${LATENCYC} 
-  ${sed_commits}" > /dev/null
+  ${sed_commits} ${sed_scan} ${sed_backup}" > /dev/null
 
 function process_html() {
   # Clean out the stuff we don't need
@@ -27,6 +27,12 @@ function process_html() {
   [[ -z "${CLIENTCONTACT}" ]] && sed -i '/CLIENTCONTACT/d' "${htmlFile}"
   [[ -z "${notes}" ]] && sed -i '/NOTES/d' "${htmlFile}"
   [[ -z "${SMOOCHID}" ]] && sed -i '/SMOOCHID/d' "${htmlFile}"
+
+  # Clean out dashboard nav menu
+  [[ -z "${SCAN_MSG}" ]] && sed -i '/SCAN_NAV/d' "${htmlFile}"
+  [[ -z "${FIREWALL_STATUS}" ]] && sed -i '/FIREWALL_NAV/d' "${htmlFile}"
+  [[ -z "${BACKUP_STATUS}" ]] && sed -i '/BACKUP_NAV/d' "${htmlFile}"
+
 
   if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
     sed -i '/BEGIN ANALYTICS/,/END ANALYTICS/d' "${htmlFile}"
@@ -48,6 +54,14 @@ function process_html() {
   sed_commits=$(echo "sed -e '/{{COMMITS_RECENT}}/ {' -e 'r ${statFile}' -e 'd' -e '}' -i \"${htmlFile}\"")
   eval "${sed_commits}"
   
+  # Insert scan results
+  sed_scan=$(echo "sed -e '/{{SCAN_STATS}}/ {' -e 'r ${scan_html}' -e 'd' -e '}' -i \"${htmlFile}\"")
+  eval "${sed_scan}"
+
+  # Insert backup directory listings
+  sed_backup=$(echo "sed -e '/{{BACKUP_FILES}}/ {' -e 'r ${trshFile}' -e 'd' -e '}' -i \"${htmlFile}\"")
+  eval "${sed_backup}"
+
   # Get to work
   sed -i -e "s^{{VIEWPORT}}^${VIEWPORT}^g" \
     -e "s^{{NOW}}^${NOW}^g" \
@@ -111,5 +125,12 @@ function process_html() {
     -e "s^{{UPTIME_BTN}}^${UPTIME_BTN}^g" \
     -e "s^{{LATENCY_BTN}}^${LATENCY_BTN}^g" \
     -e "s^{{BACKUP_BTN}}^${BACKUP_BTN}^g" \
+    -e "s^{{ACTIVITY_NAV}}^${ACTIVITY_NAV}^g" \
+    -e "s^{{STATISTICS_NAV}}^${STATISTICS_NAV}^g" \
+    -e "s^{{SCAN_NAV}}^${SCAN_NAV}^g" \
+    -e "s^{{FIREWALL_NAV}}^${FIREWALL_NAV}^g" \
+    -e "s^{{BACKUP_NAV}}^${BACKUP_NAV}^g" \
+    -e "s^{{BACKUP_MSG}}^${BACKUP_MSG}^g" \
+    -e "s^{{TOTAL_COMMITS}}^${TOTAL_COMMITS}^g" \
     "${htmlFile}"
   }

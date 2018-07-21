@@ -96,15 +96,27 @@ function postLog() {
       if [[ "${PROJSTATS}" == "1" ]]; then
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/stats"
         eval "${SCPCMD} -r" "/tmp/stats/" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}"
+        eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/avatar"
+        eval "${SCPCMD} -r" "/tmp/avatar/" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}"
         # Clean up your mess
         if [[ -d "/tmp/stats" ]]; then
           rm -R "/tmp/stats"
         fi
+        if [[ -d "/tmp/avatar" ]]; then
+          rm -R "/tmp/avatar"
+        fi
       fi
 
       if [[ "${SCAN}" == "1" ]]; then
+        trace "Sending /scan"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/scan"
         eval "${SCPCMD} -r" "${scan_html}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/scan/index.html"
+        # This stuff is for the new dashboard method
+        eval "${SCPCMD} -r" "/tmp/stats/" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}"
+        # Clean up your mess
+        #if [[ -d "/tmp/stats" ]]; then
+        #  rm -R "/tmp/stats"
+        #fi
       fi
 
       if [[ "${REPORT}" == "1" ]]; then

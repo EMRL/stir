@@ -84,8 +84,12 @@ function scan_host() {
   sed -i '1,5d' "${scan_html}" 
   sed -i '/OSVDB/d' "${scan_html}" 
   sed -i 's^<a href^<a style=\"color: {{PRIMARY}}\" href^g' "${scan_html}" 
-  sed -i 's^Host Summary^~^g' "${scan_html}"  
+  sed -i 's^Host Summary^<hr style=\"width: 600px;\">^g' "${scan_html}"  
   sed -i -e :a -e '$d;N;2,3ba' -e 'P;D' "${scan_html}"
+
+  # Create the scan report in the new dashboard format, this is kinda
+  # maybe termporary, it's getting pretty tangled
+  project_scan
 
   cat "${deployPath}/html/${HTMLTEMPLATE}/scan/header.html" "${scan_html}" "${deployPath}/html/${HTMLTEMPLATE}/scan/footer.html" > "${htmlFile}"
 

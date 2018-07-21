@@ -12,11 +12,7 @@ read -r AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMGFILE DIGESTWRAP <<< ""
 echo "${AUTHOR} ${AUTHOREMAIL} ${AUTHORNAME} ${GRAVATAR} ${IMGFILE} 
   ${DIGESTWRAP}" > /dev/null
 
-function create_digest() {
-  message_state="DIGEST"
-  htmlDir
-
-  # Collect gravatars for all the authors in this repo
+function get_avatars() {
   for AUTHOR in $(git log --pretty=format:"%ae|%an" | sort | uniq); do
     AUTHOREMAIL=$(echo $AUTHOR | cut -d\| -f1 | tr -d '[[:space:]]' | tr '[:upper:]' '[:lower:]')
     AUTHORNAME=$(echo $AUTHOR | cut -d\| -f2)
@@ -30,7 +26,15 @@ function create_digest() {
       IMGFILE="/tmp/avatar/${AUTHORNAME}.png"
     fi
     curl -fso "${IMGFILE}" "${GRAVATAR}"
-  done
+  done  
+}
+
+function create_digest() {
+  message_state="DIGEST"
+  htmlDir
+  
+  # Collect gravatars for all the authors in this repo
+  get_avatars
 
   # Attempt to get analytics
   analytics
