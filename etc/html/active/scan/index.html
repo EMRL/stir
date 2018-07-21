@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>{{PROJNAME}} &bull; {{PROJCLIENT}}</title>
+    <meta name="generator" content="Bootply" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="css/styles.css" rel="stylesheet">
+    <!--[BEGIN SMOOCH]-->
+    <script>
+        !function(e,n,t,r){
+            function o(){try{var e;if((e="string"==typeof this.response?JSON.parse(this.response):this.response).url){var t=n.getElementsByTagName("script")[0],r=n.createElement("script");r.async=!0,r.src=e.url,t.parentNode.insertBefore(r,t)}}catch(e){}}var s,p,a,i=[],c=[];e[t]={init:function(){s=arguments;var e={then:function(n){return c.push({type:"t",next:n}),e},catch:function(n){return c.push({type:"c",next:n}),e}};return e},on:function(){i.push(arguments)},render:function(){p=arguments},destroy:function(){a=arguments}},e.__onWebMessengerHostReady__=function(n){if(delete e.__onWebMessengerHostReady__,e[t]=n,s)for(var r=n.init.apply(n,s),o=0;o<c.length;o++){var u=c[o];r="t"===u.type?r.then(u.next):r.catch(u.next)}p&&n.render.apply(n,p),a&&n.destroy.apply(n,a);for(o=0;o<i.length;o++)n.on.apply(n,i[o])};var u=new XMLHttpRequest;u.addEventListener("load",o),u.open("GET","https://"+r+".webloader.smooch.io/",!0),u.responseType="json",u.send()
+        }(window,document,"Smooch","{{SMOOCHID}}");
+    </script>
+    <script>Smooch.init({appId: '{{SMOOCHID}}'}).then(function() {});</script>
+    <!--[END SMOOCH]-->
+</head>
+
+<body>
+    <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">{{PROJNAME}}</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3">
+                <!-- Left column -->
+                <strong><i class="glyphicon glyphicon-wrench"></i><span style="padding-left: 10px;">Reports</span></strong>
+                <hr>
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="nav-header"></li>
+                    <li><a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-flash"></i><span>Activity</span></a></li>
+                    <li><a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-stats"></i><span>Statistics</span></a></li>
+                    <li><a href="{{SCAN_NAV}}"><i class="glyphicon glyphicon-ok-circle"></i><span>Malware Scan</span></a></li>
+                    <li><a href="{{FIREWALL_NAV}}"><i class="glyphicon glyphicon-lock"></i><span>Firewall &amp; Security</span></a></li>
+                    <li><a href="{{BACKUP_NAV}}"><i class="glyphicon glyphicon-cloud-upload"></i><span>System Backup</span></a></li>
+                </ul>
+                <hr>
+                <ul class="nav nav-stacked">
+                    <li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#menu2"> Help &amp; Support <i class="glyphicon glyphicon-chevron-right"></i></a>
+                        <ul class="nav nav-stacked collapse" id="menu2">
+                            <li><a href="#">About Active Maintenance</a>
+                            </li>
+                            <li><a href="#">Schedule</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>&nbsp;</p>
+            </div>
+
+            <div class="col-sm-9">
+                <ul class="list-inline pull-right">
+                    <li><small>Updated {{NOW}}</small></li>
+                </ul>
+                <strong><i class="glyphicon glyphicon-flash"></i><span style="padding-left: 10px;"><a href="./">My Dashboard</a> &gt; Malware Scan</span></a></strong>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <h4>Most recent scan results</h4>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <p><strong>{{SCAN_RESULT}}</strong></p>
+                                {{SCAN_RECENT}}
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center"></footer>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
