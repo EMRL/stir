@@ -40,12 +40,8 @@ function project_stats() {
 
     notice "Generating files..."
 
-    # Assign URLs - this will change later on
-    ACTIVITY_NAV="activity.html"
-    STATISTICS_NAV="stats.html"
-    [[ -n "${SCAN_MSG}" ]] && SCAN_NAV="scan.html"
-    [[ -n "${FIREWALL_NAV}" ]] && FIREWALL_NAV="firewall.html"
-    [[ -n "${BACKUP_STATUS}" ]] && BACKUP_NAV="backup.html"
+    # Define dashboard navigation
+    assign_nav
 
     # Collect gravatars for all the authors in this repo
     get_avatars
@@ -212,4 +208,13 @@ function validate_urls() {
       sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${statFile}"
     fi
   done < "${trshFile}"
+}
+
+function assign_nav() {
+  # Assign URLs - this will change later on
+  ACTIVITY_NAV="activity.html"
+  STATISTICS_NAV="stats.html"
+  [[ -n "${SCAN_MSG}" ]] && SCAN_NAV="scan.html"
+  [[ -n "${FIREWALL_NAV}" ]] && FIREWALL_NAV="firewall.html"
+  [[ -n "${BACKUP_STATUS}" ]] && BACKUP_NAV="backup.html"
 }
