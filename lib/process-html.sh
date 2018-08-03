@@ -39,6 +39,14 @@ function process_html() {
     sed -i '/ANALYTICS/d' "${htmlFile}"
   fi
 
+  if [[ -z "${RSS_URL}" ]]; then
+    sed -i -e '/BEGIN WORK RSS/,/END WORK RSS/d' \
+      -e '/RSS_URL/d' "${htmlFile}" \
+    "${htmlFile}"
+  else
+    sed -i "s^{{RSS_URL}}^${RSS_URL}^g" "${htmlFile}"
+  fi
+
   # Prettify errors, warning, and successes
   sed -i -e '/ERROR/s/$/<\/span>/' \
     -e '/^ERROR/s/^/<span style=\"background-color: {{DANGER}};\">/' \
@@ -132,5 +140,6 @@ function process_html() {
     -e "s^{{BACKUP_NAV}}^${BACKUP_NAV}^g" \
     -e "s^{{BACKUP_MSG}}^${BACKUP_MSG}^g" \
     -e "s^{{TOTAL_COMMITS}}^${TOTAL_COMMITS}^g" \
+    -e "s^{{RSS_URL}}^${RSS_URL}^g" \
     "${htmlFile}"
   }

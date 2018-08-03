@@ -62,16 +62,35 @@ textarea.form-control {
 }
 
 .mauticform-post-success .mauticform-message {
-    color: white;
-    background-color: green;
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 20px;
-    margin-top: 5px;
-    font-weight: 700;
-    font-size: 20px;
+  color: white;
+  background-color: green;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 5px;
+  font-weight: 700;
+  font-size: 20px;
 }
 
 .mauticform-post-success .mauticform-innerform {
     display: none;
+}
+
+@media (min-width: 768px) {
+  .modal-dialog {
+    width: 800px !important;
+  }
+}
+
+.rss-items {
+  list-style-type: none;
+  -webkit-padding-start: 0px;
+}
+
+.rss-item {
+  .margin-bottom: 1.4em;
+}
+
+.text-white {
+  color: #ffffff;
 }
