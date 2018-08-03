@@ -269,6 +269,18 @@ PROJECT_VERSION="3.7.1"
 
 
 ###############################################################################
+# Work Logs
+###############################################################################
+
+# EXPERIMENTAL - Ingest work logs from Chrono (or any RSS feed) for display in
+# the statistics dashboard
+
+# Set the URL of your RSS work log. Feed will be parsed and formatted into html 
+# via feed.emrl.co
+# RSS_URL="{{RSS_URL}}"
+
+
+###############################################################################
 # Invoice Ninja integration
 ###############################################################################
 

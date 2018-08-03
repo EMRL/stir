@@ -85,21 +85,29 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="panel panel-default">
-                            <div class="panel-heading">
+                            <div class="panel-heading" style="background-color: {{SCAN_STATUS}};">
                                 <div class="panel-title">
-                                    <h4>Scan results</h4>
+                                    <h4 class="text-white">Malware scan: {{SCAN_MSG}}</h4>
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <p><strong>{{SCAN_RESULT}}</strong></p>
                                 {{SCAN_STATS}}
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <h4>About the scan</h4>
+                                </div>
+                            </div>
                             <div class="panel-body">
-                                <p>About the scan
+                                <p>
+                                	Our system performs comprehensive tests against your web server for multiple items, including over 6700 potentially dangerous files and programs, checks for outdated versions of over 1250 servers, and version specific problems on over 270 servers.
+                            	</p>
+                            	<p>
+                            		It also checks for server configuration items such as the presence of multiple index files, HTTP server options, and will attempt to identify installed web servers and software. Scan items and plugins are frequently updated and are automatically updated.
                                 </p>
                             </div>
                         </div>
