@@ -21,7 +21,7 @@ function wpPkg() {
         cd "${WORKPATH}"/"${APP}${WPROOT}${WPAPP}"; \
 
         # Database check
-        trace "Checking database..."
+        trace status "Checking database: "
         "${WPCLI}"/wp db check &>> /dev/null; EXITCODE=$?; 
         if [[ "${EXITCODE}" != "0" ]]; then 
           "${WPCLI}"/wp db check &>> "${logFile}"; 
@@ -32,7 +32,10 @@ function wpPkg() {
             info "There is a problem with your Wordpress installation, check your configuration."
           fi
         else
-          trace "OK"
+        	# Get info
+        	info "OK"
+          wp core version --extra  &>> "${logFile}";
+
           # Check for Wordfence
           wfCheck
           

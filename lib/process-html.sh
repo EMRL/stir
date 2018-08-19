@@ -9,10 +9,11 @@ trace "Loading html handling"
 
 # Initialize variables 
 read -r DEFAULTC PRIMARYC SECONDARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID \
-  COVER SCANC UPTIMEC LATENCYC LOGC LOGBC sed_commits sed_scan sed_backup <<< ""
+  COVER SCANC UPTIMEC LATENCYC LOGC LOGBC sed_commits sed_scan sed_backup \
+  process_var v i <<< ""
 echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} 
-  ${SMOOCHID} ${COVER} ${SCANC} ${UPTIMEC} ${LATENCYC} 
-  ${sed_commits} ${sed_scan} ${sed_backup}" > /dev/null
+  ${SMOOCHID} ${COVER} ${SCANC} ${UPTIMEC} ${LATENCYC} ${sed_commits} 
+  ${sed_scan} ${sed_backup} ${process_var} ${v} ${i}" > /dev/null
 
 function process_html() {
   # Clean out the stuff we don't need
@@ -43,8 +44,8 @@ function process_html() {
     sed -i -e '/BEGIN WORK RSS/,/END WORK RSS/d' \
       -e '/RSS_URL/d' "${htmlFile}" \
     "${htmlFile}"
-  else
-    sed -i "s^{{RSS_URL}}^${RSS_URL}^g" "${htmlFile}"
+  #else
+  #  sed -i "s^{{RSS_URL}}^${RSS_URL}^g" "${htmlFile}"
   fi
 
   # Prettify errors, warning, and successes
@@ -70,30 +71,30 @@ function process_html() {
   sed_backup=$(echo "sed -e '/{{BACKUP_FILES}}/ {' -e 'r ${trshFile}' -e 'd' -e '}' -i \"${htmlFile}\"")
   eval "${sed_backup}"
 
-  # Get to work
+  # Setup variables to process
+  process_var=(VIEWPORT NOW DEV LOGTITLE USER PROJNAME PROJCLIENT CLIENTLOGO \
+    DEVURL PRODURL COMMITURL EXITCODE COMMITHASH USER LOGURL REMOTEURL \
+    VIEWPORTPRE PATHTOREPO PROJNAME CLIENTCONTACT DEVURL PRODURL SCAN_MSG \
+    SCAN_RESULT SCAN_URL BACKUP_STATUS LAST_BACKUP SMOOCHID DIGESTWRAP \
+    GREETING REMOTEURL ANALYTICSMSG COVER WEEKOF UPTIME LATENCY GA_HITS \
+    GA_PERCENT GA_SEARCHES GA_DURATION GA_SOCIAL CODE_STATS SCAN_BTN \
+    UPTIME_BTN LATENCY_BTN BACKUP_BTN ACTIVITY_NAV STATISTICS_NAV SCAN_NAV \
+    FIREWALL_NAV BACKUP_NAV BACKUP_MSG TOTAL_COMMITS RSS_URL)
+
+  # Start the loop
+  for i in "${process_var[@]}" ; do
+    # This is essentially the same as insert_values, should consolidate
+    if [[ -n "${!i:-}" ]]; then
+      [[ "${INCOGNITO}" != "1" ]] && trace "${i}: ${!i}"
+      sed_hack=$(echo "sed -i 's^{{${i}}}^${!i}^g' ${htmlFile}")
+      # Kludgy but works. Ugh.
+      eval "${sed_hack}"
+    fi
+  done
+
+  # Special snowflakes; for some silly reason the variables don't match
   sed -i -e "s^{{VIEWPORT}}^${VIEWPORT}^g" \
-    -e "s^{{NOW}}^${NOW}^g" \
-    -e "s^{{DEV}}^${DEV}^g" \
-    -e "s^{{LOGTITLE}}^${LOGTITLE}^g" \
-    -e "s^{{USER}}^${USER}^g" \
-    -e "s^{{PROJNAME}}^${PROJNAME}^g" \
-    -e "s^{{PROJCLIENT}}^${PROJCLIENT}^g" \
-    -e "s^{{CLIENTLOGO}}^${CLIENTLOGO}^g" \
-    -e "s^{{DEVURL}}^${DEVURL}^g" \
-    -e "s^{{PRODURL}}^${PRODURL}^g" \
-    -e "s^{{COMMITURL}}^${COMMITURL}^g" \
-    -e "s^{{EXITCODE}}^${EXITCODE}^g" \
-    -e "s^{{COMMITHASH}}^${COMMITHASH}^g" \
-    -e "s^{{NOTES}}^${notes}^g" \
-    -e "s^{{USER}}^${USER}^g" \
-    -e "s^{{LOGURL}}^${LOGURL}^g" \
-    -e "s^{{REMOTEURL}}^${REMOTEURL}^g" \
-    -e "s^{{VIEWPORTPRE}}^${VIEWPORTPRE}^g" \
-    -e "s^{{PATHTOREPO}}^${WORKPATH}/${APP}^g" \
-    -e "s^{{PROJNAME}}^${PROJNAME}^g" \
-    -e "s^{{CLIENTCONTACT}}^${CLIENTCONTACT}^g" \
-    -e "s^{{DEVURL}}^${DEVURL}^g" \
-    -e "s^{{PRODURL}}^${PRODURL}^g" \
+    -e "s^{{NOTEs}}^${notes}^g" \
     -e "s^{{DEFAULT}}^${DEFAULTC}^g" \
     -e "s^{{PRIMARY}}^${PRIMARYC}^g" \
     -e "s^{{SECONDARY}}^${SECONDARYC}^g" \
@@ -106,40 +107,8 @@ function process_html() {
     -e "s^{{SCAN_STATUS}}^${SCANC}^g" \
     -e "s^{{UPTIME_STATUS}}^${UPTIMEC}^g" \
     -e "s^{{LATENCY_STATUS}}^${LATENCYC}^g" \
-    -e "s^{{SCAN_MSG}}^${SCAN_MSG}^g" \
-    -e "s^{{SCAN_RESULT}}^${SCAN_RESULT}^g" \
-    -e "s^{{SCAN_URL}}^${SCAN_URL}^g" \
-    -e "s^{{BACKUP_STATUS}}^${BACKUP_STATUS}^g" \
-    -e "s^{{LAST_BACKUP}}^${LAST_BACKUP}^g" \
-    -e "s^{{SMOOCHID}}^${SMOOCHID}^g" \
     -e "s^{{GRAVATARURL}}^${REMOTEURL}\/${APP}\/avatar^g" \
-    -e "s^{{DIGESTWRAP}}^${DIGESTWRAP}^g" \
-    -e "s^{{GREETING}}^${GREETING}^g" \
-    -e "s^{{REMOTEURL}}^${REMOTEURL}^g" \
-    -e "s^{{ANALYTICSMSG}}^${ANALYTICSMSG}^g" \
     -e "s^{{STATURL}}^${REMOTEURL}\/${APP}\/stats^g" \
-    -e "s^{{COVER}}^${COVER}^g" \
-    -e "s^{{WEEKOF}}^${WEEKOF}^g" \
     -e "s^{{LASTMONTH}}^${LAST_MONTH}^g" \
-    -e "s^{{UPTIME}}^${UPTIME}^g" \
-    -e "s^{{LATENCY}}^${LATENCY}^g" \
-    -e "s^{{GA_HITS}}^${GA_HITS}^g" \
-    -e "s^{{GA_PERCENT}}^${GA_PERCENT}^g" \
-    -e "s^{{GA_SEARCHES}}^${GA_SEARCHES}^g" \
-    -e "s^{{GA_DURATION}}^${GA_DURATION}^g" \
-    -e "s^{{GA_SOCIAL}}^${GA_SOCIAL}^g" \
-    -e "s^{{CODE_STATS}}^${CODE_STATS}^g" \
-    -e "s^{{SCAN_BTN}}^${SCAN_BTN}^g" \
-    -e "s^{{UPTIME_BTN}}^${UPTIME_BTN}^g" \
-    -e "s^{{LATENCY_BTN}}^${LATENCY_BTN}^g" \
-    -e "s^{{BACKUP_BTN}}^${BACKUP_BTN}^g" \
-    -e "s^{{ACTIVITY_NAV}}^${ACTIVITY_NAV}^g" \
-    -e "s^{{STATISTICS_NAV}}^${STATISTICS_NAV}^g" \
-    -e "s^{{SCAN_NAV}}^${SCAN_NAV}^g" \
-    -e "s^{{FIREWALL_NAV}}^${FIREWALL_NAV}^g" \
-    -e "s^{{BACKUP_NAV}}^${BACKUP_NAV}^g" \
-    -e "s^{{BACKUP_MSG}}^${BACKUP_MSG}^g" \
-    -e "s^{{TOTAL_COMMITS}}^${TOTAL_COMMITS}^g" \
-    -e "s^{{RSS_URL}}^${RSS_URL}^g" \
     "${htmlFile}"
   }
