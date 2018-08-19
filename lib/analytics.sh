@@ -4,6 +4,11 @@
 #
 ###############################################################################
 # Handles functions related to retrieving and parsing Google Analytics
+#
+# Thanks to https://jacobsalmela.com/2014/08/18/oauth-2-0-google-analytics-desktop-using-geektool-bash-curl/
+# for breaking this down and helping us get started
+# 
+# https://developers.google.com/analytics/devguides/reporting/core/dimsmets for all the metrics
 ###############################################################################
 trace "Loading analytics functions"   
 
@@ -88,6 +93,7 @@ function ga_data() {
   RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
   SIZE="$(printf "%.0f\n" "${RESULT}")"
 
+  # Make this a proper loop
   if [[ "${PROJSTATS}" == "1" ]]; then 
     GA_HITS=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:hits&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
     GA_PERCENT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:percentNewSessions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)

@@ -17,15 +17,34 @@ if [[ "${FORCE}" != "1" ]] && [[ "${QUIET}" = "1" ]]; then
   echo "To deploy using the --quiet flag, you must also use --force."; exit 1
 fi
 
-# Creating this function first, so verbose output option is usable early
+###############################################################################
+# trace()
+# Outputs timestamped, verbose info to both console and log files
+#
+# Arguments:
+#   status      Will place the next trace output on the same line, e.g.
+#               [trace 1]Checking database... [trace 2]OK will render 
+#               Checking database... OK in the logs
+# Returns:  
+#   None
+###############################################################################      
 function trace() {
   if [[ "${VERBOSE}" == "TRUE" ]]; then
     TIMESTAMP="$(date '+%H:%M:%S')"
-    echo -e "$(tput setaf 3)${TIMESTAMP}$(tput sgr0) $*"
-    echo "${TIMESTAMP} $*" >> "${logFile}"
+    if [[ "${1}" == "status" ]]; then
+      echo -e -n "$(tput setaf 3)${TIMESTAMP}$(tput sgr0) ${2}"
+      echo "${TIMESTAMP} ${2}" >> "${logFile}"
+    else
+      echo -e "$(tput setaf 3)${TIMESTAMP}$(tput sgr0) $*"
+      echo "${TIMESTAMP} $*" >> "${logFile}"
+    fi
   else
     TIMESTAMP="$(date '+%H:%M:%S')"
-    echo "${TIMESTAMP} $*" >> "${logFile}"
+    if [[ "${1}" == "status" ]]; then
+      echo -n "${TIMESTAMP} ${2}" >> "${logFile}"
+    else
+      echo "${TIMESTAMP} $*" >> "${logFile}"
+    fi
   fi
 }
 
