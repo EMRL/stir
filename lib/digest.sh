@@ -8,9 +8,10 @@
 trace "Loading digest handling"
 
 # Initializa needed variables
-read -r AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMGFILE DIGESTWRAP <<< ""
+read -r AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMGFILE DIGESTWRAP \
+  GREETING <<< ""
 echo "${AUTHOR} ${AUTHOREMAIL} ${AUTHORNAME} ${GRAVATAR} ${IMGFILE} 
-  ${DIGESTWRAP}" > /dev/null
+  ${DIGESTWRAP} ${GREETING}" > /dev/null
 
 function get_avatars() {
   for AUTHOR in $(git log --pretty=format:"%ae|%an" | sort | uniq); do
@@ -60,9 +61,10 @@ function create_digest() {
 
     cat "${deployPath}/html/${HTMLTEMPLATE}/digest/header.html" "${statFile}" "${deployPath}/html/${HTMLTEMPLATE}/digest/footer.html" > "${htmlFile}"
 
-    # Randomize a positive Monday thought
+    # Randomize a positive Monday thought. Special characters must be escaped 
+    # and use character codes
     array[0]="Hope you had a good weekend!"
-    array[1]="Alright Monday, let's do this."
+    array[1]="Alright Monday, let\&#39;s do this."
     array[2]="Oh, hello Monday."
     array[3]="Welcome back, how was your weekend?"
     array[4]="Happy Monday and welcome back!"
