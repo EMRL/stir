@@ -83,7 +83,8 @@ function process_html() {
 
   # Start the loop
   for i in "${process_var[@]}" ; do
-    # This is essentially the same as insert_values, should consolidate
+    # This is essentially the same as insert_values() [see env-check.sh], we
+    #  should consolidate them into one function
     if [[ -n "${!i:-}" ]]; then
       [[ "${INCOGNITO}" != "1" ]] && trace "${i}: ${!i}"
       sed_hack=$(echo "sed -i 's^{{${i}}}^${!i}^g' ${htmlFile}")
@@ -94,7 +95,7 @@ function process_html() {
 
   # Special snowflakes; for some silly reason the variables don't match
   sed -i -e "s^{{VIEWPORT}}^${VIEWPORT}^g" \
-    -e "s^{{NOTEs}}^${notes}^g" \
+    -e "s^{{NOTES}}^${notes}^g" \
     -e "s^{{DEFAULT}}^${DEFAULTC}^g" \
     -e "s^{{PRIMARY}}^${PRIMARYC}^g" \
     -e "s^{{SECONDARY}}^${SECONDARYC}^g" \

@@ -13,8 +13,10 @@
 trace "Loading analytics functions"   
 
 # Initialize variables
-read -r SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION GA_SOCIAL <<< ""
-echo "${SIZE} ${RND} ${METRIC} ${RESULT} ${GA_HITS} ${GA_PERCENT} ${GA_SEARCHES} ${GA_DURATION} ${GA_SOCIAL}" > /dev/null
+read -r SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \
+  GA_SOCIAL ANALYTICSMSG <<< ""
+echo "${SIZE} ${RND} ${METRIC} ${RESULT} ${GA_HITS} ${GA_PERCENT} ${GA_SEARCHES} 
+  ${GA_DURATION} ${GA_SOCIAL} ${ANALYTICSMSG}" > /dev/null
 
 function ga_metrics() {
   array[0]="hits"
@@ -55,10 +57,10 @@ function analytics() {
       if [[ "${SIZE}" -gt "100" ]]; then
         ga_fail
       elif [[ "${SIZE}" -gt "50" ]]; then
-        ANALYTICSMSG="Last week <strong>${SIZE}</strong> percent of your users were first time visitors. That's great!"
+        ANALYTICSMSG="Last week <strong>${SIZE}</strong> percent of your users were first time visitors. That\&#39;s great!"
       else
         RESULT="$((100 - ${SIZE}))"
-        ANALYTICSMSG="Last week <strong>${RESULT}</strong> percent of your users were return visitors. That's great!"
+        ANALYTICSMSG="Last week <strong>${RESULT}</strong> percent of your users were return visitors. That\&#39;s great!"
       fi
     fi
 
