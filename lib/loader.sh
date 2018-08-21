@@ -19,7 +19,7 @@ fi
 
 ###############################################################################
 # trace()
-# Outputs timestamped, verbose info to both console and log files
+#   Outputs timestamped, verbose info to both console and log files
 #
 # Arguments:
 #   status      Will place the next trace output on the same line, e.g.
