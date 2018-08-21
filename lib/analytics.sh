@@ -14,9 +14,10 @@ trace "Loading analytics functions"
 
 # Initialize variables
 read -r SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \
-  GA_SOCIAL ANALYTICSMSG <<< ""
-echo "${SIZE} ${RND} ${METRIC} ${RESULT} ${GA_HITS} ${GA_PERCENT} ${GA_SEARCHES} 
-  ${GA_DURATION} ${GA_SOCIAL} ${ANALYTICSMSG}" > /dev/null
+  GA_SOCIAL ANALYTICSMSG ga_var ga_day ga_sequence max_value <<< ""
+echo "${SIZE} ${RND} ${METRIC} ${RESULT} ${GA_HITS} ${GA_PERCENT} 
+  ${GA_SEARCHES} ${GA_DURATION} ${GA_SOCIAL} ${ANALYTICSMSG} ${ga_var} 
+  ${ga_sequence} ${max_value}" > /dev/null
 
 function ga_metrics() {
   array[0]="hits"
@@ -109,7 +110,86 @@ function ga_data() {
   fi
 }
 
-# If no other results are worht displaying, fall back to displaying hits
+# Just a test for now
+function ga_data_loop() {
+  # Setup variables to process
+  console "${GASTART} - ${GAEND}"
+  ga_var=(users newUsers percentNewSessions sessionsPerUser sessions 
+    bounceRate avgSessionDuration hits organicSearches pageviews avgTimeOnPage
+    avgPageLoadTime avgDomainLookupTime avgServerResponseTime impressions 
+    adClicks adCost CPC CTR)
+
+  # Start the loop
+  for i in "${ga_var[@]}" ; do
+    # This is essentially the same as insert_values() [see env-check.sh], we
+    #  should consolidate them into one function
+    RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$i&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+    
+    # Round to two decimal places if needed
+    if [[ "${RESULT}" = *"."* ]]; then
+      RESULT="$(printf '%0.2f\n' "${RESULT}")"
+    fi
+
+    # Output trace
+    trace "${i}: ${RESULT}"
+  done
+}
+
+###############################################################################
+# ga_over_time()
+#   Collects Gollge Analytics data over a certain period of time
+#
+# Arguments:
+#   [metric]    Defines the metric you wish to get from Google's API. Examples
+#               include 'sessions', 'hits', etc. Refere to Google API docs at
+#               https://developers.google.com/analytics/devguides/reporting/core/dimsmets 
+#   [days]      The number of days for which to gather analytics data.
+#
+# Returns:  
+#   None
+###############################################################################  
+function ga_over_time() {
+  # Process arguments
+  if [[ -n "$2" ]]; then
+    GASTART="$(date -I -d "$GAEND - $2 day")"
+  fi
+
+  # Setup variables
+  ga_day="${GAEND}"
+  day="0"
+  METRIC="${1}"
+  
+  while [ "$ga_day" != "${GASTART}" ]; do 
+    RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+    trace "${ga_day}: ${RESULT} $1"
+    
+    # Store the values 
+    declare "$1_${day}"="${RESULT}"
+    ga_sequence="${ga_sequence}${RESULT} "
+    day="$((day+1))"
+    ga_day="$(date -I -d "$ga_day - 1 day")"
+  done
+
+  # Create percentage array
+  ga_sequence="$(echo -e "${ga_sequence}" | sed -e 's/[[:space:]]*$//')"
+  trace "Calculating array: ${ga_sequence}"
+  IFS=', ' read -r -a a <<< "${ga_sequence}"
+  for i in ${a[@]}; do
+    if [[ $i -gt $max_value ]]; then 
+      max_value=$i
+    fi
+  done
+  trace "Max sequence value=${max_value}"
+
+  # Calculate
+  for ((n=0; n < $2; n++)); do 
+    var="$1_$n"; var_percent="$1_percent_$n"
+    var_percent=$(awk "BEGIN { pc=100*${!var}/${max_value}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
+    trace "100*${!var}/${max_value} = ${var_percent}%"
+  done
+}
+
+# If no other results are worth displaying, fall back to displaying hits
 function ga_fail() {
   METRIC="hits"
   ga_data
@@ -165,6 +245,12 @@ function ga_test() {
   sed -i '/access_token/!d' "${trshFile}"
   ACCESSTOKEN="$(awk -F\" '{print $4}' "${trshFile}")"
   echo "${ACCESSTOKEN}"
+
+  # Just here for testing
+  #ga_data_loop
+  empty_line; trace "Day count"
+  ga_over_time hits 7
+  return
 
   # Setup the metric we're after
   array[0]="hits"
