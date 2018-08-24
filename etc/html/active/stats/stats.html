@@ -82,7 +82,7 @@
 				<strong><i class="glyphicon glyphicon-stats"></i><span style="padding-left: 10px;"><a href="./">My Dashboard</a> &gt; Statistics</span></a></strong>
 				<hr>
 				<div class="row">
-					<div class="col-md-12">
+					<div class="col-md-8">
 						<div class="panel panel-default">
 							<div class="panel-body text-center">
 								<object data="commits_day_week.svg" type="image/svg+xml" style="max-width: 800px;"></object>
@@ -121,15 +121,37 @@
 						<hr>
 						<div class="panel panel-default">
 							<div class="panel-body text-center">
-								<div class="col-xs-6 text-center">
+								<div class="col-xs-4 text-center">
 									<object data="authors.svg" type="image/svg+xml" style="max-width: 540px;"></object>
 								</div>
-								<div class="col-xs-6 text-center">
+								<div class="col-xs-4 text-center">
 								<object data="files_type.svg" type="image/svg+xml" style="max-width: 540px;"></object>
 								</div>
 							</div>
 						</div>
 					</div>
+
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <h4>About these charts</h4>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                            	<p>
+                            		These charts represent when, how many, and by who code changes to your website are being made. 
+                            	<p>
+                            		<strong>What is a commit?</strong>
+                                <p>
+                                	Your website code uses version control systems which allow rolling back to previous versions easily. In this context, a commit within a version control system is protected as it is easily rolled back, even after the commit has been applied.
+                            	</p>
+                            	<p>
+                            		More information about this type of workflow can be found <a href="https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control">here</a>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 				</div>	
 			</div>
 		</div>

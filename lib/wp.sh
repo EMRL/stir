@@ -13,19 +13,19 @@ function wpPkg() {
 
     # Is wp-cli installed? 
     if hash "${WPCLI}"/wp 2>/dev/null; then
-    trace "wp-cli found, checking for Wordpress..."
+    trace status "wp-cli found, checking for Wordpress... "
 
       # Check for Wordpress
       if [[ -f "${WORKPATH}"/"${APP}${WPROOT}${WPSYSTEM}"/wp-settings.php ]]; then
-        trace "Wordpress found!"
+        trace notime "FOUND"
         cd "${WORKPATH}"/"${APP}${WPROOT}${WPAPP}"; \
 
         # Database check
-        trace status "Checking database: "
+        trace status "Checking database... "
         "${WPCLI}"/wp db check &>> /dev/null; EXITCODE=$?; 
         if [[ "${EXITCODE}" != "0" ]]; then 
           "${WPCLI}"/wp db check &>> "${logFile}"; 
-          trace "ERROR: Database check failed"
+          trace notime "FAIL"
           if [[ "${AUTOMATE}" == "1" ]]; then
             error "There is a problem with your Wordpress installation, check your configuration."
           else
@@ -33,7 +33,7 @@ function wpPkg() {
           fi
         else
         	# Get info
-        	info "OK"
+        	trace notime "OK"
           wp core version --extra  &>> "${logFile}";
 
           # Check for Wordfence
@@ -69,7 +69,7 @@ function wpPkg() {
           fi
         fi
       else
-        trace "Wordpress not found"
+        trace notime "NOT FOUND"
       fi
     else
       trace "wp-cli not found"

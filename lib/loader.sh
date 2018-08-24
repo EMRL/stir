@@ -25,6 +25,8 @@ fi
 #   status      Will place the next trace output on the same line, e.g.
 #               [trace 1]Checking database... [trace 2]OK will render 
 #               Checking database... OK in the logs
+#   notime      Output trace with no timestamp, generally used after a 
+#               `trace status "blahblah"`  
 # Returns:  
 #   None
 ###############################################################################      
@@ -33,7 +35,10 @@ function trace() {
     TIMESTAMP="$(date '+%H:%M:%S')"
     if [[ "${1}" == "status" ]]; then
       echo -e -n "$(tput setaf 3)${TIMESTAMP}$(tput sgr0) ${2}"
-      echo "${TIMESTAMP} ${2}" >> "${logFile}"
+      echo -e -n "${TIMESTAMP} ${2}" >> "${logFile}"
+    elif [[ "${1}" == "notime" ]]; then
+      echo -e "${2}"
+      echo "${2}" >> "${logFile}"
     else
       echo -e "$(tput setaf 3)${TIMESTAMP}$(tput sgr0) $*"
       echo "${TIMESTAMP} $*" >> "${logFile}"
@@ -41,7 +46,9 @@ function trace() {
   else
     TIMESTAMP="$(date '+%H:%M:%S')"
     if [[ "${1}" == "status" ]]; then
-      echo -n "${TIMESTAMP} ${2}" >> "${logFile}"
+      echo -e -n "${TIMESTAMP} ${2}" >> "${logFile}"
+    elif [[ "${1}" == "notime" ]]; then
+      echo "${2}" >> "${logFile}"
     else
       echo "${TIMESTAMP} $*" >> "${logFile}"
     fi
