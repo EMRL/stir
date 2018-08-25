@@ -94,3 +94,23 @@ textarea.form-control {
 .text-white {
   color: #ffffff;
 }
+
+.progress-bar-vertical {
+  width: calc(86% / 7);
+  min-height: 340px;
+  display: flex;
+  align-items: flex-end;
+  float: left;
+}
+
+.progress-bar-vertical-margin {
+  margin-right: 2%;
+}
+
+.progress-bar-vertical .progress-bar {
+  width: 100%;
+  height: 0;
+  -webkit-transition: height 0.6s ease;
+  -o-transition: height 0.6s ease;
+  transition: height 0.6s ease;
+}

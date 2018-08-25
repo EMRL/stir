@@ -14,10 +14,10 @@ trace "Loading analytics functions"
 
 # Initialize variables
 read -r SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \
-  GA_SOCIAL ANALYTICSMSG ga_var ga_day ga_sequence max_value <<< ""
+  GA_SOCIAL ANALYTICSMSG ga_var ga_day ga_sequence max_value n GA_TOTAL <<< ""
 echo "${SIZE} ${RND} ${METRIC} ${RESULT} ${GA_HITS} ${GA_PERCENT} 
   ${GA_SEARCHES} ${GA_DURATION} ${GA_SOCIAL} ${ANALYTICSMSG} ${ga_var} 
-  ${ga_sequence} ${max_value}" > /dev/null
+  ${ga_sequence} ${max_value} ${n} ${GA_TOTAL}" > /dev/null
 
 function ga_metrics() {
   array[0]="hits"
@@ -174,19 +174,32 @@ function ga_over_time() {
   ga_sequence="$(echo -e "${ga_sequence}" | sed -e 's/[[:space:]]*$//')"
   trace "Calculating array: ${ga_sequence}"
   IFS=', ' read -r -a a <<< "${ga_sequence}"
+
   for i in ${a[@]}; do
     if [[ $i -gt $max_value ]]; then 
       max_value=$i
     fi
   done
-  trace "Max sequence value=${max_value}"
 
   # Calculate
   for ((n=0; n < $2; n++)); do 
     var="$1_$n"; var_percent="$1_percent_$n"
     var_percent=$(awk "BEGIN { pc=100*${!var}/${max_value}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
     trace "100*${!var}/${max_value} = ${var_percent}%"
+
+    # Store values
+    eval $1_$n="${!var}"
+    eval $1_percent_$n="${var_percent}"
+
+    if [[ "${PROJSTATS}" == "1" ]]; then
+      sed -i -e "s^{{$1_$n}}^${!var}^g" \
+        -e "s^{{$1_percent_$n}}^${var_percent}^g" \
+        -e "s^{{$1_date_$n}}^${n} days ago^g" \
+        "${htmlFile}"
+    fi    
   done
+
+  trace "Values: ${hits_0}, ${hits_1}, ${hits_2}, ${hits_3}, ${hits_4}, ${hits_5}, ${hits_6}"
 }
 
 # If no other results are worth displaying, fall back to displaying hits
