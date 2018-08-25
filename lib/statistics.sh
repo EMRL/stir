@@ -80,6 +80,7 @@ function project_stats() {
     project_statistics
     project_firewall
     project_backup
+    project_engagement
 
     # Post files
     postLog
@@ -117,6 +118,16 @@ function project_firewall() {
   # Process the HTML
   cat "${deployPath}/html/${HTMLTEMPLATE}/stats/firewall.html" > "${htmlFile}"
   process_html; cat "${htmlFile}" > "/tmp/stats/firewall.html"
+}
+
+function project_engagement() {
+  cat "${deployPath}/html/${HTMLTEMPLATE}/stats/engagement.html" > "${htmlFile}"
+  # This just for testing, will turn it into a loop
+  ga_over_time hits 7
+
+  # Process the HTML
+  process_html; 
+  cat "${htmlFile}" > "/tmp/stats/engagement.html"
 }
 
 function project_backup() {
