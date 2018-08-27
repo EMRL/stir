@@ -154,14 +154,24 @@ function ga_over_time() {
     GASTART="$(date -I -d "$GAEND - $2 day")"
   fi
 
+  # Make sure temp directory exists
+  if [[ ! -d "/tmp/stats" ]]; then
+    umask 077 && mkdir /tmp/stats &> /dev/null
+  fi
+  
   # Setup variables
   ga_day="${GAEND}"
   day="0"
   METRIC="${1}"
-  
+  ga_sequence=""
+  max_value=""
+
+  # Flush csv
+  [[ -f "${trshFile}" ]] && rm "${trshFile}"
+
   while [ "$ga_day" != "${GASTART}" ]; do 
     RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
-    trace "${ga_day}: ${RESULT} $1"
+    # trace "${ga_day}: ${RESULT} $1"
     
     # Store the values 
     declare "$1_${day}"="${RESULT}"
@@ -172,7 +182,7 @@ function ga_over_time() {
 
   # Create percentage array
   ga_sequence="$(echo -e "${ga_sequence}" | sed -e 's/[[:space:]]*$//')"
-  trace "Calculating array: ${ga_sequence}"
+  # trace "Calculating array: ${ga_sequence}"
   IFS=', ' read -r -a a <<< "${ga_sequence}"
 
   for i in ${a[@]}; do
@@ -185,21 +195,48 @@ function ga_over_time() {
   for ((n=0; n < $2; n++)); do 
     var="$1_$n"; var_percent="$1_percent_$n"
     var_percent=$(awk "BEGIN { pc=100*${!var}/${max_value}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
-    trace "100*${!var}/${max_value} = ${var_percent}%"
+    # trace "100*${!var}/${max_value} = ${var_percent}%"
 
     # Store values
     eval $1_$n="${!var}"
     eval $1_percent_$n="${var_percent}"
+    this_day=$(date '+%a' -d "$n days ago")
+    echo -e "${this_day}, ${!var}, ${var_percent}" >> "${trshFile}"
 
     if [[ "${PROJSTATS}" == "1" ]]; then
       sed -i -e "s^{{$1_$n}}^${!var}^g" \
         -e "s^{{$1_percent_$n}}^${var_percent}^g" \
-        -e "s^{{$1_date_$n}}^${n} days ago^g" \
+        -e "s^{{$1_date_$n}}^${this_day}^g" \
         "${htmlFile}"
     fi    
   done
 
-  trace "Values: ${hits_0}, ${hits_1}, ${hits_2}, ${hits_3}, ${hits_4}, ${hits_5}, ${hits_6}"
+  tac "${trshFile}" > /tmp/stats/"${METRIC}".csv
+  # Future home of gnuplot charts
+  gnuplot -p << EOF
+  set encoding utf8
+  set terminal png enhanced size 1280,600
+  primary = "${PRIMARYC}"; 
+  secondary = "${SECONDARYC}";
+  info = "${INFOC}"
+  set key off
+  set datafile separator ","
+  set output '/tmp/stats/${METRIC}.png'
+  set boxwidth 0.5
+  set style fill transparent solid 0.1 noborder
+  set samples 1000
+  set style line 100 lt 1 lc rgb secondary lw 1
+  set style line 101 lt 0.5 lc rgb secondary lw 1
+  set grid mytics ytics ls 100, ls 101
+  set grid mxtics xtics ls 100, ls 101
+  set style line 11 lc rgb '${DEFAULTC}' lt 1 lw 3
+  set border 3 back ls 11
+  set tics out nomirror
+  #plot '~/${METRIC}.csv' using 2:xtic(1) with boxes lc rgb primary, \
+  #"" using 2:xtic(1) smooth bezier with lines lc rgb info
+  plot '/tmp/stats/${METRIC}.csv' using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3,\
+    "" using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info
+EOF
 }
 
 # If no other results are worth displaying, fall back to displaying hits

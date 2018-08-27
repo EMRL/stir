@@ -85,15 +85,15 @@ function postLog() {
       if [[ "${DIGEST}" == "1" ]]; then
         REMOTEFILE="digest-${EPOCH}.html"
         DIGESTURL="${REMOTEURL}/${APP}/${REMOTEFILE}"
-        eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/avatar"
-        eval "${SCPCMD} -r" "/tmp/avatar/" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}"
+        #eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/avatar"
+        #eval "${SCPCMD} -r" "/tmp/avatar/" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}"
         # Clean up your mess
-        if [[ -d "/tmp/avatar" ]]; then
-          rm -R "/tmp/avatar"
-        fi
+        #if [[ -d "/tmp/avatar" ]]; then
+        #  rm -R "/tmp/avatar"
+        #fi
       fi
 
-      if [[ "${PROJSTATS}" == "1" ]]; then
+      if [[ "${PROJSTATS}" == "1" || "${DIGEST}" == "1" ]]; then
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/stats"
         eval "${SCPCMD} -r" "/tmp/stats/" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/avatar"

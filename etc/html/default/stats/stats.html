@@ -79,132 +79,87 @@
 				<ul class="list-inline pull-right">
 					<li><small>Updated {{NOW}}</small></li>
 				</ul>
-				<strong><i class="glyphicon glyphicon-dashboard"></i><span style="padding-left: 10px;">My Dashboard</span></strong>
+				<strong><i class="glyphicon glyphicon-stats"></i><span style="padding-left: 10px;"><a href="./">My Dashboard</a> &gt; Statistics</span></a></strong>
 				<hr>
 				<div class="row">
-					<div class="col-md-6">
-						<div class="btn-group btn-group-justified">
-							<!--// Each <a>...</a> below needs to be on ONE line in order to be parsed correctly //-->
-							<a href="{{SCAN_NAV}}" class="btn {{SCAN_BTN}} col-sm-3"><i class="glyphicon glyphicon-ok-sign"></i><div class="stat-label">{{SCAN_MSG}}</div></a>
-							<a href="#" class="btn {{UPTIME_BTN}} col-sm-3"><i class="glyphicon glyphicon-time"></i><div class="stat-label">{{UPTIME}}% uptime</div></a>
-							<a href="#" class="btn {{LATENCY_BTN}} col-sm-3"><i class="glyphicon glyphicon-send"></i><div class="stat-label">{{LATENCY}}s latency</div></a>
-							<a href="{{BACKUP_NAV}}" class="btn {{BACKUP_BTN}} col-sm-3"><i class="glyphicon glyphicon-cloud-upload"></i><div class="stat-label">{{LAST_BACKUP}}</div></a>
-						</div>
-
-						<!--[BEGIN ANALYTICS]-->
-						<hr>
+					<div class="col-md-8">
 						<div class="panel panel-default">
-							<div class="panel-heading">
-								<div class="panel-title">
-									<h4>Engagement (Last 7 days)</h4>
-								</div>
-							</div>
-							<div class="panel-body">
-								<div class="col-xs-4 text-center">
-									<h1><strong>{{GA_HITS}}</strong></h1>
-									<p>hits from visitors</p>
-								</div>
-								<div class="col-xs-4 text-center">
-								<h1><strong>{{GA_PERCENT}}%</strong></h1>
-									<p>traffic from new users</p>
-								</div>
-								<div class="col-xs-4 text-center">
-								<h1><strong>{{GA_SEARCHES}}</strong></h1>
-									<p>organic searches</p>
-								</div>
+							<div class="panel-body text-center">
+								<object data="commits_day_week.svg" type="image/svg+xml" style="max-width: 800px;"></object>
 							</div>
 						</div>
-						<!--[END ANALYTICS]-->
-
 						<hr>
 						<div class="panel panel-default">
-							<div class="panel-heading">
-								<div class="panel-title">
-									<a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-link pull-right"></i></a>
-									<h4>Recent Activity</h4>
-								</div>
+							<div class="panel-body text-center">
+								<object data="commits_hour_week.svg" type="image/svg+xml" style="max-width: 800px;"></object>
 							</div>
-							<div class="panel-body">
-								{{COMMITS_RECENT}}
-								<p class="text-center">
-									<a href="{{ACTIVITY_NAV}}">View all</a>
-								</p>
+						</div>
+						<hr>
+						<div class="panel panel-default">
+							<div class="panel-body text-center">
+								<object data="commits_hour_day.svg" type="image/svg+xml" style="max-width: 800px;"></object>
+							</div>
+						</div>
+						<hr>
+						<div class="panel panel-default">
+							<div class="panel-body text-center">
+								<object data="commits_month.svg" type="image/svg+xml" style="max-width: 800px;"></object>
+							</div>
+						</div>
+						<hr>
+						<div class="panel panel-default">
+							<div class="panel-body text-center">
+								<object data="commits_year.svg" type="image/svg+xml" style="max-width: 800px;"></object>
+							</div>
+						</div>
+						<hr>
+						<div class="panel panel-default">
+							<div class="panel-body text-center">
+								<object data="commits_year_month.svg" type="image/svg+xml" style="max-width: 800px;"></object>
+							</div>
+						</div>
+						<hr>
+						<div class="panel panel-default">
+							<div class="panel-body text-center">
+								<div class="col-xs-4 text-center">
+									<object data="authors.svg" type="image/svg+xml" style="max-width: 540px;"></object>
+								</div>
+								<div class="col-xs-4 text-center">
+								<object data="files_type.svg" type="image/svg+xml" style="max-width: 540px;"></object>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<div class="panel-title">
-									<a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-link pull-right"></i></a>
-									<h4>Project Stats</h4>
-								</div>
-							</div>
-							<div class="panel-body">
-								<div class="col-xs-8">
-									<p>
-										Project: {{PROJNAME}}<br />
-										Development: <a href="{{DEVURL}}">{{DEVURL}}</a><br />
-										Production: <a href="{{PRODURL}}">{{PRODURL}}</a>
-									</p>
-									<p>{{CODE_STATS}}</p>
-								</div>
-								<div class="col-xs-4">
-									<img src="{{CLIENTLOGO}}" class="img-rounded img-responsive" style="float: right;" alt="{{PROJCLIENT}}" title="{{PROJCLIENT}}" width="128">
-								</div>
-							</div>
-							
-							<div class="panel-body">
-								<object style="max-width: 840px;" data="commits_day_week.svg" type="image/svg+xml"></object>
-								<hr>
-								<p class="text-center">
-									<a href="{{STATISTICS_NAV}}">View all</a>
-								</p>
-							</div>
-						</div>
-						<hr>
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<div class="panel-title">
-									<!--i class="glyphicon glyphicon-wrench pull-right"></i-->
-									<h4>Support Request</h4>
-								</div>
-							</div>
-							<div class="panel-body">
-								<script type="text/javascript" src="//drip.emrl.com/form/generate.js?id=43"></script>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 
-	<!--[BEGIN WORK RSS]-->
-	<div class="modal" id="workModal">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h4 class="modal-title">Uptime</h4>
-				</div>
-				<div class="modal-body">
-					<script language="JavaScript" src="{{RSS_URL}}" charset="UTF-8" type="text/javascript"></script>
-					<noscript><a href="{{RSS_URL}}">View RSS feed</a></noscript>
-				</div>
-				<div class="modal-footer">
-					<a href="#" data-dismiss="modal" class="btn">Close</a>
-					<!--a href="https://dply.emrl.co/scan" data-dismiss="modal" class="btn btn-primary">View in Project Manager</a-->
-				</div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <h4>About these charts</h4>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                            	<p>
+                            		These charts represent when, how many, and by who code changes to your website are being made. 
+                            	<p>
+                            		<strong>What is a commit?</strong>
+                                <p>
+                                	Your website code uses version control systems which allow rolling back to previous versions easily. In this context, a commit within a version control system is protected as it is easily rolled back, even after the commit has been applied.
+                            	</p>
+                            	<p>
+                            		More information about this type of workflow can be found <a href="https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control">here</a>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+				</div>	
 			</div>
 		</div>
 	</div>
-	<!--[END WORK RSS]-->
 
 	<footer class="text-center"></footer>
-
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/scripts.js"></script>
-</body>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/scripts.js"></script>
+	</body>
 </html>

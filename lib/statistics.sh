@@ -76,14 +76,14 @@ function project_stats() {
     spinner $!
 
     # Create sub pages
-    project_activity
-    project_statistics
-    project_firewall
-    project_backup
-    project_engagement
+    project_activity & spinner $!
+    project_statistics & spinner $!
+    project_firewall & spinner $!
+    project_backup & spinner $!
+    project_engagement & spinner $!
 
     # Post files
-    postLog
+    postLog & spinner $!
   fi
 }
 
@@ -122,8 +122,12 @@ function project_firewall() {
 
 function project_engagement() {
   cat "${deployPath}/html/${HTMLTEMPLATE}/stats/engagement.html" > "${htmlFile}"
-  # This just for testing, will turn it into a loop
-  ga_over_time hits 7
+
+  ga_var=(hits users newUsers sessions organicSearches pageviews)
+  # Start the loop
+  for i in "${ga_var[@]}" ; do
+    ga_over_time ${i} 7
+  done
 
   # Process the HTML
   process_html; 

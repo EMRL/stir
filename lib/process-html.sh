@@ -86,7 +86,7 @@ function process_html() {
     # This is essentially the same as insert_values() [see env-check.sh], we
     #  should consolidate them into one function
     if [[ -n "${!i:-}" ]]; then
-      [[ "${INCOGNITO}" != "1" ]] && trace "${i}: ${!i}"
+      # [[ "${INCOGNITO}" != "1" ]] && trace "${i}: ${!i}"
       sed_hack=$(echo "sed -i 's^{{${i}}}^${!i}^g' ${htmlFile}")
       # Kludgy but works. Ugh.
       eval "${sed_hack}"
@@ -111,5 +111,6 @@ function process_html() {
     -e "s^{{GRAVATARURL}}^${REMOTEURL}\/${APP}\/avatar^g" \
     -e "s^{{STATURL}}^${REMOTEURL}\/${APP}\/stats^g" \
     -e "s^{{LASTMONTH}}^${LAST_MONTH}^g" \
+    -e "s^{{ANALYTICS_CHART}}^${REMOTEURL}/${APP}/stats/${METRIC}.png^g" \
     "${htmlFile}"
   }
