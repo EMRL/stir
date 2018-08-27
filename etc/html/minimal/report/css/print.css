@@ -1,0 +1,7 @@
+table tr {
+	border-bottom: solid 1px black;
+}
+#hiderow,
+.delete {
+    display: none;
+}
