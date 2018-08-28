@@ -56,8 +56,9 @@
 				<hr>
 				<ul class="nav nav-pills nav-stacked">
 					<li class="nav-header"></li>
-					<li><a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-flash"></i><span>Activity</span></a></li>
-					<li><a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-stats"></i><span>Statistics</span></a></li>
+					<li><a href="{{ENGAGEMENT_NAV}}"><i class="glyphicon glyphicon-stats"></i><span>Audience Engagement</span></a></li>
+					<li><a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-transfer"></i><span>Update History</span></a></li>
+					<li><a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-flash"></i><span>Code Statistics</span></a></li>
 					<li><a href="{{SCAN_NAV}}"><i class="glyphicon glyphicon-ok-circle"></i><span>Malware Scan</span></a></li>
 					<li><a href="{{FIREWALL_NAV}}"><i class="glyphicon glyphicon-lock"></i><span>Firewall &amp; Security</span></a></li>
 					<li><a href="{{BACKUP_NAV}}"><i class="glyphicon glyphicon-cloud-upload"></i><span>System Backup</span></a></li>
@@ -96,13 +97,14 @@
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<div class="panel-title">
-									<h4>Engagement (Last 7 days)</h4>
+									<a href="{{ENGAGEMENT_NAV}}"><i class="glyphicon glyphicon-link pull-right"></i></a>
+									<h4>Audience Engagement <small>(Last 7 days)</small></h4>
 								</div>
 							</div>
 							<div class="panel-body">
 								<div class="col-xs-4 text-center">
 									<h1><strong>{{GA_HITS}}</strong></h1>
-									<p>hits from visitors</p>
+									<p>page views</p>
 								</div>
 								<div class="col-xs-4 text-center">
 								<h1><strong>{{GA_PERCENT}}%</strong></h1>
@@ -110,8 +112,14 @@
 								</div>
 								<div class="col-xs-4 text-center">
 								<h1><strong>{{GA_SEARCHES}}</strong></h1>
-									<p>organic searches</p>
+									<p>inbound organic searches</p>
 								</div>
+							</div>
+							<div class="panel-body" style="padding-top: 0px;">
+								<hr>
+								<p class="text-center">
+									<a href="{{ENGAGEMENT_NAV}}">View all</a>
+								</p>
 							</div>
 						</div>
 						<!--[END ANALYTICS]-->

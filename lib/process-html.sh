@@ -33,6 +33,7 @@ function process_html() {
   [[ -z "${SCAN_MSG}" ]] && sed -i '/SCAN_NAV/d' "${htmlFile}"
   [[ -z "${FIREWALL_STATUS}" ]] && sed -i '/FIREWALL_NAV/d' "${htmlFile}"
   [[ -z "${BACKUP_STATUS}" ]] && sed -i '/BACKUP_NAV/d' "${htmlFile}"
+  [[ -z "${PROFILEID}" ]] && sed -i '/ENGAGEMENT_NAV/d' "${htmlFile}"
 
 
   if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
@@ -79,7 +80,7 @@ function process_html() {
     GREETING REMOTEURL ANALYTICSMSG COVER WEEKOF UPTIME LATENCY GA_HITS \
     GA_PERCENT GA_SEARCHES GA_DURATION GA_SOCIAL CODE_STATS SCAN_BTN \
     UPTIME_BTN LATENCY_BTN BACKUP_BTN ACTIVITY_NAV STATISTICS_NAV SCAN_NAV \
-    FIREWALL_NAV BACKUP_NAV BACKUP_MSG TOTAL_COMMITS RSS_URL)
+    ENGAGEMENT_NAV FIREWALL_NAV BACKUP_NAV BACKUP_MSG TOTAL_COMMITS RSS_URL)
 
   # Start the loop
   for i in "${process_var[@]}" ; do
