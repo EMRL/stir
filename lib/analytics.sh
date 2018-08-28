@@ -14,10 +14,10 @@ trace "Loading analytics functions"
 
 # Initialize variables
 read -r SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \
-  GA_SOCIAL ANALYTICSMSG ga_var ga_day ga_sequence max_value n GA_TOTAL <<< ""
+  GA_SOCIAL ANALYTICSMSG ga_var ga_day ga_sequence max_value n a GA_TOTAL <<< ""
 echo "${SIZE} ${RND} ${METRIC} ${RESULT} ${GA_HITS} ${GA_PERCENT} 
   ${GA_SEARCHES} ${GA_DURATION} ${GA_SOCIAL} ${ANALYTICSMSG} ${ga_var} 
-  ${ga_sequence} ${max_value} ${n} ${GA_TOTAL}" > /dev/null
+  ${ga_sequence} ${max_value} ${n} ${a} ${GA_TOTAL}" > /dev/null
 
 function ga_metrics() {
   array[0]="hits"
@@ -137,7 +137,7 @@ function ga_data_loop() {
 
 ###############################################################################
 # ga_over_time()
-#   Collects Gollge Analytics data over a certain period of time
+#   Collects Google Analytics data over a certain period of time
 #
 # Arguments:
 #   [metric]    Defines the metric you wish to get from Google's API. Examples
@@ -171,6 +171,9 @@ function ga_over_time() {
 
   while [ "$ga_day" != "${GASTART}" ]; do 
     RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+    
+    # Make sure we're only dealing with integers
+    RESULT="$(printf "%.0f\n" "${RESULT}")"
     # trace "${ga_day}: ${RESULT} $1"
     
     # Store the values 
@@ -194,7 +197,13 @@ function ga_over_time() {
   # Calculate
   for ((n=0; n < $2; n++)); do 
     var="$1_$n"; var_percent="$1_percent_$n"
-    var_percent=$(awk "BEGIN { pc=100*${!var}/${max_value}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
+
+    # Calculating percent while zero was causing nasty bugs
+    if [[ -n "${!var}" ]] && [[ "${!var}" != "0" ]]; then
+      var_percent=$(awk "BEGIN { pc=100*${!var}/${max_value}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
+    else
+      var_percent="0"
+    fi
     # trace "100*${!var}/${max_value} = ${var_percent}%"
 
     # Store values
@@ -212,13 +221,14 @@ function ga_over_time() {
   done
 
   tac "${trshFile}" > /tmp/stats/"${METRIC}".csv
-  # Future home of gnuplot charts
+
   gnuplot -p << EOF
   set encoding utf8
   set terminal png enhanced size 1280,600
   primary = "${PRIMARYC}"; 
   secondary = "${SECONDARYC}";
-  info = "${INFOC}"
+  info = "${INFOC}";
+  default = "${DEFAULTC}";
   set key off
   set datafile separator ","
   set output '/tmp/stats/${METRIC}.png'
@@ -229,13 +239,21 @@ function ga_over_time() {
   set style line 101 lt 0.5 lc rgb secondary lw 1
   set grid mytics ytics ls 100, ls 101
   set grid mxtics xtics ls 100, ls 101
-  set style line 11 lc rgb '${DEFAULTC}' lt 1 lw 3
+  set style line 11 lc rgb default lt 1 lw 3
   set border 3 back ls 11
   set tics out nomirror
-  #plot '~/${METRIC}.csv' using 2:xtic(1) with boxes lc rgb primary, \
-  #"" using 2:xtic(1) smooth bezier with lines lc rgb info
+  
+  # PNG
+  set terminal png enhanced size 1280,600
+  set output '/tmp/stats/${METRIC}.png'
   plot '/tmp/stats/${METRIC}.csv' using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3,\
     "" using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info
+
+  # SVG
+  set terminal svg dynamic enhanced size 1280,600
+  set output '/tmp/stats/${METRIC}.svg'
+  plot '/tmp/stats/${METRIC}.csv' using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3,\
+    "" using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info  
 EOF
 }
 
@@ -296,12 +314,6 @@ function ga_test() {
   ACCESSTOKEN="$(awk -F\" '{print $4}' "${trshFile}")"
   echo "${ACCESSTOKEN}"
 
-  # Just here for testing
-  #ga_data_loop
-  empty_line; trace "Day count"
-  ga_over_time hits 7
-  return
-
   # Setup the metric we're after
   array[0]="hits"
   array[1]="percentNewSessions"
@@ -311,8 +323,15 @@ function ga_test() {
   SIZE="${#array[@]}"
   RND="$(($RANDOM % $SIZE))"
   METRIC="${array[$RND]}"
+ 
+  # Just here for testing
+  #ga_data_loop
+  # METRIC="newUsers"
+  notice "Retrieving ${METRIC}..." 
+  ga_over_time "${METRIC}" 7
+  cat /tmp/stats/"${METRIC}".csv
+  return
 
-  notice "Retrieving ${METRIC}..."  
   console "Running: printf \"${METRIC} (Last 7 days): \"; curl -s \"https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN\"" # | tr , '\n' | grep \"totalsForAllResults\" | cut -d'\"' -f6"
   #empty_line; analytics
   sleep 3

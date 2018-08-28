@@ -10,14 +10,15 @@ trace "Loading statistics functions"
 # Initialize variables
 read -r DB_API_TOKEN DB_BACKUP_PATH LAST_BACKUP BACKUP_STATUS CODE_STATS \
   BACKUP_BTN LATENCY_BTN UPTIME_BTN SCAN_BTN COMMITS_RECENT  \
-  repo_charts ACTIVITY_NAV STATISTICS_NAV SCAN_NAV FIREWALL_NAV \
-  BACKUP_NAV SCAN_STATS FIREWALL_STATUS BACKUP_MSG BACKUP_FILES \
-  TOTAL_COMMITS RSS_URL <<< ""
+  repo_charts ACTIVITY_NAV STATISTICS_NAV SCAN_NAV ENGAGEMENT_NAV \
+  FIREWALL_NAV BACKUP_NAV SCAN_STATS FIREWALL_STATUS BACKUP_MSG \
+  BACKUP_FILES TOTAL_COMMITS RSS_URL <<< ""
 echo "${DB_API_TOKEN} ${DB_BACKUP_PATH} ${LAST_BACKUP} ${BACKUP_STATUS} 
   ${CODE_STATS} ${BACKUP_BTN} ${LATENCY_BTN} ${UPTIME_BTN} ${SCAN_BTN}
   ${COMMITS_RECENT} ${repo_charts} ${ACTIVITY_NAV} ${STATISTICS_NAV} 
-  ${SCAN_NAV} ${FIREWALL_NAV} ${BACKUP_NAV} ${FIREWALL_STATUS}
-  ${BACKUP_MSG} ${BACKUP_FILES} ${TOTAL_COMMITS} ${RSS_URL}" > /dev/null
+  ${SCAN_NAV} ${ENGAGEMENT_NAV} ${FIREWALL_NAV} ${BACKUP_NAV} 
+  ${FIREWALL_STATUS} ${BACKUP_MSG} ${BACKUP_FILES} ${TOTAL_COMMITS} 
+  ${RSS_URL}" > /dev/null
 
 function project_stats() {
   hash gitchart 2>/dev/null || {
@@ -121,6 +122,11 @@ function project_firewall() {
 }
 
 function project_engagement() {
+  if [[ -z "${PROFILEID}" ]]; then
+    trace "Google Analytics not configured"
+    return
+  fi
+  
   cat "${deployPath}/html/${HTMLTEMPLATE}/stats/engagement.html" > "${htmlFile}"
 
   ga_var=(hits users newUsers sessions organicSearches pageviews)
@@ -229,6 +235,7 @@ function assign_nav() {
   # Assign URLs - this will change later on
   ACTIVITY_NAV="activity.html"
   STATISTICS_NAV="stats.html"
+  [[ -n "${PROFILEID}" ]] && ENGAGEMENT_NAV="engagement.html"
   [[ -n "${SCAN_MSG}" ]] && SCAN_NAV="scan.html"
   [[ -n "${FIREWALL_NAV}" ]] && FIREWALL_NAV="firewall.html"
   [[ -n "${BACKUP_STATUS}" ]] && BACKUP_NAV="backup.html"

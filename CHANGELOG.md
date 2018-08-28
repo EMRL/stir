@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Digest emails can now include a chart showing the week's analytics
 ### Changed 
 - Improved HTML post-processing
+### Fixed
+- Log files should no longer be left behind in the `/tmp` directory
 
 ## [3.7.1] - 07-13-2018
 ### Added

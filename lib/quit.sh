@@ -87,12 +87,14 @@ function clean_up() {
   [[ -f "${trshFile}" ]] && rm "${trshFile}"
   [[ -f "${postFile}" ]] && rm "${postFile}"
   [[ -f "${statFile}" ]] && rm "${statFile}"
+  [[ -f "${scanFile}" ]] && rm "${scanFile}"
   [[ -f "${wpFile}" ]] && rm "${wpFile}"
   [[ -f "${urlFile}" ]] && rm "${urlFile}"
   [[ -f "${htmlFile}" ]] && rm "${htmlFile}"
   [[ -f "${htmlEmail}" ]] && rm "${htmlEmail}"
   [[ -f "${clientEmail}" ]] && rm "${clientEmail}"
   [[ -f "${coreFile}" ]] && rm "${coreFile}"
+  [[ -d /tmp/stats ]] && rm -rf /tmp/stats
   # [[ -f "${gitLock}" ]] && rm "${gitLock}"
   # Attempt to reset the terminal
   # echo -e \\033c
@@ -126,5 +128,5 @@ function clean_up() {
   fi
 
   # Say goodnight, Gracie. Goodnight Gracie.
-  info "Exiting."; console
+  console "Exiting."
 }

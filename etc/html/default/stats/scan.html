@@ -56,8 +56,9 @@
                 <hr>
                 <ul class="nav nav-pills nav-stacked">
                     <li class="nav-header"></li>
-                    <li><a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-flash"></i><span>Activity</span></a></li>
-                    <li><a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-stats"></i><span>Statistics</span></a></li>
+                    <li><a href="{{ENGAGEMENT_NAV}}"><i class="glyphicon glyphicon-stats"></i><span>Audience Engagement</span></a></li>
+                    <li><a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-transfer"></i><span>Update History</span></a></li>
+                    <li><a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-flash"></i><span>Code Statistics</span></a></li>
                     <li><a href="{{SCAN_NAV}}"><i class="glyphicon glyphicon-ok-circle"></i><span>Malware Scan</span></a></li>
                     <li><a href="{{FIREWALL_NAV}}"><i class="glyphicon glyphicon-lock"></i><span>Firewall &amp; Security</span></a></li>
                     <li><a href="{{BACKUP_NAV}}"><i class="glyphicon glyphicon-cloud-upload"></i><span>System Backup</span></a></li>
@@ -84,9 +85,9 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="panel panel-default">
-                            <div class="panel-heading" style="background-color: {{SCAN_STATUS}};">
+                            <div class="panel-heading">
                                 <div class="panel-title">
-                                    <h4 class="text-white">Malware scan: {{SCAN_MSG}}</h4>
+                                    <h4 >Malware scan: {{SCAN_MSG}} <i style="color: {{SCAN_STATUS}};" class="glyphicon glyphicon-ok-sign"></i></h4>
                                 </div>
                             </div>
                             <div class="panel-body">
