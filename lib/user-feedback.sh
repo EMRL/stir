@@ -13,7 +13,7 @@ echo "${pid} ${delay} ${spinstr} %{temp}" > /dev/null
 
 # Progress spinner; we'll see if this works
 function spinner() {
-  if [[ "${QUIET}" != "1" ]]; then
+  if [[ "${QUIET}" != "1" ]] && [[ "${DEBUG}" != "1" ]]; then
     local pid=$1
     local delay=0.15
     # Is ther ea better way to format this thing?  It's wonky
@@ -48,7 +48,7 @@ function progressBar() {
 
 # Display progress bar
 function showProgress() {
-  if [[ "${QUIET}" != "1" ]]; then
+  if [[ "${QUIET}" != "1" ]] && [[ "${DEBUG}" != "1" ]]; then
     _start=1
     _end=100
     for number in $(seq ${_start} ${_end})
