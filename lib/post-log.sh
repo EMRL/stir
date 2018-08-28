@@ -47,7 +47,7 @@ function postLog() {
       if [[ "${PROJSTATS}" == "1" ]]; then
         [[ ! -d "${LOCALHOSTPATH}/${APP}" ]] && mkdir "${LOCALHOSTPATH}/${APP}"
         [[ ! -d "${LOCALHOSTPATH}/${APP}/stats" ]] && mkdir "${LOCALHOSTPATH}/${APP}/stats"
-        cp -R "/tmp/stats" "${LOCALHOSTPATH}/${APP}"
+        cp -R "${statDir}" "${LOCALHOSTPATH}/${APP}"
         chmod -R a+rw "${deployPath}/html/${HTMLTEMPLATE}/stats" &> /dev/null
       fi
 
@@ -95,13 +95,13 @@ function postLog() {
 
       if [[ "${PROJSTATS}" == "1" || "${DIGEST}" == "1" ]]; then
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/stats"
-        eval "${SCPCMD} -r" "/tmp/stats/" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}"
+        eval "${SCPCMD} -r" "${statDir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/stats/"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/avatar"
         eval "${SCPCMD} -r" "/tmp/avatar/" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}"
         # Clean up your mess
-        if [[ -d "/tmp/stats" ]]; then
-          rm -R "/tmp/stats"
-        fi
+        #if [[ -d "${statDir}" ]]; then
+        #  rm -R "${statDir}"
+        #fi
         if [[ -d "/tmp/avatar" ]]; then
           rm -R "/tmp/avatar"
         fi
@@ -112,10 +112,10 @@ function postLog() {
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/scan"
         eval "${SCPCMD} -r" "${scan_html}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/scan/index.html"
         # This stuff is for the new dashboard method
-        eval "${SCPCMD} -r" "/tmp/stats/" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}"
+        eval "${SCPCMD} -r" "${statDir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/stats/"
         # Clean up your mess
-        #if [[ -d "/tmp/stats" ]]; then
-        #  rm -R "/tmp/stats"
+        #if [[ -d "${statDir}" ]]; then
+        #  rm -R "${statDir}"
         #fi
       fi
 

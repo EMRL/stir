@@ -152,7 +152,6 @@ function postDeploy() {
         info "Deployed to ${PRODURL}"
       fi
     else
-      info ""
       warning "Deployment succeeded, but something unexpected happened."
       if yesno --default yes "View status? [Y/n] "; then
         git status

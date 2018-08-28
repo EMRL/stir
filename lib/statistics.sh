@@ -30,14 +30,14 @@ function project_stats() {
   queue_check
 
     # Setup up tmp work folder
-    if [[ ! -d "/tmp/stats" ]]; then
-      umask 077 && mkdir /tmp/stats &> /dev/null
-    fi
+    #if [[ ! -d "${statDir}" ]]; then
+    #  umask 077 && mkdir "${statDir}" &> /dev/null
+    #fi
 
     # Prep assets
-    cp -R "${deployPath}/html/${HTMLTEMPLATE}/stats/css" "/tmp/stats/"
-    cp -R "${deployPath}/html/${HTMLTEMPLATE}/stats/fonts" "/tmp/stats/"
-    cp -R "${deployPath}/html/${HTMLTEMPLATE}/stats/js" "/tmp/stats/"
+    cp -R "${deployPath}/html/${HTMLTEMPLATE}/stats/css" "${statDir}/"
+    cp -R "${deployPath}/html/${HTMLTEMPLATE}/stats/fonts" "${statDir}/"
+    cp -R "${deployPath}/html/${HTMLTEMPLATE}/stats/js" "${statDir}/"
 
     notice "Generating files..."
 
@@ -64,15 +64,15 @@ function project_stats() {
     cat "${deployPath}/html/${HTMLTEMPLATE}/stats/index.html" > "${htmlFile}"
     process_html
 
-    cat "${htmlFile}" > "/tmp/stats/index.html"
+    cat "${htmlFile}" > "${statDir}/index.html"
 
     # Create SVG charts
     repo_charts=(authors commits_day_week commits_hour_day commits_hour_week \
       commits_month commits_year commits_year_month files_type)
     for i in "${repo_charts[@]}" ; do
-      /usr/bin/gitchart -r "${WORKPATH}/${APP}" "${i}" "/tmp/stats/${i}.svg" &>> /dev/null
-      sed -i "s/#9999ff/${PRIMARYC}/g" "/tmp/stats/${i}.svg" 
-      sed -i 's/Consolas,"Liberation Mono",Menlo,Courier,monospace/Roboto, Helvetica, Arial, sans-serif/g' "/tmp/stats/${i}.svg"
+      /usr/bin/gitchart -r "${WORKPATH}/${APP}" "${i}" "${statDir}/${i}.svg" &>> /dev/null
+      sed -i "s/#9999ff/${PRIMARYC}/g" "${statDir}/${i}.svg" 
+      sed -i 's/Consolas,"Liberation Mono",Menlo,Courier,monospace/Roboto, Helvetica, Arial, sans-serif/g' "${statDir}/${i}.svg"
     done &
     spinner $!
 
@@ -96,29 +96,31 @@ function project_activity() {
 
   # Process the HTML
   cat "${deployPath}/html/${HTMLTEMPLATE}/stats/activity.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "/tmp/stats/activity.html"
+  process_html; cat "${htmlFile}" > "${statDir}/activity.html"
 }
 
 function project_statistics() {
   # Process the HTML
   cat "${deployPath}/html/${HTMLTEMPLATE}/stats/stats.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "/tmp/stats/stats.html"
+  process_html; cat "${htmlFile}" > "${statDir}/stats.html"
 }
 
 # This is a special snowflake for now, called from within scan_host()
 function project_scan(){
-  if [[ ! -d "/tmp/stats" ]]; then
-    umask 077 && mkdir /tmp/stats &> /dev/null
-  fi
+  
+  #if [[ ! -d "${statDir}" ]]; then
+  #  umask 077 && mkdir ${statDir} &> /dev/null
+  #fi
+  
   SCAN_STATS=$(<${scan_html})
   cat "${deployPath}/html/${HTMLTEMPLATE}/stats/scan.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "/tmp/stats/scan.html"
+  process_html; cat "${htmlFile}" > "${statDir}/scan.html"
 }
 
 function project_firewall() {
   # Process the HTML
   cat "${deployPath}/html/${HTMLTEMPLATE}/stats/firewall.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "/tmp/stats/firewall.html"
+  process_html; cat "${htmlFile}" > "${statDir}/firewall.html"
 }
 
 function project_engagement() {
@@ -137,7 +139,7 @@ function project_engagement() {
 
   # Process the HTML
   process_html; 
-  cat "${htmlFile}" > "/tmp/stats/engagement.html"
+  cat "${htmlFile}" > "${statDir}/engagement.html"
 }
 
 function project_backup() {
@@ -153,7 +155,7 @@ function project_backup() {
 
   # Process the HTML
   cat "${deployPath}/html/${HTMLTEMPLATE}/stats/backup.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "/tmp/stats/backup.html"
+  process_html; cat "${htmlFile}" > "${statDir}/backup.html"
 }
 
 function check_backup() {

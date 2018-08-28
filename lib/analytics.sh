@@ -155,8 +155,8 @@ function ga_over_time() {
   fi
 
   # Make sure temp directory exists
-  if [[ ! -d "/tmp/stats" ]]; then
-    umask 077 && mkdir /tmp/stats &> /dev/null
+  if [[ ! -d "${statDir}" ]]; then
+    umask 077 && mkdir ${statDir} &> /dev/null
   fi
   
   # Setup variables
@@ -220,7 +220,7 @@ function ga_over_time() {
     fi    
   done
 
-  tac "${trshFile}" > /tmp/stats/"${METRIC}".csv
+  tac "${trshFile}" > ${statDir}/"${METRIC}".csv
 
   gnuplot -p << EOF
   set encoding utf8
@@ -231,7 +231,7 @@ function ga_over_time() {
   default = "${DEFAULTC}";
   set key off
   set datafile separator ","
-  set output '/tmp/stats/${METRIC}.png'
+  set output '${statDir}/${METRIC}.png'
   set boxwidth 0.5
   set style fill transparent solid 0.1 noborder
   set samples 1000
@@ -245,14 +245,14 @@ function ga_over_time() {
   
   # PNG
   set terminal png enhanced size 1280,600
-  set output '/tmp/stats/${METRIC}.png'
-  plot '/tmp/stats/${METRIC}.csv' using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3,\
+  set output '${statDir}/${METRIC}.png'
+  plot '${statDir}/${METRIC}.csv' using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3,\
     "" using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info
 
   # SVG
   set terminal svg dynamic enhanced size 1280,600
-  set output '/tmp/stats/${METRIC}.svg'
-  plot '/tmp/stats/${METRIC}.csv' using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3,\
+  set output '${statDir}/${METRIC}.svg'
+  plot '${statDir}/${METRIC}.csv' using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3,\
     "" using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info  
 EOF
 }
@@ -329,7 +329,7 @@ function ga_test() {
   # METRIC="newUsers"
   notice "Retrieving ${METRIC}..." 
   ga_over_time "${METRIC}" 7
-  cat /tmp/stats/"${METRIC}".csv
+  cat ${statDir}/"${METRIC}".csv
   return
 
   console "Running: printf \"${METRIC} (Last 7 days): \"; curl -s \"https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN\"" # | tr , '\n' | grep \"totalsForAllResults\" | cut -d'\"' -f6"
