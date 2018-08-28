@@ -148,7 +148,7 @@ function postDeploy() {
       # Run integration hooks
       postCommit  
       # This needs a check.
-      # info "Deployment Success."
+      info "Deployed to ${PRODURL}"
     else
       info ""
       warning "Deployment succeeded, but something unexpected happened."

@@ -28,6 +28,7 @@ function process_html() {
   [[ -z "${CLIENTCONTACT}" ]] && sed -i '/CLIENTCONTACT/d' "${htmlFile}"
   [[ -z "${notes}" ]] && sed -i '/NOTES/d' "${htmlFile}"
   [[ -z "${SMOOCHID}" ]] && sed -i '/SMOOCHID/d' "${htmlFile}"
+  [[ -z "${COMMITHASH}" ]] && sed -i '/COMMITHASH/d' "${htmlFile}"
 
   # Clean out dashboard nav menu
   [[ -z "${SCAN_MSG}" ]] && sed -i '/SCAN_NAV/d' "${htmlFile}"
