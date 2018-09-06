@@ -88,6 +88,7 @@ function clean_up() {
   [[ -f "${postFile}" ]] && rm "${postFile}"
   [[ -f "${statFile}" ]] && rm "${statFile}"
   [[ -f "${scanFile}" ]] && rm "${scanFile}"
+  [[ -f "${scan_html}" ]] && rm "${scan_html}"
   [[ -f "${wpFile}" ]] && rm "${wpFile}"
   [[ -f "${urlFile}" ]] && rm "${urlFile}"
   [[ -f "${htmlFile}" ]] && rm "${htmlFile}"

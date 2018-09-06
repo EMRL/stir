@@ -49,12 +49,13 @@ function scan_host() {
   
   # Run the scan
   trace "Scanning ${PRODURL}..."
+  # Spinners commented out for now, causing issues when running from a crontab
   if [[ -z "${NIKTO_PROXY}" ]]; then
-    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -Tuning 013789c -no404 -output "${scan_html}" -host "${PRODURL}" > "${scanFile}" &
-    spinner $!
+    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -Tuning 013789c -no404 -output "${scan_html}" -host "${PRODURL}" > "${scanFile}" #&
+    #spinner $!
   else
-    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -no404 -output "${scan_html}" -useproxy "${NIKTO_PROXY}" -host "${PRODURL}" > "${scanFile}" &
-    spinner $!
+    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -no404 -output "${scan_html}" -useproxy "${NIKTO_PROXY}" -host "${PRODURL}" > "${scanFile}" #&
+    #spinner $!
   fi
 
   # For testing only
