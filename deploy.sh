@@ -213,7 +213,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --invoice) CREATE_INVOICE="1" ;;
     --unlock) UNLOCK="1" ;;
     --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="TRUE" ;;
-    --scan) SCAN="1"; FORCE="1" ;;
+    --scan) SCAN="1" ;;
     --no-check) NOCHECK="1" ;;
     --function-list) FUNCTIONLIST="1"; CURRENT="1" ;; # Spoofs --current
     --variable-list) VARIABLELIST="1"; CURRENT="1" ;; # Spoofs --current
@@ -288,15 +288,15 @@ echo -e "Deployment logfile for ${APP^^} - $NOW\r" >> "${logFile}"
 echo -e "Launching deploy${STARTUP}\n" >> "${logFile}"
 
 # More crappy tmp files
-postFile="/tmp/${APP}.wtf-$RANDOM.log"; (umask 077 && touch "${postFile}" &> /dev/null) || log_fail
-trshFile="/tmp/${APP}.trsh-$RANDOM.log"; (umask 077 && touch "${trshFile}" &> /dev/null) || log_fail
-scanFile="/tmp/${APP}.scan-$RANDOM.log"; (umask 077 && touch "${scanFile}" &> /dev/null) || log_fail 
-statFile="/tmp/${APP}.stat-$RANDOM.log"; (umask 077 && touch "${statFile}" &> /dev/null) || log_fail
-statDir="/tmp/${APP}.stat-$RANDOM"; (umask 077 && mkdir "${statDir}" &> /dev/null) || log_fail
-urlFile="/tmp/${APP}.url-$RANDOM.log"; (umask 077 && touch "${urlFile}" &> /dev/null) || log_fail
-htmlFile="/tmp/${APP}.log-$RANDOM.html"; (umask 077 && touch "${htmlFile}" &> /dev/null) || log_fail
-htmlEmail="/tmp/${APP}.email-$RANDOM.html"; (umask 077 && touch "${htmlEmail}" &> /dev/null) || log_fail
-clientEmail="/tmp/${APP}.shortemail-$RANDOM.html"; (umask 077 && touch "${clientEmail}" &> /dev/null) || log_fail
+postFile="/tmp/${APP}.wtf-${RANDOM}.log"; (umask 077 && touch "${postFile}" &> /dev/null) || log_fail
+trshFile="/tmp/${APP}.trsh-${RANDOM}.log"; (umask 077 && touch "${trshFile}" &> /dev/null) || log_fail
+scanFile="/tmp/${APP}.scan-${RANDOM}.log"; (umask 077 && touch "${scanFile}" &> /dev/null) || log_fail 
+statFile="/tmp/${APP}.stat-${RANDOM}.log"; (umask 077 && touch "${statFile}" &> /dev/null) || log_fail
+statDir="/tmp/${APP}.stat-${RANDOM}"; (umask 077 && mkdir "${statDir}" &> /dev/null) || log_fail
+urlFile="/tmp/${APP}.url-${RANDOM}.log"; (umask 077 && touch "${urlFile}" &> /dev/null) || log_fail
+htmlFile="/tmp/${APP}.log-${RANDOM}.html"; (umask 077 && touch "${htmlFile}" &> /dev/null) || log_fail
+htmlEmail="/tmp/${APP}.email-${RANDOM}.html"; (umask 077 && touch "${htmlEmail}" &> /dev/null) || log_fail
+clientEmail="/tmp/${APP}.shortemail-${RANDOM}.html"; (umask 077 && touch "${clientEmail}" &> /dev/null) || log_fail
 
 # Path of the script; I should flip this check to make it more useful
 if [ -d "/etc/deploy" ]; then

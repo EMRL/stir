@@ -31,7 +31,7 @@ fi
 #   None
 ###############################################################################      
 function trace() {
-  if [[ "${VERBOSE}" == "TRUE" ]]; then
+  if [[ "${VERBOSE}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then
     TIMESTAMP="$(date '+%H:%M:%S')"
     if [[ "${1}" == "status" ]]; then
       echo -e -n "$(tput setaf 3)${TIMESTAMP}$(tput sgr0) ${2}"

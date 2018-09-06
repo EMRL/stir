@@ -183,7 +183,8 @@ function ga_over_time() {
     ga_day="$(date -I -d "$ga_day - 1 day")"
   done
 
-  # Create percentage array
+  # Create percentage array, this is pretty much obsolete now since 
+  # we're using gnuplot
   ga_sequence="$(echo -e "${ga_sequence}" | sed -e 's/[[:space:]]*$//')"
   # trace "Calculating array: ${ga_sequence}"
   IFS=', ' read -r -a a <<< "${ga_sequence}"

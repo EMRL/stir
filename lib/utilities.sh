@@ -84,7 +84,7 @@ function go() {
   fi
 
   # Chill and wait for user to confirm project
-  if  [[ "${FORCE}" == "1" ]] || yesno --default yes "Continue? [Y/n] "; then
+  if  [[ "${FORCE}" == "1" || "${SCAN}" == "1" || "${PROJSTATS}" == "1" ]] || yesno --default yes "Continue? [Y/n] "; then
     trace "Loading project"
   else
     quickExit

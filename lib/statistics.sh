@@ -67,24 +67,25 @@ function project_stats() {
     cat "${htmlFile}" > "${statDir}/index.html"
 
     # Create SVG charts
+    # Spinners commented out for now, causing issues when running from a crontab
     repo_charts=(authors commits_day_week commits_hour_day commits_hour_week \
       commits_month commits_year commits_year_month files_type)
     for i in "${repo_charts[@]}" ; do
       /usr/bin/gitchart -r "${WORKPATH}/${APP}" "${i}" "${statDir}/${i}.svg" &>> /dev/null
       sed -i "s/#9999ff/${PRIMARYC}/g" "${statDir}/${i}.svg" 
       sed -i 's/Consolas,"Liberation Mono",Menlo,Courier,monospace/Roboto, Helvetica, Arial, sans-serif/g' "${statDir}/${i}.svg"
-    done &
-    spinner $!
+    done #&
+    #spinner $!
 
     # Create sub pages
-    project_activity & spinner $!
-    project_statistics & spinner $!
-    project_firewall & spinner $!
-    project_backup & spinner $!
-    project_engagement & spinner $!
+    project_activity #& spinner $!
+    project_statistics #& spinner $!
+    project_firewall #& spinner $!
+    project_backup #& spinner $!
+    project_engagement #& spinner $!
 
     # Post files
-    postLog & spinner $!
+    postLog #& spinner $!
   fi
 }
 

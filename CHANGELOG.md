@@ -8,8 +8,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed 
 - Improved HTML post-processing
 ### Fixed
+- The `--stats` flag should no longer cause issues when being properly run from a cron process
 - Log files should no longer be left behind in the `/tmp` directory
 - Fixed a problem where statistic dashboard could get corrupted when multiple instances of `deploy --stats` are running
+
 
 ## [3.7.1] - 07-13-2018
 ### Added
