@@ -97,6 +97,7 @@ function clean_up() {
   [[ -f "${coreFile}" ]] && rm "${coreFile}"
   [[ -d "${statDir}" ]] && rm -rf "${statDir}"
   [[ -d /tmp/stats ]] && rm -rf /tmp/stats
+  [[ -d /tmp/avatar ]] && rm -rf /tmp/avatar
   # [[ -f "${gitLock}" ]] && rm "${gitLock}"
   # Attempt to reset the terminal
   # echo -e \\033c

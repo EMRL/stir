@@ -23,6 +23,32 @@ APP="null"
 # Set mode
 set -uo pipefail
 
+# Trap ctrl-c exits; someday I'll do this better 
+trap ctrl_c INT
+
+function ctrl_c() {
+  if type quietExit &>/dev/null; then
+    quietExit
+  else
+    [[ -f "${logFile}" ]] && rm "${logFile}"
+    [[ -f "${trshFile}" ]] && rm "${trshFile}"
+    [[ -f "${postFile}" ]] && rm "${postFile}"
+    [[ -f "${statFile}" ]] && rm "${statFile}"
+    [[ -f "${scanFile}" ]] && rm "${scanFile}"
+    [[ -f "${scan_html}" ]] && rm "${scan_html}"
+    [[ -f "${wpFile}" ]] && rm "${wpFile}"
+    [[ -f "${urlFile}" ]] && rm "${urlFile}"
+    [[ -f "${htmlFile}" ]] && rm "${htmlFile}"
+    [[ -f "${htmlEmail}" ]] && rm "${htmlEmail}"
+    [[ -f "${clientEmail}" ]] && rm "${clientEmail}"
+    [[ -f "${coreFile}" ]] && rm "${coreFile}"
+    [[ -d "${statDir}" ]] && rm -rf "${statDir}"
+    [[ -d /tmp/stats ]] && rm -rf /tmp/stats
+    [[ -d /tmp/avatar ]] && rm -rf /tmp/avatar
+    exit 27
+  fi
+}
+
 # Initialize variables 
 # Startup switches
 read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
@@ -564,9 +590,6 @@ fi
 
 # Execute the deploy process
 main
-
-# Trapping stuff
-trap userExit INT
 
 # All done
 safeExit
