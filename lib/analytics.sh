@@ -176,13 +176,16 @@ function ga_over_time() {
     RESULT="$(printf "%.0f\n" "${RESULT}")"
     # trace "${ga_day}: ${RESULT} $1"
     
+    # Add to total
+    let ga_${METRIC}+="${RESULT}"
+    
     # Store the values 
     declare "$1_${day}"="${RESULT}"
     ga_sequence="${ga_sequence}${RESULT} "
     day="$((day+1))"
     ga_day="$(date -I -d "$ga_day - 1 day")"
   done
-
+ 
   # Create percentage array, this is pretty much obsolete now since 
   # we're using gnuplot
   ga_sequence="$(echo -e "${ga_sequence}" | sed -e 's/[[:space:]]*$//')"

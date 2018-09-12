@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Project dashboards have been redesigned to include more analytics charts and information
 - Digest emails can now include a chart showing the week's analytics
 ### Changed 
 - Improved HTML post-processing
