@@ -14,10 +14,21 @@ trace "Loading analytics functions"
 
 # Initialize variables
 read -r SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \
-  GA_SOCIAL ANALYTICSMSG ga_var ga_day ga_sequence max_value n a GA_TOTAL <<< ""
+  GA_SOCIAL ANALYTICSMSG ga_day ga_sequence max_value n a GA_TOTAL <<< ""
 echo "${SIZE} ${RND} ${METRIC} ${RESULT} ${GA_HITS} ${GA_PERCENT} 
-  ${GA_SEARCHES} ${GA_DURATION} ${GA_SOCIAL} ${ANALYTICSMSG} ${ga_var} 
-  ${ga_sequence} ${max_value} ${n} ${a} ${GA_TOTAL}" > /dev/null
+  ${GA_SEARCHES} ${GA_DURATION} ${GA_SOCIAL} ${ANALYTICSMSG} ${ga_sequence} 
+  ${max_value} ${n} ${a} ${GA_TOTAL}" > /dev/null
+
+ga_var=(users newUsers percentNewSessions sessionsPerUser sessions 
+    bounceRate avgSessionDuration hits organicSearches pageviews avgTimeOnPage
+    avgPageLoadTime avgDomainLookupTime avgServerResponseTime impressions 
+    adClicks adCost CPC CTR socialInteractions)
+
+for i in "${ga_var[@]}" ; do
+  read -r ga_${i} <<< ""
+  echo "ga_${i}" > /dev/null
+done
+
 
 function ga_metrics() {
   array[0]="hits"
@@ -331,7 +342,7 @@ function ga_test() {
   # Just here for testing
   #ga_data_loop
   # METRIC="newUsers"
-  notice "Retrieving ${METRIC}..." 
+  notice "Retrieving a random metric (${METRIC})..." 
   ga_over_time "${METRIC}" 7
   cat ${statDir}/"${METRIC}".csv
   return
