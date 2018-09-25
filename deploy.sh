@@ -43,6 +43,7 @@ function ctrl_c() {
     [[ -f "${clientEmail}" ]] && rm "${clientEmail}"
     [[ -f "${coreFile}" ]] && rm "${coreFile}"
     [[ -d "${statDir}" ]] && rm -rf "${statDir}"
+    [[ -d "${avatarDir}" ]] && rm -rf "${avatarDir}"
     [[ -d /tmp/stats ]] && rm -rf /tmp/stats
     [[ -d /tmp/avatar ]] && rm -rf /tmp/avatar
     exit 27
@@ -319,6 +320,7 @@ trshFile="/tmp/${APP}.trsh-${RANDOM}.log"; (umask 077 && touch "${trshFile}" &> 
 scanFile="/tmp/${APP}.scan-${RANDOM}.log"; (umask 077 && touch "${scanFile}" &> /dev/null) || log_fail 
 statFile="/tmp/${APP}.stat-${RANDOM}.log"; (umask 077 && touch "${statFile}" &> /dev/null) || log_fail
 statDir="/tmp/${APP}.stat-${RANDOM}"; (umask 077 && mkdir "${statDir}" &> /dev/null) || log_fail
+avatarDir="/tmp/${APP}.avatar-${RANDOM}"; (umask 077 && mkdir "${avatarDir}" &> /dev/null) || log_fail
 urlFile="/tmp/${APP}.url-${RANDOM}.log"; (umask 077 && touch "${urlFile}" &> /dev/null) || log_fail
 htmlFile="/tmp/${APP}.log-${RANDOM}.html"; (umask 077 && touch "${htmlFile}" &> /dev/null) || log_fail
 htmlEmail="/tmp/${APP}.email-${RANDOM}.html"; (umask 077 && touch "${htmlEmail}" &> /dev/null) || log_fail

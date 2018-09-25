@@ -21,10 +21,10 @@ function get_avatars() {
     if [[ "${SCPPOST}" != "TRUE" ]]; then 
       IMGFILE="${LOCALHOSTPATH}/${APP}/avatar/$AUTHORNAME.png"
     else
-      if [[ ! -d "/tmp/avatar" ]]; then
-        umask 077 && mkdir /tmp/avatar &> /dev/null
-      fi
-      IMGFILE="/tmp/avatar/${AUTHORNAME}.png"
+      #if [[ ! -d "/tmp/avatar" ]]; then
+      #  umask 077 && mkdir /tmp/avatar &> /dev/null
+      #fi
+      IMGFILE="${avatarDir}/${AUTHORNAME}.png"
     fi
     curl -fso "${IMGFILE}" "${GRAVATAR}"
   done  
