@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.7.2] - 09-25-2018
 ### Added
 - Project dashboards have been redesigned to include more analytics charts and information
 - Digest emails can now include a chart showing the week's analytics
@@ -230,7 +230,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Old monolithic script rewritten
 
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.7.1...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.7.2...HEAD
+[3.7.2]: https://github.com/EMRL/deploy/compare/v3.7.1...v3.7.2
 [3.7.1]: https://github.com/EMRL/deploy/compare/v3.7...v3.7.1
 [3.7]: https://github.com/EMRL/deploy/compare/v3.6.7...v3.7
 [3.6.7]: https://github.com/EMRL/deploy/compare/v3.6.6...v3.6.7
