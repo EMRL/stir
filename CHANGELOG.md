@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Changed
+- Project deployment can be disabled by adding a file called `.donotdeploy` in the project's root directory
+
 ## [3.7.2] - 09-25-2018
 ### Added
 - Project dashboards have been redesigned to include more analytics charts and information
