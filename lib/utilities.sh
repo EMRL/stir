@@ -91,7 +91,7 @@ function go() {
   fi
 
   # Is this project locked?
-  if [[ "${DONOTDEPLOY}" == "TRUE" ]]; then
+  if [[ "${DONOTDEPLOY}" == "TRUE" ]] || [[ -f "${WORKPATH}/${APP}/.donotdeploy" ]]; then
     warning "This project is currently locked, and can't be deployed."; quickExit
   fi
 
