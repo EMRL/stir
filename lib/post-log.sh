@@ -97,13 +97,13 @@ function postLog() {
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/stats"
         eval "${SCPCMD} -r" "${statDir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/stats/"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/avatar"
-        eval "${SCPCMD} -r" "/tmp/avatar/" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}"
+        eval "${SCPCMD} -r" "${avatarDir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/avatar/"
         # Clean up your mess
         #if [[ -d "${statDir}" ]]; then
         #  rm -R "${statDir}"
         #fi
-        if [[ -d "/tmp/avatar" ]]; then
-          rm -R "/tmp/avatar"
+        if [[ -d "${avatarDir}" ]]; then
+          rm -R "${avatarDir}"
         fi
       fi
 
