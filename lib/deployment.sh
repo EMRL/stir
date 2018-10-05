@@ -7,6 +7,10 @@
 ###############################################################################
 trace "Loading deployment functions"   
 
+# Initializa needed variables
+read -r start_deploy <<< ""
+echo "${start_deploy}" > /dev/null
+
 # Housekeeping tasks to run before final deployment
 function preDeploy() {
   # If there are changes waiting in the repo, stop and ask for user input
@@ -75,6 +79,7 @@ function pkgDeploy() {
 
       # If we don't require approval to push to live, keep going
       if [[ "${FORCE}" == "1" ]] || yesno --default yes "Deploy to live server? [Y/n] "; then
+        start_deploy="1"
 
         # Test deployment command before running
         if [[ "${DEPLOY}" != "SCP" ]]; then
@@ -100,11 +105,10 @@ function pkgDeploy() {
             fi
           else
             if [[ "${DEPLOY}" == "SCP" ]]; then
-              deploy_scp &>> "${logFile}"
+              deploy_scp &>> "${logFile}"; error_check
             else
-              eval "${DEPLOY}" &>> "${logFile}"
+              eval "${DEPLOY}" &>> "${logFile}"; error_check
             fi
-            error_check
           fi
         fi
 
@@ -147,10 +151,7 @@ function postDeploy() {
     if [[ -z $(git status -uno --porcelain) ]]; then
       # Run integration hooks
       postCommit  
-      # This needs a check.
-      if [[ -n "${PRODURL}" ]]; then
-        info "Deployed to ${PRODURL}"
-      fi
+      deploy_msg
     else
       warning "Deployment succeeded, but something unexpected happened."
       if yesno --default yes "View status? [Y/n] "; then
@@ -167,8 +168,14 @@ function postDeploy() {
       if [[ -z "${PRODURL}" ]]; then
         warning "No production URL configured, but deployment command ran successfully."
       else
-        info "Deployed to ${PRODURL}"
+        deploy_msg
       fi
     fi
+  fi
+}
+
+function deploy_msg() {
+  if [[ -n "${PRODURL}" ]] && [[ "${start_deploy}" == "1" ]]; then
+    info "Deployed to ${PRODURL}"
   fi
 }
