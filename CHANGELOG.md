@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - ACF Pro update files must now pass an integrity check before proceeding with plugin upgrade
 ### Changed
 - Project deployment can be disabled by adding a file called `.donotdeploy` in the project's root directory
+### Fixed
+- Fixed a bug that occasionally caused successful deployment to be incorrectly reported
 
 ## [3.7.2] - 09-25-2018
 ### Added
