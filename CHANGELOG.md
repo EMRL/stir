@@ -4,9 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Wordpress projects can now be managed using either `composer` or `wp-cli` (or both) transparently
 - ACF Pro update files must now pass an integrity check before proceeding with plugin upgrade
 ### Changed
-- Project deployment can be disabled by adding a file called `.donotdeploy` in the project's root directory
+- Project deployment can be disabled by adding a file called `.donotdeploy` in the project's root directory (This is the equivalent of setting `DONOTDEPLOY="TRUE"` in `.deploy.sh`)
 ### Fixed
 - Fixed a bug that occasionally caused successful deployment to be incorrectly reported
 
