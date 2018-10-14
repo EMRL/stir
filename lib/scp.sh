@@ -20,9 +20,16 @@ function deploy_scp() {
       SCP_DEPLOY_PORT="22"
     fi
 
-    # Checkout production branch - note this function currently requires the
-    # --merge flag, this will need to be changed
-    gitChkProd
+    # Checkout production branch
+
+    if [[ -n "${PRODUCTION}" ]]; then
+      # Remove this requirement at some point
+      MERGE="1"
+      gitChkProd
+    else
+      error "Production branch must be defined"
+      return
+    fi
 
     # Todo: Add proper checks/fallbacks here
     TMP=$(<$SCP_DEPLOY_PASS)

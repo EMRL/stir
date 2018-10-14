@@ -51,11 +51,23 @@ function deploy_check() {
     elif [[ -f "${WORKPATH}/${APP}/.deploy.yml" ]]; then
       DEPLOYTEST="bundle exec mina --simulate deploy -f Minafile"
       grep -n -w "user:" "${WORKPATH}/${APP}"/.deploy.yml > "${trshFile}"
-      MINAUSER=$(awk -F\' '{print $2,$4}' ${trshFile})
+      
+      if grep -q "'" "${trshFile}"; then
+        MINAUSER=$(awk -F\' '{print $2,$4}' ${trshFile}) # Single quote method
+      else
+        MINAUSER=$(awk 'NF>1{print $NF}' ${trshFile})
+      fi
+
       echo -n "${MINAUSER}" > "${statFile}"
       echo -n "@" >> ${statFile}
       grep -n -w "domain:" "${WORKPATH}/${APP}"/.deploy.yml > "${trshFile}"
-      MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trshFile})
+
+      if grep -q "'" "${trshFile}"; then
+        MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trshFile}) # Single quote method
+      else
+        MINADOMAIN=$(awk 'NF>1{print $NF}' ${trshFile})
+      fi
+
       echo -n "${MINADOMAIN}" >> "${statFile}"
       SSHTARGET=$(sed -r 's/\s+//g' ${statFile})  
       # SSH check

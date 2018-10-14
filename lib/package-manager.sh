@@ -8,8 +8,8 @@
 trace "Loading build management"
 
 # Initialize variables
-read -r deploy_config SKIP_BUILD <<< ""
-echo "${deploy_config} ${SKIP_BUILD}" > /dev/null
+read -r deploy_config SKIP_BUILD npm_json <<< ""
+echo "${deploy_config} ${SKIP_BUILD} ${npm_json}" > /dev/null
 
 function pkgMgr() {
   if [[ "${FORCE}" != "1" ]] || [[ "${BUILD}" == "1" ]]; then
@@ -36,32 +36,8 @@ function pkgMgr() {
         sleep 1
 
         # node.js check
-        if [[ -f "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/${APP}/package.json" ]]; then
-          trace "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/${APP}/package.json found."
+        npm_build
 
-          check_build_method
-          if [[ "${SKIP_BUILD}" == "1" ]]; then
-            return
-          fi
-          
-          notice "Found npm configuration!"
-          if [[ "${BUILD}" = "1" ]] || yesno --default no "Build assets? [y/N] "; then
-            cd "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/${APP}" || errorCheck
-
-            if [[ "${VERBOSE}" == "TRUE" ]]; then
-              npm run build | tee --append "${trshFile}"               
-            else
-              npm run build &>> "${trshFile}" &
-              spinner $!   
-              info "Packages successfully compiled."
-            fi
-          else
-            info "Skipping Node Package Manager..."
-          fi
-        else
-          # info "No package management needed."
-          trace "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/$APP/package.json not found, skipping."
-        fi
       fi
     fi
   fi
@@ -76,5 +52,43 @@ function check_build_method() {
     if [[ "${deploy_config}" =~ "npm run build" ]] && [[ "${BUILD}" != "1" ]]; then
         SKIP_BUILD="1"
     fi
+  fi
+}
+
+function npm_build() {
+  if [[ -f "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/site/package.json" ]]; then
+    trace "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/site/package.json found."
+    npm_json="${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/site"
+  elif [[ -f "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/${APP}/package.json" ]]; then
+    trace "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/${APP}/package.json found."
+    npm_json="${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/${APP}"
+  elif [[ -f "${WORKPATH}/${APP}/package.json" ]]; then
+    trace "${WORKPATH}/${APP}/package.json found."
+    npm_json="${WORKPATH}/${APP}"
+  fi
+
+  if [[ -z "${npm_json}" ]]; then 
+    trace "package.json not found, skipping."
+    return
+  fi
+
+  check_build_method
+
+  if [[ "${SKIP_BUILD}" == "1" ]]; then
+    return
+  fi
+   
+  notice "Found npm configuration!"
+  if [[ "${BUILD}" = "1" ]] || yesno --default no "Build assets? [y/N] "; then
+    cd "${npm_json}" || errorCheck
+    if [[ "${VERBOSE}" == "TRUE" ]]; then
+      npm run build | tee --append "${trshFile}"               
+    else
+      npm run build &>> "${trshFile}" &
+      spinner $!   
+      info "Packages successfully compiled."
+    fi
+  else
+    info "Skipping Node Package Manager..."
   fi
 }

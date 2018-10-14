@@ -3,7 +3,7 @@
 [![release](https://img.shields.io/badge/release-v3.7.2-blue.svg?style=flat)](https://github.com/EMRL/deploy/releases/latest)
 [![Build Status](https://travis-ci.org/EMRL/deploy.svg?branch=master)](https://travis-ci.org/EMRL/deploy)
 
-`deploy` is designed to speed up, automate, and integrate project deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
+`deploy` is designed to speed up, automate, and integrate project commits, management, and deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
 
 [Changelog](https://github.com/EMRL/deploy/blob/master/CHANGELOG.md)
 
@@ -59,7 +59,7 @@ Other Options:
 
 ## How It Works
 
-Basically, this thing consolidates a boatload of commands into a single command that simplifies web app deployment from a development or staging environment to a production server. 
+`deploy` consolidates a boatload of functions into a single command that simplifies web app deployment from a development or staging environment to a production server. 
 
 `deploy` requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
 

@@ -39,7 +39,21 @@ function wpPlugins() {
       acf_update
     fi
 
-    # Let's get to work
+    # First, check for for updates via composer
+    if [[ -f "${WORKPATH}/${APP}/composer.json" ]]; then
+      trace "Found composer.json, updating"
+      cd "${WORKPATH}"/"${APP}"; \
+      if [[ "${QUIET}" != "1" ]]; then
+        # Come back and get this path properly
+        /usr/local/bin/composer update &>> "${logFile}" &
+        spinner $!
+      else
+        /usr/local/bin/composer update &>> "${logFile}"
+      fi
+      cd "${WORKPATH}"/"${APP}${WPROOT}${WPAPP}"; \
+    fi
+
+    # Now, run the rest of the needed updates via wp-cli
     if [[ "${QUIET}" != "1" ]]; then
       "${WPCLI}"/wp plugin update --all --no-color &>> "${logFile}" &
       spinner $!
