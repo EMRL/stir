@@ -12,6 +12,12 @@ read -r CURMTH CURYR PRVMTH PRVYR LASTDY <<< ""
 echo "${CURMTH} ${CURYR} ${PRVMTH} ${PRVYR} ${LASTDY}" > /dev/null
 
 function create_report() {
+
+  # Make sure we've got cal, or don't bother
+  hash cal 2>/dev/null || {
+    console "Creating reports requires the cal utility whichh cannot be found."; quietExit
+  }
+
   message_state="REPORT"
   htmlDir
 
