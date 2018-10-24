@@ -7,19 +7,23 @@
 ###############################################################################
 
 # Initialize variables
-read -r value <<< ""
-echo "${value}" > /dev/null
+read -r value remote_origin config_file <<< ""
+echo "${value} ${remote_origin} ${config_file}" > /dev/null
 
 function configure_project() {
   empty_line
   arg="${PROJNAME}"; read -rp "Project name:" -e -i "${arg}" value; set_value "${value}"
   arg="${PROJCLIENT}"; read -rp "Client name:" -e -i "${arg}" value; set_value "${value}"
+  remote_origin="$(git ls-remote --get-url)"
+  REPOHOST=$(echo ${remote_origin%/*})
+  arg="${REPOHOST}"; read -rp "Repo root URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
   arg="${DEVURL}"; read -rp "Staging URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
   arg="${PRODURL}"; read -rp "Production URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
 }
 
 function configure_user() {
   empty_line
+  config_file="$HOME/.deployrc"
   #target_file="/tmp/.deployrc"
   #cp "${deployPath}"/.deployrc "${target_file}"
   arg="CLEARSCREEN"
@@ -52,12 +56,11 @@ function configure_global() {
 function set_value() {
   value="$1"
   sed -i -e "s^{{${arg}}}^${value}^g" \
-    -e "s^# ${arg}^${arg}^g" \
-    ~/.deployrc      
+    -e "s^# ${arg}^${arg}^g" "${config_file}"      
 }
 
 function unset_value() {
-  sed -i -e "s^{{${arg}}}^FALSE^g" ~/.deployrc      
+  sed -i -e "s^{{${arg}}}^FALSE^g" "${config_file}"      
 }
 
 function clear_user() {
