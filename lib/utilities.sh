@@ -25,7 +25,7 @@ function go() {
   scan_check
   check_backup
 
-  console "deploy ${VERSION}"
+  console "stir ${VERSION}"
 
   # Build only
   if [[ "${BUILD}" == "1" ]]; then
