@@ -22,7 +22,7 @@ function slackPost () {
   fi
 
   # Setup the payload w/ the baseline language
-  slack_message="*${SLACKUSER}* deployed updates to ${APP}"
+  slack_message="*${SLACKUSER}* pushed updates to ${APP}"
 
   # Is this a simple publish of existing code to live?
   if [[ "${PUBLISH}" == "1" ]]; then

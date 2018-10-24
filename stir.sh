@@ -51,33 +51,42 @@ function ctrl_c() {
   fi
 }
 
-# Initialize variables 
+# Initialize variables
+# Loop
+function init_loop {
+  for i in "${var[@]}" ; do
+    read -r "${i}" <<< ""
+    echo "${i}" > /dev/null
+  done
+}
+
 # Startup switches
-read -r APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
-  SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
-  DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
-  SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
-  CHECK_BACKUP <<< ""
-echo "${APP} ${UPGRADE} ${SKIPUPDATE} ${CURRENT} ${VERBOSE} ${QUIET} ${STRICT}  
-  ${DEBUG} ${FORCE} ${SLACKTEST} ${FUNCTIONLIST} ${VARIABLELIST}
-  ${AUTOMATE} ${EMAILTEST} ${APPROVE} ${DENY} ${PUBLISH} ${DIGEST}
-  ${ANALYTICS} ${ANALYTICSTEST} ${PROJSTATS} ${UNLOCK} ${SSHTEST} ${TIME} 
-  ${UPDATEONLY} ${POSTTEST} ${REPORT} ${REPAIR} ${CREATE_INVOICE} 
-  ${SCAN} ${CHECK_BACKUP}" > /dev/null
+function init_startup() {
+  var=(APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
+    SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
+    DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
+    SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
+    CHECK_BACKUP)
+  init_loop
+}
 
 # Temp files
-read -r logFile wpFile coreFile postFile trshFile scanFile statFile \
-  urlFile <<< ""
-echo "${logFile} ${wpFile} ${coreFile} ${postFile} ${trshFile} ${statFile}
-  ${scanFile} ${urlFile}" > /dev/null
+function init_temp() {
+  var=(logFile wpFile coreFile postFile trshFile scanFile statFile \
+    urlFile)
+  init_loop
+}
+
 # Console Colors
-read -r black red green yellow blue magenta cyan white endColor bold \
-  underline reset purple tan <<< ""
-echo "${black} ${red} ${green} ${yellow} ${blue} ${magenta} ${cyan} ${white}
-  ${endColor} ${bold} ${underline} ${reset} ${purple} ${tan}" > /dev/null
+function init_color() {
+  var=(black red green yellow blue magenta cyan white endColor bold \
+  underline reset purple tan)
+  init_loop
+}
 
 # Constants and environment variables
-read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
+function init_env() {
+  var=(CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   EMAILHTML NOPHP FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP TO \
   FROM SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT FROMDOMAIN FROMUSER \
   POSTEMAILHEAD POSTEMAILTAIL POSTTOSLACK SLACKURL SLACKERROR POSTURL NOKEY \
@@ -90,26 +99,13 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   CLIENTSECRET REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN REFRESHTOKEN \
   PROFILEID ALLOWROOT SHORTEMAIL INCOGNITO REPORTURL CLIENTCONTACT \
   INCLUDEHOSTING GLOBAL_VERSION USER_VERSION PROJECT_VERSION TERSE \
-  NOTIFYCLIENT <<< ""
-echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
-  ${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
-  ${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${FROM} ${SUBJECT} ${EMAILERROR} 
-  ${EMAILSUCCESS} ${EMAILQUIT} ${FROMDOMAIN} ${FROMUSER} ${POSTEMAILHEAD} 
-  ${POSTEMAILTAIL} ${POSTTOSLACK} ${SLACKURL} ${SLACKERROR} ${POSTURL} ${NOKEY} 
-  ${PROJNAME} ${PROJCLIENT} ${DEVURL} ${PRODURL} ${REPO} ${MASTER} ${PRODUCTION} 
-  ${COMMITMSG} ${DEPLOY} ${DONOTDEPLOY} ${TASK} ${CHECKBRANCH} ${ACTIVECHECK} 
-  ${CHECKTIME} ${GARBAGE} ${WFCHECK} ${ACFKEY} ${WFOFF} ${REMOTELOG} 
-  ${REMOTETEMPLATE} ${LOCALHOSTPOST} ${LOCALHOSTPATH} ${DIGESTEMAIL} 
-  ${DIGESTSLACK} ${DIGESTURL} ${CLIENTLOGO} ${REMOTEURL} ${SCPPOST} ${SCPUSER}
-  ${SCPHOST} ${SCPHOSTPATH} ${SCPPORT} ${SCPPASS} ${SCPCMD} ${SSHCMD} ${LOGMSG}
-  ${EXPIRELOGS} ${SERVERCHECK} ${STASH} ${MAILPATH} ${REQUIREAPPROVAL} 
-  ${ADDTIME} ${TASKUSER} ${SCPPORT} ${CLIENTID} ${CLIENTSECRET} ${REDIRECTURI}
-  ${AUTHORIZATIONCODE} ${ACCESSTOKEN} ${REFRESHTOKEN} ${PROFILEID} ${ALLOWROOT} 
-  ${SHORTEMAIL} ${INCOGNITO} ${REPORTURL} ${CLIENTCONTACT} ${INCLUDEHOSTING} 
-  ${GLOBAL_VERSION} ${USER_VERSION} ${PROJECT_VERSION} ${TERSE} 
-  ${NOTIFYCLIENT}" > /dev/null
+  NOTIFYCLIENT FIXINDEX HTMLTEMPLATE)
+  init_loop
+}
+
 # Internal variables
-read -r var optstring options logFile wpFile coreFile postFile trshFile statFile \
+function init_internal() {
+  var=(optstring options logFile wpFile coreFile postFile trshFile statFile \
   urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail deployPath \
   etcLocation libLocation POSTEMAIL current_branch error_msg notes \
   UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC USERRC message_state \
@@ -120,22 +116,17 @@ read -r var optstring options logFile wpFile coreFile postFile trshFile statFile
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE  LOGSUFFIX \
   DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile \
   TMP MONITORURL MONITORUSER MONITORPASS SERVERID \
-  MONITORHOURS LATENCY UPTIME MONITORTEST MONITORAPI <<< ""
-echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile} 
-  ${trshFile} ${statFile} ${urlFile} ${htmlFile} ${htmlSendmail} ${htmlEmail} 
-  ${clientEmail} ${textSendmail} ${deployPath} ${etcLocation} ${libLocation} 
-  ${POSTEMAIL} ${current_branch} ${error_msg} ${notes} ${UPDCORE} 
-  ${TASKLOG} ${PCA} ${PCB} ${PCC} ${PCD} ${PLUGINS} ${slack_icon} ${APPRC} ${USERRC} 
-  ${message_state} ${COMMITURL} ${COMMITHASH} ${UPD1} ${UPD2} ${UPDATE} ${gitLock} 
-  ${AUTOMERGE} ${MERGE} ${EXITCODE} ${currentStash} ${deploy_cmd} ${deps} 
-  ${start_branch} ${postSendmail} ${SLACKUSER} ${NOCHECK} ${VIEWPORT} 
-  ${VIEWPORTPRE} ${LOGTITLE} ${LOGURL} ${TIMESTAMP} ${STARTUP} ${WPROOT} ${WPAPP} 
-  ${WPSYSTEM} ${DONOTUPDATEWP} ${gitHistory} ${digestSendmail} ${MINAUSER} 
-  ${MINADOMAIN} ${SSHTARGET} ${SSHSTATUS} ${REMOTEFILE} ${LOGSUFFIX} 
-  ${DISABLESSHCHECK} ${URL} ${CODE} ${DEPLOYPID} ${DEPLOYTEST} ${payload} 
-  ${reportFile} ${TMP} ${MONITORURL} ${MONITORUSER} ${MONITORPASS} 
-  ${SERVERID} ${MONITORHOURS} ${LATENCY} ${UPTIME} ${MONITORTEST} 
-  ${MONITORAPI}" > /dev/null
+  MONITORHOURS LATENCY UPTIME MONITORTEST MONITORAPI)
+  init_loop
+}
+
+# Go!
+init_startup
+init_temp
+init_color
+init_env
+init_internal
+
 
 # Display command options
 function flags() {
