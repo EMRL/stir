@@ -11,7 +11,7 @@ trace "Loading activity checking"
 read -r active_files <<< ""
 echo "${active_files}" > /dev/null
 
-function active_check() { 
+function check_active() { 
   if [[ "${FORCE}" == "1" ]] && [[ "${UPGRADE}" == "1" ]] && [[ "${QUIET}" == "1" ]] && [[ "${ACTIVECHECK}" = "TRUE" ]]; then
     trace "Checking for active files"
     active_files=$(find "${WORKPATH}/${APP}" -mmin -"${CHECKTIME}" ! -path "${WORKPATH}/${APP}/public/app/wflogs" ! -path "${WORKPATH}/${APP}/.git/*" ! -path "${WORKPATH}/${APP}/.git")

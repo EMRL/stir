@@ -78,3 +78,21 @@ function wpPlugins() {
     info "Skipping plugin updates..."
   fi 
 }
+
+###############################################################################
+# add_plugin()
+#   Adds plugins to a Wordpress project, using either composer or wp-cli 
+#   depending on project setup 
+#
+# Arguments:
+#   [plugin]    Name of the plugin. Will only work if plugin is tracked in 
+#               the Wordpress plugin archive
+############################################################################### 
+function add_plugin() {
+  # User will be doing something like `deploy --add-plugin wp-job-manager` from 
+  # the shell
+  # If composer:
+  composer require wpackagist-plugin/wp-job-manager:*
+  # If no composer:
+  wp plugin install wp-job-manager
+}
