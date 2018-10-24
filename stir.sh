@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 #
-# deploy.sh
+# stir.sh
 #
 ###############################################################################
-# A shell script designed to speed up and automate deployment of (primarily) 
-# Wordpress websites, while integrating with third-party communication tools.
+# A shell script designed to speed up and automate management and deployment of
+# (primarily) Wordpress websites, while integrating with third-party 
+# communication tools.
 #
-# https://github.com/EMRL/deploy
+# https://github.com/EMRL/stir
 ###############################################################################
 
 IFS=$'\n\t'
@@ -88,7 +89,8 @@ read -r CLEARSCREEN WORKPATH CONFIGDIR REPOHOST WPCLI SMARTCOMMIT GITSTATS \
   STASH MAILPATH REQUIREAPPROVAL ADDTIME SCPPORT TASKUSER CLIENTID \
   CLIENTSECRET REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN REFRESHTOKEN \
   PROFILEID ALLOWROOT SHORTEMAIL INCOGNITO REPORTURL CLIENTCONTACT \
-  INCLUDEHOSTING GLOBAL_VERSION USER_VERSION PROJECT_VERSION TERSE <<< ""
+  INCLUDEHOSTING GLOBAL_VERSION USER_VERSION PROJECT_VERSION TERSE \
+  NOTIFYCLIENT <<< ""
 echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI} 
   ${SMARTCOMMIT} ${GITSTATS} ${EMAILHTML} ${NOPHP} ${FIXPERMISSIONS} ${DEVUSER} 
   ${DEVGROUP} ${APACHEUSER} ${APACHEGROUP} ${TO} ${FROM} ${SUBJECT} ${EMAILERROR} 
@@ -104,7 +106,8 @@ echo "${CLEARSCREEN} ${WORKPATH} ${CONFIGDIR} ${REPOHOST} ${WPCLI}
   ${ADDTIME} ${TASKUSER} ${SCPPORT} ${CLIENTID} ${CLIENTSECRET} ${REDIRECTURI}
   ${AUTHORIZATIONCODE} ${ACCESSTOKEN} ${REFRESHTOKEN} ${PROFILEID} ${ALLOWROOT} 
   ${SHORTEMAIL} ${INCOGNITO} ${REPORTURL} ${CLIENTCONTACT} ${INCLUDEHOSTING} 
-  ${GLOBAL_VERSION} ${USER_VERSION} ${PROJECT_VERSION} ${TERSE}" > /dev/null
+  ${GLOBAL_VERSION} ${USER_VERSION} ${PROJECT_VERSION} ${TERSE} 
+  ${NOTIFYCLIENT}" > /dev/null
 # Internal variables
 read -r var optstring options logFile wpFile coreFile postFile trshFile statFile \
   urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail deployPath \
@@ -136,7 +139,7 @@ echo "${var} ${optstring} ${options} ${logFile} ${wpFile} ${coreFile} ${postFile
 
 # Display command options
 function flags() {
-  echo -n "Usage: deploy [options] [target] ...
+  echo -n "Usage: stir [options] [target] ...
 
 Options:
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
@@ -153,7 +156,7 @@ Options:
   -v, --version          Output version information and exit
 
 Other Options:
-  --automate             For unattended deployment via cron
+  --automate             For unattended execution via cron
   --approve              Approve and deploy queued code changes
   --deny                 Deny queued code changes
   --build                Build project assets
@@ -176,7 +179,7 @@ Other Options:
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables
 
-More information at https://github.com/EMRL/deploy
+More information at https://github.com/EMRL/stir
 "
 }
 
@@ -298,15 +301,15 @@ if [[ "${CURRENT}" != "1" ]] && [[ -z "${*}" ]]; then
 fi
 
 # Path of the script; I should flip this check to make it more useful
-if [ -d "/etc/deploy" ]; then
-  deployPath="/etc/deploy"
+if [ -d "/etc/stir" ]; then
+  deployPath="/etc/stir"
 else
   deployPath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 fi
 
 # Load external configuration & functions
 libLocation="${deployPath}/lib/loader.sh"
-etcLocation="${deployPath}/deploy.conf"
+etcLocation="${deployPath}/stir.conf"
 
 # System wide configuration files
 if [[ -f "${etcLocation}" ]]; then
@@ -338,9 +341,9 @@ if [[ "${CURRENT}" != "1" ]]; then
 fi
 
 # Load per-user configuration, if it exists
-if [[ -r ~/.deployrc ]]; then
+if [[ -r ~/.stirrc ]]; then
   # shellcheck disable=1090
-  source ~/.deployrc; USERRC=1
+  source ~/.stirrc; USERRC=1
 fi
 
 # Load libraries, or die
@@ -367,7 +370,7 @@ coreFile="/tmp/${APP}.core-$RANDOM.log"; (umask 077 && touch "${coreFile}" &> /d
 
 # Start writing the logfile
 echo -e "Deployment logfile for ${APP^^} - $NOW\r" >> "${logFile}"
-echo -e "Launching deploy${STARTUP}\n" >> "${logFile}"
+echo -e "Launching stir${STARTUP}\n" >> "${logFile}"
 
 # More crappy tmp files
 postFile="/tmp/${APP}.wtf-${RANDOM}.log"; (umask 077 && touch "${postFile}" &> /dev/null) || log_fail
@@ -401,45 +404,44 @@ fi
 # Does a user configuration exit?
 if [[ "${USERRC}" == "1" ]]; then
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    trace "Loading user configuration from ~/.deployrc"
+    trace "Loading user configuration from ~/.stirrc"
   fi
 else
   trace "User configuration not found, creating"
-  cp "${deployPath}"/.deployrc ~/.deployrc
-  console "User configuration file missing, creating ~/.deployrc"
+  cp "${deployPath}"/.stirrc ~/.stirrc
+  console "User configuration file missing, creating ~/.stirrc"
   if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
-    # nano ~/.deployrc
     configure_user; sleep 1
     console "Loading user configuration."
     # shellcheck source=/dev/null
-    source ~/.deployrc
+    source ~/.stirrc
     # quickExit
   else
-    info "You can change configuration later by editing ~/.deployrc"
+    info "You can change configuration later by editing ~/.stirrc"
     clear_user
   fi
 fi
 
 # Load per-project configuration, if it exists
-if [[ -f "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh" ]]; then
+if [[ -n "${CONFIGDIR}" ]] && [[ -f "${WORKPATH}/${APP}/${CONFIGDIR}/stir.sh" ]]; then
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    trace "Loading project configuration from ${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
+    trace "Loading project configuration from ${WORKPATH}/${APP}/${CONFIGDIR}/stir.sh"
   fi
-  project_config="${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
+  project_config="${WORKPATH}/${APP}/${CONFIGDIR}/stir.sh"
   # Fallback to configuration file in the root directory if it exists
-elif [[ -f "${WORKPATH}/${APP}/.deploy.sh" ]]; then
+elif [[ -f "${WORKPATH}/${APP}/.stir.sh" ]]; then
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    trace "Loading project configuration from ${WORKPATH}/${APP}/.deploy.sh"
+    trace "Loading project configuration from ${WORKPATH}/${APP}/.stir.sh"
   fi
-  project_config="${WORKPATH}/${APP}/.deploy.sh"
+  project_config="${WORKPATH}/${APP}/.stir.sh"
   # Zero out the global configdir variable
   CONFIGDIR=""
-elif [[ -f "${WORKPATH}/${APP}/deploy.sh" ]]; then
+elif [[ -f "${WORKPATH}/${APP}/stir.sh" ]]; then
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    trace "Loading project configuration from ${WORKPATH}/${APP}/deploy.sh"
+    trace "Loading project configuration from ${WORKPATH}/${APP}/stir.sh"
   fi
   # shellcheck disable=1090
-  project_config="${WORKPATH}/${APP}/deploy.sh"
+  project_config="${WORKPATH}/${APP}/stir.sh"
   # Zero out the global configdir variable
   CONFIGDIR=""
 else
@@ -454,14 +456,13 @@ else
   # Make sure app directory is writable
   if [[ -w "${WORKPATH}/${APP}" ]]; then
     empty_line; info "Project configuration not found, creating."; sleep 2
-    cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/.deploy.sh"
-    APPRC="${WORKPATH}/${APP}/.deploy.sh"
+    cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/.stir.sh"
+    APPRC="${WORKPATH}/${APP}/.stir.sh"
     if [[ -x "$(command -v nano)" ]]; then
       if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
         nano "${APPRC}"
         clear; sleep 1
         $(basename ${APP}) && quietExit
-        # exec "/usr/local/bin/deploy ${STARTUP} ${APP}"
       fi
     fi
     info "You can change configuration later by editing ${APPRC}"
@@ -607,7 +608,7 @@ if [[ "${MERGE}" == "1" ]] && [[ -z "${PRODUCTION}" ]]; then
   quietExit
 fi
 
-# Execute the deploy process
+# Execute the main process
 main
 
 # All done

@@ -26,13 +26,13 @@ function env_check() {
     local_version="${VERSION//-*}"
     
     # Compare version numbers
-    local_version="${GLOBAL_VERSION}"; source "${deployPath}"/deploy-example.conf
+    local_version="${GLOBAL_VERSION}"; source "${deployPath}"/stir-global.conf
     [[ "${GLOBAL_VERSION}" != "${local_version}" ]] && update_global="1";
     
-    local_version="${USER_VERSION}"; source "${deployPath}"/.deployrc
+    local_version="${USER_VERSION}"; source "${deployPath}"/stir-user.rc
     [[ "${USER_VERSION}" != "${local_version}" ]] && update_user="1";
     
-    local_version="${PROJECT_VERSION}"; source "${deployPath}"/deploy.sh 
+    local_version="${PROJECT_VERSION}"; source "${deployPath}"/stir-project.sh 
     [[ "${PROJECT_VERSION}" != "${local_version}" ]] && update_project="1"
 
     if [[ "${update_global}" == "1" ]] || [[ "${update_user}" == "1" ]] || [[ "${update_project}" == "1" ]]; then
@@ -40,8 +40,8 @@ function env_check() {
     fi
 
     # Reload environment variables, from global > user > project
-    source "${deployPath}"/deploy.conf
-    source ~/.deployrc
+    source "${deployPath}"/stir.conf
+    source ~/.stirrc
     source "${project_config}"
 
     # Restore workpath value
@@ -69,7 +69,7 @@ function update_config() {
 }
 
 function update_global() {
-  info "Updating ${deployPath}/deploy.conf..."
+  info "Updating ${deployPath}/stir.conf..."
   env_settings=(CLEARSCREEN WORKPATH CONFIGDIR SERVERCHECK ACTIVECHECK \
     CHECKTIME REPOHOST SMARTCOMMIT GITSTATS STASH GARBAGE WPCLI WFCHECK \
     FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP FIXINDEX \
@@ -81,52 +81,52 @@ function update_global() {
 
   if [[ ! -w "${deployPath}" ]]; then
     info "Requesting sudo access..."
-    sudo cp "${deployPath}"/deploy.conf "${deployPath}"/deploy.conf.bak
+    sudo cp "${deployPath}"/stir.conf "${deployPath}"/stir.conf.bak
   else
-    cp "${deployPath}"/deploy.conf "${deployPath}"/deploy.conf.bak
+    cp "${deployPath}"/stir.conf "${deployPath}"/stir.conf.bak
   fi
-  info "Global configuration backup created at ${deployPath}/deploy.conf.bak"
+  info "Global configuration backup created at ${deployPath}/stir.conf.bak"
   
-  cp "${deployPath}"/deploy-example.conf "${trshFile}"
+  cp "${deployPath}"/stir-global.conf "${trshFile}"
 
   # Reload global values
-  source "${deployPath}"/deploy.conf
+  source "${deployPath}"/stir.conf
   
   # Loops through the variables
   for i in "${env_settings[@]}" ; do
-    current_setting=$(grep "^${i}=" "${deployPath}"/deploy.conf.bak)
+    current_setting=$(grep "^${i}=" "${deployPath}"/stir.conf.bak)
     insert_values
   done
 
   # Install new files
   env_cleanup
   if [[ ! -w "${deployPath}" ]]; then
-    sudo cp "${trshFile}" "${deployPath}"/deploy.conf
+    sudo cp "${trshFile}" "${deployPath}"/stir.conf
   else
-    cp "${trshFile}" "${deployPath}"/deploy.conf
+    cp "${trshFile}" "${deployPath}"/stir.conf
   fi
 }
 
 function update_user() {
-  info "Updating ~/.deployrc..."
+  info "Updating ~/.stirrc..."
   env_settings=(CLEARSCREEN VERBOSE GITSTATS)
   
-  info "User configuration backup created at ~/.deployrc.bak"
-  cp ~/.deployrc ~/.deployrc.bak
-  cp "${deployPath}"/.deployrc "${trshFile}"
+  info "User configuration backup created at ~/.stirrc.bak"
+  cp ~/.stirrc ~/.stirrc.bak
+  cp "${deployPath}"/.stirrc "${trshFile}"
 
   # Reload user values
-  source ~/.deployrc
+  source ~/.stirrc
 
   # Loops through the variables
   for i in "${env_settings[@]}" ; do
-    current_setting=$(grep "^${i}=" ~/.deployrc)
+    current_setting=$(grep "^${i}=" ~/.stirrc)
     insert_values
   done
 
   # Install new files
   env_cleanup
-  cp "${trshFile}" ~/.deployrc
+  cp "${trshFile}" ~/.stirrc
 }
 
 function update_project() { 
@@ -147,7 +147,7 @@ function update_project() {
 
   info "Project configuration backup created at ${project_config}.bak"
   cp "${project_config}" "${project_config}.bak"
-  cp "${deployPath}"/deploy.sh "${trshFile}"
+  cp "${deployPath}"/stir.sh "${trshFile}"
   # Loops through the variables
   for i in "${env_settings[@]}" ; do
     current_setting=$(grep "^${i}=" "${project_config}")

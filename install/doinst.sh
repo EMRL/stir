@@ -3,9 +3,9 @@
 # doinst.sh
 #
 ###############################################################################
-# Installs and configures deploy 
+# Installation and configuration
 #
-# https://github.com/EMRL/deploy
+# https://github.com/EMRL/stir
 ###############################################################################
 
 # Set mode
@@ -72,7 +72,7 @@ function check_program() {
 function error_check() {
   EXITCODE=$?; 
   if [[ "${EXITCODE}" != "0" ]]; then 
-    echo "Error ${EXITCODE}: deploy not installed."
+    echo "Error ${EXITCODE}: stir not installed."
     exit "${EXITCODE}"
   fi
 }
@@ -128,30 +128,30 @@ fi
 
 # Start the install
 echo; sleep 1
-if [[ ! -d /etc/deploy ]] || [[ ! -d /etc/deploy/lib ]] || [[ ! -d /etc/deploy/crontab ]]; then
+if [[ ! -d /etc/stir ]] || [[ ! -d /etc/stir/lib ]] || [[ ! -d /etc/stir/crontab ]]; then
   echo "Creating directories"
-  if [[ ! -d /etc/deploy ]]; then
-    sudo mkdir /etc/deploy; error_check
+  if [[ ! -d /etc/stir ]]; then
+    sudo mkdir /etc/stir; error_check
   fi
 
-  if [[ ! -d /etc/deploy/lib ]]; then
-    sudo mkdir /etc/deploy/lib; error_check
+  if [[ ! -d /etc/stir/lib ]]; then
+    sudo mkdir /etc/stir/lib; error_check
   fi
 
-  if [[ ! -d /etc/deploy/lib/crontab ]]; then
-    sudo mkdir /etc/deploy/lib/crontab; error_check
+  if [[ ! -d /etc/stir/lib/crontab ]]; then
+    sudo mkdir /etc/stir/lib/crontab; error_check
   fi
 fi
 
 echo "Installing configuration files"
-sudo cp -R etc/* /etc/deploy; error_check
-sudo cp etc/.deployrc /etc/deploy; error_check
+sudo cp -R etc/* /etc/stir; error_check
+sudo cp etc/stir-user.rc /etc/stir; error_check
 
-if [[ ! -f /etc/deploy/deploy.conf ]]; then
-  cp /etc/deploy/deploy-example.conf /etc/deploy/deploy.conf; error_check
+if [[ ! -f /etc/stir/stir.conf ]]; then
+  cp /etc/stir/stir-global.conf /etc/stir/stir.conf; error_check
 fi
 
-cp -R lib/* /etc/deploy/lib || error_check
-cp deploy.sh /usr/local/bin/deploy || error_check
-sudo chmod 755 /usr/local/bin/deploy || error_check
-echo "Successfully installed, try typing 'deploy' for help."
+cp -R lib/* /etc/stir/lib || error_check
+cp stir.sh /usr/local/bin/stir || error_check
+sudo chmod 755 /usr/local/bin/stir || error_check
+echo "Successfully installed, try typing 'stir' for help."
