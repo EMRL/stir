@@ -5,7 +5,6 @@
 ###############################################################################
 # Handles exiting the program
 ###############################################################################
-trace "Loading exit states"
 
 # User-requested exit
 function userExit() {

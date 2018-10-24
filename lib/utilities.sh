@@ -5,7 +5,6 @@
 ###############################################################################
 # Handles various setup, logging, and option flags
 ###############################################################################
-trace "Loading utilities"
 
 # Initialize variables
 read -r integer_check <<< ""

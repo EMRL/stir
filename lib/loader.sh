@@ -27,8 +27,6 @@ fi
 #               Checking database... OK in the logs
 #   notime      Output trace with no timestamp, generally used after a 
 #               `trace status "blahblah"`  
-# Returns:  
-#   None
 ###############################################################################      
 function trace() {
   if [[ "${VERBOSE}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then

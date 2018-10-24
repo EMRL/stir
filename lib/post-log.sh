@@ -5,7 +5,6 @@
 ###############################################################################
 # Handles posting logs to localhost as well as remote hosts
 ###############################################################################
-trace "Loading post functions"
 
 # Initialize variables
 read -r SCPPORT <<< ""

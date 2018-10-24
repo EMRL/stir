@@ -5,7 +5,6 @@
 ###############################################################################
 # Locks deployment process
 ###############################################################################
-trace "Locking process"
 
 # Define lock file location
 LOCK_FILE="/tmp/$APP.lock"

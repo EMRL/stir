@@ -5,7 +5,6 @@
 ###############################################################################
 # Checks if project uses node.js or grunt, and builds assets if needed. 
 ###############################################################################
-trace "Loading build management"
 
 # Initialize variables
 read -r deploy_config SKIP_BUILD npm_json <<< ""

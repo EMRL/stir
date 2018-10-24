@@ -5,7 +5,6 @@
 ###############################################################################
 # Handles git related processes
 ###############################################################################
-trace "Loading git functions"
 
 # Initialize variables
 read -r FULLUSER <<< ""

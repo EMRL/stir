@@ -5,7 +5,6 @@
 ###############################################################################
 # Handles text colors and other screen output
 ############################################################################### 
-trace "Loading console styles"
 
 # Define color codes
 black='\E[30;47m'

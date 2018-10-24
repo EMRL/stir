@@ -5,7 +5,6 @@
 ###############################################################################
 # Tries to create "Smart Commit" messages based on parsing output from wp-cli
 ###############################################################################
-trace "Loading smart commit functions"
 
 # Constructing smart *cough* commit messages
 function smrtCommit() {

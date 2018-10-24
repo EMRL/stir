@@ -5,7 +5,6 @@
 ###############################################################################
 # Handles parsing and creating logs
 ###############################################################################
-trace "Loading digest handling"
 
 # Initializa needed variables
 read -r AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMGFILE DIGESTWRAP \

@@ -5,7 +5,6 @@
 ###############################################################################
 # Checks for recently active project files that may cause deployment issues
 ###############################################################################
-trace "Loading activity checking"
 
 # Initialize variables
 read -r active_files <<< ""

@@ -5,7 +5,6 @@
 ###############################################################################
 # Global, user, and project configuration
 ###############################################################################
-trace "Loading configuration"
 
 # Initialize variables
 read -r value <<< ""

@@ -5,7 +5,6 @@
 ###############################################################################
 # Handles various exit code checking
 ###############################################################################
-trace "Loading error checking"
 
 # Try to get exit/error code, with a hard stop on fail
 function error_check() {

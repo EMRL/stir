@@ -5,7 +5,6 @@
 ###############################################################################
 # Check project's variables for special characters that may cause issues
 ###############################################################################
-trace "Loading validation tests"
 
 function validate_conf() {
   array=( "${PROJNAME}" "${PROJCLIENT}" )

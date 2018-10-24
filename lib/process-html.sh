@@ -5,7 +5,6 @@
 ###############################################################################
 # Filters through html templates to inject our project's variables
 ###############################################################################
-trace "Loading html handling"
 
 # Initialize variables 
 read -r DEFAULTC PRIMARYC SECONDARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID \

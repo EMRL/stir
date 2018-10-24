@@ -10,7 +10,6 @@
 # 
 # https://developers.google.com/analytics/devguides/reporting/core/dimsmets for all the metrics
 ###############################################################################
-trace "Loading analytics functions"   
 
 # Initialize variables
 read -r SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \

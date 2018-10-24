@@ -5,7 +5,6 @@
 ###############################################################################
 # Handles parsing and creating logs
 ###############################################################################
-trace "Loading log handling"
 
 function makeLog() {
   # Clean up stuff that is most likely there

@@ -5,7 +5,6 @@
 ###############################################################################
 # Integration with Slack
 ###############################################################################
-trace "Loading Slack integration"
 
 function slackPost () {
   trace "${DIGESTSLACK}"

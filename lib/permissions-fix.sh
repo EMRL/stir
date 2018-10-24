@@ -5,7 +5,6 @@
 ###############################################################################
 # Repairs potential permission issues before deployment
 ###############################################################################
-trace "Loading permissions fixes"
 
 function permFix() {
   if [[ "${FIXPERMISSIONS}" == "TRUE" ]]; then

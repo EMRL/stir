@@ -5,7 +5,6 @@
 ###############################################################################
 # Checks for Wordpress upgrades, and executes upgrades if needed
 ###############################################################################
-trace "Loading Wordpress functions"
 
 function wpPkg() {
   # Make sure we are allowed to update

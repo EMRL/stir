@@ -5,7 +5,6 @@
 ###############################################################################
 # Handles integration with other services
 ###############################################################################
-trace "Loading integration"
 
 # Compile commit message with other stuff for integration
 function build_log() {
