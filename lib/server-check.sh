@@ -5,7 +5,6 @@
 ###############################################################################
 # Check to see if production environment is online and running web server
 ###############################################################################
-trace "Loading server checks"
 
 function server_check() {
   if [[ "${SERVERCHECK}" == "TRUE" ]]; then

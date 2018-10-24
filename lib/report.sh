@@ -5,7 +5,6 @@
 ###############################################################################
 # Handles parsing and creating monthly work reports
 ###############################################################################
-trace "Loading report handling"
 
 # Initialize variables
 read -r CURMTH CURYR PRVMTH PRVYR LASTDY <<< ""

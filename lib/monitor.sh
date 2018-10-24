@@ -6,7 +6,6 @@
 # Uses PHP Server Monitor and an add-on API to retrieve a production server's 
 # uptime and latency
 ###############################################################################
-trace "Loading server monitoring"
 
 function server_monitor() {
   # Don't bother unless all the needed variables are declared

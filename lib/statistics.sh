@@ -5,7 +5,6 @@
 ###############################################################################
 # Generate HTML statistics pages
 ###############################################################################
-trace "Loading statistics functions"
 
 # Initialize variables
 read -r DB_API_TOKEN DB_BACKUP_PATH LAST_BACKUP BACKUP_STATUS CODE_STATS \

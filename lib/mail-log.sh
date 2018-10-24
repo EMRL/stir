@@ -5,7 +5,6 @@
 ###############################################################################
 # Mail handling
 ###############################################################################
-trace "Loading mail handler"
 
 function mailLog() {
   # Only send email if a commit has been made, an approval is required, or there has been an error

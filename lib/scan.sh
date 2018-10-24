@@ -5,7 +5,6 @@
 ###############################################################################
 # Integrates with nikto to run malware and security scans 
 ###############################################################################
-trace "Loading malware scanning utilities"
 
 # Initialize variables
 read -r NIKTO NIKTO_CONFIG NIKTO_PROXY scan_html SCAN_RESULT SCAN_MSG \

@@ -5,7 +5,6 @@
 ###############################################################################
 # Handles console feedback components
 ###############################################################################
-trace "Loading interface"
 
 # Initialize variables 
 read -r pid delay spinstr temp <<< ""
