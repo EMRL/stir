@@ -12,8 +12,9 @@ echo "${value} ${remote_origin} ${config_file}" > /dev/null
 
 function configure_project() {
   empty_line
-  arg="${PROJNAME}"; read -rp "Project name:" -e -i "${arg}" value; set_value "${value}"
-  arg="${PROJCLIENT}"; read -rp "Client name:" -e -i "${arg}" value; set_value "${value}"
+  config_file="${APPRC}"
+  arg="${PROJNAME}"; read -rp "Project name:" -e -i "${arg} " value; set_value "${value}"
+  arg="${PROJCLIENT}"; read -rp "Client name:" -e -i "${arg} " value; set_value "${value}"
   remote_origin="$(git ls-remote --get-url)"
   REPOHOST=$(echo ${remote_origin%/*})
   arg="${REPOHOST}"; read -rp "Repo root URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"

@@ -86,7 +86,7 @@ function email_test() {
     echo "Subject: [TESTING] ${SUBJECT} - ${APP}"
     echo "Content-Type: text/html"
     echo
-    echo "This is a test HTML email from <a href=\"https://github.com/EMRL/deploy/\">deploy ${VERSION}</a>.<br />"
+    echo "This is a test HTML email from <a href=\"https://github.com/EMRL/stir/\">stir ${VERSION}</a>.<br />"
     echo "Current user is ${DEV}<br /><br />";
     echo
     echo "<strong>Project Information</strong><br />"
@@ -225,7 +225,7 @@ function email_test() {
     echo "Subject: [TESTING] ${SUBJECT} - ${APP}"
     echo "Content-Type: text/plain"
     echo
-    echo "This is a test TEXT email from deploy ${VERSION} (https://github.com/EMRL/deploy/)"
+    echo "This is a test TEXT email from stir ${VERSION} (https://github.com/EMRL/stir/)"
     echo "Current user is ${DEV}";
     echo
     echo "Project Information"
@@ -384,8 +384,8 @@ function email_test() {
       echo "Subject: [TESTING] ${SUBJECT} - ${APP}"
       echo "Content-Type: text/plain"
       echo
-      echo "This is a test email integration from deploy ${VERSION}"
-      echo "(https://github.com/EMRL/deploy/)"
+      echo "This is a test email integration from stir ${VERSION}"
+      echo "(https://github.com/EMRL/stir/)"
       echo
       [[ -n "${PROJNAME}" ]] && echo "Name: ${PROJNAME}"
       [[ -n "${PROJCLIENT}" ]] && echo "Client: ${PROJCLIENT}"

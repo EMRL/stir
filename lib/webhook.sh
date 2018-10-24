@@ -32,7 +32,7 @@ function postTest {
     warning "No webhook URL found."; empty_line
     clean_up; exit 1
   else
-    curl -X POST --data "payload={\"text\": \"Testing POST integration of ${APP} from deploy ${VERSION}\nhttps://github.com/EMRL/deploy\"}" "${POSTURL}"
+    curl -X POST --data "payload={\"text\": \"Testing POST integration of ${APP} from stir ${VERSION}\nhttps://github.com/EMRL/stir\"}" "${POSTURL}"
     empty_line
   fi
 }

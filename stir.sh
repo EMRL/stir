@@ -408,7 +408,7 @@ if [[ "${USERRC}" == "1" ]]; then
   fi
 else
   trace "User configuration not found, creating"
-  cp "${deployPath}"/.stirrc ~/.stirrc
+  cp "${deployPath}"/stir-user.rc ~/.stirrc
   console "User configuration file missing, creating ~/.stirrc"
   if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
     configure_user; sleep 1
@@ -423,25 +423,11 @@ else
 fi
 
 # Load per-project configuration, if it exists
-if [[ -n "${CONFIGDIR}" ]] && [[ -f "${WORKPATH}/${APP}/${CONFIGDIR}/stir.sh" ]]; then
-  if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    trace "Loading project configuration from ${WORKPATH}/${APP}/${CONFIGDIR}/stir.sh"
-  fi
-  project_config="${WORKPATH}/${APP}/${CONFIGDIR}/stir.sh"
-  # Fallback to configuration file in the root directory if it exists
-elif [[ -f "${WORKPATH}/${APP}/.stir.sh" ]]; then
+if [[ -f "${WORKPATH}/${APP}/.stir.sh" ]]; then
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
     trace "Loading project configuration from ${WORKPATH}/${APP}/.stir.sh"
   fi
   project_config="${WORKPATH}/${APP}/.stir.sh"
-  # Zero out the global configdir variable
-  CONFIGDIR=""
-elif [[ -f "${WORKPATH}/${APP}/stir.sh" ]]; then
-  if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    trace "Loading project configuration from ${WORKPATH}/${APP}/stir.sh"
-  fi
-  # shellcheck disable=1090
-  project_config="${WORKPATH}/${APP}/stir.sh"
   # Zero out the global configdir variable
   CONFIGDIR=""
 else
@@ -456,18 +442,17 @@ else
   # Make sure app directory is writable
   if [[ -w "${WORKPATH}/${APP}" ]]; then
     empty_line; info "Project configuration not found, creating."; sleep 2
-    cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/.stir.sh"
+    cp "${deployPath}"/stir-project.sh "${WORKPATH}/${APP}/.stir.sh"
     APPRC="${WORKPATH}/${APP}/.stir.sh"
     if [[ -x "$(command -v nano)" ]]; then
       if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
         nano "${APPRC}"
         clear; sleep 1
-        $(basename ${APP}) && quietExit
       fi
     fi
     info "You can change configuration later by editing ${APPRC}"
-    quietExit
   fi
+  source "${APPRC}"
 fi
 
 # Make sure variables are set up correctly
