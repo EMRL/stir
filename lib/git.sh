@@ -56,7 +56,7 @@ function gitStart() {
   fi
 
   # Check for active files
-  active_check
+  check_active
 
   # Try to clear out old git processes owned by this user, if they exist
   pkill -f git &>> /dev/null || true
