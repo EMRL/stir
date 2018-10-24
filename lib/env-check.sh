@@ -113,7 +113,7 @@ function update_user() {
   
   info "User configuration backup created at ~/.stirrc.bak"
   cp ~/.stirrc ~/.stirrc.bak
-  cp "${deployPath}"/.stirrc "${trshFile}"
+  cp "${deployPath}"/.stir-user.rc "${trshFile}"
 
   # Reload user values
   source ~/.stirrc
