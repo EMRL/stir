@@ -4,5 +4,6 @@
 /*.sublime-workspace
 .DS_Store
 .deploy.sh
+.stir.sh
 theme.conf
 *.bak

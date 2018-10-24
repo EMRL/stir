@@ -23,9 +23,7 @@ function configure_project() {
 
 function configure_user() {
   empty_line
-  config_file="$HOME/.deployrc"
-  #target_file="/tmp/.deployrc"
-  #cp "${deployPath}"/.deployrc "${target_file}"
+  config_file="$HOME/.stirrc"
   arg="CLEARSCREEN"
   if yesno --default yes "Clear screen on startup? [Y/n] "; then
     set_value TRUE
