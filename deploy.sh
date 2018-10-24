@@ -450,6 +450,23 @@ if [[ -n "${project_config}" ]]; then
   # shellcheck disable=1090 
   source "${project_config}"
   APPRC="1"
+else
+  # Make sure app directory is writable
+  if [[ -w "${WORKPATH}/${APP}" ]]; then
+    empty_line; info "Project configuration not found, creating."; sleep 2
+    cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/.deploy.sh"
+    APPRC="${WORKPATH}/${APP}/.deploy.sh"
+    if [[ -x "$(command -v nano)" ]]; then
+      if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
+        nano "${APPRC}"
+        clear; sleep 1
+        $(basename ${APP}) && quietExit
+        # exec "/usr/local/bin/deploy ${STARTUP} ${APP}"
+      fi
+    fi
+    info "You can change configuration later by editing ${APPRC}"
+    quietExit
+  fi
 fi
 
 # Make sure variables are set up correctly
