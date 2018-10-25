@@ -7,8 +7,8 @@
 ###############################################################################
 
 # Initialize variables
-read -r deploy_config SKIP_BUILD npm_json <<< ""
-echo "${deploy_config} ${SKIP_BUILD} ${npm_json}" > /dev/null
+var=(deploy_config SKIP_BUILD npm_json)
+init_loop
 
 function pkgMgr() {
   if [[ "${FORCE}" != "1" ]] || [[ "${BUILD}" == "1" ]]; then

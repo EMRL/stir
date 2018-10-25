@@ -7,12 +7,10 @@
 ###############################################################################
 
 # Initialize variables 
-read -r DEFAULTC PRIMARYC SECONDARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID \
+var=(DEFAULTC PRIMARYC SECONDARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID \
   COVER SCANC UPTIMEC LATENCYC LOGC LOGBC sed_commits sed_scan sed_backup \
-  process_var v i <<< ""
-echo "${DEFAULTC} ${PRIMARYC} ${SUCCESSC} ${INFOC} ${WARNINGC} ${DANGERC} 
-  ${SMOOCHID} ${COVER} ${SCANC} ${UPTIMEC} ${LATENCYC} ${sed_commits} 
-  ${sed_scan} ${sed_backup} ${process_var} ${v} ${i}" > /dev/null
+  process_var v i)
+init_loop
 
 function process_html() {
   # Clean out the stuff we don't need

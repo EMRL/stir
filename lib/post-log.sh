@@ -7,8 +7,8 @@
 ###############################################################################
 
 # Initialize variables
-read -r SCPPORT <<< ""
-echo "${SCPPORT}" > /dev/null
+var=(SCPPORT)
+init_loop
 
 # Remote log function; this really needs to be rewritten
 function postLog() {

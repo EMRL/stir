@@ -148,7 +148,7 @@ sudo cp -R etc/* /etc/stir; error_check
 sudo cp etc/stir-user.rc /etc/stir; error_check
 
 if [[ ! -f /etc/stir/stir.conf ]]; then
-  cp /etc/stir/stir-global.conf /etc/stir/stir.conf; error_check
+  cp /etc/stir/stir-global.conf /etc/stir/global.conf; error_check
 fi
 
 cp -R lib/* /etc/stir/lib || error_check

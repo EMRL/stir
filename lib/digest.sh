@@ -7,10 +7,9 @@
 ###############################################################################
 
 # Initializa needed variables
-read -r AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMGFILE DIGESTWRAP \
-  GREETING <<< ""
-echo "${AUTHOR} ${AUTHOREMAIL} ${AUTHORNAME} ${GRAVATAR} ${IMGFILE} 
-  ${DIGESTWRAP} ${GREETING}" > /dev/null
+var=(AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMGFILE DIGESTWRAP \
+  GREETING)
+init_loop
 
 function get_avatars() {
   for AUTHOR in $(git log --pretty=format:"%ae|%an" | sort | uniq); do

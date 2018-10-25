@@ -7,19 +7,13 @@
 ###############################################################################
 
 # Initialize variables
-read -r DB_API_TOKEN DB_BACKUP_PATH LAST_BACKUP BACKUP_STATUS CODE_STATS \
+var=(DB_API_TOKEN DB_BACKUP_PATH LAST_BACKUP BACKUP_STATUS CODE_STATS \
   BACKUP_BTN LATENCY_BTN UPTIME_BTN SCAN_BTN COMMITS_RECENT  \
   repo_charts ACTIVITY_NAV STATISTICS_NAV SCAN_NAV ENGAGEMENT_NAV \
   FIREWALL_NAV BACKUP_NAV SCAN_STATS FIREWALL_STATUS BACKUP_MSG \
   BACKUP_FILES TOTAL_COMMITS RSS_URL ga_hits ga_users ga_newUsers ga_sessions \
-  ga_organicSearches ga_pageviews <<< ""
-echo "${DB_API_TOKEN} ${DB_BACKUP_PATH} ${LAST_BACKUP} ${BACKUP_STATUS} 
-  ${CODE_STATS} ${BACKUP_BTN} ${LATENCY_BTN} ${UPTIME_BTN} ${SCAN_BTN}
-  ${COMMITS_RECENT} ${repo_charts} ${ACTIVITY_NAV} ${STATISTICS_NAV} 
-  ${SCAN_NAV} ${ENGAGEMENT_NAV} ${FIREWALL_NAV} ${BACKUP_NAV} 
-  ${FIREWALL_STATUS} ${BACKUP_MSG} ${BACKUP_FILES} ${TOTAL_COMMITS} 
-  ${RSS_URL} ${ga_hits} ${ga_users} ${ga_newUsers} ${ga_sessions} 
-  ${ga_organicSearches} ${ga_pageviews}" > /dev/null
+  ga_organicSearches ga_pageviews)
+init_loop
 
 function project_stats() {
   hash gitchart 2>/dev/null || {

@@ -7,8 +7,8 @@
 ###############################################################################
 
 # Initialize variables
-read -r active_files <<< ""
-echo "${active_files}" > /dev/null
+var=(active_files)
+init_loop
 
 function check_active() { 
   if [[ "${FORCE}" == "1" ]] && [[ "${UPGRADE}" == "1" ]] && [[ "${QUIET}" == "1" ]] && [[ "${ACTIVECHECK}" = "TRUE" ]]; then

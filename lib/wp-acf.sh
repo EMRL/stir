@@ -7,8 +7,8 @@
 ###############################################################################
 
 # Declare needed variables
-read -r ACFFILE <<< ""
-echo "${ACFFILE}" > /dev/null
+var=(ACFFILE)
+init_loop
 
 function acf_update() {
   if grep -q "advanced-custom-fields-pro" "${wpFile}"; then

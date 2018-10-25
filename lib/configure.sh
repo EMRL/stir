@@ -7,8 +7,8 @@
 ###############################################################################
 
 # Initialize variables
-read -r value remote_origin config_file <<< ""
-echo "${value} ${remote_origin} ${config_file}" > /dev/null
+var=(value remote_origin config_file)
+init_loop
 
 function configure_project() {
   empty_line

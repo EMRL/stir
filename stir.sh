@@ -300,7 +300,7 @@ fi
 
 # Load external configuration & functions
 libLocation="${deployPath}/lib/loader.sh"
-etcLocation="${deployPath}/stir.conf"
+etcLocation="${deployPath}/global.conf"
 
 # System wide configuration files
 if [[ -f "${etcLocation}" ]]; then

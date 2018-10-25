@@ -7,10 +7,9 @@
 ###############################################################################
 
 # Initialize variables
-read -r STAGING_DEPLOY_PATH PRODUCTION_DEPLOY_HOST PRODUCTION_DEPLOY_PATH \
-  SCP_DEPLOY_USER SCP_DEPLOY_PASS <<< ""
-echo "${STAGING_DEPLOY_PATH} ${PRODUCTION_DEPLOY_HOST} ${PRODUCTION_DEPLOY_PATH} 
-  ${SCP_DEPLOY_USER} ${SCP_DEPLOY_PASS}" > /dev/null
+var=(STAGING_DEPLOY_PATH PRODUCTION_DEPLOY_HOST PRODUCTION_DEPLOY_PATH \
+  SCP_DEPLOY_USER SCP_DEPLOY_PASS)
+init_loop
 
 function deploy_scp() {
   # This is ghetto

@@ -7,8 +7,8 @@
 ###############################################################################
 
 # Initialize variables
-read -r FULLUSER <<< ""
-echo "${FULLUSER}" > /dev/null
+var=(FULLUSER)
+init_loop
 
 # Assign a variable to represent .git/index.lock
 gitLock="${WORKPATH}/${APP}/.git/index.lock"
