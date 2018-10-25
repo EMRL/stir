@@ -7,8 +7,8 @@
 ###############################################################################
 
 # Initialize variables
-read -r release release_notes release_url <<< ""
-echo "${active_files}" > /dev/null
+var=(release release_notes release_url)
+init_loop
 
 function release_check() {
   # Only check for a newer release when someone is at the console

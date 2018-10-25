@@ -7,8 +7,8 @@
 ############################################################################### 
 
 # Initialize variables
-read -r QUEUED <<< ""
-echo "${QUEUED}" > /dev/null
+var=(QUEUED)
+init_loop
 
 function queue() {
 	# Make sure there's something to do

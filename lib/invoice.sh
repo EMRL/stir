@@ -7,10 +7,9 @@
 ###############################################################################
 
 # Initialize variables
-read -r IN_HOST IN_TOKEN IN_CLIENT_ID IN_PRODUCT IN_ITEM_COST IN_ITEM_QTY \
-  IN_NOTES IN_EMAIL invoice_hack current_invoice <<< ""
-echo "${IN_HOST} ${IN_TOKEN} ${IN_CLIENT_ID} ${IN_PRODUCT} ${IN_ITEM_COST}
-  ${IN_ITEM_QTY} ${IN_NOTES} ${IN_EMAIL} ${invoice_hack} ${current_invoice}" > /dev/null
+var=(IN_HOST IN_TOKEN IN_CLIENT_ID IN_PRODUCT IN_ITEM_COST IN_ITEM_QTY \
+  IN_NOTES IN_EMAIL invoice_hack current_invoice)
+init_loop
 
 function create_invoice() {
   # Will create the invoice payload

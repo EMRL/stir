@@ -7,6 +7,9 @@
 ###############################################################################
 
 # Initialize variables
+var=(integer_check)
+init_loop
+
 read -r integer_check <<< ""
 echo "${integer_check}" > /dev/null
 

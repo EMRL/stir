@@ -7,8 +7,8 @@
 ############################################################################### 
 
 # Initializa needed variables
-read -r start_deploy <<< ""
-echo "${start_deploy}" > /dev/null
+var=(start_deploy)
+init_loop
 
 # Housekeeping tasks to run before final deployment
 function preDeploy() {
