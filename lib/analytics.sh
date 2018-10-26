@@ -26,7 +26,6 @@ for i in "${ga_var[@]}" ; do
   echo "ga_${i}" > /dev/null
 done
 
-
 function ga_metrics() {
   array[0]="hits"
   array[1]="percentNewSessions"

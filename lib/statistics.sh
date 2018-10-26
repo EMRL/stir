@@ -181,26 +181,26 @@ function check_backup() {
       do 
       var="$(date -d "${i} day ago" +"%Y-%m-%d")"
       if [[ $(grep "${var}" "${trshFile}") ]]; then
+        # Assume success
+        BACKUP_STATUS="${SUCCESSC}"
+        BACKUP_BTN="btn-success"
         if [[ "${i}" == "0" ]]; then 
           LAST_BACKUP="Today"
           BACKUP_STATUS="${SUCCESSC}"
           BACKUP_BTN="btn-success"
         elif [[ "${i}" == "1" ]]; then
           LAST_BACKUP="Yesterday" 
-          BACKUP_STATUS="${SUCCESSC}"
-          BACKUP_BTN="btn-success"
         else
           LAST_BACKUP="${i} days ago"
-          if [[ "${i}" < "5" ]]; then
+          if [[ "${i}" -lt "5" ]]; then
             BACKUP_STATUS="${SUCCESSC}"
-          elif [[ "${i}" > "4" && "${i}" < "11" ]]; then
+          elif [[ "${i}" -gt "4" && "${i}" -lt "11" ]]; then
             BACKUP_STATUS="${WARNINGC}"
             BACKUP_BTN="btn-warning"
           else
             BACKUP_STATUS="${DANGERC}"
             BACKUP_BTN="btn-danger"
           fi
- 
         fi
         BACKUP_MSG="Last backup: ${LAST_BACKUP} (${var}) in ${DB_BACKUP_PATH}"
         trace "${BACKUP_MSG}"

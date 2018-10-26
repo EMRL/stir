@@ -231,7 +231,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --monitor-test) MONITORTEST="1" ;;
     --stats) PROJSTATS="1" ;;
     --build) BUILD="1"; NOCHECK="1"; FORCE="1" ;;
-    --invoice) CREATE_INVOICE="1" ;;
+    --invoice) CREATE_INVOICE="1"; FORCE="1" ;;
     --unlock) UNLOCK="1" ;;
     --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="TRUE" ;;
     --scan) SCAN="1" ;;

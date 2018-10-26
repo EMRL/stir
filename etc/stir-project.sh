@@ -305,6 +305,9 @@ PROJECT_VERSION="3.7.1"
 # Default item notes
 # IN_NOTES="{{IN_NOTES}}"
 
+# Should the invoices immediately be emailed upon creation?
+# IN_EMAIL="{{IN_EMAIL}}"
+
 
 ###############################################################################
 # Google Analytics
