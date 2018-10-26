@@ -55,13 +55,13 @@ Other Options:
   --variable-list        Output a project's declared variables
 ```
 
-[![asciicast](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP.png)](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP?t=0)
-
 ## How It Works
 
-`stir` consolidates a boatload of functions into a single command that simplifies web app deployment from a development or staging environment to a production server. 
+`stir` consolidates a boatload of functions into a single command that simplifies web app deployment from a development or staging environment to a production server. It also can provide clients with a dashboard of information about their project.
 
-`stir` requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
+![Dashboard](https://raw.githubusercontent.com/EMRL/deploy/stir/img/dashboard.png)
+
+`stir` requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), `composer`, and  [`mina`](http://nadarei.co/mina/) if they are installed.
 
 ## Installation
 
