@@ -80,13 +80,12 @@ function slackPost () {
     if [[ -n "${PRODURL}" ]]; then 
       slack_message="${IN_NOTES} invoice (#${current_invoice}) created for <${PRODURL}|${PROJNAME}>"
     else 
-      slack_message="${IN_NOTES} invoice (#${current_invoice}) created *${PROJNAME}*"               
+      slack_message="${IN_NOTES} invoice (#${current_invoice}) created for *${PROJNAME}*"               
     fi    
   fi
 
-
   # Add a details link to online logfiles if they exist
-  if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]]; then
+  if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]] && [[ "${CREATE_INVOICE}" != "1" ]]; then
     slack_message="${slack_message} (<${LOGURL}|Details>)"
   fi
 
