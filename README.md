@@ -61,7 +61,7 @@ Other Options:
 
 ![Dashboard](https://raw.githubusercontent.com/EMRL/deploy/stir/img/dashboard.png)
 
-`stir` requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), `composer`, and  [`mina`](http://nadarei.co/mina/) if they are installed.
+`stir` requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), [`composer`](https://getcomposer.org/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
 
 ## Installation
 
