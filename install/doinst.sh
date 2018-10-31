@@ -128,18 +128,10 @@ fi
 
 # Start the install
 echo; sleep 1
-if [[ ! -d /etc/stir ]] || [[ ! -d /etc/stir/lib ]] || [[ ! -d /etc/stir/crontab ]]; then
+if [[ ! -d /etc/stir ]]; then # || [[ ! -d /etc/stir/lib ]] || [[ ! -d /etc/stir/crontab ]]; then
   echo "Creating directories"
   if [[ ! -d /etc/stir ]]; then
     sudo mkdir /etc/stir; error_check
-  fi
-
-  if [[ ! -d /etc/stir/lib ]]; then
-    sudo mkdir /etc/stir/lib; error_check
-  fi
-
-  if [[ ! -d /etc/stir/lib/crontab ]]; then
-    sudo mkdir /etc/stir/lib/crontab; error_check
   fi
 fi
 
@@ -151,7 +143,7 @@ if [[ ! -f /etc/stir/stir.conf ]]; then
   cp /etc/stir/stir-global.conf /etc/stir/global.conf; error_check
 fi
 
-cp -R lib/* /etc/stir/lib || error_check
+cp -R lib /etc/stir || error_check
 cp stir.sh /usr/local/bin/stir || error_check
 sudo chmod 755 /usr/local/bin/stir || error_check
 echo "Successfully installed, try typing 'stir' for help."

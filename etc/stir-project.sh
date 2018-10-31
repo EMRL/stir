@@ -9,7 +9,7 @@
 # This value indicates the version number when this file was last changed: 
 # it does not necessarily reflect deploy's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-PROJECT_VERSION="3.7.1"
+PROJECT_VERSION="3.8"
 
 
 ###############################################################################
@@ -32,6 +32,11 @@ PROJECT_VERSION="3.7.1"
 ###############################################################################
 # Git Configuration
 ###############################################################################
+
+# If you will need to execute custom scripts before beginning your session, 
+# insert the command with (full path in the value below. If you won't be 
+# needing to run prepare scripts, leave this value empty or set to FALSE.
+# PREPARE="{{PREPARE}}"
 
 # The URL for this repo's hosting, with no trailing slash. For example, if 
 # you use Github and your repo URL looks like https://github.com/EMRL/deploy
