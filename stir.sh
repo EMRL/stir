@@ -51,8 +51,7 @@ function ctrl_c() {
   fi
 }
 
-# Initialize variables
-# Loop
+# Variable init loop
 function init_loop {
   for i in "${var[@]}" ; do
     read -r "${i}" <<< ""
@@ -77,7 +76,7 @@ function init_temp() {
   init_loop
 }
 
-# Console Colors
+# Console colors
 function init_color() {
   var=(black red green yellow blue magenta cyan white endColor bold \
   underline reset purple tan)
@@ -99,7 +98,7 @@ function init_env() {
   CLIENTSECRET REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN REFRESHTOKEN \
   PROFILEID ALLOWROOT SHORTEMAIL INCOGNITO REPORTURL CLIENTCONTACT \
   INCLUDEHOSTING GLOBAL_VERSION USER_VERSION PROJECT_VERSION TERSE \
-  NOTIFYCLIENT FIXINDEX HTMLTEMPLATE)
+  NOTIFYCLIENT FIXINDEX HTMLTEMPLATE PREPARE PREPARE_ONLY)
   init_loop
 }
 
@@ -127,6 +126,10 @@ init_color
 init_env
 init_internal
 
+# Log errors
+function log_fail() {
+  echo "Could not create temporary file, exiting."; exit 2
+}
 
 # Display command options
 function flags() {
@@ -151,6 +154,7 @@ Other Options:
   --approve              Approve and deploy queued code changes
   --deny                 Deny queued code changes
   --build                Build project assets
+  --prepare              Prepare project
   --digest               Create and send weekly digest
   --report               Create a monthly activity report
   --no-check             Override active file and server checks
@@ -220,6 +224,7 @@ while [[ ${1:-unset} = -?* ]]; do
     -t|--time) TIME="1" ;;
     --approve) APPROVE="1"; FORCE="1" ;;
     --deny) DENY="1"; FORCE="1" ;;
+    --prepare) PREPARE_ONLY="1" ;;
     --digest) DIGEST="1"; FORCE="1"; QUIET="1" ;;
     --report) REPORT="1"; FORCE="1"; QUIET="1" ;;
     --automate) FORCE="1"; UPGRADE="1"; MERGE="1"; QUIET="1"; AUTOMATE="1" ;;
@@ -308,7 +313,7 @@ if [[ -f "${etcLocation}" ]]; then
   source "${etcLocation}"
 else
   echo "Unable to load configuration file at ${etcLocation}, exiting."
-  exit 1
+  exit 12
 fi
 
 # Check to see if the user is deploying from current working directory
@@ -322,11 +327,11 @@ if [[ "${CURRENT}" != "1" ]]; then
   # if [[ -z "${@}" ]]; then
   if [[ -z "${APP}" ]]; then
     echo "Choose a valid project, or use the --current flag to deploy from the current directory."
-    exit 1
+    exit 13
   else
     if [[ ! -d "${WORKPATH}/${APP}" ]]; then
       echo "${WORKPATH}/${APP} is not a valid project."
-      exit 1
+      exit 17
     fi
   fi
 fi
@@ -343,16 +348,10 @@ if [[ -f "${libLocation}" ]]; then
   source "${libLocation}"
 else
   echo "Unable to load libraries at ${libLocation}, exiting."
-  exit 1
+  exit 19
 fi
 
 # Fire up temporary log files. Consolidate this shit better someday, geez.
-# 
-# Crash and burn
-function log_fail() {
-  echo "Could not create temporary file, exiting."; exit 1
-}
-
 # Main log file
 logFile="/tmp/${APP}.log-$RANDOM.log"
 (umask 077 && touch "${logFile}") || log_fail
@@ -360,7 +359,7 @@ wpFile="/tmp/${APP}.wp-$RANDOM.log"; (umask 077 && touch "${wpFile}" &> /dev/nul
 coreFile="/tmp/${APP}.core-$RANDOM.log"; (umask 077 && touch "${coreFile}" &> /dev/null) || log_fail
 
 # Start writing the logfile
-echo -e "Deployment logfile for ${APP^^} - $NOW\r" >> "${logFile}"
+echo -e "Deployment logfile for ${APP^^} - ${NOW}\r" >> "${logFile}"
 echo -e "Launching stir${STARTUP}\n" >> "${logFile}"
 
 # More crappy tmp files
@@ -446,16 +445,7 @@ else
   source "${APPRC}"
 fi
 
-# Make sure variables are set up correctly
-for var in "${REPOHOST} ${CLIENTLOGO}" "${DEVURL}" "${PRODURL}"; do
-  if [[ -n "${var}" ]]; then
-    if [[ "${var}" != *"http"*"://"* ]]; then
-      error "The URL in your configuration ($var) must be preceded by either http:// or https:// - check your setup."
-    fi
-  fi
-done
-
-# Check variables for weird characters
+# Validate configuration setings
 validate_conf
 
 # Are we using "smart" *cough* commits?
