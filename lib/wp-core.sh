@@ -9,7 +9,7 @@
 function wpCore() {
   # There's a little bug when certain plugins are spitting errors; work around 
   # seems to be to check for core updates a second time
-  cd "${WORKPATH}"/"${APP}${WPROOT}"; \
+  cd "${APP_PATH}"/"${WPROOT}"; \
   "${WPCLI}"/wp core check-update --no-color &>> "${logFile}"
   if grep -q 'WordPress is at the latest version.' "${logFile}"; then
     info "Wordpress core is up to date."; UPD2="1"
@@ -44,7 +44,7 @@ function wpCore() {
         warning "Checking for available core update was unreliable, skipping.";
       else
         if [[ "${FORCE}" = "1" ]] || yesno --default no "A new version of Wordpress is available (${COREUPD}), update? [y/N] "; then
-          cd "${WORKPATH}/${APP}${WPROOT}"; \
+          cd "${APP_PATH}/${WPROOT}"; \
           if [[ "${QUIET}" != "1" ]]; then
             "${WPCLI}"/wp core update --no-color &>> "${logFile}" &
             spinner $!
@@ -60,7 +60,7 @@ function wpCore() {
             error "Core update failed.";
           else
             sleep 1
-            cd "${WORKPATH}/${APP}/"; # \ 
+            cd "${APP_PATH}/"; # \ 
             info "Wordpress core updates complete."; UPDCORE=1
           fi
                   

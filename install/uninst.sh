@@ -113,11 +113,15 @@ if [[ -f /usr/local/bin/stir ]]; then
   echo "Removing stir"
   sudo rm /usr/local/bin/stir; error_check
 
-  if [[ ! -d /etc/stir/lib ]]; then
+  if [[ -d /etc/stir/lib ]]; then
     sudo rm -rf /etc/stir/lib; error_check
   fi
 
-  if yesno --default yes "Remove global configuration files? [Y/n] "; then
+  if [[ -d /etc/stir/html ]]; then
+    sudo rm -rf /etc/stir/html; error_check
+  fi
+
+  if yesno --default yes "Remove configuration files? [Y/n] "; then
     if [[ -d /etc/stir ]]; then 
       sudo rm -rf /etc/stir; error_check
     fi

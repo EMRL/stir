@@ -65,7 +65,7 @@ function init_startup() {
     SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
     DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
     SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
-    CHECK_BACKUP)
+    CHECK_BACKUP APP_PATH)
   init_loop
 }
 
@@ -574,7 +574,10 @@ if [[ "${MERGE}" == "1" ]] && [[ -z "${PRODUCTION}" ]]; then
   quietExit
 fi
 
-# Execute the main process
+# Set app path
+APP_PATH="${WORKPATH}/${APP}"
+
+# Execute the main application
 main
 
 # All done

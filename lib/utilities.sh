@@ -36,7 +36,7 @@ function go() {
   fi  
 
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    console "Current working path is ${WORKPATH}/${APP}"
+    console "Current working path is ${APP_PATH}"
   fi
   
   # Slack test

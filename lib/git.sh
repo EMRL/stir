@@ -11,7 +11,7 @@ var=(FULLUSER)
 init_loop
 
 # Assign a variable to represent .git/index.lock
-gitLock="${WORKPATH}/${APP}/.git/index.lock"
+gitLock="${APP_PATH}/.git/index.lock"
 
 # Make sure we're in a git repository.
 function gitStart() {
@@ -21,19 +21,19 @@ function gitStart() {
   fi
   
   # Directory exists?
-  if [[ ! -d "${WORKPATH}/${APP}" ]]; then
-    info "${WORKPATH}/${APP} is not a valid directory."
-    clean_up; exit 1
+  if [[ ! -d "${APP_PATH}" ]]; then
+    info "${APP_PATH} is not a valid directory."
+    clean_up; exit 34
   else
-    cd "${WORKPATH}/${APP}" || error_check
+    cd "${APP_PATH}" || error_check
   fi
 
   # Check that .git exists
-  if [[ -f "${WORKPATH}/${APP}/.git/index" ]]; then
+  if [[ -f "${APP_PATH}/.git/index" ]]; then
     sleep 1
   else
-    info "There is nothing at ${WORKPATH}/${APP} to deploy."
-    clean_up; exit 1
+    info "There is nothing at ${APP_PATH} to deploy."
+    clean_up; exit 51
   fi
 
   # Make sure there has been at least one commit previously made
@@ -64,7 +64,7 @@ function gitStart() {
 # Checkout master
 function gitChkMstr() {
   if [[ -z "${MASTER}" ]]; then
-    empty_line; error "deploy ${VERSION} requires a master branch to be defined.";
+    empty_line; error "stir ${VERSION} requires a master branch to be defined.";
   else
     current_branch="$(git rev-parse --abbrev-ref HEAD)"
     if [[ "${current_branch}" != "${MASTER}" ]]; then
@@ -166,7 +166,7 @@ function gitCommit() {
         # We need Smart commits enabled or this can't work
         if [[ "${SMARTCOMMIT}" -ne "TRUE" ]]; then
           console "Smart Commits must enabled when forcing updates."
-          console "Set SMARTCOMMIT=TRUE in ${WORKPATH}/${APP}/${CONFIGDIR}deploy.sh"; quietExit
+          console "Set SMARTCOMMIT=TRUE in .stir.sh"; quietExit
         else
           if [[ -z "${COMMITMSG}" ]]; then
             info "Commit message must not be empty."; quietExit

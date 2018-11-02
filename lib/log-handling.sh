@@ -153,8 +153,9 @@ function makeLog() {
 }
 
 function build_html() {
-  # Build out the HTML
   LOGSUFFIX="html"
+  
+  # Build out the HTML
   if [[ "${message_state}" == "ERROR" ]]; then
     # Oh man, this is an error
     notes="${error_msg}"
