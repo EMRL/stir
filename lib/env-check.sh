@@ -40,6 +40,8 @@ function env_check() {
     # Reload environment variables, from global > user > project
     source "${deployPath}"/global.conf
     source ~/.stirrc
+    
+    # TODO This throws an error, fix it.
     source "${project_config}"
 
     # Restore workpath value

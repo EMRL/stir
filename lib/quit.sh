@@ -97,6 +97,7 @@ function clean_up() {
   [[ -d "${statDir}" ]] && rm -rf "${statDir}"
   [[ -d "${avatarDir}" ]] && rm -rf "${avatarDir}"
   [[ -d /tmp/stats ]] && rm -rf /tmp/stats
+  
   # [[ -d /tmp/avatar ]] && rm -rf /tmp/avatar
   # [[ -f "${gitLock}" ]] && rm "${gitLock}"
   # Attempt to reset the terminal
@@ -123,6 +124,12 @@ function clean_up() {
     if [[ -f "${WORKPATH}/${APP}/.approved" ]]; then
       rm "${WORKPATH}/${APP}/.approved"
     fi
+  fi
+
+  # Cleanup clone
+  if [[ -d "/tmp/${REPO}" ]]; then 
+    cd /tmp
+    rm -rf /tmp/"${REPO}"
   fi
 
   # Attempt to reset the console when running --quiet

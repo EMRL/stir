@@ -10,9 +10,14 @@ function main() {
   dependency_check  # Check that required commands are available
   release_check     # Check for newer version at Github
   env_check         # Check for configuration files that need updating
-
-  if [[ -n "${PREPARE}" ]] && [[ "${PREPARE}" != "FALSE" ]]; then
-    prepare
+  wp_check          # Check for Wordpress
+  
+  if [[ -n "${PREPARE}" ]] || [[ "${PREPARE_ONLY}" == "1" ]]; then
+    if [[ "${PREPARE}" != "FALSE" ]]; then
+      prepare
+    else
+      return
+    fi
   fi
 
   gitStart          # Check for a valid git project and get set up

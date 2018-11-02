@@ -40,9 +40,9 @@ function wpPlugins() {
     fi
 
     # First, check for for updates via composer
-    if [[ -f "${WORKPATH}/${APP}/composer.json" ]]; then
+    if [[ -f "${APP_PATH}/composer.json" ]]; then
       trace "Found composer.json, updating"
-      cd "${WORKPATH}"/"${APP}"; \
+      cd "${APP_PATH}"; \
       if [[ "${QUIET}" != "1" ]]; then
         # Come back and get this path properly
         /usr/local/bin/composer update &>> "${logFile}" &
@@ -50,7 +50,7 @@ function wpPlugins() {
       else
         /usr/local/bin/composer update &>> "${logFile}"
       fi
-      cd "${WORKPATH}"/"${APP}${WPROOT}${WPAPP}"; \
+      cd "${WP_PATH}"; \
     fi
 
     # Now, run the rest of the needed updates via wp-cli
@@ -72,7 +72,7 @@ function wpPlugins() {
       error "One or more plugin updates have failed."
     fi
 
-    cd "${WORKPATH}"/"${APP}"/; \
+    cd "${APP_PATH}"; \
     info "Plugin updates complete."
   else  
     info "Skipping plugin updates..."

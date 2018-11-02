@@ -139,8 +139,13 @@ echo "Installing configuration files"
 sudo cp -R etc/* /etc/stir; error_check
 sudo cp etc/stir-user.rc /etc/stir; error_check
 
-if [[ ! -f /etc/stir/stir.conf ]]; then
-  cp /etc/stir/stir-global.conf /etc/stir/global.conf; error_check
+if [[ ! -f /etc/stir/global.conf ]]; then
+  echo "Global configuration not found, installing."
+  sudo cp /etc/stir/stir-global.conf /etc/stir/global.conf; error_check
+fi
+
+if [[ ! -f "/etc/stir/html/default/theme.conf" ]]; then
+  sudo cp "/etc/stir/html/default/theme-example.conf" "/etc/stir/html/default/theme.conf"
 fi
 
 cp -R lib /etc/stir || error_check

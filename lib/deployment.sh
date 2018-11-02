@@ -58,7 +58,7 @@ function pkgDeploy() {
   empty_line
   if [[ -n "${DEPLOY}" ]]; then
     # Add ssh keys and double check directoy
-    cd "${WORKPATH}/${APP}" || error_check
+    cd "${APP_PATH}" || error_check
     if [[ "${INCOGNITO}" != "TRUE" ]]; then
       trace "Launching deployment"
     else
