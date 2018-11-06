@@ -35,8 +35,13 @@ PROJECT_VERSION="3.8"
 
 # If you will need to execute custom scripts before beginning your session, 
 # insert the command with (full path in the value below. If you won't be 
-# needing to run prepare scripts, leave this value empty or set to FALSE.
+# needing to run prepare scripts, leave this value empty or set to FALSE. To 
+# use stir's built-in Wordpress prepare function, set this value to TRUE.
 # PREPARE="{{PREPARE}}"
+
+# If you need to load extra environment variables, enter a the location to
+# that file below.  
+# PREPARE_CONFIG="{{PREPARE_CONFIG}}"
 
 # The URL for this repo's hosting, with no trailing slash. For example, if 
 # you use Github and your repo URL looks like https://github.com/EMRL/deploy
@@ -103,6 +108,9 @@ PROJECT_VERSION="3.8"
 # Wordpress plugin ACF Pro. Including your license key below will enable 
 # upgrades to happen more reliably.
 # ACFKEY="{{ACFKEY}}"
+
+# Gravityforms License
+# GRAVITY_FORMS_LICENSE="{{GRAVITY_FORMS_LICENSE}}"
 
 
 ###############################################################################

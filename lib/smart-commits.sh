@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Constructing smart *cough* commit messages
-function smrtCommit() {
+function smart_commit() {
   if [[ "${SMARTCOMMIT}" == "TRUE" ]]; then
     # Checks for the existence of a successful plugin update, using grep, and if 
     # we find updates, grab the relevant line of text from the logs
@@ -20,7 +20,7 @@ function smrtCommit() {
       fi
     fi
 
-    if [[ ! -z "${PCA}" ]] || [[ ! -z "${UPDCORE}" ]]; then
+    if [[ ! -z "${PCA}" ]] || [[ ! -z "${UPDCORE}" ]] || [[ -s "${wpFile}" ]]; then
       trace "Building commit message"
 
       if [[ -z "${PCA}" ]] && [[ -z "${ACFFILE}" ]]; then

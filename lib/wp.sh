@@ -72,15 +72,18 @@ function wp_update_check() {
 function wp_check() {
   # Is wp-cli installed? 
   if hash "${WPCLI}"/wp 2>/dev/null; then
-  trace status "wp-cli found, checking for Wordpress... "
-    # Check for Wordpress
-    if [[ -f "${WORKPATH}"/"${APP}${WPROOT}${WPSYSTEM}"/wp-settings.php ]]; then
-      trace notime "FOUND"
+    trace "wp-cli found"
 
+    # Bug out if this is a new style project
+    if [[ "${PREPARE}" == "TRUE" ]]; then 
+      return
+    fi
+
+    if [[ -f "${WORKPATH}"/"${APP}${WPROOT}${WPSYSTEM}"/wp-settings.php ]]; then
       # Get Wordpress paths
       wp_path;
 
-      # Database check
+      # Local database check
       trace status "Checking database... "
       "${WPCLI}"/wp db check &>> /dev/null; EXITCODE=$?; 
       
@@ -98,7 +101,6 @@ function wp_check() {
         "${WPCLI}"/wp core version --extra  &>> "${logFile}";
       fi
     else
-      trace notime "NOT FOUND"
       WP_PATH="FALSE"
     fi
   fi

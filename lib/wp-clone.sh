@@ -7,13 +7,11 @@
 ###############################################################################
 
 # Initialize variables
-var=(SSH_REPO TMP_PATH SET_ENV)
+var=(SSH_REPO TMP_PATH SET_ENV dest REMOVE_ME MYSQL_USER MYSQL_PASS)
 init_loop
 
 function wp_clone() {
   # This is all under construction
-  trace "Cloning the project..."
-
   # Get paths
   wp_path
   wp_tmp
@@ -33,22 +31,114 @@ function wp_clone() {
   
   notice "Setting up project..."
   cd /tmp; \
-  git clone "${SSH_REPO}" #&>> /dev/null &
-  #spinner $!
+  if [[ -d "/tmp/${REPO}" ]]; then
+    cd "/tmp/${REPO}"
+    git checkout "${MASTER}" &>> /dev/null; error_check
+  else
+    trace status "Cloning ${SSH_REPO}... "
+    git clone "${SSH_REPO}" &>> /dev/null; error_check
+    trace notime "OK"
+  fi
 
   # Copy plugins that are not part of repo (for update checking)
-  cp -nrp "${WP_PATH}/plugins" "${WP_TMP}/" &>> "${logFile}";
+  # cp -nrp "${WP_PATH}/plugins" "${WP_TMP}/" &>> "${logFile}";
 
   # Reset our root working directory
   APP_PATH="/tmp/${REPO}"
   cd "${APP_PATH}"
 
-  # Get environment variables
-  get_env
+  # Setup environment variables
+  create_env
   WP_PATH="${WP_TMP}"
+  ACTIVECHECK="FALSE"
+  cd "${WP_PATH}"
+
+  # Create database
+  if [[ -z "${PREPARE_CONFIG}" ]]; then
+    error "MYSQL user info not found, can not create database."
+  else
+    # This is temporary
+    source "${PREPARE_CONFIG}"
+
+    # If using .env
+    if [[ "${env_file}" == *".env" ]]; then
+      sed -i -e "/DB_DATABASE/c\DB_DATABASE='null'" \
+        -e "/DB_USERNAME/c\DB_USERNAME='${MYSQL_USER}'" \
+        -e "/DB_PASSWORD/c\DB_PASSWORD='${MYSQL_PASS}'" \
+        "${APP_PATH}/${env_file}"
+    fi
+
+    # If using env.php config
+    if [[ "${env_file}" == *"env.php"* ]]; then
+      sed -i -e "/host/c\'host' => 'localhost'," \
+        -e "/name/c\'name' => 'null'," \
+        -e "/user/c\'user' => '${MYSQL_USER}'," \
+        -e "/pass/c\'pass' => '${MYSQL_PASS}'," \
+        "${APP_PATH}/${env_file}"
+    fi
+
+    # If using a standard wp-config.php
+    if [[ "${env_file}" == *"wp-config.php"* ]]; then
+      sed -i -e "s^localhost^localhost^g" \
+        -e "s^database_name_here^null^g" \
+        -e "s^username_here^${MYSQL_USER}^g" \
+        -e "s^password_here^${MYSQL_PASS}^g" \
+        "${APP_PATH}/${env_file}"
+    fi
+
+    # Set Gravityforms license if needed
+    if [[ -n "${GRAVITY_FORMS_LICENSE}" ]]; then
+      sed -i "/GRAVITY_FORMS_LICENSE/c\GRAVITY_FORMS_LICENSE='${GRAVITY_FORMS_LICENSE}'" \
+        "${APP_PATH}/${env_file}"
+    fi
+
+    # Composer stuff
+    if [[ -f "${APP_PATH}/composer.json" ]]; then
+      # TODO Get real path later
+      cd "${APP_PATH}"
+      /usr/local/bin/composer install
+    fi
+
+    cat "${APP_PATH}/${env_file}" #; quietExit
+
+    trace status "Creating database... "
+    wp db create &>> /dev/null; error_check; trace notime "OK"
+    trace status "Installing Wordpress... "
+    wp core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
+    trace notime "OK"
+  fi
 }
 
-function get_env() {
+function create_env() {
+  env_file=(config/env-example.php env-example.php .env-example.php \
+    .env.example .env.sample public/wp-config-sample.php wp-config-sample.php)
+  for arg in "${env_file[@]}"; do
+    if [[ -f "${APP_PATH}/${arg}" ]]; then
+      if [[ "${arg}" == *"-example"* ]]; then
+        REMOVE_ME="-example"
+      elif [[ "${arg}" == *"-sample"* ]]; then
+        REMOVE_ME="-sample"
+      elif [[ "${arg}" == *".sample"* ]]; then
+        REMOVE_ME=".sample"
+      elif [[ "${arg}" == *".example"* ]]; then
+        REMOVE_ME=".example"
+      fi
+      dest="$(printf '%s\n' ${arg//$REMOVE_ME/})"
+      cp "${arg}" "${dest}" &>> "${logFile}"
+      SET_ENV="1"
+      env_file="${dest}"
+    fi
+  done
+
+  if [[ "${SET_ENV}" != "1" ]]; then
+    error "Configuration file not found, can not continue."
+  fi
+
+  # This is a freshly cloned repo, no need for garbage collection
+  GARBAGE="FALSE"
+}
+
+function get_env_deprecated() {
   env_file=(config/env.php env.php .env.php .env public/wp-settings.php)
   for arg in "${env_file[@]}"; do
     if [[ -f "${WORKPATH}/${APP}/${arg}" ]]; then
@@ -64,5 +154,6 @@ function get_env() {
     quickExit
   fi
 
+  # This is a freshly cloned repo, no need for garbage collection
   GARBAGE="FALSE"
 }

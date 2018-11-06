@@ -162,7 +162,7 @@ function is_integer() {
 function dependency_check() {
   # Is git installed?
   hash git 2>/dev/null || {
-    error "deploy ${VERSION} requires git to function properly." 
+    error "stir ${VERSION} requires git to function properly." 
   }
 
   # Does a configuration file for this repo exist?

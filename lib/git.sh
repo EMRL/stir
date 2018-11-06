@@ -131,7 +131,7 @@ function gitStage() {
 # Commit, with message
 function gitCommit() {
   # Smart commit stuff
-  smrtCommit; empty_line
+  smart_commit; empty_line
 
   # Do a dry run; check for anything to commit
   git commit --dry-run &>> "${logFile}" 

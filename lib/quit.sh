@@ -127,9 +127,9 @@ function clean_up() {
   fi
 
   # Cleanup clone
-  if [[ -d "/tmp/${REPO}" ]]; then 
-    cd /tmp
-    rm -rf /tmp/"${REPO}"
+  if [[ -d "/tmp/${REPO}" ]] && [[ "${PREPARE_ONLY}" != "1" ]] && [[ "${SET_ENV}" == "1" ]]; then 
+    cd "${WP_TMP}"; "${WPCLI}"/wp db drop --yes &>> /dev/null
+    cd /tmp; rm -rf /tmp/"${REPO}"
   fi
 
   # Attempt to reset the console when running --quiet
