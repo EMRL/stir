@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Automated Worpdress updates are now made by cloning a temporary copy of the project's repo, running the updates, and destroying upon completion
+- Prepare hook added 
 - Wordpress projects can now be managed using either `composer` or `wp-cli` (or both) transparently
 - ACF Pro update files must now pass an integrity check before proceeding with plugin upgrade
 ### Changed
