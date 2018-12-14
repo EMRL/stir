@@ -11,7 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - `deploy` is now `stir`
 - Invoice creation will now exit gracefully if project is not correctly configured
-- Project deployment can be disabled by adding a file called `.donotdeploy` in the project's root directory (This is the equivalent of setting `DONOTDEPLOY="TRUE"` in `.deploy.sh`)
+- Project deployment can be disabled by adding a file called `.donotdeploy` in the project's root directory (This is the equivalent of setting `DONOTDEPLOY="TRUE"` in `.stir.sh`)
 ### Fixed
 - Fixed a bug that occasionally caused successful deployment to be incorrectly reported
 
