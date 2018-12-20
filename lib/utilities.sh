@@ -138,10 +138,10 @@ function go() {
 function fix_index() {
   # A rather brutal fix for index permissions issues
   if [[ "${FIXINDEX}" == "TRUE" ]]; then
-    if [[ ! -w "${WORKPATH}/${APP}/.git/index" ]]; then
+    if [[ ! -w "${APP_PATH}/.git/index" ]]; then
       trace "Index is not writable, attempting to fix..."
-      sudo chmod 777 "${WORKPATH}/${APP}/.git/index"; error_check
-      if [[ ! -w "${WORKPATH}/${APP}/.git/index" ]]; then
+      sudo chmod 777 "${APP_PATH}/.git/index"; error_check
+      if [[ ! -w "${APP_PATH}/.git/index" ]]; then
         error "Unable to write new index file."
       fi
     fi

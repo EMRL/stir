@@ -7,7 +7,8 @@
 ###############################################################################
 
 # Initialize variables
-var=(SSH_REPO TMP_PATH SET_ENV dest REMOVE_ME MYSQL_USER MYSQL_PASS)
+var=(SSH_REPO TMP_PATH SET_ENV dest REMOVE_ME MYSQL_USER MYSQL_PASS \
+  DB_CHECK)
 init_loop
 
 function wp_clone() {
@@ -96,16 +97,25 @@ function wp_clone() {
     if [[ -f "${APP_PATH}/composer.json" ]]; then
       # TODO Get real path later
       cd "${APP_PATH}"
-      /usr/local/bin/composer install
+      /usr/local/bin/composer install; error_check
+    fi
+    
+    # Database check
+    DB_CHECK="$(/usr/bin/mysqlshow --user=${MYSQL_USER} --password=${MYSQL_PASS} null 2> /dev/null | grep -o null)"
+    if [[ "${DB_CHECK}" != "null" ]]; then
+      trace status "Creating database... "
+      "${WPCLI}"/wp db create &>> /dev/null; error_check; trace notime "OK"
     fi
 
-    cat "${APP_PATH}/${env_file}" #; quietExit
+    # Install wordpress if there's no composer
+    # if [[ ! -f "${APP_PATH}/composer.json" ]]; then
+    #  trace status "Installing Wordpress... "
+    #  "${WPCLI}"/wp core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
+    #  trace notime "OK"
+    # fi
 
-    trace status "Creating database... "
-    wp db create &>> /dev/null; error_check; trace notime "OK"
-    trace status "Installing Wordpress... "
-    wp core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
-    trace notime "OK"
+    # Check server
+    # wp_server_check
   fi
 }
 
@@ -132,26 +142,6 @@ function create_env() {
 
   if [[ "${SET_ENV}" != "1" ]]; then
     error "Configuration file not found, can not continue."
-  fi
-
-  # This is a freshly cloned repo, no need for garbage collection
-  GARBAGE="FALSE"
-}
-
-function get_env_deprecated() {
-  env_file=(config/env.php env.php .env.php .env public/wp-settings.php)
-  for arg in "${env_file[@]}"; do
-    if [[ -f "${WORKPATH}/${APP}/${arg}" ]]; then
-      cp "${WORKPATH}/${APP}/${arg}" "/tmp/${REPO}/${arg}"
-      if [[ -f "/tmp/${REPO}/${arg}" ]]; then
-        SET_ENV="1"
-      fi
-    fi
-  done
-
-  if [[ "${SET_ENV}" != "1" ]]; then
-    warning "Configuration file not found, can not continue."
-    quickExit
   fi
 
   # This is a freshly cloned repo, no need for garbage collection

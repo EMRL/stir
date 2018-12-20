@@ -141,7 +141,7 @@ Options:
   -S, --skip-update      Skip any Wordpress core/plugin updates
   -u, --update           If no available Wordpress updates, halt deployment
   -U, --update-only      Deploy only Wordpresss plugin/core updates
-  -P, --publish          Publish current production code to live environment
+  -D, --deploy           Deploy current production code to live environment
   -m, --merge            Force merge of branches
   -c, --current          Deploy a project from current working directory          
   -t, --time             Add time to project management integration
@@ -212,7 +212,7 @@ while [[ ${1:-unset} = -?* ]]; do
     -h|--help) flags >&2; exit ;;
     -u|--update) UPGRADE="1" ;;
     -U|--update-only) UPDATEONLY="1" ;;
-    -P|--publish) PUBLISH="1" ;;
+    -D|--deploy) PUBLISH="1" ;;
     -S|--skip-update) SKIPUPDATE="1" ;;
     -c|--current) CURRENT="1" ;;
     -v|--version) echo "$(basename "${0}") ${VERSION}"; exit ;;

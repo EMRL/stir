@@ -6,7 +6,7 @@
 # Checks for Wordpress core updates
 ###############################################################################
 
-function wpCore() {
+function wp_core() {
   # There's a little bug when certain plugins are spitting errors; work around 
   # seems to be to check for core updates a second time
   cd "${APP_PATH}"/"${WPROOT}"; \
@@ -39,8 +39,21 @@ function wpCore() {
       # Update available!  \o/
       echo -e "";
 
+      # This is only temporary, danger!
+      if [[ -f "${APP_PATH}/composer.json" ]]; then
+        trace "Found composer.json, updating"
+        cd "${APP_PATH}"; \
+        if [[ "${QUIET}" != "1" ]]; then
+          # Come back and get this path properly
+          /usr/local/bin/composer update &>> "${logFile}" &
+          spinner $!
+        else
+          /usr/local/bin/composer update &>> "${logFile}"
+        fi
+        cd "${WP_PATH}"; \
+
       # Check for broken wp-cli garbage
-      if [[ "${COREUPD}" == *"PHP"* ]]; then
+      elif [[ "${COREUPD}" == *"PHP"* ]]; then
         warning "Checking for available core update was unreliable, skipping.";
       else
         if [[ "${FORCE}" = "1" ]] || yesno --default no "A new version of Wordpress is available (${COREUPD}), update? [y/N] "; then

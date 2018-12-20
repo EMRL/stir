@@ -6,7 +6,7 @@
 # Checks for Wordpress plugin updates
 ###############################################################################
 
-function wpPlugins() {
+function wp_plugins() {
   # If available then let's do it
   info "The following updates are available:"
   # Clean the garbage out of the log for console display

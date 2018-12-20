@@ -73,7 +73,7 @@ function main() {
 
       # Continue normally
       if [[ "${APPROVE}" != "1" ]]; then
-        wpPkg       # Run Wordpress upgrades if needed
+        wp          # Run Wordpress upgrades if needed
         pkgMgr      # Run package manager
         gitStatus   # Make sure there's anything here to commit         
       fi
