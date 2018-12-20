@@ -5,7 +5,7 @@
 
 `stir` is designed to speed up, automate, and integrate project commits, management, and deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
 
-[Changelog](https://github.com/EMRL/deploy/blob/master/CHANGELOG.md)
+[Changelog](https://github.com/EMRL/stir/blob/master/CHANGELOG.md)
 
 `stir` is in daily use at [EMRL](http://emrl.com), an advertising, design, and development agency in northern California. If you have any questions, please feel free to contact us.
 
@@ -68,13 +68,13 @@ Other Options:
 `stir` can be run from anywhere, but if you'd like it to be installed server-wide follow the instructions below. 
 
 1. In the `stir` directory, type `sudo ./install/doinst.sh` and enter your sudo password when/if asked
-2. That's it. By default `deploy` is installed to `/usr/local/bin/` and support files are installed to `/etc/deploy/`
+2. That's it. By default `stir` is installed to `/usr/local/bin/` and support files are installed to `/etc/stir/`
 
 ## Configuration
 
 Configuration is handled globally in the `etc/stir/global.conf` file. Individual users also have their own settings in `~/.stirrc`
 
-Repositories can each have their own deploy configuration. An example of this file can be [found here](https://github.com/EMRL/deploy/blob/master/etc/deploy.sh).
+Repositories can each have their own deploy configuration. An example of this file can be [found here](https://github.com/EMRL/stir/blob/master/etc/stir.sh).
 
 ## Slack
 
@@ -82,7 +82,7 @@ For workgroups and teams that use it, `stir` is able to integrate with Slack. Yo
 
 ## Autopilot
 
-`stir --automate` works well for unattended updates of Wordpress sites; great for maintaining updates via a crontab. An example cron script can be [found here](https://github.com/EMRL/deploy/blob/master/etc/cron/deploy.cron.example). Running in this mode, the project will only be deployed if there are Wordpress core or plugin updates. If other code changes are detected the project will not be auto-updated. Smart Commits must be enabled or nothing will be deployed.
+`stir --automate` works well for unattended updates of Wordpress sites; great for maintaining updates via a crontab. An example cron script can be [found here](https://github.com/EMRL/stir/blob/master/etc/cron/stir.cron.example). Running in this mode, the project will only be deployed if there are Wordpress core or plugin updates. If other code changes are detected the project will not be auto-updated. Smart Commits must be enabled or nothing will be deployed.
 
 ## Contact
 
