@@ -9,7 +9,7 @@
 # This value indicates the version number when this file was last changed: 
 # it does not necessarily reflect deploy's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-PROJECT_VERSION="3.8"
+PROJECT_VERSION="3.81"
 
 
 ###############################################################################
@@ -108,6 +108,10 @@ PROJECT_VERSION="3.8"
 # Wordpress plugin ACF Pro. Including your license key below will enable 
 # upgrades to happen more reliably.
 # ACFKEY="{{ACFKEY}}"
+#
+# If you need to lock your version of ACF fro some reason, set the value
+# below to TRUE
+# ACF_LOCK="{{ACF_LOCK}}"
 
 # Gravityforms License
 # GRAVITY_FORMS_LICENSE="{{GRAVITY_FORMS_LICENSE}}"
