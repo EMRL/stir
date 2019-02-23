@@ -47,7 +47,9 @@ PROJECT_VERSION="3.81"
 # you use Github and your repo URL looks like https://github.com/EMRL/deploy
 # your REPOHOST should be set to https://github.com/EMRL (with no trailing 
 # slash) If most of your repos are all hosted at the same location, you may 
-# want to define this in either the global or user configuration files.
+# want to define this in either the global or user configuration files. Note
+# that Github will currently ask for a user/password in when using https://
+# instead of ssh - a fix for this is incoming ASAP.
 # REPOHOST="{{REPOHOST}}"
 
 # The exact name of the Bitbucket/Github repository
