@@ -32,11 +32,13 @@ function wp_plugins() {
 
   if [[ "${FORCE}" = "1" ]] || yesno --default no "Proceed with updates? [y/N] "; then
     # If ACFPRO needs an update, do it first via wget
-    if [[ "${QUIET}" != "1" ]]; then
-      acf_update &
-      spinner $!
-    else
-      acf_update
+    if [[ "${ACF_LOCK}" != "TRUE" ]]; then
+      if [[ "${QUIET}" != "1" ]]; then
+        acf_update &
+       spinner $!
+      else
+        acf_update
+      fi
     fi
 
     # First, check for for updates via composer

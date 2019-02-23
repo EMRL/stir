@@ -63,7 +63,7 @@ function wp_clone() {
 
     # If using .env
     if [[ "${env_file}" == *".env" ]]; then
-      sed -i -e "/DB_DATABASE/c\DB_DATABASE='null'" \
+      sed -i -e "/DB_DATABASE/c\DB_DATABASE='null_${REPO}'" \
         -e "/DB_USERNAME/c\DB_USERNAME='${MYSQL_USER}'" \
         -e "/DB_PASSWORD/c\DB_PASSWORD='${MYSQL_PASS}'" \
         "${APP_PATH}/${env_file}"
@@ -72,7 +72,7 @@ function wp_clone() {
     # If using env.php config
     if [[ "${env_file}" == *"env.php"* ]]; then
       sed -i -e "/host/c\'host' => 'localhost'," \
-        -e "/name/c\'name' => 'null'," \
+        -e "/name/c\'name' => 'null_${REPO}'," \
         -e "/user/c\'user' => '${MYSQL_USER}'," \
         -e "/pass/c\'pass' => '${MYSQL_PASS}'," \
         "${APP_PATH}/${env_file}"
@@ -81,7 +81,7 @@ function wp_clone() {
     # If using a standard wp-config.php
     if [[ "${env_file}" == *"wp-config.php"* ]]; then
       sed -i -e "s^localhost^localhost^g" \
-        -e "s^database_name_here^null^g" \
+        -e "s^database_name_here^null_${REPO}^g" \
         -e "s^username_here^${MYSQL_USER}^g" \
         -e "s^password_here^${MYSQL_PASS}^g" \
         "${APP_PATH}/${env_file}"
@@ -109,13 +109,13 @@ function wp_clone() {
 
     # Install wordpress if there's no composer
     # if [[ ! -f "${APP_PATH}/composer.json" ]]; then
-    #  trace status "Installing Wordpress... "
-    #  "${WPCLI}"/wp core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
-    #  trace notime "OK"
+    trace status "Installing Wordpress... "
+    "${WPCLI}"/wp core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
+    trace notime "OK"
     # fi
 
     # Check server
-    # wp_server_check
+    wp_server_check
   fi
 }
 
