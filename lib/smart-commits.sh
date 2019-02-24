@@ -61,6 +61,10 @@ function smart_commit() {
 
       # Output the contents of $COMMITMSG
       if [[ -n "${COMMITMSG}" ]]; then
+				# This is temporary
+				if [[ "${ACF_LOCK}" == "TRUE" ]]; then
+					COMMITMSG="$(sed 's/, advanced-custom-fields-pro*......//g' <<< ${COMMITMSG})"
+				fi 
         trace "Auto-generated commit message: $COMMITMSG"
       fi
     fi
