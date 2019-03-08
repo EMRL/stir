@@ -188,7 +188,7 @@ function build_html() {
       fi
       if [[ "${DIGEST}" != "1" ]] && [[ "${REPORT}" != "1" ]]; then
         if [[ "${REPAIR}" == "1" ]] && [[ -z "${notes}" ]]; then
-          notes="Repaired and deployed codebase"
+          notes="Merged and deployed codebase"
         fi
         cat "${deployPath}/html/${HTMLTEMPLATE}/header.html" "${deployPath}/html/${HTMLTEMPLATE}/success.html" > "${htmlFile}"
       fi

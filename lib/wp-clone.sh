@@ -31,9 +31,9 @@ function wp_clone() {
   ssh_check
   
   notice "Setting up project..."
-  cd /tmp; \
+  cd ${WORKPATH}; \
   if [[ -d "/tmp/${REPO}" ]]; then
-    cd "/tmp/${REPO}"
+    cd "/${WORKPATH}/${REPO}"
     git checkout "${MASTER}" &>> /dev/null; error_check
   else
     trace status "Cloning ${SSH_REPO}... "
