@@ -132,6 +132,10 @@ function clean_up() {
   #  cd /tmp; rm -rf /tmp/"${REPO}"
   #fi
 
+  # Do we need to shutdown local wp server?
+  # This will spit out a PID to kill
+  # lsof -i:8080 -t 
+  
   # Attempt to reset the console when running --quiet
   if [[ "${QUIET}" != "1" ]]; then
     tput cnorm
