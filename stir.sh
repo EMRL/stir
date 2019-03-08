@@ -393,13 +393,13 @@ if [[ "${INCOGNITO}" != "TRUE" ]]; then
 fi
 
 # Does a user configuration exit?
-if [[ "${USERRC}" == "1" ]]; then
-  if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    trace "Loading user configuration from ~/.stirrc"
-  fi
-else
+if [[ "${USERRC}" != "1" ]]; then
   trace "User configuration not found, creating"
-  cp "${deployPath}"/stir-user.rc ~/.stirrc
+  if [[ -r "${deployPath}/stir-user.rc" ]]; then
+    cp "${deployPath}"/stir-user.rc ~/.stirrc
+  elif [[ -r "${deployPath}/etc/stir-user.rc" ]]; then
+    cp "${deployPath}"/etc/stir-user.rc ~/.stirrc
+  fi
   console "User configuration file missing, creating ~/.stirrc"
   if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
     configure_user; sleep 1

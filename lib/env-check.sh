@@ -9,7 +9,7 @@
 # Initialize variables
 var=(update_global update_user update_project env_settings project_config \
   sed_hack short_version global_project_version local_version \
-  tmp_workpath)
+  tmp_workpath default_etc)
 init_loop
 
 function env_check() {
@@ -23,14 +23,21 @@ function env_check() {
     # Trim alpha/beta part of version number   
     local_version="${VERSION//-*}"
     
+    # Check for global vs local install
+    if [[ "${deployPath}" != "/etc/stir" ]]; then
+      default_etc="${deployPath}/etc"
+    else
+      default_etc="${deployPath}"
+    fi
+
     # Compare version numbers
-    local_version="${GLOBAL_VERSION}"; source "${deployPath}"/stir-global.conf
+    local_version="${GLOBAL_VERSION}"; source "${default_etc}"/stir-global.conf
     [[ "${GLOBAL_VERSION}" != "${local_version}" ]] && update_global="1";
     
-    local_version="${USER_VERSION}"; source "${deployPath}"/stir-user.rc
+    local_version="${USER_VERSION}"; source "${default_etc}"/stir-user.rc
     [[ "${USER_VERSION}" != "${local_version}" ]] && update_user="1";
     
-    local_version="${PROJECT_VERSION}"; source "${deployPath}"/stir-project.sh 
+    local_version="${PROJECT_VERSION}"; source "${default_etc}"/stir-project.sh 
     [[ "${PROJECT_VERSION}" != "${local_version}" ]] && update_project="1"
 
     if [[ "${update_global}" == "1" ]] || [[ "${update_user}" == "1" ]] || [[ "${update_project}" == "1" ]]; then
