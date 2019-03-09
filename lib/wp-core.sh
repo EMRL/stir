@@ -39,16 +39,16 @@ function wp_core() {
       # Update available!  \o/
       echo -e "";
 
-      # This is only temporary, danger!
+      # Update via composer if needed
       if [[ -f "${APP_PATH}/composer.json" ]]; then
         trace "Found composer.json, updating"
         cd "${APP_PATH}"; \
         if [[ "${QUIET}" != "1" ]]; then
           # Come back and get this path properly
-          /usr/local/bin/composer update &>> "${logFile}" &
+          /usr/local/bin/composer update johnpbloch/wordpress &>> "${logFile}" &
           spinner $!
         else
-          /usr/local/bin/composer update &>> "${logFile}"
+          /usr/local/bin/composer update johnpbloch/wordpress &>> "${logFile}"
         fi
         cd "${WP_PATH}"; \
 
