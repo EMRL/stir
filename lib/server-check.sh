@@ -41,7 +41,7 @@ function server_check() {
       trace "No production URL set, skipping check"
     else
       # Should return "200 OK" if all is working well
-      if curl -sL --head "${PRODURL}" | grep "200 OK" > /dev/null; then
+      if curl -sL --head "${PRODURL}" | grep "200 " > /dev/null; then
         console " ${PRODURL} (production) ${tan}OK${endColor}"
       else
         console " ${PRODURL} (production) ${red}FAIL${endColor}"

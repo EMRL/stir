@@ -306,7 +306,12 @@ fi
 
 # Load external configuration & functions
 libLocation="${deployPath}/lib/loader.sh"
-etcLocation="${deployPath}/global.conf"
+
+if [[ -r "${deployPath}/global.conf" ]]; then
+  etcLocation="${deployPath}/global.conf"
+else
+  etcLocation="${deployPath}/etc/global.conf"
+fi
 
 # System wide configuration files
 if [[ -f "${etcLocation}" ]]; then

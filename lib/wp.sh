@@ -18,6 +18,13 @@ function wp() {
     
     cd "${WP_PATH}"
 
+    # Check log for core updates
+    if [[ "${DONOTUPDATEWP}" == "TRUE" ]]; then
+      trace "Wordpress core updates disabled, skipping"
+    else
+      wp_core
+    fi
+    
     # Look for updates
     if [[ "${QUIET}" != "1" ]]; then
       wp_update_check &
@@ -38,13 +45,6 @@ function wp() {
       else
         info "Plugins are up to date."; UPD1="1"
       fi
-    fi
-
-    # Check log for core updates
-    if [[ "${DONOTUPDATEWP}" == "TRUE" ]]; then
-      trace "Wordpress core updates disabled, skipping"
-    else
-      wp_core
     fi
   fi
 

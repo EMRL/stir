@@ -45,7 +45,7 @@ function env_check() {
     fi
 
     # Reload environment variables, from global > user > project
-    source "${deployPath}"/global.conf
+    source "${etcLocation}"
     source ~/.stirrc
     
     # TODO This throws an error, fix it.
@@ -179,3 +179,5 @@ function insert_values() {
 function env_cleanup() {
   sed -i "s^{{.*}}^^g" "${trshFile}"
 }
+
+
