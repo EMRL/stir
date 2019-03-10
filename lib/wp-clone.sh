@@ -31,9 +31,9 @@ function wp_clone() {
   ssh_check
   
   notice "Setting up project..."
-  cd /tmp; \
-  if [[ -d "/tmp/${REPO}" ]]; then
-    cd "/tmp/${REPO}"
+  cd ${WORKPATH}; \
+  if [[ -d "${WORKPATH}/${REPO}" ]]; then
+    cd "${WORKPATH}/${REPO}"; \
     "${git_cmd}" checkout "${MASTER}" &>> /dev/null; error_check
   else
     trace status "Cloning ${SSH_REPO}... "
@@ -45,7 +45,7 @@ function wp_clone() {
   # cp -nrp "${WP_PATH}/plugins" "${WP_TMP}/" &>> "${logFile}";
 
   # Reset our root working directory
-  APP_PATH="/tmp/${REPO}"
+  APP_PATH="${WORKPATH}/${REPO}"
   cd "${APP_PATH}"
 
   # Setup environment variables
@@ -111,11 +111,11 @@ function wp_clone() {
     #fi
 
     # Install wordpress if there's no composer
-    # if [[ ! -f "${APP_PATH}/composer.json" ]]; then
-    trace status "Installing Wordpress... "
-    "${wp_cmd}" core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
-    trace notime "OK"
-    # fi
+    if [[ ! -f "${APP_PATH}/composer.json" ]]; then
+      trace status "Installing Wordpress... "
+      "${wp_cmd}" core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
+      trace notime "OK"
+    fi
 
     # Check server
     wp_server_check
