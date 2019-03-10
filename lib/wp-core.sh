@@ -16,7 +16,7 @@ function wp_core() {
   else
     sleep 1
     # Get files setup for smart commit
-    "${WPCLI}"/wp core check-update --no-color &> "${coreFile}"
+    "${wp_cmd}" core check-update --no-color &> "${coreFile}"
     
     # Strip out any randomly occuring debugging output
     grep -vE 'Notice:|Warning:|Strict Standards:|PHP' "${coreFile}" > "${trshFile}" && mv "${trshFile}" "${coreFile}";
@@ -45,10 +45,10 @@ function wp_core() {
         cd "${APP_PATH}"; \
         if [[ "${QUIET}" != "1" ]]; then
           # Come back and get this path properly
-          /usr/local/bin/composer update johnpbloch/wordpress &>> "${logFile}" &
+          "${composer_cmd}" update johnpbloch/wordpress &>> "${logFile}" &
           spinner $!
         else
-          /usr/local/bin/composer update johnpbloch/wordpress &>> "${logFile}"
+          "${composer_cmd}" update johnpbloch/wordpress &>> "${logFile}"
         fi
         cd "${WP_PATH}"; \
 

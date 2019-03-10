@@ -19,7 +19,7 @@ function prepare() {
   done
 
   # Should we use our built-in Worpdress prepare clone function?
-  if [[ "${PREPARE}" == "TRUE" ]]; then
+  if [[ "${PREPARE}" == "TRUE" ]] || [[ "${PREPARE}" == "1" ]]; then
     wp_clone; return
   fi
 }
