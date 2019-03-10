@@ -98,7 +98,7 @@ function init_env() {
   CLIENTID CLIENTSECRET REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN \
   REFRESHTOKEN PROFILEID ALLOWROOT SHORTEMAIL INCOGNITO REPORTURL \
   CLIENTCONTACT INCLUDEHOSTING GLOBAL_VERSION USER_VERSION PROJECT_VERSION \
-  TERSE NOTIFYCLIENT FIXINDEX HTMLTEMPLATE PREPARE PREPARE_ONLY \
+  TERSE NOTIFYCLIENT FIXINDEX HTMLTEMPLATE PREPARE \
   PREPARE_CONFIG GRAVITY_FORMS_LICENSE)
   init_loop
 }
@@ -145,6 +145,7 @@ Options:
   -m, --merge            Force merge of branches
   -c, --current          Deploy a project from current working directory          
   -t, --time             Add time to project management integration
+  -p, --prepare          Clone and setup local Wordpress project
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
   -h, --help             Display this help and exit
@@ -225,7 +226,7 @@ while [[ ${1:-unset} = -?* ]]; do
     -t|--time) TIME="1" ;;
     --approve) APPROVE="1"; FORCE="1" ;;
     --deny) DENY="1"; FORCE="1" ;;
-    --prepare) PREPARE_ONLY="1" ;;
+    -p|--prepare) PREPARE="1" ;;
     --digest) DIGEST="1"; FORCE="1"; QUIET="1" ;;
     --report) REPORT="1"; FORCE="1"; QUIET="1" ;;
     --automate) FORCE="1"; UPGRADE="1"; MERGE="1"; QUIET="1"; AUTOMATE="1" ;;

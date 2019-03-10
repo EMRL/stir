@@ -31,13 +31,13 @@ function wp_clone() {
   ssh_check
   
   notice "Setting up project..."
-  cd ${WORKPATH}; \
+  cd /tmp; \
   if [[ -d "/tmp/${REPO}" ]]; then
-    cd "/${WORKPATH}/${REPO}"
-    git checkout "${MASTER}" &>> /dev/null; error_check
+    cd "/tmp/${REPO}"
+    "${git_cmd}" checkout "${MASTER}" &>> /dev/null; error_check
   else
     trace status "Cloning ${SSH_REPO}... "
-    git clone "${SSH_REPO}" &>> /dev/null; error_check
+    "${git_cmd}" clone "${SSH_REPO}" &>> /dev/null; error_check
     trace notime "OK"
   fi
 
@@ -95,22 +95,25 @@ function wp_clone() {
 
     # Composer stuff
     if [[ -f "${APP_PATH}/composer.json" ]]; then
-      # TODO Get real path later
       cd "${APP_PATH}"
-      /usr/local/bin/composer install; error_check
+      ${composer_cmd} install; error_check
     fi
     
-    # Database check
-    DB_CHECK="$(/usr/bin/mysqlshow --user=${MYSQL_USER} --password=${MYSQL_PASS} null 2> /dev/null | grep -o null)"
-    if [[ "${DB_CHECK}" != "null" ]]; then
-      trace status "Creating database... "
-      "${WPCLI}"/wp db create &>> /dev/null; error_check; trace notime "OK"
-    fi
+    # Database check (check is not working correctly)
+    # trace "Checking for database \'${DB_DATABASE}\'"
+    # "${mysqlshow_cmd}" --user=${MYSQL_USER} --password=${MYSQL_PASS} ${DB_DATABASE} 2> /dev/null
+    # DB_CHECK=$?;
+    # if [[ "${DB_CHECK}" != "0" ]]; then
+       trace status "Creating database... "
+    #  "${wp_cmd}" db create &>> /dev/null; error_check; trace notime "OK"
+      "${wp_cmd}" db create &>> /dev/null; trace notime "OK"
+
+    #fi
 
     # Install wordpress if there's no composer
     # if [[ ! -f "${APP_PATH}/composer.json" ]]; then
     trace status "Installing Wordpress... "
-    "${WPCLI}"/wp core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
+    "${wp_cmd}" core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
     trace notime "OK"
     # fi
 
@@ -142,6 +145,8 @@ function create_env() {
 
   if [[ "${SET_ENV}" != "1" ]]; then
     error "Configuration file not found, can not continue."
+  else
+    source "${env_file}"
   fi
 
   # This is a freshly cloned repo, no need for garbage collection

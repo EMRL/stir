@@ -11,10 +11,14 @@ function mailLog() {
   if [[ -n "${COMMITHASH}" ]] || [[ "${message_state}" == "ERROR" ]] || [[ "${message_state}" == "APPROVAL NEEDED" ]] || [[ "${AUTOMATE}" == "1" ]]; then
 
     # Make sure sendmail exists and is configured 
-    if [[ ! -f "${MAILPATH}/sendmail" ]]; then
-      empty_line; warning "Sendmail misconfigured or not found."
-      quietExit
-    fi
+    hash "${sendmail_cmd}" 2>/dev/null || { 
+      error >&2 "Sendmail misconfigured or not found."; 
+    }
+
+#    if [[ ! -f "${MAILPATH}/sendmail" ]]; then
+#      empty_line; warning "Sendmail misconfigured or not found."
+#      quietExit
+#    fi
 
     # If using --current, use the REPO value instead of the APP (current directory)
     if [[ "${CURRENT}" == "1" ]]; then
@@ -32,7 +36,7 @@ function mailLog() {
       echo "Content-Type: text/html"
       echo
       echo "${htmlSendmail}";
-      ) | "${MAILPATH}"/sendmail -t
+      ) | "${sendmail_cmd}" -t
     else
       # Compile and send text format email
       textSendmail=$(<"${logFile}")
@@ -45,7 +49,7 @@ function mailLog() {
       echo "Content-Type: text/plain"
       echo
       echo "${textSendmail}";
-      ) | "${MAILPATH}"/sendmail -t
+      ) | "${sendmail_cmd}" -t
     fi
   fi
 
@@ -61,21 +65,28 @@ function mailLog() {
     echo "Content-Type: text/html"
     echo
     echo "${digestSendmail}";
-    ) | "${MAILPATH}"/sendmail -t
+    ) | "${sendmail_cmd}" -t
   fi
 }
 
 function email_test() {
   console "Testing email..."
 
+  # Make sure sendmail exists and is configured 
+  hash "${sendmail_cmd}" 2>/dev/null || { 
+    error >&2 "Sendmail misconfigured or not found.";
+  }
+
   # Confirm we have a recipient address
   if [[ -z "${TO}" ]]; then
     empty_line; warning "No recipient address found."
     quietExit
   # Make sure sendmail exists and is configured 
-  elif [[ ! -f "${MAILPATH}/sendmail" ]]; then
-    empty_line; warning "Sendmail misconfigured or not found."
-    quietExit
+
+
+#  elif [[ ! -f "${MAILPATH}/sendmail" ]]; then
+#    empty_line; warning "Sendmail misconfigured or not found."
+#    quietExit
   else
     # Send HTML mail
     (
@@ -214,7 +225,7 @@ function email_test() {
       [[ -n "${NIKTO_PROXY}" ]] && echo "Proxy: ${NIKTO_PROXY}<br />"
       echo "<br />"
     fi
-    ) | "${MAILPATH}"/sendmail -t
+    ) | "${sendmail_cmd}" -t
 
     # Send text mail
     (
@@ -365,7 +376,7 @@ function email_test() {
       [[ -n "${NIKTO_PROXY}" ]] && echo "Proxy: ${NIKTO_PROXY}"
       echo
     fi
-    ) | "${MAILPATH}"/sendmail -t
+    ) | "${sendmail_cmd}" -t
   fi
 
   # If an integration is setup, let's test it
@@ -391,7 +402,7 @@ function email_test() {
       [[ -n "${PROJCLIENT}" ]] && echo "Client: ${PROJCLIENT}"
       [[ -n "${DEVURL}" ]] && echo "Staging URL: ${DEVURL}"
       [[ -n "${PRODURL}" ]] && echo "Production URL: ${PRODURL}"
-      ) | "${MAILPATH}"/sendmail -t
+      ) | "${sendmail_cmd}" -t
       quietExit
     else
       console "Integration email address ${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL} does not look valid"; quietExit

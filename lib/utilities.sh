@@ -157,6 +157,12 @@ function is_integer() {
   fi
 }
 
+function get_fullpath() {
+   # Get absolute paths to critical commands
+  for i in "${var[@]}" ; do
+    eval "${i}_cmd=\"$(which ${i})\""
+  done
+}
 
 # Check that dependencies exist
 function dependency_check() {
@@ -197,7 +203,11 @@ function dependency_check() {
       error "Project directory is not writable."
     fi
   fi
-  
+
+  # Get absolute paths
+  var=(composer wp sendmail wget curl git mysqlshow grep wc)
+  get_fullpath
+
   # If a deploy command is declared, check that it actually exists.
   # This is probably not the best way to do this but for now it works. It 
   # strips everything after the first space that is declared in DEPLOY and

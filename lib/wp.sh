@@ -18,6 +18,8 @@ function wp() {
     
     cd "${WP_PATH}"
 
+    notice "Checking for updates..."
+
     # Check log for core updates
     if [[ "${DONOTUPDATEWP}" == "TRUE" ]]; then
       trace "Wordpress core updates disabled, skipping"
@@ -30,8 +32,8 @@ function wp() {
       wp_update_check &
       spinner $!
     else
-      "${WPCLI}"/wp plugin status --no-color >> "${logFile}"
-      "${WPCLI}"/wp plugin update --dry-run --no-color --all > "${wpFile}"
+      "${wp_cmd}" plugin status --no-color >> "${logFile}"
+      "${wp_cmd}" plugin update --dry-run --no-color --all > "${wpFile}"
     fi
 
     # Check the logs
@@ -56,13 +58,12 @@ function wp() {
 }
 
 function wp_update_check() {
-  notice "Checking for updates..."
 
   # For the logfile
-  "${WPCLI}"/wp plugin status --no-color &>> $logFile
+  "${wp_cmd}" plugin status --no-color &>> $logFile
 
   # For the console/smart commit message
-  "${WPCLI}"/wp plugin update --dry-run --no-color --all &> "${wpFile}"
+  "${wp_cmd}" plugin update --dry-run --no-color --all &> "${wpFile}"
 
   # Other options, thanks Corey
   # wp plugin list --format=csv --all --fields=name,update_version,update | grep 'available'
@@ -85,10 +86,10 @@ function wp_check() {
 
       # Local database check
       trace status "Checking database... "
-      "${WPCLI}"/wp db check &>> /dev/null; EXITCODE=$?; 
+      "${wp_cmd}" db check &>> /dev/null; EXITCODE=$?; 
       
       if [[ "${EXITCODE}" != "0" ]]; then 
-        "${WPCLI}"/wp db check &>> "${logFile}"; 
+        "${wp_cmd}" db check &>> "${logFile}"; 
         trace notime "FAIL"
         if [[ "${AUTOMATE}" == "1" ]]; then
           error "There is a problem with your Wordpress installation, check your configuration."
@@ -98,7 +99,7 @@ function wp_check() {
       else
         # Get info
         trace notime "OK"
-        "${WPCLI}"/wp core version --extra  &>> "${logFile}";
+        "${wp_cmd}" core version --extra  &>> "${logFile}";
       fi
     else
       WP_PATH="FALSE"
@@ -109,7 +110,7 @@ function wp_check() {
 function wp_server_check {
   # Launch server
   trace "Launching server"
-  "${WPCLI}"/wp server --host=localhost >> "${logFile}" 2>&1 &
+  "${wp_cmd}" server --host=localhost >> "${logFile}" 2>&1 &
   PID=$!
 
   # Keep checking for server to come online
@@ -118,11 +119,11 @@ function wp_server_check {
   done
 
   trace "Activating plugins"
-  "${WPCLI}"/wp plugin activate --all >> "${logFile}" 2>&1
+  "${wp_cmd}" plugin activate --all >> "${logFile}" 2>&1
   trace "Activating theme"
-  "${WPCLI}"/wp theme activate site >> "${logFile}" 2>&1
+  "${wp_cmd}" theme activate site >> "${logFile}" 2>&1
   
-  curl -sL localhost:8080 | grep -E "Warning:|Fatal:" >> "${logFile}" 2>&1
+  "${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" >> "${logFile}" 2>&1
   
   if [[ -z "$(curl -sL localhost:8080 | grep -E "Warning:|Fatal:")" ]]; then
   #if curl -sL localhost:8080 | grep -E "Warning:|Fatal:" > /dev/null; then

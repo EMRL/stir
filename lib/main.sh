@@ -12,7 +12,7 @@ function main() {
   env_check         # Check for configuration files that need updating
   wp_check          # Check for Wordpress
   
-  if [[ -n "${PREPARE}" ]] || [[ "${PREPARE_ONLY}" == "1" ]]; then
+  if [[ -n "${PREPARE}" ]]; then
     if [[ "${PREPARE}" != "FALSE" ]]; then
       prepare
     else
