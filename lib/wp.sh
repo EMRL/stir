@@ -123,14 +123,14 @@ function wp_server_check {
   trace "Activating theme"
   "${wp_cmd}" theme activate site >> "${logFile}" 2>&1
   
-  "${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" >> "${logFile}" 2>&1
+  #"${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" >> "${logFile}" 2>&1
   
-  if [[ -z "$(curl -sL localhost:8080 | grep -E "Warning:|Fatal:")" ]]; then
+  #if [[ -z "$(curl -sL localhost:8080 | grep -E "Warning:|Fatal:")" ]]; then
   #if curl -sL localhost:8080 | grep -E "Warning:|Fatal:" > /dev/null; then
-    trace "Local server check passed";
-  else
-    error "Local server check FAIL"
-  fi
+  #  trace "Local server check passed";
+  #else
+  #  error "Local server check FAIL"
+  #fi
 }
 
 function wp_path() {
