@@ -137,11 +137,14 @@ function wp_path() {
   # Store path in variable and remove any extra /
   WP_PATH="${APP_PATH}${WPROOT}${WPAPP}"
   WP_PATH=$(sed -e "s^//^/^g" <<< ${WP_PATH})
-  cd "${WP_PATH}"; \
+  if [[ -d "${WP_PATH}" ]]; then
+    cd "${WP_PATH}"; \
+  fi
 }
 
 function wp_tmp {
   # Store path in variable and remove any extra /
-  WP_TMP="/tmp/${REPO}/${WPROOT}${WPAPP}"
+  # WP_TMP="/tmp/${REPO}/${WPROOT}${WPAPP}"
+  WP_TMP="/${WORKPATH}/${REPO}/${WPROOT}${WPAPP}"
   WP_TMP=$(sed -e "s^//^/^g" <<< $WP_TMP)
 }
