@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.7.3] - 03-12-2019
 ### Added
 - Wordpress projects can now be managed using either `composer` or `wp-cli` (or both) transparently
 - ACF Pro update files must now pass an integrity check before proceeding with plugin upgrade
@@ -239,7 +239,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Old monolithic script rewritten
 
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.7.2...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.7.3...HEAD
+[3.7.3]: https://github.com/EMRL/deploy/compare/v3.7.2...v3.7.3
 [3.7.2]: https://github.com/EMRL/deploy/compare/v3.7.1...v3.7.2
 [3.7.1]: https://github.com/EMRL/deploy/compare/v3.7...v3.7.1
 [3.7]: https://github.com/EMRL/deploy/compare/v3.6.7...v3.7
