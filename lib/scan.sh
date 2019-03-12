@@ -7,10 +7,9 @@
 ###############################################################################
 
 # Initialize variables
-read -r NIKTO NIKTO_CONFIG NIKTO_PROXY scan_html SCAN_RESULT SCAN_MSG \
-  SCAN_URL <<< ""
-echo "${NIKTO} ${NIKTO_CONFIG} ${scan_html} ${SCAN_RESULT} ${SCAN_MSG}
-  ${SCAN_URL}" > /dev/null
+var=(NIKTO NIKTO_CONFIG NIKTO_PROXY scan_html SCAN_RESULT SCAN_MSG \
+  SCAN_URL)
+init_loop
 
 function scan_check() {
   if [[ -n "${PRODURL}" ]] || [[ -n "${NIKTO}" ]]; then

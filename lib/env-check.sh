@@ -7,12 +7,10 @@
 ###############################################################################
 
 # Initialize variables
-read -r update_global update_user update_project env_settings project_config \
+var=(update_global update_user update_project env_settings project_config \
   sed_hack short_version global_project_version local_version \
-  tmp_workpath <<< ""
-echo "${update_global} ${update_user} ${update_project} ${project_config} 
-  ${sed_hack} ${short_version} ${global_project_version} 
-  ${local_version} ${tmp_workpath}" > /dev/null
+  tmp_workpath default_etc)
+init_loop
 
 function env_check() {
   # Only check when someone is at the console
@@ -25,14 +23,21 @@ function env_check() {
     # Trim alpha/beta part of version number   
     local_version="${VERSION//-*}"
     
+    # Check for global vs local install
+    if [[ "${deployPath}" != "/etc/stir" ]]; then
+      default_etc="${deployPath}/etc"
+    else
+      default_etc="${deployPath}"
+    fi
+
     # Compare version numbers
-    local_version="${GLOBAL_VERSION}"; source "${deployPath}"/deploy-example.conf
+    local_version="${GLOBAL_VERSION}"; source "${default_etc}"/stir-global.conf
     [[ "${GLOBAL_VERSION}" != "${local_version}" ]] && update_global="1";
     
-    local_version="${USER_VERSION}"; source "${deployPath}"/.deployrc
+    local_version="${USER_VERSION}"; source "${default_etc}"/stir-user.rc
     [[ "${USER_VERSION}" != "${local_version}" ]] && update_user="1";
     
-    local_version="${PROJECT_VERSION}"; source "${deployPath}"/deploy.sh 
+    local_version="${PROJECT_VERSION}"; source "${default_etc}"/stir-project.sh 
     [[ "${PROJECT_VERSION}" != "${local_version}" ]] && update_project="1"
 
     if [[ "${update_global}" == "1" ]] || [[ "${update_user}" == "1" ]] || [[ "${update_project}" == "1" ]]; then
@@ -40,8 +45,10 @@ function env_check() {
     fi
 
     # Reload environment variables, from global > user > project
-    source "${deployPath}"/deploy.conf
-    source ~/.deployrc
+    source "${etcLocation}"
+    source ~/.stirrc
+    
+    # TODO This throws an error, fix it.
     source "${project_config}"
 
     # Restore workpath value
@@ -50,7 +57,7 @@ function env_check() {
     # Trying to continue if global configuration has been changed is buggy
     # if using --current switch
     if [[ "${update_global}" == "1" ]]; then
-      console "Global configuration changed - restart your deployment."
+      console "Global configuration changed - restart stir to continue."
       quietExit
     fi
   fi
@@ -69,7 +76,7 @@ function update_config() {
 }
 
 function update_global() {
-  info "Updating ${deployPath}/deploy.conf..."
+  info "Updating ${deployPath}/global.conf..."
   env_settings=(CLEARSCREEN WORKPATH CONFIGDIR SERVERCHECK ACTIVECHECK \
     CHECKTIME REPOHOST SMARTCOMMIT GITSTATS STASH GARBAGE WPCLI WFCHECK \
     FIXPERMISSIONS DEVUSER DEVGROUP APACHEUSER APACHEGROUP FIXINDEX \
@@ -81,52 +88,52 @@ function update_global() {
 
   if [[ ! -w "${deployPath}" ]]; then
     info "Requesting sudo access..."
-    sudo cp "${deployPath}"/deploy.conf "${deployPath}"/deploy.conf.bak
+    sudo cp "${deployPath}"/global.conf "${deployPath}"/global.conf.bak
   else
-    cp "${deployPath}"/deploy.conf "${deployPath}"/deploy.conf.bak
+    cp "${deployPath}"/global.conf "${deployPath}"/global.conf.bak
   fi
-  info "Global configuration backup created at ${deployPath}/deploy.conf.bak"
+  info "Global configuration backup created at ${deployPath}/global.conf.bak"
   
-  cp "${deployPath}"/deploy-example.conf "${trshFile}"
+  cp "${deployPath}"/stir-global.conf "${trshFile}"
 
   # Reload global values
-  source "${deployPath}"/deploy.conf
+  source "${deployPath}"/global.conf
   
   # Loops through the variables
   for i in "${env_settings[@]}" ; do
-    current_setting=$(grep "^${i}=" "${deployPath}"/deploy.conf.bak)
+    current_setting=$(grep "^${i}=" "${deployPath}"/global.conf.bak)
     insert_values
   done
 
   # Install new files
   env_cleanup
   if [[ ! -w "${deployPath}" ]]; then
-    sudo cp "${trshFile}" "${deployPath}"/deploy.conf
+    sudo cp "${trshFile}" "${deployPath}"/global.conf
   else
-    cp "${trshFile}" "${deployPath}"/deploy.conf
+    cp "${trshFile}" "${deployPath}"/global.conf
   fi
 }
 
 function update_user() {
-  info "Updating ~/.deployrc..."
+  info "Updating ~/.stirrc..."
   env_settings=(CLEARSCREEN VERBOSE GITSTATS)
   
-  info "User configuration backup created at ~/.deployrc.bak"
-  cp ~/.deployrc ~/.deployrc.bak
-  cp "${deployPath}"/.deployrc "${trshFile}"
+  info "User configuration backup created at ~/.stirrc.bak"
+  cp ~/.stirrc ~/.stirrc.bak
+  cp "${deployPath}"/.stir-user.rc "${trshFile}"
 
   # Reload user values
-  source ~/.deployrc
+  source ~/.stirrc
 
   # Loops through the variables
   for i in "${env_settings[@]}" ; do
-    current_setting=$(grep "^${i}=" ~/.deployrc)
+    current_setting=$(grep "^${i}=" ~/.stirrc)
     insert_values
   done
 
   # Install new files
   env_cleanup
-  cp "${trshFile}" ~/.deployrc
+  cp "${trshFile}" ~/.stirrc
 }
 
 function update_project() { 
@@ -143,11 +150,12 @@ function update_project() {
     ACCESSTOKEN REFRESHTOKEN PROFILEID MONITORURL MONITORUSER MONITORPASS \
     SERVERID NIKTO NIKTO_CONFIG STAGING_DEPLOY_PATH PRODUCTION_DEPLOY_HOST \
     PRODUCTION_DEPLOY_PATH SCP_DEPLOY_USER SCP_DEPLOY_PASS SCP_DEPLOY_PORT \
-    NIKTO NIKTO_CONFIG NIKTO_PROXY DB_API_TOKEN DB_BACKUP_PATH)
+    NIKTO NIKTO_CONFIG NIKTO_PROXY DB_API_TOKEN DB_BACKUP_PATH PREPARE \
+    PREPARE_CONFIG ACF_LOCK)
 
   info "Project configuration backup created at ${project_config}.bak"
   cp "${project_config}" "${project_config}.bak"
-  cp "${deployPath}"/deploy.sh "${trshFile}"
+  cp "${deployPath}"/stir-project.sh "${trshFile}"
   # Loops through the variables
   for i in "${env_settings[@]}" ; do
     current_setting=$(grep "^${i}=" "${project_config}")
@@ -171,3 +179,5 @@ function insert_values() {
 function env_cleanup() {
   sed -i "s^{{.*}}^^g" "${trshFile}"
 }
+
+

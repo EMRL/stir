@@ -6,17 +6,17 @@
 # Checks for Wordpress core updates
 ###############################################################################
 
-function wpCore() {
+function wp_core() {
   # There's a little bug when certain plugins are spitting errors; work around 
   # seems to be to check for core updates a second time
-  cd "${WORKPATH}"/"${APP}${WPROOT}"; \
+  cd "${APP_PATH}"/"${WPROOT}"; \
   "${WPCLI}"/wp core check-update --no-color &>> "${logFile}"
   if grep -q 'WordPress is at the latest version.' "${logFile}"; then
     info "Wordpress core is up to date."; UPD2="1"
   else
     sleep 1
     # Get files setup for smart commit
-    "${WPCLI}"/wp core check-update --no-color &> "${coreFile}"
+    "${wp_cmd}" core check-update --no-color &> "${coreFile}"
     
     # Strip out any randomly occuring debugging output
     grep -vE 'Notice:|Warning:|Strict Standards:|PHP' "${coreFile}" > "${trshFile}" && mv "${trshFile}" "${coreFile}";
@@ -39,12 +39,25 @@ function wpCore() {
       # Update available!  \o/
       echo -e "";
 
+      # Update via composer if needed
+      if [[ -f "${APP_PATH}/composer.json" ]]; then
+        trace "Found composer.json, updating"
+        cd "${APP_PATH}"; \
+        if [[ "${QUIET}" != "1" ]]; then
+          # Come back and get this path properly
+          "${composer_cmd}" update johnpbloch/wordpress &>> "${logFile}" &
+          spinner $!
+        else
+          "${composer_cmd}" update johnpbloch/wordpress &>> "${logFile}"
+        fi
+        cd "${WP_PATH}"; \
+
       # Check for broken wp-cli garbage
-      if [[ "${COREUPD}" == *"PHP"* ]]; then
+      elif [[ "${COREUPD}" == *"PHP"* ]]; then
         warning "Checking for available core update was unreliable, skipping.";
       else
         if [[ "${FORCE}" = "1" ]] || yesno --default no "A new version of Wordpress is available (${COREUPD}), update? [y/N] "; then
-          cd "${WORKPATH}/${APP}${WPROOT}"; \
+          cd "${APP_PATH}/${WPROOT}"; \
           if [[ "${QUIET}" != "1" ]]; then
             "${WPCLI}"/wp core update --no-color &>> "${logFile}" &
             spinner $!
@@ -60,7 +73,7 @@ function wpCore() {
             error "Core update failed.";
           else
             sleep 1
-            cd "${WORKPATH}/${APP}/"; # \ 
+            cd "${APP_PATH}/"; # \ 
             info "Wordpress core updates complete."; UPDCORE=1
           fi
                   

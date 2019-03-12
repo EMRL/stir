@@ -7,13 +7,14 @@
 ###############################################################################
 
 # Initialize variables
-read -r value remote_origin config_file <<< ""
-echo "${value} ${remote_origin} ${config_file}" > /dev/null
+var=(value remote_origin config_file)
+init_loop
 
 function configure_project() {
   empty_line
-  arg="${PROJNAME}"; read -rp "Project name:" -e -i "${arg}" value; set_value "${value}"
-  arg="${PROJCLIENT}"; read -rp "Client name:" -e -i "${arg}" value; set_value "${value}"
+  config_file="${APPRC}"
+  arg="${PROJNAME}"; read -rp "Project name:" -e -i "${arg} " value; set_value "${value}"
+  arg="${PROJCLIENT}"; read -rp "Client name:" -e -i "${arg} " value; set_value "${value}"
   remote_origin="$(git ls-remote --get-url)"
   REPOHOST=$(echo ${remote_origin%/*})
   arg="${REPOHOST}"; read -rp "Repo root URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
@@ -23,9 +24,7 @@ function configure_project() {
 
 function configure_user() {
   empty_line
-  config_file="$HOME/.deployrc"
-  #target_file="/tmp/.deployrc"
-  #cp "${deployPath}"/.deployrc "${target_file}"
+  config_file="$HOME/.stirrc"
   arg="CLEARSCREEN"
   if yesno --default yes "Clear screen on startup? [Y/n] "; then
     set_value TRUE

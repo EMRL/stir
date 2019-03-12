@@ -153,8 +153,9 @@ function makeLog() {
 }
 
 function build_html() {
-  # Build out the HTML
   LOGSUFFIX="html"
+  
+  # Build out the HTML
   if [[ "${message_state}" == "ERROR" ]]; then
     # Oh man, this is an error
     notes="${error_msg}"
@@ -187,7 +188,7 @@ function build_html() {
       fi
       if [[ "${DIGEST}" != "1" ]] && [[ "${REPORT}" != "1" ]]; then
         if [[ "${REPAIR}" == "1" ]] && [[ -z "${notes}" ]]; then
-          notes="Repaired and deployed codebase"
+          notes="Merged and deployed codebase"
         fi
         cat "${deployPath}/html/${HTMLTEMPLATE}/header.html" "${deployPath}/html/${HTMLTEMPLATE}/success.html" > "${htmlFile}"
       fi

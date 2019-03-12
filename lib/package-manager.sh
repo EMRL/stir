@@ -7,19 +7,19 @@
 ###############################################################################
 
 # Initialize variables
-read -r deploy_config SKIP_BUILD npm_json <<< ""
-echo "${deploy_config} ${SKIP_BUILD} ${npm_json}" > /dev/null
+var=(deploy_config SKIP_BUILD npm_json)
+init_loop
 
 function pkgMgr() {
   if [[ "${FORCE}" != "1" ]] || [[ "${BUILD}" == "1" ]]; then
     if [[ "${UPGRADE}" != "1" ]]; then
 
       # Checking for app/lib, which assumes we're using Grunt
-      if [[ -f "${WORKPATH}/${APP}/Gruntfile.coffee" ]]; then
+      if [[ -f "${APP_PATH}/Gruntfile.coffee" ]]; then
         notice "Found grunt configuration!" 
 
         if  [[ "${FORCE}" = "1" ]] || yesno --default no "Build assets? [y/N] "; then
-          cd "${WORKPATH}"/"${APP}" || errorCheck
+          cd "${APP_PATH}" || errorCheck
     
           if [[ "${VERBOSE}" == "TRUE" ]]; then
             /usr/local/bin/grunt build --force 2>&1 | tee --append "${trshFile}"           
@@ -47,7 +47,7 @@ function pkgMgr() {
 function check_build_method() {
   if [[ "${DEPLOY}" == *"mina"* ]]; then
     # Trying this a weirdo way, turn it into a loop or something later
-    [[ -f "${WORKPATH}/${APP}/Minafile" ]] && deploy_config="$(cat ${WORKPATH}/${APP}/Minafile)"
+    [[ -f "${APP_PATH}/Minafile" ]] && deploy_config="$(cat ${APP_PATH}/Minafile)"
     if [[ "${deploy_config}" =~ "npm run build" ]] && [[ "${BUILD}" != "1" ]]; then
         SKIP_BUILD="1"
     fi
@@ -55,15 +55,15 @@ function check_build_method() {
 }
 
 function npm_build() {
-  if [[ -f "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/site/package.json" ]]; then
-    trace "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/site/package.json found."
-    npm_json="${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/site"
-  elif [[ -f "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/${APP}/package.json" ]]; then
-    trace "${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/${APP}/package.json found."
-    npm_json="${WORKPATH}/${APP}${WPROOT}${WPAPP}/themes/${APP}"
-  elif [[ -f "${WORKPATH}/${APP}/package.json" ]]; then
-    trace "${WORKPATH}/${APP}/package.json found."
-    npm_json="${WORKPATH}/${APP}"
+  if [[ -f "${APP_PATH}/${WPROOT}${WPAPP}/themes/site/package.json" ]]; then
+    trace "${APP_PATH}/${WPROOT}${WPAPP}/themes/site/package.json found."
+    npm_json="${APP_PATH}/${WPROOT}${WPAPP}/themes/site"
+  elif [[ -f "${APP_PATH}/${WPROOT}${WPAPP}/themes/${APP}/package.json" ]]; then
+    trace "${APP_PATH}/${WPROOT}${WPAPP}/themes/${APP}/package.json found."
+    npm_json="${APP_PATH}/${WPROOT}${WPAPP}/themes/${APP}"
+  elif [[ -f "${APP_PATH}//package.json" ]]; then
+    trace "${APP_PATH}//package.json found."
+    npm_json="${APP_PATH}"
   fi
 
   if [[ -z "${npm_json}" ]]; then 

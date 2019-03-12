@@ -7,14 +7,14 @@
 ###############################################################################
 
 # Initialize variables
-read -r release release_notes release_url <<< ""
-echo "${active_files}" > /dev/null
+var=(release release_notes release_url)
+init_loop
 
 function release_check() {
   # Only check for a newer release when someone is at the console
   if [[ "${FORCE}" != "1" ]]; then
     # Get the release tag
-    trace "Checking for deploy updates..."
+    trace "Checking for updates..."
     release="$(curl -s https://api.github.com/repos/emrl/deploy/releases/latest | grep \"tag_name\")"
     # Remove the extra garbage
     release="${release#*v}"
@@ -39,7 +39,7 @@ function release_check() {
         release_url="$(curl -s https://api.github.com/repos/emrl/deploy/releases/latest | grep tarball_url | cut -d '"' -f 4)"
         curl -Ls "${release_url}" -o "deploy-${release}.tar.gz"
         # Eventually I'll have a full install here but for now we'll bail
-        console "Try 'tar zxvf deploy-${release}.tar.gz' and then 'sudo doinst.sh' from the archive root directory."
+        console "Try 'tar zxvf stir-${release}.tar.gz' and then 'sudo doinst.sh' from the archive root directory."
         quietExit
       fi
     fi

@@ -12,11 +12,9 @@
 ###############################################################################
 
 # Initialize variables
-read -r SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \
-  GA_SOCIAL ANALYTICSMSG ga_day ga_sequence max_value n a GA_TOTAL <<< ""
-echo "${SIZE} ${RND} ${METRIC} ${RESULT} ${GA_HITS} ${GA_PERCENT} 
-  ${GA_SEARCHES} ${GA_DURATION} ${GA_SOCIAL} ${ANALYTICSMSG} ${ga_sequence} 
-  ${max_value} ${n} ${a} ${GA_TOTAL}" > /dev/null
+var=(SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \
+  GA_SOCIAL ANALYTICSMSG ga_day ga_sequence max_value n a GA_TOTAL)
+init_loop
 
 ga_var=(users newUsers percentNewSessions sessionsPerUser sessions 
     bounceRate avgSessionDuration hits organicSearches pageviews avgTimeOnPage
@@ -27,7 +25,6 @@ for i in "${ga_var[@]}" ; do
   read -r ga_${i} <<< ""
   echo "ga_${i}" > /dev/null
 done
-
 
 function ga_metrics() {
   array[0]="hits"

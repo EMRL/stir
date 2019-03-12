@@ -7,6 +7,9 @@
 ###############################################################################
 
 # Initialize variables
+var=(integer_check)
+init_loop
+
 read -r integer_check <<< ""
 echo "${integer_check}" > /dev/null
 
@@ -25,7 +28,7 @@ function go() {
   scan_check
   check_backup
 
-  console "deploy ${VERSION}"
+  console "stir ${VERSION}"
 
   # Build only
   if [[ "${BUILD}" == "1" ]]; then
@@ -33,7 +36,7 @@ function go() {
   fi  
 
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    console "Current working path is ${WORKPATH}/${APP}"
+    console "Current working path is ${APP_PATH}"
   fi
   
   # Slack test
@@ -135,10 +138,10 @@ function go() {
 function fix_index() {
   # A rather brutal fix for index permissions issues
   if [[ "${FIXINDEX}" == "TRUE" ]]; then
-    if [[ ! -w "${WORKPATH}/${APP}/.git/index" ]]; then
+    if [[ ! -w "${APP_PATH}/.git/index" ]]; then
       trace "Index is not writable, attempting to fix..."
-      sudo chmod 777 "${WORKPATH}/${APP}/.git/index"; error_check
-      if [[ ! -w "${WORKPATH}/${APP}/.git/index" ]]; then
+      sudo chmod 777 "${APP_PATH}/.git/index"; error_check
+      if [[ ! -w "${APP_PATH}/.git/index" ]]; then
         error "Unable to write new index file."
       fi
     fi
@@ -154,12 +157,18 @@ function is_integer() {
   fi
 }
 
+function get_fullpath() {
+   # Get absolute paths to critical commands
+  for i in "${var[@]}" ; do
+    eval "${i}_cmd=\"$(which ${i})\""
+  done
+}
 
 # Check that dependencies exist
 function dependency_check() {
   # Is git installed?
   hash git 2>/dev/null || {
-    error "deploy ${VERSION} requires git to function properly." 
+    error "stir ${VERSION} requires git to function properly." 
   }
 
   # Does a configuration file for this repo exist?
@@ -194,7 +203,11 @@ function dependency_check() {
       error "Project directory is not writable."
     fi
   fi
-  
+
+  # Get absolute paths
+  var=(composer wp sendmail wget curl git mysqlshow grep wc)
+  get_fullpath
+
   # If a deploy command is declared, check that it actually exists.
   # This is probably not the best way to do this but for now it works. It 
   # strips everything after the first space that is declared in DEPLOY and

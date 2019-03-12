@@ -4,12 +4,34 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.7.3] - 03-12-2019
 ### Added
+- Automated Worpdress updates may now made by cloning a temporary copy of the project's repo, running the updates, and destroying upon completion
+- Prepare hook added 
+### Changed
+- `deploy` is now `stir`
+- Invoice creation will now exit gracefully if project is not correctly configured
+### Fixed
+- Fixed many small bugs
+
+## [3.7.3] - 03-12-2019
+### Added
 - Wordpress projects can now be managed using either `composer` or `wp-cli` (or both) transparently
 - ACF Pro update files must now pass an integrity check before proceeding with plugin upgrade
 ### Changed
 - Project deployment can be disabled by adding a file called `.donotdeploy` in the project's root directory (This is the equivalent of setting `DONOTDEPLOY="TRUE"` in `.deploy.sh`)
 ### Fixed
 - Fixed a bug that occasionally caused successful deployment to be incorrectly reported
+
+## [3.7.2] - 09-25-2018
+### Added
+- Project dashboards have been redesigned to include more analytics charts and information
+- Digest emails can now include a chart showing the week's analytics
+### Changed 
+- Improved HTML post-processing
+### Fixed
+- The `--stats` flag should no longer cause issues when being properly run from a cron process
+- Log files should no longer be left behind in the `/tmp` directory
+- Fixed a problem where statistic dashboard could get corrupted when multiple instances of `deploy --stats` are running
+- Unbound variable errors no longer occur when a Google Analytics result is zero
 
 ## [3.7.2] - 09-25-2018
 ### Added

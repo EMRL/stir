@@ -1,22 +1,20 @@
-# Deploy
+# Stir
 
 [![release](https://img.shields.io/badge/release-v3.7.3-blue.svg?style=flat)](https://github.com/EMRL/deploy/releases/latest)
 [![Build Status](https://travis-ci.org/EMRL/deploy.svg?branch=master)](https://travis-ci.org/EMRL/deploy)
 
-**Note: This is the final release of deploy - check out the ['stir'](https://github.com/EMRL/deploy/tree/stir) branch to see where development headed**
+`stir` is designed to speed up, automate, and integrate project commits, management, and deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
 
-`deploy` is designed to speed up, automate, and integrate project commits, management, and deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
+[Changelog](https://github.com/EMRL/stir/blob/master/CHANGELOG.md)
 
-[Changelog](https://github.com/EMRL/deploy/blob/master/CHANGELOG.md)
-
-This script is in daily use at [EMRL](http://emrl.com), an advertising, design, and development agency in northern California. If you have any questions, please feel free to contact us.
+`stir` is in daily use at [EMRL](http://emrl.com), an advertising, design, and development agency in northern California. If you have any questions, please feel free to contact us.
 
 Please note that our documentation here is nearly useless, and there is quite a bit of setup involved in getting this running reliably. A full setup guide is coming soon™.
 
 ## Startup Options
 
 ```
-Usage: deploy [options] [target] ...
+Usage: stir [options] [target] ...
 
 Options:
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
@@ -57,37 +55,36 @@ Other Options:
   --variable-list        Output a project's declared variables
 ```
 
-[![asciicast](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP.png)](https://asciinema.org/a/mMCid9O2BK7JrpocQuSl3CRkP?t=0)
-
 ## How It Works
 
-`deploy` consolidates a boatload of functions into a single command that simplifies web app deployment from a development or staging environment to a production server. 
+`stir` consolidates a boatload of functions into a single command that simplifies web app deployment from a development or staging environment to a production server. It also can provide clients with a dashboard of information about their project.
 
-`deploy` requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
+![Dashboard](https://raw.githubusercontent.com/EMRL/deploy/stir/img/dashboard.png)
+
+`stir` requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), [`composer`](https://getcomposer.org/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
 
 ## Installation
 
-`deploy` can be run from wherever you've installed it, but if you'd like it to be installed server-wide, follow the instructions below. 
+`stir` can be run from anywhere, but if you'd like it to be installed server-wide follow the instructions below. 
 
-1. In the `deploy` directory, type `sudo ./install/doinst.sh` and enter your sudo password when/if asked
-2. That's it. By default `deploy` is installed to `/usr/local/bin/` and support files are installed to `/etc/deploy/`
+1. In the `stir` directory, type `sudo ./install/doinst.sh` and enter your sudo password when/if asked
+2. That's it. By default `stir` is installed to `/usr/local/bin/` and support files are installed to `/etc/stir/`
 
 ## Configuration
 
-Configuration is handled globally in the `etc/deploy.conf` file. Individual users also have their own settings in `~/.deployrc`
+Configuration is handled globally in the `etc/stir/global.conf` file. Individual users also have their own settings in `~/.stirrc`
 
-Repositories can each have their own deploy configuration. An example of this file can be [found here](https://github.com/EMRL/deploy/blob/master/etc/deploy.sh).
+Repositories can each have their own deploy configuration. An example of this file can be [found here](https://github.com/EMRL/stir/blob/master/etc/stir.sh).
 
 ## Slack
 
-For workgroups and teams that use it, `deploy` is able to integrate with Slack. You'll need to set up an "Incoming Webhook" custom integration on the Slack side to get this ready to roll. See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get going. Once you think you've got Slack configured, run `deploy --slack-test [project]` to test.
+For workgroups and teams that use it, `stir` is able to integrate with Slack. You'll need to set up an "Incoming Webhook" custom integration on the Slack side to get this ready to roll. See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get going. Once you think you've got Slack configured, run `stir --slack-test [project]` to test.
 
 ## Autopilot
 
-`deploy --automate` works well for unattended updates of Wordpress sites; great for maintaining updates via a crontab. An example cron script can be [found here](https://github.com/EMRL/deploy/blob/master/etc/cron/deploy.cron.example). Running in this mode, the project will only be deployed if there are Wordpress core or plugin updates. If other code changes are detected the project will not be auto-updated. Smart Commits must be enabled or nothing will be deployed.
+`stir --automate` works well for unattended updates of Wordpress sites; great for maintaining updates via a crontab. An example cron script can be [found here](https://github.com/EMRL/stir/blob/master/etc/cron/stir.cron.example). Running in this mode, the project will only be deployed if there are Wordpress core or plugin updates. If other code changes are detected the project will not be auto-updated. Smart Commits must be enabled or nothing will be deployed.
 
 ## Contact
 
 * <http://emrl.com/>
 * <https://www.facebook.com/advertisingisnotacrime>
-

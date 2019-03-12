@@ -6,9 +6,9 @@
 # Handles console feedback components
 ###############################################################################
 
-# Initialize variables 
-read -r pid delay spinstr temp <<< ""
-echo "${pid} ${delay} ${spinstr} %{temp}" > /dev/null
+# Initialize variables
+var=(pid delay spinstr temp)
+init_loop
 
 # Progress spinner; we'll see if this works
 function spinner() {
