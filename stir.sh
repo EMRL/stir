@@ -11,7 +11,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.7.3-dev"
+VERSION="4.0-dev"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 LAST_MONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
@@ -27,6 +27,8 @@ set -uo pipefail
 # Trap ctrl-c exits; someday I'll do this better 
 trap ctrl_c INT
 
+# Function to try and cleanup after a user exit, even when external function
+# libraries may not be loaded
 function ctrl_c() {
   if type quietExit &>/dev/null; then
     quietExit
@@ -120,7 +122,7 @@ function init_internal() {
   init_loop
 }
 
-# Go!
+# Initialize all variables we'll need before loading external functions
 init_startup
 init_temp
 init_color
@@ -366,7 +368,7 @@ wpFile="/tmp/${APP}.wp-$RANDOM.log"; (umask 077 && touch "${wpFile}" &> /dev/nul
 coreFile="/tmp/${APP}.core-$RANDOM.log"; (umask 077 && touch "${coreFile}" &> /dev/null) || log_fail
 
 # Start writing the logfile
-echo -e "Deployment logfile for ${APP^^} - ${NOW}\r" >> "${logFile}"
+echo -e "Avtivity logfile for ${APP^^} - ${NOW}\r" >> "${logFile}"
 echo -e "Launching stir${STARTUP}\n" >> "${logFile}"
 
 # More crappy tmp files
