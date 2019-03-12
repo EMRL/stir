@@ -22,7 +22,7 @@ function slackPost () {
   fi
 
   # Setup the payload w/ the baseline language
-  slack_message="*${SLACKUSER}* deployed updates to ${APP}"
+  slack_message="*${SLACKUSER}* pushed updates to ${APP}"
 
   # Is this a simple publish of existing code to live?
   if [[ "${PUBLISH}" == "1" ]]; then
@@ -80,13 +80,12 @@ function slackPost () {
     if [[ -n "${PRODURL}" ]]; then 
       slack_message="${IN_NOTES} invoice (#${current_invoice}) created for <${PRODURL}|${PROJNAME}>"
     else 
-      slack_message="${IN_NOTES} invoice (#${current_invoice}) created *${PROJNAME}*"               
+      slack_message="${IN_NOTES} invoice (#${current_invoice}) created for *${PROJNAME}*"               
     fi    
   fi
 
-
   # Add a details link to online logfiles if they exist
-  if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]]; then
+  if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]] && [[ "${CREATE_INVOICE}" != "1" ]]; then
     slack_message="${slack_message} (<${LOGURL}|Details>)"
   fi
 
@@ -154,7 +153,7 @@ function slackTest {
     warning "No Slack configuration found."; empty_line
     clean_up; exit 1
   else
-    curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration of ${APP} from deploy ${VERSION}\nhttps://github.com/EMRL/deploy\"}" "${SLACKURL}"
+    curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration of ${APP} from stir ${VERSION}\nhttps://github.com/EMRL/deploy\"}" "${SLACKURL}"
     empty_line
   fi
 }

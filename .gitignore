@@ -1,9 +1,7 @@
-/config/
-/etc/deploy.conf
 /original
 /*.sublime-workspace
+global.conf
 .DS_Store
-.deploy.sh
 .stir.sh
 theme.conf
 *.bak

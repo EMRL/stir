@@ -97,6 +97,7 @@ function clean_up() {
   [[ -d "${statDir}" ]] && rm -rf "${statDir}"
   [[ -d "${avatarDir}" ]] && rm -rf "${avatarDir}"
   [[ -d /tmp/stats ]] && rm -rf /tmp/stats
+  
   # [[ -d /tmp/avatar ]] && rm -rf /tmp/avatar
   # [[ -f "${gitLock}" ]] && rm "${gitLock}"
   # Attempt to reset the terminal
@@ -125,6 +126,16 @@ function clean_up() {
     fi
   fi
 
+  # Cleanup clone
+  #if [[ -d "/tmp/${REPO}" ]] && [[ "${PREPARE_ONLY}" != "1" ]] && [[ "${SET_ENV}" == "1" ]]; then 
+  #  cd "${WP_TMP}"; "${WPCLI}"/wp db drop --yes &>> /dev/null
+  #  cd /tmp; rm -rf /tmp/"${REPO}"
+  #fi
+
+  # Do we need to shutdown local wp server?
+  # This will spit out a PID to kill
+  # lsof -i:8080 -t 
+  
   # Attempt to reset the console when running --quiet
   if [[ "${QUIET}" != "1" ]]; then
     tput cnorm

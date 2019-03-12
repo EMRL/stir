@@ -6,7 +6,7 @@
 # Checks for Wordpress plugin updates
 ###############################################################################
 
-function wpPlugins() {
+function wp_plugins() {
   # If available then let's do it
   info "The following updates are available:"
   # Clean the garbage out of the log for console display
@@ -32,25 +32,26 @@ function wpPlugins() {
 
   if [[ "${FORCE}" = "1" ]] || yesno --default no "Proceed with updates? [y/N] "; then
     # If ACFPRO needs an update, do it first via wget
-    if [[ "${QUIET}" != "1" ]]; then
-      acf_update &
-      spinner $!
-    else
-      acf_update
+    if [[ "${ACF_LOCK}" != "TRUE" ]]; then
+      if [[ "${QUIET}" != "1" ]]; then
+        acf_update &
+       spinner $!
+      else
+        acf_update
+      fi
     fi
 
     # First, check for for updates via composer
-    if [[ -f "${WORKPATH}/${APP}/composer.json" ]]; then
+    if [[ -f "${APP_PATH}/composer.json" ]]; then
       trace "Found composer.json, updating"
-      cd "${WORKPATH}"/"${APP}"; \
+      cd "${APP_PATH}"; \
       if [[ "${QUIET}" != "1" ]]; then
-        # Come back and get this path properly
-        /usr/local/bin/composer update &>> "${logFile}" &
+        "${composer_cmd}" update &>> "${logFile}" &
         spinner $!
       else
-        /usr/local/bin/composer update &>> "${logFile}"
+        "${composer_cmd}" update &>> "${logFile}"
       fi
-      cd "${WORKPATH}"/"${APP}${WPROOT}${WPAPP}"; \
+      cd "${WP_PATH}"; \
     fi
 
     # Now, run the rest of the needed updates via wp-cli
@@ -72,7 +73,7 @@ function wpPlugins() {
       error "One or more plugin updates have failed."
     fi
 
-    cd "${WORKPATH}"/"${APP}"/; \
+    cd "${APP_PATH}"; \
     info "Plugin updates complete."
   else  
     info "Skipping plugin updates..."
@@ -92,7 +93,7 @@ function add_plugin() {
   # User will be doing something like `deploy --add-plugin wp-job-manager` from 
   # the shell
   # If composer:
-  composer require wpackagist-plugin/wp-job-manager:*
+  "${composer_cmd}" require wpackagist-plugin/wp-job-manager:*
   # If no composer:
   wp plugin install wp-job-manager
 }

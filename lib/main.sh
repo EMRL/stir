@@ -10,6 +10,16 @@ function main() {
   dependency_check  # Check that required commands are available
   release_check     # Check for newer version at Github
   env_check         # Check for configuration files that need updating
+  wp_check          # Check for Wordpress
+  
+  if [[ -n "${PREPARE}" ]]; then
+    if [[ "${PREPARE}" != "FALSE" ]]; then
+      prepare
+    else
+      return
+    fi
+  fi
+
   gitStart          # Check for a valid git project and get set up
   lock              # Create lock file
   go                # Start a deployment work session
@@ -63,7 +73,7 @@ function main() {
 
       # Continue normally
       if [[ "${APPROVE}" != "1" ]]; then
-        wpPkg       # Run Wordpress upgrades if needed
+        wp          # Run Wordpress upgrades if needed
         pkgMgr      # Run package manager
         gitStatus   # Make sure there's anything here to commit         
       fi

@@ -7,8 +7,8 @@
 ###############################################################################
 
 # Initialize variables
-read -r CURMTH CURYR PRVMTH PRVYR LASTDY <<< ""
-echo "${CURMTH} ${CURYR} ${PRVMTH} ${PRVYR} ${LASTDY}" > /dev/null
+var=(CURMTH CURYR PRVMTH PRVYR LASTDY)
+init_loop
 
 function create_report() {
 

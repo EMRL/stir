@@ -39,8 +39,14 @@ function mailPost() {
   if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
     trace "Approval required, skipping integration"
   else
+
+    if [[ ! -f "${MAILPATH}/sendmail" ]]; then
+      empty_line; warning "Sendmail misconfigured or not found, skipping email integration."
+      return
+    fi
+
     echo "${COMMITURL}" >> "${postFile}"
-    postSendmail=$(<"${postFile}")
+    post=$(<"${postFile}")
     (
     # Is this an automated deployment?
     if [ "${AUTOMATE}" = "1" ]; then
@@ -66,7 +72,7 @@ function mailPost() {
     echo "To: ${POSTEMAIL}"
     echo "Content-Type: text/plain"
     echo
-    echo "${postSendmail}";
+    echo "${post}";
     ) | "${MAILPATH}"/sendmail -t
   fi
 }
