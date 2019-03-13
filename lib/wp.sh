@@ -119,9 +119,9 @@ function wp_server_check {
   done
 
   trace "Activating plugins"
-  "${wp_cmd}" plugin activate --all >> "${logFile}" 2>&1
+  # "${wp_cmd}" plugin activate --all >> "${logFile}" 2>&1
   trace "Activating theme"
-  "${wp_cmd}" theme activate site >> "${logFile}" 2>&1
+  # "${wp_cmd}" theme activate site >> "${logFile}" 2>&1
   
   #"${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" >> "${logFile}" 2>&1
   
