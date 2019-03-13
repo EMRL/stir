@@ -20,6 +20,11 @@ function prepare() {
 
   # Should we use our built-in Worpdress prepare clone function?
   if [[ "${PREPARE}" == "TRUE" ]] || [[ "${PREPARE}" == "1" ]]; then
-    wp_clone; return
+    wp_clone
+    if [[ "${PREPARE}" == "1" ]]; then
+      quickExit
+    else
+      return
+    fi
   fi
 }
