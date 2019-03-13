@@ -1,4 +1,4 @@
-# Stir
+![Stir](https://raw.githubusercontent.com/EMRL/stir/master/img/logo.png)
 
 [![release](https://img.shields.io/badge/release-v3.7.3-blue.svg?style=flat)](https://github.com/EMRL/deploy/releases/latest)
 [![Build Status](https://travis-ci.org/EMRL/deploy.svg?branch=master)](https://travis-ci.org/EMRL/deploy)
@@ -21,17 +21,18 @@ Options:
   -S, --skip-update      Skip any Wordpress core/plugin updates
   -u, --update           If no available Wordpress updates, halt deployment
   -U, --update-only      Deploy only Wordpresss plugin/core updates
-  -P, --publish          Publish current production code to live environment
+  -D, --deploy           Deploy current production code to live environment
   -m, --merge            Force merge of branches
   -c, --current          Deploy a project from current working directory          
   -t, --time             Add time to project management integration
+  -p, --prepare          Clone and prepare local Wordpress project
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
   -h, --help             Display this help and exit
   -v, --version          Output version information and exit
 
 Other Options:
-  --automate             For unattended deployment via cron
+  --automate             For unattended execution via cron
   --approve              Approve and deploy queued code changes
   --deny                 Deny queued code changes
   --build                Build project assets
