@@ -110,12 +110,10 @@ function wp_clone() {
 
     #fi
 
-    # Install wordpress if there's no composer
-    if [[ ! -f "${APP_PATH}/composer.json" ]]; then
-      trace status "Installing Wordpress... "
-      "${wp_cmd}" core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
-      trace notime "OK"
-    fi
+    # Install wordpress database tables
+    trace status "Installing Wordpress... "
+    "${wp_cmd}" core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
+    trace notime "OK"
 
     # Check server
     wp_server_check
