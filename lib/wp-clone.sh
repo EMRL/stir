@@ -116,7 +116,7 @@ function wp_clone() {
     trace notime "OK"
 
     # Check server
-    wp_server_check
+    # wp_server_check
   fi
 }
 
