@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Origin sync is now forced when running using `--automate` 
 - Automated Worpdress updates may now made by cloning a temporary copy of the project's repo, running the updates, and destroying upon completion
 - Prepare hook added 
 ### Changed
