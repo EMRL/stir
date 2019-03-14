@@ -1,7 +1,7 @@
-![Stir](https://raw.githubusercontent.com/EMRL/stir/master/img/logo.png)
+﻿![Stir](https://raw.githubusercontent.com/EMRL/stir/master/img/logo.png)
 
-[![release](https://img.shields.io/badge/release-v3.7.3-blue.svg?style=flat)](https://github.com/EMRL/deploy/releases/latest)
-[![Build Status](https://travis-ci.org/EMRL/deploy.svg?branch=master)](https://travis-ci.org/EMRL/deploy)
+[![release](https://img.shields.io/badge/release-v3.7.3-blue.svg?style=flat)](https://github.com/EMRL/stir/releases/latest)
+[![Build Status](https://travis-ci.org/EMRL/stir.svg?branch=master)](https://travis-ci.org/EMRL/stir)
 
 `stir` is designed to speed up, automate, and integrate project commits, management, and deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
 
@@ -60,7 +60,7 @@ Other Options:
 
 `stir` consolidates a boatload of functions into a single command that simplifies web app deployment from a development or staging environment to a production server. It also can provide clients with a dashboard of information about their project.
 
-![Dashboard](https://raw.githubusercontent.com/EMRL/deploy/stir/img/dashboard.png)
+![Dashboard](https://raw.githubusercontent.com/EMRL/stir/stir/img/dashboard.png)
 
 `stir` requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), [`composer`](https://getcomposer.org/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
 
@@ -75,7 +75,7 @@ Other Options:
 
 Configuration is handled globally in the `etc/stir/global.conf` file. Individual users also have their own settings in `~/.stirrc`
 
-Repositories can each have their own deploy configuration. An example of this file can be [found here](https://github.com/EMRL/stir/blob/master/etc/stir.sh).
+Repositories can each have their own configuration. An example of this file can be [found here](https://github.com/EMRL/stir/blob/master/etc/stir.sh).
 
 ## Slack
 
