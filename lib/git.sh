@@ -42,7 +42,7 @@ function gitStart() {
     error "Unable to start deployment, push your first commit manually and try again."
   else  
     # If running --automate, force a branch check
-    if [[ "${AUTOMATE}" ]]; then
+    if [[ "${AUTOMATE}" == "1" ]]; then
       CHECKBRANCH="${MASTER}"
     fi
     # If CHECKBRANCH is set, make sure current branch is correct.
@@ -56,6 +56,12 @@ function gitStart() {
 
   # Check for active files
   check_active
+
+  # If running --automate, pull and sync all branches
+  if [[ "${AUTOMATE}" == "1" ]]; then
+    trace "Syncing with origin"
+    git pull --all &>> "${logFile}"; error_check
+  fi
 
   # Try to clear out old git processes owned by this user, if they exist
   pkill -f git &>> /dev/null || true

@@ -153,7 +153,7 @@ function slackTest {
     warning "No Slack configuration found."; empty_line
     clean_up; exit 1
   else
-    curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration of ${APP} from stir ${VERSION}\nhttps://github.com/EMRL/deploy\"}" "${SLACKURL}"
+    curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration of ${APP} from stir ${VERSION}\nhttps://github.com/EMRL/stir\"}" "${SLACKURL}"
     empty_line
   fi
 }
