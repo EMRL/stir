@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initialize variables
-var=(WP_PATH PID)
+var=(WP_PATH WP_SERVER_PID)
 init_loop
 
 function wp() {
@@ -111,8 +111,6 @@ function wp_server_check {
   # Launch server
   trace "Launching server"
   "${wp_cmd}" server --host=localhost >> "${logFile}" 2>&1 &
-  PID=$!
-  trace "Server running (process ${PID})"
 
   # Keep checking for server to come online
   until $(curl --output /dev/null --silent --head --fail http://localhost:8080); do

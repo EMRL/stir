@@ -135,8 +135,10 @@ function clean_up() {
   # Do we need to shutdown local wp server?
   # This will spit out a PID to kill
   # lsof -i :8080
-  if [[ -n "${PID}" ]]; then
-    kill -9 "${PID}"
+  # This is not ideal but it'll work for now
+  if [[ -n "${PREPARE}" ]]; then
+    WP_SERVER_PID=$(lsof -i :8080  | sed -n '1!p' | awk '{print $2}')
+    kill -9 "${WP_SERVER_PID}"  &> /dev/null
   fi
   
   # Attempt to reset the console when running --quiet
