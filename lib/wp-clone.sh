@@ -57,9 +57,9 @@ function wp_clone() {
 
   # Setup environment variables
   create_env
-  WP_PATH="${WP_TMP}"
+  #WP_PATH="${WP_TMP}"
   ACTIVECHECK="FALSE"
-  cd "${WP_PATH}"
+  #cd "${WP_PATH}"
 
   # Create database
   if [[ -z "${PREPARE_CONFIG}" ]]; then
