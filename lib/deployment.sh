@@ -15,9 +15,7 @@ function preDeploy() {
   # If there are changes waiting in the repo, stop and ask for user input
   # This should probably be it's own function
   currentStash="0"
-  if [[ -z $(git status --porcelain) ]]; then
-    trace "Status looks good"
-  else
+  if [[ -n $(git status --porcelain) ]]; then
     # If running in --force mode we will not allow deployment to continue
     if [[ "${FORCE}" == "1" && "${APPROVE}" != "1" ]] || [[ "${UPDATEONLY}" == "1" ]] || [[ "${REPAIR}" = "1" ]]; then
       trace "Checking for files that need stashing"
@@ -33,12 +31,12 @@ function preDeploy() {
         currentStash="1"
       else
         empty_line
-        error "There are previously undeployed changes in this project, deployment can not continue."
+        error "There are unstaged changes in this project, deployment can not continue."
       fi
 
     else
       empty_line
-      warning "There are previously undeployed changes in this project."
+      warning "There are unstaged changes in this project."
 
       if yesno --default no "View unresolved files? [y/N] "; then
         console; console " N = New | M = Modified | D = Deleted"

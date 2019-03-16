@@ -11,6 +11,13 @@ var=(SSH_REPO TMP_PATH SET_ENV dest REMOVE_ME MYSQL_USER MYSQL_PASS \
   DB_CHECK)
 init_loop
 
+function wp_clone_mngmt() {
+  "${git_cmd}" clone --no-checkout "${SSH_REPO}" "${WORKPATH}/${APP}/${REPO}" &>> /dev/null; error_check
+  mv "${WORKPATH}/${APP}/${REPO}/.git" "${WORKPATH}/${APP}"  &>> /dev/null; error_check 
+  rm -rf "${WORKPATH}/${APP}/${REPO}"  &>> /dev/null; error_check
+  "${git_cmd}" reset --hard HEAD &>> /dev/null; error_check 
+}
+
 function wp_clone() {
   # This is all under construction
   # Get paths
@@ -31,21 +38,21 @@ function wp_clone() {
   ssh_check
   
   notice "Setting up project..."
-  cd ${WORKPATH}; \
-  if [[ -d "${WORKPATH}/${REPO}" ]]; then
-    cd "${WORKPATH}/${REPO}"; \
+  cd "${WORKPATH}/${APP}"; \
+  if [[ -d "${WORKPATH}/${APP}/.gitignore" ]]; then
     "${git_cmd}" checkout "${MASTER}" &>> /dev/null; error_check
   else
-    trace status "Cloning ${SSH_REPO}... "
-    "${git_cmd}" clone "${SSH_REPO}" &>> /dev/null; error_check
-    trace notime "OK"
+    trace "Cloning ${SSH_REPO}... "
+    wp_clone_mngmt &
+    spinner $!
+    trace "OK"
   fi
 
   # Copy plugins that are not part of repo (for update checking)
   # cp -nrp "${WP_PATH}/plugins" "${WP_TMP}/" &>> "${logFile}";
 
   # Reset our root working directory
-  APP_PATH="${WORKPATH}/${REPO}"
+  # APP_PATH="${WORKPATH}/${REPO}"
   cd "${APP_PATH}"
 
   # Setup environment variables

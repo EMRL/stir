@@ -10,6 +10,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - `deploy` is now `stir`
 - Invoice creation will now exit gracefully if project is not correctly configured
+- Initial project preparation and cloning has been simplified
+- Improved accuracy of smart commit messages
 ### Fixed
 - Fixed many small bugs
 

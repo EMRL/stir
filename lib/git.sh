@@ -32,14 +32,14 @@ function gitStart() {
   if [[ -f "${APP_PATH}/.git/index" ]]; then
     sleep 1
   else
-    info "There is nothing at ${APP_PATH} to deploy."
+    info "There is nothingno working project at ${APP_PATH}"
     clean_up; exit 51
   fi
 
   # Make sure there has been at least one commit previously made
   git rev-parse --abbrev-ref HEAD &>> "${trshFile}"
   if grep -q "fatal" "${trshFile}"; then 
-    error "Unable to start deployment, push your first commit manually and try again."
+    error "Unable to start, push your first commit manually and try again."
   else  
     # If running --automate, force a branch check
     if [[ "${AUTOMATE}" == "1" ]]; then
@@ -49,7 +49,7 @@ function gitStart() {
     start_branch="$(git rev-parse --abbrev-ref HEAD)"
     if [[ -n "${CHECKBRANCH}" ]] && [[ "${DIGEST}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]] && [[ "${EMAILTEST}" != "1" ]] && [[ "${SLACKTEST}" != "1" ]]; then 
       if [[ "${start_branch}" != "${CHECKBRANCH}" ]]; then
-        error "Must be on ${CHECKBRANCH} branch to continue deployment.";
+        error "Must be on ${CHECKBRANCH} branch to continue.";
       fi
     fi
   fi
@@ -171,7 +171,7 @@ function gitCommit() {
       if [[ "${FORCE}" = "1" ]] && [[ "${UPDATE}" = "1" ]]; then
         # We need Smart commits enabled or this can't work
         if [[ "${SMARTCOMMIT}" -ne "TRUE" ]]; then
-          console "Smart Commits must enabled when forcing updates."
+          console "Smart Commits must be enabled when forcing updates."
           console "Set SMARTCOMMIT=TRUE in .stir.sh"; quietExit
         else
           if [[ -z "${COMMITMSG}" ]]; then

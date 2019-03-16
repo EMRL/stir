@@ -99,7 +99,7 @@ function go() {
 
   # Is the user root?
   if [[ "${ALLOWROOT}" != "TRUE" ]] && [[ "${EUID}" -eq "0" ]]; then
-    warning "Can't continue deployment as root."; quickExit
+    warning "Can't continue as root."; quickExit
   fi
 
   # Disallow server check?
@@ -118,7 +118,7 @@ function go() {
     warning "Found ${gitLock}"
     # If running in --force mode we will not allow deployment to continue
     if [[ "${FORCE}" = "1" ]]; then
-      warning "Can't continue deployment using --force."; quietExit
+      warning "Can't continue using --force."; quietExit
     else
       if yesno --default no "Remove lockfile? [y/N] "; then
         rm -f "${gitLock}" 2>/dev/null
@@ -222,7 +222,7 @@ function dependency_check() {
   # Do we need Sendmail, and if so can we find it?
   if [[ "${EMAILERROR}" == "TRUE" ]] || [[ "${EMAILSUCCESS}" == "TRUE" ]] || [[ "${EMAILQUIT}" == "TRUE" ]] || [[ "${NOTIFYCLIENT}" == "TRUE" ]]; then
     hash "${MAILPATH}"/sendmail 2>/dev/null || {
-      error "deploy ${VERSION} requires Sendmail to function properly with your current configuration."
+      error "stir ${VERSION} requires Sendmail to function properly with your current configuration."
     }
   fi
 }
