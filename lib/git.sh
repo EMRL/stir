@@ -32,7 +32,7 @@ function gitStart() {
   if [[ -f "${APP_PATH}/.git/index" ]]; then
     sleep 1
   else
-    info "There is nothingno working project at ${APP_PATH}"
+    info "There is no working project at ${APP_PATH}"
     clean_up; exit 51
   fi
 
