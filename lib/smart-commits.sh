@@ -22,10 +22,10 @@ function smart_commit() {
     #  fi
     #fi
 
-    if [[ ! -z "${PCA}" ]] || [[ ! -z "${UPDCORE}" ]] || [[ -s "${wpFile}" ]]; then
+    if [[ "${PCA}" -gt "0" ]] || [[ ! -z "${UPDCORE}" ]] || [[ -s "${wpFile}" ]]; then
       trace "Building commit message"
 
-      if [[ -z "${PCA}" ]] && [[ -z "${ACFFILE}" ]]; then
+      if [[ "${PCA}" == "0" ]] && [[ -z "${ACFFILE}" ]]; then
         trace "No plugin updates"
       else
         # How many plugins have we updated? First, strip out the Success:

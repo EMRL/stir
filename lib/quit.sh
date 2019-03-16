@@ -138,7 +138,9 @@ function clean_up() {
   # This is not ideal but it'll work for now
   if [[ -n "${PREPARE}" ]]; then
     WP_SERVER_PID=$(lsof -i :8080  | sed -n '1!p' | awk '{print $2}')
-    kill -9 "${WP_SERVER_PID}"  &> /dev/null
+    if [[ -n "${WP_SERVER_PID}" ]]; then
+      kill -9 "${WP_SERVER_PID}"  &> /dev/null
+    fi
   fi
   
   # Attempt to reset the console when running --quiet
