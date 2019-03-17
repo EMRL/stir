@@ -18,14 +18,16 @@ function scan_check() {
     SCAN_RESULT=$(echo "${SCAN_MSG//  <td>}")
     # Piping through tac is a workaround to solve a timing issue, see 
     # https://github.com/EMRL/deploy/issues/134
+    # For some reason upon migration, tac | tac no longer works
     #if curl -LIs --speed-time 900 "${SCAN_URL}" tac | tac | grep -q "200"; then
     if curl -LIs "${SCAN_URL}"  | grep -q "200"; then
-      if curl -Ls --speed-time 900 "${SCAN_URL}" tac | tac | grep -q "0 error"; then
+      if curl -Ls --speed-time 900 "${SCAN_URL}" | grep -q "0 error"; then
         SCANC="${SUCCESSC}"; SCAN_BTN="btn-success"
         SCAN_MSG="Scan passed"
-      elif curl -Ls --speed-time 900 "${SCAN_URL}" tac | tac | grep -q "error"; then
+      elif curl -Ls --speed-time 900 "${SCAN_URL}" | grep -q "error"; then
         SCANC="${DANGERC}"; SCAN_BTN="btn-danger"
         SCAN_MSG="Problem found"
+        trace "error"
       fi
       trace "Malware report: ${SCAN_MSG} (see ${SCAN_URL})"
     fi

@@ -76,7 +76,7 @@ function quietExit() {
 }
 
 function clean_up() {
-  info "Closing ${APP} (${SSH_REPO})"
+  notice "Closing ${APP} (${REPOHOST}/${REPO})"
 
   # If anything is stashed, unstash it.
   if [[ "${currentStash}" == "1" ]]; then
