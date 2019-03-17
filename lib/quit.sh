@@ -76,6 +76,8 @@ function quietExit() {
 }
 
 function clean_up() {
+  info "Closing ${APP} (${SSH_REPO})"
+
   # If anything is stashed, unstash it.
   if [[ "${currentStash}" == "1" ]]; then
     trace "Unstashing files"
@@ -133,9 +135,7 @@ function clean_up() {
   #fi
 
   # Do we need to shutdown local wp server?
-  # This will spit out a PID to kill
-  # lsof -i :8080
-  # This is not ideal but it'll work for now
+  # lsof doesn't seem to work as expected in Windows Subsystem Linux, doh
   if [[ -n "${PREPARE}" ]]; then
     WP_SERVER_PID=$(lsof -i :8080  | sed -n '1!p' | awk '{print $2}')
     if [[ -n "${WP_SERVER_PID}" ]]; then
