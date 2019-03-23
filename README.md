@@ -60,7 +60,7 @@ Other Options:
 
 `stir` consolidates a boatload of functions into a single command that simplifies web app deployment from a development or staging environment to a production server. It also can provide clients with a dashboard of information about their project.
 
-![Dashboard](https://raw.githubusercontent.com/EMRL/stir/stir/img/dashboard.png)
+![Dashboard](https://raw.githubusercontent.com/EMRL/stir/master/img/dashboard.png)
 
 `stir` requires [`git`](https://git-scm.com/), and will make use of [`wp-cli`](http://wp-cli.org/), [`grunt`](http://gruntjs.com/), [`npm`](https://www.npmjs.com/), [`composer`](https://getcomposer.org/), and  [`mina`](http://nadarei.co/mina/) if they are installed.
 
