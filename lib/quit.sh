@@ -26,6 +26,7 @@ function quickExit() {
 
 # Exit on error
 function error_exit() {
+  notice "Closing ${APP} (${REPOHOST}/${REPO})"
   message_state="ERROR"; makeLog # Compile log
   # Check email settings
   if [[ "${EMAILERROR}" == "TRUE" ]]; then
@@ -44,6 +45,7 @@ function error_exit() {
 
 # Clean exit
 function safeExit() {
+  notice "Closing ${APP} (${REPOHOST}/${REPO})"
   makeLog # Compile log
   # Check email settings
   if [[ "${EMAILSUCCESS}" == "TRUE" ]]; then
@@ -76,8 +78,6 @@ function quietExit() {
 }
 
 function clean_up() {
-  notice "Closing ${APP} (${REPOHOST}/${REPO})"
-
   # If anything is stashed, unstash it.
   if [[ "${currentStash}" == "1" ]]; then
     trace "Unstashing files"
