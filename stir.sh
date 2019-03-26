@@ -67,7 +67,7 @@ function init_startup() {
     SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
     DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
     SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
-    CHECK_BACKUP APP_PATH)
+    CHECK_BACKUP APP_PATH EXTENDED_HELP)
   init_loop
 }
 
@@ -150,9 +150,13 @@ Options:
   -p, --prepare          Clone and setup local Wordpress project
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
-  -h, --help             Display this help and exit
   -v, --version          Output version information and exit
+  -h, --help             Display this help and exit
+  -H, --full-help        Display extended help and exit
+"
 
+  if [[ "${EXTENDED_HELP}" == "1" ]]; then
+    echo -n "
 Other Options:
   --automate             For unattended execution via cron
   --approve              Approve and deploy queued code changes
@@ -177,7 +181,14 @@ Other Options:
   --monitor-test         Test production server uptime and latency monitoring
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables
+"
+  else
+    echo -n "
+Try 'stir -H' for extended help options"  
+  fi
 
+
+  echo -n "
 More information at https://github.com/EMRL/stir
 "
 }
@@ -213,6 +224,7 @@ unset options
 while [[ ${1:-unset} = -?* ]]; do
   case $1 in
     -h|--help) flags >&2; exit ;;
+    -H|--help-extended) EXTENDED_HELP="1"; flags >&2; exit ;;
     -u|--update) UPGRADE="1" ;;
     -U|--update-only) UPDATEONLY="1" ;;
     -D|--deploy) PUBLISH="1" ;;
