@@ -42,8 +42,8 @@ function preDeploy() {
         console; console " N = New | M = Modified | D = Deleted"
         console " ------------------------------------ "
         git status --porcelain; echo
-        if  yesno --default yes "Continue deploy? [Y/n] "; then
-          trace "Continuing deploy"
+        if  yesno --default yes "Continue? [Y/n] "; then
+          trace "Processing project"
         else
           userExit
         fi
