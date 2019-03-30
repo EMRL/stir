@@ -36,19 +36,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed a problem where statistic dashboard could get corrupted when multiple instances of `deploy --stats` are running
 - Unbound variable errors no longer occur when a Google Analytics result is zero
 
-## [3.7.2] - 09-25-2018
-### Added
-- Project dashboards have been redesigned to include more analytics charts and information
-- Digest emails can now include a chart showing the week's analytics
-### Changed 
-- Improved HTML post-processing
-### Fixed
-- The `--stats` flag should no longer cause issues when being properly run from a cron process
-- Log files should no longer be left behind in the `/tmp` directory
-- Fixed a problem where statistic dashboard could get corrupted when multiple instances of `deploy --stats` are running
-- Unbound variable errors no longer occur when a Google Analytics result is zero
-
-
 ## [3.7.1] - 07-13-2018
 ### Added
 - Added `deploy --build [project name]` for quickly building project assets
