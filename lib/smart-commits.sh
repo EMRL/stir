@@ -26,7 +26,7 @@ function smart_commit() {
 
         if [[ "${PCA}" -gt "1" ]]; then
           COMMITMSG="Updated ${PCA} plugins ($PLUGINS)"
-        else
+        elif [[ "${PCA}" == "1" ]]; then
           COMMITMSG="Updated ${PCA} plugin ($PLUGINS)"
         fi
       fi
