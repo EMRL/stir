@@ -145,14 +145,14 @@ Options:
   -U, --update-only      Deploy only Wordpresss plugin/core updates
   -D, --deploy           Deploy current production code to live environment
   -m, --merge            Force merge of branches
-  -c, --current          Deploy a project from current working directory          
+  -c, --current          Deploy a project from current directory          
   -t, --time             Add time to project management integration
   -p, --prepare          Clone and setup local Wordpress project
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
   -v, --version          Output version information and exit
   -h, --help             Display this help and exit
-  -H, --full-help        Display extended help and exit
+  -H, --more-help        Display extended help and exit
 "
 
   if [[ "${EXTENDED_HELP}" == "1" ]]; then
@@ -173,12 +173,12 @@ Other Options:
   --unlock               Delete expired lock files
   --repair               Repair a deployment after merge failure
   --scan                 Scan production hosts for malware issues
-  --ssh-test             Validate SSH key setup
-  --email-test           Test email configuration
-  --slack-test           Test Slack integration
-  --post-test            Test webhook integration  
-  --analytics-test       Test Google Analytics authentication
-  --monitor-test         Test production server uptime and latency monitoring
+  --test-ssh             Validate SSH key setup
+  --test-email           Test email configuration
+  --test-slack           Test Slack integration
+  --test-webhook         Test webhook integration  
+  --test-analytics       Test Google Analytics authentication
+  --test-monitor         Test production server uptime and latency monitoring
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables
 "
@@ -224,7 +224,7 @@ unset options
 while [[ ${1:-unset} = -?* ]]; do
   case $1 in
     -h|--help) flags >&2; exit ;;
-    -H|--help-extended) EXTENDED_HELP="1"; flags >&2; exit ;;
+    -H|--more-help) EXTENDED_HELP="1"; flags >&2; exit ;;
     -u|--update) UPGRADE="1" ;;
     -U|--update-only) UPDATEONLY="1" ;;
     -D|--deploy) PUBLISH="1" ;;
@@ -244,12 +244,12 @@ while [[ ${1:-unset} = -?* ]]; do
     --digest) DIGEST="1"; FORCE="1"; QUIET="1" ;;
     --report) REPORT="1"; FORCE="1"; QUIET="1" ;;
     --automate) FORCE="1"; UPGRADE="1"; MERGE="1"; QUIET="1"; AUTOMATE="1" ;;
-    --ssh-test) SSHTEST="1" ;;
-    --slack-test) SLACKTEST="1" ;;
-    --email-test) EMAILTEST="1" ;;
-    --post-test) POSTTEST="1" ;;
-    --analytics-test) ANALYTICSTEST="1" ;; 
-    --monitor-test) MONITORTEST="1" ;;
+    --test-ssh) SSHTEST="1" ;;
+    --test-slack) SLACKTEST="1" ;;
+    --test-email) EMAILTEST="1" ;;
+    --test-webhook) POSTTEST="1" ;;
+    --test-analytics) ANALYTICSTEST="1" ;; 
+    --test-monitor) MONITORTEST="1" ;;
     --stats) PROJSTATS="1" ;;
     --build) BUILD="1"; NOCHECK="1"; FORCE="1" ;;
     --invoice) CREATE_INVOICE="1"; FORCE="1" ;;

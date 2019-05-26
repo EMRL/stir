@@ -15,7 +15,6 @@ Please note that our documentation here is nearly useless, and there is quite a 
 
 ```
 Usage: stir [options] [target] ...
-
 Options:
   -F, --force            Skip all user interaction, forces 'Yes' to all actions
   -S, --skip-update      Skip any Wordpress core/plugin updates
@@ -23,19 +22,21 @@ Options:
   -U, --update-only      Deploy only Wordpresss plugin/core updates
   -D, --deploy           Deploy current production code to live environment
   -m, --merge            Force merge of branches
-  -c, --current          Deploy a project from current working directory          
+  -c, --current          Deploy a project from current directory          
   -t, --time             Add time to project management integration
-  -p, --prepare          Clone and prepare local Wordpress project
+  -p, --prepare          Clone and setup local Wordpress project
   -V, --verbose          Output more process information to screen
   -q, --quiet            Display minimal output on screen
-  -h, --help             Display this help and exit
   -v, --version          Output version information and exit
+  -h, --help             Display this help and exit
+  -H, --more-help        Display extended help and exit
 
 Other Options:
   --automate             For unattended execution via cron
   --approve              Approve and deploy queued code changes
   --deny                 Deny queued code changes
   --build                Build project assets
+  --prepare              Prepare project
   --digest               Create and send weekly digest
   --report               Create a monthly activity report
   --no-check             Override active file and server checks
@@ -46,12 +47,12 @@ Other Options:
   --unlock               Delete expired lock files
   --repair               Repair a deployment after merge failure
   --scan                 Scan production hosts for malware issues
-  --ssh-test             Validate SSH key setup
-  --email-test           Test email configuration
-  --slack-test           Test Slack integration
-  --post-test            Test webhook integration  
-  --analytics-test       Test Google Analytics authentication
-  --monitor-test         Test production server uptime and latency monitoring
+  --test-ssh             Validate SSH key setup
+  --test-email           Test email configuration
+  --test-slack           Test Slack integration
+  --test-webhook         Test webhook integration  
+  --test-analytics       Test Google Analytics authentication
+  --test-monitor         Test production server uptime and latency monitoring
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables
 ```
