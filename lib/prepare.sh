@@ -8,7 +8,7 @@
 
 function prepare() {
 
-  # If running a command that does not going to touch code, we can skip the 
+  # If running a command that is not going to touch code, we can skip the 
   # --prepare stuff altogether
   startup_switch=(REPORT DIGEST SCAN SSHTEST EMAILTEST SLACKTEST POSTTEST \
     PUBLISH PROJSTATS CREATE_INVOICE FUNCTIONLIST VARIABLELIST)
@@ -21,6 +21,7 @@ function prepare() {
   # Should we use our built-in Worpdress prepare clone function?
   if [[ "${PREPARE}" == "TRUE" ]] || [[ "${PREPARE}" == "1" ]]; then
     wp_clone
+    # If --prepare switch is being used, exit immediately
     if [[ "${PREPARE}" == "1" ]]; then
       quickExit
     else

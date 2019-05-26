@@ -20,9 +20,9 @@ function main() {
     fi
   fi
 
-  gitStart          # Check for a valid git project and get set up
+  gitStart          # Check for a valid git project and project set up
   lock              # Create lock file
-  go                # Start a deployment work session
+  go                # Start a work session
 
   if [[ "${DIGEST}" == "1" ]]; then
     create_digest
@@ -75,7 +75,7 @@ function main() {
       if [[ "${APPROVE}" != "1" ]]; then
         wp          # Run Wordpress upgrades if needed
         pkgMgr      # Run package manager
-        gitStatus   # Make sure there's anything here to commit         
+        gitStatus   # Make sure there's something here to commit         
       fi
 
       if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then

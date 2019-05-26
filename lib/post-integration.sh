@@ -73,7 +73,7 @@ function mailPost() {
     echo "Content-Type: text/plain"
     echo
     echo "${post}";
-    ) | "${MAILPATH}"/sendmail -t
+    ) | "${sendmail_cmd}" -t
   fi
 }
 
