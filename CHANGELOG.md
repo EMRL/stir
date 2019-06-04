@@ -4,9 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [4.0-pre]
 ### Added
-- Origin sync is now forced when running using `--automate` 
 - Automated Worpdress updates may now made by cloning a temporary copy of the project's repo, running the updates, and destroying upon completion
-- Prepare hook added 
+- Origin sync is now forced when running using `--automate`
+- Prepare hook added
+- Added `--reset` switch
 ### Changed
 - `deploy` is now `stir`
 - Invoice creation will now exit gracefully if project is not correctly configured

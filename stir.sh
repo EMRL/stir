@@ -67,7 +67,7 @@ function init_startup() {
     SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
     DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
     SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
-    CHECK_BACKUP APP_PATH EXTENDED_HELP)
+    CHECK_BACKUP APP_PATH EXTENDED_HELP RESET)
   init_loop
 }
 
@@ -163,6 +163,7 @@ Other Options:
   --deny                 Deny queued code changes
   --build                Build project assets
   --prepare              Prepare project
+  --reset                Resets local project files
   --digest               Create and send weekly digest
   --report               Create a monthly activity report
   --no-check             Override active file and server checks
@@ -241,6 +242,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --approve) APPROVE="1"; FORCE="1" ;;
     --deny) DENY="1"; FORCE="1" ;;
     -p|--prepare) PREPARE="1" ;;
+    --reset) RESET="1" ;;
     --digest) DIGEST="1"; FORCE="1"; QUIET="1" ;;
     --report) REPORT="1"; FORCE="1"; QUIET="1" ;;
     --automate) FORCE="1"; UPGRADE="1"; MERGE="1"; QUIET="1"; AUTOMATE="1" ;;
@@ -360,7 +362,7 @@ fi
 # Load per-user configuration, if it exists
 if [[ -r ~/.stirrc ]]; then
   # shellcheck disable=1090
-  source ~/.stirrc; USERRC=1
+  source ~/.stirrc; USERRC="1"
 fi
 
 # Load libraries, or die
@@ -593,6 +595,10 @@ if [[ "${MERGE}" == "1" ]] && [[ -z "${PRODUCTION}" ]]; then
     warning "You are attempting to merge branches, but a target branch is not defined."
   fi
   quietExit
+fi
+
+if [[ "${RESET}" == "1" ]]; then
+  reset_local
 fi
 
 # Set app path
