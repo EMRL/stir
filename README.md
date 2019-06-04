@@ -37,6 +37,7 @@ Other Options:
   --deny                 Deny queued code changes
   --build                Build project assets
   --prepare              Prepare project
+  --reset                Resets local project files
   --digest               Create and send weekly digest
   --report               Create a monthly activity report
   --no-check             Override active file and server checks
