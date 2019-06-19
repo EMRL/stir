@@ -12,6 +12,10 @@ function main() {
   env_check         # Check for configuration files that need updating
   wp_check          # Check for Wordpress
   
+  if [[ "${RESET}" == "1" ]]; then
+    reset_local
+  fi
+
   if [[ -n "${PREPARE}" ]]; then
     if [[ "${PREPARE}" != "FALSE" ]]; then
       prepare

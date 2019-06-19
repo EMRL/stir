@@ -597,10 +597,6 @@ if [[ "${MERGE}" == "1" ]] && [[ -z "${PRODUCTION}" ]]; then
   quietExit
 fi
 
-if [[ "${RESET}" == "1" ]]; then
-  reset_local
-fi
-
 # Set app path
 APP_PATH="${WORKPATH}/${APP}"
 
