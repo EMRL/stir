@@ -8,20 +8,31 @@
 
 function reset_local() {
   if [[ -n "${project_config}" ]] && [[ -w "${WORKPATH}/${APP}" ]]; then
+
+    if [[ -n "${wp_cmd}" ]]; then
+      # TODO: Add a better check here someday
+      info "Dropping Wordpress database..."
+      "${wp_cmd}" db drop --yes
+    fi
+
     info "Resetting local files..."
-      
-    trace "mv ${project_config} /tmp/${APP}-stir.sh"
-    mv "${project_config}" /tmp/"${APP}"-stir.sh
-        
-    trace "rm -rfv ${WORKPATH}/${APP}/*"
-    rm -rfv ${WORKPATH}/${APP}/*
-        
-    rm -rfv ${WORKPATH}/${APP}/.*
-        
-    trace "mv /tmp/${APP}-stir.sh ${project_config}"
-    mv /tmp/"${APP}"-stir.sh "${project_config}"
-    quietExit
+    remove_local_files &
+    spinner $!
+
+    if [[ -n "${PREPARE}" ]] && [[ "${PREPARE}" != "FALSE" ]]; then
+      return
+    else
+      quietExit
+    fi
+
   else
     warning "Can not reset this project"
   fi
+}
+
+function remove_local_files() {
+  mv "${project_config}" /tmp/"${APP}"-stir.sh &>> "${logFile}"
+  rm -rf ${WORKPATH}/${APP}/* &>> "${logFile}" 
+  rm -rf ${WORKPATH}/${APP}/.* &>> "${logFile}"
+  mv /tmp/"${APP}"-stir.sh "${project_config}" &>> "${logFile}"
 }
