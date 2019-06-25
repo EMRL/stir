@@ -18,8 +18,17 @@ function wp_clone_mngmt() {
   "${git_cmd}" reset --hard HEAD &>> /dev/null; error_check 
 }
 
+function check_mysql_service() {
+  if [[ -z "$(pgrep mysql)" ]]; then 
+    warning "MySQL service not found, can not continue."
+    quietExit
+  fi
+}
+
 function wp_clone() {
   # This is all under construction
+  check_mysql_service
+
   # Get paths
   wp_path
   wp_tmp
