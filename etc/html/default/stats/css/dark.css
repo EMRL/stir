@@ -18,6 +18,10 @@ i {
   font-size:16px;
 }
 
+.img-circle {
+  border: solid 8px #878b90;
+}
+
 a:hover {
   color: #eee;
 }
@@ -88,7 +92,7 @@ hr {
 }
 
 .panel-body {
-  background-color: #3A3F44;
+  background-color: #ececec;
 }
 
 .mauticform-post-success .mauticform-message {
