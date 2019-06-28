@@ -404,11 +404,6 @@ htmlFile="/tmp/${APP}.log-${RANDOM}.html"; (umask 077 && touch "${htmlFile}" &> 
 htmlEmail="/tmp/${APP}.email-${RANDOM}.html"; (umask 077 && touch "${htmlEmail}" &> /dev/null) || log_fail
 clientEmail="/tmp/${APP}.shortemail-${RANDOM}.html"; (umask 077 && touch "${clientEmail}" &> /dev/null) || log_fail
 
-# Lowercase dashboard class is better form
-if [[ -n "${THEME_MODE}" ]]; then
-  THEME_MODE="$(echo ${THEME_MODE} | awk '{print tolower($0)}')"
-fi
-
 # Function list
 if [[ "${FUNCTIONLIST}" == "1" ]]; then
   compgen -A function | more; quickExit
@@ -507,6 +502,11 @@ fi
 if [[ -f "${deployPath}/html/${HTMLTEMPLATE}/theme.conf" ]]; then
   # shellcheck disable=1090
   source "${deployPath}/html/${HTMLTEMPLATE}/theme.conf"
+
+  # Lowercase dashboard class is better form
+  if [[ -n "${THEME_MODE}" ]]; then
+    THEME_MODE="$(echo ${THEME_MODE} | awk '{print tolower($0)}')"
+  fi
 fi
 
 # Remote logging?
