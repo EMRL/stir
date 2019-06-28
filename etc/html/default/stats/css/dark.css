@@ -2,7 +2,7 @@
 
 body {
   font-family: 'Roboto', sans-serif !important;
-  color: #878b90;
+  color: #a7abb1;
   background-color: #3A3F44;
 }
 
@@ -71,17 +71,16 @@ textarea.form-control {
 }
 
 hr {
-  border-top: 1px solid rgb(77, 77, 77, .35);
+  border-top: 1px solid rgba(77, 77, 77, .35);
 }
 
 .panel {
-  color: #484e54;
   background-color: #484e54;
 }
 
 .panel-light {
   color: #333;
-  background-color: rgb(200, 200, 200, 0.85)
+  background-color: rgba(200, 200, 200, 0.85)
 }
 
 .panel-default {
