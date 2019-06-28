@@ -1,223 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<meta charset="utf-8">
-	<title>{{PROJNAME}} &bull; {{PROJCLIENT}}</title>
-	<meta name="generator" content="Bootply" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<!--[if lt IE 9]>
-		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-	<link href="css/{{THEME_MODE}}.css" rel="stylesheet">
-	<!--[BEGIN SMOOCH]-->
-	<script>
-	    !function(e,n,t,r){
-	        function o(){try{var e;if((e="string"==typeof this.response?JSON.parse(this.response):this.response).url){var t=n.getElementsByTagName("script")[0],r=n.createElement("script");r.async=!0,r.src=e.url,t.parentNode.insertBefore(r,t)}}catch(e){}}var s,p,a,i=[],c=[];e[t]={init:function(){s=arguments;var e={then:function(n){return c.push({type:"t",next:n}),e},catch:function(n){return c.push({type:"c",next:n}),e}};return e},on:function(){i.push(arguments)},render:function(){p=arguments},destroy:function(){a=arguments}},e.__onWebMessengerHostReady__=function(n){if(delete e.__onWebMessengerHostReady__,e[t]=n,s)for(var r=n.init.apply(n,s),o=0;o<c.length;o++){var u=c[o];r="t"===u.type?r.then(u.next):r.catch(u.next)}p&&n.render.apply(n,p),a&&n.destroy.apply(n,a);for(o=0;o<i.length;o++)n.on.apply(n,i[o])};var u=new XMLHttpRequest;u.addEventListener("load",o),u.open("GET","https://"+r+".webloader.smooch.io/",!0),u.responseType="json",u.send()
-	    }(window,document,"Smooch","{{SMOOCHID}}");
-	</script>
-	<script>Smooch.init({appId: '{{SMOOCHID}}'}).then(function() {});</script>
-	<!--[END SMOOCH]-->
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>{{PROJNAME}} &bull; {{PROJCLIENT}}</title>
+    <meta name="generator" content="Bootply" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="css/{{THEME_MODE}}.css" rel="stylesheet">
+    <!--[BEGIN SMOOCH]-->
+    <script>
+        !function(e,n,t,r){
+            function o(){try{var e;if((e="string"==typeof this.response?JSON.parse(this.response):this.response).url){var t=n.getElementsByTagName("script")[0],r=n.createElement("script");r.async=!0,r.src=e.url,t.parentNode.insertBefore(r,t)}}catch(e){}}var s,p,a,i=[],c=[];e[t]={init:function(){s=arguments;var e={then:function(n){return c.push({type:"t",next:n}),e},catch:function(n){return c.push({type:"c",next:n}),e}};return e},on:function(){i.push(arguments)},render:function(){p=arguments},destroy:function(){a=arguments}},e.__onWebMessengerHostReady__=function(n){if(delete e.__onWebMessengerHostReady__,e[t]=n,s)for(var r=n.init.apply(n,s),o=0;o<c.length;o++){var u=c[o];r="t"===u.type?r.then(u.next):r.catch(u.next)}p&&n.render.apply(n,p),a&&n.destroy.apply(n,a);for(o=0;o<i.length;o++)n.on.apply(n,i[o])};var u=new XMLHttpRequest;u.addEventListener("load",o),u.open("GET","https://"+r+".webloader.smooch.io/",!0),u.responseType="json",u.send()
+        }(window,document,"Smooch","{{SMOOCHID}}");
+    </script>
+    <script>Smooch.init({appId: '{{SMOOCHID}}'}).then(function() {});</script>
+    <!--[END SMOOCH]-->
 </head>
 
 <body>
-	<div id="top-nav" class="navbar navbar-inverse navbar-static-top">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="./">{{PROJNAME}}</a>
-			</div>
-	        <div class="navbar-collapse collapse">
-	            <ul class="nav navbar-nav navbar-right">
-	                <li class="dropdown">
-	                    <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-	                    	My EMRL Stuff <span class="caret"></span></a>
-	                    <ul id="g-account-menu" class="dropdown-menu" role="menu">
-	                    	<!--[RSS_URL]--><li><a data-toggle="modal" href="#workModal">My Work</a></li>
-	                        <li><a href="//cloud.emrl.com">My Files</a></li>
+    <div id="top-nav" class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="./">{{PROJNAME}}</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+                            My EMRL Stuff <span class="caret"></span></a>
+                        <ul id="g-account-menu" class="dropdown-menu" role="menu">
+                            <!--[RSS_URL]--><li><a data-toggle="modal" href="#workModal">My Work</a></li>
+                            <li><a href="//cloud.emrl.com">My Files</a></li>
                             <li><a href="//invoice.emrl.com/client/login">My Invoices</a></li>
-	                        <!--li><a href="#">Help</a></li-->
-	                    </ul>
-	                </li>
-	            </ul>
-	        </div>
-		</div>
-	</div>
+                            <!--li><a href="#">Help</a></li-->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-sm-3">
-				<strong><i class="glyphicon glyphicon-wrench"></i><span style="padding-left: 10px;">Reports</span></strong>
-				<hr>
-				<ul class="nav nav-pills nav-stacked">
-					<li class="nav-header"></li>
-					<li><a href="{{ENGAGEMENT_NAV}}"><i class="glyphicon glyphicon-stats"></i><span>Site Traffic</span></a></li>
-					<li><a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-transfer"></i><span>Update History</span></a></li>
-					<li><a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-flash"></i><span>Code Statistics</span></a></li>
-					<li><a href="{{SCAN_NAV}}"><i class="glyphicon glyphicon-heart"></i><span>Server Health</span></a></li>
-					<li><a href="{{FIREWALL_NAV}}"><i class="glyphicon glyphicon-lock"></i><span>Firewall &amp; Security</span></a></li>
-					<li><a href="{{BACKUP_NAV}}"><i class="glyphicon glyphicon-cloud-upload"></i><span>System Backup</span></a></li>
-				</ul>
-				<!--hr>
-				<ul class="nav nav-stacked">
-					<li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#menu2"> Help &amp; Support <i class="glyphicon glyphicon-chevron-right"></i></a>
-						<ul class="nav nav-stacked collapse" id="menu2">
-							<li><a href="#">Transparency Mission</a></li>
-							<li><a href="#">About Active Maintenance</a></li>
-							<li><a href="#">Schedule</a></li>
-						</ul>
-					</li>
-				</ul-->
-				<p>&nbsp;</p>
-			</div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3">
+                <strong><i class="glyphicon glyphicon-wrench"></i><span style="padding-left: 10px;">Reports</span></strong>
+                <hr>
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="nav-header"></li>
+                    <li><a href="{{ENGAGEMENT_NAV}}"><i class="glyphicon glyphicon-stats"></i><span>Site Traffic</span></a></li>
+                    <li><a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-transfer"></i><span>Update History</span></a></li>
+                    <li><a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-flash"></i><span>Code Statistics</span></a></li>
+                    <li><a href="{{SCAN_NAV}}"><i class="glyphicon glyphicon-heart"></i><span>Server Health</span></a></li>
+                    <li><a href="{{FIREWALL_NAV}}"><i class="glyphicon glyphicon-lock"></i><span>Firewall &amp; Security</span></a></li>
+                    <li><a href="{{BACKUP_NAV}}"><i class="glyphicon glyphicon-cloud-upload"></i><span>System Backup</span></a></li>
+                </ul>
+                <!--hr>
+                <ul class="nav nav-stacked">
+                    <li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#menu2"> Help &amp; Support <i class="glyphicon glyphicon-chevron-right"></i></a>
+                        <ul class="nav nav-stacked collapse" id="menu2">
+                            <li><a href="#">Transparency Mission</a></li>
+                            <li><a href="#">About Active Maintenance</a></li>
+                            <li><a href="#">Schedule</a></li>
+                        </ul>
+                    </li>
+                </ul-->
+                <p>&nbsp;</p>
+            </div>
 
-			<div class="col-sm-9">
-				<ul class="list-inline pull-right">
-					<li><small>Updated {{NOW}}</small></li>
-				</ul>
-				<strong><i class="glyphicon glyphicon-dashboard"></i><span style="padding-left: 10px;">My Dashboard</span></strong>
-				<hr>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="btn-group btn-group-justified">
-							<!--// Each <a>...</a> below needs to be on ONE line in order to be parsed correctly //-->
-							<a href="{{SCAN_NAV}}" class="btn {{SCAN_BTN}} col-sm-3"><i class="glyphicon glyphicon-ok-sign"></i><div class="stat-label">{{SCAN_MSG}}</div></a>
-							<a href="#" class="btn {{UPTIME_BTN}} col-sm-3"><i class="glyphicon glyphicon-time"></i><div class="stat-label">{{UPTIME}}% uptime</div></a>
-							<a href="#" class="btn {{LATENCY_BTN}} col-sm-3"><i class="glyphicon glyphicon-send"></i><div class="stat-label">{{LATENCY}}s latency</div></a>
-							<a href="{{BACKUP_NAV}}" class="btn {{BACKUP_BTN}} col-sm-3"><i class="glyphicon glyphicon-cloud-upload"></i><div class="stat-label">{{LAST_BACKUP}}</div></a>
-						</div>
+            <div class="col-sm-9">
+                <ul class="list-inline pull-right">
+                    <li><small>Updated {{NOW}}</small></li>
+                </ul>
+                <strong><i class="glyphicon glyphicon-dashboard"></i><span style="padding-left: 10px;">My Dashboard</span></strong>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="btn-group btn-group-justified">
+                            <!--// Each <a>...</a> below needs to be on ONE line in order to be parsed correctly //-->
+                            <a href="{{SCAN_NAV}}" class="btn {{SCAN_BTN}} col-sm-3"><i class="glyphicon glyphicon-ok-sign"></i><div class="stat-label">{{SCAN_MSG}}</div></a>
+                            <a href="#" class="btn {{UPTIME_BTN}} col-sm-3"><i class="glyphicon glyphicon-time"></i><div class="stat-label">{{UPTIME}}% uptime</div></a>
+                            <a href="#" class="btn {{LATENCY_BTN}} col-sm-3"><i class="glyphicon glyphicon-send"></i><div class="stat-label">{{LATENCY}}s latency</div></a>
+                            <a href="{{BACKUP_NAV}}" class="btn {{BACKUP_BTN}} col-sm-3"><i class="glyphicon glyphicon-cloud-upload"></i><div class="stat-label">{{LAST_BACKUP}}</div></a>
+                        </div>
 
-						<!--[BEGIN ANALYTICS]-->
-						<hr>
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<div class="panel-title">
-									<a href="{{ENGAGEMENT_NAV}}"><i class="glyphicon glyphicon-link pull-right"></i></a>
-									<h4>Site Traffic <small>(Last 7 days)</small></h4>
-								</div>
-							</div>
-							<div class="panel-body">
-								<div class="text-center">
-                                					<object data="hits.svg" type="image/svg+xml"></object>
-<br /><small>Total pageviews</small>
-								
-</div>
-								<div class="col-xs-4 text-center">
-									<h1><strong>{{GA_HITS}}</strong></h1>
-									<p>page views</p>
-								</div>
-								<div class="col-xs-4 text-center">
-								<h1><strong>{{GA_PERCENT}}%</strong></h1>
-									<p>traffic from new users</p>
-								</div>
-								<div class="col-xs-4 text-center">
-								<h1><strong>{{GA_SEARCHES}}</strong></h1>
-									<p>inbound organic searches</p>
-								</div>
-							</div>
-							<div class="panel-body" style="padding-top: 0px;">
-								<hr>
-								<p class="text-center">
-									<a href="{{ENGAGEMENT_NAV}}">View all</a>
-								</p>
-							</div>
-						</div>
-						<!--[END ANALYTICS]-->
+                        <!--[BEGIN ANALYTICS]-->
+                        <hr>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <a href="{{ENGAGEMENT_NAV}}"><i class="glyphicon glyphicon-link pull-right"></i></a>
+                                    <h4>Site Traffic <small>(Last 7 days)</small></h4>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="text-center">
+                                    <a href="{{ENGAGEMENT_NAV}}"><object data="hits.svg" type="image/svg+xml"></object></a>
+                                    <br /><strong>{{GA_HITS}}</strong>total pageviews
+                                </div>
+                                <div class="col-xs-6 text-center">
+                                <h1><strong>{{GA_PERCENT}}%</strong></h1>
+                                    <p>traffic from new users</p>
+                                </div>
+                                <div class="col-xs-6 text-center">
+                                <h1><strong>{{GA_SEARCHES}}</strong></h1>
+                                    <p>inbound organic searches</p>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="padding-top: 0px;">
+                                <hr>
+                                <p class="text-center">
+                                    <a href="{{ENGAGEMENT_NAV}}">View all</a>
+                                </p>
+                            </div>
+                        </div>
+                        <!--[END ANALYTICS]-->
 
-						<hr>
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<div class="panel-title">
-									<a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-link pull-right"></i></a>
-									<h4>Recent Activity</h4>
-								</div>
-							</div>
-							<div class="panel-body">
-								{{COMMITS_RECENT}}
-								<p class="text-center">
-									<a href="{{ACTIVITY_NAV}}">View all</a>
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<div class="panel-title">
-									<a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-link pull-right"></i></a>
-									<h4>Project Stats</h4>
-								</div>
-							</div>
-							<div class="panel-body">
-								<div class="col-xs-8">
-									<p>
-										Project: {{PROJNAME}}<br />
-										Development: <a href="{{DEVURL}}">{{DEVURL}}</a><br />
-										Production: <a href="{{PRODURL}}">{{PRODURL}}</a>
-									</p>
-									<p>{{CODE_STATS}}</p>
-								</div>
-								<div class="col-xs-4">
-									<img src="{{CLIENTLOGO}}" class="img-rounded img-responsive" style="float: right;" alt="{{PROJCLIENT}}" title="{{PROJCLIENT}}" width="128">
-								</div>
-							</div>
-							
-							<div class="panel-body">
-								<object style="max-width: 840px;" data="commits_day_week.svg" type="image/svg+xml"></object>
-								<hr>
-								<p class="text-center">
-									<a href="{{STATISTICS_NAV}}">View all</a>
-								</p>
-							</div>
-						</div>
-						<hr>
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<div class="panel-title">
-									<!--i class="glyphicon glyphicon-wrench pull-right"></i-->
-									<h4>Support Request</h4>
-								</div>
-							</div>
-							<div class="panel-body">
-								<script type="text/javascript" src="//drip.emrl.com/form/generate.js?id=43"></script>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                        <hr>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-link pull-right"></i></a>
+                                    <h4>Recent Activity</h4>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                {{COMMITS_RECENT}}
+                                <p class="text-center">
+                                    <a href="{{ACTIVITY_NAV}}">View all</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-link pull-right"></i></a>
+                                    <h4>Project Stats</h4>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-xs-8">
+                                    <p>
+                                        Project: {{PROJNAME}}<br />
+                                        Development: <a href="{{DEVURL}}">{{DEVURL}}</a><br />
+                                        Production: <a href="{{PRODURL}}">{{PRODURL}}</a>
+                                    </p>
+                                    <p>{{CODE_STATS}}</p>
+                                </div>
+                                <div class="col-xs-4">
+                                    <img src="{{CLIENTLOGO}}" class="img-rounded img-responsive" style="float: right;" alt="{{PROJCLIENT}}" title="{{PROJCLIENT}}" width="128">
+                                </div>
+                            </div>
+                            
+                            <div class="panel-body">
+                                <object style="max-width: 840px;" data="commits_day_week.svg" type="image/svg+xml"></object>
+                                <hr>
+                                <p class="text-center">
+                                    <a href="{{STATISTICS_NAV}}">View all</a>
+                                </p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <!--i class="glyphicon glyphicon-wrench pull-right"></i-->
+                                    <h4>Support Request</h4>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <script type="text/javascript" src="//drip.emrl.com/form/generate.js?id=43"></script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<!--[BEGIN WORK RSS]-->
-	<div class="modal" id="workModal">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h4 class="modal-title">Uptime</h4>
-				</div>
-				<div class="modal-body">
-					<script language="JavaScript" src="{{RSS_URL}}" charset="UTF-8" type="text/javascript"></script>
-					<noscript><a href="{{RSS_URL}}">View RSS feed</a></noscript>
-				</div>
-				<div class="modal-footer">
-					<a href="#" data-dismiss="modal" class="btn">Close</a>
-					<!--a href="https://dply.emrl.co/scan" data-dismiss="modal" class="btn btn-primary">View in Project Manager</a-->
-				</div>
-			</div>
-		</div>
-	</div>
-	<!--[END WORK RSS]-->
+    <!--[BEGIN WORK RSS]-->
+    <div class="modal" id="workModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Uptime</h4>
+                </div>
+                <div class="modal-body">
+                    <script language="JavaScript" src="{{RSS_URL}}" charset="UTF-8" type="text/javascript"></script>
+                    <noscript><a href="{{RSS_URL}}">View RSS feed</a></noscript>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" data-dismiss="modal" class="btn">Close</a>
+                    <!--a href="https://dply.emrl.co/scan" data-dismiss="modal" class="btn btn-primary">View in Project Manager</a-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--[END WORK RSS]-->
 
-	<footer class="text-center"></footer>
+    <footer class="text-center"></footer>
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/scripts.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
 </body>
 </html>

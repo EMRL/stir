@@ -18,6 +18,10 @@ i {
   font-size:16px;
 }
 
+a:hover {
+  color: #eee;
+}
+
 .nav > li > a {
   color:#787878;
 }
