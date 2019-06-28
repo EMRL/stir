@@ -71,14 +71,16 @@ textarea.form-control {
 }
 
 hr {
-  border-top: 1px solid #484E54;
+  border-top: 1px solid rgb(77, 77, 77, .35);
 }
 
 .panel {
-  background-color: rgb(127, 127, 127, 0.45)
+  color: #484e54;
+  background-color: #484e54;
 }
 
 .panel-light {
+  color: #333;
   background-color: rgb(200, 200, 200, 0.85)
 }
 
@@ -97,6 +99,15 @@ hr {
 
 .panel-title {
   color: #eee;
+}
+
+.form-control {
+  background-color: #6b6b6b;
+  border: none;
+}
+
+select {
+  color: #878b90 !important;
 }
 
 .mauticform-post-success .mauticform-message {
