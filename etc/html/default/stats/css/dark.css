@@ -2,6 +2,8 @@
 
 body {
   font-family: 'Roboto', sans-serif !important;
+  color: #878b90;
+  background-color: #3A3F44;
 }
 
 p, td {
@@ -24,7 +26,6 @@ footer {
   margin-top:20px;
   padding-top:20px;
   padding-bottom:20px;
-  background-color:#efefef;
 }
 
 /* count indicator near icons */
@@ -59,6 +60,31 @@ textarea.form-control {
 
 .caret {
   padding: 0 !important;
+}
+
+hr {
+  border-top: 1px solid #484E54;
+}
+
+.panel-default {
+  border-color: #484e54;
+}
+
+.panel-heading {
+  color: #333;
+}
+
+.panel-default>.panel-heading {
+  background-color: #484e54;
+  border-color: #484e54;
+}
+
+.panel-title {
+  color: #eee;
+}
+
+.panel-body {
+  background-color: #3A3F44;
 }
 
 .mauticform-post-success .mauticform-message {
