@@ -10,6 +10,11 @@ p, td {
   font-weight: 400;
 }
 
+.navbar-inverse {
+  background-color: #222;
+  border-color: none !important;
+}
+
 .navbar-static-top {
   margin-bottom:20px;
 }
