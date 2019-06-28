@@ -27,6 +27,15 @@ i {
   border: solid 8px #878b90;
 }
 
+.img-navbar-circle {
+  margin-top: -5px; 
+  margin-right: 8px; 
+  background-color: #eee; 
+  float: left; 
+  border: solid 2px #787878;
+  max-height: 30px;
+}
+
 a:hover {
   color: #eee;
 }
