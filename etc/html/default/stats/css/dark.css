@@ -74,6 +74,14 @@ hr {
   border-top: 1px solid #484E54;
 }
 
+.panel {
+  background-color: rgb(127, 127, 127, 0.45)
+}
+
+.panel-light {
+  background-color: rgb(200, 200, 200, 0.85)
+}
+
 .panel-default {
   border-color: #484e54;
 }
@@ -89,10 +97,6 @@ hr {
 
 .panel-title {
   color: #eee;
-}
-
-.panel-body {
-  background-color: #ececec;
 }
 
 .mauticform-post-success .mauticform-message {
