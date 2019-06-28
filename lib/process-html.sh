@@ -79,7 +79,8 @@ function process_html() {
     GA_PERCENT GA_SEARCHES GA_DURATION GA_SOCIAL CODE_STATS SCAN_BTN \
     UPTIME_BTN LATENCY_BTN BACKUP_BTN ACTIVITY_NAV STATISTICS_NAV SCAN_NAV \
     ENGAGEMENT_NAV FIREWALL_NAV BACKUP_NAV BACKUP_MSG TOTAL_COMMITS RSS_URL \
-    ga_hits ga_users ga_newUsers ga_sessions ga_organicSearches ga_pageviews)
+    ga_hits ga_users ga_newUsers ga_sessions ga_organicSearches ga_pageviews \
+    THEME_MODE)
 
   # Start the loop
   for i in "${process_var[@]}" ; do

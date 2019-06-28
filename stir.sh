@@ -122,12 +122,19 @@ function init_internal() {
   init_loop
 }
 
+function init_theme() {
+  var=(THEME_MODE DEFAULTC PRIMARYC SECONDARYC SUCCESSC INFOC WARNINGC \
+  DANGERC LOGC LOGBC)
+  init_loop
+}
+
 # Initialize all variables we'll need before loading external functions
 init_startup
 init_temp
 init_color
 init_env
 init_internal
+init_theme
 
 # Log errors
 function log_fail() {
@@ -396,6 +403,11 @@ urlFile="/tmp/${APP}.url-${RANDOM}.log"; (umask 077 && touch "${urlFile}" &> /de
 htmlFile="/tmp/${APP}.log-${RANDOM}.html"; (umask 077 && touch "${htmlFile}" &> /dev/null) || log_fail
 htmlEmail="/tmp/${APP}.email-${RANDOM}.html"; (umask 077 && touch "${htmlEmail}" &> /dev/null) || log_fail
 clientEmail="/tmp/${APP}.shortemail-${RANDOM}.html"; (umask 077 && touch "${clientEmail}" &> /dev/null) || log_fail
+
+# Lowercase dashboard class is better form
+if [[ -n "${THEME_MODE}" ]]; then
+  THEME_MODE="$(echo ${THEME_MODE} | awk '{print tolower($0)}')"
+fi
 
 # Function list
 if [[ "${FUNCTIONLIST}" == "1" ]]; then
