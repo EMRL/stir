@@ -29,6 +29,10 @@ i {
   max-height: 30px;
 }
 
+a {
+  color: {{PRIMARY}};
+}
+
 .nav > li > a {
   color:#787878;
 }
