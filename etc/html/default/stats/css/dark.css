@@ -11,8 +11,8 @@ p, td {
 }
 
 .navbar-inverse {
-  background-color: #222;
-  border-color: none !important;
+  background-color: #313131;
+  border-color: transparent;
 }
 
 .navbar-static-top {
@@ -34,6 +34,10 @@ i {
   float: left; 
   border: solid 2px #787878;
   max-height: 30px;
+}
+
+a {
+  color: {{PRIMARY}};
 }
 
 a:hover {
@@ -75,6 +79,8 @@ textarea.form-control {
   font-weight: 700;
   font-size: 0.8em;
 }
+
+
 
 .nav > li > a > span {
   padding: 0 10px;
