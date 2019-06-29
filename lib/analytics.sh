@@ -236,7 +236,7 @@ function ga_over_time() {
   gnuplot -p << EOF
   set encoding utf8
   set terminal png enhanced size 1280,600
-  primary = "${PRIMARYC}"; 
+  primary = "${CHARTC}"; 
   secondary = "${SECONDARYC}";
   info = "${INFOC}";
   default = "${DEFAULTC}";

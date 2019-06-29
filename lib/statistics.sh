@@ -67,7 +67,7 @@ function project_stats() {
       commits_month commits_year commits_year_month files_type)
     for i in "${repo_charts[@]}" ; do
       /usr/bin/gitchart -r "${WORKPATH}/${APP}" "${i}" "${statDir}/${i}.svg" &>> /dev/null
-      sed -i "s/#9999ff/${PRIMARYC}/g" "${statDir}/${i}.svg" 
+      sed -i "s/#9999ff/${CHARTC}/g" "${statDir}/${i}.svg" 
       sed -i 's/Consolas,"Liberation Mono",Menlo,Courier,monospace/Roboto, Helvetica, Arial, sans-serif/g' "${statDir}/${i}.svg"
     done #&
     #spinner $!
