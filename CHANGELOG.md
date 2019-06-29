@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Origin sync is now forced when running using `--automate`
 - Prepare hook added
 - Added `--reset` switch
+- Default HTML theme now includes a dark mode
 ### Changed
 - `deploy` is now `stir`
 - Invoice creation will now exit gracefully if project is not correctly configured

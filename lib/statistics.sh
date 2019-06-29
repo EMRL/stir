@@ -79,6 +79,9 @@ function project_stats() {
     project_backup #& spinner $!
     project_engagement #& spinner $!
 
+    # Filter CSS
+    project_css #& spinner $!
+
     # Post files
     postLog #& spinner $!
   fi
@@ -136,6 +139,12 @@ function project_engagement() {
   # Process the HTML
   process_html; 
   cat "${htmlFile}" > "${statDir}/engagement.html"
+}
+
+function project_css() {
+  # Process the CSS files
+  cat "${deployPath}/html/${HTMLTEMPLATE}/stats/css/${THEME_MODE}.css" > "${htmlFile}"
+  process_html; cat "${htmlFile}" > "${statDir}/css/${THEME_MODE}.css"
 }
 
 function project_backup() {

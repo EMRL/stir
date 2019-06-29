@@ -43,7 +43,7 @@ a:hover {
 .nav > li > a {
   color:#787878;
 }
-  
+
 footer {
   margin-top:20px;
   padding-top:20px;
@@ -112,6 +112,34 @@ hr {
 
 .panel-title {
   color: #eee;
+}
+
+.btn {
+  border-color: transparent !important;
+}
+
+.btn-primary {
+  background-color: {{PRIMARY}};
+}
+
+.btn-secondary {
+  background-color: {{SECONDARY}};
+}
+
+.btn-success {
+  background-color: {{SUCCESS}};
+}
+
+.btn-info {
+  background-color: {{INFO}};
+}
+
+.btn-warning {
+  background-color: {{WARNING}};
+}
+
+.btn-danger {
+  background-color: {{DANGER}};
 }
 
 .form-control {
