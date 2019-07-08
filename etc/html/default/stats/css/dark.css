@@ -100,7 +100,7 @@ hr {
 
 .panel-light {
   color: #333;
-  background-color: rgba(200, 200, 200, 0.85)
+  background-color: rgba(225, 225, 225, 1.0);
 }
 
 .panel-default {
