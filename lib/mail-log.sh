@@ -12,7 +12,9 @@ function mailLog() {
 
     # Make sure sendmail exists and is configured 
     hash "${sendmail_cmd}" 2>/dev/null || { 
-      error >&2 "Sendmail misconfigured or not found."; 
+      quietExit
+      # The line below sends us into an infinite recursive loop, issue #157
+      # error >&2 "Sendmail misconfigured or not found."; 
     }
 
 #    if [[ ! -f "${MAILPATH}/sendmail" ]]; then
