@@ -7,7 +7,7 @@
 # system & user settings.
 
 # This value indicates the version number when this file was last changed: 
-# it does not necessarily reflect deploy's current version number.
+# it does not necessarily reflect stir's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
 PROJECT_VERSION="3.81"
 
@@ -64,13 +64,13 @@ PROJECT_VERSION="3.81"
 # when deploying, set AUTOMERGE to TRUE.
 # AUTOMERGE="{{AUTOMERGE}}"
 
-# If dirty (yet to be committed) files exist in the repo, deploy will normally 
+# If dirty (yet to be committed) files exist in the repo, stir will normally 
 # not halt execution when running with the --automate flag. If you prefer to 
 # have the dirty files stashed and proceed with updates set the below value 
 # to TRUE. Files will be unstashed after the deployment is complete.  
 # STASH="{{STASH}}"
 
-# Define CHECKBRANCH if you only want deploy to run when the set branch is 
+# Define CHECKBRANCH if you only want stir to run when the set branch is 
 # currently checked out; e.g. if CHECKBRANCH="master" and the current branch is 
 # "production", deployment will halt.
 # CHECKBRANCH="{{CHECKBRANCH}}"
@@ -80,7 +80,7 @@ PROJECT_VERSION="3.81"
 #
 # NOKEY="{{NOKEY}}"
 
-# By default deploy will check for valid SSH keys; if you want to override this
+# By default stir will check for valid SSH keys; if you want to override this
 # behavior, set DISABLESSHCHECK to TRUE
 # DISABLESSHCHECK="{{DISABLESSHCHECK}}"
 
@@ -165,7 +165,7 @@ PROJECT_VERSION="3.81"
 # Project Management 
 # ------------------
 
-# Task#: This is used to post deploy logs to project management systems 
+# Task#: This is used to post logs to project management systems 
 # that can accept external email input. For examples, our task management system 
 # accepts emails in the format task-####@projects.emrl.com, with the #### 
 # being the task identification number for the project being deployed.
@@ -185,7 +185,7 @@ PROJECT_VERSION="3.81"
 # You'll need to set up an "Incoming Webhook" custom integration on the Slack 
 # side to get this ready to roll. 
 # See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get 
-# going. Once your Slack webhook is setup, run # 'deploy --slack-test' to 
+# going. Once your Slack webhook is setup, run # 'stir --test-slack' to 
 # test your configuration.
 
 # Set POSTTOSLACK to "TRUE" to enable Slack integration.
@@ -219,7 +219,7 @@ PROJECT_VERSION="3.81"
 
 # If you want to use an email template unique to this project (instead of the 
 # globally configured template) define it below. HTML templates are stored in 
-# separate folders in /etc/deploy/html. The value used below should be the 
+# separate folders in /etc/stir/html. The value used below should be the 
 # folder name of your template.
 # HTMLTEMPLATE="{{HTMLTEMPLATE}}"
 
@@ -237,12 +237,12 @@ PROJECT_VERSION="3.81"
 # are only posting to LOCALHOST.
 # REMOTELOG="{{REMOTELOG}}"
 
-# Define the root url where the deploy log will be accessible with no 
+# Define the root url where the stir log will be accessible with no 
 # trailing slash
 # REMOTEURL="{{REMOTEURL}}"
 
 # If using HTML logs, define which template you'd like to use. HTML templates
-# are stored in separate folders in /etc/deploy/html. The value used below 
+# are stored in separate folders in /etc/stir/html. The value used below 
 # should be the folder name of your template.
 # REMOTETEMPLATE="{{REMOTETEMPLATE}}"
 
@@ -268,7 +268,7 @@ PROJECT_VERSION="3.81"
 # Weekly Digests
 ###############################################################################
 
-# If you'd like to send branded HTML emails using the `deploy --digest [project]` 
+# If you'd like to send branded HTML emails using the `stir --digest [project]` 
 # command, enter the recipient's email address below. Email value can be a comma 
 # separated string of multiple addresses. 
 # DIGESTEMAIL="{{DIGESTEMAIL}}"
@@ -355,7 +355,7 @@ PROJECT_VERSION="3.81"
 
 # Uptime and average latency can be included in logs, digests, and reports when 
 # integrating with PHP Server Monitor, and an add-on API. 
-# See https://github.com/EMRL/deploy/wiki/Integration for more information. 
+# See https://github.com/EMRL/stir/wiki/Integration for more information. 
 
 # Full API URL
 # MONITORURL="{{MONITORURL}}"
