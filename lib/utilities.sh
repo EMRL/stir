@@ -158,9 +158,11 @@ function is_integer() {
 }
 
 function get_fullpath() {
-   # Get absolute paths to critical commands
+  # Get absolute paths to critical commands
   for i in "${var[@]}" ; do
-    eval "${i}_cmd=\"$(which ${i})\""
+    if [[ -x "$(command -v ${i})" ]]; then
+      eval "${i}_cmd=\"$(which ${i})\""
+    fi
   done
 }
 

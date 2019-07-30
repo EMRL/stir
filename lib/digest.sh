@@ -56,7 +56,8 @@ function create_digest() {
     while read URL; do
       CODE=$(curl -o /dev/null --silent --head --write-out '%{http_code}' "$URL")
       if [[ "${CODE}" != "200" ]]; then 
-        sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${statFile}"
+        # sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${statFile}"
+        sed -i "s,${URL},${REPOHOST}/${REPO},g" "${statFile}"
       fi
     done < "${trshFile}"
 

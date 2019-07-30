@@ -13,7 +13,7 @@
 
 # Initialize variables
 var=(SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \
-  GA_SOCIAL ANALYTICSMSG ga_day ga_sequence max_value n a GA_TOTAL)
+  GA_SOCIAL ANALYTICSMSG ga_day ga_sequence max_value n a GA_TOTAL ga_)
 init_loop
 
 ga_var=(users newUsers percentNewSessions sessionsPerUser sessions 
