@@ -7,9 +7,6 @@
 ###############################################################################
 
 # Initialize variables
-var=(integer_check)
-init_loop
-
 read -r integer_check <<< ""
 echo "${integer_check}" > /dev/null
 
@@ -160,6 +157,8 @@ function is_integer() {
 function get_fullpath() {
   # Get absolute paths to critical commands
   for i in "${var[@]}" ; do
+    read -r "${i}_cmd" <<< ""
+    echo "${i}_cmd" > /dev/null
     if [[ -x "$(command -v ${i})" ]]; then
       eval "${i}_cmd=\"$(which ${i})\""
     fi

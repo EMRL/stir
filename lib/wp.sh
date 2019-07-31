@@ -73,7 +73,8 @@ function wp_update_check() {
 function wp_check() {
   # Is wp-cli installed? 
   if hash "${WPCLI}"/wp 2>/dev/null; then
-    trace "wp-cli found"
+    wp_cmd="${WPCLI}/wp"
+    trace "wp-cli found at ${wp_cmd}"
 
     # Bug out if this is a new style project
     if [[ "${PREPARE}" == "TRUE" ]]; then 
@@ -109,17 +110,19 @@ function wp_check() {
 
 function wp_server_check {
   # Launch server
-  trace "Launching server"
-  "${wp_cmd}" server --host=localhost >> "${logFile}" 2>&1 &
-
-  # Keep checking for server to come online
-  until $(curl --output /dev/null --silent --head --fail http://localhost:8080); do
-    sleep 1
-  done
+  # "${wp_cmd}" server --host=localhost > /dev/null 2>&1; EXITCODE=$?; 
+  # if [[ "${EXITCODE}" -eq "0" ]]; then
+    # trace "Launching server"
+    # "${wp_cmd}" server --host=localhost >> "${logFile}" 2>&1 &
+    # Keep checking for server to come online
+    # until $(curl --output /dev/null --silent --head --fail http://localhost:8080); do
+    #   sleep 1
+    # done
+  # fi
 
   trace "Activating plugins"
   "${wp_cmd}" plugin activate --all >> "${logFile}" 2>&1
-  trace "Activating theme"
+  # trace "Activating theme"
   # "${wp_cmd}" theme activate site >> "${logFile}" 2>&1
   
   #"${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" >> "${logFile}" 2>&1
