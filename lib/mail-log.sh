@@ -11,11 +11,19 @@ function mailLog() {
   if [[ -n "${COMMITHASH}" ]] || [[ "${message_state}" == "ERROR" ]] || [[ "${message_state}" == "APPROVAL NEEDED" ]] || [[ "${AUTOMATE}" == "1" ]]; then
 
     # Make sure sendmail exists and is configured 
-    hash "${sendmail_cmd}" 2>/dev/null || { 
+    # hash "${sendmail_cmd}" 2>/dev/null || { 
+
+    #if [[ -z "${sendmail_cmd-}" ]]; then
+    #  return
+    #fi
+
+    if [[ ! -x "$(command -v ${sendmail_cmd})" ]]; then
       quietExit
+
       # The line below sends us into an infinite recursive loop, issue #157
       # error >&2 "Sendmail misconfigured or not found."; 
-    }
+    # }
+    fi
 
 #    if [[ ! -f "${MAILPATH}/sendmail" ]]; then
 #      empty_line; warning "Sendmail misconfigured or not found."

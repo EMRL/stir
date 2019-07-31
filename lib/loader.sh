@@ -14,7 +14,7 @@ if [[ "${CLEARSCREEN}" == "TRUE" ]]; then
 fi
 
 if [[ "${FORCE}" != "1" ]] && [[ "${QUIET}" = "1" ]]; then
-  echo "To deploy using the --quiet flag, you must also use --force."; exit 1
+  echo "To use the --quiet flag, you must also use --force."; exit 1
 fi
 
 ###############################################################################

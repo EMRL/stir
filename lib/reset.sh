@@ -10,9 +10,12 @@ function reset_local() {
   if [[ -n "${project_config}" ]] && [[ -w "${WORKPATH}/${APP}" ]]; then
 
     if [[ -n "${wp_cmd}" ]]; then
-      # TODO: Add a better check here someday
-      info "Dropping Wordpress database..."
-      "${wp_cmd}" db drop --yes
+      "${wp_cmd}" db check  > /dev/null 2>&1
+      EXITCODE=$?; 
+      if [[ "${EXITCODE}" -eq "0" ]]; then
+        info "Dropping Wordpress database..."
+        "${wp_cmd}" db drop --yes
+      fi
     fi
 
     info "Resetting local files..."

@@ -127,9 +127,13 @@ function wp_clone() {
     #fi
 
     # Install wordpress database tables
-    trace status "Installing Wordpress... "
-    "${wp_cmd}" core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
-    trace notime "OK"
+    "${wp_cmd}" core > /dev/null 2>&1
+    EXITCODE=$?; 
+    if [[ "${EXITCODE}" -ne "0" ]]; then
+      trace status "Installing Wordpress... "
+      "${wp_cmd}" core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
+      trace notime "OK"
+    fi
 
     # Check server
     wp_server_check
