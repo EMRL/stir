@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Invoice creation will now exit gracefully if project is not correctly configured
 - Initial project preparation and cloning has been simplified
 - Improved accuracy of smart commit messages
+- Approval queue functions are now deprecated and slated for removal
 ### Fixed
 - Fixed many small bugs
 
