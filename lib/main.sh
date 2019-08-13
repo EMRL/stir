@@ -66,6 +66,7 @@ function main() {
 
       # Check for approval/deny/queue
       if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
+        notice "Approval queue functions are deprecated and will be removed soon."
         if [[ "${APPROVE}" == "1" ]] || [[ -f "${WORKPATH}/${APP}/.approved" ]]; then
           approve   # Approve proposed changes
         else
@@ -83,6 +84,7 @@ function main() {
       fi
 
       if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
+        notice "Approval queue functions are deprecated and will be removed soon."
         queue 		# Queue for approval if needed
       fi
 

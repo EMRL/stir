@@ -33,8 +33,8 @@ Options:
 
 Other Options:
   --automate             For unattended execution via cron
-  --approve              Approve and deploy queued code changes
-  --deny                 Deny queued code changes
+  --approve              Approve and deploy queued code changes (deprecated)
+  --deny                 Deny queued code changes (deprecated)
   --build                Build project assets
   --prepare              Prepare project
   --reset                Resets local project files
