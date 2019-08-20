@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initialize variables
-var=(FULLUSER)
+var=(FULLUSER SRC_BRANCH DEST_BRANCH)
 init_loop
 
 # Assign a variable to represent .git/index.lock
