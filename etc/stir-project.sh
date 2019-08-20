@@ -58,6 +58,7 @@ PROJECT_VERSION="3.81"
 # Configure your branches. In most cases the name will be master & production. 
 # If you are only using a master branch, leave production undefined.
 # MASTER="{{MASTER}}"
+# STAGING="{{STAGING}}"
 # PRODUCTION="{{PRODUCTION}}"
 
 # Configure merge behavior. If you wish to automatically merge your branches 
