@@ -151,7 +151,7 @@ function update_project() {
     SERVERID NIKTO NIKTO_CONFIG STAGING_DEPLOY_PATH PRODUCTION_DEPLOY_HOST \
     PRODUCTION_DEPLOY_PATH SCP_DEPLOY_USER SCP_DEPLOY_PASS SCP_DEPLOY_PORT \
     NIKTO NIKTO_CONFIG NIKTO_PROXY DB_API_TOKEN DB_BACKUP_PATH PREPARE \
-    PREPARE_CONFIG ACF_LOCK)
+    PREPARE_CONFIG ACF_LOCK STAGING)
 
   info "Project configuration backup created at ${project_config}.bak"
   cp "${project_config}" "${project_config}.bak"
