@@ -44,6 +44,11 @@ function scan_host() {
     error "Can't find scanning command (${NITKO})" 
   }
 
+  # Only scan production URL
+  if [[ -z "${PRODURL}" ]]; then
+    warning "Production server is not defined, check your setup."; quietExit
+  fi
+
   # Create temp files
   scan_html="/tmp/${APP}.scan-$RANDOM.html"; (umask 077 && touch "${scan_html}" &> /dev/null) || log_fail
   

@@ -16,6 +16,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Improved accuracy of smart commit messages
 - Approval queue functions are now deprecated and slated for removal
 ### Fixed
+- Production URL must now be defined before malware scans are attempted 
 - Fixed many small bugs
 
 ## [3.7.3] - 03-12-2019
