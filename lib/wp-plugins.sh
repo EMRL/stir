@@ -77,6 +77,7 @@ function wp_plugins() {
     info "Plugin updates complete."
   else  
     info "Skipping plugin updates..."
+    SMARTCOMMIT="FALSE"
   fi 
 }
 
