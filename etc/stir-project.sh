@@ -9,7 +9,7 @@
 # This value indicates the version number when this file was last changed: 
 # it does not necessarily reflect stir's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-PROJECT_VERSION="3.81"
+PROJECT_VERSION="3.82"
 
 
 ###############################################################################
@@ -56,7 +56,7 @@ PROJECT_VERSION="3.81"
 # REPO="{{REPO}}"
 
 # Configure your branches. In most cases the name will be master & production. 
-# If you are only using a master branch, leave production undefined.
+# If you are only using a master branch, leave the others undefined.
 # MASTER="{{MASTER}}"
 # STAGING="{{STAGING}}"
 # PRODUCTION="{{PRODUCTION}}"
