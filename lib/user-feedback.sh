@@ -15,7 +15,7 @@ function spinner() {
   if [[ "${QUIET}" != "1" ]] && [[ "${DEBUG}" != "1" ]]; then
     local pid=$1
     local delay=0.15
-    # Is ther ea better way to format this thing?  It's wonky
+    # Is there a better way to format this thing?  It's wonky
     local spinstr='|/-\'
     tput civis;
     while [[ "$(ps a | awk '{print $1}' | grep ${pid})" ]]; do
