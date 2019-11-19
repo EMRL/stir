@@ -14,7 +14,7 @@ init_loop
 
 function process_html() {
   # Clean out the stuff we don't need
-  [[ -z "${DEVURL}" ]] && sed -i '/<strong>Staging URL:/d' "${htmlFile}"
+  [[ -z "${DEVURL}" ]] && sed -i '/DEVURL/d' "${htmlFile}"
   [[ -z "${PRODURL}" ]] && sed -i '/PRODURL/d' "${htmlFile}"
   [[ -z "${UPTIME}" ]] && sed -i '/UPTIME/d' "${htmlFile}"
   [[ -z "${LATENCY}" ]] && sed -i '/LATENCY/d' "${htmlFile}"  

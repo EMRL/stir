@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Fixed
+- Fixed a small email text bug
+
 ## [3.7.4] - 11-18-2019
 ### Added
 - Automated Worpdress updates may now made by cloning a temporary copy of the project's repo, running the updates, and destroying upon completion
