@@ -255,7 +255,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Old monolithic script rewritten
 
 [Unreleased]: https://github.com/EMRL/deploy/compare/v3.7.4...HEAD
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.7.3...v3.7.4
+[3.7.4]: https://github.com/EMRL/deploy/compare/v3.7.3...v3.7.4
 [3.7.3]: https://github.com/EMRL/deploy/compare/v3.7.2...v3.7.3
 [3.7.2]: https://github.com/EMRL/deploy/compare/v3.7.1...v3.7.2
 [3.7.1]: https://github.com/EMRL/deploy/compare/v3.7...v3.7.1
