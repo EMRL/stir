@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# This is an example cron file for periodic scheduled deployments. 
+# This is an example cron file for periodic scheduled ments. 
 
 # Nerf any color coded garbage you have in your shell stuff
 export TERM=${TERM:-dumb}
@@ -16,18 +16,18 @@ PATH="[required path]:$PATH"
 source $HOME/.bash_profile 2>&1
 source $HOME/.keychain/$HOSTNAME-sh 2>&1
 
-# And now, the deploy command; the recommended cron command is 
-# deploy --automate 
+# And now, the stir command; the recommended cron command is 
+# stir --automate 
 #
 # The deprecated mode to run from a cron is as follows
-# deploy --force --update --quiet (or -Fuq *cough* in short form)
+# stir --force --update --quiet (or -Fuq *cough* in short form)
 #
 # Both commands are quite similar - the new --automate switch adds a flag to send
 # an email update to clients upon a successful deployment, if you wish.
 #
 # Smart commits must be enabled, as there will be no human to write a 
 # commit message
-deploy --automate [repo name]
+stir --automate [repo name]
 
 # If you have problems with authenticating, you can debug what's up with a command like this: 
 # ssh -Tvvv git@bitbucket.org

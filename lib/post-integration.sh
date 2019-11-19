@@ -78,18 +78,24 @@ function mailPost() {
 }
 
 function postCommit() {
-  # Check for a Wordpress core update, update production database if needed
-  if [[ "${UPDCORE}" == "1" ]] && [[ -n "${PRODUCTION}" ]] && [[ -n "${PRODURL}" ]] && [[ -n "${DEPLOY}" ]]; then
-    info "Upgrading production database..."; curl --silent "${PRODURL}${WPSYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
+  # Run Wordpress database updates
+  if [[ -n "${PRODUCTION}" ]] && [[ -n "${PRODURL}" ]]; then
+    info "Updating production database..."
+    "${curl_cmd}" --silent "${PRODURL}${WPSYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
   fi
+
+  # Check for a Wordpress core update, update production database if needed
+  #if [[ "${UPDCORE}" == "1" ]] && [[ -n "${PRODUCTION}" ]] && [[ -n "${PRODURL}" ]] && [[ -n "${DEPLOY}" ]]; then
+  #  info "Upgrading production database..."; curl --silent "${PRODURL}${WPSYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
+  #fi
 
   # Just for yuks, display git stats for this user (user can override this if it annoys them)
   gitStats
 
   # Check to see if there's an email integration setup
-  if [[ -n "$POSTEMAIL" ]]; then
+  if [[ -n "${POSTEMAIL}" ]]; then
     # Is it a valid email address? Ghetto check but better than nothing
-    if [[ "$POSTEMAIL" == ?*@?*.?* ]]; then
+    if [[ "${POSTEMAIL}" == ?*@?*.?* ]]; then
       build_log; mailPost
     else
       trace "Integration email address ${POSTEMAIL} does not look valid"

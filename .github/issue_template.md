@@ -13,7 +13,7 @@ The more details the better...
 
 | Q   | A
 | --- | ---
-| Deploy version | 
+| Stir version | 
 
 ### Steps to reproduce:
 1. 
