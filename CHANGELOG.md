@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Fixed
+- Checking for new `stir` releases works more reliably
 - Fixed a small email text bug
 
 ## [3.7.4] - 11-18-2019
