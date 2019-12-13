@@ -100,16 +100,16 @@ function analytics() {
 }
 
 function ga_data() {
-  RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+  RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "\"ga:$METRIC\":" | cut -d'"' -f4)
   SIZE="$(printf "%.0f\n" "${RESULT}")"
 
   # Make this a proper loop
   if [[ "${PROJSTATS}" == "1" ]]; then 
-    GA_HITS=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:hits&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
-    GA_PERCENT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:percentNewSessions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
-    GA_SEARCHES=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:organicSearches&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
-    GA_DURATION=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:avgSessionDuration&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
-    GA_SOCIAL=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:socialInteractions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+    GA_HITS=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:hits&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "\"ga:hits\":" | cut -d'"' -f4)
+    GA_PERCENT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:percentNewSessions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "\"ga:percentNewSessions\":" | cut -d'"' -f4)
+    GA_SEARCHES=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:organicSearches&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "\"ga:organicSearches\":" | cut -d'"' -f4)
+    GA_DURATION=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:avgSessionDuration&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "\"ga:avgSessionDuration\":" | cut -d'"' -f4)
+    GA_SOCIAL=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:socialInteractions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "\"ga:socialInteractions\":" | cut -d'"' -f4)
 
     # Make sure we're only dealing with integers
     GA_PERCENT="$(printf "%.0f\n" "${GA_PERCENT}")"
@@ -117,7 +117,6 @@ function ga_data() {
   fi
 }
 
-# Just a test for now
 function ga_data_loop() {
   # Setup variables to process
   console "${GASTART} - ${GAEND}"
@@ -130,7 +129,7 @@ function ga_data_loop() {
   for i in "${ga_var[@]}" ; do
     # This is essentially the same as insert_values() [see env-check.sh], we
     #  should consolidate them into one function
-    RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$i&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+    RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$i&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "\"ga:$i\":" | cut -d'"' -f4)
     
     # Round to two decimal places if needed
     if [[ "${RESULT}" = *"."* ]]; then
@@ -177,7 +176,7 @@ function ga_over_time() {
   [[ -f "${trshFile}" ]] && rm "${trshFile}"
 
   while [ "$ga_day" != "${GASTART}" ]; do 
-    RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6)
+    RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep "\"ga:$METRIC\":" | cut -d'"' -f4)
     
     # Make sure we're only dealing with integers
     RESULT="$(printf "%.0f\n" "${RESULT}")"
@@ -336,20 +335,11 @@ function ga_test() {
   METRIC="${array[$RND]}"
  
   # Just here for testing
-  #ga_data_loop
+  console "Running 'curl -s \"https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN\"'"
+  ga_data_loop
   # METRIC="newUsers"
-  notice "Retrieving a random metric (${METRIC})..." 
-  ga_over_time "${METRIC}" 7
-  cat ${statDir}/"${METRIC}".csv
+  # notice "Retrieving a random metric (${METRIC})..." 
+  # ga_over_time "${METRIC}" 7
+  # cat ${statDir}/"${METRIC}".csv
   return
-
-  console "Running: printf \"${METRIC} (Last 7 days): \"; curl -s \"https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN\"" # | tr , '\n' | grep \"totalsForAllResults\" | cut -d'\"' -f6"
-  #empty_line; analytics
-  sleep 3
-  printf "${METRIC} (Last 7 days): "; curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "totalsForAllResults" | cut -d'"' -f6
-  empty_line
-  console "Verbose output"
-  console "--------------"
-  curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN"
-  empty_line
 }

@@ -67,10 +67,11 @@ function push() {
 
 ###############################################################################
 # merge()
-#   Merges ${MASTER} into the current working branch
+#   Merges [branch] into the current working branch. If no variable is passed,
+#   the value if MASTER is used
 #
 # Arguments:
-#   None
+#   [branch]    The branch to merge into current branch
 ################################################################################
 function merge() {
   if [[ "${MERGE}" = "1" ]] && [[ "${working_branch}" != "${MASTER}" ]]; then
