@@ -16,10 +16,22 @@ var=(SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \
   GA_SOCIAL ANALYTICSMSG ga_day ga_sequence max_value n a GA_TOTAL ga_)
 init_loop
 
-ga_var=(users newUsers percentNewSessions sessionsPerUser sessions 
-    bounceRate avgSessionDuration hits organicSearches pageviews avgTimeOnPage
-    avgPageLoadTime avgDomainLookupTime avgServerResponseTime impressions 
-    adClicks adCost CPC CTR socialInteractions)
+ga_var=(users newUsers percentNewSessions sessionsPerUser sessions bounces bounceRate \
+  sessionDuration avgSessionDuration uniqueDimensionCombinations hits \
+  organicSearches pageValue entrances entranceRate pageviews \
+  pageviewsPerSession uniquePageviews timeOnPage avgTimeOnPage exits \
+  exitRate impressions adClicks adCost CPM CPC CTR costPerTransaction \
+  costPerGoalConversion costPerConversion RPC ROAS goalStartsAll \
+  goalCompletionsAll goalValueAll goalValuePerSession goalConversionRateAll \
+  goalAbandonsAll goalAbandonRateAll goalConversionRateAll goalAbandonsAll \
+  goalAbandonRateAll pageLoadTime pageLoadSample avgPageLoadTime \
+  domainLookupTime avgDomainLookupTime pageDownloadTime avgPageDownloadTime \
+  redirectionTime avgRedirectionTime serverConnectionTime \
+  avgServerConnectionTime serverResponseTime avgServerResponseTime \
+  speedMetricsSample domInteractiveTime avgDomInteractiveTime \
+  domContentLoadedTime avgDomContentLoadedTime domLatencyMetricsSample \
+  socialInteractions uniqueSocialInteractions socialInteractionsPerSession \
+  userTimingValue userTimingSample avgUserTimingValue)
 
 for i in "${ga_var[@]}" ; do
   read -r ga_${i} <<< ""
@@ -120,10 +132,22 @@ function ga_data() {
 function ga_data_loop() {
   # Setup variables to process
   console "${GASTART} - ${GAEND}"
-  ga_var=(users newUsers percentNewSessions sessionsPerUser sessions 
-    bounceRate avgSessionDuration hits organicSearches pageviews avgTimeOnPage
-    avgPageLoadTime avgDomainLookupTime avgServerResponseTime impressions 
-    adClicks adCost CPC CTR)
+  ga_var=(users newUsers percentNewSessions sessionsPerUser sessions bounces bounceRate \
+    sessionDuration avgSessionDuration uniqueDimensionCombinations hits \
+    organicSearches pageValue entrances entranceRate pageviews \
+    pageviewsPerSession uniquePageviews timeOnPage avgTimeOnPage exits \
+    exitRate impressions adClicks adCost CPM CPC CTR costPerTransaction \
+    costPerGoalConversion costPerConversion RPC ROAS goalStartsAll \
+    goalCompletionsAll goalValueAll goalValuePerSession goalConversionRateAll \
+    goalAbandonsAll goalAbandonRateAll goalConversionRateAll goalAbandonsAll \
+    goalAbandonRateAll pageLoadTime pageLoadSample avgPageLoadTime \
+    domainLookupTime avgDomainLookupTime pageDownloadTime avgPageDownloadTime \
+    redirectionTime avgRedirectionTime serverConnectionTime \
+    avgServerConnectionTime serverResponseTime avgServerResponseTime \
+    speedMetricsSample domInteractiveTime avgDomInteractiveTime \
+    domContentLoadedTime avgDomContentLoadedTime domLatencyMetricsSample \
+    socialInteractions uniqueSocialInteractions socialInteractionsPerSession \
+    userTimingValue userTimingSample avgUserTimingValue)
 
   # Start the loop
   for i in "${ga_var[@]}" ; do
