@@ -39,6 +39,10 @@ PROJECT_VERSION="3.82"
 # use stir's built-in Wordpress prepare function, set this value to TRUE.
 # PREPARE="{{PREPARE}}"
 
+# To reset projects files before executing your prepare squence, set the 
+# value below to TRUE.
+# PREPARE_WITH_RESET="{{PREPARE_WITH_RESET}}"
+
 # If you need to load extra environment variables, enter a the location to
 # that file below.  
 # PREPARE_CONFIG="{{PREPARE_CONFIG}}"

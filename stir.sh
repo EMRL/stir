@@ -67,7 +67,7 @@ function init_startup() {
     SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
     DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
     SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
-    CHECK_BACKUP APP_PATH EXTENDED_HELP RESET)
+    CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET)
   init_loop
 }
 
@@ -171,6 +171,7 @@ Other Options:
   --build                Build project assets
   --prepare              Prepare project
   --reset                Resets local project files
+  --prepare-with-reset   Reset and prepare project
   --digest               Create and send weekly digest
   --report               Create a monthly activity report
   --no-check             Override active file and server checks
@@ -250,6 +251,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --deny) DENY="1"; FORCE="1" ;;
     -p|--prepare) PREPARE="1" ;;
     --reset) RESET="1" ;;
+     --prepare-with-reset) PREPARE_WITH_RESET="1"; PREPARE="1" ;;
     --digest) DIGEST="1"; FORCE="1"; QUIET="1" ;;
     --report) REPORT="1"; FORCE="1"; QUIET="1" ;;
     --automate) FORCE="1"; UPGRADE="1"; MERGE="1"; QUIET="1"; AUTOMATE="1" ;;

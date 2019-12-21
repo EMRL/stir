@@ -18,6 +18,11 @@ function prepare() {
     fi
   done
 
+  # Should we reset before preparing project?
+  if [[ "${PREPARE_WITH_RESET}" == "TRUE" ]] || [[ "${PREPARE_WITH_RESET}" == "1" ]]; then
+    reset_local
+  fi
+
   # Should we use our built-in Worpdress prepare clone function?
   if [[ "${PREPARE}" == "TRUE" ]] || [[ "${PREPARE}" == "1" ]]; then
     wp_clone
