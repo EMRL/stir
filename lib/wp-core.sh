@@ -37,18 +37,20 @@ function wp_core() {
 
     if [[ -n "${COREUPD}" ]]; then
       # Update available!  \o/
-      echo -e "";
-
+      # echo -e "";
+      trace "Core update ${COREUPD} available"
       # Update via composer if needed
       if [[ -f "${APP_PATH}/composer.json" ]]; then
         trace "Found composer.json, updating"
         cd "${APP_PATH}"; \
         if [[ "${QUIET}" != "1" ]]; then
-          # Come back and get this path properly
-          "${composer_cmd}" update johnpbloch/wordpress &>> "${logFile}" &
+          # Execute the update
+          info "Core update found, updating to ${COREUPD}"
+          trace "Executing ${composer_cmd} update johnpbloch/wordpress-core"
+          "${composer_cmd}" update johnpbloch/wordpress-core &>> "${logFile}" &
           spinner $!
         else
-          "${composer_cmd}" update johnpbloch/wordpress &>> "${logFile}"
+          "${composer_cmd}" update johnpbloch/wordpress-core &>> "${logFile}"
         fi
         cd "${WP_PATH}"; \
 
