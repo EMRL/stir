@@ -153,15 +153,31 @@ function ga_data_loop() {
   for i in "${ga_var[@]}" ; do
     # This is essentially the same as insert_values() [see env-check.sh], we
     #  should consolidate them into one function
-    RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$i&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep "\"ga:$i\":" | cut -d'"' -f4)
+    #if [[ "${ANALYTICSTEST}" == "1" ]]; then
+    #  console "Running 'curl -s \"https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN\" | tr , '\\n' | grep \"ga:${i}\":\" | cut -d'\"' -f4'"
+    #fi
+
+    RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n\n' | grep "\"ga:${i}\":" | cut -d'"' -f4)
     
+    # Workaround for buggy Google shit
+    until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
+    do
+      RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n\n' | grep "\"ga:${i}\":" | cut -d'"' -f4)
+    done
+
     # Round to two decimal places if needed
     if [[ "${RESULT}" = *"."* ]]; then
       RESULT="$(printf '%0.2f\n' "${RESULT}")"
     fi
 
+    # Store variable in the proper place
+    # This won't work w/ floating point. Trim decimal or let it ride and do
+    # a different way?
+    # let ga_${i}="${RESULT}"
+    
     # Output trace
     trace "${i}: ${RESULT}"
+
   done
 }
 
@@ -202,9 +218,15 @@ function ga_over_time() {
   while [ "$ga_day" != "${GASTART}" ]; do 
     RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep "\"ga:$METRIC\":" | cut -d'"' -f4)
     
+    # Workaround for buggy Google shit
+    until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
+    do
+      RESULT=$(curl -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep "\"ga:$METRIC\":" | cut -d'"' -f4)
+    done
+
     # Make sure we're only dealing with integers
     RESULT="$(printf "%.0f\n" "${RESULT}")"
-    # trace "${ga_day}: ${RESULT} $1"
+    trace "${ga_day}: ${RESULT} $1"
     
     # Add to total
     let ga_${METRIC}+="${RESULT}"
@@ -349,17 +371,16 @@ function ga_test() {
   echo "${ACCESSTOKEN}"
 
   # Setup the metric we're after
-  array[0]="hits"
-  array[1]="percentNewSessions"
-  array[2]="organicSearches"
-  array[3]="avgSessionDuration"
-  array[4]="socialInteractions"
-  SIZE="${#array[@]}"
-  RND="$(($RANDOM % $SIZE))"
-  METRIC="${array[$RND]}"
+  #array[0]="hits"
+  #array[1]="percentNewSessions"
+  #array[2]="organicSearches"
+  #array[3]="avgSessionDuration"
+  #array[4]="socialInteractions"
+  #SIZE="${#array[@]}"
+  #RND="$(($RANDOM % $SIZE))"
+  #METRIC="${array[$RND]}"
  
   # Just here for testing
-  console "Running 'curl -s \"https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN\"'"
   ga_data_loop
   # METRIC="newUsers"
   # notice "Retrieving a random metric (${METRIC})..." 

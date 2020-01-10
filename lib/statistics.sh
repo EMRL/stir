@@ -12,7 +12,7 @@ var=(DB_API_TOKEN DB_BACKUP_PATH LAST_BACKUP BACKUP_STATUS CODE_STATS \
   repo_charts ACTIVITY_NAV STATISTICS_NAV SCAN_NAV ENGAGEMENT_NAV \
   FIREWALL_NAV BACKUP_NAV SCAN_STATS FIREWALL_STATUS BACKUP_MSG \
   BACKUP_FILES TOTAL_COMMITS RSS_URL ga_hits ga_users ga_newUsers ga_sessions \
-  ga_organicSearches ga_pageviews)
+  ga_organicSearches ga_pageviews ENGAGEMENT_DAYS)
 init_loop
 
 function project_stats() {
@@ -130,10 +130,15 @@ function project_engagement() {
   
   cat "${deployPath}/html/${HTMLTEMPLATE}/stats/engagement.html" > "${htmlFile}"
 
+  # How many days of analytics to display?
+  if [[ -z "${ENGAGEMENT_DAYS}" ]]; then
+    ENGAGEMENT_DAYS="7"
+  fi
+
   ga_var=(hits users newUsers sessions organicSearches pageviews)
   # Start the loop
   for i in "${ga_var[@]}" ; do
-    ga_over_time ${i} 7
+    ga_over_time ${i} ${ENGAGEMENT_DAYS}
   done
 
   # Process the HTML
