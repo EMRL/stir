@@ -226,7 +226,7 @@ function ga_over_time() {
 
     # Make sure we're only dealing with integers
     RESULT="$(printf "%.0f\n" "${RESULT}")"
-    trace "${ga_day}: ${RESULT} $1"
+    # trace "${ga_day}: ${RESULT} $1"
     
     # Add to total
     let ga_${METRIC}+="${RESULT}"
