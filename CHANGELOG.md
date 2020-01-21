@@ -4,8 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- Launching `stir` using the `--prepare-wuth-reset` will completely delete and reset the local copy of the target project, and then launch your defined prepare action
-- The number of days of engagement data to be displayed now be configured in the projects' `theme.conf` 
+- Launching `stir` using the `--prepare-with-reset` will completely delete and reset the local copy of the target project, and then launch your defined prepare action
+- The number of days of engagement data to be displayed can now be configured in the projects' `theme.conf` 
 ### Fixed
 - Checking for new `stir` releases works more reliably
 - Fixed a small email text bug
