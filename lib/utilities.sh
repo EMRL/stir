@@ -105,11 +105,6 @@ function go() {
     ACTIVECHECK="FALSE"
   fi
 
-  # Force sudo password input if needed
-  if [[ "${FIXPERMISSIONS}" == "TRUE" ]]; then
-    sudo sleep 1
-  fi
-
   # if git.lock exists, do we want to remove it?
   if [[ -f "${gitLock}" ]]; then
     warning "Found ${gitLock}"
@@ -129,20 +124,6 @@ function go() {
   # Outstanding approval?
   if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]] && [[ -f "${WORKPATH}/${APP}/.approved" ]]; then 
     notice "Processing outstanding approval..."
-  fi
-}
-
-function fix_index() {
-  # A rather brutal fix for index permissions issues
-  if [[ "${FIXINDEX}" == "TRUE" ]]; then
-    if [[ ! -w "${APP_PATH}/.git/index" ]]; then
-      trace "Index is not writable, attempting to fix..."
-      sudo chmod 777 "${APP_PATH}/.git/index"; error_check
-      if [[ ! -w "${APP_PATH}/.git/index" ]]; then
-        error "Unable to write new index file."
-      fi
-    fi
-    sleep 1
   fi
 }
 

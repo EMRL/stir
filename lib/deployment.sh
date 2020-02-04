@@ -62,7 +62,6 @@ function pkgDeploy() {
     else
       trace "Launching deployment from ${PWD}"
     fi
-    fix_index
     
     if [[ "${DEPLOY}" != "SCP" ]]; then
       # Make sure the project's deploy command is going to work

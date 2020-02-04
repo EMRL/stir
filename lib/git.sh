@@ -74,7 +74,7 @@ function gitChkMstr() {
   else
     current_branch="$(git rev-parse --abbrev-ref HEAD)"
     if [[ "${current_branch}" != "${MASTER}" ]]; then
-      notice "Checking out master branch..."; fix_index
+      notice "Checking out master branch..."
       if [[ "${VERBOSE}" == "TRUE" ]]; then
         git checkout master | tee --append "${logFile}"            
       else
@@ -212,7 +212,7 @@ function gitCommit() {
 # Push master
 function gitPushMstr() {
   if [[ -n "${MASTER}" ]]; then
-    trace "Pushing ${MASTER}"; fix_index
+    trace "Pushing ${MASTER}"
     empty_line  
     if [[ "${VERBOSE}" == "TRUE" ]]; then
       git push origin "${MASTER}" | tee --append "${logFile}"; error_check           
@@ -240,7 +240,7 @@ function gitPushMstr() {
 function gitChkProd() {
   if [[ "${MERGE}" = "1" ]]; then
     if [[ -n "${PRODUCTION}" ]]; then
-      notice "Checking out ${PRODUCTION} branch..."; fix_index
+      notice "Checking out ${PRODUCTION} branch..."
 
       if [[ "${VERBOSE}" == "TRUE" ]]; then
         git checkout "${PRODUCTION}" | tee --append "${logFile}"; error_check               
@@ -284,7 +284,7 @@ function gitChkProd() {
 function gitMerge() {
   if [[ "${MERGE}" = "1" ]]; then
     if [[ -n "${PRODUCTION}" ]]; then
-      notice "Merging ${MASTER} into ${PRODUCTION}..."; fix_index
+      notice "Merging ${MASTER} into ${PRODUCTION}..."
       # Clear out the index.lock file, cause reasons
       [[ -f "${gitLock}" ]] && rm "${gitLock}"
       # Bonus add, just because. Ugh.
@@ -308,7 +308,7 @@ function gitMerge() {
 function gitPushProd() {
   if [[ "${MERGE}" = "1" ]]; then
     if [[ -n "${PRODUCTION}" ]]; then
-      trace "Push ${PRODUCTION}"; fix_index
+      trace "Push ${PRODUCTION}"
       empty_line
       if [[ "${VERBOSE}" == "TRUE" ]]; then
         git push origin "${PRODUCTION}" | tee --append "${logFile}"; error_check 

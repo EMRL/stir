@@ -20,7 +20,7 @@ init_loop
 function checkout() {
   if [[ -n "${1}" ]]; then
     working_branch="${1}"
-    notice "Checking out ${working_branch} branch..."; fix_index
+    notice "Checking out ${working_branch} branch...";
     
     if [[ "${VERBOSE}" == "TRUE" ]]; then
       git checkout "${working_branch}" | tee --append "${logFile}"
@@ -38,7 +38,7 @@ function checkout() {
 # TODO: REWRITE
 function push() {
   if [[ "${MERGE}" = "1" ]]; then
-    trace "Push ${working_branch}"; fix_index
+    trace "Push ${working_branch}";
     empty_line
     if [[ "${VERBOSE}" == "TRUE" ]]; then
       git push origin "${working_branch}" | tee --append "${logFile}"; error_check 
@@ -75,7 +75,7 @@ function push() {
 ################################################################################
 function merge() {
   if [[ "${MERGE}" = "1" ]] && [[ "${working_branch}" != "${MASTER}" ]]; then
-    notice "Merging ${MASTER} into ${working_branch}..."; fix_index
+    notice "Merging ${MASTER} into ${working_branch}..."
     # Clear out the index.lock file, cause reasons
     # TODO: Find out why this is here, I can't remember what it was working around
     [[ -f "${gitLock}" ]] && rm "${gitLock}"
