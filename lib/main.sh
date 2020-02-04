@@ -43,7 +43,6 @@ function main() {
     if [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then
       ssh_check   # Check keys
     fi
-    permFix     # Fix permissions
     if [[ "${PUBLISH}" == "1" ]]; then
       pkgDeploy   # Deploy project to live server
     else
