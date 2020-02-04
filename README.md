@@ -38,6 +38,7 @@ Other Options:
   --build                Build project assets
   --prepare              Prepare project
   --reset                Resets local project files
+  --prepare-with-reset   Reset and prepare project
   --digest               Create and send weekly digest
   --report               Create a monthly activity report
   --no-check             Override active file and server checks
