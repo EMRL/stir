@@ -6,6 +6,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Launching `stir` using the `--prepare-with-reset` will completely delete and reset the local copy of the target project, and then launch your defined prepare action
 - The number of days of engagement data to be displayed can now be configured in the projects' `theme.conf` 
+### Changed
+- Deprecated and removed the `permFix()` and `fix_index()` functions
 ### Fixed
 - Checking for new `stir` releases works more reliably
 - Fixed a small email text bug
