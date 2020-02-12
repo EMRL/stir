@@ -9,6 +9,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Deprecated and removed the `permFix()` and `fix_index()` functions
 ### Fixed
+- Binary files should no longer confuse log parsing functions
+- Missing project configuration error now exits more gracefully
+- Analytics functions changed to accept more variation in payloads received from Google
 - Checking for new `stir` releases works more reliably
 - Fixed a small email text bug
 

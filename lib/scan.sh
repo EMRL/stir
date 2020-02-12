@@ -19,12 +19,12 @@ function scan_check() {
     # Piping through tac is a workaround to solve a timing issue, see 
     # https://github.com/EMRL/deploy/issues/134
     # For some reason upon migration, tac | tac no longer works
-    #if curl -LIs --speed-time 900 "${SCAN_URL}" tac | tac | grep -q "200"; then
-    if curl -LIs "${SCAN_URL}"  | grep -q "200"; then
-      if curl -Ls --speed-time 900 "${SCAN_URL}" | grep -q "0 error"; then
+    #if curl -LIs --speed-time 900 "${SCAN_URL}" tac | tac | grep -aq "200"; then
+    if curl -LIs "${SCAN_URL}"  | grep -aq "200"; then
+      if curl -Ls --speed-time 900 "${SCAN_URL}" | grep -aq "0 error"; then
         SCANC="${SUCCESSC}"; SCAN_BTN="btn-success"
         SCAN_MSG="Scan passed"
-      elif curl -Ls --speed-time 900 "${SCAN_URL}" | grep -q "error"; then
+      elif curl -Ls --speed-time 900 "${SCAN_URL}" | grep -aq "error"; then
         SCANC="${DANGERC}"; SCAN_BTN="btn-danger"
         SCAN_MSG="Problem found"
         trace "error"
@@ -100,7 +100,7 @@ function scan_host() {
 
   cat "${deployPath}/html/${HTMLTEMPLATE}/scan/header.html" "${scan_html}" "${deployPath}/html/${HTMLTEMPLATE}/scan/footer.html" > "${htmlFile}"
 
-  SCAN_MSG=$(grep "error" "${htmlFile}")
+  SCAN_MSG=$(grep -a "error" "${htmlFile}")
 
   # Create scan result text
   SCAN_RESULT=$(echo "${SCAN_MSG//  <td>}")

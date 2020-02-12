@@ -37,12 +37,12 @@ function wp() {
     fi
 
     # Check the logs
-    #if grep -q "U = Update Available" "${logFile}"; then
-    if grep -q "Available plugin updates:" "${wpFile}"; then    
+    #if grep -aq "U = Update Available" "${logFile}"; then
+    if grep -aq "Available plugin updates:" "${wpFile}"; then    
       wp_plugins
     else
       # Was there a database glitch?
-      if grep -q 'plugins can not be updated' "${wpFile}"; then
+      if grep -aq 'plugins can not be updated' "${wpFile}"; then
         sleep 1
       else
         info "Plugins are up to date."; UPD1="1"
@@ -66,8 +66,8 @@ function wp_update_check() {
   "${wp_cmd}" plugin update --dry-run --no-color --all &> "${wpFile}"
 
   # Other options, thanks Corey
-  # wp plugin list --format=csv --all --fields=name,update_version,update | grep 'available'
-  # wp plugin list --format=csv --all --fields=title,update_version,update | grep 'available'
+  # wp plugin list --format=csv --all --fields=name,update_version,update | grep -a 'available'
+  # wp plugin list --format=csv --all --fields=title,update_version,update | grep -a 'available'
 }
 
 function wp_check() {

@@ -182,7 +182,7 @@ function check_backup() {
       \"include_has_explicit_shared_members\": false}" > "${trshFile}"
 
     # Check for what we might assume is error output
-    if [[ $(grep "error" "${trshFile}") ]]; then
+    if [[ $(grep -a "error" "${trshFile}") ]]; then
       warning "Error in backup configuration"
       return
     fi
@@ -194,7 +194,7 @@ function check_backup() {
     for i in $(seq 0 365)
       do 
       var="$(date -d "${i} day ago" +"%Y-%m-%d")"
-      if [[ $(grep "${var}" "${trshFile}") ]]; then
+      if [[ $(grep -a "${var}" "${trshFile}") ]]; then
         # Assume success
         BACKUP_STATUS="${SUCCESSC}"
         BACKUP_BTN="btn-success"

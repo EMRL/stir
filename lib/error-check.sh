@@ -51,7 +51,7 @@ function deploy_check() {
       DEPLOYTEST="bundle exec mina --simulate deploy -f Minafile"
       grep -n -w "user:" "${WORKPATH}/${APP}"/.deploy.yml > "${trshFile}"
       
-      if grep -q "'" "${trshFile}"; then
+      if grep -aq "'" "${trshFile}"; then
         MINAUSER=$(awk -F\' '{print $2,$4}' ${trshFile}) # Single quote method
       else
         MINAUSER=$(awk 'NF>1{print $NF}' ${trshFile})
@@ -61,7 +61,7 @@ function deploy_check() {
       echo -n "@" >> ${statFile}
       grep -n -w "domain:" "${WORKPATH}/${APP}"/.deploy.yml > "${trshFile}"
 
-      if grep -q "'" "${trshFile}"; then
+      if grep -aq "'" "${trshFile}"; then
         MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trshFile}) # Single quote method
       else
         MINADOMAIN=$(awk 'NF>1{print $NF}' ${trshFile})

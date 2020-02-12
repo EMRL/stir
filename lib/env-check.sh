@@ -48,8 +48,13 @@ function env_check() {
     source "${etcLocation}"
     source ~/.stirrc
     
-    # TODO This throws an error, fix it.
-    source "${project_config}"
+    # TODO This probably needs more thought
+    if [[ -r "${project_config}" ]]; then
+      source "${project_config}"
+    else
+      console "Project configuration has changed or is missing - restart stir to continue."
+      quietExit
+    fi
 
     # Restore workpath value
     WORKPATH="${tmp_workpath}"
@@ -100,7 +105,7 @@ function update_global() {
   
   # Loops through the variables
   for i in "${env_settings[@]}" ; do
-    current_setting=$(grep "^${i}=" "${deployPath}"/global.conf.bak)
+    current_setting=$(grep -a "^${i}=" "${deployPath}"/global.conf.bak)
     insert_values
   done
 
@@ -126,7 +131,7 @@ function update_user() {
 
   # Loops through the variables
   for i in "${env_settings[@]}" ; do
-    current_setting=$(grep "^${i}=" ~/.stirrc)
+    current_setting=$(grep -a "^${i}=" ~/.stirrc)
     insert_values
   done
 
@@ -157,7 +162,7 @@ function update_project() {
   cp "${deployPath}"/stir-project.sh "${trshFile}"
   # Loops through the variables
   for i in "${env_settings[@]}" ; do
-    current_setting=$(grep "^${i}=" "${project_config}")
+    current_setting=$(grep -a "^${i}=" "${project_config}")
     insert_values
   done
 

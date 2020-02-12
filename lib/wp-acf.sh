@@ -11,7 +11,7 @@ var=(ACFFILE)
 init_loop
 
 function acf_update() {
-  if grep -q "advanced-custom-fields-pro" "${wpFile}"; then
+  if grep -aq "advanced-custom-fields-pro" "${wpFile}"; then
 	ACFFILE="/tmp/acfpro.zip"
 	# Download the ACF Pro upgrade file
 	wget --header="Accept: application/zip" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" -O "${ACFFILE}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACFKEY}" &>> "${logFile}"; error_check

@@ -11,7 +11,7 @@ function wp_core() {
   # seems to be to check for core updates a second time
   cd "${APP_PATH}"/"${WPROOT}"; \
   "${WPCLI}"/wp core check-update --no-color &>> "${logFile}"
-  if grep -q 'WordPress is at the latest version.' "${logFile}"; then
+  if grep -aq 'WordPress is at the latest version.' "${logFile}"; then
     info "Wordpress core is up to date."; UPD2="1"
   else
     sleep 1
@@ -71,7 +71,7 @@ function wp_core() {
           # 'version' in the output, we must have missed the upgrade 
           # somehow
           "${WPCLI}"/wp core check-update --quiet --no-color &> "${trshFile}"
-          if grep -q "version" "${trshFile}"; then
+          if grep -aq "version" "${trshFile}"; then
             error "Core update failed.";
           else
             sleep 1
