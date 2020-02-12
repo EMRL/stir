@@ -117,7 +117,7 @@ function confirm_branch() {
       safeExit
     fi
     # Were there any conflicts checking out?
-    if grep -q "error: Your local changes to the following files would be overwritten by checkout:" "${logFile}"; then
+    if grep -aq "error: Your local changes to the following files would be overwritten by checkout:" "${logFile}"; then
       error "There is a conflict checking out."
     else
       trace "OK"

@@ -29,7 +29,7 @@ function server_check() {
       trace "No staging URL set, skipping check"
     else
       # Should return "200 OK" if all is working well
-      if curl -sL --head "${DEVURL}" | grep "200 OK" > /dev/null; then
+      if curl -sL --head "${DEVURL}" | grep -a "200 OK" > /dev/null; then
         console " ${DEVURL} (staging) ${tan}OK${endColor}";
       else
         console " ${DEVURL} (staging) ${red}FAIL${endColor}"
@@ -41,7 +41,7 @@ function server_check() {
       trace "No production URL set, skipping check"
     else
       # Should return "200 OK" if all is working well
-      if curl -sL --head "${PRODURL}" | grep "200 " > /dev/null; then
+      if curl -sL --head "${PRODURL}" | grep -a "200 " > /dev/null; then
         console " ${PRODURL} (production) ${tan}OK${endColor}"
       else
         console " ${PRODURL} (production) ${red}FAIL${endColor}"

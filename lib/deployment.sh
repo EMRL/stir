@@ -136,7 +136,7 @@ function pkgDeploy() {
 
 function postDeploy() {
   # Check for deployment failure
-  if grep -q "ERROR: Deploy failed." "${logFile}"; then
+  if grep -aq "ERROR: Deploy failed." "${logFile}"; then
     error "Deploy failed."
   fi
 

@@ -38,7 +38,7 @@ function gitStart() {
 
   # Make sure there has been at least one commit previously made
   git rev-parse --abbrev-ref HEAD &>> "${trshFile}"
-  if grep -q "fatal" "${trshFile}"; then 
+  if grep -aq "fatal" "${trshFile}"; then 
     error "Unable to start, push your first commit manually and try again."
   else  
     # If running --automate, force a branch check
@@ -142,7 +142,7 @@ function gitCommit() {
   # Do a dry run; check for anything to commit
   git commit --dry-run &>> "${logFile}" 
 
-  if grep -q "nothing to commit, working directory clean" "${logFile}"; then 
+  if grep -aq "nothing to commit, working directory clean" "${logFile}"; then 
     info "Nothing to commit, working directory clean."
     safeExit
   else
@@ -270,7 +270,7 @@ function gitChkProd() {
       fi
 
       # Were there any conflicts checking out?
-      if grep -q "error: Your local changes to the following files would be overwritten by checkout:" "${logFile}"; then
+      if grep -aq "error: Your local changes to the following files would be overwritten by checkout:" "${logFile}"; then
          error "There is a conflict checking out."
       else
         trace "OK"

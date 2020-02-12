@@ -19,7 +19,7 @@ function wf_check() {
           "${WPCLI}"/wp plugin deactivate --no-color wordfence &>> "${logFile}"; WFOFF="1"
           sudo rm -rf "${WORKPATH}/${APP}${WPROOT}${WPAPP}/wflogs" &>> $logFile
           # Remove from repo history, in case .gitignore doesn't have them excluded
-          if ! grep -q "wflog" "${WORKPATH}/${APP}/.gitignore"; then
+          if ! grep -aq "wflog" "${WORKPATH}/${APP}/.gitignore"; then
             cd "${WORKPATH}"/"${APP}"; \
             git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch ${WPROOT}${WPAPP}/wflogs > /dev/null" HEAD &>> "${logFile}" &
             spinner $!

@@ -63,13 +63,13 @@ function wp_plugins() {
     fi  
 
     # Any problems with plugin updates?
-    if grep -q 'Warning: The update cannot be installed because we will be unable to copy some files.' "${logFile}"; then
+    if grep -aq 'Warning: The update cannot be installed because we will be unable to copy some files.' "${logFile}"; then
       error "One or more plugin updates have failed, probably due to problems with permissions."
-    elif grep -q "Plugin update failed." "${logFile}"; then
+    elif grep -aq "Plugin update failed." "${logFile}"; then
       error "One or more plugin updates have failed."
-    elif grep -q 'Warning: Update package not available.' "${logFile}"; then
+    elif grep -aq 'Warning: Update package not available.' "${logFile}"; then
       error "One or more update packages are not available. \nThis is often be caused by commercial plugins; check your log files."
-    elif grep -q 'Error: Updated' "${logFile}"; then
+    elif grep -aq 'Error: Updated' "${logFile}"; then
       error "One or more plugin updates have failed."
     fi
 
