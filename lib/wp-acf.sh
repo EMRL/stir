@@ -20,8 +20,8 @@ function acf_update() {
 	acf_filecheck
 
 	# Proceed with install
-	"${WPCLI}"/wp plugin delete --no-color advanced-custom-fields-pro &>> "${logFile}"
-	"${WPCLI}"/wp plugin install --no-color "${ACFFILE}" &>> "${logFile}"
+	"${wp_cmd}" plugin delete --no-color advanced-custom-fields-pro &>> "${logFile}"
+	"${wp_cmd}" plugin install --no-color "${ACFFILE}" &>> "${logFile}"
 	rm "${ACFFILE}"
   fi
 }

@@ -10,7 +10,7 @@ function wp_core() {
   # There's a little bug when certain plugins are spitting errors; work around 
   # seems to be to check for core updates a second time
   cd "${APP_PATH}"/"${WPROOT}"; \
-  "${WPCLI}"/wp core check-update --no-color &>> "${logFile}"
+  "${wp_cmd}" core check-update --no-color &>> "${logFile}"
   if grep -aq 'WordPress is at the latest version.' "${logFile}"; then
     info "Wordpress core is up to date."; UPD2="1"
   else
@@ -61,16 +61,16 @@ function wp_core() {
         if [[ "${FORCE}" = "1" ]] || yesno --default no "A new version of Wordpress is available (${COREUPD}), update? [y/N] "; then
           cd "${APP_PATH}/${WPROOT}"; \
           if [[ "${QUIET}" != "1" ]]; then
-            "${WPCLI}"/wp core update --no-color &>> "${logFile}" &
+            "${wp_cmd}" core update --no-color &>> "${logFile}" &
             spinner $!
           else
-            "${WPCLI}"/wp core update --no-color &>> "${logFile}"
+            "${wp_cmd}" core update --no-color &>> "${logFile}"
           fi
 
           # Double check upgrade was successful if we still see 
           # 'version' in the output, we must have missed the upgrade 
           # somehow
-          "${WPCLI}"/wp core check-update --quiet --no-color &> "${trshFile}"
+          "${wp_cmd}" core check-update --quiet --no-color &> "${trshFile}"
           if grep -aq "version" "${trshFile}"; then
             error "Core update failed.";
           else

@@ -8,9 +8,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - The number of days of engagement data to be displayed can now be configured in the projects' `theme.conf` 
 ### Changed
 - Deprecated and removed the `permFix()` and `fix_index()` functions
+- Deprecated the `WPCLI` variable
 ### Fixed
 - Binary files should no longer confuse log parsing functions
 - Missing project configuration error now exits more gracefully
+- Environment checking works more reliably
 - Analytics functions changed to accept more variation in payloads received from Google
 - Checking for new `stir` releases works more reliably
 - Fixed a small email text bug

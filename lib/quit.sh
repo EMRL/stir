@@ -115,7 +115,7 @@ function clean_up() {
 
   # If Wordfence was an issue, restart the plugin
   if [[ "${WFOFF}" = "1" ]]; then
-    "${WPCLI}"/wp plugin activate --no-color wordfence &>> $logFile; error_check
+    "${wp_cmd}" plugin activate --no-color wordfence &>> $logFile; error_check
   fi
 
   # Was this an approval?
@@ -130,7 +130,7 @@ function clean_up() {
 
   # Cleanup clone
   #if [[ -d "/tmp/${REPO}" ]] && [[ "${PREPARE_ONLY}" != "1" ]] && [[ "${SET_ENV}" == "1" ]]; then 
-  #  cd "${WP_TMP}"; "${WPCLI}"/wp db drop --yes &>> /dev/null
+  #  cd "${WP_TMP}"; "${wp_cmd}" db drop --yes &>> /dev/null
   #  cd /tmp; rm -rf /tmp/"${REPO}"
   #fi
 

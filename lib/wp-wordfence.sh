@@ -16,7 +16,7 @@ function wf_check() {
         error "Deployment can not continue while Wordfence firewall is enabled."
       else
         if yesno --default yes "Attempt to repair files? (sudo required) [Y/n] "; then
-          "${WPCLI}"/wp plugin deactivate --no-color wordfence &>> "${logFile}"; WFOFF="1"
+          "${wp_cmd}" plugin deactivate --no-color wordfence &>> "${logFile}"; WFOFF="1"
           sudo rm -rf "${WORKPATH}/${APP}${WPROOT}${WPAPP}/wflogs" &>> $logFile
           # Remove from repo history, in case .gitignore doesn't have them excluded
           if ! grep -aq "wflog" "${WORKPATH}/${APP}/.gitignore"; then
