@@ -56,10 +56,10 @@ function wp_plugins() {
 
     # Now, run the rest of the needed updates via wp-cli
     if [[ "${QUIET}" != "1" ]]; then
-      "${WPCLI}"/wp plugin update --all --no-color &>> "${logFile}" &
+      "${wp_cmd}" plugin update --all --no-color &>> "${logFile}" &
       spinner $!
     else
-      "${WPCLI}"/wp plugin update --all --no-color &>> "${logFile}" 
+      "${wp_cmd}" plugin update --all --no-color &>> "${logFile}" 
     fi  
 
     # Any problems with plugin updates?
