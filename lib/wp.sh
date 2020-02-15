@@ -72,9 +72,6 @@ function wp_update_check() {
 
 function wp_check() {
   # Is wp-cli installed? 
-  #if hash "${WPCLI}"/wp 2>/dev/null; then
-  #  wp_cmd="${WPCLI}/wp"
-  trace "wp: ${wp_cmd}"
   if [[ -n "${wp_cmd}" ]]; then
     trace "wp-cli found at ${wp_cmd}"
 
