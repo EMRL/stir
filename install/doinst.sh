@@ -63,7 +63,7 @@ function check_program() {
   # There's potential for non-global stuff to fail this check so here's a
   # fairly kludgey way to hopefully allow those to pass
   if [[ "${1}" =~ ^(wp|grunt|npm)$ ]]; then
-    command -v $(type -p "${1}") >/dev/null 2>&1 && echo "${YES}" || { echo "${NOT}"; message+="${1} "; }
+    which $(type -p "${1}") >/dev/null 2>&1 && echo "${YES}" || { echo "${NOT}"; message+="${1} "; }
   else
     command -v "${1}" >/dev/null 2>&1 && echo "${YES}" || { echo "${NOT}"; message+="${1} "; }
   fi
