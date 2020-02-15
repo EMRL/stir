@@ -347,6 +347,11 @@ else
   exit 12
 fi
 
+# If global.conf appears empty, launch configuration options
+if [[ -z "#{WORKPATH}" ]]; then
+  configure_global
+fi
+
 # Check to see if the user is deploying from current working directory
 if [[ "${CURRENT}" == "1" ]]; then
   WORKPATH="$(dirname "${PWD}")"
