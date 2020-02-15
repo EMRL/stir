@@ -10,6 +10,7 @@ function main() {
   dependency_check  # Check that required commands are available
   release_check     # Check for newer version at Github
   env_check         # Check for configuration files that need updating
+  get_fullpath      # Get full path to internal commands
   wp_check          # Check for Wordpress
   
   if [[ "${RESET}" == "1" ]]; then

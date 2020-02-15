@@ -137,6 +137,8 @@ function is_integer() {
 
 function get_fullpath() {
   # Get absolute paths to critical commands
+  var=(composer wp sendmail wget curl git mysqlshow grep wc)
+
   for i in "${var[@]}" ; do
     read -r "${i}_cmd" <<< ""
     echo "${i}_cmd" > /dev/null
@@ -144,6 +146,9 @@ function get_fullpath() {
       eval "${i}_cmd=\"$(which ${i})\""
     fi
   done
+
+  # What is this I don't even
+  wp_cmd="$(which wp)"
 }
 
 # Check that dependencies exist
@@ -185,10 +190,6 @@ function dependency_check() {
       error "Project directory is not writable."
     fi
   fi
-
-  # Get absolute paths
-  var=(composer wp sendmail wget curl git mysqlshow grep wc)
-  get_fullpath
 
   # If a deploy command is declared, check that it actually exists.
   # This is probably not the best way to do this but for now it works. It 
