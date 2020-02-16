@@ -67,7 +67,8 @@ function init_startup() {
     SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
     DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
     SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
-    CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET)
+    CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET \
+    SHOWSETTINGS)
   init_loop
 }
 
@@ -187,6 +188,7 @@ Other Options:
   --test-webhook         Test webhook integration  
   --test-analytics       Test Google Analytics authentication
   --test-monitor         Test production server uptime and latency monitoring
+  --show-settings        Display current global and project settings
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables
 "
@@ -267,6 +269,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="TRUE" ;;
     --scan) SCAN="1" ;;
     --no-check) NOCHECK="1" ;;
+    --show-settings) SHOWSETTINGS="1" ;;
     --function-list) FUNCTIONLIST="1"; CURRENT="1" ;; # Spoofs --current
     --variable-list) VARIABLELIST="1"; CURRENT="1" ;; # Spoofs --current
     --endopts) shift; break ;;
@@ -417,7 +420,12 @@ fi
 
 # Variable list
 if [[ "${VARIABLELIST}" == "1" ]]; then
-  ( set -o posix ; set ) | cat -v; quickExit
+  VERBOSE="FALSE"; ( set -o posix ; set ) | cat -v; quickExit
+fi
+
+# Do we need to be quiet?
+if [[ "${SHOWSETTINGS}" == "1" ]]; then
+  VERBOSE="FALSE"
 fi
 
 # Spam all the things!

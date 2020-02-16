@@ -8,7 +8,8 @@
 
 function main() { 
   get_fullpath      # Get full path to internal commands
-  dependency_check  # Check that required external commands are available
+  dependency_check  # Check that all dependencies are available
+  user_tests        # Run tests if specified by the user
   release_check     # Check for newer version at Github
   env_check         # Check for configuration files that need updating
   wp_check          # Check for Wordpress

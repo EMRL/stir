@@ -35,47 +35,6 @@ function go() {
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
     console "Current working path is ${APP_PATH}"
   fi
-  
-  # Slack test
-  if [[ "${SLACKTEST}" == "1" ]]; then
-    slackTest; quickExit
-  fi
-
-  # Webhook POST test
-  if [[ "${POSTTEST}" == "1" ]]; then
-    postTest; quickExit
-  fi
-
-  # Email test
-  if [[ "${EMAILTEST}" == "1" ]]; then
-    email_test; quickExit
-  fi
-
-  # Test analytics authentication
-  if [[ "${ANALYTICSTEST}" == "1" ]]; then
-    ga_test; quickExit
-  fi
-
-  # Test server monitoring
-  if [[ "${MONITORTEST}" == "1" ]]; then
-    server_monitor_test; quickExit
-  fi
-
-  # Test analytics authentication
-  if [[ "${CHECK_BACKUP}" == "1" ]]; then
-    check_backup; quickExit
-  fi
-
-  # Test SSH key authentication using the --ssh-check flag
-  if [[ "${SSHTEST}" == "1" ]]; then
-    if [[ "${NOKEY}" != "TRUE" ]] && [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then
-      notice "Checking SSH Configuration..."
-      ssh_check
-    else
-      warning "This project is not configured to use SSH keys, no check needed."
-    fi
-    quickExit
-  fi
 
   # Generate git stats
   if [[ "${PROJSTATS}" == "1" ]]; then
@@ -151,6 +110,54 @@ function get_fullpath() {
   wp_cmd="$(which wp)"
 }
 
+# User tests
+function user_tests() {
+  if [[ "${SHOWSETTINGS}" == "1" ]]; then
+    show_settings; quickExit
+  fi
+
+  # Slack test
+  if [[ "${SLACKTEST}" == "1" ]]; then
+    slackTest; quickExit
+  fi
+
+  # Webhook POST test
+  if [[ "${POSTTEST}" == "1" ]]; then
+    postTest; quickExit
+  fi
+
+  # Email test
+  if [[ "${EMAILTEST}" == "1" ]]; then
+    email_test; quickExit
+  fi
+
+  # Test analytics authentication
+  if [[ "${ANALYTICSTEST}" == "1" ]]; then
+    ga_test; quickExit
+  fi
+
+  # Test server monitoring
+  if [[ "${MONITORTEST}" == "1" ]]; then
+    server_monitor_test; quickExit
+  fi
+
+  # Test analytics authentication
+  if [[ "${CHECK_BACKUP}" == "1" ]]; then
+    check_backup; quickExit
+  fi
+
+  # Test SSH key authentication using the --ssh-check flag
+  if [[ "${SSHTEST}" == "1" ]]; then
+    if [[ "${NOKEY}" != "TRUE" ]] && [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then
+      notice "Checking SSH Configuration..."
+      ssh_check
+    else
+      warning "This project is not configured to use SSH keys, no check needed."
+    fi
+    quickExit
+  fi
+}
+
 # Check that dependencies exist
 function dependency_check() {
   # Is git installed?
@@ -208,4 +215,142 @@ function dependency_check() {
       error "stir ${VERSION} requires Sendmail to function properly with your current configuration."
     }
   fi
+}
+
+function show_settings() {
+  notice "Project Information"
+  echo "-------------------"
+  [[ -n "${PROJNAME}" ]] && echo "Name: ${PROJNAME}"
+  [[ -n "${PROJCLIENT}" ]] && echo "Client: ${PROJCLIENT}"
+  [[ -n "${DEVURL}" ]] && echo "Staging URL: ${DEVURL}"
+  [[ -n "${PRODURL}" ]] && echo "Production URL: ${PRODURL}"
+  # Git
+  if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECKBRANCH}" ]]; then
+    notice "Git Configuration"
+    echo "-----------------"
+    [[ -n "${REPO}" ]] && echo "Repo: ${REPOHOST}/${REPO}"
+    [[ -n "${MASTER}" ]] && echo "Master branch: ${MASTER}"
+    [[ -n "${PRODUCTION}" ]] && echo "Production branch: ${PRODUCTION}"
+    [[ -n "${AUTOMERGE}" ]] && echo "Auto merge: ${AUTOMERGE}"
+    [[ -n "${STASH}" ]] && echo "File Stashing: ${STASH}"
+    [[ -n "${CHECKBRANCH}" ]] && echo "Force branch checking: ${CHECKBRANCH}" 
+  fi
+  # Wordpress
+  if [[ -n "${WPROOT}" ]] || [[ -n "${WPAPP}" ]] || [[ -n "${WPSYSTEM}" ]]; then
+    notice "Wordpress Setup"
+    echo "---------------"
+    [[ -n "${WPROOT}" ]] && echo "Wordpress root: ${WPROOT}"
+    [[ -n "${WPAPP}" ]] && echo "Wordpress application: ${WPAPP}"
+    [[ -n "${WPSYSTEM}" ]] && echo "Wordpress system: ${WPSYSTEM}"
+  fi
+  # Deployment
+  if [[ -n "${DEPLOY}" ]] || [[ -n "${DONOTDEPLOY}" ]]; then
+    notice "Deployment Configuration"
+    echo "------------------------"
+    [[ -n "${DEPLOY}" ]] && echo "Deploy command: ${DEPLOY}"
+    [[ -n "${DONOTDEPLOY}" ]] && echo "Disallow deployment: ${DONOTDEPLOY}"
+  fi
+  # Notifications
+  if [[ -n "${TASK}" ]] || [[ -n "${TASKUSER}" ]] || [[ -n "${ADDTIME}" ]] || [[ -n "${POSTTOSLACK}" ]] || [[ -n "${SLACKERROR}" ]] || [[ -n "${PROFILEID}" ]] || [[ -n "${POSTURL}" ]]; then
+    notice "Notifications"
+    echo "-------------"
+    [[ -n "${TASK}" ]] && echo "Task #: ${TASK}"
+    [[ -n "${TASKUSER}" ]] && echo "Task user: ${TASKUSER}"
+    [[ -n "${ADDTIME}" ]] && echo "Task time: ${ADDTIME}"
+    [[ -n "${POSTTOSLACK}" ]] && echo "Post to Slack: ${POSTTOSLACK}"
+    [[ -n "${SLACKERROR}" ]] && echo "Post errors to Slack: ${SLACKERROR}"
+    [[ -n "${POSTURL}" ]] && echo "Webhook URL: ${POSTURL}"
+    [[ -n "${PROFILEID}" ]] && echo "Google Analytics ID: ${PROFILEID}"
+  fi
+  # Logging
+  if [[ -n "${REMOTELOG}" ]] || [[ -n "${REMOTEURL}" ]] || [[ -n "${EXPIRELOGS}" ]] || [[ -n "${LOCALHOSTPOST}" ]] || [[ -n "${LOCALHOSTPATH}" ]] || [[ -n "${SCPPOST}" ]] || [[ -n "${SCPUSER}" ]] || [[ -n "${SCPHOST}" ]] || [[ -n "${SCPHOSTPATH}" ]] || [[ -n "${SCPPASS}" ]] || [[ -n "${REMOTETEMPLATE}" ]] || [[ -n "${REMOTETEMPLATE}" ]]; then
+    notice "Logging"
+    echo "-------"
+    [[ -n "${TO}" ]] && echo "Send to: ${TO}"
+    [[ -n "${HTMLTEMPLATE}" ]] && echo "Email template: ${HTMLTEMPLATE}"
+    [[ -n "${CLIENTLOGO}" ]] && echo "Logo: ${CLIENTLOGO}"
+    [[ -n "${COVER}" ]] && echo "Cover image: ${COVER}"
+    [[ -n "${INCOGNITO}" ]] && echo "Logo: ${INCOGNITO}"
+    [[ -n "${REMOTELOG}" ]] && echo "Web logs: ${REMOTELOG}"
+    [[ -n "${REMOTEURL}" ]] && echo "Address: ${REMOTEURL}"
+    [[ -n "${EXPIRELOGS}" ]] && echo "Log expiration: ${EXPIRELOGS} days"
+    [[ -n "${REMOTETEMPLATE}" ]] && echo "Log template: ${REMOTETEMPLATE}"
+    [[ -n "${SCPPOST}" ]] && echo "Post with SCP/SSH: ${SCPPOST}"
+    [[ -n "${SCPUSER}" ]] && echo "SCP user: ${SCPUSER}"
+    [[ -n "${SCPHOST}" ]] && echo "Remote log host: ${SCPHOST}"
+    [[ -n "${SCPHOSTPATH}" ]] && echo "Remote log path: ${SCPHOSTPATH}"
+    [[ -n "${SCPHOSTPORT}" ]] && echo "Remote log path: ${SCPHOSTPORT}"
+    [[ -n "${LOCALHOSTPOST}" ]] && echo "Save logs locally: ${LOCALHOSTPOST}"
+    [[ -n "${LOCALHOSTPATH}" ]] && echo "Path to local logs: ${}LOCALHOSTPATH"
+  fi
+  # Weekly Digests
+  if [[ -n "${DIGESTEMAIL}" ]]; then
+    notice "Weekly Digests"
+    echo "--------------"
+    [[ -n "${DIGESTEMAIL}" ]] && echo "Send to: ${DIGESTEMAIL}"
+  fi
+  # Monthly Reporting
+  if [[ -n "${CLIENTCONTACT}" ]] || [[ -n "${INCLUDEHOSTING}" ]]; then
+    notice "Monthly Reporting"
+    echo "-----------------"
+    [[ -n "${CLIENTCONTACT}" ]] && echo "Client contact: ${CLIENTCONTACT}"
+    [[ -n "${INCLUDEHOSTING}" ]] && echo "Hosting notes: ${INCLUDEHOSTING}"
+  fi
+  # Invoice Ninja integration
+  if [[ -n "${IN_HOST}" ]] || [[ -n "${IN_TOKEN}" ]] || [[ -n "${IN_CLIENT_ID}" ]] || [[ -n "${IN_PRODUCT}" ]] || [[ -n "${IN_ITEM_COST}" ]] || [[ -n "${IN_ITEM_QTY}" ]] || [[ -n "${IN_NOTES}" ]] || [[ -n "${IN_NOTES}" ]]; then
+    notice "Invoice Ninja Integration"
+    echo "-------------------------"
+    [[ -n "${IN_HOST}" ]] && echo "Host: ${IN_HOST}"
+    [[ -n "${IN_TOKEN}" ]] && echo "Token: ${IN_TOKEN}"
+    [[ -n "${IN_CLIENT_ID}" ]] && echo "Client ID: ${IN_CLIENT_ID}"
+    [[ -n "${IN_PRODUCT}" ]] && echo "Product: ${IN_PRODUCT}"
+    [[ -n "${IN_ITEM_COST}" ]] && echo "Item cost: ${IN_ITEM_COST}"
+    [[ -n "${IN_ITEM_QTY}" ]] && echo "Item quantity: ${IN_ITEM_QTY}"
+    [[ -n "${IN_NOTES}" ]] && echo "Notes: ${IN_NOTES}"
+  fi
+  # Google Analytics
+  if [[ -n "${CLIENTID}" ]] || [[ -n "${CLIENTSECRET}" ]] || [[ -n "${REDIRECTURI}" ]] || [[ -n "${AUTHORIZATIONCODE}" ]] || [[ -n "${ACCESSTOKEN}" ]] || [[ -n "${REFRESHTOKEN}" ]] || [[ -n "${PROFILEID}" ]]; then
+    notice "Google Analytics"
+    echo "----------------"
+    [[ -n "${CLIENTID}" ]] && echo "Client ID: ${CLIENTID}"
+    [[ -n "${CLIENTSECRET}" ]] && echo "Client secret: ${CLIENTSECRET}"
+    [[ -n "${REDIRECTURI}" ]] && echo "Redirect URI: ${REDIRECTURI}"
+    [[ -n "${AUTHORIZATIONCODE}" ]] && echo "Authorization code: ${AUTHORIZATIONCODE}"
+    [[ -n "${ACCESSTOKEN}" ]] && echo "Access token: ${ACCESSTOKEN}"
+    [[ -n "${REFRESHTOKEN}" ]] && echo "Refresh token: ${REFRESHTOKEN}"
+    [[ -n "${PROFILEID}" ]] && echo "Profile ID: ${PROFILEID}"
+  fi
+  # Server monitoring
+  if [[ -n "${MONITORURL}" ]] || [[ -n "${MONITORUSER}" ]] || [[ -n "${SERVERID}" ]]; then
+    notice "Server Monitoring"
+    echo "-----------------"
+    [[ -n "${MONITORURL}" ]] && echo "Monitor URL: ${MONITORURL}"
+    [[ -n "${MONITORUSER}" ]] && echo "User: ${MONITORUSER}"
+    [[ -n "${SERVERID}" ]] && echo "Server ID: ${SERVERID}"
+  fi
+  # Dropbox integration
+  if [[ -n "${DB_API_TOKEN}" ]] || [[ -n "${DB_BACKUP_PATH}" ]]; then
+    notice "Dropbox Integration"
+    echo "-------------------"
+    [[ -n "${DB_API_TOKEN}" ]] && echo "Token: ${DB_API_TOKEN}"
+    [[ -n "${DB_BACKUP_PATH}" ]] && echo "Backup path: ${DB_BACKUP_PATH}"
+  fi
+  # Malware scanning
+  if [[ -n "${NIKTO}" ]] || [[ -n "${NIKTO_CONFIG}" ]] || [[ -n "${NIKTO_PROXY}" ]]; then
+    notice "Malware Scanning"
+    echo "----------------"
+    [[ -n "${NIKTO}" ]] && echo "Scanner: ${NIKTO}"
+    [[ -n "${NIKTO_CONFIG}" ]] && echo "Configuration path: ${NIKTO_CONFIG}"
+    [[ -n "${NIKTO_PROXY}" ]] && echo "Proxy: ${NIKTO_PROXY}"
+  fi
+  empty_line
+
+  if [[ -n "${TO}" ]]; then
+    if [[ "${CURRENT}" == "1" ]]; then
+      console "You can email this information to yourself by using 'stir --test-email --current'"
+      else
+      console "You can email this information to yourself by using 'stir --test-email ${APP}'"
+    fi
+  fi      
+  quickExit
 }

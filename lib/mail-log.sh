@@ -80,19 +80,17 @@ function mailLog() {
 }
 
 function email_test() {
-  console "Testing email..."
-
   # Make sure sendmail exists and is configured 
   hash "${sendmail_cmd}" 2>/dev/null || { 
     error >&2 "Sendmail misconfigured or not found.";
   }
 
+    console "Testing email using ${sendmail_cmd}"
+
   # Confirm we have a recipient address
   if [[ -z "${TO}" ]]; then
     empty_line; warning "No recipient address found."
     quietExit
-  # Make sure sendmail exists and is configured 
-
 
 #  elif [[ ! -f "${sendmail_cmd}" ]]; then
 #    empty_line; warning "Sendmail misconfigured or not found."
@@ -235,7 +233,7 @@ function email_test() {
       [[ -n "${NIKTO_PROXY}" ]] && echo "Proxy: ${NIKTO_PROXY}<br />"
       echo "<br />"
     fi
-    ) | "${sendmail_cmd}" -t
+    ) | sendmail -tv
 
     # Send text mail
     (
@@ -386,7 +384,7 @@ function email_test() {
       [[ -n "${NIKTO_PROXY}" ]] && echo "Proxy: ${NIKTO_PROXY}"
       echo
     fi
-    ) | "${sendmail_cmd}" -t
+    ) | "${sendmail_cmd}" -tv
   fi
 
   # If an integration is setup, let's test it
@@ -412,7 +410,7 @@ function email_test() {
       [[ -n "${PROJCLIENT}" ]] && echo "Client: ${PROJCLIENT}"
       [[ -n "${DEVURL}" ]] && echo "Staging URL: ${DEVURL}"
       [[ -n "${PRODURL}" ]] && echo "Production URL: ${PRODURL}"
-      ) | "${sendmail_cmd}" -t
+      ) | "${sendmail_cmd}" -tv
       quietExit
     else
       console "Integration email address ${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL} does not look valid"; quietExit
