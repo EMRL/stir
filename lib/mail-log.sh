@@ -25,7 +25,7 @@ function mailLog() {
     # }
     fi
 
-#    if [[ ! -f "${MAILPATH}/sendmail" ]]; then
+#    if [[ ! -f "${sendmail_cmd}" ]]; then
 #      empty_line; warning "Sendmail misconfigured or not found."
 #      quietExit
 #    fi
@@ -94,7 +94,7 @@ function email_test() {
   # Make sure sendmail exists and is configured 
 
 
-#  elif [[ ! -f "${MAILPATH}/sendmail" ]]; then
+#  elif [[ ! -f "${sendmail_cmd}" ]]; then
 #    empty_line; warning "Sendmail misconfigured or not found."
 #    quietExit
   else

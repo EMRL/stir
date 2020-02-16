@@ -7,10 +7,10 @@
 ###############################################################################
 
 function main() { 
-  dependency_check  # Check that required commands are available
+  get_fullpath      # Get full path to internal commands
+  dependency_check  # Check that required external commands are available
   release_check     # Check for newer version at Github
   env_check         # Check for configuration files that need updating
-  get_fullpath      # Get full path to internal commands
   wp_check          # Check for Wordpress
   
   if [[ "${RESET}" == "1" ]]; then
@@ -34,7 +34,6 @@ function main() {
   elif [[ "${REPORT}" == "1" ]]; then
     create_report
   elif [[ "${CREATE_INVOICE}" == "1" ]]; then
-    # create_invoice
     create_invoice
   elif [[ "${SCAN}" == "1" ]]; then
     scan_host

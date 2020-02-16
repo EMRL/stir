@@ -84,7 +84,7 @@ function update_global() {
   info "Updating ${deployPath}/global.conf..."
   env_settings=(CLEARSCREEN WORKPATH CONFIGDIR SERVERCHECK ACTIVECHECK \
     CHECKTIME REPOHOST SMARTCOMMIT GITSTATS STASH GARBAGE WPCLI WFCHECK \
-    MAILPATH TO FROM SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT SHORTEMAIL \
+    TO FROM SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT SHORTEMAIL \
     EMAILHTML HTMLTEMPLATE FROMDOMAIN FROMUSER POSTEMAILHEAD POSTEMAILTAIL \
     POSTTOSLACK SLACKURL SLACKERROR POSTURL NOPHP TERSE INCOGNITO REMOTELOG \
     REMOTEURL REMOTETEMPLATE SCPPOST SCPUSER SCPHOST SCPHOSTPATH SCPPORT \
@@ -124,7 +124,7 @@ function update_user() {
   
   info "User configuration backup created at ~/.stirrc.bak"
   cp ~/.stirrc ~/.stirrc.bak
-  cp "${deployPath}"/.stir-user.rc "${trshFile}"
+  cp "${deployPath}"/stir-user.rc "${trshFile}"
 
   # Reload user values
   source ~/.stirrc
