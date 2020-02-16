@@ -40,7 +40,7 @@ function mailPost() {
     trace "Approval required, skipping integration"
   else
 
-    if [[ ! -f "${MAILPATH}/sendmail" ]]; then
+    if [[ ! -f "${sendmail_cmd}" ]]; then
       empty_line; warning "Sendmail misconfigured or not found, skipping email integration."
       return
     fi
