@@ -13,9 +13,10 @@ set -uo pipefail
 
 # Initialize variables 
 read -r OS VER EXITCODE dependencies option message fg_green fg_red reset \
-  YES NO NOT i k <<< ""
+  YES NO NOT i k WORKPATH FIRSTRUN INPUTPATH <<< ""
 echo "${OS} ${VER} ${EXITCODE} ${dependencies} ${option} ${message} ${fg_green} 
-  ${fg_red} ${reset} ${YES} ${NO} ${NOT} ${i} ${k}" > /dev/null
+  ${fg_red} ${reset} ${YES} ${NO} ${NOT} ${i} ${k} ${WORKPATH} 
+  ${FIRSTRUN} ${INPUTPATH}" > /dev/null
 
 # No root, no fun
 if [[ "${EUID}" -ne 0 ]]; then
@@ -141,6 +142,7 @@ sudo cp etc/stir-user.rc /etc/stir; error_check
 
 if [[ ! -f /etc/stir/global.conf ]]; then
   echo "Global configuration not found, installing."
+  FIRSTRUN="TRUE"
   sudo cp /etc/stir/stir-global.conf /etc/stir/global.conf; error_check
 fi
 
@@ -151,4 +153,30 @@ fi
 cp -R lib /etc/stir || error_check
 cp stir.sh /usr/local/bin/stir || error_check
 sudo chmod 755 /usr/local/bin/stir || error_check
+
+if [[ "${FIRSTRUN}" == "TRUE" ]]; then
+  # Someday some first run help stuff could go here
+  echo;
+fi
+
+# If values need to be set, ask the user for input to setup global.conf
+if grep -q "{{WORKPATH}}" "/etc/stir/global.conf"; then
+  echo; echo "Where are all (or most) of your repos are stored?"
+  WORKPATH="~/repos"
+  read -rp "[ Ex. ${WORKPATH} ]: " -e -i "${WORKPATH}" INPUTPATH
+  WORKPATH="${INPUTPATH:-$WORKPATH}"
+  sed_hack=$(echo "sed -i 's^{{WORKPATH}}^${WORKPATH}^g' /etc/stir/global.conf; sed -i 's^# WORKPATH^WORKPATH^g' /etc/stir/global.conf"); eval "${sed_hack}"
+fi
+
+if grep -q "{{REPOHOST}}" "/etc/stir/global.conf"; then
+  echo; echo "Where are all (or most) of your repos are stored?"
+  REPOHOST="http://github.com/username"
+  read -rp "[ Ex. ${REPOHOST} ]: " -e -i "${REPOHOST}" INPUTPATH
+  REPOHOST="${INPUTPATH:-$REPOHOST}"
+  sed_hack=$(echo "sed -i 's^{{REPOHOST}}^${REPOHOST}^g' /etc/stir/global.conf; sed -i 's^# REPOHOST^REPOHOST^g' /etc/stir/global.conf"); eval "${sed_hack}"
+fi
+
+
+
+
 echo "Successfully installed, try typing 'stir' for help."
