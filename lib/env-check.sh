@@ -62,7 +62,7 @@ function env_check() {
     # Trying to continue if global configuration has been changed is buggy
     # if using --current switch
     if [[ "${update_global}" == "1" ]]; then
-      console "Global configuration changed - restart stir to continue."
+      console "Global configuration updated - restart stir to continue."
       quietExit
     fi
   fi
@@ -83,7 +83,7 @@ function update_config() {
 function update_global() {
   info "Updating ${deployPath}/global.conf..."
   env_settings=(CLEARSCREEN WORKPATH CONFIGDIR SERVERCHECK ACTIVECHECK \
-    CHECKTIME REPOHOST SMARTCOMMIT GITSTATS STASH GARBAGE WFCHECK \
+    CHECKTIME REPOHOST SMARTCOMMIT GITSTATS STASH GARBAGE WPCLI WFCHECK \
     MAILPATH TO FROM SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT SHORTEMAIL \
     EMAILHTML HTMLTEMPLATE FROMDOMAIN FROMUSER POSTEMAILHEAD POSTEMAILTAIL \
     POSTTOSLACK SLACKURL SLACKERROR POSTURL NOPHP TERSE INCOGNITO REMOTELOG \
