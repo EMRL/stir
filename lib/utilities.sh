@@ -218,6 +218,15 @@ function dependency_check() {
 }
 
 function show_settings() {
+  notice "General Setup"
+  echo "-------------"
+  [[ -n "${WORKPATH}" ]] && echo "Root project storage: ${WORKPATH}"
+  [[ -n "${REPOHOST}" ]] && echo "Repohost: ${REPOHOST}"
+  [[ -n "${SERVERCHECK}" ]] && echo "Server checking: ${SERVERCHECK}"
+  [[ -n "${ALLOWROOT}" ]] && echo "Allow superuser: ${ALLOWROOT}"
+  [[ -n "${ACTIVECHECK}" ]] && echo "Check file activity: ${ACTIVECHECK}"  
+  [[ -n "${CHECKTIME}" ]] && echo "Active time limit: ${CHECKTIME} minutes"
+  # Project
   notice "Project Information"
   echo "-------------------"
   [[ -n "${PROJNAME}" ]] && echo "Name: ${PROJNAME}"
@@ -228,7 +237,8 @@ function show_settings() {
   if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECKBRANCH}" ]]; then
     notice "Git Configuration"
     echo "-----------------"
-    [[ -n "${REPO}" ]] && echo "Repo: ${REPOHOST}/${REPO}"
+    [[ -n "${REPO}" ]] && echo "Repo URL: ${REPOHOST}/${REPO}"
+    [[ -n "${REPO}" ]] && echo "Local repo path: ${APP_PATH}"
     [[ -n "${MASTER}" ]] && echo "Master branch: ${MASTER}"
     [[ -n "${PRODUCTION}" ]] && echo "Production branch: ${PRODUCTION}"
     [[ -n "${AUTOMERGE}" ]] && echo "Auto merge: ${AUTOMERGE}"
