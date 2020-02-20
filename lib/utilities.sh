@@ -49,7 +49,7 @@ function go() {
   fi
 
   # Is this project locked?
-  if [[ "${DONOTDEPLOY}" == "TRUE" ]] || [[ -f "${WORKPATH}/${APP}/.donotdeploy" ]]; then
+  if [[ "${DONOTDEPLOY}" == "TRUE" ]] || [[ -f "${WORKPATH}/${APP}/.donotstir" ]]; then
     warning "This project is currently locked, and can't be deployed."; quickExit
   fi
 
@@ -176,11 +176,11 @@ function dependency_check() {
           mkdir "${WORKPATH}/${APP}/${CONFIGDIR}"
         fi
         cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/${CONFIGDIR}/"
-        APPRC="${WORKPATH}/${APP}/${CONFIGDIR}/deploy.sh"
+        APPRC="${WORKPATH}/${APP}/${CONFIGDIR}/stir.sh"
       else
-        # If using root directory for .deploy.sh
-        cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/.deploy.sh"
-        APPRC="${WORKPATH}/${APP}/.deploy.sh"
+        # If using root directory for .stir.sh
+        cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/.stir.sh"
+        APPRC="${WORKPATH}/${APP}/.stir.sh"
       fi
       # Ask the user if they would like to edit
       if [[ -x "$(command -v nano)" ]]; then
