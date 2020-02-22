@@ -13,60 +13,6 @@ init_loop
 # Assign a variable to represent .git/index.lock
 gitLock="${APP_PATH}/.git/index.lock"
 
-# Make sure we're in a git repository.
-function gitStart() {
-  # If this is just a build, we won't require git repo functions
-  if [[ "${BUILD}" == "1" ]]; then 
-    return 0
-  fi
-  
-  # Directory exists?
-  if [[ ! -d "${APP_PATH}" ]]; then
-    info "${APP_PATH} is not a valid directory."
-    clean_up; exit 34
-  else
-    cd "${APP_PATH}" || error_check
-  fi
-
-  # Check that .git exists
-  if [[ -f "${APP_PATH}/.git/index" ]]; then
-    sleep 1
-  else
-    info "There is no working project at ${APP_PATH}"
-    clean_up; exit 51
-  fi
-
-  # Make sure there has been at least one commit previously made
-  git rev-parse --abbrev-ref HEAD &>> "${trshFile}"
-  if grep -aq "fatal" "${trshFile}"; then 
-    error "Unable to start, push your first commit manually and try again."
-  else  
-    # If running --automate, force a branch check
-    if [[ "${AUTOMATE}" == "1" ]]; then
-      CHECKBRANCH="${MASTER}"
-    fi
-    # If CHECKBRANCH is set, make sure current branch is correct.
-    start_branch="$(git rev-parse --abbrev-ref HEAD)"
-    if [[ -n "${CHECKBRANCH}" ]] && [[ "${DIGEST}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]] && [[ "${EMAILTEST}" != "1" ]] && [[ "${SLACKTEST}" != "1" ]]; then 
-      if [[ "${start_branch}" != "${CHECKBRANCH}" ]]; then
-        error "Must be on ${CHECKBRANCH} branch to continue.";
-      fi
-    fi
-  fi
-
-  # Check for active files
-  check_active
-
-  # If running --automate, pull and sync all branches
-  if [[ "${AUTOMATE}" == "1" ]]; then
-    trace "Syncing with origin"
-    git pull --all &>> "${logFile}"; error_check
-  fi
-
-  # Try to clear out old git processes owned by this user, if they exist
-  pkill -f git &>> /dev/null || true
-}
-
 # Checkout master
 function gitChkMstr() {
   if [[ -z "${MASTER}" ]]; then
@@ -96,20 +42,6 @@ function gitGarbage() {
     git gc | tee --append "${logFile}"
     if [[ "${QUIET}" != "1" ]]; then
       git gc &>> "${logFile}"
-    fi
-  fi
-}
-
-# Does anything need to be committed? (Besides me?)
-function gitStatus() {
-  if [[ -z "$(git status --porcelain)" ]]; then
-    if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
-      if [[ "${REQUIREAPPROVAL}" == "TRUE" ]]; then
-        console "Nothing to queue, working directory clean."
-      else
-        console "Nothing to commit, working directory clean."
-      fi
-      quietExit
     fi
   fi
 }

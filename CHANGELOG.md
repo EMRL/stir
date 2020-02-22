@@ -9,8 +9,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Project settings can be displayed in an easy to read format using the `show-settings` switch
 - Global project directory and repo host variables are now set during the initial install process
 ### Changed
-- Deprecated and removed the `permFix()` and `fix_index()` functions
-- Deprecated the `WPCLI` and `MAILPATH` variables
+- Deprecated and removed the `gitStatus()`, `gitStart()`, `permFix()` and `fix_index()` functions
+- Deprecated the `WPCLI` and `MAILPATH` global variables
 ### Fixed
 - Binary files should no longer confuse log parsing functions
 - Missing project configuration error now exits more gracefully

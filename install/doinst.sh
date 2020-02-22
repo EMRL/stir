@@ -78,6 +78,10 @@ function error_check() {
   fi
 }
 
+function strip_empty_variables() {
+  sudo sed -i 's^{{.*}}^^g' /etc/stir/stir-global.conf
+}
+
 echo; check_os
 if [[ -n "${OS}" ]] && [[ -n "${VER}" ]]; then
   echo "=> Checking operating system: "; sleep .3
@@ -170,13 +174,14 @@ fi
 
 if grep -q "{{REPOHOST}}" "/etc/stir/global.conf"; then
   echo; echo "Where are all (or most) of your repos are stored?"
+  echo "(This setting can be overridden on a per-project basis)"
   REPOHOST="http://github.com/username"
   read -rp "[ Ex. ${REPOHOST} ]: " -e -i "${REPOHOST}" INPUTPATH
   REPOHOST="${INPUTPATH:-$REPOHOST}"
   sed_hack=$(echo "sed -i 's^{{REPOHOST}}^${REPOHOST}^g' /etc/stir/global.conf; sed -i 's^# REPOHOST^REPOHOST^g' /etc/stir/global.conf"); eval "${sed_hack}"
 fi
 
-
-
+strip_empty_variables
 
 echo "Successfully installed, try typing 'stir' for help."
+exit 0

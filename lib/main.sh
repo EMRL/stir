@@ -26,7 +26,7 @@ function main() {
     fi
   fi
 
-  gitStart          # Check for a valid git project and project set up
+  verify_project    # Check for a valid git project and project set up
   lock              # Create lock file
   go                # Start a work session
 
@@ -80,7 +80,7 @@ function main() {
       if [[ "${APPROVE}" != "1" ]]; then
         wp          # Run Wordpress upgrades if needed
         pkgMgr      # Run package manager
-        gitStatus   # Make sure there's something here to commit         
+        status      # Make sure there's something here to commit         
       fi
 
       if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
