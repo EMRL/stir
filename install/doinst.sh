@@ -13,7 +13,7 @@ set -uo pipefail
 
 # Initialize variables 
 read -r OS VER EXITCODE dependencies option message fg_green fg_red reset \
-  YES NO NOT i k WORKPATH FIRSTRUN INPUTPATH <<< ""
+  YES NO NOT i k WORKPATH FIRSTRUN INPUTPATH TIMEOUT <<< ""
 echo "${OS} ${VER} ${EXITCODE} ${dependencies} ${option} ${message} ${fg_green} 
   ${fg_red} ${reset} ${YES} ${NO} ${NOT} ${i} ${k} ${WORKPATH} 
   ${FIRSTRUN} ${INPUTPATH}" > /dev/null
@@ -24,6 +24,13 @@ if [[ "${EUID}" -ne 0 ]]; then
   exit 1
 fi
 
+if [[ $# != "0" ]]; then
+  if [[ "${1}" == "--unit-test" ]]; then
+    TIMEOUT="TRUE"
+  fi
+fi
+
+echo "Timeout:" $TIMEOUT
 function check_os() {
   # Try to discover the OS flavor 
   if [[ -f /etc/os-release ]]; then
@@ -76,10 +83,6 @@ function error_check() {
     echo "Error ${EXITCODE}: stir not installed."
     exit "${EXITCODE}"
   fi
-}
-
-function strip_empty_variables() {
-  sudo sed -i 's^{{.*}}^^g' /etc/stir/stir-global.conf
 }
 
 echo; check_os
@@ -165,23 +168,29 @@ fi
 
 # If values need to be set, ask the user for input to setup global.conf
 if grep -q "{{WORKPATH}}" "/etc/stir/global.conf"; then
-  echo; echo "Where are all (or most) of your repos are stored?"
-  WORKPATH="~/repos"
-  read -rp "[ Ex. ${WORKPATH} ]: " -e -i "${WORKPATH}" INPUTPATH
-  WORKPATH="${INPUTPATH:-$WORKPATH}"
+  if [[ "${TIMEOUT}" != "TRUE" ]]; then
+    WORKPATH="~/repos"
+    echo; echo "Where are all (or most) of your repos stored?" 
+    read -rp "[ Ex. ${WORKPATH} ]: " -e -i "${WORKPATH}" INPUTPATH
+    WORKPATH="${INPUTPATH:-$WORKPATH}"
+  else
+    WORKPATH="$(cd -P .. && pwd -P)"
+  fi
   sed_hack=$(echo "sed -i 's^{{WORKPATH}}^${WORKPATH}^g' /etc/stir/global.conf; sed -i 's^# WORKPATH^WORKPATH^g' /etc/stir/global.conf"); eval "${sed_hack}"
 fi
 
 if grep -q "{{REPOHOST}}" "/etc/stir/global.conf"; then
-  echo; echo "Where are all (or most) of your repos are stored?"
-  echo "(This setting can be overridden on a per-project basis)"
-  REPOHOST="http://github.com/username"
-  read -rp "[ Ex. ${REPOHOST} ]: " -e -i "${REPOHOST}" INPUTPATH
-  REPOHOST="${INPUTPATH:-$REPOHOST}"
+  if [[ "${TIMEOUT}" != "TRUE" ]]; then
+    REPOHOST="http://github.com/username"
+    echo; echo "Where are all (or most) of your repos are stored?"
+    echo "(This setting can be overridden on a per-project basis)"
+    read -rp "[ Ex. ${REPOHOST} ]: " -e -i "${REPOHOST}" INPUTPATH
+    REPOHOST="${INPUTPATH:-$REPOHOST}"
+  else
+    REPOHOST="http://github.com/EMRL"
+  fi
   sed_hack=$(echo "sed -i 's^{{REPOHOST}}^${REPOHOST}^g' /etc/stir/global.conf; sed -i 's^# REPOHOST^REPOHOST^g' /etc/stir/global.conf"); eval "${sed_hack}"
 fi
-
-strip_empty_variables
 
 echo "Successfully installed, try typing 'stir' for help."
 exit 0

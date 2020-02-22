@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+PROJECT_VERSION="0"
+PROJNAME="Stir"
+PROJCLIENT="EMRL"
+REPOHOST="http://github.com/EMRL"
+REPO="stir"
+MASTER="master"
+STASH="FALSE"
+CHECKBRANCH="master"
+HTMLTEMPLATE="default"

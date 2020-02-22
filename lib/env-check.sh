@@ -9,7 +9,7 @@
 # Initialize variables
 var=(update_global update_user update_project env_settings project_config \
   sed_hack short_version global_project_version local_version \
-  tmp_workpath default_etc)
+  tmp_workpath default_etc updates_skipped)
 init_loop
 
 function env_check() {
@@ -61,7 +61,7 @@ function env_check() {
 
     # Trying to continue if global configuration has been changed is buggy
     # if using --current switch
-    if [[ "${update_global}" == "1" ]]; then
+    if [[ "${update_global}" == "1" ]] && [[ "${updates_skipped}" != "1" ]]; then
       console "Global configuration updated - restart stir to continue."
       quietExit
     fi
@@ -76,6 +76,7 @@ function update_config() {
     [[ "${update_project}" == "1" ]] && update_project
     info "Updates complete."; empty_line
   else
+    updates_skipped="1"
     info "Skipping update."
   fi
 }
@@ -90,7 +91,7 @@ function update_global() {
     REMOTEURL REMOTETEMPLATE SCPPOST SCPUSER SCPHOST SCPHOSTPATH SCPPORT \
     SCPPASS LOCALHOSTPOST LOCALHOSTPATH EXPIRELOGS)
 
-  if [[ ! -w "${deployPath}" ]]; then
+  if [[ ! -w "${deployPath}/global.conf" ]]; then
     info "Requesting sudo access..."
     sudo cp "${deployPath}"/global.conf "${deployPath}"/global.conf.bak
   else
@@ -111,7 +112,7 @@ function update_global() {
 
   # Install new files
   env_cleanup
-  if [[ ! -w "${deployPath}" ]]; then
+  if [[ ! -w "${deployPath}/global.conf" ]]; then
     sudo cp "${trshFile}" "${deployPath}"/global.conf
   else
     cp "${trshFile}" "${deployPath}"/global.conf
