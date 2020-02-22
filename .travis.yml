@@ -11,5 +11,5 @@ script:
     - sudo bash install/doinst.sh --unit-test
     - cp test/project-config.sh .stir.sh
     - touch ~/.stirrc
-    - bash /usr/local/bin/stir --show-settings --unit-test
-    - bash /usr/local/bin/stir --reset --current --unit-test
+    - bash /usr/local/bin/stir --show-settings --unit-test stir
+    - bash /usr/local/bin/stir --reset --current --unit-test stir
