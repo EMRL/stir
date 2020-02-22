@@ -12,7 +12,7 @@ init_loop
 
 function queue() {
 	# Make sure there's something to do
-	gitStatus
+	status
 	gitCommit
 	(git status --porcelain | sed s/^...//) >> "${WORKPATH}/${APP}/.queued"
 

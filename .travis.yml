@@ -9,4 +9,4 @@ script:
     - bash test/test.sh
     - bash test/extended.sh
     - sudo bash install/doinst.sh
-    - bash /usr/local/bin/stir --version
+    - bash /usr/local/bin/stir --version --unit-test

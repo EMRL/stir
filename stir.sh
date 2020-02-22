@@ -68,7 +68,7 @@ function init_startup() {
     DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
     SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
     CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET \
-    SHOWSETTINGS)
+    SHOWSETTINGS UNIT_TEST)
   init_loop
 }
 
@@ -272,6 +272,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --show-settings) SHOWSETTINGS="1" ;;
     --function-list) FUNCTIONLIST="1"; CURRENT="1" ;; # Spoofs --current
     --variable-list) VARIABLELIST="1"; CURRENT="1" ;; # Spoofs --current
+    --unit-test) UNIT_TEST="1" ;;
     --endopts) shift; break ;;
     *) echo "Invalid option: '$1'" 1>&2 ; exit 1 ;;
   esac

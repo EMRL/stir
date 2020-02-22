@@ -110,6 +110,17 @@ function get_fullpath() {
   wp_cmd="$(which wp)"
 }
 
+###############################################################################
+# strip_empty_variables()
+#   A simple function to handle git checkouts
+#
+# Arguments:
+#   [file]    The file in which to strip out {{UNUSED_VARIABLE}}
+###############################################################################
+function strip_empty_variables() {
+  sudo sed -i 's^{{.*}}^^g' "${1}"
+}
+
 # User tests
 function user_tests() {
   if [[ "${SHOWSETTINGS}" == "1" ]]; then
