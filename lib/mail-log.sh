@@ -233,7 +233,7 @@ function email_test() {
       [[ -n "${NIKTO_PROXY}" ]] && echo "Proxy: ${NIKTO_PROXY}<br />"
       echo "<br />"
     fi
-    ) | sendmail -tv
+    ) | "${sendmail_cmd}" -t
 
     # Send text mail
     (
@@ -384,7 +384,7 @@ function email_test() {
       [[ -n "${NIKTO_PROXY}" ]] && echo "Proxy: ${NIKTO_PROXY}"
       echo
     fi
-    ) | "${sendmail_cmd}" -tv
+    ) | "${sendmail_cmd}" -t
   fi
 
   # If an integration is setup, let's test it
@@ -410,7 +410,7 @@ function email_test() {
       [[ -n "${PROJCLIENT}" ]] && echo "Client: ${PROJCLIENT}"
       [[ -n "${DEVURL}" ]] && echo "Staging URL: ${DEVURL}"
       [[ -n "${PRODURL}" ]] && echo "Production URL: ${PRODURL}"
-      ) | "${sendmail_cmd}" -tv
+      ) | "${sendmail_cmd}" -t
       quietExit
     else
       console "Integration email address ${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL} does not look valid"; quietExit
