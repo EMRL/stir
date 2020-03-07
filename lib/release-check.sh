@@ -34,12 +34,13 @@ function release_check() {
       printf "${release_notes}" | fold --spaces -w 78; empty_line
       # Update?
       empty_line
-      if yesno --default yes "Would you like to download now? [Y/n] "; then
+      if yesno --default yes "Would you like to update now? [Y/n] "; then
         # Get latest
         release_url="$(curl -s https://api.github.com/repos/emrl/stir/releases/latest | grep tarball_url | cut -d '"' -f 4)"
-        curl -Ls "${release_url}" -o "stir-${release}.tar.gz"
-        # Eventually I'll have a full install here but for now we'll bail
-        console "Try 'tar zxvf stir-${release}.tar.gz' and then 'sudo doinst.sh' from the archive root directory."
+        
+        # Update!
+        update_release
+        console "Update complete."
         quietExit
       fi
     fi
@@ -48,4 +49,26 @@ function release_check() {
 
 function version_compare() {
   test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; 
+}
+
+# Get latest version and install globally
+function update_release() {
+  release_url="$(curl -s https://api.github.com/repos/emrl/stir/releases/latest | grep tarball_url | cut -d '"' -f 4)"
+
+  # If user is not root, warn them
+  if [[ "${EUID}" -ne "0" ]]; then
+    if yesno --default yes "You will be need sudo access to update, continue? [Y/n] "; then
+      sudo sleep 1
+    else
+      console "Installation canceled."; quietExit
+    fi
+  fi
+  
+  # Continue installation
+  curl -Ls "${release_url}" -o "/tmp/stir-${release}.tar.gz"
+  mkdir /tmp/stir; tar zxvf /tmp/stir-${release}.tar.gz --strip-components=1 -C /tmp/stir
+  cd /tmp/stir; sudo install/doinst.sh
+  
+  # Clean up our mess
+  rm -f tar zxvf stir-${release}.tar.gz; rm -rf /tmp/stir
 }
