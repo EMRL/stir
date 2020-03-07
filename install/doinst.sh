@@ -30,7 +30,6 @@ if [[ $# != "0" ]]; then
   fi
 fi
 
-echo "Timeout:" $TIMEOUT
 function check_os() {
   # Try to discover the OS flavor 
   if [[ -f /etc/os-release ]]; then
