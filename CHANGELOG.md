@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - The number of days of engagement data to be displayed can now be configured in the projects' `theme.conf` 
 - Project settings can be displayed in an easy to read format using the `show-settings` switch
 - Global project directory and repo host variables are now set during the initial install process
+- New releases of `stir` will now update "in place"
 ### Changed
 - Deprecated and removed the `gitStatus()`, `gitStart()`, `permFix()` and `fix_index()` functions
 - Deprecated the `WPCLI` and `MAILPATH` global variables
