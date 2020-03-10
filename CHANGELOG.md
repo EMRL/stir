@@ -18,6 +18,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Analytics functions changed to accept more variation in payloads received from Google
 - Checking for new `stir` releases works more reliably
 - Fixed a small email text bug
+- Commit authors with no Gravatar image are now correctly given the default profile image
 
 ## [3.7.4] - 11-18-2019
 ### Added

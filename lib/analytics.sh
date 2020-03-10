@@ -226,7 +226,6 @@ function ga_over_time() {
 
     # Make sure we're only dealing with integers
     RESULT="$(printf "%.0f\n" "${RESULT}")"
-    # trace "${ga_day}: ${RESULT} $1"
     
     # Add to total
     let ga_${METRIC}+="${RESULT}"
@@ -241,7 +240,6 @@ function ga_over_time() {
   # Create percentage array, this is pretty much obsolete now since 
   # we're using gnuplot
   ga_sequence="$(echo -e "${ga_sequence}" | sed -e 's/[[:space:]]*$//')"
-  # trace "Calculating array: ${ga_sequence}"
   IFS=', ' read -r -a a <<< "${ga_sequence}"
 
   for i in ${a[@]}; do
@@ -370,21 +368,6 @@ function ga_test() {
   ACCESSTOKEN="$(awk -F\" '{print $4}' "${trshFile}")"
   echo "${ACCESSTOKEN}"
 
-  # Setup the metric we're after
-  #array[0]="hits"
-  #array[1]="percentNewSessions"
-  #array[2]="organicSearches"
-  #array[3]="avgSessionDuration"
-  #array[4]="socialInteractions"
-  #SIZE="${#array[@]}"
-  #RND="$(($RANDOM % $SIZE))"
-  #METRIC="${array[$RND]}"
- 
-  # Just here for testing
   ga_data_loop
-  # METRIC="newUsers"
-  # notice "Retrieving a random metric (${METRIC})..." 
-  # ga_over_time "${METRIC}" 7
-  # cat ${statDir}/"${METRIC}".csv
   return
 }

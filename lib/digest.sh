@@ -16,6 +16,14 @@ function get_avatars() {
     AUTHOREMAIL=$(echo $AUTHOR | cut -d\| -f1 | tr -d '[[:space:]]' | tr '[:upper:]' '[:lower:]')
     AUTHORNAME=$(echo $AUTHOR | cut -d\| -f2)
     GRAVATAR="http://www.gravatar.com/avatar/$(echo -n $AUTHOREMAIL | md5sum)?d=404&s=200"
+
+    # Check for missing Gravatar
+    if curl --output /dev/null --silent --head --fail "${GRAVATAR}"; then
+      trace "${GRAVATAR}"
+    else
+      GRAVATAR="http://www.gravatar.com/avatar"
+    fi
+
     if [[ "${SCPPOST}" != "TRUE" ]]; then 
       IMGFILE="${LOCALHOSTPATH}/${APP}/avatar/$AUTHORNAME.png"
     else
