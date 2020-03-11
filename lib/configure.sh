@@ -11,15 +11,32 @@ var=(value remote_origin config_file)
 init_loop
 
 function configure_project() {
+  # 
   empty_line
   config_file="${APPRC}"
-  arg="${PROJNAME}"; read -rp "Project name:" -e -i "${arg} " value; set_value "${value}"
-  arg="${PROJCLIENT}"; read -rp "Client name:" -e -i "${arg} " value; set_value "${value}"
+
+  # Repohost
   remote_origin="$(git ls-remote --get-url)"
   REPOHOST=$(echo ${remote_origin%/*})
-  arg="${REPOHOST}"; read -rp "Repo root URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
-  arg="${DEVURL}"; read -rp "Staging URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
-  arg="${PRODURL}"; read -rp "Production URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
+  arg="${REPOHOST}"; read -rp "Repo root URL (including http:// or https://):" -e -i "${arg}" value; set_value "${value}"
+
+  # Repo name
+  REPO="$(basename -s .git `git config --get remote.origin.url`)"
+  arg="${REPO}"; read -rp "Repo name:" -e -i "${arg}" value; set_value "${value}"
+
+  # Branch name
+  MASTER="$(git rev-parse --abbrev-ref HEAD)"
+  arg="${MASTER}"; read -rp "Master branch name:" -e -i "${arg}" value; set_value "${value}"
+
+  # Project name
+  if [[ -z "${PROJNAME}" ]]; then
+    PROJNAME="$(basename `git rev-parse --show-toplevel`)"
+  fi
+  arg="${PROJNAME}"; read -rp "Project name:" -e -i "${arg} " value; set_value "${value}"
+  #arg="${PROJCLIENT}"; read -rp "Client name:" -e -i "${arg} " value; set_value "${value}"
+
+  #arg="${DEVURL}"; read -rp "Staging URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
+  #arg="${PRODURL}"; read -rp "Production URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
 }
 
 function configure_user() {
