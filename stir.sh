@@ -238,7 +238,7 @@ while [[ ${1:-unset} = -?* ]]; do
     -u|--update) UPGRADE="1" ;;
     -U|--update-only) UPDATEONLY="1" ;;
     -D|--deploy) PUBLISH="1" ;;
-    -S|--skip-update) SKIPUPDATE="1" ;;
+    -S|--skip-update|--skip-updates) SKIPUPDATE="1" ;;
     -c|--current) CURRENT="1" ;;
     -v|--version) echo "$(basename "${0}") ${VERSION}"; exit ;;
     -V|--verbose) VERBOSE="1" ;;
