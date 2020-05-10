@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Deprecated and removed the `gitStatus()`, `gitStart()`, `permFix()` and `fix_index()` functions
 - Deprecated the `WPCLI` and `MAILPATH` global variables
+- Plugins are no longer activated by default, unless required for reliable upgrades  
 ### Fixed
 - Binary files should no longer confuse log parsing functions
 - Missing project configuration error now exits more gracefully
