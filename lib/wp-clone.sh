@@ -136,7 +136,19 @@ function wp_clone() {
     fi
 
     # Check server
-    wp_server_check
+    # wp_server_check
+
+    # Activate required plugins
+    trace status "Checking plugin requirements... "
+    var=(gravityforms)
+    for i in "${var[@]}" ; do
+      "${wp_cmd}" plugin is-active "${i}" #2>&1
+      EXITCODE=$?; 
+      if [[ "${EXITCODE}" -ne "0" ]]; then
+        "${wp_cmd}" plugin activate "${i}" >> "${logFile}" 2>&1
+      fi
+    done
+    trace notime "OK"
   fi
 }
 
