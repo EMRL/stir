@@ -26,6 +26,9 @@ function check_mysql_service() {
 }
 
 function wp_clone() {
+  # Chill for a sec
+  sleep 2
+  
   # This is all under construction
   check_mysql_service
 

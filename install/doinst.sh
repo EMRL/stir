@@ -158,7 +158,9 @@ fi
 
 cp -R lib /etc/stir || error_check
 cp stir.sh /usr/local/bin/stir || error_check
+cp etc/extras/bulk.stir.sh /usr/local/bin/bulk.stir || error_check
 sudo chmod 755 /usr/local/bin/stir || error_check
+sudo chmod 755 /usr/local/bin/bulk.stir || error_check
 
 if [[ "${FIRSTRUN}" == "TRUE" ]]; then
   # Someday some first run help stuff could go here
