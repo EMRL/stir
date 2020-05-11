@@ -7,7 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Launching `stir` using the `--prepare-with-reset` will completely delete and reset the local copy of the target project, and then launch your defined prepare action
 - The number of days of engagement data to be displayed can now be configured in the projects' `theme.conf` 
 - Project settings can be displayed in an easy to read format using the `show-settings` switch
+- Added a simple external script for perfoming batch stir actions, see `etc/extras/bulk.stir.sh`
 - Global project directory and repo host variables are now set during the initial install process
+- Project settings are now backed up when performing a `--reset` when a global `CONFIGBACKUP` is declared
 - New releases of `stir` will now update "in place"
 - `--skip-updates` now aliases to `--skip-updated` because I kept forgetting the switch name
 ### Changed

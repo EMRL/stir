@@ -18,6 +18,12 @@ function reset_local() {
       fi
     fi
 
+    if [[ -n "${CONFIGBACKUP}" ]]; then
+      trace status "Backing up project settings to ${CONFIGBACKUP}/${APP}-stir.sh... "
+      cp "${project_config}" "${CONFIGBACKUP}/${APP}-stir.sh"; error_check
+      trace notime "OK"
+    fi
+
     info "Resetting local files..."
     remove_local_files &
     spinner $!
