@@ -90,7 +90,7 @@ function postCommit() {
   #fi
 
   # Just for yuks, display git stats for this user (user can override this if it annoys them)
-  gitStats
+  git_stats
 
   # Check to see if there's an email integration setup
   if [[ -n "${POSTEMAIL}" ]]; then

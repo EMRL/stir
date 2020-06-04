@@ -85,6 +85,14 @@ function wp_clone() {
       sed -i -e "/DB_DATABASE/c\DB_DATABASE='null_${REPO}'" \
         -e "/DB_USERNAME/c\DB_USERNAME='${MYSQL_USER}'" \
         -e "/DB_PASSWORD/c\DB_PASSWORD='${MYSQL_PASS}'" \
+        -e "/SECURE_AUTH_KEY/c\SECURE_AUTH_KEY='null_key'" \
+        -e "/AUTH_KEY/c\AUTH_KEY='null_key'" \
+        -e "/LOGGED_IN_KEY/c\LOGGED_IN_KEY='null_key'" \
+        -e "/NONCE_KEY/c\NONCE_KEY='null_key'" \
+        -e "/SECURE_AUTH_SALT/c\SECURE_AUTH_SALT='null_salt'" \
+        -e "/AUTH_SALT/c\AUTH_SALT='null_salt'" \
+        -e "/LOGGED_IN_SALT/c\LOGGED_IN_SALT='null_salt'" \
+        -e "/NONCE_SALT/c\NONCE_SALT='null_salt'" \
         "${APP_PATH}/${env_file}"
     fi
 
@@ -112,6 +120,8 @@ function wp_clone() {
         "${APP_PATH}/${env_file}"
     fi
 
+    source "${APP_PATH}/${env_file}"
+
     # Composer stuff
     if [[ -f "${APP_PATH}/composer.json" ]]; then
       cd "${APP_PATH}"
@@ -124,9 +134,7 @@ function wp_clone() {
     # DB_CHECK=$?;
     # if [[ "${DB_CHECK}" != "0" ]]; then
        trace status "Creating database... "
-    #  "${wp_cmd}" db create &>> /dev/null; error_check; trace notime "OK"
-      "${wp_cmd}" db create &>> /dev/null; trace notime "OK"
-
+      "${wp_cmd}" db create &>> /dev/null; error_check; trace notime "OK"
     #fi
 
     # Install wordpress database tables

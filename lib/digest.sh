@@ -99,7 +99,7 @@ function create_digest() {
     # Get the email payload ready
     digestSendmail=$(<"${htmlFile}")
   else
-    echo "No activity found, canceling digest."
+    console "No activity found, canceling digest."
     safeExit
   fi
 }

@@ -253,7 +253,7 @@ while [[ ${1:-unset} = -?* ]]; do
     -p|--prepare) PREPARE="1" ;;
     --reset) RESET="1" ;;
      --prepare-with-reset) PREPARE_WITH_RESET="1"; PREPARE="1" ;;
-    --digest) DIGEST="1"; FORCE="1"; QUIET="1" ;;
+    --digest) DIGEST="1"; FORCE="1" ;;
     --report) REPORT="1"; FORCE="1"; QUIET="1" ;;
     --automate) FORCE="1"; UPGRADE="1"; MERGE="1"; QUIET="1"; AUTOMATE="1" ;;
     --test-ssh) SSHTEST="1" ;;

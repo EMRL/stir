@@ -107,32 +107,50 @@ function status() {
   fi
 }
 
+# Stage files
+function stage() {
+  # Check for stuff that needs a commit
+  if [[ -z $(git status --porcelain) ]]; then
+    console "Nothing to commit, working directory clean."; quietExit
+  else
+    empty_line
+    if [[ "${FORCE}" = "1" ]] || yesno --default yes "Stage files? [Y/n] "; then
+      trace "Staging files"
+      if [[ "${VERBOSE}" == "TRUE" ]]; then
+        git add -A | tee --append "${logFile}"; error_check              
+      else  
+        git add -A &>> "${logFile}"; error_check
+      fi
+    else
+      trace "Exiting without staging files"; userExit    
+    fi
+  fi
+}
+
 # TODO: REWRITE
 function push() {
-  if [[ "${MERGE}" = "1" ]]; then
-    trace "Push ${working_branch}";
-    empty_line
-    if [[ "${VERBOSE}" == "TRUE" ]]; then
-      git push origin "${working_branch}" | tee --append "${logFile}"; error_check 
-      trace "OK"              
-    else
-      if [[ "${FORCE}" = "1" ]] || yesno --default yes "Push ${working_branch} branch? [Y/n] "; then
-        if [[ "${QUIET}" != "1" ]]; then
-          sleep 1
-          git push origin "${working_branch}" &>> "${logFile}" &
-          spinner $!
-          info "Success.    "
-        else
-          git push origin "${working_branch}" &>> "${logFile}"; error_check
-        fi
+  trace "Push ${working_branch}";
+  empty_line
+  if [[ "${VERBOSE}" == "TRUE" ]]; then
+    git push origin "${working_branch}" | tee --append "${logFile}"; error_check 
+    trace "OK"              
+  else
+    if [[ "${FORCE}" = "1" ]] || yesno --default yes "Push ${working_branch} branch? [Y/n] "; then
+      if [[ "${QUIET}" != "1" ]]; then
         sleep 1
-        if [[ "$(git status --porcelain)" ]]; then
-          sleep 1; git add . &>> "${logFile}"
-          git push --force-with-lease  &>> "${logFile}"
-        fi
+        git push origin "${working_branch}" &>> "${logFile}" &
+        spinner $!
+        info "Success.    "
       else
-        safeExit
+        git push origin "${working_branch}" &>> "${logFile}"; error_check
       fi
+      sleep 1
+      if [[ "$(git status --porcelain)" ]]; then
+        sleep 1; git add . &>> "${logFile}"
+        git push --force-with-lease  &>> "${logFile}"
+      fi
+    else
+      safeExit
     fi
   fi
 }
@@ -196,3 +214,26 @@ function confirm_branch() {
     fi 
   fi
 }
+
+# Garbage collection
+function garbage() {
+  if [[ "${GARBAGE}" = "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then 
+    notice "Preparing repository..."
+    git gc | tee --append "${logFile}"
+    if [[ "${QUIET}" != "1" ]]; then
+      git gc &>> "${logFile}"
+    fi
+  fi
+}
+
+# Get the stats for this git author, just for fun
+function git_stats() {
+  if [[ "${GITSTATS}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]] && [[ "${PUBLISH}" != "1" ]] && [[ "${APPROVE}" != "1" ]]; then
+    console "Calculating..."
+    getent passwd "${USER}" | cut -d ':' -f 5 | cut -d ',' -f 1 > "${trshFile}"
+    FULLUSER=$(<"${trshFile}")
+    git log --author="${FULLUSER}" --pretty=tformat: --numstat | \
+    # The single quotes were messing with trying to line break this one
+    awk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf "Your total lines of code contributed so far: %s\n(+%s added | -%s deleted)\n",loc,add,subs }' -
+  fi
+} 
