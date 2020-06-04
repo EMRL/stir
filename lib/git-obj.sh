@@ -117,9 +117,9 @@ function stage() {
     if [[ "${FORCE}" = "1" ]] || yesno --default yes "Stage files? [Y/n] "; then
       trace "Staging files"
       if [[ "${VERBOSE}" == "TRUE" ]]; then
-        git add -A | tee --append "${logFile}"; error_check              
+        git add --all :/ | tee --append "${logFile}"; error_check              
       else  
-        git add -A &>> "${logFile}"; error_check
+        git add --all :/ &>> "${logFile}"; error_check
       fi
     else
       trace "Exiting without staging files"; userExit    
@@ -146,7 +146,7 @@ function push() {
       fi
       sleep 1
       if [[ "$(git status --porcelain)" ]]; then
-        sleep 1; git add . &>> "${logFile}"
+        sleep 1; git add --all :/ &>> "${logFile}"
         git push --force-with-lease  &>> "${logFile}"
       fi
     else
