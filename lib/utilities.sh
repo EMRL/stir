@@ -251,6 +251,7 @@ function show_settings() {
     [[ -n "${REPO}" ]] && echo "Repo URL: ${REPOHOST}/${REPO}"
     [[ -n "${REPO}" ]] && echo "Local repo path: ${APP_PATH}"
     [[ -n "${MASTER}" ]] && echo "Master branch: ${MASTER}"
+    [[ -n "${STAGING}" ]] && echo "Staging branch: ${STAGING}"
     [[ -n "${PRODUCTION}" ]] && echo "Production branch: ${PRODUCTION}"
     [[ -n "${AUTOMERGE}" ]] && echo "Auto merge: ${AUTOMERGE}"
     [[ -n "${STASH}" ]] && echo "File Stashing: ${STASH}"
