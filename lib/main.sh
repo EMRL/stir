@@ -123,19 +123,21 @@ function main() {
       
       confirm_branch "${MASTER}"
       push
-      if [[ -n "${STAGING}" ]]; then
-        checkout "${STAGING}"
-        merge
-        push
-      fi
 
-      if [[ -n "${PRODUCTION}" ]]; then
-        checkout "${PRODUCTION}"
-        merge
-        push
-      fi
+      if [[ "${MERGE}" == "1" ]]; then
+        if [[ -n "${STAGING}" ]]; then
+          checkout "${STAGING}"
+          merge
+          push
+        fi
 
-      checkout "${MASTER}"
+        if [[ -n "${PRODUCTION}" ]]; then
+          checkout "${PRODUCTION}"
+          merge
+          push
+        fi
+        checkout "${MASTER}"
+      fi
 
       pkgDeploy     # Deploy project to live server
     fi
