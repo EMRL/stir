@@ -13,13 +13,13 @@ function postWebhook {
       message_state="DIGEST"
       payload="*${PROJNAME}* updates for the week of ${WEEKOF} (<${DIGESTURL})"               
       # Send it
-      curl -X POST --data "payload={\"text\": \"${payload}\"}" "${POSTURL}" > /dev/null 2>&1; error_status
+      "${curl_cmd}" -X POST --data "payload={\"text\": \"${payload}\"}" "${POSTURL}" > /dev/null 2>&1; error_status
     fi
 
     # Create payload for reports
     if [[ "${REPORT}" == "1" ]]; then
       payload="Monthly report for *${PROJNAME}* created (<${REPORTURL})" 
-      curl -X POST --data "payload={\"text\": \"${payload}\"}" "${POSTURL}" > /dev/null 2>&1; error_status              
+      "${curl_cmd}" -X POST --data "payload={\"text\": \"${payload}\"}" "${POSTURL}" > /dev/null 2>&1; error_status              
     fi
   fi
 }
@@ -32,7 +32,7 @@ function postTest {
     warning "No webhook URL found."; empty_line
     clean_up; exit 1
   else
-    curl -X POST --data "payload={\"text\": \"Testing POST integration of ${APP} from stir ${VERSION}\nhttps://github.com/EMRL/stir\"}" "${POSTURL}"
+    "${curl_cmd}" -X POST --data "payload={\"text\": \"Testing POST integration of ${APP} from stir ${VERSION}\nhttps://github.com/EMRL/stir\"}" "${POSTURL}"
     empty_line
   fi
 }

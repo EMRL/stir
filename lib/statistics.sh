@@ -34,7 +34,7 @@ function project_stats() {
     cp -R "${deployPath}/html/${HTMLTEMPLATE}/stats/fonts" "${statDir}/"
     cp -R "${deployPath}/html/${HTMLTEMPLATE}/stats/js" "${statDir}/"
 
-    notice "Generating files..."
+    echo -n "Generating files"
 
     # Define dashboard navigation
     assign_nav
@@ -66,7 +66,7 @@ function project_stats() {
     repo_charts=(authors commits_day_week commits_hour_day commits_hour_week \
       commits_month commits_year commits_year_month files_type)
     for i in "${repo_charts[@]}" ; do
-      /usr/bin/gitchart -r "${WORKPATH}/${APP}" "${i}" "${statDir}/${i}.svg" &>> /dev/null
+      "${gitchart_cmd}" -r "${WORKPATH}/${APP}" "${i}" "${statDir}/${i}.svg" &>> /dev/null
       sed -i "s/#9999ff/${CHARTC}/g" "${statDir}/${i}.svg" 
       sed -i 's/Consolas,"Liberation Mono",Menlo,Courier,monospace/Roboto, Helvetica, Arial, sans-serif/g' "${statDir}/${i}.svg"
     done #&
@@ -174,7 +174,7 @@ function check_backup() {
     return
   else 
     # Examine the Dropbox backup directory
-    curl -s -X POST https://api.dropboxapi.com/2/files/list_folder \
+    "${curl_cmd}" -s -X POST https://api.dropboxapi.com/2/files/list_folder \
     --header "Authorization: Bearer ${DB_API_TOKEN}" \
     --header "Content-Type: application/json" \
     --data "{\"path\": \"${DB_BACKUP_PATH}\",\"recursive\": false,

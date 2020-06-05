@@ -96,7 +96,7 @@ function is_integer() {
 
 function get_fullpath() {
   # Get absolute paths to critical commands
-  var=(composer wp sendmail wget curl git mysqlshow grep wc)
+  var=(composer wp sendmail wget curl git mysqlshow grep wc gitchart)
 
   for i in "${var[@]}" ; do
     read -r "${i}_cmd" <<< ""

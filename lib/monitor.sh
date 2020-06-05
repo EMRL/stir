@@ -53,7 +53,7 @@ function server_monitor_log() {
   # Load the password and setup the curl command
   MONITORPASS=$(<$MONITORPASS)
   MONITORAPI="${MONITORURL}?tag=serveruptime&email=${MONITORUSER}&app_password=${MONITORPASS}&server_id=${SERVERID}&HoursUnit=${MONITORHOURS}"
-  curl -s --request GET "${MONITORAPI}" -o "${trshFile}"
+  "${curl_cmd}" -s --request GET "${MONITORAPI}" -o "${trshFile}"
   # Uptime
   UPTIME=$(grep -Po '"uptime":.*?[^\\]",' ${trshFile})
   UPTIME="$(cut -d ',' -f 1 <<< "${UPTIME}")"

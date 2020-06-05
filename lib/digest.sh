@@ -18,8 +18,8 @@ function get_avatars() {
     GRAVATAR="http://www.gravatar.com/avatar/$(echo -n $AUTHOREMAIL | md5sum)?d=404&s=200"
 
     # Check for missing Gravatar
-    if curl --output /dev/null --silent --head --fail "${GRAVATAR}"; then
-      trace "${GRAVATAR}"
+    if "${curl_cmd}" --output /dev/null --silent --head --fail "${GRAVATAR}"; then
+      echo -n "."
     else
       GRAVATAR="http://www.gravatar.com/avatar"
     fi
@@ -32,7 +32,7 @@ function get_avatars() {
       #fi
       IMGFILE="${avatarDir}/${AUTHORNAME}.png"
     fi
-    curl -fso "${IMGFILE}" "${GRAVATAR}"
+    "${curl_cmd}" -fso "${IMGFILE}" "${GRAVATAR}"
   done  
 }
 
