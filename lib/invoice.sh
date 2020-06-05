@@ -31,7 +31,7 @@ function create_invoice() {
 }
 
 function get_current_invoice() {
-  curl -X GET "${IN_HOST}/api/v1/clients/${IN_CLIENT_ID}?include=invoices" -H "X-Ninja-Token: ${IN_TOKEN}" > "${trshFile}"
+  "${curl_cmd}" -X GET "${IN_HOST}/api/v1/clients/${IN_CLIENT_ID}?include=invoices" -H "X-Ninja-Token: ${IN_TOKEN}" > "${trshFile}"
 
   # Many sedtastic things
   sed -i '/"invoice_number"/!d' "${trshFile}"
@@ -45,7 +45,7 @@ function get_current_invoice() {
 
 function send_invoice() {
   # This does not seem to work as advertised. Ugh.
-  # curl -X POST ninja.test/api/v1/email_invoice -d '{"id":1}' -H "Content-Type:application/json" -H "X-Ninja-Token: TOKEN"
+  # "${curl_cmd}" -X POST ninja.test/api/v1/email_invoice -d '{"id":1}' -H "Content-Type:application/json" -H "X-Ninja-Token: TOKEN"
   invoice_hack=$(echo "curl -X POST ${IN_HOST}/api/v1/email_invoice -d '{\"id\":${current_invoice}}' -H "Content-Type:application/json" -H \"X-Ninja-Token: ${IN_TOKEN}\"")
   trace "Trying ${invoice_hack}"
   eval "${invoice_hack}" &>> "${logFile}"; error_check
