@@ -114,7 +114,7 @@ function wp_server_check {
     # trace "Launching server"
     # "${wp_cmd}" server --host=localhost >> "${logFile}" 2>&1 &
     # Keep checking for server to come online
-    # until $(curl --output /dev/null --silent --head --fail http://localhost:8080); do
+    # until $(${curl_cmd} --output /dev/null --silent --head --fail http://localhost:8080); do
     #   sleep 1
     # done
   # fi
@@ -126,7 +126,7 @@ function wp_server_check {
   
   #"${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" >> "${logFile}" 2>&1
   
-  #if [[ -z "$(curl -sL localhost:8080 | grep -E "Warning:|Fatal:")" ]]; then
+  #if [[ -z "$(${curl_cmd} -sL localhost:8080 | grep -E "Warning:|Fatal:")" ]]; then
   #if "${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" > /dev/null; then
   #  trace "Local server check passed";
   #else
