@@ -127,7 +127,7 @@ function wp_server_check {
   #"${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" >> "${logFile}" 2>&1
   
   #if [[ -z "$(curl -sL localhost:8080 | grep -E "Warning:|Fatal:")" ]]; then
-  #if curl -sL localhost:8080 | grep -E "Warning:|Fatal:" > /dev/null; then
+  #if "${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" > /dev/null; then
   #  trace "Local server check passed";
   #else
   #  error "Local server check FAIL"

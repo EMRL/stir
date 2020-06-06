@@ -65,7 +65,7 @@ function update_release() {
   fi
   
   # Continue installation
-  curl -Ls "${release_url}" -o "/tmp/stir-${release}.tar.gz"
+  "${curl_cmd}" -Ls "${release_url}" -o "/tmp/stir-${release}.tar.gz"
   mkdir /tmp/stir; tar zxvf /tmp/stir-${release}.tar.gz --strip-components=1 -C /tmp/stir
   cd /tmp/stir; sudo install/doinst.sh
   

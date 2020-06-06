@@ -81,7 +81,7 @@ function wp_core() {
                   
           # Update staging server database if needed
           if [[ "${UPDCORE}" = "1" ]] && [[ -n "${DEVURL}" ]]; then
-            info "Upgrading staging database..."; curl --silent "${DEVURL}${WPSYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
+            info "Upgrading staging database..."; "${curl_cmd}" --silent "${DEVURL}${WPSYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
           fi                          
         else
           info "Skipping Wordpress core updates..."
