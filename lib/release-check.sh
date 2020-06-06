@@ -15,7 +15,7 @@ function release_check() {
   if [[ "${FORCE}" != "1" ]]; then
     # Get the release tag
     trace "Checking for updates..."
-    release="$(curl -s https://api.github.com/repos/emrl/stir/releases/latest | grep \"tag_name\")"
+    release="$(${curl_cmd} -s https://api.github.com/repos/emrl/stir/releases/latest | grep \"tag_name\")"
     # Remove the extra garbage
     release="${release#*v}"
     release="$(printf '%s' "${release}" | sed 's/",//g')"
@@ -23,7 +23,7 @@ function release_check() {
     # Compare versions
     if version_compare "${release}" "${VERSION}"; then
       # Get release notes
-      release_notes="$(curl -s https://api.github.com/repos/emrl/stir/releases/latest | grep \"body\")"
+      release_notes="$(${curl_cmd} -s https://api.github.com/repos/emrl/stir/releases/latest | grep \"body\")"
       # Remove the extra garbage
       release_notes="$(printf '%s' "${release_notes}" | sed 's^\"body\": \"^^g')"
       release_notes="${release_notes//\"}"
@@ -36,7 +36,7 @@ function release_check() {
       empty_line
       if yesno --default yes "Would you like to update now? [Y/n] "; then
         # Get latest
-        release_url="$(curl -s https://api.github.com/repos/emrl/stir/releases/latest | grep tarball_url | cut -d '"' -f 4)"
+        release_url="$(${curl_cmd} -s https://api.github.com/repos/emrl/stir/releases/latest | grep tarball_url | cut -d '"' -f 4)"
         
         # Update!
         update_release
@@ -53,7 +53,7 @@ function version_compare() {
 
 # Get latest version and install globally
 function update_release() {
-  release_url="$(curl -s https://api.github.com/repos/emrl/stir/releases/latest | grep tarball_url | cut -d '"' -f 4)"
+  release_url="$(${curl_cmd} -s https://api.github.com/repos/emrl/stir/releases/latest | grep tarball_url | cut -d '"' -f 4)"
 
   # If user is not root, warn them
   if [[ "${EUID}" -ne "0" ]]; then
