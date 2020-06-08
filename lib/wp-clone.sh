@@ -13,6 +13,7 @@ init_loop
 
 function wp_clone_mngmt() {
   "${git_cmd}" clone --no-checkout "${SSH_REPO}" "${WORKPATH}/${APP}/${REPO}" &>> /dev/null; error_check
+  "${git_cmd}" branch -r | grep -v '\->' | while read remote; do "${git_cmd}" branch --track "${remote#origin/}" "$remote"; done
   mv "${WORKPATH}/${APP}/${REPO}/.git" "${WORKPATH}/${APP}"  &>> /dev/null; error_check 
   rm -rf "${WORKPATH}/${APP}/${REPO}"  &>> /dev/null; error_check
   "${git_cmd}" reset --hard HEAD &>> /dev/null; error_check 
