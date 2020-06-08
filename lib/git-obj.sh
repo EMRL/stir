@@ -61,7 +61,9 @@ function verify_project() {
   # If running --automate, pull and sync all branches
   if [[ "${AUTOMATE}" == "1" ]]; then
     trace "Syncing with origin"
-    git pull --all &>> "${logFile}"; error_check
+    "${git_cmd}" fetch --all &>> "${logFile}"; error_check
+    sleep 2 # Chill for a second (or 2 :p)
+    "${git_cmd}" pull --all &>> "${logFile}"; error_check
   fi
 
   # Try to clear out old git processes owned by this user, if they exist
