@@ -141,7 +141,7 @@ function slackPost () {
   if [[ "${DIGEST}" == "1" ]] && [[ -z "${GREETING}" ]]; then
     trace "No activity found, canceling digest."
   else
-    curl -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" > /dev/null 2>&1; error_status
+    "${curl_cmd}" -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACKURL}" > /dev/null 2>&1; error_status
   fi
 }
 
@@ -153,7 +153,7 @@ function slackTest {
     warning "No Slack configuration found."; empty_line
     clean_up; exit 1
   else
-    curl -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration of ${APP} from stir ${VERSION}\nhttps://github.com/EMRL/stir\"}" "${SLACKURL}"
+    "${curl_cmd}" -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration of ${APP} from stir ${VERSION}\nhttps://github.com/EMRL/stir\"}" "${SLACKURL}"
     empty_line
   fi
 }
