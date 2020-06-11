@@ -255,7 +255,7 @@ while [[ ${1:-unset} = -?* ]]; do
      --prepare-with-reset) PREPARE_WITH_RESET="1"; PREPARE="1" ;;
     --digest) DIGEST="1"; FORCE="1" ;;
     --report) REPORT="1"; FORCE="1"; QUIET="1" ;;
-    --automate) FORCE="1"; UPGRADE="1"; MERGE="1"; QUIET="1"; AUTOMATE="1" ;;
+    --automate) FORCE="1"; UPGRADE="1"; MERGE="1"; AUTOMATE="1" ;;
     --test-ssh) SSHTEST="1" ;;
     --test-slack) SLACKTEST="1" ;;
     --test-email) EMAILTEST="1" ;;
