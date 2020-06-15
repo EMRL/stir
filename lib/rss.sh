@@ -68,12 +68,16 @@ function create_rss_payload() {
 		return
 	else
 		get_rss
-		process_xml > ${postFile}
+		process_xml > ${trshFile}
 
 		# Clean up output
-		sed -i 's/\xc2\x91\|\xc2\x92\|\xc2\xa0\|\xe2\x80\x8e//g' "${postFile}"
+		sed -i 's/\xc2\x91\|\xc2\x92\|\xc2\xa0\|\xe2\x80\x8e//g' "${trshFile}"
 		# iconv -c -f utf-8 -t ascii "${postFile}"
-		awk -i inplace '{gsub(/’/, "'"'"'");print}' "${postFile}"
+
+		# Centos doesn't have the inplace option 
+		# awk -i inplace '{gsub(/’/, "'"'"'");print}' "${postFile}"
+		awk '{gsub(/’/, "'"'"'");print}' "${trshFile}" > "${postFile}"
+
 
 		sed -r -i -e '/<p>The post /d' \
 			-e "s/&amp;#160;/\ /g" \
@@ -88,7 +92,7 @@ function create_rss_payload() {
 		sed -i ':a;N;$!ba;s/\n//g' "${postFile}"
 		sed -i -e :a -e '$!N;s/\n[[:blank:]]\{1,\}/ /;ta' -e 'P;D' "${postFile}"
 
-		empty_line; cat "${postFile}"
+		# empty_line; cat "${postFile}"
 		RSS_NEWS="$(<${postFile})"
 	fi
 }
