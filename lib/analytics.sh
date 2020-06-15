@@ -51,7 +51,9 @@ function ga_metrics() {
 
 function analytics() {
   # If profile does not exist, skip it all
-  if [[ -n "${PROFILEID}" ]]; then
+  if [[ -z "${PROFILEID}" ]]; then
+    return
+  else
     # Setup the metric we're after
     ga_metrics
 
@@ -195,120 +197,124 @@ function ga_data_loop() {
 #   None
 ###############################################################################  
 function ga_over_time() {
-  # Process arguments
-  if [[ -n "$2" ]]; then
-    GASTART="$(date -I -d "$GAEND - $2 day")"
-  fi
+  if [[ -z "${PROFILEID}" ]]; then
+    return
+  else
+    # Process arguments
+    if [[ -n "$2" ]]; then
+      GASTART="$(date -I -d "$GAEND - $2 day")"
+    fi
 
-  # Make sure temp directory exists
-  if [[ ! -d "${statDir}" ]]; then
-    umask 077 && mkdir ${statDir} &> /dev/null
-  fi
-  
-  # Setup variables
-  ga_day="${GAEND}"
-  day="0"
-  METRIC="${1}"
-  ga_sequence=""
-  max_value=""
-
-  # Flush csv
-  [[ -f "${trshFile}" ]] && rm "${trshFile}"
-
-  while [ "$ga_day" != "${GASTART}" ]; do 
-    RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4)
+    # Make sure temp directory exists
+    if [[ ! -d "${statDir}" ]]; then
+      umask 077 && mkdir ${statDir} &> /dev/null
+    fi
     
-    # Workaround for buggy Google shit
-    until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
-    do
+    # Setup variables
+    ga_day="${GAEND}"
+    day="0"
+    METRIC="${1}"
+    ga_sequence=""
+    max_value=""
+
+    # Flush csv
+    [[ -f "${trshFile}" ]] && rm "${trshFile}"
+
+    while [ "$ga_day" != "${GASTART}" ]; do 
       RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4)
+      
+      # Workaround for buggy Google shit
+      until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
+      do
+        RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4)
+      done
+
+      # Make sure we're only dealing with integers
+      RESULT="$(printf "%.0f\n" "${RESULT}")"
+      
+      # Add to total
+      let ga_${METRIC}+="${RESULT}"
+      
+      # Store the values 
+      declare "$1_${day}"="${RESULT}"
+      ga_sequence="${ga_sequence}${RESULT} "
+      day="$((day+1))"
+      ga_day="$(date -I -d "$ga_day - 1 day")"
+    done
+  
+    # Create percentage array, this is pretty much obsolete now since 
+    # we're using gnuplot
+    ga_sequence="$(echo -e "${ga_sequence}" | sed -e 's/[[:space:]]*$//')"
+    IFS=', ' read -r -a a <<< "${ga_sequence}"
+
+    for i in ${a[@]}; do
+      if [[ $i -gt $max_value ]]; then 
+        max_value=$i
+      fi
     done
 
-    # Make sure we're only dealing with integers
-    RESULT="$(printf "%.0f\n" "${RESULT}")"
+    # Calculate
+    for ((n=0; n < $2; n++)); do 
+      var="$1_$n"; var_percent="$1_percent_$n"
+
+      # Calculating percent while zero was causing nasty bugs
+      if [[ -n "${!var}" ]] && [[ "${!var}" != "0" ]]; then
+        var_percent=$(awk "BEGIN { pc=100*${!var}/${max_value}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
+      else
+        var_percent="0"
+      fi
+      # trace "100*${!var}/${max_value} = ${var_percent}%"
+
+      # Store values
+      eval $1_$n="${!var}"
+      eval $1_percent_$n="${var_percent}"
+      this_day=$(date '+%a' -d "$n days ago")
+      echo -e "${this_day}, ${!var}, ${var_percent}" >> "${trshFile}"
+
+      if [[ "${PROJSTATS}" == "1" ]]; then
+        sed -i -e "s^{{$1_$n}}^${!var}^g" \
+          -e "s^{{$1_percent_$n}}^${var_percent}^g" \
+          -e "s^{{$1_date_$n}}^${this_day}^g" \
+          "${htmlFile}"
+      fi    
+    done
+
+    tac "${trshFile}" > ${statDir}/"${METRIC}".csv
+
+    gnuplot -p << EOF
+    set encoding utf8
+    set terminal png enhanced size 1280,600
+    primary = "${CHARTC}"; 
+    secondary = "${SECONDARYC}";
+    info = "${INFOC}";
+    default = "${DEFAULTC}";
+    set key off
+    set datafile separator ","
+    set output '${statDir}/${METRIC}.png'
+    set boxwidth 0.5
+    set style fill transparent solid 0.1 noborder
+    set samples 1000
+    set style line 100 lt 1 lc rgb secondary lw 1
+    set style line 101 lt 0.5 lc rgb secondary lw 1
+    set grid mytics ytics ls 100, ls 101
+    set grid mxtics xtics ls 100, ls 101
+    set style line 11 lc rgb default lt 1 lw 3
+    set border 3 back ls 11
+    set tics out nomirror
     
-    # Add to total
-    let ga_${METRIC}+="${RESULT}"
-    
-    # Store the values 
-    declare "$1_${day}"="${RESULT}"
-    ga_sequence="${ga_sequence}${RESULT} "
-    day="$((day+1))"
-    ga_day="$(date -I -d "$ga_day - 1 day")"
-  done
- 
-  # Create percentage array, this is pretty much obsolete now since 
-  # we're using gnuplot
-  ga_sequence="$(echo -e "${ga_sequence}" | sed -e 's/[[:space:]]*$//')"
-  IFS=', ' read -r -a a <<< "${ga_sequence}"
+    # PNG
+    set terminal png enhanced size 1280,600
+    set output '${statDir}/${METRIC}.png'
+    plot '${statDir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
+      "" using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3
 
-  for i in ${a[@]}; do
-    if [[ $i -gt $max_value ]]; then 
-      max_value=$i
-    fi
-  done
-
-  # Calculate
-  for ((n=0; n < $2; n++)); do 
-    var="$1_$n"; var_percent="$1_percent_$n"
-
-    # Calculating percent while zero was causing nasty bugs
-    if [[ -n "${!var}" ]] && [[ "${!var}" != "0" ]]; then
-      var_percent=$(awk "BEGIN { pc=100*${!var}/${max_value}; i=int(pc); print (pc-i<0.5)?i:i+1 }")
-    else
-      var_percent="0"
-    fi
-    # trace "100*${!var}/${max_value} = ${var_percent}%"
-
-    # Store values
-    eval $1_$n="${!var}"
-    eval $1_percent_$n="${var_percent}"
-    this_day=$(date '+%a' -d "$n days ago")
-    echo -e "${this_day}, ${!var}, ${var_percent}" >> "${trshFile}"
-
-    if [[ "${PROJSTATS}" == "1" ]]; then
-      sed -i -e "s^{{$1_$n}}^${!var}^g" \
-        -e "s^{{$1_percent_$n}}^${var_percent}^g" \
-        -e "s^{{$1_date_$n}}^${this_day}^g" \
-        "${htmlFile}"
-    fi    
-  done
-
-  tac "${trshFile}" > ${statDir}/"${METRIC}".csv
-
-  gnuplot -p << EOF
-  set encoding utf8
-  set terminal png enhanced size 1280,600
-  primary = "${CHARTC}"; 
-  secondary = "${SECONDARYC}";
-  info = "${INFOC}";
-  default = "${DEFAULTC}";
-  set key off
-  set datafile separator ","
-  set output '${statDir}/${METRIC}.png'
-  set boxwidth 0.5
-  set style fill transparent solid 0.1 noborder
-  set samples 1000
-  set style line 100 lt 1 lc rgb secondary lw 1
-  set style line 101 lt 0.5 lc rgb secondary lw 1
-  set grid mytics ytics ls 100, ls 101
-  set grid mxtics xtics ls 100, ls 101
-  set style line 11 lc rgb default lt 1 lw 3
-  set border 3 back ls 11
-  set tics out nomirror
-  
-  # PNG
-  set terminal png enhanced size 1280,600
-  set output '${statDir}/${METRIC}.png'
-  plot '${statDir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
-    "" using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3
-
-  # SVG
-  set terminal svg dynamic enhanced size 1280,600
-  set output '${statDir}/${METRIC}.svg'
-  plot '${statDir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
-    "" using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3
+    # SVG
+    set terminal svg dynamic enhanced size 1280,600
+    set output '${statDir}/${METRIC}.svg'
+    plot '${statDir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
+      "" using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3
 EOF
+fi
 }
 
 # If no other results are worth displaying, fall back to displaying hits
