@@ -90,7 +90,6 @@ function process_html() {
     if [[ -n "${!i:-}" ]]; then
       # [[ "${INCOGNITO}" != "1" ]] && trace "${i}: ${!i}"
       sed_hack=$(echo "sed -i 's^{{${i}}}^${!i}^g' ${htmlFile}")
-      console "${sed_hack}"
       # Kludgy but works. Ugh.
       eval "${sed_hack}"
     fi

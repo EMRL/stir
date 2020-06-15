@@ -12,7 +12,7 @@ init_loop
 function get_rss() {
 	# Pull RSS feed
 	# wget --quiet -O /tmp/${APP}.xml ${NEWS_URL}
-	"${curl_cmd}" "${NEWS_URL}" > /tmp/${APP}.xml
+	"${curl_cmd}" --silent "${NEWS_URL}" > /tmp/${APP}.xml
 	# Strip CDATA stuff
 	xmlstarlet fo --omit-decl --nocdata /tmp/${APP}.xml > ${statFile}
 	# Clean up mess
@@ -64,23 +64,24 @@ function create_rss_payload() {
 	# statFile=test.rss
 	# postFile=test.html
 
-	get_rss
-	process_xml > ${postFile}
+	if [[ -z "${NEWS_URL}" ]]; then
+		return
+	else
+		get_rss
+		process_xml > ${postFile}
 
-	sed 's/\xc2\x91\|\xc2\x92\|\xc2\xa0\|\xe2\x80\x8e//g' "${postFile}"
-	
-	# Clean up output
-	sed -r -i -e '/<p>The post /d' \
-		-e "s/&amp;#160;/\ /g" \
-		-e "s/&amp;#8217;/\'/g" \
-		-e "s/&amp;#8230;/\.../g" \
-		"${postFile}"
+		# Clean up output
+		sed -i 's/\xc2\x91\|\xc2\x92\|\xc2\xa0\|\xe2\x80\x8e//g' "${postFile}"
+		# iconv -c -f utf-8 -t ascii "${postFile}"
 
-	# Escape quotes
-	#sed -i 's/"/\\"/g' "${postFile}"
+		sed -r -i -e '/<p>The post /d' \
+			-e "s/&amp;#160;/\ /g" \
+			-e "s/&amp;#8230;/\.../g" \
+			"${postFile}"
 
-	# Remove newlines
-	sed -i ':a;N;$!ba;s/\n//g' "${postFile}"
+		# Remove newlines
+		sed -i ':a;N;$!ba;s/\n//g' "${postFile}"
 
-	RSS_NEWS="$(<${postFile})"
+		RSS_NEWS="$(<${postFile})"
+	fi
 }
