@@ -26,6 +26,7 @@ function process_html() {
   [[ -z "${notes}" ]] && sed -i '/NOTES/d' "${htmlFile}"
   [[ -z "${SMOOCHID}" ]] && sed -i '/SMOOCHID/d' "${htmlFile}"
   [[ -z "${COMMITHASH}" ]] && sed -i '/COMMITHASH/d' "${htmlFile}"
+  [[ -z "${NEWS_URL}" ]] && sed -i '/RSS_NEWS/d' "${htmlFile}"
 
   # Clean out dashboard nav menu
   [[ -z "${SCAN_MSG}" ]] && sed -i '/SCAN_NAV/d' "${htmlFile}"
@@ -80,7 +81,7 @@ function process_html() {
     UPTIME_BTN LATENCY_BTN BACKUP_BTN ACTIVITY_NAV STATISTICS_NAV SCAN_NAV \
     ENGAGEMENT_NAV FIREWALL_NAV BACKUP_NAV BACKUP_MSG TOTAL_COMMITS RSS_URL \
     ga_hits ga_users ga_newUsers ga_sessions ga_organicSearches ga_pageviews \
-    THEME_MODE)
+    THEME_MODE RSS_NEWS)
 
   # Start the loop
   for i in "${process_var[@]}" ; do
@@ -89,6 +90,7 @@ function process_html() {
     if [[ -n "${!i:-}" ]]; then
       # [[ "${INCOGNITO}" != "1" ]] && trace "${i}: ${!i}"
       sed_hack=$(echo "sed -i 's^{{${i}}}^${!i}^g' ${htmlFile}")
+      console "${sed_hack}"
       # Kludgy but works. Ugh.
       eval "${sed_hack}"
     fi

@@ -43,6 +43,9 @@ function create_digest() {
   # Collect gravatars for all the authors in this repo
   get_avatars
 
+  # If configured, setup RSS news
+  create_rss_payload
+  
   # Attempt to get analytics
   analytics
 
