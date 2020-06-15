@@ -73,15 +73,22 @@ function create_rss_payload() {
 		# Clean up output
 		sed -i 's/\xc2\x91\|\xc2\x92\|\xc2\xa0\|\xe2\x80\x8e//g' "${postFile}"
 		# iconv -c -f utf-8 -t ascii "${postFile}"
+		awk -i inplace '{gsub(/’/, "'"'"'");print}' "${postFile}"
 
 		sed -r -i -e '/<p>The post /d' \
 			-e "s/&amp;#160;/\ /g" \
 			-e "s/&amp;#8230;/\.../g" \
 			"${postFile}"
 
+		# Escape quotes
+		# sed -i 's/"/\\"/g' "${postFile}"
+		sed -i "s/'/\'/g" "${postFile}"
+
 		# Remove newlines
 		sed -i ':a;N;$!ba;s/\n//g' "${postFile}"
+		sed -i -e :a -e '$!N;s/\n[[:blank:]]\{1,\}/ /;ta' -e 'P;D' "${postFile}"
 
+		empty_line; cat "${postFile}"
 		RSS_NEWS="$(<${postFile})"
 	fi
 }
