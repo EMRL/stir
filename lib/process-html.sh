@@ -71,6 +71,9 @@ function process_html() {
   sed_backup=$(echo "sed -e '/{{BACKUP_FILES}}/ {' -e 'r ${trshFile}' -e 'd' -e '}' -i \"${htmlFile}\"")
   eval "${sed_backup}"
 
+  # RSS news
+  sed -i "s^{{RSS_NEWS}}^${RSS_NEWS}^g" "${htmlFile}"
+
   # Setup variables to process
   process_var=(VIEWPORT NOW DEV LOGTITLE USER PROJNAME PROJCLIENT CLIENTLOGO \
     DEVURL PRODURL COMMITURL EXITCODE COMMITHASH USER LOGURL REMOTEURL \
@@ -81,7 +84,7 @@ function process_html() {
     UPTIME_BTN LATENCY_BTN BACKUP_BTN ACTIVITY_NAV STATISTICS_NAV SCAN_NAV \
     ENGAGEMENT_NAV FIREWALL_NAV BACKUP_NAV BACKUP_MSG TOTAL_COMMITS RSS_URL \
     ga_hits ga_users ga_newUsers ga_sessions ga_organicSearches ga_pageviews \
-    THEME_MODE RSS_NEWS)
+    THEME_MODE)
 
   # Start the loop
   for i in "${process_var[@]}" ; do
