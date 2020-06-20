@@ -132,10 +132,6 @@ PROJECT_VERSION="3.7.7"
 # use the built-in scp deployment method.
 # DEPLOY="{{DEPLOY}}"
 
-# To require approval before pushing this project's code to a live production
-# environment, set REQUIREAPPROVAL="TRUE"
-# REQUIREAPPROVAL="{{REQUIREAPPROVAL}}"
-
 # Disallow deployment; set to TRUE to enable. Double negative, it's tricky.
 # DONOTDEPLOY="{{DONOTDEPLOY}}"
 
@@ -270,13 +266,17 @@ PROJECT_VERSION="3.7.7"
 
 
 ###############################################################################
-# Weekly Digests
+# Digest Emails
 ###############################################################################
 
 # If you'd like to send branded HTML emails using the `stir --digest [project]`
 # command, enter the recipient's email address below. Email value can be a
 # comma separated string of multiple addresses.
 # DIGESTEMAIL="{{DIGESTEMAIL}}"
+
+# To include your website's RSS feed in your digest emails, set your feed's 
+# URL below.
+# NEWS_URL="{{NEWS_URL}}"
 
 
 ###############################################################################

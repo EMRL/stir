@@ -11,49 +11,24 @@ var=(QUEUED)
 init_loop
 
 function queue() {
-	# Make sure there's something to do
-	status
-	gitCommit
-	(git status --porcelain | sed s/^...//) >> "${WORKPATH}/${APP}/.queued"
-
-	info "Queuing proposed updates for approval"
-	safeExit
-	# slackPost
+	info "Approval functionality is deprecated and has been removed."
+	quietExit
 }
 
 function approve() {
-	info "Approving proposed updates"
-	# Read proposed commit message from the first line of .queued
-	notes="$(head -n 1 ${WORKPATH}/${APP}/.queued)"
-	# Remove first line
-	sed -i -e "1d" "${WORKPATH}/${APP}/.queued"
-	# Loop through file, git add each file (line)
-	while read QUEUED; do
-		# Verify file date is older than .queued
-		if [[ "${QUEUED}" -nt "${WORKPATH}/${APP}/.queued" ]]; then
-			error "The file ${QUEUED} was modified after it was queued for approval."
-			sed -i '1s/^/${notes}\n/' "${QUEUED}"
-		else
-			git add "${QUEUED}" | tee --append "${logFile}"
-		fi
-	done < "${WORKPATH}/${APP}/.queued"
-	git commit -m "${notes}" &>> "${logFile}"; error_check
-	trace "Commit message: ${notes}"
+	info "Approval functionality is deprecated and has been removed."
+	quietExit
 }
 
 function deny() {
-	info "Denying proposed updates"
-	if [[ -f "${WORKPATH}/${APP}/.queued" ]]; then 
-		rm "${WORKPATH}/${APP}/.queued"
-	fi
+	info "Approval functionality is deprecated and has been removed."
 	quietExit
 }
 
 # Check for approval queue
 function queue_check() {
 	if [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
-		warning "Can not continue while code is queued for approval."
-
-		quietExit
+		info "Approval functionality is deprecated and has been removed."
+	  quietExit
 	fi
 }

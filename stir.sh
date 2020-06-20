@@ -68,7 +68,7 @@ function init_startup() {
     DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
     SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
     CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET \
-    SHOWSETTINGS UNIT_TEST)
+    SHOWSETTINGS UNIT_TEST BUGSNAG_TEST)
   init_loop
 }
 
@@ -101,7 +101,7 @@ function init_env() {
   REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN REFRESHTOKEN PROFILEID ALLOWROOT \
   SHORTEMAIL INCOGNITO REPORTURL CLIENTCONTACT INCLUDEHOSTING GLOBAL_VERSION \
   USER_VERSION PROJECT_VERSION TERSE NOTIFYCLIENT HTMLTEMPLATE PREPARE \
-  PREPARE_CONFIG GRAVITY_FORMS_LICENSE NEWS_URL)
+  PREPARE_CONFIG GRAVITY_FORMS_LICENSE NEWS_URL BUGSNAG_AUTH)
   init_loop
 }
 
@@ -166,8 +166,6 @@ Options:
     echo -n "
 Other Options:
   --automate             For unattended execution via cron
-  --approve              Approve and deploy queued code changes (deprecated)
-  --deny                 Deny queued code changes (deprecated)
   --build                Build project assets
   --prepare              Prepare project
   --reset                Resets local project files
@@ -188,6 +186,7 @@ Other Options:
   --test-webhook         Test webhook integration  
   --test-analytics       Test Google Analytics authentication
   --test-monitor         Test production server uptime and latency monitoring
+  --test-bugsnag         Test Bugsnag integration
   --show-settings        Display current global and project settings
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables
@@ -262,6 +261,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --test-webhook) POSTTEST="1" ;;
     --test-analytics) ANALYTICSTEST="1" ;; 
     --test-monitor) MONITORTEST="1" ;;
+    --test-bugsnag) BUGSNAG_TEST="1" ;;
     --stats) PROJSTATS="1" ;;
     --build) BUILD="1"; NOCHECK="1"; FORCE="1" ;;
     --invoice) CREATE_INVOICE="1"; FORCE="1" ;;

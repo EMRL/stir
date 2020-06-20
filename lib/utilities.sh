@@ -7,8 +7,8 @@
 ###############################################################################
 
 # Initialize variables
-read -r integer_check <<< ""
-echo "${integer_check}" > /dev/null
+var=(integer_check json_key json_num)
+init_loop
 
 # Open a deployment session, ask for user confirmation before beginning
 function go() {
@@ -88,7 +88,7 @@ function go() {
 
 # Check that a variable is an integer
 function is_integer() {
-  declare arg1="$1"; integer_check="0"
+  declare arg1="${1}"; integer_check="0"
   if [[ ! "${arg1}" =~ ^[0-9]+$ ]] ; then
     integer_check="1"
   fi
@@ -97,7 +97,6 @@ function is_integer() {
 function get_fullpath() {
   # Get absolute paths to critical commands
   var=(composer wp sendmail wget curl git mysqlshow grep wc gitchart)
-
   for i in "${var[@]}" ; do
     read -r "${i}_cmd" <<< ""
     echo "${i}_cmd" > /dev/null
@@ -119,6 +118,28 @@ function get_fullpath() {
 ###############################################################################
 function strip_empty_variables() {
   sudo sed -i 's^{{.*}}^^g' "${1}"
+}
+
+###############################################################################
+# get_json_value()
+#   Get a value (or values) from a json file
+#
+# Arguments:
+#   [key]         The JSON key whose value you are after
+#   [occurance]   Get the value of the nth occurance of the key
+#
+# Example use:
+#   get_json_value name
+#   get_json_value name 30
+#   cat tmpfile.txt | get_json_value id
+#   VARIABLE="$(cat tmpfile.txt | get_json_value id 7)"
+############################################################################### 
+function get_json_value() {
+  if [[ -n ${1} ]]; then
+      json_key="${1}"
+      json_num="${2}"
+      awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'${json_key}'\042/){print $(i+1)}}}' | tr -d '"' | sed -n "${json_num}"p
+  fi
 }
 
 # User tests
@@ -152,7 +173,12 @@ function user_tests() {
     server_monitor_test; quickExit
   fi
 
-  # Test analytics authentication
+  # Test Bugsnag integration
+  if [[ "${BUGSNAG_TEST}" == "1" ]]; then
+    bugsnag_test; quickExit
+  fi
+
+  # Test Dropbox backup authentication
   if [[ "${CHECK_BACKUP}" == "1" ]]; then
     check_backup; quickExit
   fi
