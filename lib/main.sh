@@ -52,14 +52,7 @@ function main() {
 
       # A simple way to repair a failed push
       if [[ "${REPAIR}" == "1" ]]; then 
-        preDeploy     # Get the status
-
-        # TODO: Section to be deprecated ASAP
-        #gitPushMstr   # Push master branch
-        #gitChkProd    # Checkout production branch
-        #gitMerge      # Merge master into production
-        #gitPushProd   # Push production branch
-        #gitChkMstr    # Checkout master once again  
+        preDeploy     # Get the status  
 
         confirm_branch "${MASTER}"
         push

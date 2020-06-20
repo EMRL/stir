@@ -33,8 +33,6 @@ Options:
 
 Other Options:
   --automate             For unattended execution via cron
-  --approve              Approve and deploy queued code changes (deprecated)
-  --deny                 Deny queued code changes (deprecated)
   --build                Build project assets
   --prepare              Prepare project
   --reset                Resets local project files
@@ -55,6 +53,7 @@ Other Options:
   --test-webhook         Test webhook integration  
   --test-analytics       Test Google Analytics authentication
   --test-monitor         Test production server uptime and latency monitoring
+  --test-bugsnag         Test Bugsnag integration
   --show-settings        Display current global and project settings
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables
@@ -87,7 +86,7 @@ For workgroups and teams that use it, `stir` is able to integrate with Slack. Yo
 
 ## Autopilot
 
-`stir --automate` works well for unattended updates of Wordpress sites; great for maintaining updates via a crontab. An example cron script can be [found here](https://github.com/EMRL/stir/blob/master/etc/cron/stir.cron.example). Running in this mode, the project will only be deployed if there are Wordpress core or plugin updates. If other code changes are detected the project will not be auto-updated. Smart Commits must be enabled or nothing will be deployed.
+`stir --automate` works well for unattended updates of Wordpress sites; great for maintaining updates via a cron. An example cron script can be [found here](https://github.com/EMRL/stir/blob/master/etc/cron/stir.cron.example). Running in this mode, the project will only be deployed if there are Wordpress core or plugin updates. If other code changes are detected the project will not be auto-updated. Smart Commits must be enabled or nothing will be deployed.
 
 ## Contact
 
