@@ -12,15 +12,13 @@ init_loop
 
 function bugsnag_test() { 
   if [[ -n "${BUGSNAG_AUTH}" ]]; then
-
     trace status "Testing Bugsnag... "
     # Test goes here
     BUGSNAG_ORG=$(${curl_cmd} --silent --get "https://api.bugsnag.com/user/organizations" --header "Authorization: token ${BUGSNAG_AUTH}" --header "X-Version: 2" | get_json_value id 1)
     if [[ -z "${BUGSNAG_ORG}" ]]; then
       trace notime "FAIL"
     else
-      trace notime "OK"
-      trace "Bugsnag Organization ID: ${BUGSNAG_ORG}"
+      trace notime "OK (Org. #${BUGSNAG_ORG})"
     fi
   fi
 }

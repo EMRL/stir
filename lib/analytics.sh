@@ -281,7 +281,7 @@ function ga_over_time() {
 
     tac "${trshFile}" > ${statDir}/"${METRIC}".csv
 
-    gnuplot -p << EOF
+    ${gnuplot_cmd} -p << EOF
     set encoding utf8
     set terminal png enhanced size 1280,600
     primary = "${CHARTC}"; 

@@ -39,7 +39,7 @@ PROJECT_VERSION="3.7.7"
 # use stir's built-in Wordpress prepare function, set this value to TRUE.
 # PREPARE="{{PREPARE}}"
 
-# To reset projects files before executing your prepare squence, set the
+# To reset projects files before executing your prepare sequence, set the
 # value below to TRUE.
 # PREPARE_WITH_RESET="{{PREPARE_WITH_RESET}}"
 
@@ -59,8 +59,10 @@ PROJECT_VERSION="3.7.7"
 # The exact name of the Bitbucket/Github repository
 # REPO="{{REPO}}"
 
-# Configure your branches. In most cases the name will be master & production.
-# If you are only using a master branch, leave the others undefined.
+# Configure your branches. In most cases the name will be `master` or `main`,
+# and production. If you are using a `staging` branch you can declare that 
+# here as well If you are only using a master branch, leave the others 
+# undefined.
 # MASTER="{{MASTER}}"
 # STAGING="{{STAGING}}"
 # PRODUCTION="{{PRODUCTION}}"
@@ -305,14 +307,8 @@ PROJECT_VERSION="3.7.7"
 
 
 ###############################################################################
-# Invoice Ninja integration
+# Invoice Ninja project integration
 ###############################################################################
-
-# Full url of your Invoice Ninja host, with no trailing slash
-# IN_HOST="{{IN_HOST}}"
-
-# API Token, created at https://yourinvoicehost.com/settings/api_tokens
-# IN_TOKEN="{{IN_TOKEN}}"
 
 # Client ID number
 # IN_CLIENT_ID="{{IN_CLIENT_ID}}"
@@ -379,14 +375,6 @@ PROJECT_VERSION="3.7.7"
 ###############################################################################
 # Dropbox integration
 ###############################################################################
-
-# For functions that require Dropbox integration, define the variables below.
-# Currently this is used for checking when your last backups were made using
-# the Wordpress BackWPUp plugin, and feeding that data into the stats pages as
-# well as the email digests
-
-# Dropbox API token
-# DB_API_TOKEN="{{DB_API_TOKEN}}"
 
 # Define the *full* path to this project's backup. Do not including "/Home" as
 # part of the path

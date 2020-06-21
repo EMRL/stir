@@ -82,6 +82,8 @@ function postCommit() {
   if [[ -n "${PRODUCTION}" ]] && [[ -n "${PRODURL}" ]]; then
     info "Updating production database..."
     "${curl_cmd}" --silent "${PRODURL}${WPSYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
+    # In case curl is being weird
+    "${wget_cmd}" -q -O - "${PRODURL}${WPSYSTEM}"/wp-admin/upgrade.php?step=1 > /dev/null 2>&1
   fi
 
   # Check for a Wordpress core update, update production database if needed
