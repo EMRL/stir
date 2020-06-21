@@ -13,7 +13,7 @@ init_loop
 function create_report() {
 
   # Make sure we've got cal, or don't bother
-  if [[ -z "#{cal_cmd}" ]]; then
+  if [[ -z "${cal_cmd}" ]]; then
     console "Creating reports requires the cal utility which cannot be found."; quietExit
   fi
 
