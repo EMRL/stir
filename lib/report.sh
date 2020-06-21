@@ -13,9 +13,9 @@ init_loop
 function create_report() {
 
   # Make sure we've got cal, or don't bother
-  hash cal 2>/dev/null || {
+  if [[ -z "#{cal_cmd}" ]]; then
     console "Creating reports requires the cal utility which cannot be found."; quietExit
-  }
+  fi
 
   message_state="REPORT"
   htmlDir
@@ -39,7 +39,7 @@ function create_report() {
   fi
 
   # Try to setup the month/day count
-  LASTDY=`cal ${PRVMTH} ${PRVYR} | egrep -a "28|29|30|31" |tail -1 |awk '{print $NF}'`
+  LASTDY=`${cal_cmd} ${PRVMTH} ${PRVYR} | egrep -a "28|29|30|31" |tail -1 |awk '{print $NF}'`
 
   if [[ -n "${INCLUDEHOSTING}" ]] && [[ "${INCLUDEHOSTING}" != "FALSE" ]]; then
     # If INCLUDEHOSTING is equal to something other than TRUE (And not FALSE), 

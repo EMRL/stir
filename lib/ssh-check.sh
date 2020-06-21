@@ -12,7 +12,7 @@ function ssh_check() {
   if [[ "${NOKEY}" != "TRUE" ]]; then
     trace "Checking SSH configuration"
     if [[ "${REPOHOST}" == *"bitbucket"* ]]; then
-      ssh -oStrictHostKeyChecking=no git@bitbucket.org &> /dev/null; error_status
+      "${ssh_cmd}" -oStrictHostKeyChecking=no git@bitbucket.org &> /dev/null; error_status
       if [[ "${EXITCODE}" != "0" ]]; then
         error "git@bitbucket.org: SSH check failed (Error code ${EXITCODE})"
       else
@@ -20,7 +20,7 @@ function ssh_check() {
         trace "git@bitbucket.org: OK"
       fi
     elif [[ "${REPOHOST}" == *"github"* ]]; then
-      ssh -oStrictHostKeyChecking=no git@github.com &> /dev/null #; error_status     
+      "${ssh_cmd}" -oStrictHostKeyChecking=no git@github.com &> /dev/null #; error_status     
       if [[ "${EXITCODE}" -gt "1" ]]; then
         error "git@github.com: SSH check failed (Error code ${EXITCODE})"
       else

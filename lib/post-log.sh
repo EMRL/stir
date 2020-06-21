@@ -62,20 +62,15 @@ function postLog() {
     # Send the files through SSH/SCP
     if [[ "${SCPPOST}" == "TRUE" ]] && [[ -f "${htmlFile}" ]]; then
 
-      # if SCPPORT is empty, set it to 22
-      #if [[ -z "${SCPPORT}" ]]; then
-      #  SCPPORT="22"
-      #fi
-
       # Setup up the proper command, depending on whether we're using key or password
       if [[ -n "${SCPPASS}" ]]; then
         TMP=$(<$SCPPASS)
         SCPPASS="${TMP}"
-        SCPCMD="sshpass -p \"${SCPPASS}\" scp -o StrictHostKeyChecking=no -P \"${SCPPORT}\""
-        SSHCMD="sshpass -p \"${SCPPASS}\" ssh -p \"${SCPPORT}\""
+        SCPCMD="${sshpass_cmd} -p \"${SCPPASS}\" scp -o StrictHostKeyChecking=no -P \"${SCPPORT}\""
+        SSHCMD="${sshpass_cmd} -p \"${SCPPASS}\" ssh -p \"${SCPPORT}\""
       else
-        SCPCMD="scp -P \"${SCPPORT}\""
-        SSHCMD="ssh -P \"${SCPPORT}\""
+        SCPCMD="${scp_cmd} -P \"${SCPPORT}\""
+        SSHCMD="${ssh_cmd} -P \"${SCPPORT}\""
       fi
 
       # Loop through the various scenarios, make directories if needed

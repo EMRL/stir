@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Project settings are now backed up when performing a `--reset` when a global `CONFIGBACKUP` is declared
 - New releases of `stir` will now update "in place"
 - `--skip-updates` now aliases to `--skip-updated` because I kept forgetting the switch name
+- Added a workaround for emailing Invoice Ninja invoices with an offset invoice numbering
 ### Changed
 - Deprecated and removed the `gitStatus()`, `gitStart()`, `permFix()` and `fix_index()` functions
 - Deprecated the `WPCLI` and `MAILPATH` global variables
@@ -25,7 +26,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Checking for new `stir` releases works more reliably
 - Fixed a small email text bug
 - Commit authors with no Gravatar image are now correctly given the default profile image
-
 ## [3.7.4] - 11-18-2019
 ### Added
 - Automated Worpdress updates may now made by cloning a temporary copy of the project's repo, running the updates, and destroying upon completion

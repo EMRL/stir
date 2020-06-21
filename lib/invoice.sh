@@ -8,7 +8,8 @@
 
 # Initialize variables
 var=(IN_HOST IN_TOKEN IN_CLIENT_ID IN_PRODUCT IN_ITEM_COST IN_ITEM_QTY \
-  IN_NOTES IN_EMAIL invoice_hack current_invoice)
+  IN_NOTES IN_EMAIL invoice_hack current_invoice IN_OFFSET \
+  current_invoice_offset)
 init_loop
 
 function create_invoice() {
@@ -31,7 +32,7 @@ function create_invoice() {
 }
 
 function get_current_invoice() {
-  "${curl_cmd}" -X GET "${IN_HOST}/api/v1/clients/${IN_CLIENT_ID}?include=invoices" -H "X-Ninja-Token: ${IN_TOKEN}" > "${trshFile}"
+  "${curl_cmd}" --silent -X GET "${IN_HOST}/api/v1/clients/${IN_CLIENT_ID}?include=invoices" -H "X-Ninja-Token: ${IN_TOKEN}" > "${trshFile}"; error_check
 
   # Many sedtastic things
   sed -i '/"invoice_number"/!d' "${trshFile}"
@@ -40,13 +41,20 @@ function get_current_invoice() {
 
   # Store current invoice number
   current_invoice=$(tail -1 ${trshFile})
-  trace "Invoice: ${current_invoice}"
+
+  trace "Invoice ${current_invoice} created"
 }
 
 function send_invoice() {
-  # This does not seem to work as advertised. Ugh.
-  # "${curl_cmd}" -X POST ninja.test/api/v1/email_invoice -d '{"id":1}' -H "Content-Type:application/json" -H "X-Ninja-Token: TOKEN"
-  invoice_hack=$(echo "curl -X POST ${IN_HOST}/api/v1/email_invoice -d '{\"id\":${current_invoice}}' -H "Content-Type:application/json" -H \"X-Ninja-Token: ${IN_TOKEN}\"")
-  trace "Trying ${invoice_hack}"
+  trace status "Emailing invoice ${current_invoice}... "
+
+  # Apply an offset to the invoice number if needed
+  if [[ "${IN_OFFSET}" -gt "0" ]]; then
+    current_invoice_offset="$(($current_invoice-$IN_OFFSET))"
+  fi
+
+  # Build out the command to send the email
+  invoice_hack=$(echo "curl -X POST ${IN_HOST}/api/v1/email_invoice -d '{\"id\":${current_invoice_offset}}' -H "Content-Type:application/json" -H \"X-Ninja-Token: ${IN_TOKEN}\"")
   eval "${invoice_hack}" &>> "${logFile}"; error_check
+  trace notime "OK"
 }
