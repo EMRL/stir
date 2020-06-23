@@ -49,8 +49,8 @@ function go() {
   fi
 
   # Is this project locked?
-  if [[ "${DONOTDEPLOY}" == "TRUE" ]] || [[ -f "${WORKPATH}/${APP}/.donotstir" ]] || [[ -f "${WORKPATH}/${APP}/.shaken" ]]; then
-    warning "This project is currently locked, and can't be deployed."; quickExit
+  if [[ "${DONOTDEPLOY}" == "TRUE" ]]; then
+    warning "This project is currently locked."; quickExit
   fi
 
   # Is the user root?
