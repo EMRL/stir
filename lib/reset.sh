@@ -7,7 +7,7 @@
 ###############################################################################
 
 function reset_local() {
-  if [[ -n "${project_config}" ]] && [[ -w "${WORKPATH}/${APP}" ]]; then
+  if [[ -n "${project_config}" ]] && [[ -w "${WORKPATH}/${APP}" ]] && [[ "${DONOTDEPLOY}" != "TRUE" ]]; then
 
     if [[ -n "${wp_cmd}" ]]; then
       "${wp_cmd}" db check  > /dev/null 2>&1
@@ -35,7 +35,8 @@ function reset_local() {
     fi
 
   else
-    warning "Can not reset this project"
+    warning "Can not reset this project."
+    quietExit
   fi
 }
 

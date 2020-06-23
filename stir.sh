@@ -622,6 +622,10 @@ fi
 # Set app path
 APP_PATH="${WORKPATH}/${APP}"
 
+if [[ -f "${APP_PATH}/.donotstir" ]] || [[ -f "${APP_PATH}/.shaken" ]]; then
+  DONOTDEPLOY="TRUE"
+fi
+
 # Execute the main application
 main
 
