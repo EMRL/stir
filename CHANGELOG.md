@@ -17,7 +17,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Deprecated and removed the `gitStatus()`, `gitStart()`, `permFix()` and `fix_index()` functions
 - Deprecated the `WPCLI` and `MAILPATH` global variables
 - Deprecated approval functionality
-- Plugins are no longer activated by default, unless required for reliable upgrades  
+- Plugins are no longer activated by default, unless required for reliable upgrades
+- Composer now creates less noise in logfiles
 ### Fixed
 - Binary files should no longer confuse log parsing functions
 - Missing project configuration error now exits more gracefully
@@ -26,6 +27,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Checking for new `stir` releases works more reliably
 - Fixed a small email text bug
 - Commit authors with no Gravatar image are now correctly given the default profile image
+
 ## [3.7.4] - 11-18-2019
 ### Added
 - Automated Worpdress updates may now made by cloning a temporary copy of the project's repo, running the updates, and destroying upon completion

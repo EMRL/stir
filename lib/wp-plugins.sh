@@ -46,10 +46,10 @@ function wp_plugins() {
       trace "Found composer.json, updating"
       cd "${APP_PATH}"; \
       if [[ "${QUIET}" != "1" ]]; then
-        "${composer_cmd}" update &>> "${logFile}" &
+        "${composer_cmd}" --no-progress update &>> "${logFile}" &
         spinner $!
       else
-        "${composer_cmd}" update &>> "${logFile}"
+        "${composer_cmd}" --no-progress update &>> "${logFile}"
       fi
       cd "${WP_PATH}"; \
     fi
@@ -94,7 +94,7 @@ function add_plugin() {
   # User will be doing something like `deploy --add-plugin wp-job-manager` from 
   # the shell
   # If composer:
-  "${composer_cmd}" require wpackagist-plugin/wp-job-manager:*
+  "${composer_cmd}" --no-progress require wpackagist-plugin/wp-job-manager:*
   # If no composer:
   wp plugin install wp-job-manager
 }

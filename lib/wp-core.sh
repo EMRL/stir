@@ -47,10 +47,10 @@ function wp_core() {
           # Execute the update
           info "Core update found, updating to ${COREUPD}"
           trace "Executing ${composer_cmd} update johnpbloch/wordpress-core"
-          "${composer_cmd}" update johnpbloch/wordpress-core &>> "${logFile}" &
+          "${composer_cmd}" --no-progress update johnpbloch/wordpress-core &>> "${logFile}" &
           spinner $!
         else
-          "${composer_cmd}" update johnpbloch/wordpress-core &>> "${logFile}"
+          "${composer_cmd}" --no-progress update johnpbloch/wordpress-core &>> "${logFile}"
         fi
         cd "${WP_PATH}"; \
 
