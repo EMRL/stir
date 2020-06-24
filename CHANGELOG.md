@@ -27,6 +27,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Checking for new `stir` releases works more reliably
 - Fixed a small email text bug
 - Commit authors with no Gravatar image are now correctly given the default profile image
+- Fixed a layout bug in the default HTML email footer
 
 ## [3.7.4] - 11-18-2019
 ### Added
