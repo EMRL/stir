@@ -1,4 +1,4 @@
-﻿![Stir](https://raw.githubusercontent.com/EMRL/stir/master/img/logo.png)
+﻿﻿![Stir](https://raw.githubusercontent.com/EMRL/stir/master/img/logo.png)
 
 [![release](https://img.shields.io/badge/release-v3.7.4-blue.svg?style=flat)](https://github.com/EMRL/stir/releases/latest)
 [![Build Status](https://travis-ci.org/EMRL/stir.svg?branch=master)](https://travis-ci.org/EMRL/stir)
@@ -76,13 +76,13 @@ Other Options:
 
 ## Configuration
 
-Configuration is handled globally in the `etc/stir/global.conf` file. Individual users also have their own settings in `~/.stirrc`
+Configuration is handled globally in the `/etc/stir/global.conf` file. Individual users also have their own settings in `~/.stirrc`
 
 Repositories can each have their own configuration. An example of this file can be [found here](https://github.com/EMRL/stir/blob/master/etc/stir.sh).
 
-## Slack
+## Integration
 
-For workgroups and teams that use it, `stir` is able to integrate with Slack. You'll need to set up an "Incoming Webhook" custom integration on the Slack side to get this ready to roll. See https://YOURTEAMNAME.slack.com/apps/manage/custom-integrations to get going. Once you think you've got Slack configured, run `stir --slack-test [project]` to test.
+`stir` is able to integrate with many third-party platforms, including [Slack](https://slack.com), [Google Analytics](https://google.com/analytics/), [PHP Server Monitor](https://phpservermonitor.org), [Bugsnag](https://bugsnag.com), [Invoice Ninja](https://invoiceninja.com), and more. Check out the [integration wiki](https://github.com/EMRL/stir/wiki/Integration) for more information.
 
 ## Autopilot
 

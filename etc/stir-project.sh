@@ -325,7 +325,7 @@ PROJECT_VERSION="3.7.7"
 # Default item notes
 # IN_NOTES="{{IN_NOTES}}"
 
-# Should the invoices immediately be emailed upon creation?
+# Set to TRUE if invoices should be immediately be emailed upon creation
 # IN_EMAIL="{{IN_EMAIL}}"
 
 
