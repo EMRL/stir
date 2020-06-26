@@ -52,7 +52,7 @@ function create_digest() {
     # Attempt to get analytics
     analytics
 
-    # Gnereate the correct analytics chart
+    # Genereate the correct analytics chart
     ga_over_time "${METRIC}" 7
 
     # Assemble the file

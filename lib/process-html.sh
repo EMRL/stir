@@ -84,7 +84,7 @@ function process_html() {
     UPTIME_BTN LATENCY_BTN BACKUP_BTN ACTIVITY_NAV STATISTICS_NAV SCAN_NAV \
     ENGAGEMENT_NAV FIREWALL_NAV BACKUP_NAV BACKUP_MSG TOTAL_COMMITS RSS_URL \
     ga_hits ga_users ga_newUsers ga_sessions ga_organicSearches ga_pageviews \
-    THEME_MODE)
+    THEME_MODE ENGAGEMENT_DAYS)
 
   # Start the loop
   for i in "${process_var[@]}" ; do
