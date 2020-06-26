@@ -5,7 +5,7 @@
 
 `stir` is designed to speed up, automate, and integrate project commits, management, and deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
 
-[Changelog](https://github.com/EMRL/stir/blob/master/CHANGELOG.md) &bull; [Known bugs](https://github.com/EMRL/stir/issues?q=is%3Aopen+is%3Aissue+label%3Abug)
+[Changelog](https://github.com/EMRL/stir/blob/master/CHANGELOG.md) &bull; [Known bugs](https://github.com/EMRL/stir/issues?q=is%3Aopen+is%3Aissue+label%3Abug) &bull; [Installation](https://github.com/EMRL/stir/wiki)
 
 `stir` is in daily use at [EMRL](http://emrl.com), an advertising, design, and development agency in northern California. If you have any questions, please feel free to contact us.
 
