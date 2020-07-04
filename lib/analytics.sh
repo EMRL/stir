@@ -197,7 +197,7 @@ function ga_data_loop() {
 #   None
 ###############################################################################  
 function ga_over_time() {
-  if [[ -z "${PROFILEID}" ]]; then
+  if [[ -z "${PROFILEID}" ]] || [[ -z "${gnuplat_cmd}" ]]; then
     return
   else
     # Process arguments

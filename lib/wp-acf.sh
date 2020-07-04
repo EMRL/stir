@@ -11,10 +11,10 @@ var=(ACFFILE)
 init_loop
 
 function acf_update() {
-  if grep -aq "advanced-custom-fields-pro" "${wpFile}"; then
-	ACFFILE="/tmp/acfpro.zip"
+  ACFFILE="/tmp/acfpro.zip"
+  trace status "Updating ACF Pro... "
 	# Download the ACF Pro upgrade file
-	wget --header="Accept: application/zip" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" -O "${ACFFILE}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACFKEY}" &>> "${logFile}"; error_check
+	"${wget_cmd}" --header="Accept: application/zip" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" -O "${ACFFILE}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACFKEY}" &>> "${logFile}"; error_check
 
 	# Check file integrity
 	acf_filecheck
@@ -23,7 +23,7 @@ function acf_update() {
 	"${wp_cmd}" plugin delete --no-color advanced-custom-fields-pro &>> "${logFile}"
 	"${wp_cmd}" plugin install --no-color "${ACFFILE}" &>> "${logFile}"
 	rm "${ACFFILE}"
-  fi
+  trace notime "OK"
 }
 
 function acf_filecheck() {

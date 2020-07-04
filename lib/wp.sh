@@ -21,31 +21,40 @@ function wp() {
     notice "Checking for updates..."
 
     # Check log for core updates
-    if [[ "${DONOTUPDATEWP}" == "TRUE" ]]; then
-      trace "Wordpress core updates disabled, skipping"
+    if [[ "${DONOTUPDATEWP}" == "TRUE" ]] || [[ "${UPDATE_ACF}" == "1" ]]; then
+      trace "Skipping Wordpress core updates"
     else
       wp_core
     fi
-    
-    # Look for updates
-    if [[ "${QUIET}" != "1" ]]; then
-      wp_update_check &
-      spinner $!
-    else
-      "${wp_cmd}" plugin status --no-color >> "${logFile}"
-      "${wp_cmd}" plugin update --dry-run --no-color --all > "${wpFile}"
-    fi
 
-    # Check the logs
-    #if grep -aq "U = Update Available" "${logFile}"; then
-    if grep -aq "Available plugin updates:" "${wpFile}"; then    
-      wp_plugins
+    # If if this is a manual ACF upgrade, jump right in
+    if [[ "${UPDATE_ACF}" == "1" ]]; then
+      error_detail="Adnvanced Custom Fields Pro is not installed in this project, nothing to update"
+      "${wp_cmd}" plugin is-installed advanced-custom-fields-pro; error_check
+      acf_update
     else
-      # Was there a database glitch?
-      if grep -aq 'plugins can not be updated' "${wpFile}"; then
-        sleep 1
+      # Not sure I like having the entire upgrade process in this `esle` 
+      # but here we are...
+      # Look for updates
+      if [[ "${QUIET}" != "1" ]]; then
+        wp_update_check &
+        spinner $!
       else
-        info "Plugins are up to date."; UPD1="1"
+        "${wp_cmd}" plugin status --no-color >> "${logFile}"
+        "${wp_cmd}" plugin update --dry-run --no-color --all > "${wpFile}"
+      fi
+
+      # Check the logs
+      #if grep -aq "U = Update Available" "${logFile}"; then
+      if grep -aq "Available plugin updates:" "${wpFile}"; then    
+        wp_plugins
+      else
+        # Was there a database glitch?
+        if grep -aq 'plugins can not be updated' "${wpFile}"; then
+          sleep 1
+        else
+          info "Plugins are up to date."; UPD1="1"
+        fi
       fi
     fi
   fi
@@ -58,7 +67,6 @@ function wp() {
 }
 
 function wp_update_check() {
-
   # For the logfile
   "${wp_cmd}" plugin status --no-color &>> $logFile
 

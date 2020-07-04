@@ -17,7 +17,7 @@ init_loop
 
 function project_stats() {
   hash gitchart 2>/dev/null || {
-  error "gitchart not installed." 
+  error "Can not chart project stats, gitchart not installed." 
   }
 
   if [[ "${REMOTELOG}" == "TRUE" ]]; then
