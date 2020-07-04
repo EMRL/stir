@@ -6,13 +6,22 @@
 # Handles various exit code checking
 ###############################################################################
 
+# Initialize variables
+var=(error_detail)
+init_loop
+
 # Try to get exit/error code, with a hard stop on fail
 function error_check() {
   EXITCODE=$?; 
-  if [[ "${EXITCODE}" != 0 ]]; then 
-    warning "Exiting on error code ${EXITCODE}"
-    error_msg="Exited on error code ${EXITCODE}"
+  if [[ "${EXITCODE}" != 0 ]]; then
+    if [[ -z "${error_detail}" ]]; then
+      error_detail="An unspecified error occurred"
+    fi
+    warning "${error_detail} (Error ${EXITCODE})"
+    error_msg="${error_detail} (Error ${EXITCODE})"
     error_exit
+  else
+    error_text=""
   fi
 }
 

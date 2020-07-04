@@ -68,7 +68,7 @@ function init_startup() {
     DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
     SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
     CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET \
-    SHOWSETTINGS UNIT_TEST BUGSNAG_TEST)
+    SHOWSETTINGS UNIT_TEST BUGSNAG_TEST UPDATE_ACF)
   init_loop
 }
 
@@ -180,6 +180,7 @@ Other Options:
   --unlock               Delete expired lock files
   --repair               Repair a deployment after merge failure
   --scan                 Scan production hosts for malware issues
+  --update-acf           Force an update or reinstall of ACF Pro
   --test-ssh             Validate SSH key setup
   --test-email           Test email configuration
   --test-slack           Test Slack integration
@@ -255,6 +256,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --digest) DIGEST="1"; FORCE="1" ;;
     --report) REPORT="1"; FORCE="1"; QUIET="1" ;;
     --automate) FORCE="1"; UPGRADE="1"; QUIET="1"; MERGE="1"; AUTOMATE="1" ;;
+    --update-acf) UPDATE_ACF="1" ;;
     --test-ssh) SSHTEST="1" ;;
     --test-slack) SLACKTEST="1" ;;
     --test-email) EMAILTEST="1" ;;

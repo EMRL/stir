@@ -11,6 +11,10 @@ function smart_commit() {
   if [[ "${SMARTCOMMIT}" == "TRUE" ]]; then 
     PCA=$("${wc_cmd}" -l < "${wpFile}")
 
+    if [[ "${UPDATE_ACF}" == "1" ]]; then
+      PCA=$((PCA+1))
+    fi
+
     if [[ "${PCA}" -gt "0" ]] || [[ ! -z "${UPDCORE}" ]] || [[ -s "${wpFile}" ]]; then
       trace "Building commit message"
 
@@ -23,6 +27,11 @@ function smart_commit() {
         sed ':a;N;$!ba;s/\n/, /g' "${wpFile}" > "${trshFile}" && mv "${trshFile}" "${wpFile}";
         # Replace current commit message with plugin update info 
         PLUGINS=$(<"${wpFile}")
+
+        # This whole thing is just so ugly
+        if [[ "${UPDATE_ACF}" == "1" ]]; then
+          PLUGINS="advanced-custom-fields-pro"
+        fi
 
         if [[ "${PCA}" -gt "1" ]]; then
           COMMITMSG="Updated ${PCA} plugins ($PLUGINS)"

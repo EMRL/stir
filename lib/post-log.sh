@@ -63,14 +63,16 @@ function postLog() {
     if [[ "${SCPPOST}" == "TRUE" ]] && [[ -f "${htmlFile}" ]]; then
 
       # Setup up the proper command, depending on whether we're using key or password
-      if [[ -n "${SCPPASS}" ]]; then
+      if [[ -n "${SCPPASS}" ]] && [[ -n "${sshpass_cmd}" ]]; then
         TMP=$(<$SCPPASS)
         SCPPASS="${TMP}"
         SCPCMD="${sshpass_cmd} -p \"${SCPPASS}\" scp -o StrictHostKeyChecking=no -P \"${SCPPORT}\""
         SSHCMD="${sshpass_cmd} -p \"${SCPPASS}\" ssh -p \"${SCPPORT}\""
-      else
+      elif [[ -n "${scp_cmd}" ]]; then
         SCPCMD="${scp_cmd} -P \"${SCPPORT}\""
         SSHCMD="${ssh_cmd} -P \"${SCPPORT}\""
+      else
+        return
       fi
 
       # Loop through the various scenarios, make directories if needed

@@ -47,6 +47,7 @@ Other Options:
   --unlock               Delete expired lock files
   --repair               Repair a deployment after merge failure
   --scan                 Scan production hosts for malware issues
+  --update-acf           Force an update or reinstall of ACF Pro
   --test-ssh             Validate SSH key setup
   --test-email           Test email configuration
   --test-slack           Test Slack integration

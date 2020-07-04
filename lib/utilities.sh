@@ -253,6 +253,13 @@ function dependency_check() {
       error "stir ${VERSION} requires Sendmail to function properly with your current configuration."
     }
   fi
+
+  # If we're missing stuff that will be needed for --prepare, bail
+  if [[ -n "${PREPARE}" ]]; then
+    if [[ -n "${PREPARE_CONFIG}" ]] && [[ ! -f "${PREPARE_CONFIG}" ]]; then
+      error "Can't read ${PREPARE_CONFIG}, exiting."
+    fi
+  fi
 }
 
 function show_settings() {

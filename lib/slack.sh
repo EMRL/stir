@@ -22,14 +22,14 @@ function slackPost () {
   fi
 
   # Setup the payload w/ the baseline language
-  slack_message="*${SLACKUSER}* pushed updates to ${APP}"
+  slack_message="*${SLACKUSER}* (${DEV}) pushed updates to ${APP}"
 
   # Is this a simple publish of existing code to live?
   if [[ "${PUBLISH}" == "1" ]]; then
     if [[ -z "${PRODURL}" ]]; then
-      slack_message="*${SLACKUSER}* published commit <${COMMITURL}|${COMMITHASH}> to ${APP}"
+      slack_message="*${SLACKUSER}* (${DEV}) published commit <${COMMITURL}|${COMMITHASH}> to ${APP}"
     else
-      slack_message="*${SLACKUSER}* published commit <${COMMITURL}|${COMMITHASH}> to <${PRODURL}|${APP}>"
+      slack_message="*${SLACKUSER}* (${DEV}) published commit <${COMMITURL}|${COMMITHASH}> to <${PRODURL}|${APP}>"
     fi
   fi  
 
@@ -65,12 +65,12 @@ function slackPost () {
     if [ -z "${notes}" ]; then
       notes="Something went wrong."
     fi
-    slack_message="*${SLACKUSER}* attempted to deploy changes to ${APP}\nERROR: ${error_msg}"
+    slack_message="*${SLACKUSER}* (${DEV}) attempted to make changes to ${APP}\nERROR: ${error_msg}"
   fi
 
   # Is there nothing to do?
   if [[ "${message_state}" == "NOTICE" ]]; then
-    slack_message="*${SLACKUSER}* nothing to do for ${APP}\nNOTICE: ${notes}"
+    slack_message="*${SLACKUSER}* (${DEV}) nothing to do for ${APP}\nNOTICE: ${notes}"
   fi
 
   # Create a payload for invoices
@@ -85,7 +85,7 @@ function slackPost () {
   fi
 
   # Add a details link to online logfiles if they exist
-  if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]] && [[ "${CREATE_INVOICE}" != "1" ]]; then
+  if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]] && [[ "${CREATE_INVOICE}" != "1" ]] && [[ -n "${LOGURL}" ]]; then
     slack_message="${slack_message} (<${LOGURL}|Details>)"
   fi
 
