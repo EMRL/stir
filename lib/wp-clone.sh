@@ -94,14 +94,14 @@ function wp_clone() {
       sed -i -e "/DB_DATABASE/c\DB_DATABASE='null_${REPO}'" \
         -e "/DB_USERNAME/c\DB_USERNAME='${MYSQL_USER}'" \
         -e "/DB_PASSWORD/c\DB_PASSWORD='${MYSQL_PASS}'" \
-        -e "/SECURE_AUTH_KEY/c\SECURE_AUTH_KEY='null_key'" \
-        -e "/AUTH_KEY/c\AUTH_KEY='null_key'" \
-        -e "/LOGGED_IN_KEY/c\LOGGED_IN_KEY='null_key'" \
-        -e "/NONCE_KEY/c\NONCE_KEY='null_key'" \
-        -e "/SECURE_AUTH_SALT/c\SECURE_AUTH_SALT='null_salt'" \
-        -e "/AUTH_SALT/c\AUTH_SALT='null_salt'" \
-        -e "/LOGGED_IN_SALT/c\LOGGED_IN_SALT='null_salt'" \
-        -e "/NONCE_SALT/c\NONCE_SALT='null_salt'" \
+        -e "/WP_SECURE_AUTH_KEY/c\WP_SECURE_AUTH_KEY='null_key'" \
+        -e "/WP_AUTH_KEY/c\WP_AUTH_KEY='null_key'" \
+        -e "/WP_LOGGED_IN_KEY/c\WP_LOGGED_IN_KEY='null_key'" \
+        -e "/WP_NONCE_KEY/c\WP_NONCE_KEY='null_key'" \
+        -e "/WP_SECURE_AUTH_SALT/c\WP_SECURE_AUTH_SALT='null_salt'" \
+        -e "/WP_AUTH_SALT/c\WP_AUTH_SALT='null_salt'" \
+        -e "/WP_LOGGED_IN_SALT/c\WP_LOGGED_IN_SALT='null_salt'" \
+        -e "/WP_NONCE_SALT/c\WP_NONCE_SALT='null_salt'" \
         "${APP_PATH}/${env_file}"
     fi
 
