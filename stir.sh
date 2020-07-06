@@ -368,7 +368,7 @@ fi
 if [[ "${CURRENT}" != "1" ]]; then
   # if [[ -z "${@}" ]]; then
   if [[ -z "${APP}" ]]; then
-    echo "Choose a valid project, or use the --current flag to deploy from the current directory."
+    echo "Choose a valid project, or use the --current flag to work in the current directory."
     exit 13
   else
     if [[ ! -d "${WORKPATH}/${APP}" ]]; then

@@ -67,6 +67,8 @@ function wp() {
 }
 
 function wp_update_check() {
+  "${wp_cmd}" cache delete &>> /dev/null
+
   # For the logfile
   "${wp_cmd}" plugin status --no-color &>> $logFile
 
