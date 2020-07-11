@@ -3,7 +3,7 @@
     padding: 0;
 }
 body {
-    font: 14px/1.4 Arimo, sans-serif;
+    font: 14px/1.4 Roboto, sans-serif;
 }
 #page-wrap {
     width: 800px;
@@ -11,7 +11,7 @@ body {
 }
 textarea {
     border: 0;
-    font: 14px Arimo, sans-erif;
+    font: 14px Roboto, sans-erif;
     overflow: hidden;
     resize: none;
 }

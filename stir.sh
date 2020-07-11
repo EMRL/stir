@@ -401,7 +401,7 @@ wpFile="/tmp/${APP}.wp-$RANDOM.log"; (umask 077 && touch "${wpFile}" &> /dev/nul
 coreFile="/tmp/${APP}.core-$RANDOM.log"; (umask 077 && touch "${coreFile}" &> /dev/null) || log_fail
 
 # Start writing the logfile
-echo -e "Avtivity logfile for ${APP^^} - ${NOW}\r" >> "${logFile}"
+echo -e "Activity logfile for ${APP^^} - ${NOW}\r" >> "${logFile}"
 echo -e "Launching stir${STARTUP}\n" >> "${logFile}"
 
 # More crappy tmp files
