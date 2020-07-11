@@ -187,7 +187,7 @@ function merge() {
 
 ###############################################################################
 # confirm_branch()
-#   Makes the the current branch is correct
+#   Makes sure the current branch is the correct branch
 #
 # Arguments:
 #   [branch]    The branch we confirmed being checked out, if left empty stir 
@@ -220,7 +220,7 @@ function confirm_branch() {
 # Garbage collection
 function garbage() {
   if [[ "${GARBAGE}" = "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then 
-    notice "Preparing repository..."
+    notice "Preparing project files..."
     git gc | tee --append "${logFile}"
     if [[ "${QUIET}" != "1" ]]; then
       git gc &>> "${logFile}"
