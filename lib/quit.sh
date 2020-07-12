@@ -29,7 +29,7 @@ function error_exit() {
   notice "Closing ${APP} (${REPOHOST}/${REPO})"
   message_state="ERROR"; makeLog # Compile log
   # Check email settings
-  if [[ "${EMAILERROR}" == "TRUE" ]]; then
+  if [[ "${EMAILERROR}" == "TRUE" ]] || [[ -n "${sendmail_cmd}" ]]; then
     mailLog
   fi
 

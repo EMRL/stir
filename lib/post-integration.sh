@@ -41,7 +41,7 @@ function mailPost() {
   else
 
     if [[ ! -f "${sendmail_cmd}" ]]; then
-      empty_line; warning "Sendmail misconfigured or not found, skipping email integration."
+      empty_line; warning "Mail system misconfigured or not found, skipping email integration."
       return
     fi
 

@@ -70,7 +70,7 @@ function postLog() {
         SSHCMD="${sshpass_cmd} -p \"${SCPPASS}\" ssh -p \"${SCPPORT}\""
       elif [[ -n "${scp_cmd}" ]]; then
         SCPCMD="${scp_cmd} -P \"${SCPPORT}\""
-        SSHCMD="${ssh_cmd} -P \"${SCPPORT}\""
+        SSHCMD="${ssh_cmd} -p \"${SCPPORT}\""
       else
         return
       fi

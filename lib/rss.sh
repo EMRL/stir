@@ -11,10 +11,9 @@ init_loop
 
 function get_rss() {
 	# Pull RSS feed
-	# wget --quiet -O /tmp/${APP}.xml ${NEWS_URL}
-	"${curl_cmd}" --silent "${NEWS_URL}" > /tmp/${APP}.xml
+	"${curl_cmd}" --silent "${NEWS_URL}" > /tmp/${APP}.xml; error_check
 	# Strip CDATA stuff
-	xmlstarlet fo --omit-decl --nocdata /tmp/${APP}.xml > ${statFile}
+	"${xmlstarlet_cmd}" fo --omit-decl --nocdata /tmp/${APP}.xml > ${statFile}; error_check
 	# Clean up mess
 	rm /tmp/${APP}.xml
 }
@@ -40,12 +39,12 @@ function process_xml() {
 				link="$VALUE"
 				;;
 			'pubDate')
-				# convert pubDate format for <time datetime="">
+				# Convert pubDate format for <time datetime="">
 				datetime=$( date --date "$VALUE" --iso-8601=minutes )
 				pubDate=$( date --date "$VALUE" '+%A, %B %d' )
 				;;
 			'description')
-				# convert '&lt;' and '&gt;' to '<' and '>'
+				# Convert '&lt;' and '&gt;' to '<' and '>'
 				description=$( echo "$VALUE" | sed -e 's/&lt;/</g' -e 's/&gt;/>/g' )
 				;;
 			'/item')
@@ -58,13 +57,8 @@ EOF
 }
 
 function create_rss_payload() {
-	# Testing only
-	# NEWS_URL=https://emrl.com/feed/
-	# APP=test
-	# statFile=test.rss
-	# postFile=test.html
-
-	if [[ -z "${NEWS_URL}" ]]; then
+	if [[ -z "${NEWS_URL}" ]] || [[ -z "${xmlstarlet_cmd}" ]]; then
+		NEWS_URL=""
 		return
 	else
 		get_rss
@@ -72,7 +66,6 @@ function create_rss_payload() {
 
 		# Clean up output
 		sed -i 's/\xc2\x91\|\xc2\x92\|\xc2\xa0\|\xe2\x80\x8e//g' "${trshFile}"
-		# iconv -c -f utf-8 -t ascii "${postFile}"
 
 		# Centos doesn't have the inplace option 
 		# awk -i inplace '{gsub(/’/, "'"'"'");print}' "${postFile}"
@@ -85,7 +78,6 @@ function create_rss_payload() {
 			"${postFile}"
 
 		# Escape quotes
-		# sed -i 's/"/\\"/g' "${postFile}"
 		sed -i "s/'/\'/g" "${postFile}"
 
 		# Remove newlines

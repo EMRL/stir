@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Notification emails can now be sent using external SMTP servers   
 - Launching `stir` using the `--prepare-with-reset` will completely delete and reset the local copy of the target project, and then launch your defined prepare action
 - The number of days of engagement data to be displayed can now be configured in the projects' `theme.conf` 
 - Project settings can be displayed in an easy to read format using the `show-settings` switch

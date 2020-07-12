@@ -33,7 +33,7 @@ function deploy_scp() {
     # TODO: Add proper checks/fallbacks here
     TMP=$(<$SCP_DEPLOY_PASS)
     SCP_DEPLOY_PASS="${TMP}"
-    sshpass -p "${SCP_DEPLOY_PASS}" scp -o StrictHostKeyChecking=no -P "${SCP_DEPLOY_PORT}" -r -v "${WORKPATH}/${APP}/${STAGING_DEPLOY_PATH}"/* "${SCP_DEPLOY_USER}@${PRODUCTION_DEPLOY_HOST}:${PRODUCTION_DEPLOY_PATH}/"  &>> "${logFile}"; error_check;
+    "${sshpass_cmd}" -p "${SCP_DEPLOY_PASS}" scp -o StrictHostKeyChecking=no -P "${SCP_DEPLOY_PORT}" -r -v "${WORKPATH}/${APP}/${STAGING_DEPLOY_PATH}"/* "${SCP_DEPLOY_USER}@${PRODUCTION_DEPLOY_HOST}:${PRODUCTION_DEPLOY_PATH}/"  &>> "${logFile}"; error_check;
 
     # Checkout master and move on
     checkout "${MASTER}"

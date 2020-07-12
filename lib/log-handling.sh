@@ -94,7 +94,7 @@ function makeLog() {
 
   # Remove double line breaks
   sed -i '/^$/d' "${logFile}"
-
+  
   # Replace empty lines where we want
   sed -i -e '/Checking servers/s/^/\n/' \
     -e '/Launching deployment/s/^/\n/' \
@@ -137,6 +137,7 @@ function makeLog() {
 
   # Create HTML/PHP logs for viewing online
   if [[ "${REMOTELOG}" == "TRUE" ]]; then
+    trace "htmlDir"
     htmlDir
 
     # For web logs, VIEWPORT should be 960
