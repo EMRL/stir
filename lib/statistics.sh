@@ -16,10 +16,16 @@ var=(DB_API_TOKEN DB_BACKUP_PATH LAST_BACKUP BACKUP_STATUS CODE_STATS \
 init_loop
 
 function project_stats() {
-  hash gitchart 2>/dev/null || {
-  error "Can not chart project stats, gitchart not installed." 
-  }
+  #hash gitchart 2>/dev/null || {
+  #error "Can not chart project stats, gitchart not installed." 
+  #}
 
+  if [[ -z "${gitchart_cmd}" ]]; then
+    PROJSTATS=""
+    warning "Can not chart project statistics, gitchart not installed."
+    quickExit
+  fi
+  
   if [[ "${REMOTELOG}" == "TRUE" ]]; then
   # Check for approval queue
   queue_check

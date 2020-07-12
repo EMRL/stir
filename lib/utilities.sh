@@ -97,7 +97,7 @@ function is_integer() {
 function get_fullpath() {
   # Get absolute paths to critical commands
   var=(cal composer curl git gitchart gnuplot grep mysqlshow scp sendmail ssh \
-    sshpass unzip wc wget wkhtmltopdf wp)
+    sshpass ssmtp unzip wc wget wkhtmltopdf wp xmlstarlet)
   for i in "${var[@]}" ; do
     read -r "${i}_cmd" <<< ""
     echo "${i}_cmd" > /dev/null
@@ -105,6 +105,9 @@ function get_fullpath() {
       eval "${i}_cmd=\"$(which ${i})\""
     fi
   done
+
+  # If the user has SMTP configured, overwrite sendmail command with ssmtp
+  check_smtp
 
   # What is this I don't even
   wp_cmd="$(which wp)"

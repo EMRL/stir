@@ -10,25 +10,9 @@ function mailLog() {
   # Only send email if a commit has been made, an approval is required, or there has been an error
   if [[ -n "${COMMITHASH}" ]] || [[ "${message_state}" == "ERROR" ]] || [[ "${message_state}" == "APPROVAL NEEDED" ]] || [[ "${AUTOMATE}" == "1" ]]; then
 
-    # Make sure sendmail exists and is configured 
-    # hash "${sendmail_cmd}" 2>/dev/null || { 
-
-    #if [[ -z "${sendmail_cmd-}" ]]; then
-    #  return
-    #fi
-
     if [[ ! -x "$(command -v ${sendmail_cmd})" ]]; then
       quietExit
-
-      # The line below sends us into an infinite recursive loop, issue #157
-      # error >&2 "Sendmail misconfigured or not found."; 
-    # }
     fi
-
-#    if [[ ! -f "${sendmail_cmd}" ]]; then
-#      empty_line; warning "Sendmail misconfigured or not found."
-#      quietExit
-#    fi
 
     # If using --current, use the REPO value instead of the APP (current directory)
     if [[ "${CURRENT}" == "1" ]]; then
@@ -80,12 +64,12 @@ function mailLog() {
 }
 
 function email_test() {
-  # Make sure sendmail exists and is configured 
-  hash "${sendmail_cmd}" 2>/dev/null || { 
-    error >&2 "Sendmail misconfigured or not found.";
-  }
-
+  # Make sure mail transport exists and is configured 
+  if [[ -z "${sendmail_cmd}" ]]; then
+    error >&2 "Mail system misconfigured or not found.";
+  else
     console "Testing email using ${sendmail_cmd}"
+  fi
 
   # Confirm we have a recipient address
   if [[ -z "${TO}" ]]; then
@@ -93,7 +77,7 @@ function email_test() {
     quietExit
 
 #  elif [[ ! -f "${sendmail_cmd}" ]]; then
-#    empty_line; warning "Sendmail misconfigured or not found."
+#    empty_line; warning "Mail system misconfigured or not found."
 #    quietExit
   else
     # Send HTML mail
