@@ -14,7 +14,7 @@ function create_report() {
 
   # Make sure we've got cal, or don't bother
   if [[ -z "${cal_cmd}" ]]; then
-    console "Creating reports requires the cal utility which cannot be found."; quietExit
+    console "Creating reports requires the cal utility which cannot be found."; quiet_exit
   fi
 
   message_state="REPORT"
@@ -59,7 +59,7 @@ function create_report() {
   fi
 
   # Compile full report 
-  cat "${deployPath}/html/${HTMLTEMPLATE}/report/header.html" "${statFile}" "${deployPath}/html/${HTMLTEMPLATE}/report/footer.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/report/header.html" "${statFile}" "${stir_path}/html/${HTMLTEMPLATE}/report/footer.html" > "${htmlFile}"
 
   # Filter and replace template variables
   process_html

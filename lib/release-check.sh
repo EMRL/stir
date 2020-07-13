@@ -41,7 +41,7 @@ function release_check() {
         # Update!
         update_release
         console "Update complete."
-        quietExit
+        quiet_exit
       fi
     fi
   fi
@@ -60,7 +60,7 @@ function update_release() {
     if yesno --default yes "You will be need sudo access to update, continue? [Y/n] "; then
       sudo sleep 1
     else
-      console "Installation canceled."; quietExit
+      console "Installation canceled."; quiet_exit
     fi
   fi
   

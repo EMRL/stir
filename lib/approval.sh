@@ -12,23 +12,23 @@ init_loop
 
 function queue() {
 	info "Approval functionality is deprecated and has been removed."
-	quietExit
+	quiet_exit
 }
 
 function approve() {
 	info "Approval functionality is deprecated and has been removed."
-	quietExit
+	quiet_exit
 }
 
 function deny() {
 	info "Approval functionality is deprecated and has been removed."
-	quietExit
+	quiet_exit
 }
 
 # Check for approval queue
 function queue_check() {
 	if [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
 		info "Approval functionality is deprecated and has been removed."
-	  quietExit
+	  quiet_exit
 	fi
 }

@@ -47,7 +47,7 @@ function postLog() {
         [[ ! -d "${LOCALHOSTPATH}/${APP}" ]] && mkdir "${LOCALHOSTPATH}/${APP}"
         [[ ! -d "${LOCALHOSTPATH}/${APP}/stats" ]] && mkdir "${LOCALHOSTPATH}/${APP}/stats"
         cp -R "${statDir}" "${LOCALHOSTPATH}/${APP}"
-        chmod -R a+rw "${deployPath}/html/${HTMLTEMPLATE}/stats" &> /dev/null
+        chmod -R a+rw "${stir_path}/html/${HTMLTEMPLATE}/stats" &> /dev/null
       fi
 
       # Remove logs older then X days
@@ -89,7 +89,7 @@ function postLog() {
         #fi
       fi
 
-      if [[ "${PROJSTATS}" == "1" || "${DIGEST}" == "1" ]]; then
+      if [[ "${PROJSTATS}" == "1" || "${DIGEST}" == "1" && -f "${statDir}/*" ]]; then
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/stats"
         eval "${SCPCMD} -r" "${statDir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/stats/"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/avatar"
@@ -121,9 +121,9 @@ function postLog() {
         trace "Running \"${SSHCMD}\" \"${SCPUSER}\"@\"${SCPHOST}\" \"mkdir -p ${SCPHOSTPATH}/${APP}/report\""
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report/css"
-        eval "${SCPCMD} -r" "${deployPath}/html/${HTMLTEMPLATE}/report/css" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report"
+        eval "${SCPCMD} -r" "${stir_path}/html/${HTMLTEMPLATE}/report/css" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report/js"
-        eval "${SCPCMD} -r" "${deployPath}/html/${HTMLTEMPLATE}/report/js" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report"
+        eval "${SCPCMD} -r" "${stir_path}/html/${HTMLTEMPLATE}/report/js" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report"
         eval "${SCPCMD}" "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report/${REMOTEFILE}"
       fi
 
@@ -164,8 +164,8 @@ function htmlDir() {
         mkdir "${LOCALHOSTPATH}/${APP}/report/css"; error_check
         mkdir "${LOCALHOSTPATH}/${APP}/report/js"; error_check
       fi
-        cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/css" "${LOCALHOSTPATH}/${APP}/report"; error_check
-        cp -R "${deployPath}/html/${HTMLTEMPLATE}/report/js" "${LOCALHOSTPATH}/${APP}/report"; error_check
+        cp -R "${stir_path}/html/${HTMLTEMPLATE}/report/css" "${LOCALHOSTPATH}/${APP}/report"; error_check
+        cp -R "${stir_path}/html/${HTMLTEMPLATE}/report/js" "${LOCALHOSTPATH}/${APP}/report"; error_check
     fi
   fi
 }

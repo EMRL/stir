@@ -57,3 +57,11 @@ function showProgress() {
     empty_line; sleep 3
   fi
 }
+
+function dot {  
+  if [[ "${1-default}" == "newline" ]]; then
+    echo "."
+  else
+    echo -n "."
+  fi
+}

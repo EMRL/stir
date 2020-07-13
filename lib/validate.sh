@@ -21,7 +21,7 @@ function validate_conf() {
   for i in "${array[@]}"
   do
     if [ `expr "$i" : ".*[!@#\$%^\&*()_+].*"` -gt 0 ]; then 
-      warning "Problem with value: ${i}\nCheck your project configuration and remove any special characters [!@#\$%^\&*()_+] from the value above."; quietExit 
+      warning "Problem with value: ${i}\nCheck your project configuration and remove any special characters [!@#\$%^\&*()_+] from the value above."; quiet_exit 
     fi
   done
 }

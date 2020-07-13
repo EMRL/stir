@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Global project directory and repo host variables are now set during the initial install process
 - Project settings are now backed up when performing a `--reset` when a global `CONFIGBACKUP` is declared
 - Added `--update-acf` to account for unreliable update checks
+- Added `--debug-to-file` allowing for very verbose logs to be saved to file called `debug.log` in your current working directory 
 - New releases of `stir` will now update "in place"
 - `--skip-updates` now aliases to `--skip-updated` because I kept forgetting the switch name
 - Added a workaround for emailing Invoice Ninja invoices with an offset invoice numbering
@@ -22,6 +23,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Plugins are no longer activated by default, unless required for reliable upgrades
 - Composer now creates less noise in logfiles
 - Improved dependency checks
+- Improved temporary file management
 ### Fixed
 - Binary files should no longer confuse log parsing functions
 - Missing project configuration error now exits more gracefully

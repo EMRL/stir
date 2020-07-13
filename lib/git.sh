@@ -23,7 +23,7 @@ function gitCommit() {
 
   if grep -aq "nothing to commit, working directory clean" "${logFile}"; then 
     info "Nothing to commit, working directory clean."
-    safeExit
+    clean_exit
   else
     # Found stuff, let's get a commit message
     if [[ -z "${COMMITMSG}" ]]; then
@@ -41,7 +41,7 @@ function gitCommit() {
           read -rp "Enter commit message: " notes
         fi
         if [[ -z "${notes}" ]]; then
-          quickExit
+          quiet_exit
         fi
       fi
     else
@@ -51,10 +51,10 @@ function gitCommit() {
         # We need Smart commits enabled or this can't work
         if [[ "${SMARTCOMMIT}" -ne "TRUE" ]]; then
           console "Smart Commits must be enabled when forcing updates."
-          console "Set SMARTCOMMIT=TRUE in .stir.sh"; quietExit
+          console "Set SMARTCOMMIT=TRUE in .stir.sh"; quiet_exit
         else
           if [[ -z "${COMMITMSG}" ]]; then
-            info "Commit message must not be empty."; quietExit
+            info "Commit message must not be empty."; quiet_exit
           else
             notes="${COMMITMSG}"
           fi

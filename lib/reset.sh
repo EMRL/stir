@@ -31,12 +31,12 @@ function reset_local() {
     if [[ -n "${PREPARE}" ]] && [[ "${PREPARE}" != "FALSE" ]]; then
       return
     else
-      quietExit
+      quiet_exit
     fi
 
   else
     warning "Can not reset this project."
-    quietExit
+    quiet_exit
   fi
 }
 

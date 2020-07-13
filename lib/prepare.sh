@@ -11,7 +11,7 @@ function prepare() {
   # If running a command that is not going to touch code, we can skip the 
   # --prepare stuff altogether
   startup_switch=(REPORT DIGEST SCAN SSHTEST EMAILTEST SLACKTEST POSTTEST \
-    PUBLISH PROJSTATS CREATE_INVOICE FUNCTIONLIST VARIABLELIST)
+    PUBLISH PROJSTATS CREATE_INVOICE FUNCTION_LIST VARIABLE_LIST)
   for arg in "${startup_switch[@]}"; do
     if [[ "${arg}" == "1" ]]; then
       PREPARE="FALSE"; return
@@ -28,7 +28,7 @@ function prepare() {
     wp_clone
     # If --prepare switch is being used, exit immediately
     if [[ "${PREPARE}" == "1" ]]; then
-      quickExit
+      quiet_exit
     else
       return
     fi

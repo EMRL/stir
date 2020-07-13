@@ -137,7 +137,6 @@ function makeLog() {
 
   # Create HTML/PHP logs for viewing online
   if [[ "${REMOTELOG}" == "TRUE" ]]; then
-    trace "htmlDir"
     htmlDir
 
     # For web logs, VIEWPORT should be 960
@@ -162,7 +161,7 @@ function build_html() {
     notes="${error_msg}"
     LOGTITLE="Deployment Error"
     # Create the header
-    cat "${deployPath}/html/${HTMLTEMPLATE}/header.html" "${deployPath}/html/${HTMLTEMPLATE}/error.html" > "${htmlFile}"
+    cat "${stir_path}/html/${HTMLTEMPLATE}/header.html" "${stir_path}/html/${HTMLTEMPLATE}/error.html" > "${htmlFile}"
   else
     # Does this project need to be approved before finalizing deployment?
     #if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
@@ -170,8 +169,8 @@ function build_html() {
       message_state="APPROVAL NEEDED"
       LOGTITLE="Approval Needed"
       LOGSUFFIX="php"
-      # cat "${deployPath}/html/${HTMLTEMPLATE}/header.html" "${deployPath}/html/${HTMLTEMPLATE}/approve.html" > "${htmlFile}"
-      cat "${deployPath}/html/${HTMLTEMPLATE}/approval.php" > "${htmlFile}"
+      # cat "${stir_path}/html/${HTMLTEMPLATE}/header.html" "${stir_path}/html/${HTMLTEMPLATE}/approve.html" > "${htmlFile}"
+      cat "${stir_path}/html/${HTMLTEMPLATE}/approval.php" > "${htmlFile}"
     else
       if [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" == "1" ]] && [[ "${UPD2}" == "1" ]]; then
         message_state="NOTICE"
@@ -191,7 +190,7 @@ function build_html() {
         if [[ "${REPAIR}" == "1" ]] && [[ -z "${notes}" ]]; then
           notes="Merged and deployed codebase"
         fi
-        cat "${deployPath}/html/${HTMLTEMPLATE}/header.html" "${deployPath}/html/${HTMLTEMPLATE}/success.html" > "${htmlFile}"
+        cat "${stir_path}/html/${HTMLTEMPLATE}/header.html" "${stir_path}/html/${HTMLTEMPLATE}/success.html" > "${htmlFile}"
       fi
     fi
   fi
@@ -218,7 +217,7 @@ function build_html() {
 
   # Insert the full deployment logfile & button it all up
   if [[ "${REPORT}" != "1" ]]; then
-    cat "${logFile}" "${deployPath}/html/${HTMLTEMPLATE}/footer.html" >> "${htmlFile}"
+    cat "${logFile}" "${stir_path}/html/${HTMLTEMPLATE}/footer.html" >> "${htmlFile}"
     # There's probably a better place for this.
     process_html
   fi

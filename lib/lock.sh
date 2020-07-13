@@ -15,10 +15,10 @@ function lock() {
     if [[ "${UNLOCK}" == "1" ]]; then
       rm "${LOCK_FILE}"
       notice "${WORKPATH}/${APP} is now unlocked."
-      quietExit
+      quiet_exit
     else
       warning "${WORKPATH}/${APP} is already being deployed in another instance."
-      quietExit
+      quiet_exit
     fi
   else
     trap 'rm -f "${LOCK_FILE}"' EXIT

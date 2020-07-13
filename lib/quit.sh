@@ -6,45 +6,8 @@
 # Handles exiting the program
 ###############################################################################
 
-# User-requested exit
-function userExit() {
-  rm "${WORKPATH}/${APP}/.git/index.lock" &> /dev/null
-  trace "Exit on user request"
-  # Check email settings
-  if [[ "${EMAILQUIT}" == "TRUE" ]]; then
-     mailLog
-  fi
-  # Clean up your mess
-  clean_up; exit 0
-}
-
-# Quick exit, never send log. Ever.
-function quickExit() {
-  # Clean up your mess
-  clean_up; exit 0
-}
-
-# Exit on error
-function error_exit() {
-  notice "Closing ${APP} (${REPOHOST}/${REPO})"
-  message_state="ERROR"; makeLog # Compile log
-  # Check email settings
-  if [[ "${EMAILERROR}" == "TRUE" ]] || [[ -n "${sendmail_cmd}" ]]; then
-    mailLog
-  fi
-
-  # Check Slack settings
-  if [[ "${POSTTOSLACK}" == "TRUE" ]] && [[ "${SLACKERROR}" == "TRUE" ]]; then
-    message_state="ERROR"
-    slackPost
-  fi
-
-    # Clean up your mess
-  clean_up; exit 1
-}
-
 # Clean exit
-function safeExit() {
+function clean_exit() {
   notice "Closing ${APP} (${REPOHOST}/${REPO})"
   makeLog # Compile log
   # Check email settings
@@ -71,39 +34,54 @@ function safeExit() {
   clean_up; exit 0
 }
 
-# Clean exit, nothing to commit
-function quietExit() {
+# Exit on error
+function error_exit() {
+  notice "Closing ${APP} (${REPOHOST}/${REPO})"
+  message_state="ERROR"; makeLog # Compile log
+  # Check email settings
+  if [[ "${EMAILERROR}" == "TRUE" ]] || [[ -n "${sendmail_cmd}" ]]; then
+    mailLog
+  fi
+
+  # Check Slack settings
+  if [[ "${POSTTOSLACK}" == "TRUE" ]] && [[ "${SLACKERROR}" == "TRUE" ]]; then
+    message_state="ERROR"
+    slackPost
+  fi
+
+  # Clean up your mess
+  clean_up; exit 1
+}
+
+# User interrupted exit
+function user_exit() {
+  rm "${WORKPATH}/${APP}/.git/index.lock" &> /dev/null
+  trace "Exit on user request"
+  # Check email settings
+  if [[ "${EMAILQUIT}" == "TRUE" ]]; then
+     mailLog
+  fi
   # Clean up your mess
   clean_up; exit 0
 }
 
+# Quiet exit, never send log. Ever.
+function quiet_exit() {
+  # Clean up your mess
+  clean_up; exit 0
+}
+
+# Clean everything up 
 function clean_up() {
   # If anything is stashed, unstash it.
-  if [[ "${currentStash}" == "1" ]]; then
+  if [[ "${current_stash}" == "1" ]]; then
     trace "Unstashing files"
     git stash pop >> "${logFile}"
-    currentStash="0"
+    current_stash="0"
   fi  
-  [[ -f "${logFile}" ]] && rm "${logFile}"
-  [[ -f "${trshFile}" ]] && rm "${trshFile}"
-  [[ -f "${postFile}" ]] && rm "${postFile}"
-  [[ -f "${statFile}" ]] && rm "${statFile}"
-  [[ -f "${scanFile}" ]] && rm "${scanFile}"
-  [[ -f "${scan_html}" ]] && rm "${scan_html}"
-  [[ -f "${wpFile}" ]] && rm "${wpFile}"
-  [[ -f "${urlFile}" ]] && rm "${urlFile}"
-  [[ -f "${htmlFile}" ]] && rm "${htmlFile}"
-  [[ -f "${htmlEmail}" ]] && rm "${htmlEmail}"
-  [[ -f "${clientEmail}" ]] && rm "${clientEmail}"
-  [[ -f "${coreFile}" ]] && rm "${coreFile}"
-  [[ -d "${statDir}" ]] && rm -rf "${statDir}"
-  [[ -d "${avatarDir}" ]] && rm -rf "${avatarDir}"
-  [[ -d /tmp/stats ]] && rm -rf /tmp/stats
-  
-  # [[ -d /tmp/avatar ]] && rm -rf /tmp/avatar
-  # [[ -f "${gitLock}" ]] && rm "${gitLock}"
-  # Attempt to reset the terminal
-  # echo -e \\033c
+
+  # Remove temporary files
+  temp_files remove
 
   # Make sure we leave the repo as we found it
   if [[ -n "${start_branch}" ]]; then
@@ -128,14 +106,7 @@ function clean_up() {
     fi
   fi
 
-  # Cleanup clone
-  #if [[ -d "/tmp/${REPO}" ]] && [[ "${PREPARE_ONLY}" != "1" ]] && [[ "${SET_ENV}" == "1" ]]; then 
-  #  cd "${WP_TMP}"; "${wp_cmd}" db drop --yes &>> /dev/null
-  #  cd /tmp; rm -rf /tmp/"${REPO}"
-  #fi
-
   # Do we need to shutdown local wp server?
-  # lsof doesn't seem to work as expected in Windows Subsystem Linux, doh
   if [[ -n "${PREPARE}" ]]; then
     WP_SERVER_PID=$(lsof -i :8080  | sed -n '1!p' | awk '{print $2}')
     if [[ -n "${WP_SERVER_PID}" ]]; then

@@ -11,7 +11,7 @@ function mailLog() {
   if [[ -n "${COMMITHASH}" ]] || [[ "${message_state}" == "ERROR" ]] || [[ "${message_state}" == "APPROVAL NEEDED" ]] || [[ "${AUTOMATE}" == "1" ]]; then
 
     if [[ ! -x "$(command -v ${sendmail_cmd})" ]]; then
-      quietExit
+      quiet_exit
     fi
 
     # If using --current, use the REPO value instead of the APP (current directory)
@@ -74,11 +74,11 @@ function email_test() {
   # Confirm we have a recipient address
   if [[ -z "${TO}" ]]; then
     empty_line; warning "No recipient address found."
-    quietExit
+    quiet_exit
 
 #  elif [[ ! -f "${sendmail_cmd}" ]]; then
 #    empty_line; warning "Mail system misconfigured or not found."
-#    quietExit
+#    quiet_exit
   else
     # Send HTML mail
     (
@@ -397,9 +397,9 @@ function email_test() {
       [[ -n "${DEVURL}" ]] && echo "Staging URL: ${DEVURL}"
       [[ -n "${PRODURL}" ]] && echo "Production URL: ${PRODURL}"
       ) | "${sendmail_cmd}" -t
-      quietExit
+      quiet_exit
     else
-      console "Integration email address ${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL} does not look valid"; quietExit
+      console "Integration email address ${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL} does not look valid"; quiet_exit
     fi
   fi
 }

@@ -24,10 +24,10 @@ function env_check() {
     local_version="${VERSION//-*}"
     
     # Check for global vs local install
-    if [[ "${deployPath}" != "/etc/stir" ]]; then
-      default_etc="${deployPath}/etc"
+    if [[ "${stir_path}" != "/etc/stir" ]]; then
+      default_etc="${stir_path}/etc"
     else
-      default_etc="${deployPath}"
+      default_etc="${stir_path}"
     fi
 
     # Compare version numbers
@@ -45,7 +45,7 @@ function env_check() {
     fi
 
     # Reload environment variables, from global > user > project
-    source "${etcLocation}"
+    source "${etc_path}"
     source ~/.stirrc
     
     # TODO This probably needs more thought
@@ -53,7 +53,7 @@ function env_check() {
       source "${project_config}"
     else
       console "Project configuration has changed or is missing - restart stir to continue."
-      quietExit
+      quiet_exit
     fi
 
     # Restore workpath value
@@ -63,7 +63,7 @@ function env_check() {
     # if using --current switch
     if [[ "${update_global}" == "1" ]] && [[ "${updates_skipped}" != "1" ]]; then
       console "Global configuration updated - restart stir to continue."
-      quietExit
+      quiet_exit
     fi
   fi
 }
@@ -82,7 +82,7 @@ function update_config() {
 }
 
 function update_global() {
-  info "Updating ${deployPath}/global.conf..."
+  info "Updating ${stir_path}/global.conf..."
   env_settings=(CLEARSCREEN WORKPATH CONFIGDIR SERVERCHECK ACTIVECHECK \
     CHECKTIME REPOHOST SMARTCOMMIT GITSTATS STASH GARBAGE WPCLI WFCHECK \
     TO FROM SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT SHORTEMAIL \
@@ -92,31 +92,31 @@ function update_global() {
     SCPPASS LOCALHOSTPOST LOCALHOSTPATH EXPIRELOGS DB_API_TOKEN NEWS_URL \
     IN_HOST IN_TOKEN IN_OFFSET BUGSNAG_AUTH)
 
-  if [[ ! -w "${deployPath}/global.conf" ]]; then
+  if [[ ! -w "${stir_path}/global.conf" ]]; then
     info "Requesting sudo access..."
-    sudo cp "${deployPath}"/global.conf "${deployPath}"/global.conf.bak
+    sudo cp "${stir_path}"/global.conf "${stir_path}"/global.conf.bak
   else
-    cp "${deployPath}"/global.conf "${deployPath}"/global.conf.bak
+    cp "${stir_path}"/global.conf "${stir_path}"/global.conf.bak
   fi
-  info "Global configuration backup created at ${deployPath}/global.conf.bak"
+  info "Global configuration backup created at ${stir_path}/global.conf.bak"
   
-  cp "${deployPath}"/stir-global.conf "${trshFile}"
+  cp "${stir_path}"/stir-global.conf "${trshFile}"
 
   # Reload global values
-  source "${deployPath}"/global.conf
+  source "${stir_path}"/global.conf
   
   # Loops through the variables
   for i in "${env_settings[@]}" ; do
-    current_setting=$(grep -a "^${i}=" "${deployPath}"/global.conf.bak)
+    current_setting=$(grep -a "^${i}=" "${stir_path}"/global.conf.bak)
     insert_values
   done
 
   # Install new files
   env_cleanup
-  if [[ ! -w "${deployPath}/global.conf" ]]; then
-    sudo cp "${trshFile}" "${deployPath}"/global.conf
+  if [[ ! -w "${stir_path}/global.conf" ]]; then
+    sudo cp "${trshFile}" "${stir_path}"/global.conf
   else
-    cp "${trshFile}" "${deployPath}"/global.conf
+    cp "${trshFile}" "${stir_path}"/global.conf
   fi
 }
 
@@ -126,7 +126,7 @@ function update_user() {
   
   info "User configuration backup created at ~/.stirrc.bak"
   cp ~/.stirrc ~/.stirrc.bak
-  cp "${deployPath}"/stir-user.rc "${trshFile}"
+  cp "${stir_path}"/stir-user.rc "${trshFile}"
 
   # Reload user values
   source ~/.stirrc
@@ -161,7 +161,7 @@ function update_project() {
 
   info "Project configuration backup created at ${project_config}.bak"
   cp "${project_config}" "${project_config}.bak"
-  cp "${deployPath}"/stir-project.sh "${trshFile}"
+  cp "${stir_path}"/stir-project.sh "${trshFile}"
   # Loops through the variables
   for i in "${env_settings[@]}" ; do
     current_setting=$(grep -a "^${i}=" "${project_config}")
