@@ -23,7 +23,7 @@ function project_stats() {
   if [[ -z "${gitchart_cmd}" ]]; then
     PROJSTATS=""
     warning "Can not chart project statistics, gitchart not installed."
-    quickExit
+    quiet_exit
   fi
   
   if [[ "${REMOTELOG}" == "TRUE" ]]; then
@@ -36,9 +36,9 @@ function project_stats() {
     #fi
 
     # Prep assets
-    cp -R "${deployPath}/html/${HTMLTEMPLATE}/stats/css" "${statDir}/"
-    cp -R "${deployPath}/html/${HTMLTEMPLATE}/stats/fonts" "${statDir}/"
-    cp -R "${deployPath}/html/${HTMLTEMPLATE}/stats/js" "${statDir}/"
+    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/css" "${statDir}/"
+    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/fonts" "${statDir}/"
+    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/js" "${statDir}/"
 
     echo -n "Generating files"
 
@@ -62,7 +62,7 @@ function project_stats() {
     validate_urls "${statFile}"
 
     # Process the HTML
-    cat "${deployPath}/html/${HTMLTEMPLATE}/stats/index.html" > "${htmlFile}"
+    cat "${stir_path}/html/${HTMLTEMPLATE}/stats/index.html" > "${htmlFile}"
     process_html
 
     cat "${htmlFile}" > "${statDir}/index.html"
@@ -100,13 +100,13 @@ function project_activity() {
   validate_urls "${statFile}"
 
   # Process the HTML
-  cat "${deployPath}/html/${HTMLTEMPLATE}/stats/activity.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/activity.html" > "${htmlFile}"
   process_html; cat "${htmlFile}" > "${statDir}/activity.html"
 }
 
 function project_statistics() {
   # Process the HTML
-  cat "${deployPath}/html/${HTMLTEMPLATE}/stats/stats.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/stats.html" > "${htmlFile}"
   process_html; cat "${htmlFile}" > "${statDir}/stats.html"
 }
 
@@ -118,13 +118,13 @@ function project_scan(){
   #fi
   
   SCAN_STATS=$(<${scan_html})
-  cat "${deployPath}/html/${HTMLTEMPLATE}/stats/scan.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/scan.html" > "${htmlFile}"
   process_html; cat "${htmlFile}" > "${statDir}/scan.html"
 }
 
 function project_firewall() {
   # Process the HTML
-  cat "${deployPath}/html/${HTMLTEMPLATE}/stats/firewall.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/firewall.html" > "${htmlFile}"
   process_html; cat "${htmlFile}" > "${statDir}/firewall.html"
 }
 
@@ -134,7 +134,7 @@ function project_engagement() {
     return
   fi
   
-  cat "${deployPath}/html/${HTMLTEMPLATE}/stats/engagement.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/engagement.html" > "${htmlFile}"
 
   # How many days of analytics to display?
   if [[ -z "${ENGAGEMENT_DAYS}" ]]; then
@@ -154,7 +154,7 @@ function project_engagement() {
 
 function project_css() {
   # Process the CSS files
-  cat "${deployPath}/html/${HTMLTEMPLATE}/stats/css/${THEME_MODE}.css" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/css/${THEME_MODE}.css" > "${htmlFile}"
   process_html; cat "${htmlFile}" > "${statDir}/css/${THEME_MODE}.css"
 }
 
@@ -170,7 +170,7 @@ function project_backup() {
   echo "${BACKUP_FILES}" > "${trshFile}"
 
   # Process the HTML
-  cat "${deployPath}/html/${HTMLTEMPLATE}/stats/backup.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/backup.html" > "${htmlFile}"
   process_html; cat "${htmlFile}" > "${statDir}/backup.html"
 }
 

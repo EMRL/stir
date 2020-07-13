@@ -14,7 +14,7 @@ init_loop
 
 function create_invoice() {
   if [[ -z "${IN_HOST}" || -z "${IN_TOKEN}" || -z "${IN_CLIENT_ID}" || -z "${IN_PRODUCT}" || -z "${IN_ITEM_COST}" || -z "${IN_ITEM_QTY}" ]]; then
-    console "Invoicing not configured correctly, can not create payload."; quietExit
+    console "Invoicing not configured correctly, can not create payload."; quiet_exit
   fi    
 
   # Will create the invoice payload
@@ -28,7 +28,7 @@ function create_invoice() {
     send_invoice
   fi 
 
-  safeExit
+  clean_exit
 }
 
 function get_current_invoice() {

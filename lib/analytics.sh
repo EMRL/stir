@@ -329,7 +329,7 @@ function ga_test() {
   if [[ -z "${CLIENTID}" ]] || [[ -z "${CLIENTSECRET}" ]];  then
     warning "Define API project"
     console "Analytics API project not defined. Check https://console.developers.google.com/"
-    quickExit
+    quiet_exit
   else
     console "CLIENTID=${CLIENTID}"
     console "CLIENTSECRET=${CLIENTSECRET}"
@@ -338,7 +338,7 @@ function ga_test() {
   if [[ -z "${AUTHORIZATIONCODE}" ]]; then
     empty_line; warning "Authorization required"
     console "Point your browser to this link: https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fanalytics&redirect_uri=${REDIRECTURI}&response_type=code&client_id=${CLIENTID}"
-    quickExit
+    quiet_exit
   else
     console "AUTHORIZATIONCODE=${AUTHORIZATIONCODE}"
   fi
@@ -346,7 +346,7 @@ function ga_test() {
   if [[ -z "${ACCESSTOKEN}" ]] || [[ -z "${REFRESHTOKEN}" ]]; then
     empty_line; warning "Create an access token"
     console "Run this command: curl -H \"Content-Type: application/x-www-form-urlencoded\" -d code=${AUTHORIZATIONCODE} -d client_id=${CLIENTID} -d client_secret=${CLIENTSECRET} -d redirect_uri=${REDIRECTURI} -d grant_type=authorization_code https://accounts.google.com/o/oauth2/token"
-    quickExit
+    quiet_exit
   else
     console "ACCESSTOKEN=${ACCESSTOKEN}"
     console "REFRESHTOKEN=${REFRESHTOKEN}"
@@ -355,7 +355,7 @@ function ga_test() {
   if [[ -z "${PROFILEID}" ]]; then
     empty_line; warning "Missing Profile ID"
     console "Your project's profile ID is not defined."
-    quickExit
+    quiet_exit
   else
     console "PROFILEID=${PROFILEID}"
   fi
@@ -363,7 +363,7 @@ function ga_test() {
   if [[ -z "${REDIRECTURI}" ]]; then 
     warning "Missing Redirect URI"
     console "Generally your Redirect URI will be set to http://localhost"
-    quickExit
+    quiet_exit
   else
     console "REDIRECTURI=${REDIRECTURI}"
   fi

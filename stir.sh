@@ -24,35 +24,6 @@ APP="null"
 # Set mode
 set -uo pipefail
 
-# Trap ctrl-c exits; someday I'll do this better 
-trap ctrl_c INT
-
-# Function to try and cleanup after a user exit, even when external function
-# libraries may not be loaded
-function ctrl_c() {
-  if type quietExit &>/dev/null; then
-    quietExit
-  else
-    [[ -f "${logFile}" ]] && rm "${logFile}"
-    [[ -f "${trshFile}" ]] && rm "${trshFile}"
-    [[ -f "${postFile}" ]] && rm "${postFile}"
-    [[ -f "${statFile}" ]] && rm "${statFile}"
-    [[ -f "${scanFile}" ]] && rm "${scanFile}"
-    [[ -f "${scan_html}" ]] && rm "${scan_html}"
-    [[ -f "${wpFile}" ]] && rm "${wpFile}"
-    [[ -f "${urlFile}" ]] && rm "${urlFile}"
-    [[ -f "${htmlFile}" ]] && rm "${htmlFile}"
-    [[ -f "${htmlEmail}" ]] && rm "${htmlEmail}"
-    [[ -f "${clientEmail}" ]] && rm "${clientEmail}"
-    [[ -f "${coreFile}" ]] && rm "${coreFile}"
-    [[ -d "${statDir}" ]] && rm -rf "${statDir}"
-    [[ -d "${avatarDir}" ]] && rm -rf "${avatarDir}"
-    [[ -d /tmp/stats ]] && rm -rf /tmp/stats
-    [[ -d /tmp/avatar ]] && rm -rf /tmp/avatar
-    exit 27
-  fi
-}
-
 # Variable init loop
 function init_loop {
   for i in "${var[@]}" ; do
@@ -64,11 +35,11 @@ function init_loop {
 # Startup switches
 function init_startup() {
   var=(APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
-    SLACKTEST FUNCTIONLIST VARIABLELIST AUTOMATE EMAILTEST APPROVE \
+    SLACKTEST FUNCTION_LIST VARIABLE_LIST AUTOMATE EMAILTEST APPROVE \
     DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
     SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
     CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET \
-    SHOWSETTINGS UNIT_TEST BUGSNAG_TEST UPDATE_ACF USE_SMTP)
+    SHOW_SETTINGS UNIT_TEST BUGSNAG_TEST UPDATE_ACF DEBUG_TO_FILE)
   init_loop
 }
 
@@ -101,18 +72,18 @@ function init_env() {
   REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN REFRESHTOKEN PROFILEID ALLOWROOT \
   SHORTEMAIL INCOGNITO REPORTURL CLIENTCONTACT INCLUDEHOSTING GLOBAL_VERSION \
   USER_VERSION PROJECT_VERSION TERSE NOTIFYCLIENT HTMLTEMPLATE PREPARE \
-  PREPARE_CONFIG GRAVITY_FORMS_LICENSE NEWS_URL BUGSNAG_AUTH)
+  PREPARE_CONFIG GRAVITY_FORMS_LICENSE NEWS_URL BUGSNAG_AUTH USE_SMTP)
   init_loop
 }
 
 # Internal variables
 function init_internal() {
   var=(optstring options logFile wpFile coreFile postFile trshFile statFile \
-  urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail deployPath \
-  etcLocation libLocation POSTEMAIL current_branch error_msg notes \
+  urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail stir_path \
+  etc_path lib_path POSTEMAIL current_branch error_msg notes \
   UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC USERRC message_state \
   COMMITURL COMMITHASH UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE \
-  currentStash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
+  current_stash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
   VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WPROOT \
   WPAPP WPSYSTEM DONOTUPDATEWP gitHistory digestSendmail MINAUSER \
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE  LOGSUFFIX \
@@ -136,9 +107,59 @@ init_env
 init_internal
 init_theme
 
-# Log errors
+###############################################################################
+# temp_files()
+#   A function to create temporary files
+#
+# Arguments:
+#   create    Create a new set of temporary files and directories
+#   remove    Remove existing temporary files and directories
+###############################################################################
+function temp_files() {
+  if [[ -z "${1}" ]]; then
+    exit 78
+  else
+  # Setup tempfile list
+  file=(trshFile postFile statFile scanFile scan_html wpFile \
+    urlFile htmlFile htmlEmail clientEmail coreFile statDir avatarDir \
+    stats logFile)
+
+    # Start the loop
+    if [[ "${1}" == "remove" ]]; then
+      for i in "${file[@]}" ; do
+        var="${i}"
+        if [[ -f "${!i:-}" ]] || [[ -d "${!i:-}" ]]; then
+          rm -rf "${!i:-}"
+        fi
+      done
+    elif [[ "${1}" == "create" ]]; then
+      for i in "${file[@]}" ; do
+        if [[ "${i}" != *"Dir"* ]]; then
+          var="/tmp/${APP}.${i}-${RANDOM}.log"; (umask 077 && touch "${var}" &> /dev/null) || log_fail ${var}
+        else
+          var="/tmp/${APP}.${i}-${RANDOM}"; (umask 077 && mkdir "${var}" &> /dev/null) || log_fail ${var}
+        fi
+        read -r "${i}" <<< "${var}"
+      done
+    fi
+  fi
+}
+
 function log_fail() {
-  echo "Could not create temporary file, exiting."; exit 2
+  echo "Could not create temporary file (${1}), exiting."; exit 2
+}
+
+# Trap ctrl-c exits; someday I'll do this better 
+trap ctrl_c INT
+
+# Function to try and cleanup after a user exit, even when external function
+# libraries may not be loaded
+function ctrl_c() {
+  if type quiet_exit &>/dev/null; then
+    quiet_exit
+  else
+    temp_files remove
+  fi
 }
 
 # Display command options
@@ -177,6 +198,7 @@ Other Options:
   --invoice              Create an invoice
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
+  --debug-to-file        Save debug output to a file
   --unlock               Delete expired lock files
   --repair               Repair a deployment after merge failure
   --scan                 Scan production hosts for malware issues
@@ -245,6 +267,7 @@ while [[ ${1:-unset} = -?* ]]; do
     -q|--quiet) QUIET="1" ;;
     --strict) STRICT="1" ;;
     --debug) DEBUG="1" ;;
+    --debug-to-file) DEBUG_TO_FILE="1" ;;
     -F|--force) FORCE="1" ;;
     -m|--merge) MERGE="1" ;; 
     -t|--time) TIME="1" ;;
@@ -271,9 +294,9 @@ while [[ ${1:-unset} = -?* ]]; do
     --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="TRUE" ;;
     --scan) SCAN="1" ;;
     --no-check) NOCHECK="1" ;;
-    --show-settings) SHOWSETTINGS="1" ;;
-    --function-list) FUNCTIONLIST="1"; CURRENT="1" ;; # Spoofs --current
-    --variable-list) VARIABLELIST="1"; CURRENT="1" ;; # Spoofs --current
+    --show-settings) SHOW_SETTINGS="1" ;;
+    --function-list) FUNCTION_LIST="1"; CURRENT="1" ;; # Spoofs --current
+    --variable-list) VARIABLE_LIST="1"; CURRENT="1" ;; # Spoofs --current
     --unit-test) UNIT_TEST="1" ;;
     --endopts) shift; break ;;
     *) echo "Invalid option: '$1'" 1>&2 ; exit 1 ;;
@@ -282,7 +305,12 @@ while [[ ${1:-unset} = -?* ]]; do
 done
 
 # Run in debug mode, if set
-[[ "${DEBUG}" == "1" ]] && set -x
+if [[ "${DEBUG_TO_FILE}" == "1" ]]; then
+  (umask 077 && touch debug.log &> /dev/null) || log_fail debug.log
+  exec 19>debug.log
+  BASH_XTRACEFD=19
+  set -x
+fi
 
 # Exit on empty variable, will possibly get confused by git output
 [[ "${STRICT}" == "1" ]] && set -e
@@ -310,6 +338,7 @@ fi
 [[ "${STRICT}" == "1" ]] && STARTUP="${STARTUP} --strict"
 [[ "${DEBUG}" == "1" ]] && STARTUP="${STARTUP} --debug"
 [[ "${FORCE}" == "1" ]] && STARTUP="${STARTUP} --force"
+[[ "${DEBUG_TO_FILE}" == "1" ]] && STARTUP="${STARTUP} --debug-to-file"
 [[ "${MERGE}" == "1" ]] && STARTUP="${STARTUP} --merge"
 [[ "${NOCHECK}" == "1" ]] && STARTUP="${STARTUP} --no-check"
 [[ "${UNLOCK}" == "1" ]] && STARTUP="${STARTUP} --unlock"
@@ -320,8 +349,8 @@ fi
 [[ "${SLACKTEST}" == "1" ]] && STARTUP="${STARTUP} --slack-test"
 [[ "${POSTTEST}" == "1" ]] && STARTUP="${STARTUP} --post-test"
 [[ "${EMAILTEST}" == "1" ]] && STARTUP="${STARTUP} --email-test"
-[[ "${FUNCTIONLIST}" == "1" ]] && STARTUP="${STARTUP} --function-list"
-[[ "${VARIABLELIST}" == "1" ]] && STARTUP="${STARTUP} --variable-list"
+[[ "${FUNCTION_LIST}" == "1" ]] && STARTUP="${STARTUP} --function-list"
+[[ "${VARIABLE_LIST}" == "1" ]] && STARTUP="${STARTUP} --variable-list"
 
 # If not trying to deploy current directory, and no repo is named in the startup command, exit
 if [[ "${CURRENT}" != "1" ]] && [[ -z "${*}" ]]; then
@@ -330,26 +359,26 @@ fi
 
 # Path of the script; I should flip this check to make it more useful
 if [ -d "/etc/stir" ]; then
-  deployPath="/etc/stir"
+  stir_path="/etc/stir"
 else
-  deployPath="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+  stir_path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 fi
 
 # Load external configuration & functions
-libLocation="${deployPath}/lib/loader.sh"
+lib_path="${stir_path}/lib/loader.sh"
 
-if [[ -r "${deployPath}/global.conf" ]]; then
-  etcLocation="${deployPath}/global.conf"
+if [[ -r "${stir_path}/global.conf" ]]; then
+  etc_path="${stir_path}/global.conf"
 else
-  etcLocation="${deployPath}/etc/global.conf"
+  etc_path="${stir_path}/etc/global.conf"
 fi
 
 # System wide configuration files
-if [[ -f "${etcLocation}" ]]; then
+if [[ -f "${etc_path}" ]]; then
   # shellcheck disable=1090
-  source "${etcLocation}"
+  source "${etc_path}"
 else
-  echo "Unable to load configuration file at ${etcLocation}, exiting."
+  echo "Unable to load configuration file at ${etc_path}, exiting."
   exit 12
 fi
 
@@ -385,66 +414,57 @@ if [[ -r ~/.stirrc ]]; then
 fi
 
 # Load libraries, or die
-if [[ -f "${libLocation}" ]]; then
+if [[ -f "${lib_path}" ]]; then
   # shellcheck disable=1090
-  source "${libLocation}"
+  source "${lib_path}"
 else
-  echo "Unable to load libraries at ${libLocation}, exiting."
+  echo "Unable to load libraries at ${lib_path}, exiting."
   exit 19
 fi
 
+# Create temporary files
+temp_files create
+
 # Fire up temporary log files. Consolidate this shit better someday, geez.
 # Main log file
-logFile="/tmp/${APP}.log-$RANDOM.log"
-(umask 077 && touch "${logFile}") || log_fail
-wpFile="/tmp/${APP}.wp-$RANDOM.log"; (umask 077 && touch "${wpFile}" &> /dev/null) || log_fail
-coreFile="/tmp/${APP}.core-$RANDOM.log"; (umask 077 && touch "${coreFile}" &> /dev/null) || log_fail
+#logFile="/tmp/${APP}.log-$RANDOM.log"
+#(umask 077 && touch "${logFile}") || log_fail
+#wpFile="/tmp/${APP}.wp-$RANDOM.log"; (umask 077 && touch "${wpFile}" &> /dev/null) || log_fail
+#coreFile="/tmp/${APP}.core-$RANDOM.log"; (umask 077 && touch "${coreFile}" &> /dev/null) || log_fail
 
 # Start writing the logfile
 echo -e "Activity logfile for ${APP^^} - ${NOW}\r" >> "${logFile}"
 echo -e "Launching stir${STARTUP}\n" >> "${logFile}"
 
-# More crappy tmp files
-postFile="/tmp/${APP}.wtf-${RANDOM}.log"; (umask 077 && touch "${postFile}" &> /dev/null) || log_fail
-trshFile="/tmp/${APP}.trsh-${RANDOM}.log"; (umask 077 && touch "${trshFile}" &> /dev/null) || log_fail
-scanFile="/tmp/${APP}.scan-${RANDOM}.log"; (umask 077 && touch "${scanFile}" &> /dev/null) || log_fail 
-statFile="/tmp/${APP}.stat-${RANDOM}.log"; (umask 077 && touch "${statFile}" &> /dev/null) || log_fail
-statDir="/tmp/${APP}.stat-${RANDOM}"; (umask 077 && mkdir "${statDir}" &> /dev/null) || log_fail
-avatarDir="/tmp/${APP}.avatar-${RANDOM}"; (umask 077 && mkdir "${avatarDir}" &> /dev/null) || log_fail
-urlFile="/tmp/${APP}.url-${RANDOM}.log"; (umask 077 && touch "${urlFile}" &> /dev/null) || log_fail
-htmlFile="/tmp/${APP}.log-${RANDOM}.html"; (umask 077 && touch "${htmlFile}" &> /dev/null) || log_fail
-htmlEmail="/tmp/${APP}.email-${RANDOM}.html"; (umask 077 && touch "${htmlEmail}" &> /dev/null) || log_fail
-clientEmail="/tmp/${APP}.shortemail-${RANDOM}.html"; (umask 077 && touch "${clientEmail}" &> /dev/null) || log_fail
-
 # Function list
-if [[ "${FUNCTIONLIST}" == "1" ]]; then
-  compgen -A function | more; quickExit
+if [[ "${FUNCTION_LIST}" == "1" ]]; then
+  compgen -A function | more; quiet_exit
 fi
 
 # Variable list
-if [[ "${VARIABLELIST}" == "1" ]]; then
-  VERBOSE="FALSE"; ( set -o posix ; set ) | cat -v; quickExit
+if [[ "${VARIABLE_LIST}" == "1" ]]; then
+  VERBOSE="FALSE"; ( set -o posix ; set ) | cat -v; quiet_exit
 fi
 
 # Do we need to be quiet?
-if [[ "${SHOWSETTINGS}" == "1" ]]; then
+if [[ "${SHOW_SETTINGS}" == "1" ]]; then
   VERBOSE="FALSE"
 fi
 
 # Spam all the things!
 trace "Version ${VERSION}"
 if [[ "${INCOGNITO}" != "TRUE" ]]; then
-  trace "Running from ${deployPath}"
-  trace "Loading system configuration file from ${etcLocation}"
+  trace "Running from ${stir_path}"
+  trace "Loading system configuration file from ${etc_path}"
 fi
 
 # Does a user configuration exit?
 if [[ "${USERRC}" != "1" ]]; then
   trace "User configuration not found, creating"
-  if [[ -r "${deployPath}/stir-user.rc" ]]; then
-    cp "${deployPath}"/stir-user.rc ~/.stirrc
-  elif [[ -r "${deployPath}/etc/stir-user.rc" ]]; then
-    cp "${deployPath}"/etc/stir-user.rc ~/.stirrc
+  if [[ -r "${stir_path}/stir-user.rc" ]]; then
+    cp "${stir_path}"/stir-user.rc ~/.stirrc
+  elif [[ -r "${stir_path}/etc/stir-user.rc" ]]; then
+    cp "${stir_path}"/etc/stir-user.rc ~/.stirrc
   fi
   console "User configuration file missing, creating ~/.stirrc"
   if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
@@ -452,7 +472,7 @@ if [[ "${USERRC}" != "1" ]]; then
     console "Loading user configuration."
     # shellcheck source=/dev/null
     source ~/.stirrc
-    # quickExit
+    # quiet_exit
   else
     info "You can change configuration later by editing ~/.stirrc"
     clear_user
@@ -479,7 +499,7 @@ else
   # Make sure app directory is writable
   if [[ -w "${WORKPATH}/${APP}" ]]; then
     empty_line; info "Project configuration not found, creating."; sleep 2
-    cp "${deployPath}"/stir-project.sh "${WORKPATH}/${APP}/.stir.sh"
+    cp "${stir_path}"/stir-project.sh "${WORKPATH}/${APP}/.stir.sh"
     APPRC="${WORKPATH}/${APP}/.stir.sh"
     if [[ -x "$(command -v nano)" ]]; then
       if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
@@ -516,9 +536,9 @@ if [[ -n "${POSTEMAIL}" ]]; then
 fi
 
 # Load HTML theme configuration
-if [[ -f "${deployPath}/html/${HTMLTEMPLATE}/theme.conf" ]]; then
+if [[ -f "${stir_path}/html/${HTMLTEMPLATE}/theme.conf" ]]; then
   # shellcheck disable=1090
-  source "${deployPath}/html/${HTMLTEMPLATE}/theme.conf"
+  source "${stir_path}/html/${HTMLTEMPLATE}/theme.conf"
 
   # Lowercase dashboard class is better form
   if [[ -n "${THEME_MODE}" ]]; then
@@ -597,7 +617,7 @@ if [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
     else  
       warning "No outstanding approval request found."
     fi
-    quietExit
+    quiet_exit
   fi
 fi
 
@@ -618,7 +638,7 @@ if [[ "${MERGE}" == "1" ]] && [[ -z "${PRODUCTION}" ]]; then
   else
     warning "You are attempting to merge branches, but a target branch is not defined."
   fi
-  quietExit
+  quiet_exit
 fi
 
 # Set app path
@@ -632,4 +652,4 @@ fi
 main
 
 # All done
-safeExit
+clean_exit

@@ -30,7 +30,7 @@ function wp_clone_mngmt() {
 function check_mysql_service() {
   if [[ -z "$(pgrep mysql)" ]]; then 
     warning "MySQL service not found, can not continue."
-    quietExit
+    quiet_exit
   fi
 }
 

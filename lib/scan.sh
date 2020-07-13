@@ -36,7 +36,7 @@ function scan_check() {
 
 function scan_host() {
   if [[ -z "${NIKTO}" ]]; then
-    warning "Scanning command is not configured, check your setup."; quietExit
+    warning "Scanning command is not configured, check your setup."; quiet_exit
   fi
 
   # Check for nikto
@@ -46,7 +46,7 @@ function scan_host() {
 
   # Only scan production URL
   if [[ -z "${PRODURL}" ]]; then
-    warning "Production server is not defined, check your setup."; quietExit
+    warning "Production server is not defined, check your setup."; quiet_exit
   fi
 
   # Create temp files
@@ -98,7 +98,7 @@ function scan_host() {
   assign_nav
   project_scan
 
-  cat "${deployPath}/html/${HTMLTEMPLATE}/scan/header.html" "${scan_html}" "${deployPath}/html/${HTMLTEMPLATE}/scan/footer.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/scan/header.html" "${scan_html}" "${stir_path}/html/${HTMLTEMPLATE}/scan/footer.html" > "${htmlFile}"
 
   SCAN_MSG=$(grep -a "error" "${htmlFile}")
 
@@ -125,5 +125,5 @@ function scan_host() {
   LOGTITLE="Malware Scan"
   notes="Malware scan on ${PRODURL}: ${SCAN_RESULT}"
 
-  safeExit
+  clean_exit
 }

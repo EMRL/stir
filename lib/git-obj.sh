@@ -104,7 +104,7 @@ function status() {
       else
         console "Nothing to commit, working directory clean."
       fi
-      quietExit
+      quiet_exit
     fi
   fi
 }
@@ -113,7 +113,7 @@ function status() {
 function stage() {
   # Check for stuff that needs a commit
   if [[ -z $(git status --porcelain) ]]; then
-    console "Nothing to commit, working directory clean."; quietExit
+    console "Nothing to commit, working directory clean."; quiet_exit
   else
     empty_line
     if [[ "${FORCE}" = "1" ]] || yesno --default yes "Stage files? [Y/n] "; then
@@ -124,7 +124,7 @@ function stage() {
         git add --all :/ &>> "${logFile}"; error_check
       fi
     else
-      trace "Exiting without staging files"; userExit    
+      trace "Exiting without staging files"; user_exit    
     fi
   fi
 }
@@ -152,7 +152,7 @@ function push() {
         git push --force-with-lease  &>> "${logFile}"
       fi
     else
-      safeExit
+      clean_exit
     fi
   fi
 }
@@ -206,7 +206,7 @@ function confirm_branch() {
         git checkout "${working_branch}" &>> "${logFile}" #; error_check
       fi
     else
-      safeExit
+      clean_exit
     fi
     # Were there any conflicts checking out?
     if grep -aq "error: Your local changes to the following files would be overwritten by checkout:" "${logFile}"; then

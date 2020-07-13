@@ -29,7 +29,7 @@ function go() {
 
   # Build only
   if [[ "${BUILD}" == "1" ]]; then
-    pkgMgr; quietExit
+    pkgMgr; quiet_exit
   fi  
 
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
@@ -38,24 +38,24 @@ function go() {
 
   # Generate git stats
   if [[ "${PROJSTATS}" == "1" ]]; then
-    project_stats; quickExit
+    project_stats; quiet_exit
   fi
 
   # Chill and wait for user to confirm project
   if  [[ "${FORCE}" == "1" || "${SCAN}" == "1" || "${PROJSTATS}" == "1" ]] || yesno --default yes "Continue? [Y/n] "; then
     trace "Loading project"
   else
-    quickExit
+    quiet_exit
   fi
 
   # Is this project locked?
   if [[ "${DONOTDEPLOY}" == "TRUE" ]]; then
-    warning "This project is currently locked."; quickExit
+    warning "This project is currently locked."; quiet_exit
   fi
 
   # Is the user root?
   if [[ "${ALLOWROOT}" != "TRUE" ]] && [[ "${EUID}" -eq "0" ]]; then
-    warning "Can't continue as root."; quickExit
+    warning "Can't continue as root."; quiet_exit
   fi
 
   # Disallow server check?
@@ -69,13 +69,13 @@ function go() {
     warning "Found ${gitLock}"
     # If running in --force mode we will not allow deployment to continue
     if [[ "${FORCE}" = "1" ]]; then
-      warning "Can't continue using --force."; quietExit
+      warning "Can't continue using --force."; quiet_exit
     else
       if yesno --default no "Remove lockfile? [y/N] "; then
         rm -f "${gitLock}" 2>/dev/null
         sleep 1
       else
-        quickExit
+        quiet_exit
       fi
     fi
   fi
@@ -148,43 +148,43 @@ function get_json_value() {
 
 # User tests
 function user_tests() {
-  if [[ "${SHOWSETTINGS}" == "1" ]]; then
-    show_settings; quickExit
+  if [[ "${SHOW_SETTINGS}" == "1" ]]; then
+    show_settings; quiet_exit
   fi
 
   # Slack test
   if [[ "${SLACKTEST}" == "1" ]]; then
-    slackTest; quickExit
+    slackTest; quiet_exit
   fi
 
   # Webhook POST test
   if [[ "${POSTTEST}" == "1" ]]; then
-    postTest; quickExit
+    postTest; quiet_exit
   fi
 
   # Email test
   if [[ "${EMAILTEST}" == "1" ]]; then
-    email_test; quickExit
+    email_test; quiet_exit
   fi
 
   # Test analytics authentication
   if [[ "${ANALYTICSTEST}" == "1" ]]; then
-    ga_test; quickExit
+    ga_test; quiet_exit
   fi
 
   # Test server monitoring
   if [[ "${MONITORTEST}" == "1" ]]; then
-    server_monitor_test; quickExit
+    server_monitor_test; quiet_exit
   fi
 
   # Test Bugsnag integration
   if [[ "${BUGSNAG_TEST}" == "1" ]]; then
-    bugsnag_test; quickExit
+    bugsnag_test; quiet_exit
   fi
 
   # Test Dropbox backup authentication
   if [[ "${CHECK_BACKUP}" == "1" ]]; then
-    check_backup; quickExit
+    check_backup; quiet_exit
   fi
 
   # Test SSH key authentication using the --ssh-check flag
@@ -195,7 +195,7 @@ function user_tests() {
     else
       warning "This project is not configured to use SSH keys, no check needed."
     fi
-    quickExit
+    quiet_exit
   fi
 }
 
@@ -216,11 +216,11 @@ function dependency_check() {
         if [[ ! -d "${WORKPATH}/${APP}/${CONFIGDIR}" ]]; then
           mkdir "${WORKPATH}/${APP}/${CONFIGDIR}"
         fi
-        cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/${CONFIGDIR}/"
+        cp "${stir_path}"/deploy.sh "${WORKPATH}/${APP}/${CONFIGDIR}/"
         APPRC="${WORKPATH}/${APP}/${CONFIGDIR}/stir.sh"
       else
         # If using root directory for .stir.sh
-        cp "${deployPath}"/deploy.sh "${WORKPATH}/${APP}/.stir.sh"
+        cp "${stir_path}"/deploy.sh "${WORKPATH}/${APP}/.stir.sh"
         APPRC="${WORKPATH}/${APP}/.stir.sh"
       fi
       # Ask the user if they would like to edit
@@ -411,5 +411,5 @@ function show_settings() {
       console "You can email this information to yourself by using 'stir --test-email ${APP}'"
     fi
   fi      
-  quickExit
+  quiet_exit
 }

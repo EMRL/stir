@@ -14,7 +14,7 @@ init_loop
 function preDeploy() {
   # If there are changes waiting in the repo, stop and ask for user input
   # This should probably be it's own function
-  currentStash="0"
+  current_stash="0"
   if [[ -n $(git status --porcelain) ]]; then
     # If running in --force mode we will not allow deployment to continue
     if [[ "${FORCE}" == "1" && "${APPROVE}" != "1" ]] || [[ "${UPDATEONLY}" == "1" ]] || [[ "${REPAIR}" = "1" ]]; then
@@ -28,7 +28,7 @@ function preDeploy() {
         else
           git stash >> "${logFile}"; error_check
         fi
-        currentStash="1"
+        current_stash="1"
       else
         empty_line
         error "There are unstaged changes in this project, deployment can not continue."
@@ -45,7 +45,7 @@ function preDeploy() {
         if  yesno --default yes "Continue? [Y/n] "; then
           trace "Processing project"
         else
-          userExit
+          user_exit
         fi
       fi
     fi
@@ -115,7 +115,7 @@ function pkgDeploy() {
 
       else
         # If running --publish exit now
-        [[ "${PUBLISH}" == "1" ]] && quietExit
+        [[ "${PUBLISH}" == "1" ]] && quiet_exit
       fi
     else
       if [[ "${APPROVE}" == "1" ]]; then

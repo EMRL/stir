@@ -19,7 +19,7 @@ function get_avatars() {
 
     # Check for missing Gravatar
     if "${curl_cmd}" --output /dev/null --silent --head --fail "${GRAVATAR}"; then
-      echo -n "."
+      dot
     else
       GRAVATAR="http://www.gravatar.com/avatar"
     fi
@@ -32,8 +32,8 @@ function get_avatars() {
       #fi
       IMGFILE="${avatarDir}/${AUTHORNAME}.png"
     fi
-    "${curl_cmd}" -fso "${IMGFILE}" "${GRAVATAR}"
-  done  
+    "${curl_cmd}" -fso "${IMGFILE}" "${GRAVATAR}"; dot
+  done 
 }
 
 function create_digest() {
@@ -56,7 +56,7 @@ function create_digest() {
     ga_over_time "${METRIC}" 7
 
     # Assemble the file
-    DIGESTWRAP="$(<${deployPath}/html/${HTMLTEMPLATE}/digest/commit.html)"
+    DIGESTWRAP="$(<${stir_path}/html/${HTMLTEMPLATE}/digest/commit.html)"
 
     # If there have been no commits in the last week, skip creating the digest
     if [[ $(git log --since="7 days ago") ]]; then
@@ -75,7 +75,7 @@ function create_digest() {
         fi
       done < "${trshFile}"
 
-      cat "${deployPath}/html/${HTMLTEMPLATE}/digest/header.html" "${statFile}" "${deployPath}/html/${HTMLTEMPLATE}/digest/footer.html" > "${htmlFile}"
+      cat "${stir_path}/html/${HTMLTEMPLATE}/digest/header.html" "${statFile}" "${stir_path}/html/${HTMLTEMPLATE}/digest/footer.html" > "${htmlFile}"
 
       # Randomize a positive Monday thought. Special characters must be escaped 
       # and use character codes
@@ -106,7 +106,7 @@ function create_digest() {
       digestSendmail=$(<"${htmlFile}")
     else
       console "No activity found, canceling digest."
-      safeExit
+      clean_exit
     fi
   fi
 }
