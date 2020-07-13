@@ -13,7 +13,7 @@ function get_rss() {
 	# Pull RSS feed
 	"${curl_cmd}" --silent "${NEWS_URL}" > /tmp/${APP}.xml; error_check
 	# Strip CDATA stuff
-	"${xmlstarlet_cmd}" fo --omit-decl --nocdata /tmp/${APP}.xml > ${statFile}; error_check
+	"${xmlstarlet_cmd}" fo --omit-decl --nocdata /tmp/${APP}.xml > ${statFile}
 	# Clean up mess
 	rm /tmp/${APP}.xml
 }

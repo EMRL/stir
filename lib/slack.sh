@@ -7,6 +7,7 @@
 ###############################################################################
 
 function post_slack () {
+
   # If running in --automate, change the user name
   if [[ "${AUTOMATE}" == "1" ]]; then
     SLACKUSER="Scheduled update:"
