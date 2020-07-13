@@ -6,9 +6,7 @@
 # Integration with Slack
 ###############################################################################
 
-function slackPost () {
-  trace "${DIGESTSLACK}"
-
+function post_slack () {
   # If running in --automate, change the user name
   if [[ "${AUTOMATE}" == "1" ]]; then
     SLACKUSER="Scheduled update:"

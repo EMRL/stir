@@ -44,13 +44,13 @@ function create_digest() {
     htmlDir
     
     # Collect gravatars for all the authors in this repo
-    get_avatars
+    get_avatars; dot
 
     # If configured, setup RSS news
-    create_rss_payload
+    create_rss_payload; dot
     
     # Attempt to get analytics
-    analytics
+    analytics; dot
 
     # Genereate the correct analytics chart
     ga_over_time "${METRIC}" 7
@@ -60,22 +60,22 @@ function create_digest() {
 
     # If there have been no commits in the last week, skip creating the digest
     if [[ $(git log --since="7 days ago") ]]; then
-      git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${statFile}"
+      git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${statFile}"; dot
       sed -i '/^commit/ s/$/ <\/strong><br>/' "${statFile}"
       sed -i '/^Author:/ s/$/ <br>/' "${statFile}"
       sed -i '/^Date:/ s/$/ <br><br>/' "${statFile}"
 
       # Look for manual commits and strip their URLs 
-      grep -oP "(?<=href=\")[^\"]+(?=\")" "${statFile}" > "${trshFile}"
+      grep -oP "(?<=href=\")[^\"]+(?=\")" "${statFile}" > "${trshFile}"; dot
       while read URL; do
         CODE=$(${curl_cmd} -o /dev/null --silent --head --write-out '%{http_code}' "$URL")
         if [[ "${CODE}" != "200" ]]; then 
           # sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${statFile}"
-          sed -i "s,${URL},${REPOHOST}/${REPO},g" "${statFile}"
+          sed -i "s,${URL},${REPOHOST}/${REPO},g" "${statFile}"; dot
         fi
       done < "${trshFile}"
 
-      cat "${stir_path}/html/${HTMLTEMPLATE}/digest/header.html" "${statFile}" "${stir_path}/html/${HTMLTEMPLATE}/digest/footer.html" > "${htmlFile}"
+      cat "${stir_path}/html/${HTMLTEMPLATE}/digest/header.html" "${statFile}" "${stir_path}/html/${HTMLTEMPLATE}/digest/footer.html" > "${htmlFile}"; dot
 
       # Randomize a positive Monday thought. Special characters must be escaped 
       # and use character codes
@@ -89,9 +89,7 @@ function create_digest() {
       RND="$(($RANDOM % $SIZE))"
       GREETING="${array[$RND]}"
 
-      # Git some stats
-      # git log --no-merges  --since="7 days ago" --reverse --stat | grep -Eo "[0-9]{1,} files? changed" | grep -Eo "[0-9]{1,}" | awk "{ sum += \$1 } END { print sum }"
-      process_html
+      process_html; dot
 
       # Strip out useless analytics results
       if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then

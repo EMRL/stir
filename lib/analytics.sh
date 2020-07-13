@@ -117,7 +117,7 @@ function ga_data() {
   RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4)
   SIZE="$(printf "%.0f\n" "${RESULT}")"
 
-  # Make this a proper loop
+  # TODO: Make this a proper loop
   if [[ "${PROJSTATS}" == "1" ]]; then 
     GA_HITS=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:hits&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:hits\":" | cut -d'"' -f4)
     GA_PERCENT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:percentNewSessions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:percentNewSessions\":" | cut -d'"' -f4)
@@ -153,14 +153,8 @@ function ga_data_loop() {
 
   # Start the loop
   for i in "${ga_var[@]}" ; do
-    # This is essentially the same as insert_values() [see env-check.sh], we
-    #  should consolidate them into one function
-    #if [[ "${ANALYTICSTEST}" == "1" ]]; then
-    #  console "Running 'curl -s \"https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN\" | tr , '\\n' | grep \"ga:${i}\":\" | cut -d'\"' -f4'"
-    #fi
-
     RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4)
-    
+
     # Workaround for buggy Google shit
     until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
     do
@@ -171,15 +165,8 @@ function ga_data_loop() {
     if [[ "${RESULT}" = *"."* ]]; then
       RESULT="$(printf '%0.2f\n' "${RESULT}")"
     fi
-
-    # Store variable in the proper place
-    # This won't work w/ floating point. Trim decimal or let it ride and do
-    # a different way?
-    # let ga_${i}="${RESULT}"
-    
     # Output trace
     trace "${i}: ${RESULT}"
-
   done
 }
 
@@ -221,7 +208,7 @@ function ga_over_time() {
     [[ -f "${trshFile}" ]] && rm "${trshFile}"
 
     while [ "$ga_day" != "${GASTART}" ]; do 
-      RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4)
+      RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4);
       
       # Workaround for buggy Google shit
       until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
@@ -230,7 +217,7 @@ function ga_over_time() {
       done
 
       # Make sure we're only dealing with integers
-      RESULT="$(printf "%.0f\n" "${RESULT}")"
+      RESULT="$(printf "%.0f\n" "${RESULT}")"; dot
       
       # Add to total
       let ga_${METRIC}+="${RESULT}"

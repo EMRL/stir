@@ -20,10 +20,10 @@ function clean_exit() {
   if [[ "${POSTTOSLACK}" == "TRUE" ]] && [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" = "1" ]] && [[ "${UPD2}" = "1" ]]; then
     message_state="NOTICE"
     notes="No updates available for deployment"
-    slackPost
+    post_slack
   else
     if [[ "${POSTTOSLACK}" == "TRUE" ]]; then
-      build_log; slackPost > /dev/null 2>&1
+      build_log; post_slack > /dev/null 2>&1
     fi
   fi
 
@@ -46,7 +46,7 @@ function error_exit() {
   # Check Slack settings
   if [[ "${POSTTOSLACK}" == "TRUE" ]] && [[ "${SLACKERROR}" == "TRUE" ]]; then
     message_state="ERROR"
-    slackPost
+    post_slack
   fi
 
   # Clean up your mess

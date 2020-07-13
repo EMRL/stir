@@ -305,11 +305,15 @@ while [[ ${1:-unset} = -?* ]]; do
 done
 
 # Run in debug mode, if set
+# Run in debug mode, if set
+
 if [[ "${DEBUG_TO_FILE}" == "1" ]]; then
   (umask 077 && touch debug.log &> /dev/null) || log_fail debug.log
   exec 19>debug.log
   BASH_XTRACEFD=19
   set -x
+else
+  [[ "${DEBUG}" == "1" ]] && set -x
 fi
 
 # Exit on empty variable, will possibly get confused by git output
