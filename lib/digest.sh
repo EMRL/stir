@@ -41,7 +41,7 @@ function create_digest() {
     return
   else
     message_state="DIGEST"
-    htmlDir
+    html_dir
     
     # Collect gravatars for all the authors in this repo
     get_avatars; dot

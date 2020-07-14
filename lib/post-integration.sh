@@ -34,7 +34,7 @@ function build_log() {
 }
 
 # Post integration via email
-function mailPost() {
+function mail_post() {
   # If this is an outstanding approval, don't post
   if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
     trace "Approval required, skipping integration"
@@ -98,7 +98,7 @@ function postCommit() {
   if [[ -n "${POSTEMAIL}" ]]; then
     # Is it a valid email address? Ghetto check but better than nothing
     if [[ "${POSTEMAIL}" == ?*@?*.?* ]]; then
-      build_log; mailPost
+      build_log; mail_post
     else
       trace "Integration email address ${POSTEMAIL} does not look valid"
     fi

@@ -6,7 +6,7 @@
 # Mail handling
 ###############################################################################
 
-function mailLog() {
+function mail_log() {
   # Only send email if a commit has been made, an approval is required, or there has been an error
   if [[ -n "${COMMITHASH}" ]] || [[ "${message_state}" == "ERROR" ]] || [[ "${message_state}" == "APPROVAL NEEDED" ]] || [[ "${AUTOMATE}" == "1" ]]; then
 

@@ -18,9 +18,9 @@ function reset_local() {
       fi
     fi
 
-    if [[ -n "${CONFIGBACKUP}" ]]; then
-      trace status "Backing up project settings to ${CONFIGBACKUP}/${APP}-stir.sh... "
-      cp "${project_config}" "${CONFIGBACKUP}/${APP}-stir.sh"; error_check
+    if [[ -n "${CONFIG_BACKUP}" ]]; then
+      trace status "Backing up project settings to ${CONFIG_BACKUP}/${APP}-stir.sh... "
+      cp "${project_config}" "${CONFIG_BACKUP}/${APP}-stir.sh"; error_check
       trace notime "OK"
     fi
 

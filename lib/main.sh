@@ -8,7 +8,7 @@
 
 function main() { 
   get_fullpath      # Get full path to internal commands
-  dependency_check  # Check that all dependencies are available
+  check_dependencies  # Check that all dependencies are available
   user_tests        # Run tests if specified by the user
   release_check     # Check for newer version at Github
   env_check         # Check for configuration files that need updating
@@ -92,7 +92,7 @@ function main() {
       # Continue normally
       if [[ "${APPROVE}" != "1" ]]; then
         wp          # Run Wordpress upgrades if needed
-        pkgMgr      # Run package manager
+        build_check      # Run package manager
         status      # Make sure there's something here to commit         
       fi
 

@@ -12,8 +12,8 @@
 set -uo pipefail
 
 # Initialize variables 
-read -r OS VER EXITCODE dependencies option message fg_green fg_red reset \
-  YES NO NOT i k WORKPATH FIRSTRUN INPUTPATH TIMEOUT <<< ""
+read -r OS VER EXITCODE dependencies option message fg_green fg_red fg_yellow \
+  reset YES NO NOT i k WORKPATH FIRSTRUN INPUTPATH TIMEOUT <<< ""
 echo "${OS} ${VER} ${EXITCODE} ${dependencies} ${option} ${message} ${fg_green} 
   ${fg_red} ${reset} ${YES} ${NO} ${NOT} ${i} ${k} ${WORKPATH} 
   ${FIRSTRUN} ${INPUTPATH}" > /dev/null
@@ -86,7 +86,7 @@ function error_check() {
 
 echo; check_os
 if [[ -n "${OS}" ]] && [[ -n "${VER}" ]]; then
-  echo "=> Checking operating system: "; sleep .3
+  echo "${fg_yellow}=> Checking operating system:${reset}"; sleep .3
   echo "${OS} ${VER}"; sleep 1
 else
   # No values, crash out for now
@@ -104,6 +104,7 @@ options=(cal gitchart gnuplot grunt npm scp sendmail ssh sshpass ssmtp unzip \
 message=''
 fg_red="$(tput setaf 1)"
 fg_green="$(tput setaf 2)"
+fg_yellow="$(tput setaf 3)"
 reset="$(tput sgr0)"
 
 # Common messages
@@ -111,7 +112,7 @@ YES="${fg_green}OK${reset}"
 NO="${fg_red}NO${reset}"
 NOT="${fg_red}NOT FOUND${reset}"
 
-echo; echo "=> Checking for required dependencies:"
+echo; echo "${fg_yellow}=> Checking for required dependencies:${reset}"
 for i in "${dependencies[@]}" ; do
   check_program "${i}"
 done
@@ -125,7 +126,7 @@ else
   exit 1
 fi
 
-echo; echo "=> Checking optional dependencies:"
+echo; echo "${fg_yellow}=> Checking optional dependencies:${reset}"
 for k in "${options[@]}" ; do
   check_program "${k}"
 done
@@ -144,7 +145,7 @@ if [[ ! -d /etc/stir ]]; then # || [[ ! -d /etc/stir/lib ]] || [[ ! -d /etc/stir
   fi
 fi
 
-echo "Installing configuration files"
+echo "Installing system files"
 sudo cp -R etc/* /etc/stir; error_check
 sudo cp etc/stir-user.rc /etc/stir; error_check
 
@@ -166,34 +167,84 @@ sudo chmod 755 /usr/local/bin/bulk.stir || error_check
 
 if [[ "${FIRSTRUN}" == "TRUE" ]]; then
   # Someday some first run help stuff could go here
-  echo;
+  echo
+  echo "${fg_yellow}     _   _"     
+  echo " ___| |_(_)_ __" 
+  echo "/ __| __| | '__|"
+  echo "\__ \ |_| | |"  
+  echo "|___/\__|_|_|${reset}"
+  echo
+  echo "welcome to Stir!"
+  echo
+  echo "Stir is designed to speed up, integrate, and automate project "
+  echo "deployment. Its main focus is Wordpress websites, but it can be used "
+  echo "with any code repository."
+  echo
+  echo "Here's a few things that stir can help you do:"
+  echo
+  echo "1. Schedule automatic updates and deployment of Wordpress plugins and "
+  echo "   system files"
+  echo "2. Keep clients up to date with simple dashboards and scheduled digest "
+  echo "   emails notifying them of their code updates"
+  echo "3. Track all changes internally w/ integration into project management, "
+  echo "   time tracking, and invoicing systems"
+  echo "4. Notify your team of deployments through Slack and emails"
+  echo "5. Solve deployment issues with verbose logging features"
+  echo
+  echo "Let's get your configuration started!"
+
+  # If values need to be set, ask the user for input to setup global.conf
+  #
+  # WORKPATH
+  if grep -q "{{WORKPATH}}" "/etc/stir/global.conf"; then
+    if [[ "${TIMEOUT}" != "TRUE" ]]; then
+      WORKPATH="/etc/stir/repos/"
+      echo; echo "${fg_yellow}=> Where are all (or most) of your repos stored?${reset}" 
+      read -rp "[ Ex. ${WORKPATH} ]: " -e -i "${WORKPATH}" INPUTPATH
+      WORKPATH="${INPUTPATH:-$WORKPATH}"
+      if [[ -d "${WORKPATH}" ]]; then
+        if [[ -n "$(find ${WORKPATH} -type d -exec test -e '{}/.git' ';' -print -prune)" ]]; then
+          echo "Found git repos at ${WORKPATH} and using it as your default stir path"
+        else
+          echo "Using ${WORKPATH} as your default stir path."
+        fi
+      else
+        mkdir "${WORKPATH}"; error_check
+        [[ -d "${WORKPATH}" ]] && echo "Created ${WORKPATH} and using it as your default stir path."
+      fi
+    else
+      WORKPATH="$(cd -P .. && pwd -P)"
+    fi
+    sed_hack=$(echo "sed -i 's^{{WORKPATH}}^${WORKPATH}^g' /etc/stir/global.conf; sed -i 's^# WORKPATH^WORKPATH^g' /etc/stir/global.conf"); eval "${sed_hack}"
+  fi
+
+  # REPOHOST
+  if grep -q "{{REPOHOST}}" "/etc/stir/global.conf"; then
+    if [[ "${TIMEOUT}" != "TRUE" ]]; then
+      REPOHOST="http://github.com/username/"
+      echo; echo "${fg_yellow}=> What is the URL where are all (or most) of your repos hosted?${reset}"
+      #echo "Enter the URL for your repository hosting, normally https://repohost.com/username/"
+      read -rp "[ Ex. ${REPOHOST} ]: " -e -i "${REPOHOST}" INPUTPATH
+      REPOHOST="${INPUTPATH:-$REPOHOST}"
+    else
+      # This is for automated unit testing
+      REPOHOST="http://github.com/emrl/"
+    fi
+    sed_hack=$(echo "sed -i 's^{{REPOHOST}}^${REPOHOST}^g' /etc/stir/global.conf; sed -i 's^# REPOHOST^REPOHOST^g' /etc/stir/global.conf"); eval "${sed_hack}"
+  fi
+
+  # Additional configuration stuff will go here
+  echo
+  echo "Learn about configuring Stir at https://github.com/EMRL/stir/wiki"
 fi
 
-# If values need to be set, ask the user for input to setup global.conf
-if grep -q "{{WORKPATH}}" "/etc/stir/global.conf"; then
-  if [[ "${TIMEOUT}" != "TRUE" ]]; then
-    WORKPATH="~/repos"
-    echo; echo "Where are all (or most) of your repos stored?" 
-    read -rp "[ Ex. ${WORKPATH} ]: " -e -i "${WORKPATH}" INPUTPATH
-    WORKPATH="${INPUTPATH:-$WORKPATH}"
-  else
-    WORKPATH="$(cd -P .. && pwd -P)"
-  fi
-  sed_hack=$(echo "sed -i 's^{{WORKPATH}}^${WORKPATH}^g' /etc/stir/global.conf; sed -i 's^# WORKPATH^WORKPATH^g' /etc/stir/global.conf"); eval "${sed_hack}"
-fi
+# If automated unit testing, exit now
+#if [[ "${TIMEOUT}" == "TRUE" ]]; then
+#  exit 0
+#fi
 
-if grep -q "{{REPOHOST}}" "/etc/stir/global.conf"; then
-  if [[ "${TIMEOUT}" != "TRUE" ]]; then
-    REPOHOST="http://github.com/username"
-    echo; echo "Where are all (or most) of your repos are stored?"
-    echo "(This setting can be overridden on a per-project basis)"
-    read -rp "[ Ex. ${REPOHOST} ]: " -e -i "${REPOHOST}" INPUTPATH
-    REPOHOST="${INPUTPATH:-$REPOHOST}"
-  else
-    REPOHOST="http://github.com/EMRL"
-  fi
-  sed_hack=$(echo "sed -i 's^{{REPOHOST}}^${REPOHOST}^g' /etc/stir/global.conf; sed -i 's^# REPOHOST^REPOHOST^g' /etc/stir/global.conf"); eval "${sed_hack}"
-fi
+# Clean out unused variables
+# sed -i 's^{{.*}}^^g' /etc/stir/global.conf
 
 echo "Successfully installed, try typing 'stir' for help."
 exit 0

@@ -89,7 +89,7 @@ function project_stats() {
     project_css #& spinner $!
 
     # Post files
-    postLog #& spinner $!
+    post_log #& spinner $!
   fi
 }
 
