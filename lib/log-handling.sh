@@ -6,7 +6,7 @@
 # Handles parsing and creating logs
 ###############################################################################
 
-function makeLog() {
+function make_log() {
   # Clean up stuff that is most likely there
   sed -i -e '/git reset HEAD/d' \
     -e '/Checking out files:/d' \
@@ -137,7 +137,7 @@ function makeLog() {
 
   # Create HTML/PHP logs for viewing online
   if [[ "${REMOTELOG}" == "TRUE" ]]; then
-    htmlDir
+    html_dir
 
     # For web logs, VIEWPORT should be 960
     VIEWPORT="960"
@@ -148,7 +148,7 @@ function makeLog() {
 
     # Strip out the buttons that self-link
     sed -e "s^// BUTTON: BEGIN //-->^BUTTON HIDE^g" -i "${htmlFile}"
-    postLog
+    post_log
   fi
 }
 

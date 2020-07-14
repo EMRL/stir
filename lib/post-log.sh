@@ -11,14 +11,14 @@ var=(SCPPORT)
 init_loop
 
 # Remote log function; this really needs to be rewritten
-function postLog() {
+function post_log() {
   if [[ "${REMOTELOG}" == "TRUE" ]]; then
 
     # Post to localhost by simply copying files
     if [[ "${LOCALHOSTPOST}" == "TRUE" ]] && [[ -n "${LOCALHOSTPATH}" ]] && [[ -f "${htmlFile}" ]]; then
       
       # Check that directory exists
-      htmlDir
+      html_dir
 
       # Post the file   
       if [[ -n "${REMOTEFILE}" ]] && [[ "${REPORT}" != "1" ]]; then #&& [[ -n "${COMMITHASH}" ]]; then
@@ -146,7 +146,7 @@ function postLog() {
   fi
 }
 
-function htmlDir() {
+function html_dir() {
   # Yet another if/then to cover my ass. What a mess!
   if [[ "${LOCALHOSTPOST}" == "TRUE" ]] && [[ -n "${LOCALHOSTPATH}" ]]; then
 

@@ -10,7 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Project settings can be displayed in an easy to read format using the `show-settings` switch
 - Added a simple external script for perfoming batch stir actions, see `etc/extras/bulk.stir.sh`
 - Global project directory and repo host variables are now set during the initial install process
-- Project settings are now backed up when performing a `--reset` when a global `CONFIGBACKUP` is declared
+- Project settings are now backed up when performing a `--reset` when a global `CONFIG_BACKUP` is declared
 - Added `--update-acf` to account for unreliable update checks
 - Added `--debug-to-file` allowing for very verbose logs to be saved to file called `debug.log` in your current working directory 
 - New releases of `stir` will now update "in place"
@@ -24,6 +24,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Composer now creates less noise in logfiles
 - Improved dependency checks
 - Improved temporary file management
+- Improved first-run install process
 ### Fixed
 - Binary files should no longer confuse log parsing functions
 - Missing project configuration error now exits more gracefully
@@ -287,6 +288,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Old monolithic script rewritten
 
 [Unreleased]: https://github.com/EMRL/deploy/compare/v3.7.4...HEAD
+[3.8]: https://github.com/EMRL/deploy/compare/v3.7.4...v3.8
 [3.7.4]: https://github.com/EMRL/deploy/compare/v3.7.3...v3.7.4
 [3.7.3]: https://github.com/EMRL/deploy/compare/v3.7.2...v3.7.3
 [3.7.2]: https://github.com/EMRL/deploy/compare/v3.7.1...v3.7.2

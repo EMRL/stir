@@ -145,7 +145,7 @@ function post_slack () {
 }
 
 # Slack configuration test
-function slackTest {
+function slack_test {
   console "Testing Slack integration..."
   echo "${SLACKURL}"
   if [[ -z "${SLACKURL}" ]]; then

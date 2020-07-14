@@ -39,7 +39,7 @@ function init_startup() {
     DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
     SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
     CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET \
-    SHOW_SETTINGS UNIT_TEST BUGSNAG_TEST UPDATE_ACF DEBUG_TO_FILE)
+    SHOW_SETTINGS UNIT_TEST test_bugsnag UPDATE_ACF DEBUG_TO_FILE)
   init_loop
 }
 
@@ -59,7 +59,7 @@ function init_color() {
 
 # Constants and environment variables
 function init_env() {
-  var=(CLEARSCREEN WORKPATH CONFIGDIR CONFIGBACKUP REPOHOST SMARTCOMMIT \
+  var=(CLEARSCREEN WORKPATH CONFIGDIR CONFIG_BACKUP REPOHOST SMARTCOMMIT \
   GITSTATS EMAILHTML NOPHP TO FROM SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT \
   FROMDOMAIN FROMUSER POSTEMAILHEAD POSTEMAILTAIL POSTTOSLACK SLACKURL \
   SLACKERROR POSTURL NOKEY PROJNAME PROJCLIENT DEVURL PRODURL REPO MASTER \
@@ -286,7 +286,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --test-webhook) POSTTEST="1" ;;
     --test-analytics) ANALYTICSTEST="1" ;; 
     --test-monitor) MONITORTEST="1" ;;
-    --test-bugsnag) BUGSNAG_TEST="1" ;;
+    --test-bugsnag) test_bugsnag="1" ;;
     --stats) PROJSTATS="1" ;;
     --build) BUILD="1"; NOCHECK="1"; FORCE="1" ;;
     --invoice) CREATE_INVOICE="1"; FORCE="1" ;;
@@ -305,8 +305,6 @@ while [[ ${1:-unset} = -?* ]]; do
 done
 
 # Run in debug mode, if set
-# Run in debug mode, if set
-
 if [[ "${DEBUG_TO_FILE}" == "1" ]]; then
   (umask 077 && touch debug.log &> /dev/null) || log_fail debug.log
   exec 19>debug.log

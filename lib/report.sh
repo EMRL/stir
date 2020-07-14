@@ -18,7 +18,7 @@ function create_report() {
   fi
 
   message_state="REPORT"
-  htmlDir
+  html_dir
 
   # Get the first and last day of last month
   CURMTH="$(date +%m)"

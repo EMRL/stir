@@ -29,7 +29,7 @@ function go() {
 
   # Build only
   if [[ "${BUILD}" == "1" ]]; then
-    pkgMgr; quiet_exit
+    build_check; quiet_exit
   fi  
 
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
@@ -154,7 +154,7 @@ function user_tests() {
 
   # Slack test
   if [[ "${SLACKTEST}" == "1" ]]; then
-    slackTest; quiet_exit
+    slack_test; quiet_exit
   fi
 
   # Webhook POST test
@@ -178,8 +178,8 @@ function user_tests() {
   fi
 
   # Test Bugsnag integration
-  if [[ "${BUGSNAG_TEST}" == "1" ]]; then
-    bugsnag_test; quiet_exit
+  if [[ "${test_bugsnag}" == "1" ]]; then
+    test_bugsnag; quiet_exit
   fi
 
   # Test Dropbox backup authentication
@@ -200,7 +200,7 @@ function user_tests() {
 }
 
 # Check that dependencies exist
-function dependency_check() {
+function check_dependencies() {
   # Is git installed?
   hash git 2>/dev/null || {
     error "stir ${VERSION} requires git to function properly." 

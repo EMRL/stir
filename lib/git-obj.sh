@@ -87,7 +87,7 @@ function checkout() {
     else
       if [[ "${QUIET}" != "1" ]]; then
         git checkout "${working_branch}" &>> "${logFile}" &
-        showProgress
+        show_progress
       else
         git checkout "${working_branch}" &>> "${logFile}"
       fi
@@ -177,7 +177,7 @@ function merge() {
       if [[ "${QUIET}" != "1" ]]; then
         # git merge --no-edit master &>> "${logFile}" &
         git merge "${MASTER}" &>> "${logFile}" &
-        showProgress
+        show_progress
       else
         git merge "${MASTER}" &>> "${logFile}"
       fi

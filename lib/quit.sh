@@ -9,10 +9,10 @@
 # Clean exit
 function clean_exit() {
   notice "Closing ${APP} (${REPOHOST}/${REPO})"
-  makeLog # Compile log
+  make_log # Compile log
   # Check email settings
   if [[ "${EMAILSUCCESS}" == "TRUE" ]]; then
-     mailLog
+     mail_log
   fi
 
   # Is Slack integration configured?
@@ -37,10 +37,10 @@ function clean_exit() {
 # Exit on error
 function error_exit() {
   notice "Closing ${APP} (${REPOHOST}/${REPO})"
-  message_state="ERROR"; makeLog # Compile log
+  message_state="ERROR"; make_log # Compile log
   # Check email settings
   if [[ "${EMAILERROR}" == "TRUE" ]] || [[ -n "${sendmail_cmd}" ]]; then
-    mailLog
+    mail_log
   fi
 
   # Check Slack settings
@@ -59,7 +59,7 @@ function user_exit() {
   trace "Exit on user request"
   # Check email settings
   if [[ "${EMAILQUIT}" == "TRUE" ]]; then
-     mailLog
+     mail_log
   fi
   # Clean up your mess
   clean_up; exit 0

@@ -46,7 +46,7 @@ function progressBar() {
 }
 
 # Display progress bar
-function showProgress() {
+function show_progress() {
   if [[ "${QUIET}" != "1" ]] && [[ "${DEBUG}" != "1" ]]; then
     _start=1
     _end=100
