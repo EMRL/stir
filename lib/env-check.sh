@@ -61,10 +61,10 @@ function env_check() {
 
     # Trying to continue if global configuration has been changed is buggy
     # if using --current switch
-    if [[ "${update_global}" == "1" ]] && [[ "${updates_skipped}" != "1" ]]; then
-      console "Global configuration updated - restart stir to continue."
-      quiet_exit
-    fi
+    #if [[ "${update_global}" == "1" ]] && [[ "${updates_skipped}" != "1" ]]; then
+    #  console "Global configuration updated - restart stir to continue."
+    #  quiet_exit
+    #fi
   fi
 }
 
@@ -90,7 +90,8 @@ function update_global() {
     POSTTOSLACK SLACKURL SLACKERROR POSTURL NOPHP TERSE INCOGNITO REMOTELOG \
     REMOTEURL REMOTETEMPLATE SCPPOST SCPUSER SCPHOST SCPHOSTPATH SCPPORT \
     SCPPASS LOCALHOSTPOST LOCALHOSTPATH EXPIRELOGS DB_API_TOKEN NEWS_URL \
-    IN_HOST IN_TOKEN IN_OFFSET BUGSNAG_AUTH USE_SMTP)
+    IN_HOST IN_TOKEN IN_OFFSET BUGSNAG_AUTH USE_SMTP CONFIG_BACKUP \
+    GRAVITY_FORMS_LICENSE ACFKEY)
 
   if [[ ! -w "${stir_path}/global.conf" ]]; then
     info "Requesting sudo access..."
@@ -118,6 +119,9 @@ function update_global() {
   else
     cp "${trshFile}" "${stir_path}"/global.conf
   fi
+  
+  console "Global configuration updated - restart stir to continue."
+  quiet_exit
 }
 
 function update_user() {
@@ -157,7 +161,8 @@ function update_project() {
     MONITORUSER MONITORPASS SERVERID NIKTO NIKTO_CONFIG STAGING_DEPLOY_PATH \
     PRODUCTION_DEPLOY_HOST PRODUCTION_DEPLOY_PATH SCP_DEPLOY_USER \
     SCP_DEPLOY_PASS SCP_DEPLOY_PORT NIKTO NIKTO_CONFIG NIKTO_PROXY \
-    DB_BACKUP_PATH PREPARE PREPARE_CONFIG ACF_LOCK STAGING)
+    DB_BACKUP_PATH PREPARE PREPARE_CONFIG ACF_LOCK STAGING \
+    GRAVITY_FORMS_LICENSE)
 
   info "Project configuration backup created at ${project_config}.bak"
   cp "${project_config}" "${project_config}.bak"

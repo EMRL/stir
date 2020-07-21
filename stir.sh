@@ -11,7 +11,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.7.5-dev"
+VERSION="3.8"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 LAST_MONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
@@ -629,18 +629,23 @@ if [[ "${NOKEY}" == "TRUE" ]]; then
 fi
 
 # If user is trying to merge, make sure a second branch is configured
-if [[ "${MERGE}" == "1" ]] && [[ -z "${PRODUCTION}" ]]; then
-  # If using --automate, shut 'em down'
-  if [[ "${AUTOMATE}" == "1" ]]; then
-    error "Automated deployment requires a code merge, but a target branch is not defined."
-  fi
-  # If not, spit out warnings and begin walk of shame
-  if [[ "${AUTOMERGE}" == "TRUE" ]]; then
-    warning "This project is configured to automatically merge branches, but a target branch is not defined."
+if [[ "${MERGE}" == "1" ]]; then
+  if [[ -n "${PRODUCTION}" ]] || [[ -n "${STAGING}" ]]; then
+    # Do nothing
+    sleep 1
   else
-    warning "You are attempting to merge branches, but a target branch is not defined."
+    # If using --automate, shut 'em down'
+    if [[ "${AUTOMATE}" == "1" ]]; then
+      error "Automated deployment requires a code merge, but a target branch is not defined."
+    fi
+    # If not, spit out warnings and begin walk of shame
+    if [[ "${AUTOMERGE}" == "TRUE" ]]; then
+      warning "This project is configured to automatically merge branches, but a target branch is not defined."
+    else
+      warning "You are attempting to merge branches, but a target branch is not defined."
+    fi
+    quiet_exit
   fi
-  quiet_exit
 fi
 
 # Set app path
