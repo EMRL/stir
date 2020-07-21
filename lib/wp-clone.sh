@@ -11,7 +11,7 @@ var=(SSH_REPO TMP_PATH SET_ENV dest REMOVE_ME MYSQL_USER MYSQL_PASS \
   DB_CHECK)
 init_loop
 
-function wp_clone_mngmt() {
+function wp_clone_handler() {
   "${git_cmd}" clone --no-checkout "${SSH_REPO}" "${WORKPATH}/${APP}/${REPO}" &>> /dev/null; error_check
   cd "${WORKPATH}/${APP}/${REPO}"
   "${git_cmd}" branch --track origin/"${MASTER}" &>> /dev/null; error_check
@@ -64,7 +64,7 @@ function wp_clone() {
     "${git_cmd}" checkout "${MASTER}" &>> /dev/null; error_check
   else
     trace "Cloning ${SSH_REPO}... "
-    wp_clone_mngmt &
+    wp_clone_handler &
     spinner $!
     trace "OK"
   fi
@@ -153,7 +153,9 @@ function wp_clone() {
     # DB_CHECK=$?;
     # if [[ "${DB_CHECK}" != "0" ]]; then
        trace status "Creating database... "
-      "${wp_cmd}" db create &>> /dev/null; error_check; trace notime "OK"
+      "${wp_cmd}" db create &>> /dev/null; #error_check; 
+      # Insert wp dp check here
+      trace notime "OK"
     #fi
 
     # Install wordpress database tables

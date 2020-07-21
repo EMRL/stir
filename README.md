@@ -1,6 +1,6 @@
 ﻿﻿![Stir](https://raw.githubusercontent.com/EMRL/stir/master/img/logo.png)
 
-[![release](https://img.shields.io/badge/release-v3.7.4-blue.svg?style=flat)](https://github.com/EMRL/stir/releases/latest)
+[![release](https://img.shields.io/badge/release-v3.8-blue.svg?style=flat)](https://github.com/EMRL/stir/releases/latest)
 [![Build Status](https://travis-ci.org/EMRL/stir.svg?branch=master)](https://travis-ci.org/EMRL/stir)
 
 `stir` is designed to speed up, automate, and integrate project commits, management, and deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
@@ -44,6 +44,7 @@ Other Options:
   --invoice              Create an invoice
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
+  --debug-to-file        Save debug output to a file
   --unlock               Delete expired lock files
   --repair               Repair a deployment after merge failure
   --scan                 Scan production hosts for malware issues
