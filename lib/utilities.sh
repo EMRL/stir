@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initialize variables
-var=(integer_check json_key json_num cal_cmd composer_cmd curl_cmd git_cmd gitchart_cmd gnuplot_cmd grep_cmd mysqlshow_cmd scp_cmd sendmail_cmd ssh_cmd sshpass_cmd ssmtp_cmd unzip_cmd wc_cmd wget_cmd wkhtmltopdf_cmd wp_cmd xmlstarlet_cmd)
+var=(integer_check json_key json_num)
 init_loop
 
 # Open a deployment session, ask for user confirmation before beginning
@@ -96,8 +96,8 @@ function is_integer() {
 
 function get_fullpath() {
   # Get absolute paths to critical commands
-  var=(cal composer curl git gitchart gnuplot grep mysqlshow scp sendmail ssh \
-    sshpass ssmtp unzip wc wget wkhtmltopdf wp xmlstarlet)
+  var=(cal composer curl git gitchart gnuplot grep grunt mysqlshow scp 
+    sendmail ssh sshpass ssmtp unzip wc wget wkhtmltopdf wp xmlstarlet)
   for i in "${var[@]}" ; do
     read -r "${i}_cmd" <<< ""
     echo "${i}_cmd" > /dev/null
