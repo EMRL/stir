@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initialize variables
-var=(integer_check json_key json_num)
+var=(integer_check json_key json_num cal_cmd composer_cmd curl_cmd git_cmd gitchart_cmd gnuplot_cmd grep_cmd mysqlshow_cmd scp_cmd sendmail_cmd ssh_cmd sshpass_cmd ssmtp_cmd unzip_cmd wc_cmd wget_cmd wkhtmltopdf_cmd wp_cmd xmlstarlet_cmd)
 init_loop
 
 # Open a deployment session, ask for user confirmation before beginning
