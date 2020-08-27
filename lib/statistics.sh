@@ -141,7 +141,7 @@ function project_engagement() {
     ENGAGEMENT_DAYS="7"
   fi
 
-  ga_var=(hits users newUsers sessions organicSearches pageviews)
+  ga_var=(hits users newUsers sessions organicSearches pageviews percentNewSessions)
   # Start the loop
   for i in "${ga_var[@]}" ; do
     ga_over_time ${i} ${ENGAGEMENT_DAYS}
