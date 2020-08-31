@@ -24,6 +24,10 @@ function create_report() {
   CURMTH="$(date +%m)"
   CURYR="$(date +%Y)"
 
+  CURMTH="$(sed 's/^0*//' <<< $CURMTH)"
+
+# website=$(sed 's|/|\\/|g' <<< $website)
+
   if [[ "${CURMTH}" -eq 1 ]]; then
     PRVMTH="11"
     PRVYR=`expr "${CURYR}" - 1`
