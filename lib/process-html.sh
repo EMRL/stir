@@ -115,7 +115,7 @@ function process_html() {
     -e "s^{{LATENCY_STATUS}}^${LATENCYC}^g" \
     -e "s^{{GRAVATARURL}}^${REMOTEURL}\/${APP}\/avatar^g" \
     -e "s^{{STATURL}}^${REMOTEURL}\/${APP}\/stats^g" \
-    -e "s^{{LASTMONTH}}^${LAST_MONTH}^g" \
+    -e "s^{{LASTMONTH}}^${last_month}^g" \
     -e "s^{{ANALYTICS_CHART}}^${REMOTEURL}/${APP}/stats/${METRIC}.png^g" \
     "${htmlFile}"
   }

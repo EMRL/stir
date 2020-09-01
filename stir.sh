@@ -14,7 +14,7 @@ IFS=$'\n\t'
 VERSION="3.8.1-dev"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
-LAST_MONTH="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
+last_month="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
 WEEKOF="$(date -d '7 days ago' +"%B %d, %Y")"
 GASTART="$(date -d '7 days ago' "+%Y-%m-%d")"
 GAEND="$(date "+%Y-%m-%d")"
