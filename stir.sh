@@ -45,8 +45,8 @@ function init_startup() {
 
 # Temp files
 function init_temp() {
-  var=(logFile wpFile coreFile postFile trshFile scanFile statFile \
-    urlFile)
+  var=(log_file wp_file core_file post_file trash_file scan_file stat_file \
+    url_file)
   init_loop
 }
 
@@ -78,8 +78,8 @@ function init_env() {
 
 # Internal variables
 function init_internal() {
-  var=(optstring options logFile wpFile coreFile postFile trshFile statFile \
-  urlFile htmlFile htmlSendmail htmlEmail clientEmail textSendmail stir_path \
+  var=(optstring options log_file wp_file core_file post_file trash_file stat_file \
+  url_file html_file htmlSendmail html_email client_email textSendmail stir_path \
   etc_path lib_path POSTEMAIL current_branch error_msg notes \
   UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC USERRC message_state \
   COMMITURL COMMITHASH UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE \
@@ -120,9 +120,9 @@ function temp_files() {
     exit 78
   else
   # Setup tempfile list
-  file=(trshFile postFile statFile scanFile scan_html wpFile \
-    urlFile htmlFile htmlEmail clientEmail coreFile statDir avatarDir \
-    stats logFile)
+  file=(trash_file post_file stat_file scan_file scan_html wp_file \
+    url_file html_file html_email client_email core_file stat_dir avatar_dir \
+    stats log_file)
 
     # Start the loop
     if [[ "${1}" == "remove" ]]; then
@@ -326,7 +326,7 @@ if [[ "${CURRENT}" == "1" ]]; then
   APP="${PWD##*/}"
 fi
 
-# Get the active switches for display in logfiles
+# Get the active switches for display in log_files
 [[ "${AUTOMATE}" == "1" ]] && STARTUP="${STARTUP} --automate"
 [[ "${UPGRADE}" == "1" ]] && STARTUP="${STARTUP} --update"
 [[ "${APPROVE}" == "1" ]] && STARTUP="${STARTUP} --approve" #; FORCE="1"
@@ -429,14 +429,14 @@ temp_files create
 
 # Fire up temporary log files. Consolidate this shit better someday, geez.
 # Main log file
-#logFile="/tmp/${APP}.log-$RANDOM.log"
-#(umask 077 && touch "${logFile}") || log_fail
-#wpFile="/tmp/${APP}.wp-$RANDOM.log"; (umask 077 && touch "${wpFile}" &> /dev/null) || log_fail
-#coreFile="/tmp/${APP}.core-$RANDOM.log"; (umask 077 && touch "${coreFile}" &> /dev/null) || log_fail
+#log_file="/tmp/${APP}.log-$RANDOM.log"
+#(umask 077 && touch "${log_file}") || log_fail
+#wp_file="/tmp/${APP}.wp-$RANDOM.log"; (umask 077 && touch "${wp_file}" &> /dev/null) || log_fail
+#core_file="/tmp/${APP}.core-$RANDOM.log"; (umask 077 && touch "${core_file}" &> /dev/null) || log_fail
 
-# Start writing the logfile
-echo -e "Activity logfile for ${APP^^} - ${NOW}\r" >> "${logFile}"
-echo -e "Launching stir${STARTUP}\n" >> "${logFile}"
+# Start writing the log_file
+echo -e "Activity log_file for ${APP^^} - ${NOW}\r" >> "${log_file}"
+echo -e "Launching stir${STARTUP}\n" >> "${log_file}"
 
 # Function list
 if [[ "${FUNCTION_LIST}" == "1" ]]; then
@@ -555,7 +555,7 @@ fi
 
 # General info
 if [[ "${INCOGNITO}" != "TRUE" ]]; then
-  trace "Log file is ${logFile}"
+  trace "Log file is ${log_file}"
   trace "Project workpath is ${WORKPATH}"
 fi
 

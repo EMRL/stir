@@ -70,7 +70,7 @@ function wp_clone() {
   fi
 
   # Copy plugins that are not part of repo (for update checking)
-  # cp -nrp "${WP_PATH}/plugins" "${WP_TMP}/" &>> "${logFile}";
+  # cp -nrp "${WP_PATH}/plugins" "${WP_TMP}/" &>> "${log_file}";
 
   # Reset our root working directory
   # APP_PATH="${WORKPATH}/${REPO}"
@@ -177,7 +177,7 @@ function wp_clone() {
       "${wp_cmd}" plugin is-active "${i}" #2>&1
       EXITCODE=$?; 
       if [[ "${EXITCODE}" -ne "0" ]]; then
-        "${wp_cmd}" plugin activate "${i}" >> "${logFile}" 2>&1
+        "${wp_cmd}" plugin activate "${i}" >> "${log_file}" 2>&1
       fi
     done
     trace notime "OK"
@@ -199,7 +199,7 @@ function create_env() {
         REMOVE_ME=".example"
       fi
       dest="$(printf '%s\n' ${arg//$REMOVE_ME/})"
-      cp "${arg}" "${dest}" &>> "${logFile}"
+      cp "${arg}" "${dest}" &>> "${log_file}"
       SET_ENV="1"
       env_file="${dest}"
     fi

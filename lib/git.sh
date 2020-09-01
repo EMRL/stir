@@ -19,9 +19,9 @@ function gitCommit() {
   smart_commit; empty_line
 
   # Do a dry run; check for anything to commit
-  git commit --dry-run &>> "${logFile}" 
+  git commit --dry-run &>> "${log_file}" 
 
-  if grep -aq "nothing to commit, working directory clean" "${logFile}"; then 
+  if grep -aq "nothing to commit, working directory clean" "${log_file}"; then 
     info "Nothing to commit, working directory clean."
     clean_exit
   else
@@ -77,13 +77,13 @@ function gitCommit() {
       trace "Queuing commit message"
       echo "${notes}" > "${WORKPATH}/${APP}/.queued"
     else
-      git commit -m "${notes}" &>> "${logFile}"; error_check
+      git commit -m "${notes}" &>> "${log_file}"; error_check
       trace "Commit message: ${notes}"
     fi
   fi
 
   # Check for bad characters in commit message
-  echo "${notes}" > "${trshFile}"
-  sed -i "s/\&/and/g" "${trshFile}"
-  notes=$(<$trshFile)
+  echo "${notes}" > "${trash_file}"
+  sed -i "s/\&/and/g" "${trash_file}"
+  notes=$(<$trash_file)
 }

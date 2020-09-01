@@ -40,14 +40,14 @@ function deploy_check() {
     DEPLOYTEST="mina --simulate deploy"
     # Get variables organized
     if [[ -f "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.rb" ]]; then
-      grep -n -w "set :user" "${WORKPATH}/${APP}/${CONFIGDIR}"/deploy.rb > "${trshFile}"
-      MINAUSER=$(awk -F\' '{print $2,$4}' ${trshFile})
-      echo -n "${MINAUSER}" > "${statFile}"
-      echo -n "@" >> ${statFile}
-      grep -n -w "set :domain" "${WORKPATH}/${APP}/${CONFIGDIR}"/deploy.rb > "${trshFile}"
-      MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trshFile})
-      echo -n "${MINADOMAIN}" >> "${statFile}"
-      SSHTARGET=$(sed -r 's/\s+//g' ${statFile})
+      grep -n -w "set :user" "${WORKPATH}/${APP}/${CONFIGDIR}"/deploy.rb > "${trash_file}"
+      MINAUSER=$(awk -F\' '{print $2,$4}' ${trash_file})
+      echo -n "${MINAUSER}" > "${stat_file}"
+      echo -n "@" >> ${stat_file}
+      grep -n -w "set :domain" "${WORKPATH}/${APP}/${CONFIGDIR}"/deploy.rb > "${trash_file}"
+      MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trash_file})
+      echo -n "${MINADOMAIN}" >> "${stat_file}"
+      SSHTARGET=$(sed -r 's/\s+//g' ${stat_file})
       # SSH check
       if [[ "${INCOGNITO}" != "TRUE" ]]; then
         trace "Testing connection for ${SSHTARGET}"
@@ -58,26 +58,26 @@ function deploy_check() {
 
     elif [[ -f "${WORKPATH}/${APP}/.deploy.yml" ]]; then
       DEPLOYTEST="bundle exec mina --simulate deploy -f Minafile"
-      grep -n -w "user:" "${WORKPATH}/${APP}"/.deploy.yml > "${trshFile}"
+      grep -n -w "user:" "${WORKPATH}/${APP}"/.deploy.yml > "${trash_file}"
       
-      if grep -aq "'" "${trshFile}"; then
-        MINAUSER=$(awk -F\' '{print $2,$4}' ${trshFile}) # Single quote method
+      if grep -aq "'" "${trash_file}"; then
+        MINAUSER=$(awk -F\' '{print $2,$4}' ${trash_file}) # Single quote method
       else
-        MINAUSER=$(awk 'NF>1{print $NF}' ${trshFile})
+        MINAUSER=$(awk 'NF>1{print $NF}' ${trash_file})
       fi
 
-      echo -n "${MINAUSER}" > "${statFile}"
-      echo -n "@" >> ${statFile}
-      grep -n -w "domain:" "${WORKPATH}/${APP}"/.deploy.yml > "${trshFile}"
+      echo -n "${MINAUSER}" > "${stat_file}"
+      echo -n "@" >> ${stat_file}
+      grep -n -w "domain:" "${WORKPATH}/${APP}"/.deploy.yml > "${trash_file}"
 
-      if grep -aq "'" "${trshFile}"; then
-        MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trshFile}) # Single quote method
+      if grep -aq "'" "${trash_file}"; then
+        MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trash_file}) # Single quote method
       else
-        MINADOMAIN=$(awk 'NF>1{print $NF}' ${trshFile})
+        MINADOMAIN=$(awk 'NF>1{print $NF}' ${trash_file})
       fi
 
-      echo -n "${MINADOMAIN}" >> "${statFile}"
-      SSHTARGET=$(sed -r 's/\s+//g' ${statFile})  
+      echo -n "${MINADOMAIN}" >> "${stat_file}"
+      SSHTARGET=$(sed -r 's/\s+//g' ${stat_file})  
       # SSH check
       if [[ "${INCOGNITO}" != "TRUE" ]]; then
         trace "Testing connection for ${SSHTARGET}"
@@ -101,8 +101,8 @@ function deploy_check() {
         # Ok now offer to re-run mina in verbose mode if someone is at the console
         # If FORCE=1 then simply exit
         if [[ "${FORCE}" == "1" ]] || yesno --default yes "Retry ${DEPLOY} in verbose mode? [Y/n] "; then
-          eval "ssh ${SSHTARGET}" | tee --append "${logFile}"
-          # eval "${DEPLOY}" | tee --append "${logFile}"
+          eval "ssh ${SSHTARGET}" | tee --append "${log_file}"
+          # eval "${DEPLOY}" | tee --append "${log_file}"
         else
           error "Connection for ${SSHTARGET} not established, an unknown error occurred."
         fi
@@ -118,7 +118,7 @@ function deploy_check() {
       EXITCODE=$?;
       if [[ "${EXITCODE}" != 0 ]]; then
         warning "Could not locate Gemfile or .bundle/ directory, installing..." 
-        eval "bundle install" | tee --append "${logFile}"
+        eval "bundle install" | tee --append "${log_file}"
         eval "bundle check" &>> /dev/null
         EXITCODE=$?;
         if [[ "${EXITCODE}" != 0 ]]; then

@@ -101,7 +101,7 @@ function update_global() {
   fi
   info "Global configuration backup created at ${stir_path}/global.conf.bak"
   
-  cp "${stir_path}"/stir-global.conf "${trshFile}"
+  cp "${stir_path}"/stir-global.conf "${trash_file}"
 
   # Reload global values
   source "${stir_path}"/global.conf
@@ -115,9 +115,9 @@ function update_global() {
   # Install new files
   env_cleanup
   if [[ ! -w "${stir_path}/global.conf" ]]; then
-    sudo cp "${trshFile}" "${stir_path}"/global.conf
+    sudo cp "${trash_file}" "${stir_path}"/global.conf
   else
-    cp "${trshFile}" "${stir_path}"/global.conf
+    cp "${trash_file}" "${stir_path}"/global.conf
   fi
   
   console "Global configuration updated - restart stir to continue."
@@ -130,7 +130,7 @@ function update_user() {
   
   info "User configuration backup created at ~/.stirrc.bak"
   cp ~/.stirrc ~/.stirrc.bak
-  cp "${stir_path}"/stir-user.rc "${trshFile}"
+  cp "${stir_path}"/stir-user.rc "${trash_file}"
 
   # Reload user values
   source ~/.stirrc
@@ -143,7 +143,7 @@ function update_user() {
 
   # Install new files
   env_cleanup
-  cp "${trshFile}" ~/.stirrc
+  cp "${trash_file}" ~/.stirrc
 }
 
 function update_project() { 
@@ -166,7 +166,7 @@ function update_project() {
 
   info "Project configuration backup created at ${project_config}.bak"
   cp "${project_config}" "${project_config}.bak"
-  cp "${stir_path}"/stir-project.sh "${trshFile}"
+  cp "${stir_path}"/stir-project.sh "${trash_file}"
   # Loops through the variables
   for i in "${env_settings[@]}" ; do
     current_setting=$(grep -a "^${i}=" "${project_config}")
@@ -175,20 +175,20 @@ function update_project() {
 
   # Install new files
   env_cleanup
-  cp "${trshFile}" "${project_config}"
+  cp "${trash_file}" "${project_config}"
 }
 
 function insert_values() {
   if [[ -n "${!i:-}" ]]; then
     [[ "${INCOGNITO}" != "1" ]] && trace "${i}: ${!i}"
-    sed_hack=$(echo "sed -i 's^{{${i}}}^${!i}^g' ${trshFile}; sed -i 's^# ${i}^${i}^g' ${trshFile}")
+    sed_hack=$(echo "sed -i 's^{{${i}}}^${!i}^g' ${trash_file}; sed -i 's^# ${i}^${i}^g' ${trash_file}")
     # Kludgy but works. Ugh.
     eval "${sed_hack}"
   fi
 }
 
 function env_cleanup() {
-  sed -i "s^{{.*}}^^g" "${trshFile}"
+  sed -i "s^{{.*}}^^g" "${trash_file}"
 }
 
 

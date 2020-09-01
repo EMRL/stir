@@ -24,9 +24,9 @@ function preDeploy() {
         empty_line
         trace "Stashing dirty files"
         if [[ "${VERBOSE}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then
-          git stash | tee --append "${logFile}"; error_check 
+          git stash | tee --append "${log_file}"; error_check 
         else
-          git stash >> "${logFile}"; error_check
+          git stash >> "${log_file}"; error_check
         fi
         current_stash="1"
       else
@@ -87,7 +87,7 @@ function pkgDeploy() {
           if [[ "${DEPLOY}" == "SCP" ]]; then
             deploy_scp
           else
-            eval "${DEPLOY}" | tee --append "${logFile}"            
+            eval "${DEPLOY}" | tee --append "${log_file}"            
           fi
           error_check
         else
@@ -96,14 +96,14 @@ function pkgDeploy() {
               deploy_scp &
               spinner $!
             else
-              eval "${DEPLOY}" &>> "${logFile}" &
+              eval "${DEPLOY}" &>> "${log_file}" &
               spinner $!
             fi
           else
             if [[ "${DEPLOY}" == "SCP" ]]; then
-              deploy_scp &>> "${logFile}"; error_check
+              deploy_scp &>> "${log_file}"; error_check
             else
-              eval "${DEPLOY}" &>> "${logFile}"; error_check
+              eval "${DEPLOY}" &>> "${log_file}"; error_check
             fi
           fi
         fi
@@ -119,7 +119,7 @@ function pkgDeploy() {
       fi
     else
       if [[ "${APPROVE}" == "1" ]]; then
-        eval "${DEPLOY}" &>> "${logFile}"
+        eval "${DEPLOY}" &>> "${log_file}"
       else
         if [[ "${APPROVE}" != "1" ]]; then
           if [[ -z "${PRODURL}" ]]; then 
@@ -136,7 +136,7 @@ function pkgDeploy() {
 
 function postDeploy() {
   # Check for deployment failure
-  if grep -aq "ERROR: Deploy failed." "${logFile}"; then
+  if grep -aq "ERROR: Deploy failed." "${log_file}"; then
     error "Deploy failed."
   fi
 

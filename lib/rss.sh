@@ -13,7 +13,7 @@ function get_rss() {
 	# Pull RSS feed
 	"${curl_cmd}" --silent "${NEWS_URL}" > /tmp/${APP}.xml; error_check
 	# Strip CDATA stuff
-	"${xmlstarlet_cmd}" fo --omit-decl --nocdata /tmp/${APP}.xml > ${statFile}
+	"${xmlstarlet_cmd}" fo --omit-decl --nocdata /tmp/${APP}.xml > ${stat_file}
 	# Clean up mess
 	rm /tmp/${APP}.xml
 }
@@ -24,7 +24,7 @@ function next_xml() {
 }
 
 function process_xml() {
-	cat ${statFile} | while next_xml ; do
+	cat ${stat_file} | while next_xml ; do
 		case $TAG in
 			'item')
 				title=''
@@ -62,29 +62,29 @@ function create_rss_payload() {
 		return
 	else
 		get_rss
-		process_xml > ${trshFile}
+		process_xml > ${trash_file}
 
 		# Clean up output
-		sed -i 's/\xc2\x91\|\xc2\x92\|\xc2\xa0\|\xe2\x80\x8e//g' "${trshFile}"
+		sed -i 's/\xc2\x91\|\xc2\x92\|\xc2\xa0\|\xe2\x80\x8e//g' "${trash_file}"
 
 		# Centos doesn't have the inplace option 
-		# awk -i inplace '{gsub(/’/, "'"'"'");print}' "${postFile}"
-		awk '{gsub(/’/, "'"'"'");print}' "${trshFile}" > "${postFile}"
+		# awk -i inplace '{gsub(/’/, "'"'"'");print}' "${post_file}"
+		awk '{gsub(/’/, "'"'"'");print}' "${trash_file}" > "${post_file}"
 
 
 		sed -r -i -e '/<p>The post /d' \
 			-e "s/&amp;#160;/\ /g" \
 			-e "s/&amp;#8230;/\.../g" \
-			"${postFile}"
+			"${post_file}"
 
 		# Escape quotes
-		sed -i "s/'/\'/g" "${postFile}"
+		sed -i "s/'/\'/g" "${post_file}"
 
 		# Remove newlines
-		sed -i ':a;N;$!ba;s/\n//g' "${postFile}"
-		sed -i -e :a -e '$!N;s/\n[[:blank:]]\{1,\}/ /;ta' -e 'P;D' "${postFile}"
+		sed -i ':a;N;$!ba;s/\n//g' "${post_file}"
+		sed -i -e :a -e '$!N;s/\n[[:blank:]]\{1,\}/ /;ta' -e 'P;D' "${post_file}"
 
-		# empty_line; cat "${postFile}"
-		RSS_NEWS="$(<${postFile})"
+		# empty_line; cat "${post_file}"
+		RSS_NEWS="$(<${post_file})"
 	fi
 }

@@ -31,14 +31,14 @@ function project_stats() {
   queue_check
 
     # Setup up tmp work folder
-    #if [[ ! -d "${statDir}" ]]; then
-    #  umask 077 && mkdir "${statDir}" &> /dev/null
+    #if [[ ! -d "${stat_dir}" ]]; then
+    #  umask 077 && mkdir "${stat_dir}" &> /dev/null
     #fi
 
     # Prep assets
-    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/css" "${statDir}/"
-    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/fonts" "${statDir}/"
-    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/js" "${statDir}/"
+    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/css" "${stat_dir}/"
+    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/fonts" "${stat_dir}/"
+    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/js" "${stat_dir}/"
 
     echo -n "Generating files"
 
@@ -59,22 +59,22 @@ function project_stats() {
    
     # Get commits
     get_commits 6
-    validate_urls "${statFile}"
+    validate_urls "${stat_file}"
 
     # Process the HTML
-    cat "${stir_path}/html/${HTMLTEMPLATE}/stats/index.html" > "${htmlFile}"
+    cat "${stir_path}/html/${HTMLTEMPLATE}/stats/index.html" > "${html_file}"
     process_html
 
-    cat "${htmlFile}" > "${statDir}/index.html"
+    cat "${html_file}" > "${stat_dir}/index.html"
 
     # Create SVG charts
     # Spinners commented out for now, causing issues when running from a crontab
     repo_charts=(authors commits_day_week commits_hour_day commits_hour_week \
       commits_month commits_year commits_year_month files_type)
     for i in "${repo_charts[@]}" ; do
-      "${gitchart_cmd}" -r "${WORKPATH}/${APP}" "${i}" "${statDir}/${i}.svg" &>> /dev/null
-      sed -i "s/#9999ff/${CHARTC}/g" "${statDir}/${i}.svg" 
-      sed -i 's/Consolas,"Liberation Mono",Menlo,Courier,monospace/Roboto, Helvetica, Arial, sans-serif/g' "${statDir}/${i}.svg"
+      "${gitchart_cmd}" -r "${WORKPATH}/${APP}" "${i}" "${stat_dir}/${i}.svg" &>> /dev/null
+      sed -i "s/#9999ff/${CHARTC}/g" "${stat_dir}/${i}.svg" 
+      sed -i 's/Consolas,"Liberation Mono",Menlo,Courier,monospace/Roboto, Helvetica, Arial, sans-serif/g' "${stat_dir}/${i}.svg"
     done #&
     #spinner $!
 
@@ -97,35 +97,35 @@ function project_activity() {
   # Grab the total number of commits
   TOTAL_COMMITS=$(git rev-list --count ${MASTER})
   get_commits "${TOTAL_COMMITS}"
-  validate_urls "${statFile}"
+  validate_urls "${stat_file}"
 
   # Process the HTML
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/activity.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "${statDir}/activity.html"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/activity.html" > "${html_file}"
+  process_html; cat "${html_file}" > "${stat_dir}/activity.html"
 }
 
 function project_statistics() {
   # Process the HTML
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/stats.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "${statDir}/stats.html"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/stats.html" > "${html_file}"
+  process_html; cat "${html_file}" > "${stat_dir}/stats.html"
 }
 
 # This is a special snowflake for now, called from within scan_host()
 function project_scan(){
   
-  #if [[ ! -d "${statDir}" ]]; then
-  #  umask 077 && mkdir ${statDir} &> /dev/null
+  #if [[ ! -d "${stat_dir}" ]]; then
+  #  umask 077 && mkdir ${stat_dir} &> /dev/null
   #fi
   
   SCAN_STATS=$(<${scan_html})
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/scan.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "${statDir}/scan.html"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/scan.html" > "${html_file}"
+  process_html; cat "${html_file}" > "${stat_dir}/scan.html"
 }
 
 function project_firewall() {
   # Process the HTML
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/firewall.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "${statDir}/firewall.html"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/firewall.html" > "${html_file}"
+  process_html; cat "${html_file}" > "${stat_dir}/firewall.html"
 }
 
 function project_engagement() {
@@ -134,7 +134,7 @@ function project_engagement() {
     return
   fi
   
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/engagement.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/engagement.html" > "${html_file}"
 
   # How many days of analytics to display?
   if [[ -z "${ENGAGEMENT_DAYS}" ]]; then
@@ -149,29 +149,29 @@ function project_engagement() {
 
   # Process the HTML
   process_html; 
-  cat "${htmlFile}" > "${statDir}/engagement.html"
+  cat "${html_file}" > "${stat_dir}/engagement.html"
 }
 
 function project_css() {
   # Process the CSS files
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/css/${THEME_MODE}.css" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "${statDir}/css/${THEME_MODE}.css"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/css/${THEME_MODE}.css" > "${html_file}"
+  process_html; cat "${html_file}" > "${stat_dir}/css/${THEME_MODE}.css"
 }
 
 function project_backup() {
   # Get file directory
-  #echo "${BACKUP_FILES}" > "${trshFile}"
+  #echo "${BACKUP_FILES}" > "${trash_file}"
 
-  echo "${BACKUP_FILES}" | grep -Po '"path_display":.*?[^\\]",' > "${trshFile}"
-  sed -i 's/\"path_display\": \"//g' "${trshFile}"
-  sed -i 's/\",//g' "${trshFile}"
-  sed -i 's/$/<hr>/' "${trshFile}"
-  BACKUP_FILES=$(tac ${trshFile})
-  echo "${BACKUP_FILES}" > "${trshFile}"
+  echo "${BACKUP_FILES}" | grep -Po '"path_display":.*?[^\\]",' > "${trash_file}"
+  sed -i 's/\"path_display\": \"//g' "${trash_file}"
+  sed -i 's/\",//g' "${trash_file}"
+  sed -i 's/$/<hr>/' "${trash_file}"
+  BACKUP_FILES=$(tac ${trash_file})
+  echo "${BACKUP_FILES}" > "${trash_file}"
 
   # Process the HTML
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/backup.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "${statDir}/backup.html"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/backup.html" > "${html_file}"
+  process_html; cat "${html_file}" > "${stat_dir}/backup.html"
 }
 
 function check_backup() {
@@ -185,22 +185,22 @@ function check_backup() {
     --header "Content-Type: application/json" \
     --data "{\"path\": \"${DB_BACKUP_PATH}\",\"recursive\": false,
       \"include_media_info\": false,\"include_deleted\": false,
-      \"include_has_explicit_shared_members\": false}" > "${trshFile}"
+      \"include_has_explicit_shared_members\": false}" > "${trash_file}"
 
     # Check for what we might assume is error output
-    if [[ $(grep -a "error" "${trshFile}") ]]; then
+    if [[ $(grep -a "error" "${trash_file}") ]]; then
       warning "Error in backup configuration"
       return
     fi
 
     # Store file list for later
-    BACKUP_FILES="$(<${trshFile})" 
+    BACKUP_FILES="$(<${trash_file})" 
 
     # Start the loop
     for i in $(seq 0 365)
       do 
       var="$(date -d "${i} day ago" +"%Y-%m-%d")"
-      if [[ $(grep -a "${var}" "${trshFile}") ]]; then
+      if [[ $(grep -a "${var}" "${trash_file}") ]]; then
         # Assume success
         BACKUP_STATUS="${SUCCESSC}"
         BACKUP_BTN="btn-success"
@@ -232,21 +232,21 @@ function check_backup() {
 
 # Usage: get_commits [number of commits]
 function get_commits() {
-  git log -n $1 --pretty=format:"%n<table style=\"border-bottom: solid 1px rgba(127, 127, 127, 0.25);\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr><td width=\"90\" valign=\"top\" align=\"left\"><img src=\"{{GRAVATARURL}}/%an.png\" alt=\"%aN\" title=\"%aN\" width=\"64\" style=\"width: 64px; float: left; background-color: #f0f0f0; overflow: hidden; margin-top: 4px;\" class=\"img-circle\"></td><td valign=\"top\" style=\"padding-bottom: 20px;\"><strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table><br>" > "${statFile}"
-  sed -i '/^commit/ s/$/ <\/strong><br>/' "${statFile}"
-  sed -i '/^Author:/ s/$/ <br>/' "${statFile}"
-  sed -i '/^Date:/ s/$/ <br><br>/' "${statFile}"
+  git log -n $1 --pretty=format:"%n<table style=\"border-bottom: solid 1px rgba(127, 127, 127, 0.25);\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr><td width=\"90\" valign=\"top\" align=\"left\"><img src=\"{{GRAVATARURL}}/%an.png\" alt=\"%aN\" title=\"%aN\" width=\"64\" style=\"width: 64px; float: left; background-color: #f0f0f0; overflow: hidden; margin-top: 4px;\" class=\"img-circle\"></td><td valign=\"top\" style=\"padding-bottom: 20px;\"><strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table><br>" > "${stat_file}"
+  sed -i '/^commit/ s/$/ <\/strong><br>/' "${stat_file}"
+  sed -i '/^Author:/ s/$/ <br>/' "${stat_file}"
+  sed -i '/^Date:/ s/$/ <br><br>/' "${stat_file}"
 }
 
 # Usage: url_check [source file]
 function validate_urls() {
-  grep -oP "(?<=href=\")[^\"]+(?=\")" $1 > "${trshFile}"
+  grep -oP "(?<=href=\")[^\"]+(?=\")" $1 > "${trash_file}"
   while read URL; do
     CODE=$(${curl_cmd} -o /dev/null --silent --head --write-out '%{http_code}' "$URL")
     if [[ "${CODE}" != "200" ]]; then 
-      sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${statFile}"
+      sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${stat_file}"
     fi
-  done < "${trshFile}"
+  done < "${trash_file}"
 }
 
 function assign_nav() {

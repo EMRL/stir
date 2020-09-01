@@ -33,17 +33,17 @@ function console() {
   fi
 }
 
-# Standard text output to console and logfile
+# Standard text output to console and log_file
 function info() {
   if [[ "${QUIET}" != "1" ]]; then
     echo -e "${reset}$*${endColor}"
   fi
-  echo "$@" >> "${logFile}"
+  echo "$@" >> "${log_file}"
 }
 
 # Standard text output only to log
 function log() {
-  echo "$@" >> "${logFile}"
+  echo "$@" >> "${log_file}"
 }
 
 function input() {
@@ -57,7 +57,7 @@ function notice() {
   if [[ "${QUIET}" != "1" ]]; then
     echo; echo -e "${green}$*${endColor}"
   fi
-  echo "" >> "${logFile}"; echo "$@" >> "${logFile}"
+  echo "" >> "${log_file}"; echo "$@" >> "${log_file}"
 }
 
 function error() {
@@ -68,7 +68,7 @@ function error() {
   else
     echo -e "$@"
   fi
-  echo -e "\nERROR: $*" >> "${logFile}"
+  echo -e "\nERROR: $*" >> "${log_file}"
   error_msg="$*"
   error_exit
 }
@@ -77,14 +77,14 @@ function warning() {
   if [[ "${QUIET}" != "1" ]]; then
     echo -e "${red}$*${endColor}"
   fi
-  echo "WARNING: $*" >> "${logFile}"
+  echo "WARNING: $*" >> "${log_file}"
 }
 
 function empty_line() {
   if [[ "${QUIET}" != "1" ]]; then
     echo ""
-    echo "" >> "${logFile}"
+    echo "" >> "${log_file}"
   else
-    echo "" >> "${logFile}"
+    echo "" >> "${log_file}"
   fi
 }

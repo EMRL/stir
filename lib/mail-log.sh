@@ -33,7 +33,7 @@ function mail_log() {
       ) | "${sendmail_cmd}" -t
     else
       # Compile and send text format email
-      textSendmail=$(<"${logFile}")
+      textSendmail=$(<"${log_file}")
       (
       echo "Sender: ${FROM}"
       echo "From: ${FROM} <${FROM}>"

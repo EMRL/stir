@@ -56,27 +56,27 @@ function scan_host() {
   trace "Scanning ${PRODURL}..."
   # Spinners commented out for now, causing issues when running from a crontab
   if [[ -z "${NIKTO_PROXY}" ]]; then
-    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -Tuning 013789c -no404 -output "${scan_html}" -host "${PRODURL}" > "${scanFile}" #&
+    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -Tuning 013789c -no404 -output "${scan_html}" -host "${PRODURL}" > "${scan_file}" #&
     #spinner $!
   else
-    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -no404 -output "${scan_html}" -useproxy "${NIKTO_PROXY}" -host "${PRODURL}" > "${scanFile}" #&
+    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -no404 -output "${scan_html}" -useproxy "${NIKTO_PROXY}" -host "${PRODURL}" > "${scan_file}" #&
     #spinner $!
   fi
 
   # For testing only
-  cp "${scanFile}" ~/verbose_scan.txt
+  cp "${scan_file}" ~/verbose_scan.txt
 
   # Create and clean up the log
-  sed -i -e 's/^.*Running/Running/' "${scanFile}" \
+  sed -i -e 's/^.*Running/Running/' "${scan_file}" \
     -e 's/^.*Loaded/Loaded/' \
     -e '/^V\:/d' \
     -e '/^Running average\: Not enough data/d' \
     -e "s/: currently in plugin 'Nikto Tests'//" \
-    "${scanFile}"
+    "${scan_file}"
   
   # Strip redirects, can get very spammy on a Wordpress project
-  sed -i '/Redirects (301) to/d' "${scanFile}"
-  cat "${scanFile}" >> "${logFile}"
+  sed -i '/Redirects (301) to/d' "${scan_file}"
+  cat "${scan_file}" >> "${log_file}"
 
   # Here's what we need to do to get the HTML ready. Ouch.
   sed -i '/<table/,$!d' "${scan_html}" 
@@ -98,9 +98,9 @@ function scan_host() {
   assign_nav
   project_scan
 
-  cat "${stir_path}/html/${HTMLTEMPLATE}/scan/header.html" "${scan_html}" "${stir_path}/html/${HTMLTEMPLATE}/scan/footer.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/scan/header.html" "${scan_html}" "${stir_path}/html/${HTMLTEMPLATE}/scan/footer.html" > "${html_file}"
 
-  SCAN_MSG=$(grep -a "error" "${htmlFile}")
+  SCAN_MSG=$(grep -a "error" "${html_file}")
 
   # Create scan result text
   SCAN_RESULT=$(echo "${SCAN_MSG//  <td>}")
@@ -120,7 +120,7 @@ function scan_host() {
 
   process_html
 
-  cp "${htmlFile}" "${scan_html}"
+  cp "${html_file}" "${scan_html}"
   
   LOGTITLE="Malware Scan"
   notes="Malware scan on ${PRODURL}: ${SCAN_RESULT}"

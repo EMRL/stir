@@ -38,9 +38,9 @@ function build_grunt() {
       cd "${APP_PATH}" || error_check
       
       if [[ "${VERBOSE}" == "TRUE" ]]; then
-        "${grunt_cmd}" build --force 2>&1 | tee --append "${trshFile}"           
+        "${grunt_cmd}" build --force 2>&1 | tee --append "${trash_file}"           
       else
-        "${grunt_cmd}" build --force &>> "${trshFile}" &
+        "${grunt_cmd}" build --force &>> "${trash_file}" &
         spinner $!
         info "Packages successfully built."
       fi
@@ -79,9 +79,9 @@ function build_npm() {
   if [[ "${BUILD}" = "1" ]] || yesno --default no "Build assets? [y/N] "; then
     cd "${npm_json}" || error_check
     if [[ "${VERBOSE}" == "TRUE" ]]; then
-      "${npm_cmd}" run build | tee --append "${trshFile}"               
+      "${npm_cmd}" run build | tee --append "${trash_file}"               
     else
-      "${npm_cmd}" run build &>> "${trshFile}"; error_check
+      "${npm_cmd}" run build &>> "${trash_file}"; error_check
       info "Packages successfully built."
     fi
   else
