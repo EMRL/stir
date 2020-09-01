@@ -116,7 +116,7 @@ function post_log() {
       fi
 
       if [[ "${REPORT}" == "1" ]]; then
-        REMOTEFILE="${CURYR}-${CURMTH}.php"
+        REMOTEFILE="${current_year}-${current_month}.php"
         REPORTURL="${REMOTEURL}/${APP}/report/${REMOTEFILE}"
         trace "Running \"${SSHCMD}\" \"${SCPUSER}\"@\"${SCPHOST}\" \"mkdir -p ${SCPHOSTPATH}/${APP}/report\""
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report"
