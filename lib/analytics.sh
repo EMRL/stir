@@ -58,9 +58,9 @@ function analytics() {
     ga_metrics
 
     # Update access token
-    "${curl_cmd}" -s -d "client_id=${CLIENTID}&client_secret=${CLIENTSECRET}&refresh_token=${REFRESHTOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trshFile}"
-    sed -i '/access_token/!d' "${trshFile}"
-    ACCESSTOKEN="$(awk -F\" '{print $4}' "${trshFile}")"
+    "${curl_cmd}" -s -d "client_id=${CLIENTID}&client_secret=${CLIENTSECRET}&refresh_token=${REFRESHTOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trash_file}"
+    sed -i '/access_token/!d' "${trash_file}"
+    ACCESSTOKEN="$(awk -F\" '{print $4}' "${trash_file}")"
 
     # Grab data from Google
     ga_data
@@ -193,8 +193,8 @@ function ga_over_time() {
     fi
 
     # Make sure temp directory exists
-    if [[ ! -d "${statDir}" ]]; then
-      umask 077 && mkdir ${statDir} &> /dev/null
+    if [[ ! -d "${stat_dir}" ]]; then
+      umask 077 && mkdir ${stat_dir} &> /dev/null
     fi
     
     # Setup variables
@@ -205,7 +205,7 @@ function ga_over_time() {
     max_value=""
 
     # Flush csv
-    [[ -f "${trshFile}" ]] && rm "${trshFile}"
+    [[ -f "${trash_file}" ]] && rm "${trash_file}"
 
     while [ "$ga_day" != "${GASTART}" ]; do 
       RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4);
@@ -256,17 +256,17 @@ function ga_over_time() {
       eval $1_$n="${!var}"
       eval $1_percent_$n="${var_percent}"
       this_day=$(date '+%a' -d "$n days ago")
-      echo -e "${this_day}, ${!var}, ${var_percent}" >> "${trshFile}"
+      echo -e "${this_day}, ${!var}, ${var_percent}" >> "${trash_file}"
 
       if [[ "${PROJSTATS}" == "1" ]]; then
         sed -i -e "s^{{$1_$n}}^${!var}^g" \
           -e "s^{{$1_percent_$n}}^${var_percent}^g" \
           -e "s^{{$1_date_$n}}^${this_day}^g" \
-          "${htmlFile}"
+          "${html_file}"
       fi    
     done
 
-    tac "${trshFile}" > ${statDir}/"${METRIC}".csv
+    tac "${trash_file}" > ${stat_dir}/"${METRIC}".csv
 
     ${gnuplot_cmd} -p << EOF
     set encoding utf8
@@ -277,7 +277,7 @@ function ga_over_time() {
     default = "${DEFAULTC}";
     set key off
     set datafile separator ","
-    set output '${statDir}/${METRIC}.png'
+    set output '${stat_dir}/${METRIC}.png'
     set boxwidth 0.5
     set style fill transparent solid 0.1 noborder
     set samples 1000
@@ -291,14 +291,14 @@ function ga_over_time() {
     
     # PNG
     set terminal png enhanced size 1280,600
-    set output '${statDir}/${METRIC}.png'
-    plot '${statDir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
+    set output '${stat_dir}/${METRIC}.png'
+    plot '${stat_dir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
       "" using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3
 
     # SVG
     set terminal svg dynamic enhanced size 1280,600
-    set output '${statDir}/${METRIC}.svg'
-    plot '${statDir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
+    set output '${stat_dir}/${METRIC}.svg'
+    plot '${stat_dir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
       "" using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3
 EOF
 fi
@@ -356,9 +356,9 @@ function ga_test() {
   fi
 
   notice "Refreshing token..."
-  "${curl_cmd}" -s -d "client_id=${CLIENTID}&client_secret=${CLIENTSECRET}&refresh_token=${REFRESHTOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trshFile}"
-  sed -i '/access_token/!d' "${trshFile}"
-  ACCESSTOKEN="$(awk -F\" '{print $4}' "${trshFile}")"
+  "${curl_cmd}" -s -d "client_id=${CLIENTID}&client_secret=${CLIENTSECRET}&refresh_token=${REFRESHTOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trash_file}"
+  sed -i '/access_token/!d' "${trash_file}"
+  ACCESSTOKEN="$(awk -F\" '{print $4}' "${trash_file}")"
   echo "${ACCESSTOKEN}"
 
   ga_data_loop

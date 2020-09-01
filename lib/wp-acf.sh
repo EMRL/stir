@@ -14,14 +14,14 @@ function acf_update() {
   ACFFILE="/tmp/acfpro.zip"
   trace status "Updating ACF Pro... "
 	# Download the ACF Pro upgrade file
-	"${wget_cmd}" --header="Accept: application/zip" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" -O "${ACFFILE}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACFKEY}" &>> "${logFile}"; error_check
+	"${wget_cmd}" --header="Accept: application/zip" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" -O "${ACFFILE}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACFKEY}" &>> "${log_file}"; error_check
 
 	# Check file integrity
 	acf_filecheck
 
 	# Proceed with install
-	"${wp_cmd}" plugin delete --no-color advanced-custom-fields-pro &>> "${logFile}"
-	"${wp_cmd}" plugin install --no-color "${ACFFILE}" &>> "${logFile}"
+	"${wp_cmd}" plugin delete --no-color advanced-custom-fields-pro &>> "${log_file}"
+	"${wp_cmd}" plugin install --no-color "${ACFFILE}" &>> "${log_file}"
 	rm "${ACFFILE}"
   trace notime "OK"
 }

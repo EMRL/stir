@@ -16,14 +16,14 @@ function wf_check() {
         error "Deployment can not continue while Wordfence firewall is enabled."
       else
         if yesno --default yes "Attempt to repair files? (sudo required) [Y/n] "; then
-          "${wp_cmd}" plugin deactivate --no-color wordfence &>> "${logFile}"; WFOFF="1"
-          sudo rm -rf "${WORKPATH}/${APP}${WPROOT}${WPAPP}/wflogs" &>> $logFile
+          "${wp_cmd}" plugin deactivate --no-color wordfence &>> "${log_file}"; WFOFF="1"
+          sudo rm -rf "${WORKPATH}/${APP}${WPROOT}${WPAPP}/wflogs" &>> $log_file
           # Remove from repo history, in case .gitignore doesn't have them excluded
           if ! grep -aq "wflog" "${WORKPATH}/${APP}/.gitignore"; then
             cd "${WORKPATH}"/"${APP}"; \
-            git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch ${WPROOT}${WPAPP}/wflogs > /dev/null" HEAD &>> "${logFile}" &
+            git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch ${WPROOT}${WPAPP}/wflogs > /dev/null" HEAD &>> "${log_file}" &
             spinner $!
-            rm -rf .git/refs/original/ && git reflog expire --all &&  git gc --aggressive --prune &>> "${logFile}" &
+            rm -rf .git/refs/original/ && git reflog expire --all &&  git gc --aggressive --prune &>> "${log_file}" &
             spinner $!
             cd "${WORKPATH}"/"${APP}${WPROOT}"; \
           fi
