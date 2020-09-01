@@ -255,7 +255,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Cleaned up configuration files
 - Exit codes now pass more reliably to Slack messages 
 ### Fixed
-- Fixed issue with pkgDeploy() not executing deployment command correctly
+- Fixed issue with proj_deploy() not executing deployment command correctly
 
 ## [3.3.3] - 02-11-2016
 ### Added
