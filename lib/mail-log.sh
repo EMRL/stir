@@ -75,10 +75,6 @@ function email_test() {
   if [[ -z "${TO}" ]]; then
     empty_line; warning "No recipient address found."
     quiet_exit
-
-#  elif [[ ! -f "${sendmail_cmd}" ]]; then
-#    empty_line; warning "Mail system misconfigured or not found."
-#    quiet_exit
   else
     # Send HTML mail
     (

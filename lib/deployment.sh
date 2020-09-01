@@ -11,7 +11,7 @@ var=(start_deploy)
 init_loop
 
 # Housekeeping tasks to run before final deployment
-function preDeploy() {
+function pre_deploy() {
   # If there are changes waiting in the repo, stop and ask for user input
   # This should probably be it's own function
   current_stash="0"
@@ -52,7 +52,7 @@ function preDeploy() {
   fi
 } 
 
-function pkgDeploy() {
+function proj_deploy() {
   empty_line
   if [[ -n "${DEPLOY}" ]]; then
     # Add ssh keys and double check directoy
