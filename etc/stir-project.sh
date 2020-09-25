@@ -216,7 +216,7 @@ PROJECT_VERSION="3.8"
 # Logging
 ###############################################################################
 
-# If you need to send logfiles and email alerts to address(es) other than those
+# If you need to send log_files and email alerts to address(es) other than those
 # you may have configured globally, enter them below.
 # TO="{{TO}}"
 
@@ -226,7 +226,7 @@ PROJECT_VERSION="3.8"
 # folder name of your template.
 # HTMLTEMPLATE="{{HTMLTEMPLATE}}"
 
-# If you are using html logfiles, define the full URL to the client's logo
+# If you are using html log_files, define the full URL to the client's logo
 # CLIENTLOGO="{{CLIENTLOGO}}"
 
 # If you are using a digest theme that includes a cover image, at the URL below.
