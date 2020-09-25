@@ -118,7 +118,7 @@ function make_log() {
   # IF we're using HTML emails, let's get to work
   if [[ "${EMAILHTML}" == "TRUE" ]]; then
     [[ "${message_state}" != "DIGEST" ]] && build_html
-    cat "${htmlFile}" > "${trash_file}"
+    cat "${html_file}" > "${trash_file}"
 
     # If this is an approval email, strip out PHP
     if [[ "${message_state}" == "APPROVAL NEEDED" ]]; then 
@@ -147,7 +147,7 @@ function make_log() {
     # build_html
 
     # Strip out the buttons that self-link
-    sed -e "s^// BUTTON: BEGIN //-->^BUTTON HIDE^g" -i "${htmlFile}"
+    sed -e "s^// BUTTON: BEGIN //-->^BUTTON HIDE^g" -i "${html_file}"
     post_log
   fi
 }
@@ -161,7 +161,7 @@ function build_html() {
     notes="${error_msg}"
     LOGTITLE="Deployment Error"
     # Create the header
-    cat "${stir_path}/html/${HTMLTEMPLATE}/header.html" "${stir_path}/html/${HTMLTEMPLATE}/error.html" > "${htmlFile}"
+    cat "${stir_path}/html/${HTMLTEMPLATE}/header.html" "${stir_path}/html/${HTMLTEMPLATE}/error.html" > "${html_file}"
   else
     # Does this project need to be approved before finalizing deployment?
     #if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
@@ -169,8 +169,8 @@ function build_html() {
       message_state="APPROVAL NEEDED"
       LOGTITLE="Approval Needed"
       LOGSUFFIX="php"
-      # cat "${stir_path}/html/${HTMLTEMPLATE}/header.html" "${stir_path}/html/${HTMLTEMPLATE}/approve.html" > "${htmlFile}"
-      cat "${stir_path}/html/${HTMLTEMPLATE}/approval.php" > "${htmlFile}"
+      # cat "${stir_path}/html/${HTMLTEMPLATE}/header.html" "${stir_path}/html/${HTMLTEMPLATE}/approve.html" > "${html_file}"
+      cat "${stir_path}/html/${HTMLTEMPLATE}/approval.php" > "${html_file}"
     else
       if [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" == "1" ]] && [[ "${UPD2}" == "1" ]]; then
         message_state="NOTICE"
@@ -190,7 +190,7 @@ function build_html() {
         if [[ "${REPAIR}" == "1" ]] && [[ -z "${notes}" ]]; then
           notes="Merged and deployed codebase"
         fi
-        cat "${stir_path}/html/${HTMLTEMPLATE}/header.html" "${stir_path}/html/${HTMLTEMPLATE}/success.html" > "${htmlFile}"
+        cat "${stir_path}/html/${HTMLTEMPLATE}/header.html" "${stir_path}/html/${HTMLTEMPLATE}/success.html" > "${html_file}"
       fi
     fi
   fi
@@ -217,7 +217,7 @@ function build_html() {
 
   # Insert the full deployment log_file & button it all up
   if [[ "${REPORT}" != "1" ]]; then
-    cat "${log_file}" "${stir_path}/html/${HTMLTEMPLATE}/footer.html" >> "${htmlFile}"
+    cat "${log_file}" "${stir_path}/html/${HTMLTEMPLATE}/footer.html" >> "${html_file}"
     # There's probably a better place for this.
     process_html
   fi

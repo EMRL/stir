@@ -193,8 +193,8 @@ function ga_over_time() {
     fi
 
     # Make sure temp directory exists
-    if [[ ! -d "${statDir}" ]]; then
-      umask 077 && mkdir ${statDir} &> /dev/null
+    if [[ ! -d "${stat_dir}" ]]; then
+      umask 077 && mkdir ${stat_dir} &> /dev/null
     fi
     
     # Setup variables
@@ -262,11 +262,11 @@ function ga_over_time() {
         sed -i -e "s^{{$1_$n}}^${!var}^g" \
           -e "s^{{$1_percent_$n}}^${var_percent}^g" \
           -e "s^{{$1_date_$n}}^${this_day}^g" \
-          "${htmlFile}"
+          "${html_file}"
       fi    
     done
 
-    tac "${trash_file}" > ${statDir}/"${METRIC}".csv
+    tac "${trash_file}" > ${stat_dir}/"${METRIC}".csv
 
     ${gnuplot_cmd} -p << EOF
     set encoding utf8
@@ -277,7 +277,7 @@ function ga_over_time() {
     default = "${DEFAULTC}";
     set key off
     set datafile separator ","
-    set output '${statDir}/${METRIC}.png'
+    set output '${stat_dir}/${METRIC}.png'
     set boxwidth 0.5
     set style fill transparent solid 0.1 noborder
     set samples 1000
@@ -291,14 +291,14 @@ function ga_over_time() {
     
     # PNG
     set terminal png enhanced size 1280,600
-    set output '${statDir}/${METRIC}.png'
-    plot '${statDir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
+    set output '${stat_dir}/${METRIC}.png'
+    plot '${stat_dir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
       "" using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3
 
     # SVG
     set terminal svg dynamic enhanced size 1280,600
-    set output '${statDir}/${METRIC}.svg'
-    plot '${statDir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
+    set output '${stat_dir}/${METRIC}.svg'
+    plot '${stat_dir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
       "" using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3
 EOF
 fi

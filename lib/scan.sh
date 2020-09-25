@@ -98,9 +98,9 @@ function scan_host() {
   assign_nav
   project_scan
 
-  cat "${stir_path}/html/${HTMLTEMPLATE}/scan/header.html" "${scan_html}" "${stir_path}/html/${HTMLTEMPLATE}/scan/footer.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/scan/header.html" "${scan_html}" "${stir_path}/html/${HTMLTEMPLATE}/scan/footer.html" > "${html_file}"
 
-  SCAN_MSG=$(grep -a "error" "${htmlFile}")
+  SCAN_MSG=$(grep -a "error" "${html_file}")
 
   # Create scan result text
   SCAN_RESULT=$(echo "${SCAN_MSG//  <td>}")
@@ -120,7 +120,7 @@ function scan_host() {
 
   process_html
 
-  cp "${htmlFile}" "${scan_html}"
+  cp "${html_file}" "${scan_html}"
   
   LOGTITLE="Malware Scan"
   notes="Malware scan on ${PRODURL}: ${SCAN_RESULT}"
