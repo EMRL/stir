@@ -76,7 +76,7 @@ function clean_up() {
   # If anything is stashed, unstash it.
   if [[ "${current_stash}" == "1" ]]; then
     trace "Unstashing files"
-    git stash pop >> "${logFile}"
+    git stash pop >> "${log_file}"
     current_stash="0"
   fi  
 
@@ -87,13 +87,13 @@ function clean_up() {
   if [[ -n "${start_branch}" ]]; then
     current_branch="$(git rev-parse --abbrev-ref HEAD)"
     if [[ "${current_branch}" != "${start_branch}" ]]; then
-      git checkout "${start_branch}" &>> "${logFile}" &
+      git checkout "${start_branch}" &>> "${log_file}" &
     fi
   fi
 
   # If Wordfence was an issue, restart the plugin
   if [[ "${WFOFF}" = "1" ]]; then
-    "${wp_cmd}" plugin activate --no-color wordfence &>> $logFile; error_check
+    "${wp_cmd}" plugin activate --no-color wordfence &>> $log_file; error_check
   fi
 
   # Was this an approval?

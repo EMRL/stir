@@ -11,7 +11,7 @@ function make_log() {
   sed -i -e '/git reset HEAD/d' \
     -e '/Checking out files:/d' \
     -e '/Unpacking objects:/d' \
-    "${logFile}"
+    "${log_file}"
 
   # Clean up stuff that has a small chance of being there
   sed -i -e '/--:--:--/d'  \
@@ -25,7 +25,7 @@ function make_log() {
     -e '/to update what/d' \
     -e '/to discard changes/d' \
     -e '/Changes not staged for/d' \
-    "${logFile}"
+    "${log_file}"
 
   # Clean up mina's goobers
   if [[ "${DEPLOY}" == *"mina"* ]]; then
@@ -35,41 +35,41 @@ function make_log() {
       -e '/0m Using this git commit/c\Using this git commit' \
       -e '/0m Cleaning up old releases/c\Cleaning up old releases' \
       -e '/0m Build finished/c\Build finished' \
-      "${logFile}"
+      "${log_file}"
 
     # Totally remove these lines
-    sed -i -e "/----->/d" "${logFile}" \
-      -e "/0m/d" "${logFile}" \
-      -e "/Resolving deltas:/d" "${logFile}" \
-      -e "/remote:/d" "${logFile}" \
-      -e "/Receiving objects:/d" "${logFile}" \
-      -e "/Resolving deltas:/d" "${logFile}" \
+    sed -i -e "/----->/d" "${log_file}" \
+      -e "/0m/d" "${log_file}" \
+      -e "/Resolving deltas:/d" "${log_file}" \
+      -e "/remote:/d" "${log_file}" \
+      -e "/Receiving objects:/d" "${log_file}" \
+      -e "/Resolving deltas:/d" "${log_file}" \
       -e "/No Kerberos credentials available/d" \
-      "${logFile}"
+      "${log_file}"
 
     # If incognito, remove this stuff for privacy
     if [[ "${INCOGNITO}" == "TRUE" ]]; then
-      sed -i "/Using cached file/d" "${logFile}"
+      sed -i "/Using cached file/d" "${log_file}"
     fi
   fi
 
   # Filter out ACF license key & wget stuff
   if [[ -n "${ACFKEY}" ]]; then
-    sed -i "s^${ACFKEY}^############^g" "${logFile}"
-    # sed -i "/........../d" "${logFile}"
+    sed -i "s^${ACFKEY}^############^g" "${log_file}"
+    # sed -i "/........../d" "${log_file}"
   fi
 
   # Filter out noise from scp deployment method
   if [[ "${DEPLOY}" == "SCP" ]]; then
-    sed -i "/Sending file modes:/d" "${logFile}"
-    sed -i "/Sink:/d" "${logFile}"
-    sed -i "/debug1:/d" "${logFile}"
+    sed -i "/Sending file modes:/d" "${log_file}"
+    sed -i "/Sink:/d" "${log_file}"
+    sed -i "/debug1:/d" "${log_file}"
   fi
 
   # Filter PHP log output as configured by user
   if [[ "${NOPHP}" == "TRUE" ]]; then
-    grep -vE "(PHP |Notice:|Warning:|Strict Standards:)" "${logFile}" > "${postFile}"
-    cat "${postFile}" > "${logFile}"
+    grep -vE "(PHP |Notice:|Warning:|Strict Standards:)" "${log_file}" > "${post_file}"
+    cat "${post_file}" > "${log_file}"
   fi
 
   # If logs should be terse, remove some more stuff
@@ -89,11 +89,11 @@ function make_log() {
       -e "/not found/d" \
       -e "/Checking for/d" \
       -e "/Continuing deploy/d" \
-      "${logFile}"
+      "${log_file}"
   fi
 
   # Remove double line breaks
-  sed -i '/^$/d' "${logFile}"
+  sed -i '/^$/d' "${log_file}"
   
   # Replace empty lines where we want
   sed -i -e '/Checking servers/s/^/\n/' \
@@ -104,7 +104,7 @@ function make_log() {
     -e '/Checking for updates/s/^/\n/' \
     -e '/The following updates/s/^/\n/' \
     -e '/installed plugins/s/^/\n/' \
-    "${logFile}"
+    "${log_file}"
 
   # Is this a publish only?
   if [[ "${PUBLISH}" == "1" ]] && [[ -z "${notes}" ]]; then   
@@ -118,21 +118,21 @@ function make_log() {
   # IF we're using HTML emails, let's get to work
   if [[ "${EMAILHTML}" == "TRUE" ]]; then
     [[ "${message_state}" != "DIGEST" ]] && build_html
-    cat "${htmlFile}" > "${trshFile}"
+    cat "${htmlFile}" > "${trash_file}"
 
     # If this is an approval email, strip out PHP
     if [[ "${message_state}" == "APPROVAL NEEDED" ]]; then 
-      sed -i '/<?php/,/?>/d' "${trshFile}"
-      sed -e "s^EMAIL BUTTONS: BEGIN^EMAIL BUTTONS: BEGIN //-->^g" -i "${trshFile}"
+      sed -i '/<?php/,/?>/d' "${trash_file}"
+      sed -e "s^EMAIL BUTTONS: BEGIN^EMAIL BUTTONS: BEGIN //-->^g" -i "${trash_file}"
     fi
 
     # Strip out logs if necessary
     if [[ "${SHORTEMAIL}" == "TRUE" ]]; then
-      sed -i '/LOG: BEGIN/,/LOG: END/d' "${trshFile}"
+      sed -i '/LOG: BEGIN/,/LOG: END/d' "${trash_file}"
     fi
 
     # Load the email into a variable
-    htmlSendmail=$(<"${trshFile}")
+    htmlSendmail=$(<"${trash_file}")
   fi
 
   # Create HTML/PHP logs for viewing online
@@ -215,9 +215,9 @@ function build_html() {
     fi
   fi
 
-  # Insert the full deployment logfile & button it all up
+  # Insert the full deployment log_file & button it all up
   if [[ "${REPORT}" != "1" ]]; then
-    cat "${logFile}" "${stir_path}/html/${HTMLTEMPLATE}/footer.html" >> "${htmlFile}"
+    cat "${log_file}" "${stir_path}/html/${HTMLTEMPLATE}/footer.html" >> "${htmlFile}"
     # There's probably a better place for this.
     process_html
   fi

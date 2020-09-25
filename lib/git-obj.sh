@@ -38,8 +38,8 @@ function verify_project() {
   fi
 
   # Make sure there has been at least one commit previously made
-  git rev-parse --abbrev-ref HEAD &>> "${trshFile}"
-  if grep -aq "fatal" "${trshFile}"; then 
+  git rev-parse --abbrev-ref HEAD &>> "${trash_file}"
+  if grep -aq "fatal" "${trash_file}"; then 
     error "Unable to start, push your first commit manually and try again."
   else  
     # If running --automate, force a branch check
@@ -61,9 +61,9 @@ function verify_project() {
   # If running --automate, pull and sync all branches
   if [[ "${AUTOMATE}" == "1" ]]; then
     trace "Syncing with origin"
-    "${git_cmd}" fetch --all &>> "${logFile}"; error_check
+    "${git_cmd}" fetch --all &>> "${log_file}"; error_check
     sleep 2 # Chill for a second (or 2 :p)
-    "${git_cmd}" pull --all &>> "${logFile}"; error_check
+    "${git_cmd}" pull --all &>> "${log_file}"; error_check
   fi
 
   # Try to clear out old git processes owned by this user, if they exist
@@ -83,13 +83,13 @@ function checkout() {
     notice "Checking out ${working_branch} branch...";
     
     if [[ "${VERBOSE}" == "TRUE" ]]; then
-      git checkout "${working_branch}" | tee --append "${logFile}"
+      git checkout "${working_branch}" | tee --append "${log_file}"
     else
       if [[ "${QUIET}" != "1" ]]; then
-        git checkout "${working_branch}" &>> "${logFile}" &
+        git checkout "${working_branch}" &>> "${log_file}" &
         show_progress
       else
-        git checkout "${working_branch}" &>> "${logFile}"
+        git checkout "${working_branch}" &>> "${log_file}"
       fi
     fi
   fi
@@ -119,9 +119,9 @@ function stage() {
     if [[ "${FORCE}" = "1" ]] || yesno --default yes "Stage files? [Y/n] "; then
       trace "Staging files"
       if [[ "${VERBOSE}" == "TRUE" ]]; then
-        git add --all :/ | tee --append "${logFile}"; error_check              
+        git add --all :/ | tee --append "${log_file}"; error_check              
       else  
-        git add --all :/ &>> "${logFile}"; error_check
+        git add --all :/ &>> "${log_file}"; error_check
       fi
     else
       trace "Exiting without staging files"; user_exit    
@@ -134,22 +134,22 @@ function push() {
   trace "Push ${working_branch}";
   empty_line
   if [[ "${VERBOSE}" == "TRUE" ]]; then
-    git push origin "${working_branch}" | tee --append "${logFile}"; error_check 
+    git push origin "${working_branch}" | tee --append "${log_file}"; error_check 
     trace "OK"              
   else
     if [[ "${FORCE}" = "1" ]] || yesno --default yes "Push ${working_branch} branch? [Y/n] "; then
       if [[ "${QUIET}" != "1" ]]; then
         sleep 1
-        git push origin "${working_branch}" &>> "${logFile}" &
+        git push origin "${working_branch}" &>> "${log_file}" &
         spinner $!
         info "Success.    "
       else
-        git push origin "${working_branch}" &>> "${logFile}"; error_check
+        git push origin "${working_branch}" &>> "${log_file}"; error_check
       fi
       sleep 1
       if [[ "$(git status --porcelain)" ]]; then
-        sleep 1; git add --all :/ &>> "${logFile}"
-        git push --force-with-lease  &>> "${logFile}"
+        sleep 1; git add --all :/ &>> "${log_file}"
+        git push --force-with-lease  &>> "${log_file}"
       fi
     else
       clean_exit
@@ -172,14 +172,14 @@ function merge() {
     # TODO: Find out why this is here, I can't remember what it was working around
     [[ -f "${gitLock}" ]] && rm "${gitLock}"
     if [[ "${VERBOSE}" == "TRUE" ]]; then
-      git merge "${MASTER}" | tee --append "${logFile}"              
+      git merge "${MASTER}" | tee --append "${log_file}"              
     else
       if [[ "${QUIET}" != "1" ]]; then
-        # git merge --no-edit master &>> "${logFile}" &
-        git merge "${MASTER}" &>> "${logFile}" &
+        # git merge --no-edit master &>> "${log_file}" &
+        git merge "${MASTER}" &>> "${log_file}" &
         show_progress
       else
-        git merge "${MASTER}" &>> "${logFile}"
+        git merge "${MASTER}" &>> "${log_file}"
       fi
     fi
   fi
@@ -203,13 +203,13 @@ function confirm_branch() {
     if  [[ "${FORCE}" = "1" ]] || yesno --default yes "Current branch is ${current_branch} and should be ${working_branch}, try again? [Y/n] "; then
       if [[ "${current_branch}" = "${MASTER}" ]]; then 
         [[ -f "${gitLock}" ]] && rm "${gitLock}"
-        git checkout "${working_branch}" &>> "${logFile}" #; error_check
+        git checkout "${working_branch}" &>> "${log_file}" #; error_check
       fi
     else
       clean_exit
     fi
     # Were there any conflicts checking out?
-    if grep -aq "error: Your local changes to the following files would be overwritten by checkout:" "${logFile}"; then
+    if grep -aq "error: Your local changes to the following files would be overwritten by checkout:" "${log_file}"; then
       error "There is a conflict checking out."
     else
       trace "OK"
@@ -221,9 +221,9 @@ function confirm_branch() {
 function garbage() {
   if [[ "${GARBAGE}" = "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then 
     notice "Preparing project files..."
-    git gc | tee --append "${logFile}"
+    git gc | tee --append "${log_file}"
     if [[ "${QUIET}" != "1" ]]; then
-      git gc &>> "${logFile}"
+      git gc &>> "${log_file}"
     fi
   fi
 }
@@ -232,8 +232,8 @@ function garbage() {
 function git_stats() {
   if [[ "${GITSTATS}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]] && [[ "${PUBLISH}" != "1" ]] && [[ "${APPROVE}" != "1" ]]; then
     console "Calculating..."
-    getent passwd "${USER}" | cut -d ':' -f 5 | cut -d ',' -f 1 > "${trshFile}"
-    FULLUSER=$(<"${trshFile}")
+    getent passwd "${USER}" | cut -d ':' -f 5 | cut -d ',' -f 1 > "${trash_file}"
+    FULLUSER=$(<"${trash_file}")
     git log --author="${FULLUSER}" --pretty=tformat: --numstat | \
     # The single quotes were messing with trying to line break this one
     awk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf "Your total lines of code contributed so far: %s\n(+%s added | -%s deleted)\n",loc,add,subs }' -

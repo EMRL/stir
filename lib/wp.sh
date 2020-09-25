@@ -40,17 +40,17 @@ function wp() {
         wp_update_check &
         spinner $!
       else
-        "${wp_cmd}" plugin status --no-color >> "${logFile}"
-        "${wp_cmd}" plugin update --dry-run --no-color --all > "${wpFile}"
+        "${wp_cmd}" plugin status --no-color >> "${log_file}"
+        "${wp_cmd}" plugin update --dry-run --no-color --all > "${wp_file}"
       fi
 
       # Check the logs
-      #if grep -aq "U = Update Available" "${logFile}"; then
-      if grep -aq "Available plugin updates:" "${wpFile}"; then    
+      #if grep -aq "U = Update Available" "${log_file}"; then
+      if grep -aq "Available plugin updates:" "${wp_file}"; then    
         wp_plugins
       else
         # Was there a database glitch?
-        if grep -aq 'plugins can not be updated' "${wpFile}"; then
+        if grep -aq 'plugins can not be updated' "${wp_file}"; then
           sleep 1
         else
           info "Plugins are up to date."; UPD1="1"
@@ -69,11 +69,11 @@ function wp() {
 function wp_update_check() {
   "${wp_cmd}" cache delete &>> /dev/null
 
-  # For the logfile
-  "${wp_cmd}" plugin status --no-color &>> $logFile
+  # For the log_file
+  "${wp_cmd}" plugin status --no-color &>> $log_file
 
   # For the console/smart commit message
-  "${wp_cmd}" plugin update --dry-run --no-color --all &> "${wpFile}"
+  "${wp_cmd}" plugin update --dry-run --no-color --all &> "${wp_file}"
 
   # Other options, thanks Corey
   # wp plugin list --format=csv --all --fields=name,update_version,update | grep -a 'available'
@@ -99,7 +99,7 @@ function wp_check() {
       "${wp_cmd}" db check &>> /dev/null; EXITCODE=$?; 
       
       if [[ "${EXITCODE}" != "0" ]]; then 
-        "${wp_cmd}" db check &>> "${logFile}"; 
+        "${wp_cmd}" db check &>> "${log_file}"; 
         trace notime "FAIL"
         if [[ "${AUTOMATE}" == "1" ]]; then
           error "There is a problem with your Wordpress installation, check your configuration."
@@ -109,7 +109,7 @@ function wp_check() {
       else
         # Get info
         trace notime "OK"
-        "${wp_cmd}" core version --extra  &>> "${logFile}";
+        "${wp_cmd}" core version --extra  &>> "${log_file}";
       fi
     else
       WP_PATH="FALSE"
@@ -122,7 +122,7 @@ function wp_server_check {
   # "${wp_cmd}" server --host=localhost > /dev/null 2>&1; EXITCODE=$?; 
   # if [[ "${EXITCODE}" -eq "0" ]]; then
     # trace "Launching server"
-    # "${wp_cmd}" server --host=localhost >> "${logFile}" 2>&1 &
+    # "${wp_cmd}" server --host=localhost >> "${log_file}" 2>&1 &
     # Keep checking for server to come online
     # until $(${curl_cmd} --output /dev/null --silent --head --fail http://localhost:8080); do
     #   sleep 1
@@ -130,11 +130,11 @@ function wp_server_check {
   # fi
 
   trace "Activating plugins"
-  "${wp_cmd}" plugin activate --all >> "${logFile}" 2>&1
+  "${wp_cmd}" plugin activate --all >> "${log_file}" 2>&1
   # trace "Activating theme"
-  # "${wp_cmd}" theme activate site >> "${logFile}" 2>&1
+  # "${wp_cmd}" theme activate site >> "${log_file}" 2>&1
   
-  #"${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" >> "${logFile}" 2>&1
+  #"${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" >> "${log_file}" 2>&1
   
   #if [[ -z "$(${curl_cmd} -sL localhost:8080 | grep -E "Warning:|Fatal:")" ]]; then
   #if "${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" > /dev/null; then

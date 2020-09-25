@@ -60,7 +60,7 @@ function process_html() {
     "${htmlFile}"
 
   # Insert commits
-  sed_commits=$(echo "sed -e '/{{COMMITS_RECENT}}/ {' -e 'r ${statFile}' -e 'd' -e '}' -i \"${htmlFile}\"")
+  sed_commits=$(echo "sed -e '/{{COMMITS_RECENT}}/ {' -e 'r ${stat_file}' -e 'd' -e '}' -i \"${htmlFile}\"")
   eval "${sed_commits}"
   
   # Insert scan results
@@ -68,7 +68,7 @@ function process_html() {
   eval "${sed_scan}"
 
   # Insert backup directory listings
-  sed_backup=$(echo "sed -e '/{{BACKUP_FILES}}/ {' -e 'r ${trshFile}' -e 'd' -e '}' -i \"${htmlFile}\"")
+  sed_backup=$(echo "sed -e '/{{BACKUP_FILES}}/ {' -e 'r ${trash_file}' -e 'd' -e '}' -i \"${htmlFile}\"")
   eval "${sed_backup}"
 
   # RSS news

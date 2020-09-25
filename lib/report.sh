@@ -50,19 +50,19 @@ function create_report() {
     if [[ "${INCLUDEHOSTING}" == "TRUE" ]]; then
       INCLUDEHOSTING="Web hosting for the month of ${last_month}"
     fi
-    echo "<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">${TASK}<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">${INCLUDEHOSTING}</div></td></tr>" >> "${statFile}"
+    echo "<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">${TASK}<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">${INCLUDEHOSTING}</div></td></tr>" >> "${stat_file}"
   fi
 
   trace "git log --all --no-merges --first-parent --before=\"${current_year}-${current_month}-1 00:00\" --after=\"${previous_year}-${previous_month}-${last_day} 00:00\" --pretty=format:\"<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">%h<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">%s</div></td></tr>\""
-  git log --all --no-merges --first-parent --before="${current_year}-${current_month}-1 00:00" --after="${previous_year}-${previous_month}-${last_day} 00:00" --pretty=format:"<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">%h<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">%s</div></td></tr>" >> "${statFile}"
+  git log --all --no-merges --first-parent --before="${current_year}-${current_month}-1 00:00" --after="${previous_year}-${previous_month}-${last_day} 00:00" --pretty=format:"<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">%h<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">%s</div></td></tr>" >> "${stat_file}"
 
   # If it's an empty report, this empty row will keep the javascript from breaking. Kludgy I know.
-  if [[ ! -s "${statFile}" ]]; then
-    echo "<tr class=\"item-row\" id=\"hiderow\" style=\"display: none;\"><td></td><td></td></tr>" > "${statFile}"
+  if [[ ! -s "${stat_file}" ]]; then
+    echo "<tr class=\"item-row\" id=\"hiderow\" style=\"display: none;\"><td></td><td></td></tr>" > "${stat_file}"
   fi
 
   # Compile full report 
-  cat "${stir_path}/html/${HTMLTEMPLATE}/report/header.html" "${statFile}" "${stir_path}/html/${HTMLTEMPLATE}/report/footer.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/report/header.html" "${stat_file}" "${stir_path}/html/${HTMLTEMPLATE}/report/footer.html" > "${htmlFile}"
 
   # Filter and replace template variables
   process_html

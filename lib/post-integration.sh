@@ -29,7 +29,7 @@ function build_log() {
       notes="Marked as approved and deployed" 
     fi
 
-    echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${postFile}"
+    echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${post_file}"
   fi
 }
 
@@ -45,8 +45,8 @@ function mail_post() {
       return
     fi
 
-    echo "${COMMITURL}" >> "${postFile}"
-    post=$(<"${postFile}")
+    echo "${COMMITURL}" >> "${post_file}"
+    post=$(<"${post_file}")
     (
     # Is this an automated deployment?
     if [ "${AUTOMATE}" = "1" ]; then

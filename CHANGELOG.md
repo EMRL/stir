@@ -25,7 +25,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Deprecated the `WPCLI` and `MAILPATH` global variables
 - Deprecated approval functionality
 - Plugins are no longer activated by default, unless required for reliable upgrades
-- Composer now creates less noise in logfiles
+- Composer now creates less noise in log_files
 - Improved dependency checks
 - Improved temporary file management
 - Improved first-run install process

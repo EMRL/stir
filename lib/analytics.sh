@@ -58,9 +58,9 @@ function analytics() {
     ga_metrics
 
     # Update access token
-    "${curl_cmd}" -s -d "client_id=${CLIENTID}&client_secret=${CLIENTSECRET}&refresh_token=${REFRESHTOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trshFile}"
-    sed -i '/access_token/!d' "${trshFile}"
-    ACCESSTOKEN="$(awk -F\" '{print $4}' "${trshFile}")"
+    "${curl_cmd}" -s -d "client_id=${CLIENTID}&client_secret=${CLIENTSECRET}&refresh_token=${REFRESHTOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trash_file}"
+    sed -i '/access_token/!d' "${trash_file}"
+    ACCESSTOKEN="$(awk -F\" '{print $4}' "${trash_file}")"
 
     # Grab data from Google
     ga_data
@@ -205,7 +205,7 @@ function ga_over_time() {
     max_value=""
 
     # Flush csv
-    [[ -f "${trshFile}" ]] && rm "${trshFile}"
+    [[ -f "${trash_file}" ]] && rm "${trash_file}"
 
     while [ "$ga_day" != "${GASTART}" ]; do 
       RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4);
@@ -256,7 +256,7 @@ function ga_over_time() {
       eval $1_$n="${!var}"
       eval $1_percent_$n="${var_percent}"
       this_day=$(date '+%a' -d "$n days ago")
-      echo -e "${this_day}, ${!var}, ${var_percent}" >> "${trshFile}"
+      echo -e "${this_day}, ${!var}, ${var_percent}" >> "${trash_file}"
 
       if [[ "${PROJSTATS}" == "1" ]]; then
         sed -i -e "s^{{$1_$n}}^${!var}^g" \
@@ -266,7 +266,7 @@ function ga_over_time() {
       fi    
     done
 
-    tac "${trshFile}" > ${statDir}/"${METRIC}".csv
+    tac "${trash_file}" > ${statDir}/"${METRIC}".csv
 
     ${gnuplot_cmd} -p << EOF
     set encoding utf8
@@ -356,9 +356,9 @@ function ga_test() {
   fi
 
   notice "Refreshing token..."
-  "${curl_cmd}" -s -d "client_id=${CLIENTID}&client_secret=${CLIENTSECRET}&refresh_token=${REFRESHTOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trshFile}"
-  sed -i '/access_token/!d' "${trshFile}"
-  ACCESSTOKEN="$(awk -F\" '{print $4}' "${trshFile}")"
+  "${curl_cmd}" -s -d "client_id=${CLIENTID}&client_secret=${CLIENTSECRET}&refresh_token=${REFRESHTOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trash_file}"
+  sed -i '/access_token/!d' "${trash_file}"
+  ACCESSTOKEN="$(awk -F\" '{print $4}' "${trash_file}")"
   echo "${ACCESSTOKEN}"
 
   ga_data_loop

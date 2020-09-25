@@ -60,22 +60,22 @@ function create_digest() {
 
     # If there have been no commits in the last week, skip creating the digest
     if [[ $(git log --since="7 days ago") ]]; then
-      git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${statFile}"; dot
-      sed -i '/^commit/ s/$/ <\/strong><br>/' "${statFile}"
-      sed -i '/^Author:/ s/$/ <br>/' "${statFile}"
-      sed -i '/^Date:/ s/$/ <br><br>/' "${statFile}"
+      git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${stat_file}"; dot
+      sed -i '/^commit/ s/$/ <\/strong><br>/' "${stat_file}"
+      sed -i '/^Author:/ s/$/ <br>/' "${stat_file}"
+      sed -i '/^Date:/ s/$/ <br><br>/' "${stat_file}"
 
       # Look for manual commits and strip their URLs 
-      grep -oP "(?<=href=\")[^\"]+(?=\")" "${statFile}" > "${trshFile}"; dot
+      grep -oP "(?<=href=\")[^\"]+(?=\")" "${stat_file}" > "${trash_file}"; dot
       while read URL; do
         CODE=$(${curl_cmd} -o /dev/null --silent --head --write-out '%{http_code}' "$URL")
         if [[ "${CODE}" != "200" ]]; then 
-          # sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${statFile}"
-          sed -i "s,${URL},${REPOHOST}/${REPO},g" "${statFile}"; dot
+          # sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${stat_file}"
+          sed -i "s,${URL},${REPOHOST}/${REPO},g" "${stat_file}"; dot
         fi
-      done < "${trshFile}"
+      done < "${trash_file}"
 
-      cat "${stir_path}/html/${HTMLTEMPLATE}/digest/header.html" "${statFile}" "${stir_path}/html/${HTMLTEMPLATE}/digest/footer.html" > "${htmlFile}"; dot
+      cat "${stir_path}/html/${HTMLTEMPLATE}/digest/header.html" "${stat_file}" "${stir_path}/html/${HTMLTEMPLATE}/digest/footer.html" > "${htmlFile}"; dot
 
       # Randomize a positive Monday thought. Special characters must be escaped 
       # and use character codes
