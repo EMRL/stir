@@ -53,9 +53,9 @@ function server_monitor_log() {
   # Load the password and setup the curl command
   MONITORPASS=$(<$MONITORPASS)
   MONITORAPI="${MONITORURL}?tag=serveruptime&email=${MONITORUSER}&app_password=${MONITORPASS}&server_id=${SERVERID}&HoursUnit=${MONITORHOURS}"
-  "${curl_cmd}" -s --request GET "${MONITORAPI}" -o "${trshFile}"
+  "${curl_cmd}" -s --request GET "${MONITORAPI}" -o "${trash_file}"
   # Uptime
-  UPTIME=$(grep -Po '"uptime":.*?[^\\]",' ${trshFile})
+  UPTIME=$(grep -Po '"uptime":.*?[^\\]",' ${trash_file})
   UPTIME="$(cut -d ',' -f 1 <<< "${UPTIME}")"
   # Isolate the value we need
   UPTIME="$(sed 's/^[^:]*://g' <<< "${UPTIME}")"
@@ -67,7 +67,7 @@ function server_monitor_log() {
   fi
 
   # Latency
-  LATENCY="$(grep -Po '"average_latency":.*?[^\\]",' ${trshFile})"
+  LATENCY="$(grep -Po '"average_latency":.*?[^\\]",' ${trash_file})"
   LATENCY="$(cut -d ',' -f 1 <<< "${LATENCY}")"
   # Isolate the value we need
   LATENCY="$(sed 's/^[^:]*://g' <<< "${LATENCY}")"

@@ -33,22 +33,22 @@ function trace() {
     TIMESTAMP="$(date '+%H:%M:%S')"
     if [[ "${1}" == "status" ]]; then
       echo -e -n "$(tput setaf 3)${TIMESTAMP}$(tput sgr0) ${2}"
-      echo -e -n "${TIMESTAMP} ${2}" >> "${logFile}"
+      echo -e -n "${TIMESTAMP} ${2}" >> "${log_file}"
     elif [[ "${1}" == "notime" ]]; then
       echo -e "${2}"
-      echo "${2}" >> "${logFile}"
+      echo "${2}" >> "${log_file}"
     else
       echo -e "$(tput setaf 3)${TIMESTAMP}$(tput sgr0) $*"
-      echo "${TIMESTAMP} $*" >> "${logFile}"
+      echo "${TIMESTAMP} $*" >> "${log_file}"
     fi
   else
     TIMESTAMP="$(date '+%H:%M:%S')"
     if [[ "${1}" == "status" ]]; then
-      echo -e -n "${TIMESTAMP} ${2}" >> "${logFile}"
+      echo -e -n "${TIMESTAMP} ${2}" >> "${log_file}"
     elif [[ "${1}" == "notime" ]]; then
-      echo "${2}" >> "${logFile}"
+      echo "${2}" >> "${log_file}"
     else
-      echo "${TIMESTAMP} $*" >> "${logFile}"
+      echo "${TIMESTAMP} $*" >> "${log_file}"
     fi
   fi
 }

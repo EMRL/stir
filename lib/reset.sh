@@ -41,8 +41,8 @@ function reset_local() {
 }
 
 function remove_local_files() {
-  mv "${project_config}" /tmp/"${APP}"-stir.sh &>> "${logFile}"
-  rm -rf ${WORKPATH}/${APP}/* &>> "${logFile}" 
-  rm -rf ${WORKPATH}/${APP}/.* &>> "${logFile}"
-  mv /tmp/"${APP}"-stir.sh "${project_config}" &>> "${logFile}"
+  mv "${project_config}" /tmp/"${APP}"-stir.sh &>> "${log_file}"
+  rm -rf ${WORKPATH}/${APP}/* &>> "${log_file}" 
+  rm -rf ${WORKPATH}/${APP}/.* &>> "${log_file}"
+  mv /tmp/"${APP}"-stir.sh "${project_config}" &>> "${log_file}"
 }

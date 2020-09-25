@@ -59,7 +59,7 @@ function project_stats() {
    
     # Get commits
     get_commits 6
-    validate_urls "${statFile}"
+    validate_urls "${stat_file}"
 
     # Process the HTML
     cat "${stir_path}/html/${HTMLTEMPLATE}/stats/index.html" > "${htmlFile}"
@@ -97,7 +97,7 @@ function project_activity() {
   # Grab the total number of commits
   TOTAL_COMMITS=$(git rev-list --count ${MASTER})
   get_commits "${TOTAL_COMMITS}"
-  validate_urls "${statFile}"
+  validate_urls "${stat_file}"
 
   # Process the HTML
   cat "${stir_path}/html/${HTMLTEMPLATE}/stats/activity.html" > "${htmlFile}"
@@ -160,14 +160,14 @@ function project_css() {
 
 function project_backup() {
   # Get file directory
-  #echo "${BACKUP_FILES}" > "${trshFile}"
+  #echo "${BACKUP_FILES}" > "${trash_file}"
 
-  echo "${BACKUP_FILES}" | grep -Po '"path_display":.*?[^\\]",' > "${trshFile}"
-  sed -i 's/\"path_display\": \"//g' "${trshFile}"
-  sed -i 's/\",//g' "${trshFile}"
-  sed -i 's/$/<hr>/' "${trshFile}"
-  BACKUP_FILES=$(tac ${trshFile})
-  echo "${BACKUP_FILES}" > "${trshFile}"
+  echo "${BACKUP_FILES}" | grep -Po '"path_display":.*?[^\\]",' > "${trash_file}"
+  sed -i 's/\"path_display\": \"//g' "${trash_file}"
+  sed -i 's/\",//g' "${trash_file}"
+  sed -i 's/$/<hr>/' "${trash_file}"
+  BACKUP_FILES=$(tac ${trash_file})
+  echo "${BACKUP_FILES}" > "${trash_file}"
 
   # Process the HTML
   cat "${stir_path}/html/${HTMLTEMPLATE}/stats/backup.html" > "${htmlFile}"
@@ -185,22 +185,22 @@ function check_backup() {
     --header "Content-Type: application/json" \
     --data "{\"path\": \"${DB_BACKUP_PATH}\",\"recursive\": false,
       \"include_media_info\": false,\"include_deleted\": false,
-      \"include_has_explicit_shared_members\": false}" > "${trshFile}"
+      \"include_has_explicit_shared_members\": false}" > "${trash_file}"
 
     # Check for what we might assume is error output
-    if [[ $(grep -a "error" "${trshFile}") ]]; then
+    if [[ $(grep -a "error" "${trash_file}") ]]; then
       warning "Error in backup configuration"
       return
     fi
 
     # Store file list for later
-    BACKUP_FILES="$(<${trshFile})" 
+    BACKUP_FILES="$(<${trash_file})" 
 
     # Start the loop
     for i in $(seq 0 365)
       do 
       var="$(date -d "${i} day ago" +"%Y-%m-%d")"
-      if [[ $(grep -a "${var}" "${trshFile}") ]]; then
+      if [[ $(grep -a "${var}" "${trash_file}") ]]; then
         # Assume success
         BACKUP_STATUS="${SUCCESSC}"
         BACKUP_BTN="btn-success"
@@ -232,21 +232,21 @@ function check_backup() {
 
 # Usage: get_commits [number of commits]
 function get_commits() {
-  git log -n $1 --pretty=format:"%n<table style=\"border-bottom: solid 1px rgba(127, 127, 127, 0.25);\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr><td width=\"90\" valign=\"top\" align=\"left\"><img src=\"{{GRAVATARURL}}/%an.png\" alt=\"%aN\" title=\"%aN\" width=\"64\" style=\"width: 64px; float: left; background-color: #f0f0f0; overflow: hidden; margin-top: 4px;\" class=\"img-circle\"></td><td valign=\"top\" style=\"padding-bottom: 20px;\"><strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table><br>" > "${statFile}"
-  sed -i '/^commit/ s/$/ <\/strong><br>/' "${statFile}"
-  sed -i '/^Author:/ s/$/ <br>/' "${statFile}"
-  sed -i '/^Date:/ s/$/ <br><br>/' "${statFile}"
+  git log -n $1 --pretty=format:"%n<table style=\"border-bottom: solid 1px rgba(127, 127, 127, 0.25);\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr><td width=\"90\" valign=\"top\" align=\"left\"><img src=\"{{GRAVATARURL}}/%an.png\" alt=\"%aN\" title=\"%aN\" width=\"64\" style=\"width: 64px; float: left; background-color: #f0f0f0; overflow: hidden; margin-top: 4px;\" class=\"img-circle\"></td><td valign=\"top\" style=\"padding-bottom: 20px;\"><strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table><br>" > "${stat_file}"
+  sed -i '/^commit/ s/$/ <\/strong><br>/' "${stat_file}"
+  sed -i '/^Author:/ s/$/ <br>/' "${stat_file}"
+  sed -i '/^Date:/ s/$/ <br><br>/' "${stat_file}"
 }
 
 # Usage: url_check [source file]
 function validate_urls() {
-  grep -oP "(?<=href=\")[^\"]+(?=\")" $1 > "${trshFile}"
+  grep -oP "(?<=href=\")[^\"]+(?=\")" $1 > "${trash_file}"
   while read URL; do
     CODE=$(${curl_cmd} -o /dev/null --silent --head --write-out '%{http_code}' "$URL")
     if [[ "${CODE}" != "200" ]]; then 
-      sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${statFile}"
+      sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${stat_file}"
     fi
-  done < "${trshFile}"
+  done < "${trash_file}"
 }
 
 function assign_nav() {

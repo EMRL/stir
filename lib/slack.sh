@@ -83,7 +83,7 @@ function post_slack () {
     fi    
   fi
 
-  # Add a details link to online logfiles if they exist
+  # Add a details link to online log_files if they exist
   if [[ -n "${REMOTEURL}" ]] && [[ -n "${REMOTELOG}" ]] && [[ "${CREATE_INVOICE}" != "1" ]] && [[ -n "${LOGURL}" ]]; then
     slack_message="${slack_message} (<${LOGURL}|Details>)"
   fi
