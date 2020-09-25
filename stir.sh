@@ -134,7 +134,7 @@ function temp_files() {
       done
     elif [[ "${1}" == "create" ]]; then
       for i in "${file[@]}" ; do
-        if [[ "${i}" != *"Dir"* ]]; then
+        if [[ "${i}" != *"_dir"* ]]; then
           var="/tmp/${APP}.${i}-${RANDOM}.log"; (umask 077 && touch "${var}" &> /dev/null) || log_fail ${var}
         else
           var="/tmp/${APP}.${i}-${RANDOM}"; (umask 077 && mkdir "${var}" &> /dev/null) || log_fail ${var}
