@@ -14,38 +14,38 @@ init_loop
 
 function process_html() {
   # Clean out the stuff we don't need
-  [[ -z "${DEVURL}" ]] && sed -i '/DEVURL/d' "${htmlFile}"
-  [[ -z "${PRODURL}" ]] && sed -i '/PRODURL/d' "${htmlFile}"
-  [[ -z "${UPTIME}" ]] && sed -i '/UPTIME/d' "${htmlFile}"
-  [[ -z "${LATENCY}" ]] && sed -i '/LATENCY/d' "${htmlFile}"  
-  [[ -z "${SCAN_MSG}" ]] && sed -i '/SCAN_MSG/d' "${htmlFile}" 
-  [[ -z "${LAST_BACKUP}" ]] && sed -i '/LAST_BACKUP/d' "${htmlFile}" 
-  [[ -z "${PROJCLIENT}" ]] && sed -i 's/()//' "${htmlFile}"
-  [[ -z "${CLIENTLOGO}" ]] && sed -i '/CLIENTLOGO/d' "${htmlFile}"
-  [[ -z "${CLIENTCONTACT}" ]] && sed -i '/CLIENTCONTACT/d' "${htmlFile}"
-  [[ -z "${notes}" ]] && sed -i '/NOTES/d' "${htmlFile}"
-  [[ -z "${SMOOCHID}" ]] && sed -i '/SMOOCHID/d' "${htmlFile}"
-  [[ -z "${COMMITHASH}" ]] && sed -i '/COMMITHASH/d' "${htmlFile}"
-  [[ -z "${NEWS_URL}" ]] && sed -i '/RSS_NEWS/d' "${htmlFile}"
+  [[ -z "${DEVURL}" ]] && sed -i '/DEVURL/d' "${html_file}"
+  [[ -z "${PRODURL}" ]] && sed -i '/PRODURL/d' "${html_file}"
+  [[ -z "${UPTIME}" ]] && sed -i '/UPTIME/d' "${html_file}"
+  [[ -z "${LATENCY}" ]] && sed -i '/LATENCY/d' "${html_file}"  
+  [[ -z "${SCAN_MSG}" ]] && sed -i '/SCAN_MSG/d' "${html_file}" 
+  [[ -z "${LAST_BACKUP}" ]] && sed -i '/LAST_BACKUP/d' "${html_file}" 
+  [[ -z "${PROJCLIENT}" ]] && sed -i 's/()//' "${html_file}"
+  [[ -z "${CLIENTLOGO}" ]] && sed -i '/CLIENTLOGO/d' "${html_file}"
+  [[ -z "${CLIENTCONTACT}" ]] && sed -i '/CLIENTCONTACT/d' "${html_file}"
+  [[ -z "${notes}" ]] && sed -i '/NOTES/d' "${html_file}"
+  [[ -z "${SMOOCHID}" ]] && sed -i '/SMOOCHID/d' "${html_file}"
+  [[ -z "${COMMITHASH}" ]] && sed -i '/COMMITHASH/d' "${html_file}"
+  [[ -z "${NEWS_URL}" ]] && sed -i '/RSS_NEWS/d' "${html_file}"
 
   # Clean out dashboard nav menu
-  [[ -z "${SCAN_MSG}" ]] && sed -i '/SCAN_NAV/d' "${htmlFile}"
-  [[ -z "${FIREWALL_STATUS}" ]] && sed -i '/FIREWALL_NAV/d' "${htmlFile}"
-  [[ -z "${BACKUP_STATUS}" ]] && sed -i '/BACKUP_NAV/d' "${htmlFile}"
-  [[ -z "${PROFILEID}" ]] && sed -i '/ENGAGEMENT_NAV/d' "${htmlFile}"
+  [[ -z "${SCAN_MSG}" ]] && sed -i '/SCAN_NAV/d' "${html_file}"
+  [[ -z "${FIREWALL_STATUS}" ]] && sed -i '/FIREWALL_NAV/d' "${html_file}"
+  [[ -z "${BACKUP_STATUS}" ]] && sed -i '/BACKUP_NAV/d' "${html_file}"
+  [[ -z "${PROFILEID}" ]] && sed -i '/ENGAGEMENT_NAV/d' "${html_file}"
 
 
   if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
-    sed -i '/BEGIN ANALYTICS/,/END ANALYTICS/d' "${htmlFile}"
-    sed -i '/ANALYTICS/d' "${htmlFile}"
+    sed -i '/BEGIN ANALYTICS/,/END ANALYTICS/d' "${html_file}"
+    sed -i '/ANALYTICS/d' "${html_file}"
   fi
 
   if [[ -z "${RSS_URL}" ]]; then
     sed -i -e '/BEGIN WORK RSS/,/END WORK RSS/d' \
-      -e '/RSS_URL/d' "${htmlFile}" \
-    "${htmlFile}"
+      -e '/RSS_URL/d' "${html_file}" \
+    "${html_file}"
   #else
-  #  sed -i "s^{{RSS_URL}}^${RSS_URL}^g" "${htmlFile}"
+  #  sed -i "s^{{RSS_URL}}^${RSS_URL}^g" "${html_file}"
   fi
 
   # Prettify errors, warning, and successes
@@ -57,22 +57,22 @@ function process_html() {
     -e '/^SUCCESS/s/^/<span style=\"color: {{SUCCESS}};\">/' \
     -e '/Deployed to/s/$/<\/span>/' \
     -e '/^Deployed to/s/^/<span style=\"color: {{SUCCESS}};\">/' \
-    "${htmlFile}"
+    "${html_file}"
 
   # Insert commits
-  sed_commits=$(echo "sed -e '/{{COMMITS_RECENT}}/ {' -e 'r ${stat_file}' -e 'd' -e '}' -i \"${htmlFile}\"")
+  sed_commits=$(echo "sed -e '/{{COMMITS_RECENT}}/ {' -e 'r ${stat_file}' -e 'd' -e '}' -i \"${html_file}\"")
   eval "${sed_commits}"
   
   # Insert scan results
-  sed_scan=$(echo "sed -e '/{{SCAN_STATS}}/ {' -e 'r ${scan_html}' -e 'd' -e '}' -i \"${htmlFile}\"")
+  sed_scan=$(echo "sed -e '/{{SCAN_STATS}}/ {' -e 'r ${scan_html}' -e 'd' -e '}' -i \"${html_file}\"")
   eval "${sed_scan}"
 
   # Insert backup directory listings
-  sed_backup=$(echo "sed -e '/{{BACKUP_FILES}}/ {' -e 'r ${trash_file}' -e 'd' -e '}' -i \"${htmlFile}\"")
+  sed_backup=$(echo "sed -e '/{{BACKUP_FILES}}/ {' -e 'r ${trash_file}' -e 'd' -e '}' -i \"${html_file}\"")
   eval "${sed_backup}"
 
   # RSS news
-  sed -i "s^{{RSS_NEWS}}^${RSS_NEWS}^g" "${htmlFile}"
+  sed -i "s^{{RSS_NEWS}}^${RSS_NEWS}^g" "${html_file}"
 
   # Setup variables to process
   process_var=(VIEWPORT NOW DEV LOGTITLE USER PROJNAME PROJCLIENT CLIENTLOGO \
@@ -92,7 +92,7 @@ function process_html() {
     #  should consolidate them into one function
     if [[ -n "${!i:-}" ]]; then
       # [[ "${INCOGNITO}" != "1" ]] && trace "${i}: ${!i}"
-      sed_hack=$(echo "sed -i 's^{{${i}}}^${!i}^g' ${htmlFile}")
+      sed_hack=$(echo "sed -i 's^{{${i}}}^${!i}^g' ${html_file}")
       # Kludgy but works. Ugh.
       eval "${sed_hack}"
     fi
@@ -117,5 +117,5 @@ function process_html() {
     -e "s^{{STATURL}}^${REMOTEURL}\/${APP}\/stats^g" \
     -e "s^{{LASTMONTH}}^${last_month}^g" \
     -e "s^{{ANALYTICS_CHART}}^${REMOTEURL}/${APP}/stats/${METRIC}.png^g" \
-    "${htmlFile}"
+    "${html_file}"
   }

@@ -79,7 +79,7 @@ function init_env() {
 # Internal variables
 function init_internal() {
   var=(optstring options log_file wp_file core_file post_file trash_file stat_file \
-  url_file htmlFile htmlSendmail htmlEmail clientEmail textSendmail stir_path \
+  url_file html_file htmlSendmail html_email client_email textSendmail stir_path \
   etc_path lib_path POSTEMAIL current_branch error_msg notes \
   UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC USERRC message_state \
   COMMITURL COMMITHASH UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE \
@@ -121,7 +121,7 @@ function temp_files() {
   else
   # Setup tempfile list
   file=(trash_file post_file stat_file scan_file scan_html wp_file \
-    url_file htmlFile htmlEmail clientEmail core_file statDir avatarDir \
+    url_file html_file html_email client_email core_file stat_dir avatar_dir \
     stats log_file)
 
     # Start the loop
@@ -134,7 +134,7 @@ function temp_files() {
       done
     elif [[ "${1}" == "create" ]]; then
       for i in "${file[@]}" ; do
-        if [[ "${i}" != *"Dir"* ]]; then
+        if [[ "${i}" != *"_dir"* ]]; then
           var="/tmp/${APP}.${i}-${RANDOM}.log"; (umask 077 && touch "${var}" &> /dev/null) || log_fail ${var}
         else
           var="/tmp/${APP}.${i}-${RANDOM}"; (umask 077 && mkdir "${var}" &> /dev/null) || log_fail ${var}

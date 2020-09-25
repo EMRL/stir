@@ -31,14 +31,14 @@ function project_stats() {
   queue_check
 
     # Setup up tmp work folder
-    #if [[ ! -d "${statDir}" ]]; then
-    #  umask 077 && mkdir "${statDir}" &> /dev/null
+    #if [[ ! -d "${stat_dir}" ]]; then
+    #  umask 077 && mkdir "${stat_dir}" &> /dev/null
     #fi
 
     # Prep assets
-    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/css" "${statDir}/"
-    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/fonts" "${statDir}/"
-    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/js" "${statDir}/"
+    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/css" "${stat_dir}/"
+    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/fonts" "${stat_dir}/"
+    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/js" "${stat_dir}/"
 
     echo -n "Generating files"
 
@@ -62,19 +62,19 @@ function project_stats() {
     validate_urls "${stat_file}"
 
     # Process the HTML
-    cat "${stir_path}/html/${HTMLTEMPLATE}/stats/index.html" > "${htmlFile}"
+    cat "${stir_path}/html/${HTMLTEMPLATE}/stats/index.html" > "${html_file}"
     process_html
 
-    cat "${htmlFile}" > "${statDir}/index.html"
+    cat "${html_file}" > "${stat_dir}/index.html"
 
     # Create SVG charts
     # Spinners commented out for now, causing issues when running from a crontab
     repo_charts=(authors commits_day_week commits_hour_day commits_hour_week \
       commits_month commits_year commits_year_month files_type)
     for i in "${repo_charts[@]}" ; do
-      "${gitchart_cmd}" -r "${WORKPATH}/${APP}" "${i}" "${statDir}/${i}.svg" &>> /dev/null
-      sed -i "s/#9999ff/${CHARTC}/g" "${statDir}/${i}.svg" 
-      sed -i 's/Consolas,"Liberation Mono",Menlo,Courier,monospace/Roboto, Helvetica, Arial, sans-serif/g' "${statDir}/${i}.svg"
+      "${gitchart_cmd}" -r "${WORKPATH}/${APP}" "${i}" "${stat_dir}/${i}.svg" &>> /dev/null
+      sed -i "s/#9999ff/${CHARTC}/g" "${stat_dir}/${i}.svg" 
+      sed -i 's/Consolas,"Liberation Mono",Menlo,Courier,monospace/Roboto, Helvetica, Arial, sans-serif/g' "${stat_dir}/${i}.svg"
     done #&
     #spinner $!
 
@@ -100,32 +100,32 @@ function project_activity() {
   validate_urls "${stat_file}"
 
   # Process the HTML
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/activity.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "${statDir}/activity.html"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/activity.html" > "${html_file}"
+  process_html; cat "${html_file}" > "${stat_dir}/activity.html"
 }
 
 function project_statistics() {
   # Process the HTML
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/stats.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "${statDir}/stats.html"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/stats.html" > "${html_file}"
+  process_html; cat "${html_file}" > "${stat_dir}/stats.html"
 }
 
 # This is a special snowflake for now, called from within scan_host()
 function project_scan(){
   
-  #if [[ ! -d "${statDir}" ]]; then
-  #  umask 077 && mkdir ${statDir} &> /dev/null
+  #if [[ ! -d "${stat_dir}" ]]; then
+  #  umask 077 && mkdir ${stat_dir} &> /dev/null
   #fi
   
   SCAN_STATS=$(<${scan_html})
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/scan.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "${statDir}/scan.html"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/scan.html" > "${html_file}"
+  process_html; cat "${html_file}" > "${stat_dir}/scan.html"
 }
 
 function project_firewall() {
   # Process the HTML
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/firewall.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "${statDir}/firewall.html"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/firewall.html" > "${html_file}"
+  process_html; cat "${html_file}" > "${stat_dir}/firewall.html"
 }
 
 function project_engagement() {
@@ -134,7 +134,7 @@ function project_engagement() {
     return
   fi
   
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/engagement.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/engagement.html" > "${html_file}"
 
   # How many days of analytics to display?
   if [[ -z "${ENGAGEMENT_DAYS}" ]]; then
@@ -149,13 +149,13 @@ function project_engagement() {
 
   # Process the HTML
   process_html; 
-  cat "${htmlFile}" > "${statDir}/engagement.html"
+  cat "${html_file}" > "${stat_dir}/engagement.html"
 }
 
 function project_css() {
   # Process the CSS files
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/css/${THEME_MODE}.css" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "${statDir}/css/${THEME_MODE}.css"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/css/${THEME_MODE}.css" > "${html_file}"
+  process_html; cat "${html_file}" > "${stat_dir}/css/${THEME_MODE}.css"
 }
 
 function project_backup() {
@@ -170,8 +170,8 @@ function project_backup() {
   echo "${BACKUP_FILES}" > "${trash_file}"
 
   # Process the HTML
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/backup.html" > "${htmlFile}"
-  process_html; cat "${htmlFile}" > "${statDir}/backup.html"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/backup.html" > "${html_file}"
+  process_html; cat "${html_file}" > "${stat_dir}/backup.html"
 }
 
 function check_backup() {

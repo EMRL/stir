@@ -62,7 +62,7 @@ function create_report() {
   fi
 
   # Compile full report 
-  cat "${stir_path}/html/${HTMLTEMPLATE}/report/header.html" "${stat_file}" "${stir_path}/html/${HTMLTEMPLATE}/report/footer.html" > "${htmlFile}"
+  cat "${stir_path}/html/${HTMLTEMPLATE}/report/header.html" "${stat_file}" "${stir_path}/html/${HTMLTEMPLATE}/report/footer.html" > "${html_file}"
 
   # Filter and replace template variables
   process_html

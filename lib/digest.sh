@@ -30,7 +30,7 @@ function get_avatars() {
       #if [[ ! -d "/tmp/avatar" ]]; then
       #  umask 077 && mkdir /tmp/avatar &> /dev/null
       #fi
-      IMGFILE="${avatarDir}/${AUTHORNAME}.png"
+      IMGFILE="${avatar_dir}/${AUTHORNAME}.png"
     fi
     "${curl_cmd}" -fso "${IMGFILE}" "${GRAVATAR}"; dot
   done 
@@ -75,7 +75,7 @@ function create_digest() {
         fi
       done < "${trash_file}"
 
-      cat "${stir_path}/html/${HTMLTEMPLATE}/digest/header.html" "${stat_file}" "${stir_path}/html/${HTMLTEMPLATE}/digest/footer.html" > "${htmlFile}"; dot
+      cat "${stir_path}/html/${HTMLTEMPLATE}/digest/header.html" "${stat_file}" "${stir_path}/html/${HTMLTEMPLATE}/digest/footer.html" > "${html_file}"; dot
 
       # Randomize a positive Monday thought. Special characters must be escaped 
       # and use character codes
@@ -93,15 +93,15 @@ function create_digest() {
 
       # Strip out useless analytics results
       if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
-        sed -i '/ANALYTICS/d' "${htmlFile}"
+        sed -i '/ANALYTICS/d' "${html_file}"
       # else
         if [[ "${METRIC}" == "hits" ]] && [[ "${RESULT}" -lt "499" ]]; then
-          sed -i '/ANALYTICS/d' "${htmlFile}"
+          sed -i '/ANALYTICS/d' "${html_file}"
         fi
       fi   
 
       # Get the email payload ready
-      digestSendmail=$(<"${htmlFile}")
+      digestSendmail=$(<"${html_file}")
     else
       console "No activity found, canceling digest."
       clean_exit

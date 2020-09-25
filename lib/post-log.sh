@@ -15,21 +15,21 @@ function post_log() {
   if [[ "${REMOTELOG}" == "TRUE" ]]; then
 
     # Post to localhost by simply copying files
-    if [[ "${LOCALHOSTPOST}" == "TRUE" ]] && [[ -n "${LOCALHOSTPATH}" ]] && [[ -f "${htmlFile}" ]]; then
+    if [[ "${LOCALHOSTPOST}" == "TRUE" ]] && [[ -n "${LOCALHOSTPATH}" ]] && [[ -f "${html_file}" ]]; then
       
       # Check that directory exists
       html_dir
 
       # Post the file   
       if [[ -n "${REMOTEFILE}" ]] && [[ "${REPORT}" != "1" ]]; then #&& [[ -n "${COMMITHASH}" ]]; then
-        cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
+        cp "${html_file}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
         chmod a+rw "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
       fi
 
       # Post the digest
       if [[ "${DIGEST}" == "1" ]]; then
         REMOTEFILE="digest-${EPOCH}.html"
-        cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
+        cp "${html_file}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
         chmod a+rw "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
         DIGESTURL="${REMOTEURL}/${APP}/${REMOTEFILE}"
       fi
@@ -37,7 +37,7 @@ function post_log() {
       # Post the report
       if [[ "${REPORT}" == "1" ]]; then
         REMOTEFILE="${EPOCH}.php"
-        cp "${htmlFile}" "${LOCALHOSTPATH}/${APP}/report/${REMOTEFILE}"
+        cp "${html_file}" "${LOCALHOSTPATH}/${APP}/report/${REMOTEFILE}"
         chmod a+rw "${LOCALHOSTPATH}/${APP}/report/${REMOTEFILE}" &> /dev/null
         REPORTURL="${REMOTEURL}/${APP}/report/${REMOTEFILE}"
       fi
@@ -46,7 +46,7 @@ function post_log() {
       if [[ "${PROJSTATS}" == "1" ]]; then
         [[ ! -d "${LOCALHOSTPATH}/${APP}" ]] && mkdir "${LOCALHOSTPATH}/${APP}"
         [[ ! -d "${LOCALHOSTPATH}/${APP}/stats" ]] && mkdir "${LOCALHOSTPATH}/${APP}/stats"
-        cp -R "${statDir}" "${LOCALHOSTPATH}/${APP}"
+        cp -R "${stat_dir}" "${LOCALHOSTPATH}/${APP}"
         chmod -R a+rw "${stir_path}/html/${HTMLTEMPLATE}/stats" &> /dev/null
       fi
 
@@ -60,7 +60,7 @@ function post_log() {
     fi
 
     # Send the files through SSH/SCP
-    if [[ "${SCPPOST}" == "TRUE" ]] && [[ -f "${htmlFile}" ]]; then
+    if [[ "${SCPPOST}" == "TRUE" ]] && [[ -f "${html_file}" ]]; then
 
       # Setup up the proper command, depending on whether we're using key or password
       if [[ -n "${SCPPASS}" ]] && [[ -n "${sshpass_cmd}" ]]; then
@@ -89,17 +89,17 @@ function post_log() {
         #fi
       fi
 
-      if [[ "${PROJSTATS}" == "1" || "${DIGEST}" == "1" && -f "${statDir}/*" ]]; then
+      if [[ "${PROJSTATS}" == "1" || "${DIGEST}" == "1" && -f "${stat_dir}/*" ]]; then
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/stats"
-        eval "${SCPCMD} -r" "${statDir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/stats/"
+        eval "${SCPCMD} -r" "${stat_dir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/stats/"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/avatar"
-        eval "${SCPCMD} -r" "${avatarDir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/avatar/"
+        eval "${SCPCMD} -r" "${avatar_dir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/avatar/"
         # Clean up your mess
-        #if [[ -d "${statDir}" ]]; then
-        #  rm -R "${statDir}"
+        #if [[ -d "${stat_dir}" ]]; then
+        #  rm -R "${stat_dir}"
         #fi
-        if [[ -d "${avatarDir}" ]]; then
-          rm -R "${avatarDir}"
+        if [[ -d "${avatar_dir}" ]]; then
+          rm -R "${avatar_dir}"
         fi
       fi
 
@@ -108,10 +108,10 @@ function post_log() {
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/scan"
         eval "${SCPCMD} -r" "${scan_html}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/scan/index.html"
         # This stuff is for the new dashboard method
-        eval "${SCPCMD} -r" "${statDir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/stats/"
+        eval "${SCPCMD} -r" "${stat_dir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/stats/"
         # Clean up your mess
-        #if [[ -d "${statDir}" ]]; then
-        #  rm -R "${statDir}"
+        #if [[ -d "${stat_dir}" ]]; then
+        #  rm -R "${stat_dir}"
         #fi
       fi
 
@@ -124,12 +124,12 @@ function post_log() {
         eval "${SCPCMD} -r" "${stir_path}/html/${HTMLTEMPLATE}/report/css" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report/js"
         eval "${SCPCMD} -r" "${stir_path}/html/${HTMLTEMPLATE}/report/js" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report"
-        eval "${SCPCMD}" "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report/${REMOTEFILE}"
+        eval "${SCPCMD}" "${html_file}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report/${REMOTEFILE}"
       fi
 
       # Send over the logs and set permissions
       if [[ "${REPORT}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]]; then 
-        eval "${SCPCMD}" "${htmlFile}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
+        eval "${SCPCMD}" "${html_file}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
       fi
 
       # Remove logs older then X days
