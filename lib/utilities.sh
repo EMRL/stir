@@ -65,14 +65,14 @@ function go() {
   fi
 
   # if git.lock exists, do we want to remove it?
-  if [[ -f "${gitLock}" ]]; then
-    warning "Found ${gitLock}"
+  if [[ -f "${git_lock}" ]]; then
+    warning "Found ${git_lock}"
     # If running in --force mode we will not allow deployment to continue
     if [[ "${FORCE}" = "1" ]]; then
       warning "Can't continue using --force."; quiet_exit
     else
       if yesno --default no "Remove lockfile? [y/N] "; then
-        rm -f "${gitLock}" 2>/dev/null
+        rm -f "${git_lock}" 2>/dev/null
         sleep 1
       else
         quiet_exit
@@ -158,8 +158,8 @@ function user_tests() {
   fi
 
   # Webhook POST test
-  if [[ "${POSTTEST}" == "1" ]]; then
-    postTest; quiet_exit
+  if [[ "${test_webhook}" == "1" ]]; then
+    test_webhook; quiet_exit
   fi
 
   # Email test

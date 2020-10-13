@@ -7,8 +7,11 @@
 ###############################################################################
 
 # Initialize variables
-var=(working_branch)
+var=(working_branch full_user src_branch dest_branch)
 init_loop
+
+# Assign a variable to represent .git/index.lock
+git_lock="${APP_PATH}/.git/index.lock"
 
 function verify_project() {
   # If this is just a build, we won't require git repo functions
@@ -170,7 +173,7 @@ function merge() {
     notice "Merging ${MASTER} into ${working_branch}..."
     # Clear out the index.lock file, cause reasons
     # TODO: Find out why this is here, I can't remember what it was working around
-    [[ -f "${gitLock}" ]] && rm "${gitLock}"
+    [[ -f "${git_lock}" ]] && rm "${git_lock}"
     if [[ "${VERBOSE}" == "TRUE" ]]; then
       git merge "${MASTER}" | tee --append "${log_file}"              
     else
@@ -202,7 +205,7 @@ function confirm_branch() {
     # If the user is awake at the console, allow them to try again
     if  [[ "${FORCE}" = "1" ]] || yesno --default yes "Current branch is ${current_branch} and should be ${working_branch}, try again? [Y/n] "; then
       if [[ "${current_branch}" = "${MASTER}" ]]; then 
-        [[ -f "${gitLock}" ]] && rm "${gitLock}"
+        [[ -f "${git_lock}" ]] && rm "${git_lock}"
         git checkout "${working_branch}" &>> "${log_file}" #; error_check
       fi
     else
@@ -215,6 +218,81 @@ function confirm_branch() {
       trace "OK"
     fi 
   fi
+}
+
+# Commit, with message
+function commit() {
+  # Smart commit stuff
+  smart_commit; empty_line
+
+  # Do a dry run; check for anything to commit
+  git commit --dry-run &>> "${log_file}" 
+
+  if grep -aq "nothing to commit, working directory clean" "${log_file}"; then 
+    info "Nothing to commit, working directory clean."
+    clean_exit
+  else
+    # Found stuff, let's get a commit message
+    if [[ -z "${COMMITMSG}" ]]; then
+      # while read -p "Enter commit message: " notes && [[ -z "$notes" ]]; do :; done
+      read -rp "Enter commit message: " notes
+      if [[ -z "${notes}" ]]; then
+        console "Commit message must not be empty."
+        read -rp "Enter commit message: " notes
+        if [[ -z "${notes}" ]]; then
+          console "Really?"
+          read -rp "Enter commit message: " notes
+        fi
+        if [[ -z "${notes}" ]]; then
+          console "Last chance."
+          read -rp "Enter commit message: " notes
+        fi
+        if [[ -z "${notes}" ]]; then
+          quiet_exit
+        fi
+      fi
+    else
+      # If running in -Fu (force updates only) mode, grab the Smart Commit 
+      # message and skip asking for user input. Nice for cron updates. 
+      if [[ "${FORCE}" = "1" ]] && [[ "${UPDATE}" = "1" ]]; then
+        # We need Smart commits enabled or this can't work
+        if [[ "${SMARTCOMMIT}" -ne "TRUE" ]]; then
+          console "Smart Commits must be enabled when forcing updates."
+          console "Set SMARTCOMMIT=TRUE in .stir.sh"; quiet_exit
+        else
+          if [[ -z "${COMMITMSG}" ]]; then
+            info "Commit message must not be empty."; quiet_exit
+          else
+            notes="${COMMITMSG}"
+          fi
+        fi
+      else
+        # We want to be able to edit the default commit if available
+        if [[ "${FORCE}" != "1" ]]; then
+          notes="${COMMITMSG}"
+          read -rp "Edit commit message: " -e -i "${COMMITMSG}" notes
+          # Update the commit message based on user input ()
+          notes="${notes:-$COMMITMSG}"
+        else
+          info "Using auto-generated commit message: ${COMMITMSG}"
+          notes="${COMMITMSG}"
+        fi
+      fi
+    fi
+
+    if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then 
+      trace "Queuing commit message"
+      echo "${notes}" > "${WORKPATH}/${APP}/.queued"
+    else
+      git commit -m "${notes}" &>> "${log_file}"; error_check
+      trace "Commit message: ${notes}"
+    fi
+  fi
+
+  # Check for bad characters in commit message
+  echo "${notes}" > "${trash_file}"
+  sed -i "s/\&/and/g" "${trash_file}"
+  notes=$(<$trash_file)
 }
 
 # Garbage collection
@@ -233,9 +311,10 @@ function git_stats() {
   if [[ "${GITSTATS}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]] && [[ "${PUBLISH}" != "1" ]] && [[ "${APPROVE}" != "1" ]]; then
     console "Calculating..."
     getent passwd "${USER}" | cut -d ':' -f 5 | cut -d ',' -f 1 > "${trash_file}"
-    FULLUSER=$(<"${trash_file}")
-    git log --author="${FULLUSER}" --pretty=tformat: --numstat | \
+    full_user=$(<"${trash_file}")
+    git log --author="${full_user}" --pretty=tformat: --numstat | \
     # The single quotes were messing with trying to line break this one
     awk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf "Your total lines of code contributed so far: %s\n(+%s added | -%s deleted)\n",loc,add,subs }' -
   fi
-} 
+}
+

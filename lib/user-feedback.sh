@@ -31,7 +31,7 @@ function spinner() {
 }
 
 # Set up the progress bar function
-function progressBar() {
+function progress_bar() {
   # There is a bug in here I have not been able to track down yet, so 
   # overridding set -e in this function
   # set +e
@@ -52,7 +52,7 @@ function show_progress() {
     _end=100
     for number in $(seq ${_start} ${_end})
     do
-    progressBar "${number}" ${_end}
+    progress_bar "${number}" ${_end}
     done;
     empty_line; sleep 3
   fi
