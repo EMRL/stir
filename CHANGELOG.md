@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Variables changed to use more consistent naming 
 ### Fixed
 - Internal command variables are now correctly initialized
 
