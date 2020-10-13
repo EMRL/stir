@@ -18,7 +18,7 @@ function smart_commit() {
     if [[ "${PCA}" -gt "0" ]] || [[ ! -z "${UPDCORE}" ]] || [[ -s "${wp_file}" ]]; then
       trace "Building commit message"
 
-      if [[ "${PCA}" == "0" ]] && [[ -z "${ACFFILE}" ]]; then
+      if [[ "${PCA}" == "0" ]] && [[ -z "${acf_file}" ]]; then
         trace "No plugin updates"
       else
         # Get this thing ready; first remove the leading spaces 

@@ -53,7 +53,7 @@ function project_stats() {
     analytics
 
     # Code stats
-    CODE_STATS=$(git log --author="${FULLUSER}" --pretty=tformat: --numstat | \
+    CODE_STATS=$(git log --author="${full_user}" --pretty=tformat: --numstat | \
       awk '{ add += $1 ; subs += $2 ; loc += $1 - $2 } END { printf \
       "Total lines of code: %s<br>(+%s added | -%s deleted)\n",loc,add,subs }' -)
    

@@ -37,7 +37,7 @@ function init_startup() {
   var=(APP UPGRADE SKIPUPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
     SLACKTEST FUNCTION_LIST VARIABLE_LIST AUTOMATE EMAILTEST APPROVE \
     DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
-    SSHTEST TIME UPDATEONLY POSTTEST REPORT REPAIR CREATE_INVOICE SCAN \
+    SSHTEST TIME UPDATEONLY test_webhook REPORT REPAIR CREATE_INVOICE SCAN \
     CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET \
     SHOW_SETTINGS UNIT_TEST test_bugsnag UPDATE_ACF DEBUG_TO_FILE)
   init_loop
@@ -82,7 +82,7 @@ function init_internal() {
   url_file html_file htmlSendmail html_email client_email textSendmail stir_path \
   etc_path lib_path POSTEMAIL current_branch error_msg notes \
   UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC USERRC message_state \
-  COMMITURL COMMITHASH UPD1 UPD2 UPDATE gitLock AUTOMERGE MERGE EXITCODE \
+  COMMITURL COMMITHASH UPD1 UPD2 UPDATE git_lock AUTOMERGE MERGE EXITCODE \
   current_stash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
   VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WPROOT \
   WPAPP WPSYSTEM DONOTUPDATEWP gitHistory digestSendmail MINAUSER \
@@ -283,7 +283,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --test-ssh) SSHTEST="1" ;;
     --test-slack) SLACKTEST="1" ;;
     --test-email) EMAILTEST="1" ;;
-    --test-webhook) POSTTEST="1" ;;
+    --test-webhook) test_webhook="1" ;;
     --test-analytics) ANALYTICSTEST="1" ;; 
     --test-monitor) MONITORTEST="1" ;;
     --test-bugsnag) test_bugsnag="1" ;;
@@ -349,7 +349,7 @@ fi
 
 # Probably not relevant but included because reasons
 [[ "${SLACKTEST}" == "1" ]] && STARTUP="${STARTUP} --slack-test"
-[[ "${POSTTEST}" == "1" ]] && STARTUP="${STARTUP} --post-test"
+[[ "${test_webhook}" == "1" ]] && STARTUP="${STARTUP} --post-test"
 [[ "${EMAILTEST}" == "1" ]] && STARTUP="${STARTUP} --email-test"
 [[ "${FUNCTION_LIST}" == "1" ]] && STARTUP="${STARTUP} --function-list"
 [[ "${VARIABLE_LIST}" == "1" ]] && STARTUP="${STARTUP} --variable-list"
@@ -574,7 +574,7 @@ fi
 trace "Current project is ${APP}"
 if [[ "${INCOGNITO}" != "TRUE" ]]; then
   trace "Current user is ${DEV}"
-  # trace "Git lock at ${gitLock}"
+  # trace "Git lock at ${git_lock}"
 fi
 
 # Start checking for errors

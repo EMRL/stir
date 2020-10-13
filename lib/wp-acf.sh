@@ -7,27 +7,27 @@
 ###############################################################################
 
 # Declare needed variables
-var=(ACFFILE)
+var=(acf_file)
 init_loop
 
 function acf_update() {
-  ACFFILE="/tmp/acfpro.zip"
+  acf_file="/tmp/acfpro.zip"
   trace status "Updating ACF Pro... "
 	# Download the ACF Pro upgrade file
-	"${wget_cmd}" --header="Accept: application/zip" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" -O "${ACFFILE}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACFKEY}" &>> "${log_file}"; error_check
+	"${wget_cmd}" --header="Accept: application/zip" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" -O "${acf_file}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACFKEY}" &>> "${log_file}"; error_check
 
 	# Check file integrity
 	acf_filecheck
 
 	# Proceed with install
 	"${wp_cmd}" plugin delete --no-color advanced-custom-fields-pro &>> "${log_file}"
-	"${wp_cmd}" plugin install --no-color "${ACFFILE}" &>> "${log_file}"
-	rm "${ACFFILE}"
+	"${wp_cmd}" plugin install --no-color "${acf_file}" &>> "${log_file}"
+	rm "${acf_file}"
   trace notime "OK"
 }
 
 function acf_filecheck() {
-	if [[ -f "${ACFFILE}" ]]; then
+	if [[ -f "${acf_file}" ]]; then
 		hash unzip 2>/dev/null || {
 			if [[ "${AUTOMATE}" == "1" ]]; then
 				warning "Can not find unzip command, skipping ACF file integrity check."; return
@@ -37,6 +37,6 @@ function acf_filecheck() {
 		  }
 
 		# Run the check
-		unzip -t "${ACFFILE}" &>/dev/null; error_check
+		unzip -t "${acf_file}" &>/dev/null; error_check
 	fi
 }

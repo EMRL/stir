@@ -28,7 +28,7 @@ function clean_exit() {
   fi
 
   # Fire webhook
-  postWebhook
+  post_webhook
 
   # Clean up your mess
   clean_up; exit 0

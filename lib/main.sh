@@ -103,7 +103,7 @@ function main() {
 
       if [[ "${APPROVE}" != "1" ]] && [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
         stage         # Stage files     
-        gitCommit     # Commit, with message
+        commit     # Commit, with message
       fi 
       
       confirm_branch "${MASTER}"
