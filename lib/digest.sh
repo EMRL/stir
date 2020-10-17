@@ -53,7 +53,7 @@ function create_digest() {
     analytics; dot
 
     # Genereate the correct analytics chart
-    ga_over_time "${METRIC}" 7
+    ga_over_time "${METRIC}" 7; dot
 
     # Assemble the file
     DIGESTWRAP="$(<${stir_path}/html/${HTMLTEMPLATE}/digest/commit.html)"

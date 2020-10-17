@@ -7,8 +7,7 @@
 ###############################################################################
 
 # Initialize variables
-var=(STAGING_DEPLOY_PATH PRODUCTION_DEPLOY_HOST PRODUCTION_DEPLOY_PATH \
-  SCP_DEPLOY_USER SCP_DEPLOY_PASS)
+var=(STAGING_DEPLOY_PATH SCP_DEPLOY_USER SCP_DEPLOY_PASS)
 init_loop
 
 function deploy_scp() {

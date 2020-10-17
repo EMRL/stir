@@ -9,7 +9,7 @@
 # This value indicates the version number when this file was last changed:
 # it does not necessarily reflect stir's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-PROJECT_VERSION="3.8"
+PROJECT_VERSION="3.8.1"
 
 
 ###############################################################################
@@ -279,6 +279,15 @@ PROJECT_VERSION="3.8"
 # To include your website's RSS feed in your digest emails, set your feed's 
 # URL below.
 # NEWS_URL="{{NEWS_URL}}"
+
+# To include a detailed breakdown of some select analytics, set to TRUE
+# INCLUDE_DETAILS="{{INCLUDE_DETAILS}}"
+
+# To include paid advertising (Adwords) analytics, set to TRUE
+# INCLUDE_ADWORDS="{{INCLUDE_ADWORDS}}"
+
+# To include ecommerce analytics, set to TRUE
+# INCLUDE_ECOMMERCE="{{INCLUDE_ADWORDS}}"
 
 
 ###############################################################################
