@@ -44,8 +44,6 @@ function build_grunt() {
         spinner $!
         info "Packages successfully built."
       fi
-    else
-      info "Skipping Grunt..."
     fi
   fi
 }
@@ -64,11 +62,9 @@ function build_npm() {
     npm_json="${APP_PATH}"
   fi
 
-  if [[ -z "${npm_json}" ]]; then 
-    trace "package.json not found, skipping."
-    return
-  fi
-
+  # This is so dumb
+  [[ -z "${npm_json}" ]] && return
+  
   build_mina
 
   if [[ "${SKIP_BUILD}" == "1" ]]; then
@@ -84,7 +80,5 @@ function build_npm() {
       "${npm_cmd}" run build &>> "${trash_file}"; error_check
       info "Packages successfully built."
     fi
-  else
-    info "Skipping build..."
   fi
 }

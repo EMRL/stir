@@ -95,7 +95,7 @@ function create_digest() {
       if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
         sed -i '/ANALYTICS/d' "${html_file}"
       # else
-        if [[ "${METRIC}" == "hits" ]] && [[ "${RESULT}" -lt "499" ]]; then
+        if [[ "${METRIC}" == "pageviews" ]] && [[ "${RESULT}" -lt "200" ]]; then
           sed -i '/ANALYTICS/d' "${html_file}"
         fi
       fi   
