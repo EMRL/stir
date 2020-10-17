@@ -39,7 +39,7 @@ for i in "${ga_var[@]}" ; do
 done
 
 function ga_metrics() {
-  array[0]="hits"
+  array[0]="pageviews"
   array[1]="percentNewSessions"
   array[2]="organicSearches"
   array[3]="avgSessionDuration"
@@ -66,8 +66,8 @@ function analytics() {
     ga_data
 
     if [[ "${RND}" == "0" ]]; then
-      if [[ "${RESULT}" -gt "499" ]]; then
-        ANALYTICSMSG="You had <strong>${SIZE}</strong> hits in the last week. Awesome!"
+      if [[ "${RESULT}" -gt "200" ]]; then
+        ANALYTICSMSG="You had <strong>${SIZE}</strong> pageviews in the last week. Awesome!"
       else
         ga_fail
       fi
@@ -119,7 +119,7 @@ function ga_data() {
 
   # TODO: Make this a proper loop
   if [[ "${PROJSTATS}" == "1" ]]; then 
-    GA_HITS=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:hits&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:hits\":" | cut -d'"' -f4)
+    GA_HITS=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:pageviews&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:pageviews\":" | cut -d'"' -f4)
     GA_PERCENT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:percentNewSessions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:percentNewSessions\":" | cut -d'"' -f4)
     GA_SEARCHES=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:organicSearches&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:organicSearches\":" | cut -d'"' -f4)
     GA_DURATION=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:avgSessionDuration&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:avgSessionDuration\":" | cut -d'"' -f4)
@@ -306,9 +306,9 @@ fi
 
 # If no other results are worth displaying, fall back to displaying hits
 function ga_fail() {
-  METRIC="hits"
+  METRIC="pageviews"
   ga_data
-  ANALYTICSMSG="You had <strong>${SIZE}</strong> hits in the last week."
+  ANALYTICSMSG="You had <strong>${SIZE}</strong> pageviews in the last week."
 }
 
 function ga_test() {

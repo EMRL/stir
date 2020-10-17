@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Changed
+- Engagement reports and digests now use the more useful `pageviews` instead of `hits`
 - Variables changed to use more consistent naming 
 ### Fixed
 - Internal command variables are now correctly initialized
