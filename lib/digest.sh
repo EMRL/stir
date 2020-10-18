@@ -56,7 +56,7 @@ function create_digest() {
     ga_over_time "${METRIC}" 7; dot
 
     # If we're displaying details, get them now
-    if [[ "${INCLUDE_DETAILS}" == "TRUE" ]] || [[ "${INCLUDE_ADWORDS}" == "TRUE" ]] || [[ "${INCLUDE_ECOMMERCE}" == "TRUE" ]]; then
+    if [[ "${INCLUDE_DETAILS}" == "TRUE" ]]; then
       ga_data_loop
     fi
     
