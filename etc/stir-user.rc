@@ -11,7 +11,7 @@
 # This value indicates the version number when this file was last changed:
 # it does not necessarily reflect stir's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-USER_VERSION="3.8"
+USER_VERSION="3.8.2"
 
 # Clear screen on startup, when not running with --quiet or --verbose switch
 # CLEARSCREEN="{{CLEARSCREEN}}"
