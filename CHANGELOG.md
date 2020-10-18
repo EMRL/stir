@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Digests can now display detailed traffic, AdWords, and ecommerce activity data 
 ### Changed
 - Engagement reports and digests now use the more useful `pageviews` instead of `hits`
 - Variables changed to use more consistent naming 

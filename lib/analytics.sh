@@ -31,7 +31,8 @@ ga_var=(users newUsers percentNewSessions sessionsPerUser sessions bounces bounc
   speedMetricsSample domInteractiveTime avgDomInteractiveTime \
   domContentLoadedTime avgDomContentLoadedTime domLatencyMetricsSample \
   socialInteractions uniqueSocialInteractions socialInteractionsPerSession \
-  userTimingValue userTimingSample avgUserTimingValue)
+  userTimingValue userTimingSample avgUserTimingValue transactions transactionRevenue \
+  revenuePerTransaction revenuePerItem transactionsPerSession transactionsPerUser)
 
 for i in "${ga_var[@]}" ; do
   read -r ga_${i} <<< ""
@@ -132,41 +133,59 @@ function ga_data() {
 }
 
 function ga_data_loop() {
-  # Setup variables to process
-  console "${GASTART} - ${GAEND}"
-  ga_var=(users newUsers percentNewSessions sessionsPerUser sessions bounces bounceRate \
-    sessionDuration avgSessionDuration uniqueDimensionCombinations hits \
-    organicSearches pageValue entrances entranceRate pageviews \
-    pageviewsPerSession uniquePageviews timeOnPage avgTimeOnPage exits \
-    exitRate impressions adClicks adCost CPM CPC CTR costPerTransaction \
-    costPerGoalConversion costPerConversion RPC ROAS goalStartsAll \
-    goalCompletionsAll goalValueAll goalValuePerSession goalConversionRateAll \
-    goalAbandonsAll goalAbandonRateAll goalConversionRateAll goalAbandonsAll \
-    goalAbandonRateAll pageLoadTime pageLoadSample avgPageLoadTime \
-    domainLookupTime avgDomainLookupTime pageDownloadTime avgPageDownloadTime \
-    redirectionTime avgRedirectionTime serverConnectionTime \
-    avgServerConnectionTime serverResponseTime avgServerResponseTime \
-    speedMetricsSample domInteractiveTime avgDomInteractiveTime \
-    domContentLoadedTime avgDomContentLoadedTime domLatencyMetricsSample \
-    socialInteractions uniqueSocialInteractions socialInteractionsPerSession \
-    userTimingValue userTimingSample avgUserTimingValue)
+  if [[ "${ANALYTICSTEST}" == "1" ]]; then
+    # Setup variables to process
+    console "${GASTART} - ${GAEND}"
+    ga_var=(users newUsers percentNewSessions sessionsPerUser sessions bounces bounceRate \
+      sessionDuration avgSessionDuration uniqueDimensionCombinations hits \
+      organicSearches pageValue entrances entranceRate pageviews \
+      pageviewsPerSession uniquePageviews timeOnPage avgTimeOnPage exits \
+      exitRate impressions adClicks adCost CPM CPC CTR costPerTransaction \
+      costPerGoalConversion costPerConversion RPC ROAS goalStartsAll \
+      goalCompletionsAll goalValueAll goalValuePerSession goalConversionRateAll \
+      goalAbandonsAll goalAbandonRateAll goalConversionRateAll goalAbandonsAll \
+      goalAbandonRateAll pageLoadTime pageLoadSample avgPageLoadTime \
+      domainLookupTime avgDomainLookupTime pageDownloadTime avgPageDownloadTime \
+      redirectionTime avgRedirectionTime serverConnectionTime \
+      avgServerConnectionTime serverResponseTime avgServerResponseTime \
+      speedMetricsSample domInteractiveTime avgDomInteractiveTime \
+      domContentLoadedTime avgDomContentLoadedTime domLatencyMetricsSample \
+      socialInteractions uniqueSocialInteractions socialInteractionsPerSession \
+      userTimingValue userTimingSample avgUserTimingValue transactions transactionRevenue \
+      revenuePerTransaction revenuePerItem transactionsPerSession transactionsPerUser)
+  else 
+    if [[ "${DIGEST}" == "1" ]]; then
+      # Setup for extended digest analytics
+      ga_var=(users newUsers sessionsPerUser avgTimeOnPage pageviews \
+        pageviewsPerSession avgTimeOnPage organicSearches bounceRate \
+        impressions adClicks adCost CPC CTR costPerConversion transactions \
+        transactionRevenue revenuePerTransaction revenuePerItem transactionsPerSession \
+        transactionsPerUser)
+    fi
+  fi
 
   # Start the loop
   for i in "${ga_var[@]}" ; do
-    RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4)
+    RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4); dot
 
     # Workaround for buggy Google shit
     until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
     do
       RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4)
     done
-
+  
     # Round to two decimal places if needed
     if [[ "${RESULT}" = *"."* ]]; then
       RESULT="$(printf '%0.2f\n' "${RESULT}")"
     fi
+
+    # Store value
+    eval "ga_${i}"="${RESULT}"
+
     # Output trace
-    trace "${i}: ${RESULT}"
+    if [[ "${ANALYTICSTEST}" == "1" ]]; then
+      trace "${i}: ${RESULT}"
+    fi
   done
 }
 
