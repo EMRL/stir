@@ -43,10 +43,10 @@ function process_html() {
   if [[ "${INCLUDE_DETAILS}" != "TRUE" ]]; then
     sed -i '/BEGIN DETAILS/,/END DETAILS/d' "${html_file}"
   else
-    if [[ "${INCLUDE_ADWORDS}" != "TRUE" ]] || [[ "${ga_impressions}" == "0" ]]; then
+    if [[ "${ga_impressions}" == "0" ]]; then
       sed -i '/BEGIN ADWORDS/,/END ADWORDS/d' "${html_file}"
     fi
-    if [[ "${INCLUDE_ECOMMERCE}" != "TRUE" ]] || [[ "${ga_transactions}" == "0" ]]; then
+    if [[ "${ga_transactions}" == "0" ]]; then
       sed -i '/BEGIN ECOMMERCE/,/END ECOMMERCE/d' "${html_file}"
     fi
   fi
