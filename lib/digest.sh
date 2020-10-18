@@ -55,6 +55,11 @@ function create_digest() {
     # Genereate the correct analytics chart
     ga_over_time "${METRIC}" 7; dot
 
+    # If we're displaying details, get them now
+    if [[ "${INCLUDE_DETAILS}" == "TRUE" ]] || [[ "${INCLUDE_ADWORDS}" == "TRUE" ]] || [[ "${INCLUDE_ECOMMERCE}" == "TRUE" ]]; then
+      ga_data_loop
+    fi
+    
     # Assemble the file
     DIGESTWRAP="$(<${stir_path}/html/${HTMLTEMPLATE}/digest/commit.html)"
 

@@ -65,3 +65,11 @@ function dot {
     echo -n "."
   fi
 }
+
+function plus {  
+  if [[ "${1-default}" == "newline" ]]; then
+    echo "+"
+  else
+    echo -n "+"
+  fi
+}

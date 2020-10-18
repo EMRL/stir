@@ -40,12 +40,21 @@ function process_html() {
     sed -i '/ANALYTICS/d' "${html_file}"
   fi
 
+  if [[ "${INCLUDE_DETAILS}" != "TRUE" ]]; then
+    sed -i '/BEGIN DETAILS/,/END DETAILS/d' "${html_file}"
+  else
+    if [[ "${INCLUDE_ADWORDS}" != "TRUE" ]] || [[ "${ga_impressions}" == "0" ]]; then
+      sed -i '/BEGIN ADWORDS/,/END ADWORDS/d' "${html_file}"
+    fi
+    if [[ "${INCLUDE_ECOMMERCE}" != "TRUE" ]] || [[ "${ga_transactions}" == "0" ]]; then
+      sed -i '/BEGIN ECOMMERCE/,/END ECOMMERCE/d' "${html_file}"
+    fi
+  fi
+
   if [[ -z "${RSS_URL}" ]]; then
     sed -i -e '/BEGIN WORK RSS/,/END WORK RSS/d' \
       -e '/RSS_URL/d' "${html_file}" \
     "${html_file}"
-  #else
-  #  sed -i "s^{{RSS_URL}}^${RSS_URL}^g" "${html_file}"
   fi
 
   # Prettify errors, warning, and successes
@@ -83,14 +92,20 @@ function process_html() {
     GA_PERCENT GA_SEARCHES GA_DURATION GA_SOCIAL CODE_STATS SCAN_BTN \
     UPTIME_BTN LATENCY_BTN BACKUP_BTN ACTIVITY_NAV STATISTICS_NAV SCAN_NAV \
     ENGAGEMENT_NAV FIREWALL_NAV BACKUP_NAV BACKUP_MSG TOTAL_COMMITS RSS_URL \
-    ga_hits ga_users ga_newUsers ga_sessions ga_organicSearches ga_pageviews \
-    THEME_MODE ENGAGEMENT_DAYS)
+    THEME_MODE ENGAGEMENT_DAYS \
+    ga_hits  ga_sessions ga_users ga_newUsers ga_sessionsPerUser \
+    ga_avgTimeOnPage ga_organicSearches ga_pageviews ga_pageviewsPerSession \
+    ga_avgTimeOnPage ga_bounceRate ga_impressions ga_adClicks ga_adCost \
+    ga_CPC ga_CTR ga_costPerConversion ga_transactions ga_transactionRevenue \
+    ga_revenuePerTransaction ga_revenuePerItem ga_transactionsPerSession \
+    ga_transactionsPerUser)
 
   # Start the loop
   for i in "${process_var[@]}" ; do
     # This is essentially the same as insert_values() [see env-check.sh], we
     #  should consolidate them into one function
     if [[ -n "${!i:-}" ]]; then
+      # Uncomment below to help debug
       # [[ "${INCOGNITO}" != "1" ]] && trace "${i}: ${!i}"
       sed_hack=$(echo "sed -i 's^{{${i}}}^${!i}^g' ${html_file}")
       # Kludgy but works. Ugh.
