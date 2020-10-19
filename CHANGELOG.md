@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Fixed
+- Cleaned up some reposnsive layout issues with digests
+
 ## [3.8.2] - 10-17-2020
 ### Added
 - Digests can now display detailed traffic, AdWords, and ecommerce activity data 
