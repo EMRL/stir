@@ -94,7 +94,7 @@ function process_html() {
     ENGAGEMENT_NAV FIREWALL_NAV BACKUP_NAV BACKUP_MSG TOTAL_COMMITS RSS_URL \
     THEME_MODE ENGAGEMENT_DAYS \
     ga_hits  ga_sessions ga_users ga_newUsers ga_sessionsPerUser \
-    ga_avgTimeOnPage ga_organicSearches ga_pageviews ga_pageviewsPerSession \
+    ga_avgSessionDuration ga_organicSearches ga_pageviews ga_pageviewsPerSession \
     ga_avgTimeOnPage ga_bounceRate ga_impressions ga_adClicks ga_adCost \
     ga_CPC ga_CTR ga_costPerConversion ga_transactions ga_transactionRevenue \
     ga_revenuePerTransaction ga_revenuePerItem ga_transactionsPerSession \

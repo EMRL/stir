@@ -156,7 +156,7 @@ function ga_data_loop() {
   else 
     if [[ "${DIGEST}" == "1" ]]; then
       # Setup for extended digest analytics
-      ga_var=(users newUsers sessionsPerUser avgTimeOnPage pageviews \
+      ga_var=(users newUsers sessionsPerUser avgSessionDuration pageviews \
         pageviewsPerSession avgTimeOnPage organicSearches bounceRate \
         impressions adClicks adCost CPC CTR costPerConversion transactions \
         transactionRevenue revenuePerTransaction revenuePerItem transactionsPerSession \
