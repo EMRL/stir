@@ -61,8 +61,6 @@ function mail_post() {
       # If not an automated deployment, use address from .deployrc, or current user email address
       if [[ -n "${FROMUSER}" ]]; then
         echo "From: ${FROMUSER}@${FROMDOMAIN}"
-      elif [[ -n "${TASKUSER}" ]]; then
-        echo "From: ${TASKUSER}"
       else
         echo "From: ${USER}@${FROMDOMAIN}"
       fi
@@ -76,9 +74,6 @@ function mail_post() {
     echo
     echo "${post}";
     ) | "${sendmail_cmd}" -t
-    trace "Integration payload sent"
-    trace "------------------------"
-    console "${post}"
   fi
 }
 
