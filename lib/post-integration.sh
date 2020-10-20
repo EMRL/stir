@@ -61,6 +61,8 @@ function mail_post() {
       # If not an automated deployment, use address from .deployrc, or current user email address
       if [[ -n "${FROMUSER}" ]]; then
         echo "From: ${FROMUSER}@${FROMDOMAIN}"
+      elif [[ -n "${TASKUSER}" ]]; then
+        echo "From: ${TASKUSER}"
       else
         echo "From: ${USER}@${FROMDOMAIN}"
       fi
