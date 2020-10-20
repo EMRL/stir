@@ -74,6 +74,9 @@ function mail_post() {
     echo
     echo "${post}";
     ) | "${sendmail_cmd}" -t
+    trace "Integration payload sent"
+    trace "------------------------"
+    console "${post}"
   fi
 }
 
