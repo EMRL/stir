@@ -81,7 +81,7 @@ Other Options:
 
 Configuration is handled globally in the `/etc/stir/global.conf` file. Individual users also have their own settings in `~/.stirrc`
 
-Repositories can each have their own configuration. An example of this file can be [found here](https://github.com/EMRL/stir/blob/master/etc/stir.sh).
+Repositories can each have their own configuration. An example of this file can be [found here](https://github.com/EMRL/stir/blob/master/etc/stir-global.conf).
 
 ## Integration
 
