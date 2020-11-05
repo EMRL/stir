@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- If there are analytics to report, digest emails will now be sent even if there are no code updates to report
 ### Fixed
 - Cleaned up some reposnsive layout issues with digests
 - Avg. session duration is displayed correctly in digests

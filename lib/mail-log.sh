@@ -48,7 +48,7 @@ function mail_log() {
   fi
 
   # Is this a digest email?
-  if [[ -n "${DIGESTEMAIL}" ]] && [[ "${DIGEST}" == "1" ]] && [[ -n "${digestSendmail}" ]]; then
+  if [[ "${message_state}" == "DIGEST" ]]; then
     # Send the email
     (
     echo "Sender: ${FROM}"
@@ -58,12 +58,15 @@ function mail_log() {
     echo "Subject: ${PROJNAME} updates for the week of ${WEEKOF}"               
     echo "Content-Type: text/html"
     echo
-    echo "${digestSendmail}";
+    echo "${digest_payload}";
     ) | "${sendmail_cmd}" -t
   fi
 }
 
 function email_test() {
+  # If the user has SMTP configured, overwrite sendmail command with ssmtp
+  check_smtp
+  
   # Make sure mail transport exists and is configured 
   if [[ -z "${sendmail_cmd}" ]]; then
     error >&2 "Mail system misconfigured or not found.";
