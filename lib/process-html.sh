@@ -57,6 +57,12 @@ function process_html() {
     "${html_file}"
   fi
 
+  if [[ "${NO_ACTIVITY}" == "1" ]]; then
+    sed -i -e '/BEGIN REMOVE IF NO_ACTIVITY/,/END REMOVE IF NO_ACTIVITY/d' \
+      -e '/NO_ACTIVITY/d' "${html_file}" \
+    "${html_file}"
+  fi
+
   # Prettify errors, warning, and successes
   sed -i -e '/ERROR/s/$/<\/span>/' \
     -e '/^ERROR/s/^/<span style=\"background-color: {{DANGER}};\">/' \

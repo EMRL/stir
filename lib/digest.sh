@@ -8,7 +8,7 @@
 
 # Initializa needed variables
 var=(AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMGFILE DIGESTWRAP \
-  DIGESTSLACK GREETING)
+  DIGESTSLACK GREETING NO_ACTIVITY)
 init_loop
 
 function get_avatars() {
@@ -36,6 +36,32 @@ function get_avatars() {
   done 
 }
 
+function get_digest_commits() {
+  # Get ready
+  DIGESTWRAP="$(<${stir_path}/html/${HTMLTEMPLATE}/digest/commit.html)"
+  > "${stat_file}"
+
+  # If there have been no commits in the last week, skip
+  if [[ $(git log --since="7 days ago") ]]; then
+    git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${stat_file}"; dot
+    sed -i '/^commit/ s/$/ <\/strong><br>/' "${stat_file}"
+    sed -i '/^Author:/ s/$/ <br>/' "${stat_file}"
+    sed -i '/^Date:/ s/$/ <br><br>/' "${stat_file}"
+
+    # Look for manual commits and strip their URLs 
+    grep -oP "(?<=href=\")[^\"]+(?=\")" "${stat_file}" > "${trash_file}"; dot
+    while read URL; do
+      CODE=$(${curl_cmd} -o /dev/null --silent --head --write-out '%{http_code}' "$URL")
+      if [[ "${CODE}" != "200" ]]; then 
+        # sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${stat_file}"
+        sed -i "s,${URL},${REPOHOST}/${REPO},g" "${stat_file}"; dot
+      fi
+    done < "${trash_file}"
+  else
+    NO_ACTIVITY="1"
+  fi
+}
+
 function create_digest() {
   if [[ -z "${DIGESTSLACK}" || "${DIGESTSLACK}" == "FALSE" ]] && [[ -z "${DIGESTEMAIL} " ]]; then 
     return
@@ -60,56 +86,40 @@ function create_digest() {
       ga_data_loop
     fi
     
-    # Assemble the file
-    DIGESTWRAP="$(<${stir_path}/html/${HTMLTEMPLATE}/digest/commit.html)"
+    get_digest_commits
 
-    # If there have been no commits in the last week, skip creating the digest
-    if [[ $(git log --since="7 days ago") ]]; then
-      git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${stat_file}"; dot
-      sed -i '/^commit/ s/$/ <\/strong><br>/' "${stat_file}"
-      sed -i '/^Author:/ s/$/ <br>/' "${stat_file}"
-      sed -i '/^Date:/ s/$/ <br><br>/' "${stat_file}"
-
-      # Look for manual commits and strip their URLs 
-      grep -oP "(?<=href=\")[^\"]+(?=\")" "${stat_file}" > "${trash_file}"; dot
-      while read URL; do
-        CODE=$(${curl_cmd} -o /dev/null --silent --head --write-out '%{http_code}' "$URL")
-        if [[ "${CODE}" != "200" ]]; then 
-          # sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${stat_file}"
-          sed -i "s,${URL},${REPOHOST}/${REPO},g" "${stat_file}"; dot
-        fi
-      done < "${trash_file}"
-
-      cat "${stir_path}/html/${HTMLTEMPLATE}/digest/header.html" "${stat_file}" "${stir_path}/html/${HTMLTEMPLATE}/digest/footer.html" > "${html_file}"; dot
-
-      # Randomize a positive Monday thought. Special characters must be escaped 
-      # and use character codes
-      array[0]="Hope you had a good weekend!"
-      array[1]="Alright Monday, let\&#39;s do this."
-      array[2]="Oh, hello Monday."
-      array[3]="Welcome back, how was your weekend?"
-      array[4]="Happy Monday and welcome back!"
-      array[5]="Hello and good morning!"
-      SIZE="${#array[@]}"
-      RND="$(($RANDOM % $SIZE))"
-      GREETING="${array[$RND]}"
-
-      process_html; dot
-
-      # Strip out useless analytics results
-      if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
-        sed -i '/ANALYTICS/d' "${html_file}"
-      # else
-        if [[ "${METRIC}" == "pageviews" ]] && [[ "${RESULT}" -lt "200" ]]; then
-          sed -i '/ANALYTICS/d' "${html_file}"
-        fi
-      fi   
-
-      # Get the email payload ready
-      digestSendmail=$(<"${html_file}")
-    else
-      console "No activity found, canceling digest."
-      clean_exit
+    # If there's no analytics and no commit activity, there's no need for a digest
+    if [[ -z "${ANALYTICSMSG}" ]] && [[ "${NO_ACTIVITY}" == "1" ]]; then
+      console " No activity found."
+      quiet_exit
     fi
+
+    cat "${stir_path}/html/${HTMLTEMPLATE}/digest/header.html" "${stat_file}" "${stir_path}/html/${HTMLTEMPLATE}/digest/footer.html" > "${html_file}"; dot
+
+    # Randomize a positive Monday thought. Special characters must be escaped 
+    # and use character codes
+    array[0]="Hope you had a good weekend!"
+    array[1]="Alright Monday, let\&#39;s do this."
+    array[2]="Oh, hello Monday."
+    array[3]="Welcome back, how was your weekend?"
+    array[4]="Happy Monday and welcome back!"
+    array[5]="Hello and good morning!"
+    SIZE="${#array[@]}"
+    RND="$(($RANDOM % $SIZE))"
+    GREETING="${array[$RND]}"
+
+    process_html; dot
+
+    # Strip out useless analytics results
+    if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
+      sed -i '/ANALYTICS/d' "${html_file}"
+    # else
+      if [[ "${METRIC}" == "pageviews" ]] && [[ "${RESULT}" -lt "200" ]]; then
+        sed -i '/ANALYTICS/d' "${html_file}"
+      fi
+    fi   
+
+    # Get the email payload ready
+    digest_payload=$(<"${html_file}")
   fi
 }
