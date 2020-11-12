@@ -9,26 +9,29 @@
 # Clean exit
 function clean_exit() {
   notice "Closing ${APP} (${REPOHOST}/${REPO})"
-  make_log # Compile log
-  # Check email settings
-  if [[ "${EMAILSUCCESS}" == "TRUE" ]]; then
-     mail_log
-  fi
 
-  # Is Slack integration configured?
-  # Ghetto but will do for now
-  if [[ "${POSTTOSLACK}" == "TRUE" ]] && [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" = "1" ]] && [[ "${UPD2}" = "1" ]]; then
-    message_state="NOTICE"
-    notes="No updates available for deployment"
-    post_slack
-  else
-    if [[ "${POSTTOSLACK}" == "TRUE" ]]; then
-      build_log; post_slack > /dev/null 2>&1
+  if [[ "${NO_LOG}" != "1" ]]; then
+    make_log # Compile log
+    # Check email settings
+    if [[ "${EMAILSUCCESS}" == "TRUE" ]]; then
+      mail_log
     fi
-  fi
 
-  # Fire webhook
-  post_webhook
+    # Is Slack integration configured?
+    # Ghetto but will do for now
+    if [[ "${POSTTOSLACK}" == "TRUE" ]] && [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" = "1" ]] && [[ "${UPD2}" = "1" ]]; then
+      message_state="NOTICE"
+      notes="No updates available for deployment"
+      post_slack
+    else
+      if [[ "${POSTTOSLACK}" == "TRUE" ]]; then
+        build_log; post_slack > /dev/null 2>&1
+      fi
+    fi
+
+    # Fire webhook
+    post_webhook
+  fi
 
   # Clean up your mess
   clean_up; exit 0

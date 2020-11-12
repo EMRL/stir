@@ -73,7 +73,8 @@ function init_env() {
   SHORTEMAIL INCOGNITO REPORTURL CLIENTCONTACT INCLUDEHOSTING GLOBAL_VERSION \
   USER_VERSION PROJECT_VERSION TERSE NOTIFYCLIENT HTMLTEMPLATE PREPARE \
   PRODUCTION_DEPLOY_HOST PRODUCTION_DEPLOY_PATH PREPARE_CONFIG \
-  GRAVITY_FORMS_LICENSE NEWS_URL BUGSNAG_AUTH USE_SMTP INCLUDE_DETAILS)
+  GRAVITY_FORMS_LICENSE NEWS_URL BUGSNAG_AUTH USE_SMTP INCLUDE_DETAILS \
+  NO_LOG)
   init_loop
 }
 
@@ -90,7 +91,7 @@ function init_internal() {
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE  LOGSUFFIX \
   DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile \
   TMP MONITORURL MONITORUSER MONITORPASS SERVERID \
-  MONITORHOURS LATENCY UPTIME MONITORTEST MONITORAPI)
+  MONITORHOURS LATENCY UPTIME MONITORTEST MONITORAPI IN_HOST IN_TOKEN)
   init_loop
 }
 
@@ -281,24 +282,24 @@ while [[ ${1:-unset} = -?* ]]; do
     --report) REPORT="1"; FORCE="1"; QUIET="1" ;;
     --automate) FORCE="1"; UPGRADE="1"; QUIET="1"; MERGE="1"; AUTOMATE="1" ;;
     --update-acf) UPDATE_ACF="1" ;;
-    --test-ssh) SSHTEST="1" ;;
-    --test-slack) SLACKTEST="1" ;;
-    --test-email) EMAILTEST="1" ;;
-    --test-webhook) test_webhook="1" ;;
-    --test-analytics) ANALYTICSTEST="1" ;; 
-    --test-monitor) MONITORTEST="1" ;;
-    --test-bugsnag) test_bugsnag="1" ;;
+    --test-ssh) SSHTEST="1"; NO_LOG="1" ;;
+    --test-slack) SLACKTEST="1"; NO_LOG="1" ;;
+    --test-email) EMAILTEST="1"; NO_LOG="1" ;;
+    --test-webhook) test_webhook="1"; NO_LOG="1" ;;
+    --test-analytics) ANALYTICSTEST="1"; NO_LOG="1" ;; 
+    --test-monitor) MONITORTEST="1"; NO_LOG="1" ;;
+    --test-bugsnag) test_bugsnag="1"; NO_LOG="1" ;;
     --stats) PROJSTATS="1" ;;
     --build) BUILD="1"; NOCHECK="1"; FORCE="1" ;;
-    --invoice) CREATE_INVOICE="1"; FORCE="1" ;;
-    --unlock) UNLOCK="1" ;;
+    --invoice) CREATE_INVOICE="1"; NO_LOG="1"; FORCE="1" ;;
+    --unlock) UNLOCK="1"; NO_LOG="1" ;;
     --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="TRUE" ;;
     --scan) SCAN="1" ;;
     --no-check) NOCHECK="1" ;;
-    --show-settings) SHOW_SETTINGS="1" ;;
-    --function-list) FUNCTION_LIST="1"; CURRENT="1" ;; # Spoofs --current
-    --variable-list) VARIABLE_LIST="1"; CURRENT="1" ;; # Spoofs --current
-    --unit-test) UNIT_TEST="1" ;;
+    --show-settings) SHOW_SETTINGS="1"; NO_LOG="1" ;;
+    --function-list) FUNCTION_LIST="1"; CURRENT="1"; NO_LOG="1" ;; # Spoofs --current
+    --variable-list) VARIABLE_LIST="1"; CURRENT="1"; NO_LOG="1" ;; # Spoofs --current
+    --unit-test) UNIT_TEST="1"; NO_LOG="1" ;;
     --endopts) shift; break ;;
     *) echo "Invalid option: '$1'" 1>&2 ; exit 1 ;;
   esac

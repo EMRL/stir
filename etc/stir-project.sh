@@ -9,7 +9,7 @@
 # This value indicates the version number when this file was last changed:
 # it does not necessarily reflect stir's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-PROJECT_VERSION="3.8.2"
+PROJECT_VERSION="3.8.3"
 
 
 ###############################################################################
@@ -331,6 +331,9 @@ PROJECT_VERSION="3.8.2"
 
 # Set to TRUE if invoices should be immediately be emailed upon creation
 # IN_EMAIL="{{IN_EMAIL}}"
+
+# Include monthly commit report
+# IN_INCLUDE_REPORT="{{IN_INCLUDE_REPORT}}"
 
 
 ###############################################################################

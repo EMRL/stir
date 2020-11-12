@@ -11,7 +11,6 @@ var=(current_month current_year previous_month previous_year last_day)
 init_loop
 
 function create_report() {
-
   # Make sure we've got cal, or don't bother
   if [[ -z "${cal_cmd}" ]]; then
     console "Creating reports requires the cal utility which cannot be found."; quiet_exit
@@ -53,7 +52,6 @@ function create_report() {
     echo "<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">${TASK}<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">${INCLUDEHOSTING}</div></td></tr>" >> "${stat_file}"
   fi
 
-  trace "git log --all --no-merges --first-parent --before=\"${current_year}-${current_month}-1 00:00\" --after=\"${previous_year}-${previous_month}-${last_day} 00:00\" --pretty=format:\"<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">%h<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">%s</div></td></tr>\""
   git log --all --no-merges --first-parent --before="${current_year}-${current_month}-1 00:00" --after="${previous_year}-${previous_month}-${last_day} 00:00" --pretty=format:"<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">%h<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">%s</div></td></tr>" >> "${stat_file}"
 
   # If it's an empty report, this empty row will keep the javascript from breaking. Kludgy I know.
@@ -66,4 +64,12 @@ function create_report() {
 
   # Filter and replace template variables
   process_html
+
+  # Set URL
+  REMOTEFILE="${current_year}-${current_month}.php"
+  REPORTURL="${REMOTEURL}/${APP}/report/${REMOTEFILE}"
+  
+  #if [[ "${CREATE_INVOICE}" == "1" ]]; then
+  #  return
+  #fi
 }
