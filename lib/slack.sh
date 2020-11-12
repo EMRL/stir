@@ -89,7 +89,7 @@ function post_slack () {
   fi
 
   # Create payload for reports
-  if [[ "${REPORT}" == "1" ]]; then
+  if [[ "${REPORT}" == "1" ]] || [[ "${CREATE_INVOICE}" == "1" && "${}" ]]; then
     if [[ -n "${PRODURL}" ]]; then 
       slack_message="Monthly report for <${PRODURL}|${PROJNAME}> created (<${REPORTURL}|View>)"
     else
