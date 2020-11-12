@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.8.3] - 11-12-2020
 ### Added
 - If there are analytics to report, digest emails will now be sent even if there are no code updates to report
 - Monthly PDF format reports can now be attached to invoices when using the `--invoice` switch
@@ -304,8 +304,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Old monolithic script rewritten
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.8.2...HEAD
-[3.8]: https://github.com/EMRL/deploy/compare/v3.8...v3.8.2
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.8.3...HEAD
+[3.8.3]: https://github.com/EMRL/deploy/compare/v3.8.2...v3.8.3
+[3.8.2]: https://github.com/EMRL/deploy/compare/v3.8...v3.8.2
 [3.8]: https://github.com/EMRL/deploy/compare/v3.7.4...v3.8
 [3.7.4]: https://github.com/EMRL/deploy/compare/v3.7.3...v3.7.4
 [3.7.3]: https://github.com/EMRL/deploy/compare/v3.7.2...v3.7.3

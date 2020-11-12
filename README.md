@@ -10,7 +10,7 @@
 
 `stir` is in daily use at [EMRL](http://emrl.com), an advertising, design, and development agency in northern California. If you have any questions, please feel free to contact us.
 
-Please note that our documentation here is nearly useless, and there is quite a bit of setup involved in getting this running reliably. A full setup guide is coming soon™.
+Please note that there is quite a bit of setup involved in getting this running reliably. A full setup guide is coming soon™ but for now check out what we've got started in the [wiki documentation](https://github.com/EMRL/stir/wiki).
 
 ## Startup Options
 
