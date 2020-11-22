@@ -6,9 +6,7 @@
 # The main application
 ###############################################################################
 
-function main() { 
-  get_fullpath      # Get full path to internal commands
-  check_dependencies  # Check that all dependencies are available
+function main() {
   user_tests        # Run tests if specified by the user
   release_check     # Check for newer version at Github
   env_check         # Check for configuration files that need updating
