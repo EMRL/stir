@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initialize variables
-var=(error_detail)
+var=(error_detail last_command)
 init_loop
 
 # Try to get exit/error code, with a hard stop on fail
@@ -15,7 +15,7 @@ function error_check() {
   EXITCODE=$?; 
   if [[ "${EXITCODE}" != 0 ]]; then
     if [[ -z "${error_detail}" ]]; then
-      error_detail="An unspecified error occurred"
+      error_detail="Operation fault"
     fi
     warning "${error_detail} (Error ${EXITCODE})"
     error_msg="${error_detail} (Error ${EXITCODE})"

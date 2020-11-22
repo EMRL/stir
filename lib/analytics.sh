@@ -168,6 +168,10 @@ function ga_data_loop() {
   for i in "${ga_var[@]}" ; do
     RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4); dot
 
+    if [[ -z "${RESULT}" ]]; then
+      RESULT="0"
+    fi
+    
     # Workaround for buggy Google shit
     until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
     do

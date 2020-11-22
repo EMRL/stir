@@ -11,7 +11,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.8.3"
+VERSION="3.8.4-dev"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 last_month="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
@@ -518,6 +518,12 @@ fi
 
 # Validate configuration setings
 validate_conf
+
+# Get full path to all commands
+get_fullpath
+
+# Check that all dependencies are available
+check_dependencies  
 
 # Are we using "smart" *cough* commits?
 if [[ "${SMARTCOMMIT}" == "TRUE" ]]; then
