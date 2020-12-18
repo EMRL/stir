@@ -7,10 +7,11 @@
 ###############################################################################
 
 function main() {
-  user_tests        # Run tests if specified by the user
-  release_check     # Check for newer version at Github
-  env_check         # Check for configuration files that need updating
-  wp_check          # Check for Wordpress
+  user_tests            # Run tests if specified by the user
+  release_check         # Check for newer version at Github
+  env_check             # Check for configuration files that need updating
+  set_fallback_values   # Set undefined variables to something useful
+  wp_check              # Check for Wordpress
   
   if [[ "${RESET}" == "1" ]]; then
     reset_local

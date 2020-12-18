@@ -81,12 +81,6 @@ function post_log() {
       if [[ "${DIGEST}" == "1" ]]; then
         REMOTEFILE="digest-${EPOCH}.html"
         DIGESTURL="${REMOTEURL}/${APP}/${REMOTEFILE}"
-        #eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/avatar"
-        #eval "${SCPCMD} -r" "/tmp/avatar/" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}"
-        # Clean up your mess
-        #if [[ -d "/tmp/avatar" ]]; then
-        #  rm -R "/tmp/avatar"
-        #fi
       fi
 
       if [[ "${PROJSTATS}" == "1" || "${DIGEST}" == "1" && -f "${stat_dir}/*" ]]; then
@@ -94,10 +88,6 @@ function post_log() {
         eval "${SCPCMD} -r" "${stat_dir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/stats/"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/avatar"
         eval "${SCPCMD} -r" "${avatar_dir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/avatar/"
-        # Clean up your mess
-        #if [[ -d "${stat_dir}" ]]; then
-        #  rm -R "${stat_dir}"
-        #fi
         if [[ -d "${avatar_dir}" ]]; then
           rm -R "${avatar_dir}"
         fi
@@ -109,14 +99,9 @@ function post_log() {
         eval "${SCPCMD} -r" "${scan_html}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/scan/index.html"
         # This stuff is for the new dashboard method
         eval "${SCPCMD} -r" "${stat_dir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/stats/"
-        # Clean up your mess
-        #if [[ -d "${stat_dir}" ]]; then
-        #  rm -R "${stat_dir}"
-        #fi
       fi
 
       if [[ "${REPORT}" == "1" ]]; then
-        trace "Running \"${SSHCMD}\" \"${SCPUSER}\"@\"${SCPHOST}\" \"mkdir -p ${SCPHOSTPATH}/${APP}/report\""
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report/css"
         eval "${SCPCMD} -r" "${stir_path}/html/${HTMLTEMPLATE}/report/css" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report"
