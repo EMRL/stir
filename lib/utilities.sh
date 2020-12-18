@@ -146,6 +146,15 @@ function get_json_value() {
   fi
 }
 
+###############################################################################
+# set_fallback_values()
+#   Set defaults for things liks SSH ports if missing
+###############################################################################
+function set_fallback_values() {
+  [[ -z "${SCPPORT}" ]] && SCPPORT="22"
+  [[ -z "${SCP_DEPLOY_PORT}" ]] && SCP_DEPLOY_PORT="22"
+}
+
 # User tests
 function user_tests() {
   if [[ "${SHOW_SETTINGS}" == "1" ]]; then
@@ -338,7 +347,6 @@ function show_settings() {
     [[ -n "${SCPUSER}" ]] && echo "SCP user: ${SCPUSER}"
     [[ -n "${SCPHOST}" ]] && echo "Remote log host: ${SCPHOST}"
     [[ -n "${SCPHOSTPATH}" ]] && echo "Remote log path: ${SCPHOSTPATH}"
-    [[ -n "${SCPHOSTPORT}" ]] && echo "Remote log path: ${SCPHOSTPORT}"
     [[ -n "${LOCALHOSTPOST}" ]] && echo "Save logs locally: ${LOCALHOSTPOST}"
     [[ -n "${LOCALHOSTPATH}" ]] && echo "Path to local logs: ${}LOCALHOSTPATH"
   fi

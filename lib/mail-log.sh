@@ -152,7 +152,6 @@ function email_test() {
       [[ -n "${SCPUSER}" ]] && echo "SCP user: ${SCPUSER}<br />"
       [[ -n "${SCPHOST}" ]] && echo "Remote log host: ${SCPHOST}<br />"
       [[ -n "${SCPHOSTPATH}" ]] && echo "Remote log path: ${SCPHOSTPATH}<br />"
-      [[ -n "${SCPHOSTPORT}" ]] && echo "Remote log path: ${SCPHOSTPORT}<br />"
       [[ -n "${LOCALHOSTPOST}" ]] && echo "Save logs locally: ${LOCALHOSTPOST}<br />"
       [[ -n "${LOCALHOSTPATH}" ]] && echo "Path to local logs: ${}LOCALHOSTPATH<br />"
       echo "<br />"
@@ -298,7 +297,6 @@ function email_test() {
       [[ -n "${SCPUSER}" ]] && echo "SCP user: ${SCPUSER}"
       [[ -n "${SCPHOST}" ]] && echo "Remote log host: ${SCPHOST}"
       [[ -n "${SCPHOSTPATH}" ]] && echo "Remote log path: ${SCPHOSTPATH}"
-      [[ -n "${SCPHOSTPORT}" ]] && echo "Remote log path: ${SCPHOSTPORT}"
       [[ -n "${LOCALHOSTPOST}" ]] && echo "Save logs locally: ${LOCALHOSTPOST}"
       [[ -n "${LOCALHOSTPATH}" ]] && echo "Path to local logs: ${}LOCALHOSTPATH"
       echo
