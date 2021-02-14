@@ -36,7 +36,7 @@ function post_log() {
 
       # Post the report
       if [[ "${REPORT}" == "1" ]]; then
-        REMOTEFILE="${EPOCH}.php"
+        REMOTEFILE="${current_year}-${current_month}.php"
         cp "${html_file}" "${LOCALHOSTPATH}/${APP}/report/${REMOTEFILE}"
         chmod a+rw "${LOCALHOSTPATH}/${APP}/report/${REMOTEFILE}" &> /dev/null
         REPORTURL="${REMOTEURL}/${APP}/report/${REMOTEFILE}"
@@ -102,6 +102,7 @@ function post_log() {
       fi
 
       if [[ "${REPORT}" == "1" ]]; then
+        REMOTEFILE="${current_year}-${current_month}.php"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report"
         eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report/css"
         eval "${SCPCMD} -r" "${stir_path}/html/${HTMLTEMPLATE}/report/css" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report"
