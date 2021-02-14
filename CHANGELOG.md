@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.8.4] - 14-2-2020
+### Fixed 
+- Fixed issues generating monthly reports
+
 ## [3.8.3] - 11-12-2020
 ### Added
 - If there are analytics to report, digest emails will now be sent even if there are no code updates to report
@@ -304,7 +308,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Old monolithic script rewritten
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.8.3...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.8.4...HEAD
+[3.8.4]: https://github.com/EMRL/deploy/compare/v3.8.3...v3.8.4
 [3.8.3]: https://github.com/EMRL/deploy/compare/v3.8.2...v3.8.3
 [3.8.2]: https://github.com/EMRL/deploy/compare/v3.8...v3.8.2
 [3.8]: https://github.com/EMRL/deploy/compare/v3.7.4...v3.8
