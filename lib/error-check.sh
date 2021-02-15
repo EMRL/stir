@@ -39,12 +39,12 @@ function deploy_check() {
   if [[ "${DEPLOY}" == *"mina"* ]]; then # && [[ "${DEPLOY}" != *"bundle"* ]]; then
     DEPLOYTEST="mina --simulate deploy"
     # Get variables organized
-    if [[ -f "${WORKPATH}/${APP}/${CONFIGDIR}/deploy.rb" ]]; then
-      grep -n -w "set :user" "${WORKPATH}/${APP}/${CONFIGDIR}"/deploy.rb > "${trash_file}"
+    if [[ -f "${WORK_PATH}/${APP}/${CONFIG_DIR}/deploy.rb" ]]; then
+      grep -n -w "set :user" "${WORK_PATH}/${APP}/${CONFIG_DIR}"/deploy.rb > "${trash_file}"
       MINAUSER=$(awk -F\' '{print $2,$4}' ${trash_file})
       echo -n "${MINAUSER}" > "${stat_file}"
       echo -n "@" >> ${stat_file}
-      grep -n -w "set :domain" "${WORKPATH}/${APP}/${CONFIGDIR}"/deploy.rb > "${trash_file}"
+      grep -n -w "set :domain" "${WORK_PATH}/${APP}/${CONFIG_DIR}"/deploy.rb > "${trash_file}"
       MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trash_file})
       echo -n "${MINADOMAIN}" >> "${stat_file}"
       SSHTARGET=$(sed -r 's/\s+//g' ${stat_file})
@@ -56,9 +56,9 @@ function deploy_check() {
       fi
       SSHSTATUS=$(ssh -o BatchMode=yes -o ConnectTimeout=10 ${SSHTARGET} echo ok 2>&1)
 
-    elif [[ -f "${WORKPATH}/${APP}/.deploy.yml" ]]; then
+    elif [[ -f "${WORK_PATH}/${APP}/.deploy.yml" ]]; then
       DEPLOYTEST="bundle exec mina --simulate deploy -f Minafile"
-      grep -n -w "user:" "${WORKPATH}/${APP}"/.deploy.yml > "${trash_file}"
+      grep -n -w "user:" "${WORK_PATH}/${APP}"/.deploy.yml > "${trash_file}"
       
       if grep -aq "'" "${trash_file}"; then
         MINAUSER=$(awk -F\' '{print $2,$4}' ${trash_file}) # Single quote method
@@ -68,7 +68,7 @@ function deploy_check() {
 
       echo -n "${MINAUSER}" > "${stat_file}"
       echo -n "@" >> ${stat_file}
-      grep -n -w "domain:" "${WORKPATH}/${APP}"/.deploy.yml > "${trash_file}"
+      grep -n -w "domain:" "${WORK_PATH}/${APP}"/.deploy.yml > "${trash_file}"
 
       if grep -aq "'" "${trash_file}"; then
         MINADOMAIN=$(awk -F\' '{print $2,$4}' ${trash_file}) # Single quote method

@@ -6,8 +6,8 @@
 # Check to see if production environment is online and running web server
 ###############################################################################
 
-function server_check() {
-  if [[ "${SERVERCHECK}" == "TRUE" ]]; then
+function CHECK_SERVER() {
+  if [[ "${CHECK_SERVER}" == "TRUE" ]]; then
     notice "Checking servers..."
     # Set SERVERFAIL to 0
     SERVERFAIL="0"
@@ -16,36 +16,36 @@ function server_check() {
     else
       # For now, we'll use 200, 301, or 401 to indicate all is working well cause 
       # Bitbucket is being a noob; I'll make this better later
-      REPOURL="${REPOHOST}/${REPO}/"
-      if "${curl_cmd}" -sL --head "${REPOHOST}" | grep -E "200|301|401" > /dev/null; then
-        console " $REPOHOST/$REPO/ ${tan}OK${endColor}";
+      REPOURL="${REPO_HOST}/${REPO}/"
+      if "${curl_cmd}" -sL --head "${REPO_HOST}" | grep -E "200|301|401" > /dev/null; then
+        console " $REPO_HOST/$REPO/ ${tan}OK${endColor}";
       else
-        console " $REPOHOST/$REPO/ ${red}FAIL${endColor}"
-        trace " $REPOHOST/$REPO/ FAIL"; SERVERFAIL="1"
+        console " $REPO_HOST/$REPO/ ${red}FAIL${endColor}"
+        trace " $REPO_HOST/$REPO/ FAIL"; SERVERFAIL="1"
       fi
     fi
 
-    if [[ -z "${DEVURL}" ]]; then
+    if [[ -z "${DEV_URL}" ]]; then
       trace "No staging URL set, skipping check"
     else
       # Should return "200 OK" if all is working well
-      if "${curl_cmd}" -sL --head "${DEVURL}" | grep -a "200 OK" > /dev/null; then
-        console " ${DEVURL} (staging) ${tan}OK${endColor}";
+      if "${curl_cmd}" -sL --head "${DEV_URL}" | grep -a "200 OK" > /dev/null; then
+        console " ${DEV_URL} (staging) ${tan}OK${endColor}";
       else
-        console " ${DEVURL} (staging) ${red}FAIL${endColor}"
-        trace " ${DEVURL} (staging) FAIL"; SERVERFAIL="1"
+        console " ${DEV_URL} (staging) ${red}FAIL${endColor}"
+        trace " ${DEV_URL} (staging) FAIL"; SERVERFAIL="1"
       fi
     fi
 
-    if [[ -z "${PRODURL}" ]]; then
+    if [[ -z "${PROD_URL}" ]]; then
       trace "No production URL set, skipping check"
     else
       # Should return "200 OK" if all is working well
-      if "${curl_cmd}" -sL --head "${PRODURL}" | grep -a "200 " > /dev/null; then
-        console " ${PRODURL} (production) ${tan}OK${endColor}"
+      if "${curl_cmd}" -sL --head "${PROD_URL}" | grep -a "200 " > /dev/null; then
+        console " ${PROD_URL} (production) ${tan}OK${endColor}"
       else
-        console " ${PRODURL} (production) ${red}FAIL${endColor}"
-        trace " ${PRODURL} (production) FAIL"; SERVERFAIL="1"
+        console " ${PROD_URL} (production) ${red}FAIL${endColor}"
+        trace " ${PROD_URL} (production) FAIL"; SERVERFAIL="1"
       fi
     fi
 

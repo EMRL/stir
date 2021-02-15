@@ -54,8 +54,8 @@ function make_log() {
   fi
 
   # Filter out ACF license key & wget stuff
-  if [[ -n "${ACFKEY}" ]]; then
-    sed -i "s^${ACFKEY}^############^g" "${log_file}"
+  if [[ -n "${ACF_KEY}" ]]; then
+    sed -i "s^${ACF_KEY}^############^g" "${log_file}"
     # sed -i "/........../d" "${log_file}"
   fi
 
@@ -67,7 +67,7 @@ function make_log() {
   fi
 
   # Filter PHP log output as configured by user
-  if [[ "${NOPHP}" == "TRUE" ]]; then
+  if [[ "${NO_PHP}" == "TRUE" ]]; then
     grep -vE "(PHP |Notice:|Warning:|Strict Standards:)" "${log_file}" > "${post_file}"
     cat "${post_file}" > "${log_file}"
   fi
@@ -79,7 +79,7 @@ function make_log() {
       -e "/enabled/d" \
       -e "/Current user/d" \
       -e "/Current project/d" \
-      -e "/Project workpath/d" \
+      -e "/Project WORK_PATH/d" \
       -e "/Locking process/d" \
       -e "/Running from/d" \
       -e "/lock/d" \
@@ -116,7 +116,7 @@ function make_log() {
   VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
 
   # IF we're using HTML emails, let's get to work
-  if [[ "${EMAILHTML}" == "TRUE" ]]; then
+  if [[ "${EMAIL_HTML}" == "TRUE" ]]; then
     [[ "${message_state}" != "DIGEST" ]] && build_html
     cat "${html_file}" > "${trash_file}"
 
@@ -127,7 +127,7 @@ function make_log() {
     fi
 
     # Strip out logs if necessary
-    if [[ "${SHORTEMAIL}" == "TRUE" ]]; then
+    if [[ "${SHORT_EMAIL}" == "TRUE" ]]; then
       sed -i '/LOG: BEGIN/,/LOG: END/d' "${trash_file}"
     fi
 
@@ -136,7 +136,7 @@ function make_log() {
   fi
 
   # Create HTML/PHP logs for viewing online
-  if [[ "${REMOTELOG}" == "TRUE" ]]; then
+  if [[ "${REMOTE_LOG}" == "TRUE" ]]; then
     html_dir
 
     # For web logs, VIEWPORT should be 960
@@ -161,16 +161,16 @@ function build_html() {
     notes="${error_msg}"
     LOGTITLE="Deployment Error"
     # Create the header
-    cat "${stir_path}/html/${HTMLTEMPLATE}/header.html" "${stir_path}/html/${HTMLTEMPLATE}/error.html" > "${html_file}"
+    cat "${stir_path}/html/${HTML_TEMPLATE}/header.html" "${stir_path}/html/${HTML_TEMPLATE}/error.html" > "${html_file}"
   else
     # Does this project need to be approved before finalizing deployment?
-    #if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
-    if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]  && [[ "${REPORT}" != "1" ]]; then
+    #if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]]; then
+    if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]  && [[ "${REPORT}" != "1" ]]; then
       message_state="APPROVAL NEEDED"
       LOGTITLE="Approval Needed"
       LOGSUFFIX="php"
-      # cat "${stir_path}/html/${HTMLTEMPLATE}/header.html" "${stir_path}/html/${HTMLTEMPLATE}/approve.html" > "${html_file}"
-      cat "${stir_path}/html/${HTMLTEMPLATE}/approval.php" > "${html_file}"
+      # cat "${stir_path}/html/${HTML_TEMPLATE}/header.html" "${stir_path}/html/${HTML_TEMPLATE}/approve.html" > "${html_file}"
+      cat "${stir_path}/html/${HTML_TEMPLATE}/approval.php" > "${html_file}"
     else
       if [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" == "1" ]] && [[ "${UPD2}" == "1" ]]; then
         message_state="NOTICE"
@@ -190,34 +190,34 @@ function build_html() {
         if [[ "${REPAIR}" == "1" ]] && [[ -z "${notes}" ]]; then
           notes="Merged and deployed codebase"
         fi
-        cat "${stir_path}/html/${HTMLTEMPLATE}/header.html" "${stir_path}/html/${HTMLTEMPLATE}/success.html" > "${html_file}"
+        cat "${stir_path}/html/${HTML_TEMPLATE}/header.html" "${stir_path}/html/${HTML_TEMPLATE}/success.html" > "${html_file}"
       fi
     fi
   fi
 
   # Create URL
   if [[ "${PUBLISH}" == "1" ]]; then
-    LOGURL="${REMOTEURL}/${APP}/${EPOCH}.${LOGSUFFIX}"
+    LOGURL="${REMOTE_URL}/${APP}/${EPOCH}.${LOGSUFFIX}"
     REMOTEFILE="${EPOCH}.${LOGSUFFIX}"
   elif [[ "${SCAN}" == "1" ]]; then
-    LOGURL="${REMOTEURL}/${APP}/scan"
+    LOGURL="${REMOTE_URL}/${APP}/scan"
     REMOTEFILE="index.html"
   elif [[ "${message_state}" == "APPROVAL NEEDED" ]]; then
-      LOGURL="${REMOTEURL}/${APP}/APPROVAL-${EPOCH}.${LOGSUFFIX}"
+      LOGURL="${REMOTE_URL}/${APP}/APPROVAL-${EPOCH}.${LOGSUFFIX}"
       REMOTEFILE="APPROVAL-${EPOCH}.${LOGSUFFIX}"
   else
     if [[ "${message_state}" != "SUCCESS" ]] || [[ -z "${COMMITHASH}" ]]; then
-      LOGURL="${REMOTEURL}/${APP}/${message_state}-${EPOCH}.${LOGSUFFIX}"
+      LOGURL="${REMOTE_URL}/${APP}/${message_state}-${EPOCH}.${LOGSUFFIX}"
       REMOTEFILE="${message_state}-${EPOCH}.${LOGSUFFIX}"
     else
-      LOGURL="${REMOTEURL}/${APP}/${COMMITHASH}.${LOGSUFFIX}"
+      LOGURL="${REMOTE_URL}/${APP}/${COMMITHASH}.${LOGSUFFIX}"
       REMOTEFILE="${COMMITHASH}.${LOGSUFFIX}"
     fi
   fi
 
   # Insert the full deployment log_file & button it all up
   if [[ "${REPORT}" != "1" ]]; then
-    cat "${log_file}" "${stir_path}/html/${HTMLTEMPLATE}/footer.html" >> "${html_file}"
+    cat "${log_file}" "${stir_path}/html/${HTML_TEMPLATE}/footer.html" >> "${html_file}"
     # There's probably a better place for this.
     process_html
   fi

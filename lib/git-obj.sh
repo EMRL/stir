@@ -47,13 +47,13 @@ function verify_project() {
   else  
     # If running --automate, force a branch check
     if [[ "${AUTOMATE}" == "1" ]]; then
-      CHECKBRANCH="${MASTER}"
+      CHECK_BRANCH="${MASTER}"
     fi
-    # If CHECKBRANCH is set, make sure current branch is correct.
+    # If CHECK_BRANCH is set, make sure current branch is correct.
     start_branch="$(git rev-parse --abbrev-ref HEAD)"
-    if [[ -n "${CHECKBRANCH}" ]] && [[ "${DIGEST}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]] && [[ "${EMAILTEST}" != "1" ]] && [[ "${SLACKTEST}" != "1" ]]; then 
-      if [[ "${start_branch}" != "${CHECKBRANCH}" ]]; then
-        error "Must be on ${CHECKBRANCH} branch to continue.";
+    if [[ -n "${CHECK_BRANCH}" ]] && [[ "${DIGEST}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]] && [[ "${EMAILTEST}" != "1" ]] && [[ "${SLACKTEST}" != "1" ]]; then 
+      if [[ "${start_branch}" != "${CHECK_BRANCH}" ]]; then
+        error "Must be on ${CHECK_BRANCH} branch to continue.";
       fi
     fi
   fi
@@ -102,7 +102,7 @@ function checkout() {
 function status() {
   if [[ -z "$(git status --porcelain)" ]]; then
     if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
-      if [[ "${REQUIREAPPROVAL}" == "TRUE" ]]; then
+      if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]]; then
         console "Nothing to queue, working directory clean."
       else
         console "Nothing to commit, working directory clean."
@@ -233,7 +233,7 @@ function commit() {
     clean_exit
   else
     # Found stuff, let's get a commit message
-    if [[ -z "${COMMITMSG}" ]]; then
+    if [[ -z "${COMMIT_MSG}" ]]; then
       # while read -p "Enter commit message: " notes && [[ -z "$notes" ]]; do :; done
       read -rp "Enter commit message: " notes
       if [[ -z "${notes}" ]]; then
@@ -256,33 +256,33 @@ function commit() {
       # message and skip asking for user input. Nice for cron updates. 
       if [[ "${FORCE}" = "1" ]] && [[ "${UPDATE}" = "1" ]]; then
         # We need Smart commits enabled or this can't work
-        if [[ "${SMARTCOMMIT}" -ne "TRUE" ]]; then
+        if [[ "${SMART_COMMIT}" -ne "TRUE" ]]; then
           console "Smart Commits must be enabled when forcing updates."
-          console "Set SMARTCOMMIT=TRUE in .stir.sh"; quiet_exit
+          console "Set SMART_COMMIT=TRUE in .stir.sh"; quiet_exit
         else
-          if [[ -z "${COMMITMSG}" ]]; then
+          if [[ -z "${COMMIT_MSG}" ]]; then
             info "Commit message must not be empty."; quiet_exit
           else
-            notes="${COMMITMSG}"
+            notes="${COMMIT_MSG}"
           fi
         fi
       else
         # We want to be able to edit the default commit if available
         if [[ "${FORCE}" != "1" ]]; then
-          notes="${COMMITMSG}"
-          read -rp "Edit commit message: " -e -i "${COMMITMSG}" notes
+          notes="${COMMIT_MSG}"
+          read -rp "Edit commit message: " -e -i "${COMMIT_MSG}" notes
           # Update the commit message based on user input ()
-          notes="${notes:-$COMMITMSG}"
+          notes="${notes:-$COMMIT_MSG}"
         else
-          info "Using auto-generated commit message: ${COMMITMSG}"
-          notes="${COMMITMSG}"
+          info "Using auto-generated commit message: ${COMMIT_MSG}"
+          notes="${COMMIT_MSG}"
         fi
       fi
     fi
 
-    if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then 
+    if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then 
       trace "Queuing commit message"
-      echo "${notes}" > "${WORKPATH}/${APP}/.queued"
+      echo "${notes}" > "${WORK_PATH}/${APP}/.queued"
     else
       git commit -m "${notes}" &>> "${log_file}"; error_check
       trace "Commit message: ${notes}"
@@ -308,7 +308,7 @@ function garbage() {
 
 # Get the stats for this git author, just for fun
 function git_stats() {
-  if [[ "${GITSTATS}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]] && [[ "${PUBLISH}" != "1" ]] && [[ "${APPROVE}" != "1" ]]; then
+  if [[ "${GIT_STATS}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]] && [[ "${PUBLISH}" != "1" ]] && [[ "${APPROVE}" != "1" ]]; then
     console "Calculating..."
     getent passwd "${USER}" | cut -d ':' -f 5 | cut -d ',' -f 1 > "${trash_file}"
     full_user=$(<"${trash_file}")

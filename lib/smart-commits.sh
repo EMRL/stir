@@ -8,7 +8,7 @@
 
 # Constructing smart *cough* commit messages
 function smart_commit() {
-  if [[ "${SMARTCOMMIT}" == "TRUE" ]]; then 
+  if [[ "${SMART_COMMIT}" == "TRUE" ]]; then 
     PCA=$("${wc_cmd}" -l < "${wp_file}")
 
     if [[ "${UPDATE_ACF}" == "1" ]]; then
@@ -34,9 +34,9 @@ function smart_commit() {
         fi
 
         if [[ "${PCA}" -gt "1" ]]; then
-          COMMITMSG="Updated ${PCA} plugins ($PLUGINS)"
+          COMMIT_MSG="Updated ${PCA} plugins ($PLUGINS)"
         elif [[ "${PCA}" == "1" ]]; then
-          COMMITMSG="Updated ${PCA} plugin ($PLUGINS)"
+          COMMIT_MSG="Updated ${PCA} plugin ($PLUGINS)"
         fi
       fi
 
@@ -44,17 +44,17 @@ function smart_commit() {
       if [[ $UPDCORE == "1" ]]; then
         # if [[ -z "$PCC" ]]; then 
         if [[ -z "${PLUGINS}" ]]; then
-          COMMITMSG="Updated system (wp-core ${COREUPD})"
+          COMMIT_MSG="Updated system (wp-core ${COREUPD})"
         else
-          COMMITMSG="${COMMITMSG} and system (wp-core ${COREUPD})"
+          COMMIT_MSG="${COMMIT_MSG} and system (wp-core ${COREUPD})"
         fi
       else      
         trace "No system updates"
       fi
 
-      # Output the contents of $COMMITMSG
-      if [[ -n "${COMMITMSG}" ]]; then
-        trace "Auto-generated commit message: ${COMMITMSG}"
+      # Output the contents of $COMMIT_MSG
+      if [[ -n "${COMMIT_MSG}" ]]; then
+        trace "Auto-generated commit message: ${COMMIT_MSG}"
       fi
     fi
   fi

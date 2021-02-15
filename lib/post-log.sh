@@ -7,87 +7,87 @@
 ###############################################################################
 
 # Initialize variables
-var=(SCPPORT)
+var=(SCP_PORT)
 init_loop
 
 # Remote log function; this really needs to be rewritten
 function post_log() {
-  if [[ "${REMOTELOG}" == "TRUE" ]]; then
+  if [[ "${REMOTE_LOG}" == "TRUE" ]]; then
 
     # Post to localhost by simply copying files
-    if [[ "${LOCALHOSTPOST}" == "TRUE" ]] && [[ -n "${LOCALHOSTPATH}" ]] && [[ -f "${html_file}" ]]; then
+    if [[ "${POST_TO_LOCAL_HOST}" == "TRUE" ]] && [[ -n "${LOCAL_HOST_PATH}" ]] && [[ -f "${html_file}" ]]; then
       
       # Check that directory exists
       html_dir
 
       # Post the file   
       if [[ -n "${REMOTEFILE}" ]] && [[ "${REPORT}" != "1" ]]; then #&& [[ -n "${COMMITHASH}" ]]; then
-        cp "${html_file}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
-        chmod a+rw "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
+        cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/${REMOTEFILE}"
+        chmod a+rw "${LOCAL_HOST_PATH}/${APP}/${REMOTEFILE}" &> /dev/null
       fi
 
       # Post the digest
       if [[ "${DIGEST}" == "1" ]]; then
         REMOTEFILE="digest-${EPOCH}.html"
-        cp "${html_file}" "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}"
-        chmod a+rw "${LOCALHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
-        DIGESTURL="${REMOTEURL}/${APP}/${REMOTEFILE}"
+        cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/${REMOTEFILE}"
+        chmod a+rw "${LOCAL_HOST_PATH}/${APP}/${REMOTEFILE}" &> /dev/null
+        DIGESTURL="${REMOTE_URL}/${APP}/${REMOTEFILE}"
       fi
 
       # Post the report
       if [[ "${REPORT}" == "1" ]]; then
         REMOTEFILE="${current_year}-${current_month}.php"
-        cp "${html_file}" "${LOCALHOSTPATH}/${APP}/report/${REMOTEFILE}"
-        chmod a+rw "${LOCALHOSTPATH}/${APP}/report/${REMOTEFILE}" &> /dev/null
-        REPORTURL="${REMOTEURL}/${APP}/report/${REMOTEFILE}"
+        cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/report/${REMOTEFILE}"
+        chmod a+rw "${LOCAL_HOST_PATH}/${APP}/report/${REMOTEFILE}" &> /dev/null
+        REPORTURL="${REMOTE_URL}/${APP}/report/${REMOTEFILE}"
       fi
 
       # Statistics
       if [[ "${PROJSTATS}" == "1" ]]; then
-        [[ ! -d "${LOCALHOSTPATH}/${APP}" ]] && mkdir "${LOCALHOSTPATH}/${APP}"
-        [[ ! -d "${LOCALHOSTPATH}/${APP}/stats" ]] && mkdir "${LOCALHOSTPATH}/${APP}/stats"
-        cp -R "${stat_dir}" "${LOCALHOSTPATH}/${APP}"
-        chmod -R a+rw "${stir_path}/html/${HTMLTEMPLATE}/stats" &> /dev/null
+        [[ ! -d "${LOCAL_HOST_PATH}/${APP}" ]] && mkdir "${LOCAL_HOST_PATH}/${APP}"
+        [[ ! -d "${LOCAL_HOST_PATH}/${APP}/stats" ]] && mkdir "${LOCAL_HOST_PATH}/${APP}/stats"
+        cp -R "${stat_dir}" "${LOCAL_HOST_PATH}/${APP}"
+        chmod -R a+rw "${stir_path}/html/${HTML_TEMPLATE}/stats" &> /dev/null
       fi
 
       # Remove logs older then X days
-      if [[ -n "${EXPIRELOGS}" ]]; then
-        is_integer "${EXPIRELOGS}"
+      if [[ -n "${EXPIRE_LOGS}" ]]; then
+        is_integer "${EXPIRE_LOGS}"
         if [[ "${integer_check}" != "1" ]]; then
-          find "${LOCALHOSTPATH}/${APP}"* -mtime +"${EXPIRELOGS}" -exec rm {} \; &> /dev/null
+          find "${LOCAL_HOST_PATH}/${APP}"* -mtime +"${EXPIRE_LOGS}" -exec rm {} \; &> /dev/null
         fi
       fi
     fi
 
     # Send the files through SSH/SCP
-    if [[ "${SCPPOST}" == "TRUE" ]] && [[ -f "${html_file}" ]]; then
+    if [[ "${SCP_POST}" == "TRUE" ]] && [[ -f "${html_file}" ]]; then
 
       # Setup up the proper command, depending on whether we're using key or password
-      if [[ -n "${SCPPASS}" ]] && [[ -n "${sshpass_cmd}" ]]; then
-        TMP=$(<$SCPPASS)
-        SCPPASS="${TMP}"
-        SCPCMD="${sshpass_cmd} -p \"${SCPPASS}\" scp -o StrictHostKeyChecking=no -P \"${SCPPORT}\""
-        SSHCMD="${sshpass_cmd} -p \"${SCPPASS}\" ssh -p \"${SCPPORT}\""
+      if [[ -n "${SCP_PASS}" ]] && [[ -n "${sshpass_cmd}" ]]; then
+        TMP=$(<$SCP_PASS)
+        SCP_PASS="${TMP}"
+        SCPCMD="${sshpass_cmd} -p \"${SCP_PASS}\" scp -o StrictHostKeyChecking=no -P \"${SCP_PORT}\""
+        SSHCMD="${sshpass_cmd} -p \"${SCP_PASS}\" ssh -p \"${SCP_PORT}\""
       elif [[ -n "${scp_cmd}" ]]; then
-        SCPCMD="${scp_cmd} -P \"${SCPPORT}\""
-        SSHCMD="${ssh_cmd} -p \"${SCPPORT}\""
+        SCPCMD="${scp_cmd} -P \"${SCP_PORT}\""
+        SSHCMD="${ssh_cmd} -p \"${SCP_PORT}\""
       else
         return
       fi
 
       # Loop through the various scenarios, make directories if needed
-      eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}"
+      eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}"
 
       if [[ "${DIGEST}" == "1" ]]; then
         REMOTEFILE="digest-${EPOCH}.html"
-        DIGESTURL="${REMOTEURL}/${APP}/${REMOTEFILE}"
+        DIGESTURL="${REMOTE_URL}/${APP}/${REMOTEFILE}"
       fi
 
       if [[ "${PROJSTATS}" == "1" || "${DIGEST}" == "1" && -f "${stat_dir}/*" ]]; then
-        eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/stats"
-        eval "${SCPCMD} -r" "${stat_dir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/stats/"
-        eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/avatar"
-        eval "${SCPCMD} -r" "${avatar_dir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/avatar/"
+        eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/stats"
+        eval "${SCPCMD} -r" "${stat_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/stats/"
+        eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/avatar"
+        eval "${SCPCMD} -r" "${avatar_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/avatar/"
         if [[ -d "${avatar_dir}" ]]; then
           rm -R "${avatar_dir}"
         fi
@@ -95,61 +95,61 @@ function post_log() {
 
       if [[ "${SCAN}" == "1" ]]; then
         trace "Sending /scan"
-        eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/scan"
-        eval "${SCPCMD} -r" "${scan_html}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/scan/index.html"
+        eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/scan"
+        eval "${SCPCMD} -r" "${scan_html}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/scan/index.html"
         # This stuff is for the new dashboard method
-        eval "${SCPCMD} -r" "${stat_dir}/*" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/stats/"
+        eval "${SCPCMD} -r" "${stat_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/stats/"
       fi
 
       if [[ "${REPORT}" == "1" ]]; then
         REMOTEFILE="${current_year}-${current_month}.php"
-        eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report"
-        eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report/css"
-        eval "${SCPCMD} -r" "${stir_path}/html/${HTMLTEMPLATE}/report/css" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report"
-        eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "mkdir -p ${SCPHOSTPATH}/${APP}/report/js"
-        eval "${SCPCMD} -r" "${stir_path}/html/${HTMLTEMPLATE}/report/js" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report"
-        eval "${SCPCMD}" "${html_file}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/report/${REMOTEFILE}"
+        eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report"
+        eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report/css"
+        eval "${SCPCMD} -r" "${stir_path}/html/${HTML_TEMPLATE}/report/css" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report"
+        eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report/js"
+        eval "${SCPCMD} -r" "${stir_path}/html/${HTML_TEMPLATE}/report/js" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report"
+        eval "${SCPCMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report/${REMOTEFILE}"
       fi
 
       # Send over the logs and set permissions
       if [[ "${REPORT}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]]; then 
-        eval "${SCPCMD}" "${html_file}" "${SCPUSER}"@"${SCPHOST}":"${SCPHOSTPATH}/${APP}/${REMOTEFILE}" &> /dev/null
+        eval "${SCPCMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/${REMOTEFILE}" &> /dev/null
       fi
 
       # Remove logs older then X days
-      if [[ -n "${EXPIRELOGS}" ]]; then
-        is_integer "${EXPIRELOGS}"
+      if [[ -n "${EXPIRE_LOGS}" ]]; then
+        is_integer "${EXPIRE_LOGS}"
         if [[ "${integer_check}" != "1" ]]; then
-          eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "'find ${SCPHOSTPATH}/${APP}* -mtime +${EXPIRELOGS} -exec rm {} \;' &> /dev/null"
+          eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "'find ${SCP_HOST_PATH}/${APP}* -mtime +${EXPIRE_LOGS} -exec rm {} \;' &> /dev/null"
         fi
       fi
 
       # Set permissions
-      eval "${SSHCMD}" "${SCPUSER}"@"${SCPHOST}" "chmod -R 755 ${SCPHOSTPATH}/${APP}/"
+      eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "chmod -R 755 ${SCP_HOST_PATH}/${APP}/"
     fi
   fi
 }
 
 function html_dir() {
   # Yet another if/then to cover my ass. What a mess!
-  if [[ "${LOCALHOSTPOST}" == "TRUE" ]] && [[ -n "${LOCALHOSTPATH}" ]]; then
+  if [[ "${POST_TO_LOCAL_HOST}" == "TRUE" ]] && [[ -n "${LOCAL_HOST_PATH}" ]]; then
 
-    if [[ ! -d "${LOCALHOSTPATH}/${APP}" ]]; then
-      mkdir "${LOCALHOSTPATH}/${APP}"
+    if [[ ! -d "${LOCAL_HOST_PATH}/${APP}" ]]; then
+      mkdir "${LOCAL_HOST_PATH}/${APP}"
     fi
 
-    if [[ ! -d "${LOCALHOSTPATH}/${APP}/avatar" ]]; then
-      mkdir "${LOCALHOSTPATH}/${APP}/avatar"
+    if [[ ! -d "${LOCAL_HOST_PATH}/${APP}/avatar" ]]; then
+      mkdir "${LOCAL_HOST_PATH}/${APP}/avatar"
     fi
 
     if [[ "${message_state}" == "REPORT" ]]; then 
-      if [[ ! -d "${LOCALHOSTPATH}/${APP}/report" ]]; then
-        mkdir "${LOCALHOSTPATH}/${APP}/report"; error_check
-        mkdir "${LOCALHOSTPATH}/${APP}/report/css"; error_check
-        mkdir "${LOCALHOSTPATH}/${APP}/report/js"; error_check
+      if [[ ! -d "${LOCAL_HOST_PATH}/${APP}/report" ]]; then
+        mkdir "${LOCAL_HOST_PATH}/${APP}/report"; error_check
+        mkdir "${LOCAL_HOST_PATH}/${APP}/report/css"; error_check
+        mkdir "${LOCAL_HOST_PATH}/${APP}/report/js"; error_check
       fi
-        cp -R "${stir_path}/html/${HTMLTEMPLATE}/report/css" "${LOCALHOSTPATH}/${APP}/report"; error_check
-        cp -R "${stir_path}/html/${HTMLTEMPLATE}/report/js" "${LOCALHOSTPATH}/${APP}/report"; error_check
+        cp -R "${stir_path}/html/${HTML_TEMPLATE}/report/css" "${LOCAL_HOST_PATH}/${APP}/report"; error_check
+        cp -R "${stir_path}/html/${HTML_TEMPLATE}/report/js" "${LOCAL_HOST_PATH}/${APP}/report"; error_check
     fi
   fi
 }

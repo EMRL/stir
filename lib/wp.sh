@@ -21,7 +21,7 @@ function wp() {
     notice "Checking for updates..."
 
     # Check log for core updates
-    if [[ "${DONOTUPDATEWP}" == "TRUE" ]] || [[ "${UPDATE_ACF}" == "1" ]]; then
+    if [[ "${DO_NOT_UPDATE_WP}" == "TRUE" ]] || [[ "${UPDATE_ACF}" == "1" ]]; then
       trace "Skipping Wordpress core updates"
     else
       wp_core
@@ -90,7 +90,7 @@ function wp_check() {
       return
     fi
 
-    if [[ -f "${WORKPATH}"/"${APP}${WPROOT}${WPSYSTEM}"/wp-settings.php ]]; then
+    if [[ -f "${WORK_PATH}"/"${APP}${WP_ROOT}${WP_SYSTEM}"/wp-settings.php ]]; then
       # Get Wordpress paths
       wp_path;
 
@@ -117,7 +117,7 @@ function wp_check() {
   fi
 }
 
-function wp_server_check {
+function wp_CHECK_SERVER {
   # Launch server
   # "${wp_cmd}" server --host=localhost > /dev/null 2>&1; EXITCODE=$?; 
   # if [[ "${EXITCODE}" -eq "0" ]]; then
@@ -146,7 +146,7 @@ function wp_server_check {
 
 function wp_path() {
   # Store path in variable and remove any extra /
-  WP_PATH="${APP_PATH}${WPROOT}${WPAPP}"
+  WP_PATH="${APP_PATH}${WP_ROOT}${WP_APP}"
   WP_PATH=$(sed -e "s^//^/^g" <<< ${WP_PATH})
   if [[ -d "${WP_PATH}" ]]; then
     cd "${WP_PATH}"; \
@@ -155,7 +155,7 @@ function wp_path() {
 
 function wp_tmp {
   # Store path in variable and remove any extra /
-  # WP_TMP="/tmp/${REPO}/${WPROOT}${WPAPP}"
-  WP_TMP="/${WORKPATH}/${REPO}/${WPROOT}${WPAPP}"
+  # WP_TMP="/tmp/${REPO}/${WP_ROOT}${WP_APP}"
+  WP_TMP="/${WORK_PATH}/${REPO}/${WP_ROOT}${WP_APP}"
   WP_TMP=$(sed -e "s^//^/^g" <<< $WP_TMP)
 }

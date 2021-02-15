@@ -43,13 +43,13 @@ function create_report() {
   # Try to setup the month/day count
   last_day=`${cal_cmd} ${previous_month} ${previous_year} | egrep -a "28|29|30|31" |tail -1 |awk '{print $NF}'`
 
-  if [[ -n "${INCLUDEHOSTING}" ]] && [[ "${INCLUDEHOSTING}" != "FALSE" ]]; then
-    # If INCLUDEHOSTING is equal to something other than TRUE (And not FALSE), 
+  if [[ -n "${INCLUDE_HOSTING}" ]] && [[ "${INCLUDE_HOSTING}" != "FALSE" ]]; then
+    # If INCLUDE_HOSTING is equal to something other than TRUE (And not FALSE), 
     # its value will be used as the text string in the report 
-    if [[ "${INCLUDEHOSTING}" == "TRUE" ]]; then
-      INCLUDEHOSTING="Web hosting for the month of ${last_month}"
+    if [[ "${INCLUDE_HOSTING}" == "TRUE" ]]; then
+      INCLUDE_HOSTING="Web hosting for the month of ${last_month}"
     fi
-    echo "<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">${TASK}<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">${INCLUDEHOSTING}</div></td></tr>" >> "${stat_file}"
+    echo "<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">${TASK}<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">${INCLUDE_HOSTING}</div></td></tr>" >> "${stat_file}"
   fi
 
   git log --all --no-merges --first-parent --before="${current_year}-${current_month}-1 00:00" --after="${previous_year}-${previous_month}-${last_day} 00:00" --pretty=format:"<tr class=\"item-row\"><td class=\"item-name\"><div class=\"delete-wpr\">%h<a class=\"delete\" href=\"javascript:;\" title=\"Remove row\">X</a></div></td><td class=\"description\"><div contenteditable class=\"editable\">%s</div></td></tr>" >> "${stat_file}"
@@ -60,14 +60,14 @@ function create_report() {
   fi
 
   # Compile full report 
-  cat "${stir_path}/html/${HTMLTEMPLATE}/report/header.html" "${stat_file}" "${stir_path}/html/${HTMLTEMPLATE}/report/footer.html" > "${html_file}"
+  cat "${stir_path}/html/${HTML_TEMPLATE}/report/header.html" "${stat_file}" "${stir_path}/html/${HTML_TEMPLATE}/report/footer.html" > "${html_file}"
 
   # Filter and replace template variables
   process_html
 
   # Set URL
   REMOTEFILE="${current_year}-${current_month}.php"
-  REPORTURL="${REMOTEURL}/${APP}/report/${REMOTEFILE}"
+  REPORTURL="${REMOTE_URL}/${APP}/report/${REMOTEFILE}"
   
   #if [[ "${CREATE_INVOICE}" == "1" ]]; then
   #  return

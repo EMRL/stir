@@ -19,7 +19,7 @@ function mail_log() {
       APP="${REPO}"
     fi
 
-    if [[ "${EMAILHTML}" == "TRUE" ]]; then
+    if [[ "${EMAIL_HTML}" == "TRUE" ]]; then
       # Send the email
       (
       echo "Sender: ${FROM}"
@@ -54,8 +54,8 @@ function mail_log() {
     echo "Sender: ${FROM}"
     echo "From: EMRL <${FROM}>"
     echo "Reply-To: ${FROM} <${FROM}>"
-    echo "To: ${DIGESTEMAIL}"
-    echo "Subject: ${PROJNAME} updates for the week of ${WEEKOF}"               
+    echo "To: ${DIGEST_EMAIL}"
+    echo "Subject: ${PROJECT_NAME} updates for the week of ${WEEKOF}"               
     echo "Content-Type: text/html"
     echo
     echo "${digest_payload}";
@@ -92,81 +92,81 @@ function email_test() {
     echo "Current user is ${DEV}<br /><br />";
     echo
     echo "<strong>Project Information</strong><br />"
-    [[ -n "${PROJNAME}" ]] && echo "Name: ${PROJNAME}<br />"
-    [[ -n "${PROJCLIENT}" ]] && echo "Client: ${PROJCLIENT}<br />"
-    [[ -n "${DEVURL}" ]] && echo "Staging URL: <a href=\"${DEVURL}\">${DEVURL}</a><br />"
-    [[ -n "${PRODURL}" ]] && echo "Production URL: <a href=\"${PRODURL}\">${PRODURL}</a><br />"
+    [[ -n "${PROJECT_NAME}" ]] && echo "Name: ${PROJECT_NAME}<br />"
+    [[ -n "${PROJECT_CLIENT}" ]] && echo "Client: ${PROJECT_CLIENT}<br />"
+    [[ -n "${DEV_URL}" ]] && echo "Staging URL: <a href=\"${DEV_URL}\">${DEV_URL}</a><br />"
+    [[ -n "${PROD_URL}" ]] && echo "Production URL: <a href=\"${PROD_URL}\">${PROD_URL}</a><br />"
     echo "<br />"
     # Git
-    if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECKBRANCH}" ]]; then
+    if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECK_BRANCH}" ]]; then
       echo "<strong>Git Configuration</strong><br />"
-      [[ -n "${REPO}" ]] && echo "Repo: <a href=\"${REPOHOST}/${REPO}\">${REPOHOST}/${REPO}</a><br />"
+      [[ -n "${REPO}" ]] && echo "Repo: <a href=\"${REPO_HOST}/${REPO}\">${REPO_HOST}/${REPO}</a><br />"
       [[ -n "${MASTER}" ]] && echo "Master branch: ${MASTER}<br />"
       [[ -n "${STAGING}" ]] && echo "Staging branch: ${STAGING}<br />"
       [[ -n "${PRODUCTION}" ]] && echo "Production branch: ${PRODUCTION}<br />"
       [[ -n "${AUTOMERGE}" ]] && echo "Auto merge: ${AUTOMERGE}<br />"
       [[ -n "${STASH}" ]] && echo "File Stashing: ${STASH}<br />"
-      [[ -n "${CHECKBRANCH}" ]] && echo "Force branch checking: ${CHECKBRANCH}<br />"
+      [[ -n "${CHECK_BRANCH}" ]] && echo "Force branch checking: ${CHECK_BRANCH}<br />"
       echo "<br />"
     fi
     # Wordpress
-    if [[ -n "${WPROOT}" ]] || [[ -n "${WPAPP}" ]] || [[ -n "${WPSYSTEM}" ]]; then
+    if [[ -n "${WP_ROOT}" ]] || [[ -n "${WP_APP}" ]] || [[ -n "${WP_SYSTEM}" ]]; then
       echo "<strong>Wordpress Setup</strong><br />"
-      [[ -n "${WPROOT}" ]] && echo "Wordpress root: ${WPROOT}<br />"
-      [[ -n "${WPAPP}" ]] && echo "Wordpress application: ${WPAPP}<br />"
-      [[ -n "${WPSYSTEM}" ]] && echo "Wordpress system: ${WPSYSTEM}<br />"
+      [[ -n "${WP_ROOT}" ]] && echo "Wordpress root: ${WP_ROOT}<br />"
+      [[ -n "${WP_APP}" ]] && echo "Wordpress application: ${WP_APP}<br />"
+      [[ -n "${WP_SYSTEM}" ]] && echo "Wordpress system: ${WP_SYSTEM}<br />"
       echo "<br />"
     fi
     # Deployment
-    if [[ -n "${DEPLOY}" ]] || [[ -n "${DONOTDEPLOY}" ]]; then
+    if [[ -n "${DEPLOY}" ]] || [[ -n "${DO_NOT_DEPLOY}" ]]; then
       echo "<strong>Deployment Configuration</strong><br />"
       [[ -n "${DEPLOY}" ]] && echo "Deploy command: ${DEPLOY}<br />"
-      [[ -n "${DONOTDEPLOY}" ]] && echo "Disallow deployment: ${DONOTDEPLOY}<br />"
+      [[ -n "${DO_NOT_DEPLOY}" ]] && echo "Disallow deployment: ${DO_NOT_DEPLOY}<br />"
       echo "<br />"
     fi
     # Notifications
-    if [[ -n "${TASK}" ]] || [[ -n "${TASKUSER}" ]] || [[ -n "${ADDTIME}" ]] || [[ -n "${POSTTOSLACK}" ]] || [[ -n "${SLACKERROR}" ]] || [[ -n "${PROFILEID}" ]] || [[ -n "${POSTURL}" ]]; then
+    if [[ -n "${TASK}" ]] || [[ -n "${TASK_USER}" ]] || [[ -n "${ADD_TIME}" ]] || [[ -n "${POST_TO_SLACK}" ]] || [[ -n "${SLACK_ERROR}" ]] || [[ -n "${PROFILE_ID}" ]] || [[ -n "${POST_URL}" ]]; then
       echo "<strong>Notifications</strong><br />"
       [[ -n "${TASK}" ]] && echo "Task #: ${TASK}<br />"
-      [[ -n "${TASKUSER}" ]] && echo "Task user: ${TASKUSER}<br />"
-      [[ -n "${ADDTIME}" ]] && echo "Task time: ${ADDTIME}<br />"
-      [[ -n "${POSTTOSLACK}" ]] && echo "Post to Slack: ${POSTTOSLACK}<br />"
-      [[ -n "${SLACKERROR}" ]] && echo "Post errors to Slack: ${SLACKERROR}<br />"
-      [[ -n "${POSTURL}" ]] && echo "Webhook URL: ${POSTURL}<br />"
-      [[ -n "${PROFILEID}" ]] && echo "Google Analytics ID: ${PROFILEID}<br />"
+      [[ -n "${TASK_USER}" ]] && echo "Task user: ${TASK_USER}<br />"
+      [[ -n "${ADD_TIME}" ]] && echo "Task time: ${ADD_TIME}<br />"
+      [[ -n "${POST_TO_SLACK}" ]] && echo "Post to Slack: ${POST_TO_SLACK}<br />"
+      [[ -n "${SLACK_ERROR}" ]] && echo "Post errors to Slack: ${SLACK_ERROR}<br />"
+      [[ -n "${POST_URL}" ]] && echo "Webhook URL: ${POST_URL}<br />"
+      [[ -n "${PROFILE_ID}" ]] && echo "Google Analytics ID: ${PROFILE_ID}<br />"
       echo "<br />"
     fi
     # Logging
-    if [[ -n "${REMOTELOG}" ]] || [[ -n "${REMOTEURL}" ]] || [[ -n "${EXPIRELOGS}" ]] || [[ -n "${LOCALHOSTPOST}" ]] || [[ -n "${LOCALHOSTPATH}" ]] || [[ -n "${SCPPOST}" ]] || [[ -n "${SCPUSER}" ]] || [[ -n "${SCPHOST}" ]] || [[ -n "${SCPHOSTPATH}" ]] || [[ -n "${SCPPASS}" ]] || [[ -n "${REMOTETEMPLATE}" ]] || [[ -n "${REMOTETEMPLATE}" ]]; then
+    if [[ -n "${REMOTE_LOG}" ]] || [[ -n "${REMOTE_URL}" ]] || [[ -n "${EXPIRE_LOGS}" ]] || [[ -n "${POST_TO_LOCAL_HOST}" ]] || [[ -n "${LOCAL_HOST_PATH}" ]] || [[ -n "${SCP_POST}" ]] || [[ -n "${SCP_USER}" ]] || [[ -n "${SCP_HOST}" ]] || [[ -n "${SCP_HOST_PATH}" ]] || [[ -n "${SCP_PASS}" ]] || [[ -n "${REMOTE_TEMPLATE}" ]] || [[ -n "${REMOTE_TEMPLATE}" ]]; then
       echo "<strong>Logging</strong><br />"
       [[ -n "${TO}" ]] && echo "Send to: ${TO}<br />"
-      [[ -n "${HTMLTEMPLATE}" ]] && echo "Email template: ${HTMLTEMPLATE}<br />"
-      [[ -n "${CLIENTLOGO}" ]] && echo "Logo: ${CLIENTLOGO}<br />"
+      [[ -n "${HTML_TEMPLATE}" ]] && echo "Email template: ${HTML_TEMPLATE}<br />"
+      [[ -n "${CLIENT_LOGO}" ]] && echo "Logo: ${CLIENT_LOGO}<br />"
       [[ -n "${COVER}" ]] && echo "Cover image: ${COVER}<br />"
       [[ -n "${INCOGNITO}" ]] && echo "Logo: ${INCOGNITO}<br />"
-      [[ -n "${REMOTELOG}" ]] && echo "Web logs: ${REMOTELOG}<br />"
-      [[ -n "${REMOTEURL}" ]] && echo "Address: ${REMOTEURL} <br />"
-      [[ -n "${EXPIRELOGS}" ]] && echo "Log expiration: ${EXPIRELOGS} days <br />"
-      [[ -n "${REMOTETEMPLATE}" ]] && echo "Log template: ${REMOTETEMPLATE}<br />"
-      [[ -n "${SCPPOST}" ]] && echo "Post with SCP/SSH: ${SCPPOST}<br />"
-      [[ -n "${SCPUSER}" ]] && echo "SCP user: ${SCPUSER}<br />"
-      [[ -n "${SCPHOST}" ]] && echo "Remote log host: ${SCPHOST}<br />"
-      [[ -n "${SCPHOSTPATH}" ]] && echo "Remote log path: ${SCPHOSTPATH}<br />"
-      [[ -n "${LOCALHOSTPOST}" ]] && echo "Save logs locally: ${LOCALHOSTPOST}<br />"
-      [[ -n "${LOCALHOSTPATH}" ]] && echo "Path to local logs: ${}LOCALHOSTPATH<br />"
+      [[ -n "${REMOTE_LOG}" ]] && echo "Web logs: ${REMOTE_LOG}<br />"
+      [[ -n "${REMOTE_URL}" ]] && echo "Address: ${REMOTE_URL} <br />"
+      [[ -n "${EXPIRE_LOGS}" ]] && echo "Log expiration: ${EXPIRE_LOGS} days <br />"
+      [[ -n "${REMOTE_TEMPLATE}" ]] && echo "Log template: ${REMOTE_TEMPLATE}<br />"
+      [[ -n "${SCP_POST}" ]] && echo "Post with SCP/SSH: ${SCP_POST}<br />"
+      [[ -n "${SCP_USER}" ]] && echo "SCP user: ${SCP_USER}<br />"
+      [[ -n "${SCP_HOST}" ]] && echo "Remote log host: ${SCP_HOST}<br />"
+      [[ -n "${SCP_HOST_PATH}" ]] && echo "Remote log path: ${SCP_HOST_PATH}<br />"
+      [[ -n "${POST_TO_LOCAL_HOST}" ]] && echo "Save logs locally: ${POST_TO_LOCAL_HOST}<br />"
+      [[ -n "${LOCAL_HOST_PATH}" ]] && echo "Path to local logs: ${}LOCAL_HOST_PATH<br />"
       echo "<br />"
     fi
     # Weekly Digests
-    if [[ -n "${DIGESTEMAIL}" ]]; then
+    if [[ -n "${DIGEST_EMAIL}" ]]; then
       echo "<strong>Weekly Digests</strong><br />"
-      [[ -n "${DIGESTEMAIL}" ]] && echo "Send to: ${DIGESTEMAIL}<br />"
+      [[ -n "${DIGEST_EMAIL}" ]] && echo "Send to: ${DIGEST_EMAIL}<br />"
       echo "<br />"
     fi
     # Monthly Reporting
-    if [[ -n "${CLIENTCONTACT}" ]] || [[ -n "${INCLUDEHOSTING}" ]]; then
+    if [[ -n "${CLIENT_CONTACT}" ]] || [[ -n "${INCLUDE_HOSTING}" ]]; then
       echo "<strong>Monthly Reporting</strong><br />"
-      [[ -n "${CLIENTCONTACT}" ]] && echo "Client contact: ${CLIENTCONTACT}<br />"
-      [[ -n "${INCLUDEHOSTING}" ]] && echo "Hosting notes: ${INCLUDEHOSTING}<br />"
+      [[ -n "${CLIENT_CONTACT}" ]] && echo "Client contact: ${CLIENT_CONTACT}<br />"
+      [[ -n "${INCLUDE_HOSTING}" ]] && echo "Hosting notes: ${INCLUDE_HOSTING}<br />"
       echo "<br />"
     fi
     # Invoice Ninja integration
@@ -182,23 +182,23 @@ function email_test() {
       echo "<br />"
     fi
     # Google Analytics
-    if [[ -n "${CLIENTID}" ]] || [[ -n "${CLIENTSECRET}" ]] || [[ -n "${REDIRECTURI}" ]] || [[ -n "${AUTHORIZATIONCODE}" ]] || [[ -n "${ACCESSTOKEN}" ]] || [[ -n "${REFRESHTOKEN}" ]] || [[ -n "${PROFILEID}" ]]; then
+    if [[ -n "${CLIENT_ID}" ]] || [[ -n "${CLIENT_SECRET}" ]] || [[ -n "${REDIRECT_URI}" ]] || [[ -n "${AUTHORIZATION_CODE}" ]] || [[ -n "${ACCESS_TOKEN}" ]] || [[ -n "${REFRESH_TOKEN}" ]] || [[ -n "${PROFILE_ID}" ]]; then
       echo "<strong>Google Analytics</strong><br />"
-      [[ -n "${CLIENTID}" ]] && echo "Client ID: ${CLIENTID}<br />"
-      [[ -n "${CLIENTSECRET}" ]] && echo "Client secret: ${CLIENTSECRET}<br />"
-      [[ -n "${REDIRECTURI}" ]] && echo "Redirect URI: ${REDIRECTURI}<br />"
-      [[ -n "${AUTHORIZATIONCODE}" ]] && echo "Authorization code: ${AUTHORIZATIONCODE}<br />"
-      [[ -n "${ACCESSTOKEN}" ]] && echo "Access token: ${ACCESSTOKEN}<br />"
-      [[ -n "${REFRESHTOKEN}" ]] && echo "Refresh token: ${REFRESHTOKEN}<br />"
-      [[ -n "${PROFILEID}" ]] && echo "Profile ID: ${PROFILEID}<br />"
+      [[ -n "${CLIENT_ID}" ]] && echo "Client ID: ${CLIENT_ID}<br />"
+      [[ -n "${CLIENT_SECRET}" ]] && echo "Client secret: ${CLIENT_SECRET}<br />"
+      [[ -n "${REDIRECT_URI}" ]] && echo "Redirect URI: ${REDIRECT_URI}<br />"
+      [[ -n "${AUTHORIZATION_CODE}" ]] && echo "Authorization code: ${AUTHORIZATION_CODE}<br />"
+      [[ -n "${ACCESS_TOKEN}" ]] && echo "Access token: ${ACCESS_TOKEN}<br />"
+      [[ -n "${REFRESH_TOKEN}" ]] && echo "Refresh token: ${REFRESH_TOKEN}<br />"
+      [[ -n "${PROFILE_ID}" ]] && echo "Profile ID: ${PROFILE_ID}<br />"
       echo "<br />"
     fi
     # Server monitoring
-    if [[ -n "${MONITORURL}" ]] || [[ -n "${MONITORUSER}" ]] || [[ -n "${SERVERID}" ]]; then
+    if [[ -n "${MONITOR_URL}" ]] || [[ -n "${MONITOR_USER}" ]] || [[ -n "${SERVER_ID}" ]]; then
       echo "<strong>Server Monitoring</strong><br />"
-      [[ -n "${MONITORURL}" ]] && echo "Monitor URL: ${MONITORURL}<br />"
-      [[ -n "${MONITORUSER}" ]] && echo "User: ${MONITORUSER}<br />"
-      [[ -n "${SERVERID}" ]] && echo "Server ID: ${SERVERID}<br />"
+      [[ -n "${MONITOR_URL}" ]] && echo "Monitor URL: ${MONITOR_URL}<br />"
+      [[ -n "${MONITOR_USER}" ]] && echo "User: ${MONITOR_USER}<br />"
+      [[ -n "${SERVER_ID}" ]] && echo "Server ID: ${SERVER_ID}<br />"
       echo "<br />"
     fi
     # Dropbox integration
@@ -232,88 +232,88 @@ function email_test() {
     echo
     echo "Project Information"
     echo "-------------------"
-    [[ -n "${PROJNAME}" ]] && echo "Name: ${PROJNAME}"
-    [[ -n "${PROJCLIENT}" ]] && echo "Client: ${PROJCLIENT}"
-    [[ -n "${DEVURL}" ]] && echo "Staging URL: ${DEVURL}"
-    [[ -n "${PRODURL}" ]] && echo "Production URL: ${PRODURL}"
+    [[ -n "${PROJECT_NAME}" ]] && echo "Name: ${PROJECT_NAME}"
+    [[ -n "${PROJECT_CLIENT}" ]] && echo "Client: ${PROJECT_CLIENT}"
+    [[ -n "${DEV_URL}" ]] && echo "Staging URL: ${DEV_URL}"
+    [[ -n "${PROD_URL}" ]] && echo "Production URL: ${PROD_URL}"
     echo 
     # Git
-    if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECKBRANCH}" ]]; then
+    if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECK_BRANCH}" ]]; then
       echo "Git Configuration"
       echo "-----------------"
-      [[ -n "${REPO}" ]] && echo "Repo: ${REPOHOST}/${REPO}"
+      [[ -n "${REPO}" ]] && echo "Repo: ${REPO_HOST}/${REPO}"
       [[ -n "${MASTER}" ]] && echo "Master branch: ${MASTER}"
       [[ -n "${STAGING}" ]] && echo "Staging branch: ${STAGING}"
       [[ -n "${PRODUCTION}" ]] && echo "Production branch: ${PRODUCTION}"
       [[ -n "${AUTOMERGE}" ]] && echo "Auto merge: ${AUTOMERGE}"
       [[ -n "${STASH}" ]] && echo "File Stashing: ${STASH}"
-      [[ -n "${CHECKBRANCH}" ]] && echo "Force branch checking: ${CHECKBRANCH}"
+      [[ -n "${CHECK_BRANCH}" ]] && echo "Force branch checking: ${CHECK_BRANCH}"
       echo 
     fi
     # Wordpress
-    if [[ -n "${WPROOT}" ]] || [[ -n "${WPAPP}" ]] || [[ -n "${WPSYSTEM}" ]]; then
+    if [[ -n "${WP_ROOT}" ]] || [[ -n "${WP_APP}" ]] || [[ -n "${WP_SYSTEM}" ]]; then
       echo "Wordpress Setup"
       echo "---------------"
-      [[ -n "${WPROOT}" ]] && echo "Wordpress root: ${WPROOT}"
-      [[ -n "${WPAPP}" ]] && echo "Wordpress application: ${WPAPP}"
-      [[ -n "${WPSYSTEM}" ]] && echo "Wordpress system: ${WPSYSTEM}"
+      [[ -n "${WP_ROOT}" ]] && echo "Wordpress root: ${WP_ROOT}"
+      [[ -n "${WP_APP}" ]] && echo "Wordpress application: ${WP_APP}"
+      [[ -n "${WP_SYSTEM}" ]] && echo "Wordpress system: ${WP_SYSTEM}"
       echo
     fi
     # Deployment
-    if [[ -n "${DEPLOY}" ]] || [[ -n "${DONOTDEPLOY}" ]]; then
+    if [[ -n "${DEPLOY}" ]] || [[ -n "${DO_NOT_DEPLOY}" ]]; then
       echo "Deployment Configuration"
       echo "------------------------"
       [[ -n "${DEPLOY}" ]] && echo "Deploy command: ${DEPLOY}"
-      [[ -n "${DONOTDEPLOY}" ]] && echo "Disallow deployment: ${DONOTDEPLOY}"
+      [[ -n "${DO_NOT_DEPLOY}" ]] && echo "Disallow deployment: ${DO_NOT_DEPLOY}"
       echo
     fi
     # Notifications
-    if [[ -n "${TASK}" ]] || [[ -n "${TASKUSER}" ]] || [[ -n "${ADDTIME}" ]] || [[ -n "${POSTTOSLACK}" ]] || [[ -n "${SLACKERROR}" ]] || [[ -n "${PROFILEID}" ]] || [[ -n "${POSTURL}" ]]; then
+    if [[ -n "${TASK}" ]] || [[ -n "${TASK_USER}" ]] || [[ -n "${ADD_TIME}" ]] || [[ -n "${POST_TO_SLACK}" ]] || [[ -n "${SLACK_ERROR}" ]] || [[ -n "${PROFILE_ID}" ]] || [[ -n "${POST_URL}" ]]; then
       echo "Notifications"
       echo "-------------"
       [[ -n "${TASK}" ]] && echo "Task #: ${TASK}"
-      [[ -n "${TASKUSER}" ]] && echo "Task user: ${TASKUSER}"
-      [[ -n "${ADDTIME}" ]] && echo "Task time: ${ADDTIME}"
-      [[ -n "${POSTTOSLACK}" ]] && echo "Post to Slack: ${POSTTOSLACK}"
-      [[ -n "${SLACKERROR}" ]] && echo "Post errors to Slack: ${SLACKERROR}"
-      [[ -n "${POSTURL}" ]] && echo "Webhook URL: ${POSTURL}"
-      [[ -n "${PROFILEID}" ]] && echo "Google Analytics ID: ${PROFILEID}"
+      [[ -n "${TASK_USER}" ]] && echo "Task user: ${TASK_USER}"
+      [[ -n "${ADD_TIME}" ]] && echo "Task time: ${ADD_TIME}"
+      [[ -n "${POST_TO_SLACK}" ]] && echo "Post to Slack: ${POST_TO_SLACK}"
+      [[ -n "${SLACK_ERROR}" ]] && echo "Post errors to Slack: ${SLACK_ERROR}"
+      [[ -n "${POST_URL}" ]] && echo "Webhook URL: ${POST_URL}"
+      [[ -n "${PROFILE_ID}" ]] && echo "Google Analytics ID: ${PROFILE_ID}"
       echo
     fi
     # Logging
-    if [[ -n "${REMOTELOG}" ]] || [[ -n "${REMOTEURL}" ]] || [[ -n "${EXPIRELOGS}" ]] || [[ -n "${LOCALHOSTPOST}" ]] || [[ -n "${LOCALHOSTPATH}" ]] || [[ -n "${SCPPOST}" ]] || [[ -n "${SCPUSER}" ]] || [[ -n "${SCPHOST}" ]] || [[ -n "${SCPHOSTPATH}" ]] || [[ -n "${SCPPASS}" ]] || [[ -n "${REMOTETEMPLATE}" ]] || [[ -n "${REMOTETEMPLATE}" ]]; then
+    if [[ -n "${REMOTE_LOG}" ]] || [[ -n "${REMOTE_URL}" ]] || [[ -n "${EXPIRE_LOGS}" ]] || [[ -n "${POST_TO_LOCAL_HOST}" ]] || [[ -n "${LOCAL_HOST_PATH}" ]] || [[ -n "${SCP_POST}" ]] || [[ -n "${SCP_USER}" ]] || [[ -n "${SCP_HOST}" ]] || [[ -n "${SCP_HOST_PATH}" ]] || [[ -n "${SCP_PASS}" ]] || [[ -n "${REMOTE_TEMPLATE}" ]] || [[ -n "${REMOTE_TEMPLATE}" ]]; then
       echo "Logging"
       echo "-------"
       [[ -n "${TO}" ]] && echo "Send to: ${TO}"
-      [[ -n "${HTMLTEMPLATE}" ]] && echo "Email template: ${HTMLTEMPLATE}"
-      [[ -n "${CLIENTLOGO}" ]] && echo "Logo: ${CLIENTLOGO}"
+      [[ -n "${HTML_TEMPLATE}" ]] && echo "Email template: ${HTML_TEMPLATE}"
+      [[ -n "${CLIENT_LOGO}" ]] && echo "Logo: ${CLIENT_LOGO}"
       [[ -n "${COVER}" ]] && echo "Cover image: ${COVER}"
       [[ -n "${INCOGNITO}" ]] && echo "Logo: ${INCOGNITO}"
-      [[ -n "${REMOTELOG}" ]] && echo "Web logs: ${REMOTELOG}"
-      [[ -n "${REMOTEURL}" ]] && echo "Address: ${REMOTEURL}"
-      [[ -n "${EXPIRELOGS}" ]] && echo "Log expiration: ${EXPIRELOGS} days"
-      [[ -n "${REMOTETEMPLATE}" ]] && echo "Log template: ${REMOTETEMPLATE}"
-      [[ -n "${SCPPOST}" ]] && echo "Post with SCP/SSH: ${SCPPOST}"
-      [[ -n "${SCPUSER}" ]] && echo "SCP user: ${SCPUSER}"
-      [[ -n "${SCPHOST}" ]] && echo "Remote log host: ${SCPHOST}"
-      [[ -n "${SCPHOSTPATH}" ]] && echo "Remote log path: ${SCPHOSTPATH}"
-      [[ -n "${LOCALHOSTPOST}" ]] && echo "Save logs locally: ${LOCALHOSTPOST}"
-      [[ -n "${LOCALHOSTPATH}" ]] && echo "Path to local logs: ${}LOCALHOSTPATH"
+      [[ -n "${REMOTE_LOG}" ]] && echo "Web logs: ${REMOTE_LOG}"
+      [[ -n "${REMOTE_URL}" ]] && echo "Address: ${REMOTE_URL}"
+      [[ -n "${EXPIRE_LOGS}" ]] && echo "Log expiration: ${EXPIRE_LOGS} days"
+      [[ -n "${REMOTE_TEMPLATE}" ]] && echo "Log template: ${REMOTE_TEMPLATE}"
+      [[ -n "${SCP_POST}" ]] && echo "Post with SCP/SSH: ${SCP_POST}"
+      [[ -n "${SCP_USER}" ]] && echo "SCP user: ${SCP_USER}"
+      [[ -n "${SCP_HOST}" ]] && echo "Remote log host: ${SCP_HOST}"
+      [[ -n "${SCP_HOST_PATH}" ]] && echo "Remote log path: ${SCP_HOST_PATH}"
+      [[ -n "${POST_TO_LOCAL_HOST}" ]] && echo "Save logs locally: ${POST_TO_LOCAL_HOST}"
+      [[ -n "${LOCAL_HOST_PATH}" ]] && echo "Path to local logs: ${}LOCAL_HOST_PATH"
       echo
     fi
     # Weekly Digests
-    if [[ -n "${DIGESTEMAIL}" ]]; then
+    if [[ -n "${DIGEST_EMAIL}" ]]; then
       echo "Weekly Digests"
       echo "--------------"
-      [[ -n "${DIGESTEMAIL}" ]] && echo "Send to: ${DIGESTEMAIL}"
+      [[ -n "${DIGEST_EMAIL}" ]] && echo "Send to: ${DIGEST_EMAIL}"
       echo
     fi
     # Monthly Reporting
-    if [[ -n "${CLIENTCONTACT}" ]] || [[ -n "${INCLUDEHOSTING}" ]]; then
+    if [[ -n "${CLIENT_CONTACT}" ]] || [[ -n "${INCLUDE_HOSTING}" ]]; then
       echo "Monthly Reporting"
       echo "-----------------"
-      [[ -n "${CLIENTCONTACT}" ]] && echo "Client contact: ${CLIENTCONTACT}"
-      [[ -n "${INCLUDEHOSTING}" ]] && echo "Hosting notes: ${INCLUDEHOSTING}"
+      [[ -n "${CLIENT_CONTACT}" ]] && echo "Client contact: ${CLIENT_CONTACT}"
+      [[ -n "${INCLUDE_HOSTING}" ]] && echo "Hosting notes: ${INCLUDE_HOSTING}"
       echo
     fi
     # Invoice Ninja integration
@@ -329,25 +329,25 @@ function email_test() {
       echo
     fi
     # Google Analytics
-    if [[ -n "${CLIENTID}" ]] || [[ -n "${CLIENTSECRET}" ]] || [[ -n "${REDIRECTURI}" ]] || [[ -n "${AUTHORIZATIONCODE}" ]] || [[ -n "${ACCESSTOKEN}" ]] || [[ -n "${REFRESHTOKEN}" ]] || [[ -n "${PROFILEID}" ]]; then
+    if [[ -n "${CLIENT_ID}" ]] || [[ -n "${CLIENT_SECRET}" ]] || [[ -n "${REDIRECT_URI}" ]] || [[ -n "${AUTHORIZATION_CODE}" ]] || [[ -n "${ACCESS_TOKEN}" ]] || [[ -n "${REFRESH_TOKEN}" ]] || [[ -n "${PROFILE_ID}" ]]; then
       echo "Google Analytics"
       echo "----------------"
-      [[ -n "${CLIENTID}" ]] && echo "Client ID: ${CLIENTID}"
-      [[ -n "${CLIENTSECRET}" ]] && echo "Client secret: ${CLIENTSECRET}"
-      [[ -n "${REDIRECTURI}" ]] && echo "Redirect URI: ${REDIRECTURI}"
-      [[ -n "${AUTHORIZATIONCODE}" ]] && echo "Authorization code: ${AUTHORIZATIONCODE}"
-      [[ -n "${ACCESSTOKEN}" ]] && echo "Access token: ${ACCESSTOKEN}"
-      [[ -n "${REFRESHTOKEN}" ]] && echo "Refresh token: ${REFRESHTOKEN}"
-      [[ -n "${PROFILEID}" ]] && echo "Profile ID: ${PROFILEID}"
+      [[ -n "${CLIENT_ID}" ]] && echo "Client ID: ${CLIENT_ID}"
+      [[ -n "${CLIENT_SECRET}" ]] && echo "Client secret: ${CLIENT_SECRET}"
+      [[ -n "${REDIRECT_URI}" ]] && echo "Redirect URI: ${REDIRECT_URI}"
+      [[ -n "${AUTHORIZATION_CODE}" ]] && echo "Authorization code: ${AUTHORIZATION_CODE}"
+      [[ -n "${ACCESS_TOKEN}" ]] && echo "Access token: ${ACCESS_TOKEN}"
+      [[ -n "${REFRESH_TOKEN}" ]] && echo "Refresh token: ${REFRESH_TOKEN}"
+      [[ -n "${PROFILE_ID}" ]] && echo "Profile ID: ${PROFILE_ID}"
       echo
     fi
     # Server monitoring
-    if [[ -n "${MONITORURL}" ]] || [[ -n "${MONITORUSER}" ]] || [[ -n "${SERVERID}" ]]; then
+    if [[ -n "${MONITOR_URL}" ]] || [[ -n "${MONITOR_USER}" ]] || [[ -n "${SERVER_ID}" ]]; then
       echo "Server Monitoring"
       echo "-----------------"
-      [[ -n "${MONITORURL}" ]] && echo "Monitor URL: ${MONITORURL}"
-      [[ -n "${MONITORUSER}" ]] && echo "User: ${MONITORUSER}"
-      [[ -n "${SERVERID}" ]] && echo "Server ID: ${SERVERID}"
+      [[ -n "${MONITOR_URL}" ]] && echo "Monitor URL: ${MONITOR_URL}"
+      [[ -n "${MONITOR_USER}" ]] && echo "User: ${MONITOR_USER}"
+      [[ -n "${SERVER_ID}" ]] && echo "Server ID: ${SERVER_ID}"
       echo
     fi
     # Dropbox integration
@@ -373,30 +373,30 @@ function email_test() {
   # If an integration is setup, let's test it
   if [[ ! -z "${TASK}" ]]; then
     sleep 2
-    if [[ "${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL}" == ?*@?*.?* ]]; then
+    if [[ "${POST_EMAIL_HEAD}${TASK}${POST_EMAIL_TAIL}" == ?*@?*.?* ]]; then
       console "Testing integration to ${POSTEMAIL}"
       (
-      if [[ -z "${TASKUSER}" ]] || [[ -z "${ADDTIME}" ]]; then
+      if [[ -z "${TASK_USER}" ]] || [[ -z "${ADD_TIME}" ]]; then
         echo "From: ${FROM}"
       else
-        echo "From: ${TASKUSER}"
+        echo "From: ${TASK_USER}"
       fi
       echo "Reply-To: ${FROM} <${FROM}>"
-      echo "To: ${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL}"
+      echo "To: ${POST_EMAIL_HEAD}${TASK}${POST_EMAIL_TAIL}"
       echo "Subject: [TESTING] ${SUBJECT} - ${APP}"
       echo "Content-Type: text/plain"
       echo
       echo "This is a test email integration from stir ${VERSION}"
       echo "(https://github.com/EMRL/stir/)"
       echo
-      [[ -n "${PROJNAME}" ]] && echo "Name: ${PROJNAME}"
-      [[ -n "${PROJCLIENT}" ]] && echo "Client: ${PROJCLIENT}"
-      [[ -n "${DEVURL}" ]] && echo "Staging URL: ${DEVURL}"
-      [[ -n "${PRODURL}" ]] && echo "Production URL: ${PRODURL}"
+      [[ -n "${PROJECT_NAME}" ]] && echo "Name: ${PROJECT_NAME}"
+      [[ -n "${PROJECT_CLIENT}" ]] && echo "Client: ${PROJECT_CLIENT}"
+      [[ -n "${DEV_URL}" ]] && echo "Staging URL: ${DEV_URL}"
+      [[ -n "${PROD_URL}" ]] && echo "Production URL: ${PROD_URL}"
       ) | "${sendmail_cmd}" -t
       quiet_exit
     else
-      console "Integration email address ${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL} does not look valid"; quiet_exit
+      console "Integration email address ${POST_EMAIL_HEAD}${TASK}${POST_EMAIL_TAIL} does not look valid"; quiet_exit
     fi
   fi
 }

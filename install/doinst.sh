@@ -13,9 +13,9 @@ set -uo pipefail
 
 # Initialize variables 
 read -r OS VER EXITCODE dependencies option message fg_green fg_red fg_yellow \
-  reset YES NO NOT i k WORKPATH FIRSTRUN INPUTPATH TIMEOUT <<< ""
+  reset YES NO NOT i k WORK_PATH FIRSTRUN INPUTPATH TIMEOUT <<< ""
 echo "${OS} ${VER} ${EXITCODE} ${dependencies} ${option} ${message} ${fg_green} 
-  ${fg_red} ${reset} ${YES} ${NO} ${NOT} ${i} ${k} ${WORKPATH} 
+  ${fg_red} ${reset} ${YES} ${NO} ${NOT} ${i} ${k} ${WORK_PATH} 
   ${FIRSTRUN} ${INPUTPATH}" > /dev/null
 
 # No root, no fun
@@ -195,42 +195,42 @@ if [[ "${FIRSTRUN}" == "TRUE" ]]; then
 
   # If values need to be set, ask the user for input to setup global.conf
   #
-  # WORKPATH
-  if grep -q "{{WORKPATH}}" "/etc/stir/global.conf"; then
+  # WORK_PATH
+  if grep -q "{{WORK_PATH}}" "/etc/stir/global.conf"; then
     if [[ "${TIMEOUT}" != "TRUE" ]]; then
-      WORKPATH="/etc/stir/repos/"
+      WORK_PATH="/etc/stir/repos/"
       echo; echo "${fg_yellow}=> Where are all (or most) of your repos stored?${reset}" 
-      read -rp "[ Ex. ${WORKPATH} ]: " -e -i "${WORKPATH}" INPUTPATH
-      WORKPATH="${INPUTPATH:-$WORKPATH}"
-      if [[ -d "${WORKPATH}" ]]; then
-        if [[ -n "$(find ${WORKPATH} -type d -exec test -e '{}/.git' ';' -print -prune)" ]]; then
-          echo "Found git repos at ${WORKPATH} and using it as your default stir path"
+      read -rp "[ Ex. ${WORK_PATH} ]: " -e -i "${WORK_PATH}" INPUTPATH
+      WORK_PATH="${INPUTPATH:-$WORK_PATH}"
+      if [[ -d "${WORK_PATH}" ]]; then
+        if [[ -n "$(find ${WORK_PATH} -type d -exec test -e '{}/.git' ';' -print -prune)" ]]; then
+          echo "Found git repos at ${WORK_PATH} and using it as your default stir path"
         else
-          echo "Using ${WORKPATH} as your default stir path."
+          echo "Using ${WORK_PATH} as your default stir path."
         fi
       else
-        mkdir "${WORKPATH}"; error_check
-        [[ -d "${WORKPATH}" ]] && echo "Created ${WORKPATH} and using it as your default stir path."
+        mkdir "${WORK_PATH}"; error_check
+        [[ -d "${WORK_PATH}" ]] && echo "Created ${WORK_PATH} and using it as your default stir path."
       fi
     else
-      WORKPATH="$(cd -P .. && pwd -P)"
+      WORK_PATH="$(cd -P .. && pwd -P)"
     fi
-    sed_hack=$(echo "sed -i 's^{{WORKPATH}}^${WORKPATH}^g' /etc/stir/global.conf; sed -i 's^# WORKPATH^WORKPATH^g' /etc/stir/global.conf"); eval "${sed_hack}"
+    sed_hack=$(echo "sed -i 's^{{WORK_PATH}}^${WORK_PATH}^g' /etc/stir/global.conf; sed -i 's^# WORK_PATH^WORK_PATH^g' /etc/stir/global.conf"); eval "${sed_hack}"
   fi
 
-  # REPOHOST
-  if grep -q "{{REPOHOST}}" "/etc/stir/global.conf"; then
+  # REPO_HOST
+  if grep -q "{{REPO_HOST}}" "/etc/stir/global.conf"; then
     if [[ "${TIMEOUT}" != "TRUE" ]]; then
-      REPOHOST="http://github.com/username/"
+      REPO_HOST="http://github.com/username/"
       echo; echo "${fg_yellow}=> What is the URL where are all (or most) of your repos hosted?${reset}"
-      #echo "Enter the URL for your repository hosting, normally https://repohost.com/username/"
-      read -rp "[ Ex. ${REPOHOST} ]: " -e -i "${REPOHOST}" INPUTPATH
-      REPOHOST="${INPUTPATH:-$REPOHOST}"
+      #echo "Enter the URL for your repository hosting, normally https://REPO_HOST.com/username/"
+      read -rp "[ Ex. ${REPO_HOST} ]: " -e -i "${REPO_HOST}" INPUTPATH
+      REPO_HOST="${INPUTPATH:-$REPO_HOST}"
     else
       # This is for automated unit testing
-      REPOHOST="http://github.com/emrl/"
+      REPO_HOST="http://github.com/emrl/"
     fi
-    sed_hack=$(echo "sed -i 's^{{REPOHOST}}^${REPOHOST}^g' /etc/stir/global.conf; sed -i 's^# REPOHOST^REPOHOST^g' /etc/stir/global.conf"); eval "${sed_hack}"
+    sed_hack=$(echo "sed -i 's^{{REPO_HOST}}^${REPO_HOST}^g' /etc/stir/global.conf; sed -i 's^# REPO_HOST^REPO_HOST^g' /etc/stir/global.conf"); eval "${sed_hack}"
   fi
 
   # Additional configuration stuff will go here

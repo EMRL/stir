@@ -12,8 +12,8 @@ var=(NIKTO NIKTO_CONFIG NIKTO_PROXY scan_html SCAN_RESULT SCAN_MSG \
 init_loop
 
 function scan_check() {
-  if [[ -n "${PRODURL}" ]] || [[ -n "${NIKTO}" ]]; then
-    SCAN_URL="${REMOTEURL}/${APP}/scan/"
+  if [[ -n "${PROD_URL}" ]] || [[ -n "${NIKTO}" ]]; then
+    SCAN_URL="${REMOTE_URL}/${APP}/scan/"
 
     SCAN_RESULT=$(echo "${SCAN_MSG//  <td>}")
     # Piping through tac is a workaround to solve a timing issue, see 
@@ -45,7 +45,7 @@ function scan_host() {
   }
 
   # Only scan production URL
-  if [[ -z "${PRODURL}" ]]; then
+  if [[ -z "${PROD_URL}" ]]; then
     warning "Production server is not defined, check your setup."; quiet_exit
   fi
 
@@ -53,13 +53,13 @@ function scan_host() {
   scan_html="/tmp/${APP}.scan-$RANDOM.html"; (umask 077 && touch "${scan_html}" &> /dev/null) || log_fail
   
   # Run the scan
-  trace "Scanning ${PRODURL}..."
+  trace "Scanning ${PROD_URL}..."
   # Spinners commented out for now, causing issues when running from a crontab
   if [[ -z "${NIKTO_PROXY}" ]]; then
-    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -Tuning 013789c -no404 -output "${scan_html}" -host "${PRODURL}" > "${scan_file}" #&
+    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -Tuning 013789c -no404 -output "${scan_html}" -host "${PROD_URL}" > "${scan_file}" #&
     #spinner $!
   else
-    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -no404 -output "${scan_html}" -useproxy "${NIKTO_PROXY}" -host "${PRODURL}" > "${scan_file}" #&
+    "${NIKTO}" -config "${NIKTO_CONFIG}" -nointeractive -ask no -Display VE14 -no404 -output "${scan_html}" -useproxy "${NIKTO_PROXY}" -host "${PROD_URL}" > "${scan_file}" #&
     #spinner $!
   fi
 
@@ -98,7 +98,7 @@ function scan_host() {
   assign_nav
   project_scan
 
-  cat "${stir_path}/html/${HTMLTEMPLATE}/scan/header.html" "${scan_html}" "${stir_path}/html/${HTMLTEMPLATE}/scan/footer.html" > "${html_file}"
+  cat "${stir_path}/html/${HTML_TEMPLATE}/scan/header.html" "${scan_html}" "${stir_path}/html/${HTML_TEMPLATE}/scan/footer.html" > "${html_file}"
 
   SCAN_MSG=$(grep -a "error" "${html_file}")
 
@@ -123,7 +123,7 @@ function scan_host() {
   cp "${html_file}" "${scan_html}"
   
   LOGTITLE="Malware Scan"
-  notes="Malware scan on ${PRODURL}: ${SCAN_RESULT}"
+  notes="Malware scan on ${PROD_URL}: ${SCAN_RESULT}"
 
   clean_exit
 }

@@ -26,7 +26,7 @@ function project_stats() {
     quiet_exit
   fi
   
-  if [[ "${REMOTELOG}" == "TRUE" ]]; then
+  if [[ "${REMOTE_LOG}" == "TRUE" ]]; then
   # Check for approval queue
   queue_check
 
@@ -36,9 +36,9 @@ function project_stats() {
     #fi
 
     # Prep assets
-    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/css" "${stat_dir}/"
-    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/fonts" "${stat_dir}/"
-    cp -R "${stir_path}/html/${HTMLTEMPLATE}/stats/js" "${stat_dir}/"
+    cp -R "${stir_path}/html/${HTML_TEMPLATE}/stats/css" "${stat_dir}/"
+    cp -R "${stir_path}/html/${HTML_TEMPLATE}/stats/fonts" "${stat_dir}/"
+    cp -R "${stir_path}/html/${HTML_TEMPLATE}/stats/js" "${stat_dir}/"
 
     echo -n "Generating files"
 
@@ -62,7 +62,7 @@ function project_stats() {
     validate_urls "${stat_file}"
 
     # Process the HTML
-    cat "${stir_path}/html/${HTMLTEMPLATE}/stats/index.html" > "${html_file}"
+    cat "${stir_path}/html/${HTML_TEMPLATE}/stats/index.html" > "${html_file}"
     process_html
 
     cat "${html_file}" > "${stat_dir}/index.html"
@@ -72,7 +72,7 @@ function project_stats() {
     repo_charts=(authors commits_day_week commits_hour_day commits_hour_week \
       commits_month commits_year commits_year_month files_type)
     for i in "${repo_charts[@]}" ; do
-      "${gitchart_cmd}" -r "${WORKPATH}/${APP}" "${i}" "${stat_dir}/${i}.svg" &>> /dev/null
+      "${gitchart_cmd}" -r "${WORK_PATH}/${APP}" "${i}" "${stat_dir}/${i}.svg" &>> /dev/null
       sed -i "s/#9999ff/${CHARTC}/g" "${stat_dir}/${i}.svg" 
       sed -i 's/Consolas,"Liberation Mono",Menlo,Courier,monospace/Roboto, Helvetica, Arial, sans-serif/g' "${stat_dir}/${i}.svg"
     done #&
@@ -100,13 +100,13 @@ function project_activity() {
   validate_urls "${stat_file}"
 
   # Process the HTML
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/activity.html" > "${html_file}"
+  cat "${stir_path}/html/${HTML_TEMPLATE}/stats/activity.html" > "${html_file}"
   process_html; cat "${html_file}" > "${stat_dir}/activity.html"
 }
 
 function project_statistics() {
   # Process the HTML
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/stats.html" > "${html_file}"
+  cat "${stir_path}/html/${HTML_TEMPLATE}/stats/stats.html" > "${html_file}"
   process_html; cat "${html_file}" > "${stat_dir}/stats.html"
 }
 
@@ -118,23 +118,23 @@ function project_scan(){
   #fi
   
   SCAN_STATS=$(<${scan_html})
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/scan.html" > "${html_file}"
+  cat "${stir_path}/html/${HTML_TEMPLATE}/stats/scan.html" > "${html_file}"
   process_html; cat "${html_file}" > "${stat_dir}/scan.html"
 }
 
 function project_firewall() {
   # Process the HTML
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/firewall.html" > "${html_file}"
+  cat "${stir_path}/html/${HTML_TEMPLATE}/stats/firewall.html" > "${html_file}"
   process_html; cat "${html_file}" > "${stat_dir}/firewall.html"
 }
 
 function project_engagement() {
-  if [[ -z "${PROFILEID}" ]]; then
+  if [[ -z "${PROFILE_ID}" ]]; then
     trace "Google Analytics not configured"
     return
   fi
   
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/engagement.html" > "${html_file}"
+  cat "${stir_path}/html/${HTML_TEMPLATE}/stats/engagement.html" > "${html_file}"
 
   # How many days of analytics to display?
   if [[ -z "${ENGAGEMENT_DAYS}" ]]; then
@@ -154,7 +154,7 @@ function project_engagement() {
 
 function project_css() {
   # Process the CSS files
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/css/${THEME_MODE}.css" > "${html_file}"
+  cat "${stir_path}/html/${HTML_TEMPLATE}/stats/css/${THEME_MODE}.css" > "${html_file}"
   process_html; cat "${html_file}" > "${stat_dir}/css/${THEME_MODE}.css"
 }
 
@@ -170,7 +170,7 @@ function project_backup() {
   echo "${BACKUP_FILES}" > "${trash_file}"
 
   # Process the HTML
-  cat "${stir_path}/html/${HTMLTEMPLATE}/stats/backup.html" > "${html_file}"
+  cat "${stir_path}/html/${HTML_TEMPLATE}/stats/backup.html" > "${html_file}"
   process_html; cat "${html_file}" > "${stat_dir}/backup.html"
 }
 
@@ -232,7 +232,7 @@ function check_backup() {
 
 # Usage: get_commits [number of commits]
 function get_commits() {
-  git log -n $1 --pretty=format:"%n<table style=\"border-bottom: solid 1px rgba(127, 127, 127, 0.25);\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr><td width=\"90\" valign=\"top\" align=\"left\"><img src=\"{{GRAVATARURL}}/%an.png\" alt=\"%aN\" title=\"%aN\" width=\"64\" style=\"width: 64px; float: left; background-color: #f0f0f0; overflow: hidden; margin-top: 4px;\" class=\"img-circle\"></td><td valign=\"top\" style=\"padding-bottom: 20px;\"><strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table><br>" > "${stat_file}"
+  git log -n $1 --pretty=format:"%n<table style=\"border-bottom: solid 1px rgba(127, 127, 127, 0.25);\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr><td width=\"90\" valign=\"top\" align=\"left\"><img src=\"{{GRAVATARURL}}/%an.png\" alt=\"%aN\" title=\"%aN\" width=\"64\" style=\"width: 64px; float: left; background-color: #f0f0f0; overflow: hidden; margin-top: 4px;\" class=\"img-circle\"></td><td valign=\"top\" style=\"padding-bottom: 20px;\"><strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTE_URL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table><br>" > "${stat_file}"
   sed -i '/^commit/ s/$/ <\/strong><br>/' "${stat_file}"
   sed -i '/^Author:/ s/$/ <br>/' "${stat_file}"
   sed -i '/^Date:/ s/$/ <br><br>/' "${stat_file}"
@@ -244,7 +244,7 @@ function validate_urls() {
   while read URL; do
     CODE=$(${curl_cmd} -o /dev/null --silent --head --write-out '%{http_code}' "$URL")
     if [[ "${CODE}" != "200" ]]; then 
-      sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${stat_file}"
+      sed -i "s,${URL},${REMOTE_URL}/nolog.html,g" "${stat_file}"
     fi
   done < "${trash_file}"
 }
@@ -253,7 +253,7 @@ function assign_nav() {
   # Assign URLs - this will change later on
   ACTIVITY_NAV="activity.html"
   STATISTICS_NAV="stats.html"
-  [[ -n "${PROFILEID}" ]] && ENGAGEMENT_NAV="engagement.html"
+  [[ -n "${PROFILE_ID}" ]] && ENGAGEMENT_NAV="engagement.html"
   [[ -n "${SCAN_MSG}" ]] && SCAN_NAV="scan.html"
   [[ -n "${FIREWALL_NAV}" ]] && FIREWALL_NAV="firewall.html"
   [[ -n "${BACKUP_STATUS}" ]] && BACKUP_NAV="backup.html"

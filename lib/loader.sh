@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Save current contents of the terminal
-if [[ "${CLEARSCREEN}" == "TRUE" ]]; then
+if [[ "${CLEAR_SCREEN}" == "TRUE" ]]; then
   if [[ "${QUIET}" != "1" ]] && [[ "${VERBOSE}" != "TRUE" ]]; then
     tput smcup; clear
   fi

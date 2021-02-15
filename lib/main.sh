@@ -38,9 +38,9 @@ function main() {
   elif [[ "${SCAN}" == "1" ]]; then
     scan_host
   else
-    server_check      # Check that servers are up and running
+    CHECK_SERVER      # Check that servers are up and running
     
-    if [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then
+    if [[ "${DISABLE_SSH_CHECK}" != "TRUE" ]]; then
       ssh_check   # Check keys
     fi
     if [[ "${PUBLISH}" == "1" ]]; then
@@ -71,18 +71,18 @@ function main() {
 
         proj_deploy      # Deploy project to live server
         return 0
-      elif [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
+      elif [[ ! -f "${WORK_PATH}/${APP}/.queued" ]]; then
         pre_deploy      # Get the status
       fi
 
 
       # Check for approval/deny/queue
-      if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
+      if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]]; then
         notice "Approval queue functions are deprecated and will be removed soon."
-        if [[ "${APPROVE}" == "1" ]] || [[ -f "${WORKPATH}/${APP}/.approved" ]]; then
+        if [[ "${APPROVE}" == "1" ]] || [[ -f "${WORK_PATH}/${APP}/.approved" ]]; then
           approve     # Approve proposed changes
         else
-          if [[ "${DENY}" == "1" ]] || [[ -f "${WORKPATH}/${APP}/.denied" ]]; then 
+          if [[ "${DENY}" == "1" ]] || [[ -f "${WORK_PATH}/${APP}/.denied" ]]; then 
             deny      # Deny proposed changes
           fi
         fi
@@ -95,12 +95,12 @@ function main() {
         status        # Make sure there's something here to commit         
       fi
 
-      if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
+      if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ ! -f "${WORK_PATH}/${APP}/.queued" ]]; then
         notice "Approval queue functions are deprecated and will be removed soon."
         queue 		    # Queue for approval if needed
       fi
 
-      if [[ "${APPROVE}" != "1" ]] && [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
+      if [[ "${APPROVE}" != "1" ]] && [[ ! -f "${WORK_PATH}/${APP}/.queued" ]]; then
         stage         # Stage files     
         commit     # Commit, with message
       fi 

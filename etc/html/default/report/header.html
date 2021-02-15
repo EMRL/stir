@@ -4,7 +4,7 @@
 
 <head>
 	<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-	<title>Monthly Maintenance Report for {{PROJCLIENT}}</title>
+	<title>Monthly Maintenance Report for {{PROJECT_CLIENT}}</title>
 	<link rel='stylesheet' type='text/css' href='css/style.css' />
 	<link rel='stylesheet' type='text/css' href='css/print.css' media="print" />
 	<script src="https://code.jquery.com/jquery-1.3.2.min.js"></script>
@@ -20,13 +20,13 @@
 		<div style="clear:both"></div>
 		<strong>{{LASTMONTH}} maintenance report for</strong>
 		<div id="customer">
-			<h1>{{PROJCLIENT}}<br />
-				<!--[CLIENTCONTACT]--><textarea style="font-size: 20px;">c/o {{CLIENTCONTACT}}</textarea>
+			<h1>{{PROJECT_CLIENT}}<br />
+				<!--[CLIENT_CONTACT]--><textarea style="font-size: 20px;">c/o {{CLIENT_CONTACT}}</textarea>
 			</h1>
 
 			<div id="desc">
 				<p>
-					This report for the month of {{LASTMONTH}} includes notes on system updates, security patches, and other code changes on <a style="color: {{PRIMARY}}; text-decoration: none; font-weight: bold;" href="{{PRODURL}}">{{PRODURL}}</a>
+					This report for the month of {{LASTMONTH}} includes notes on system updates, security patches, and other code changes on <a style="color: {{PRIMARY}}; text-decoration: none; font-weight: bold;" href="{{PROD_URL}}">{{PROD_URL}}</a>
 				</p>
 			</div>
 

@@ -11,7 +11,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.8.4"
+VERSION="3.8.5-dev"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 last_month="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
@@ -38,7 +38,7 @@ function init_startup() {
     SLACKTEST FUNCTION_LIST VARIABLE_LIST AUTOMATE EMAILTEST APPROVE \
     DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
     SSHTEST TIME UPDATEONLY test_webhook REPORT REPAIR CREATE_INVOICE SCAN \
-    CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET \
+    CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET MIGRATE \
     SHOW_SETTINGS UNIT_TEST test_bugsnag UPDATE_ACF DEBUG_TO_FILE)
   init_loop
 }
@@ -59,19 +59,19 @@ function init_color() {
 
 # Constants and environment variables
 function init_env() {
-  var=(CLEARSCREEN WORKPATH CONFIGDIR CONFIG_BACKUP REPOHOST SMARTCOMMIT \
-  GITSTATS EMAILHTML NOPHP TO FROM SUBJECT EMAILERROR EMAILSUCCESS EMAILQUIT \
-  FROMDOMAIN FROMUSER POSTEMAILHEAD POSTEMAILTAIL POSTTOSLACK SLACKURL \
-  SLACKERROR POSTURL NOKEY PROJNAME PROJCLIENT DEVURL PRODURL REPO MASTER \
-  STAGING PRODUCTION COMMITMSG DEPLOY DONOTDEPLOY TASK CHECKBRANCH \
-  ACTIVECHECK CHECKTIME GARBAGE WFCHECK ACFKEY ACF_LOCK WFOFF REMOTELOG \
-  REMOTETEMPLATE LOCALHOSTPOST LOCALHOSTPATH DIGESTEMAIL DIGESTSLACK \
-  DIGESTURL CLIENTLOGO REMOTEURL SCPPOST SCPUSER SCPHOST SCPHOSTPATH \
-  SCPPASS SCPCMD SSHCMD LOGMSG EXPIRELOGS SERVERCHECK STASH \
-  REQUIREAPPROVAL ADDTIME SCPPORT TASKUSER CLIENTID CLIENTSECRET \
-  REDIRECTURI AUTHORIZATIONCODE ACCESSTOKEN REFRESHTOKEN PROFILEID ALLOWROOT \
-  SHORTEMAIL INCOGNITO REPORTURL CLIENTCONTACT INCLUDEHOSTING GLOBAL_VERSION \
-  USER_VERSION PROJECT_VERSION TERSE NOTIFYCLIENT HTMLTEMPLATE PREPARE \
+  var=(CLEAR_SCREEN WORK_PATH CONFIG_DIR CONFIG_BACKUP REPO_HOST SMART_COMMIT \
+  GIT_STATS EMAIL_HTML NO_PHP TO FROM SUBJECT EMAIL_ERROR EMAIL_SUCCESS EMAIL_QUIT \
+  FROM_DOMAIN FROM_USER POST_EMAIL_HEAD POST_EMAIL_TAIL POST_TO_SLACK SLACK_URL \
+  SLACK_ERROR POST_URL NO_KEY PROJECT_NAME PROJECT_CLIENT DEV_URL PROD_URL REPO MASTER \
+  STAGING PRODUCTION COMMIT_MSG DEPLOY DO_NOT_DEPLOY TASK CHECK_BRANCH \
+  CHECK_ACTIVE CHECK_TIME GARBAGE WF_CHECK ACF_KEY ACF_LOCK WFOFF REMOTE_LOG \
+  REMOTE_TEMPLATE POST_TO_LOCAL_HOST LOCAL_HOST_PATH DIGEST_EMAIL DIGEST_SLACK \
+  DIGESTURL CLIENT_LOGO REMOTE_URL SCP_POST SCP_USER SCP_HOST SCP_HOSTPATH \
+  SCP_PASS SCPCMD SSHCMD LOGMSG EXPIRE_LOGS CHECK_SERVER STASH \
+  REQUIRE_APPROVAL ADD_TIME SCP_PORT TASK_USER CLIENT_ID CLIENT_SECRET \
+  REDIRECT_URI AUTHORIZATION_CODE ACCESS_TOKEN REFRESH_TOKEN PROFILE_ID ALLOW_ROOT \
+  SHORT_EMAIL INCOGNITO REPORTURL CLIENT_CONTACT INCLUDE_HOSTING GLOBAL_VERSION \
+  USER_VERSION PROJECT_VERSION TERSE NOTIFYCLIENT HTML_TEMPLATE PREPARE \
   PRODUCTION_DEPLOY_HOST PRODUCTION_DEPLOY_PATH PREPARE_CONFIG \
   GRAVITY_FORMS_LICENSE NEWS_URL BUGSNAG_AUTH USE_SMTP INCLUDE_DETAILS \
   NO_LOG)
@@ -86,11 +86,11 @@ function init_internal() {
   UPDCORE TASKLOG PCA PCB PCC PCD PLUGINS slack_icon APPRC USERRC message_state \
   COMMITURL COMMITHASH UPD1 UPD2 UPDATE git_lock AUTOMERGE MERGE EXITCODE \
   current_stash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
-  VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WPROOT \
-  WPAPP WPSYSTEM DONOTUPDATEWP gitHistory digest_payload MINAUSER \
+  VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WP_ROOT \
+  WP_APP WP_SYSTEM DO_NOT_UPDATE_WP gitHistory digest_payload MINAUSER \
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE  LOGSUFFIX \
-  DISABLESSHCHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile \
-  TMP MONITORURL MONITORUSER MONITORPASS SERVERID \
+  DISABLE_SSH_CHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile \
+  TMP MONITOR_URL MONITOR_USER MONITOR_PASS SERVER_ID \
   MONITORHOURS LATENCY UPTIME MONITORTEST MONITORAPI IN_HOST IN_TOKEN)
   init_loop
 }
@@ -205,6 +205,7 @@ Other Options:
   --repair               Repair a deployment after merge failure
   --scan                 Scan production hosts for malware issues
   --update-acf           Force an update or reinstall of ACF Pro
+  --migrate              Migrate global configuration files to newest format
   --test-ssh             Validate SSH key setup
   --test-email           Test email configuration
   --test-slack           Test Slack integration
@@ -277,7 +278,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --deny) DENY="1"; FORCE="1" ;;
     -p|--prepare) PREPARE="1" ;;
     --reset) RESET="1" ;;
-     --prepare-with-reset) PREPARE_WITH_RESET="1"; PREPARE="1" ;;
+    --prepare-with-reset) PREPARE_WITH_RESET="1"; PREPARE="1" ;;
     --digest) DIGEST="1"; FORCE="1" ;;
     --report) REPORT="1"; FORCE="1";; #QUIET="1" ;;
     --automate) FORCE="1"; UPGRADE="1"; QUIET="1"; MERGE="1"; AUTOMATE="1" ;;
@@ -300,6 +301,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --function-list) FUNCTION_LIST="1"; CURRENT="1"; NO_LOG="1" ;; # Spoofs --current
     --variable-list) VARIABLE_LIST="1"; CURRENT="1"; NO_LOG="1" ;; # Spoofs --current
     --unit-test) UNIT_TEST="1"; NO_LOG="1" ;;
+    --migrate) MIGRATE="1" ;;
     --endopts) shift; break ;;
     *) echo "Invalid option: '$1'" 1>&2 ; exit 1 ;;
   esac
@@ -324,8 +326,21 @@ APP=("${@}") # Originally I had it like this: APP+=("${@}") I can't remember why
 
 # Check to see if the user is deploying from current working directory
 if [[ "${CURRENT}" == "1" ]]; then
-  WORKPATH="$(dirname "${PWD}")"
+  WORK_PATH="$(dirname "${PWD}")"
   APP="${PWD##*/}"
+fi
+
+# Immediately migrate to newer project format if needed
+if [[ ${MIGRATE} == "1" ]]; then
+  i="/etc/stir/global.conf"
+  if [[ ! -w "${i}" ]]; then
+    echo "Migration requires sudo access."
+    echo "Format: sudo stir --migrate"
+    exit
+  fi
+  local_version="null"
+  source "/etc/stir/lib/migrate.sh"
+  migrate_variables
 fi
 
 # Get the active switches for display in log_files
@@ -387,13 +402,13 @@ else
 fi
 
 # If global.conf appears empty, launch configuration options
-if [[ -z "#{WORKPATH}" ]]; then
+if [[ -z "#{WORK_PATH}" ]]; then
   configure_global
 fi
 
 # Check to see if the user is deploying from current working directory
 if [[ "${CURRENT}" == "1" ]]; then
-  WORKPATH="$(dirname "${PWD}")"
+  WORK_PATH="$(dirname "${PWD}")"
   APP="${PWD##*/}"
 fi
 
@@ -404,8 +419,8 @@ if [[ "${CURRENT}" != "1" ]]; then
     echo "Choose a valid project, or use the --current flag to work in the current directory."
     exit 13
   else
-    if [[ ! -d "${WORKPATH}/${APP}" ]]; then
-      echo "${WORKPATH}/${APP} is not a valid project."
+    if [[ ! -d "${WORK_PATH}/${APP}" ]]; then
+      echo "${WORK_PATH}/${APP} is not a valid project."
       exit 17
     fi
   fi
@@ -484,13 +499,13 @@ if [[ "${USERRC}" != "1" ]]; then
 fi
 
 # Load per-project configuration, if it exists
-if [[ -f "${WORKPATH}/${APP}/.stir.sh" ]]; then
+if [[ -f "${WORK_PATH}/${APP}/.stir.sh" ]]; then
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    trace "Loading project configuration from ${WORKPATH}/${APP}/.stir.sh"
+    trace "Loading project configuration from ${WORK_PATH}/${APP}/.stir.sh"
   fi
-  project_config="${WORKPATH}/${APP}/.stir.sh"
-  # Zero out the global configdir variable
-  CONFIGDIR=""
+  project_config="${WORK_PATH}/${APP}/.stir.sh"
+  # Zero out the global CONFIG_DIR variable
+  CONFIG_DIR=""
 else
   trace "No project configuration file found"
 fi
@@ -501,10 +516,10 @@ if [[ -n "${project_config}" ]]; then
   APPRC="1"
 else
   # Make sure app directory is writable
-  if [[ -w "${WORKPATH}/${APP}" ]]; then
+  if [[ -w "${WORK_PATH}/${APP}" ]]; then
     empty_line; info "Project configuration not found, creating."; sleep 2
-    cp "${stir_path}"/stir-project.sh "${WORKPATH}/${APP}/.stir.sh"
-    APPRC="${WORKPATH}/${APP}/.stir.sh"
+    cp "${stir_path}"/stir-project.sh "${WORK_PATH}/${APP}/.stir.sh"
+    APPRC="${WORK_PATH}/${APP}/.stir.sh"
     if [[ -x "$(command -v nano)" ]]; then
       if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
         nano "${APPRC}"
@@ -526,17 +541,17 @@ get_fullpath
 check_dependencies  
 
 # Are we using "smart" *cough* commits?
-if [[ "${SMARTCOMMIT}" == "TRUE" ]]; then
+if [[ "${SMART_COMMIT}" == "TRUE" ]]; then
   trace "Smart commits enabled"
 fi
 
 # Are any integrations setup?
-if [[ "${POSTTOSLACK}" == "TRUE" ]]; then
+if [[ "${POST_TO_SLACK}" == "TRUE" ]]; then
   trace "Slack integration enabled"
 fi
 
 # Integration email
-POSTEMAIL="${POSTEMAILHEAD}${TASK}${POSTEMAILTAIL}"
+POSTEMAIL="${POST_EMAIL_HEAD}${TASK}${POST_EMAIL_TAIL}"
 if [[ -n "${POSTEMAIL}" ]]; then
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
     trace "Email integration enabled (${POSTEMAIL})"
@@ -546,9 +561,9 @@ if [[ -n "${POSTEMAIL}" ]]; then
 fi
 
 # Load HTML theme configuration
-if [[ -f "${stir_path}/html/${HTMLTEMPLATE}/theme.conf" ]]; then
+if [[ -f "${stir_path}/html/${HTML_TEMPLATE}/theme.conf" ]]; then
   # shellcheck disable=1090
-  source "${stir_path}/html/${HTMLTEMPLATE}/theme.conf"
+  source "${stir_path}/html/${HTML_TEMPLATE}/theme.conf"
 
   # Lowercase dashboard class is better form
   if [[ -n "${THEME_MODE}" ]]; then
@@ -557,14 +572,14 @@ if [[ -f "${stir_path}/html/${HTMLTEMPLATE}/theme.conf" ]]; then
 fi
 
 # Remote logging?
-if [[ "${REMOTELOG}" == "TRUE" ]]; then
+if [[ "${REMOTE_LOG}" == "TRUE" ]]; then
   trace "Remote log posting enabled"
 fi
 
 # General info
 if [[ "${INCOGNITO}" != "TRUE" ]]; then
   trace "Log file is ${log_file}"
-  trace "Project workpath is ${WORKPATH}"
+  trace "global workpath is ${WORK_PATH}"
 fi
 
 # Check for upcoming merge
@@ -575,7 +590,7 @@ fi
 
 # If using --automate, force branch checking
 if [[ "${AUTOMATE}" == "1" ]] || [[ "${REPAIR}" == "1" ]]; then
-  CHECKBRANCH="${MASTER}";
+  CHECK_BRANCH="${MASTER}";
   trace "Enforcing branch checking: ${MASTER}"
 fi
 
@@ -594,13 +609,13 @@ if [[ "${PUBLISH}" == "1" ]]; then
 fi
 
 # If approval required, are smart commits enabled?
-if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${SMARTCOMMIT}" != "TRUE" ]]; then
-  SMARTCOMMIT="TRUE"
+if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${SMART_COMMIT}" != "TRUE" ]]; then
+  SMART_COMMIT="TRUE"
   trace "Enabling smart commits for approval queue" 
 fi
 
 # Has this repo already been approved?
-if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]] && [[ -f "${WORKPATH}/${APP}/.approved" ]]; then 
+if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]] && [[ -f "${WORK_PATH}/${APP}/.approved" ]]; then 
   APPROVE="1"; FORCE="1"
 fi
 
@@ -610,19 +625,19 @@ if [[ "${APPROVE}" == "1" ]] && [[ "${DENY}" == "1" ]]; then
 fi
 
 # Check if a deployment is queued
-if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
+if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]]; then
   if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
     queue_check
   fi
-  if [[ "${DENY}" == "1" ]] || [[ -f "${WORKPATH}/${APP}/.denied" ]]; then
+  if [[ "${DENY}" == "1" ]] || [[ -f "${WORK_PATH}/${APP}/.denied" ]]; then
     deny
   fi
 fi
 
 # Check if approval is queued
-if [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
+if [[ ! -f "${WORK_PATH}/${APP}/.queued" ]]; then
   if [[ "${APPROVE}" == "1" ]] || [[ "${DENY}" == "1" ]]; then
-    if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
+    if [[ "${REQUIRE_APPROVAL}" != "TRUE" ]]; then
       warning "This project is not configured to require approval." 
     else  
       warning "No outstanding approval request found."
@@ -632,8 +647,8 @@ if [[ ! -f "${WORKPATH}/${APP}/.queued" ]]; then
 fi
 
 # Disable SSH check for those that will never need it
-if [[ "${NOKEY}" == "TRUE" ]]; then
-  DISABLESSHCHECK="TRUE"
+if [[ "${NO_KEY}" == "TRUE" ]]; then
+  DISABLE_SSH_CHECK="TRUE"
 fi
 
 # If user is trying to merge, make sure a second branch is configured
@@ -657,10 +672,10 @@ if [[ "${MERGE}" == "1" ]]; then
 fi
 
 # Set app path
-APP_PATH="${WORKPATH}/${APP}"
+APP_PATH="${WORK_PATH}/${APP}"
 
 if [[ -f "${APP_PATH}/.donotstir" ]] || [[ -f "${APP_PATH}/.shaken" ]]; then
-  DONOTDEPLOY="TRUE"
+  DO_NOT_DEPLOY="TRUE"
 fi
 
 # Execute the main application

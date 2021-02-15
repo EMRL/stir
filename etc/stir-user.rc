@@ -11,14 +11,14 @@
 # This value indicates the version number when this file was last changed:
 # it does not necessarily reflect stir's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-USER_VERSION="3.8.3"
+USER_VERSION="3.8.5"
 
 # Clear screen on startup, when not running with --quiet or --verbose switch
-# CLEARSCREEN="{{CLEARSCREEN}}"
+# CLEAR_SCREEN="{{CLEAR_SCREEN}}"
 
 # Verbose output to console?
 # VERBOSE="{{VERBOSE}}"
 
 # If you want to see statistics about your recent git activity,
 # set this value to exactly "TRUE"
-# GITSTATS="{{GITSTATS}}"
+# GIT_STATS="{{GIT_STATS}}"

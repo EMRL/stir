@@ -8,7 +8,7 @@
 
 # Initializa needed variables
 var=(AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMGFILE DIGESTWRAP \
-  DIGESTSLACK GREETING NO_ACTIVITY)
+  DIGEST_SLACK GREETING NO_ACTIVITY)
 init_loop
 
 function get_avatars() {
@@ -24,8 +24,8 @@ function get_avatars() {
       GRAVATAR="http://www.gravatar.com/avatar"
     fi
 
-    if [[ "${SCPPOST}" != "TRUE" ]]; then 
-      IMGFILE="${LOCALHOSTPATH}/${APP}/avatar/$AUTHORNAME.png"
+    if [[ "${SCP_POST}" != "TRUE" ]]; then 
+      IMGFILE="${LOCAL_HOST_PATH}/${APP}/avatar/$AUTHORNAME.png"
     else
       #if [[ ! -d "/tmp/avatar" ]]; then
       #  umask 077 && mkdir /tmp/avatar &> /dev/null
@@ -38,12 +38,12 @@ function get_avatars() {
 
 function get_digest_commits() {
   # Get ready
-  DIGESTWRAP="$(<${stir_path}/html/${HTMLTEMPLATE}/digest/commit.html)"
+  DIGESTWRAP="$(<${stir_path}/html/${HTML_TEMPLATE}/digest/commit.html)"
   > "${stat_file}"
 
   # If there have been no commits in the last week, skip
   if [[ $(git log --since="7 days ago") ]]; then
-    git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTEURL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${stat_file}"; dot
+    git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTE_URL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${stat_file}"; dot
     sed -i '/^commit/ s/$/ <\/strong><br>/' "${stat_file}"
     sed -i '/^Author:/ s/$/ <br>/' "${stat_file}"
     sed -i '/^Date:/ s/$/ <br><br>/' "${stat_file}"
@@ -53,8 +53,8 @@ function get_digest_commits() {
     while read URL; do
       CODE=$(${curl_cmd} -o /dev/null --silent --head --write-out '%{http_code}' "$URL")
       if [[ "${CODE}" != "200" ]]; then 
-        # sed -i "s,${URL},${REMOTEURL}/nolog.html,g" "${stat_file}"
-        sed -i "s,${URL},${REPOHOST}/${REPO},g" "${stat_file}"; dot
+        # sed -i "s,${URL},${REMOTE_URL}/nolog.html,g" "${stat_file}"
+        sed -i "s,${URL},${REPO_HOST}/${REPO},g" "${stat_file}"; dot
       fi
     done < "${trash_file}"
   else
@@ -63,7 +63,7 @@ function get_digest_commits() {
 }
 
 function create_digest() {
-  if [[ -z "${DIGESTSLACK}" || "${DIGESTSLACK}" == "FALSE" ]] && [[ -z "${DIGESTEMAIL} " ]]; then 
+  if [[ -z "${DIGEST_SLACK}" || "${DIGEST_SLACK}" == "FALSE" ]] && [[ -z "${DIGEST_EMAIL} " ]]; then 
     return
   else
     message_state="DIGEST"
@@ -94,7 +94,7 @@ function create_digest() {
       quiet_exit
     fi
 
-    cat "${stir_path}/html/${HTMLTEMPLATE}/digest/header.html" "${stat_file}" "${stir_path}/html/${HTMLTEMPLATE}/digest/footer.html" > "${html_file}"; dot
+    cat "${stir_path}/html/${HTML_TEMPLATE}/digest/header.html" "${stat_file}" "${stir_path}/html/${HTML_TEMPLATE}/digest/footer.html" > "${html_file}"; dot
 
     # Randomize a positive Monday thought. Special characters must be escaped 
     # and use character codes

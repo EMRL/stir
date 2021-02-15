@@ -15,10 +15,10 @@ function configure_project() {
   empty_line
   config_file="${APPRC}"
 
-  # Repohost
+  # REPO_HOST
   remote_origin="$(git ls-remote --get-url)"
-  REPOHOST=$(echo ${remote_origin%/*})
-  arg="${REPOHOST}"; read -rp "Repo root URL (including http:// or https://):" -e -i "${arg}" value; set_value "${value}"
+  REPO_HOST=$(echo ${remote_origin%/*})
+  arg="${REPO_HOST}"; read -rp "Repo root URL (including http:// or https://):" -e -i "${arg}" value; set_value "${value}"
 
   # Repo name
   REPO="$(basename -s .git `git config --get remote.origin.url`)"
@@ -29,20 +29,20 @@ function configure_project() {
   arg="${MASTER}"; read -rp "Master branch name:" -e -i "${arg}" value; set_value "${value}"
 
   # Project name
-  if [[ -z "${PROJNAME}" ]]; then
-    PROJNAME="$(basename `git rev-parse --show-toplevel`)"
+  if [[ -z "${PROJECT_NAME}" ]]; then
+    PROJECT_NAME="$(basename `git rev-parse --show-toplevel`)"
   fi
-  arg="${PROJNAME}"; read -rp "Project name:" -e -i "${arg} " value; set_value "${value}"
-  #arg="${PROJCLIENT}"; read -rp "Client name:" -e -i "${arg} " value; set_value "${value}"
+  arg="${PROJECT_NAME}"; read -rp "Project name:" -e -i "${arg} " value; set_value "${value}"
+  #arg="${PROJECT_CLIENT}"; read -rp "Client name:" -e -i "${arg} " value; set_value "${value}"
 
-  #arg="${DEVURL}"; read -rp "Staging URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
-  #arg="${PRODURL}"; read -rp "Production URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
+  #arg="${DEV_URL}"; read -rp "Staging URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
+  #arg="${PROD_URL}"; read -rp "Production URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
 }
 
 function configure_user() {
   empty_line
   config_file="$HOME/.stirrc"
-  arg="CLEARSCREEN"
+  arg="CLEAR_SCREEN"
   if yesno --default yes "Clear screen on startup? [Y/n] "; then
     set_value TRUE
   else
@@ -56,7 +56,7 @@ function configure_user() {
     unset_value
   fi  
 
-  arg="GITSTATS"
+  arg="GIT_STATS"
   if yesno --default yes "Display project statistics after every deployment? [Y/n] "; then
     set_value TRUE
   else
@@ -80,7 +80,7 @@ function unset_value() {
 }
 
 function clear_user() {
-settings=(CLEARSCREEN VERBOSE GITSTATS)
+settings=(CLEAR_SCREEN VERBOSE GIT_STATS)
 empty_line
 for arg in "${settings[@]}" ; do
   unset_value

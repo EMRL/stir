@@ -8,7 +8,7 @@
 
 function validate_conf() {
   # Check URLs
-  for var in "${REPOHOST} ${CLIENTLOGO}" "${DEVURL}" "${PRODURL}"; do
+  for var in "${REPO_HOST} ${CLIENT_LOGO}" "${DEV_URL}" "${PROD_URL}"; do
     if [[ -n "${var}" ]]; then
       if [[ "${var}" != *"http"*"://"* ]]; then
         error "The URL in your configuration ($var) must be preceded by either http:// or https:// - check your setup."
@@ -17,7 +17,7 @@ function validate_conf() {
   done
 
   # Check for bogus characters
-  array=( "${PROJNAME}" "${PROJCLIENT}" )
+  array=( "${PROJECT_NAME}" "${PROJECT_CLIENT}" )
   for i in "${array[@]}"
   do
     if [ `expr "$i" : ".*[!@#\$%^\&*()_+].*"` -gt 0 ]; then 

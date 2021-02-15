@@ -14,7 +14,7 @@ function acf_update() {
   acf_file="/tmp/acfpro.zip"
   trace status "Updating ACF Pro... "
 	# Download the ACF Pro upgrade file
-	"${wget_cmd}" --header="Accept: application/zip" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" -O "${acf_file}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACFKEY}" &>> "${log_file}"; error_check
+	"${wget_cmd}" --header="Accept: application/zip" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" -O "${acf_file}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACF_KEY}" &>> "${log_file}"; error_check
 
 	# Check file integrity
 	acf_filecheck

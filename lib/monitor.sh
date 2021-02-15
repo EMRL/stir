@@ -9,7 +9,7 @@
 
 function server_monitor() {
   # Don't bother unless all the needed variables are declared
-  if [[ -n "${MONITORURL}" ]] && [[ -n "${MONITORUSER}" ]] && [[ -n "${SERVERID}" ]] && [[ -n "${MONITORPASS}" ]]; then
+  if [[ -n "${MONITOR_URL}" ]] && [[ -n "${MONITOR_USER}" ]] && [[ -n "${SERVER_ID}" ]] && [[ -n "${MONITOR_PASS}" ]]; then
     # What kind of log is this?
     if [[ "${REPORT}" == "1" ]]; then
       # Last 30 days; this will not correlate exactly with the time range of the report 
@@ -30,11 +30,11 @@ function server_monitor() {
 
 function server_monitor_test() {
   notice "Testing server monitor integration..."
-  if [[ -n "${MONITORURL}" ]] && [[ -n "${MONITORUSER}" ]] && [[ -n "${SERVERID}" ]] && [[ -n "${MONITORPASS}" ]]; then
-    console "Monitor URL: ${MONITORURL}"
-    console "User: ${MONITORUSER}"
-    console "Server ID: ${SERVERID}"
-    console "Password file: ${MONITORPASS}"
+  if [[ -n "${MONITOR_URL}" ]] && [[ -n "${MONITOR_USER}" ]] && [[ -n "${SERVER_ID}" ]] && [[ -n "${MONITOR_PASS}" ]]; then
+    console "Monitor URL: ${MONITOR_URL}"
+    console "User: ${MONITOR_USER}"
+    console "Server ID: ${SERVER_ID}"
+    console "Password file: ${MONITOR_PASS}"
   else
     warning "Server monitoring is not configured; check your project's configuration file."
     return
@@ -51,8 +51,8 @@ function server_monitor_test() {
 
 function server_monitor_log() {
   # Load the password and setup the curl command
-  MONITORPASS=$(<$MONITORPASS)
-  MONITORAPI="${MONITORURL}?tag=serveruptime&email=${MONITORUSER}&app_password=${MONITORPASS}&server_id=${SERVERID}&HoursUnit=${MONITORHOURS}"
+  MONITOR_PASS=$(<$MONITOR_PASS)
+  MONITORAPI="${MONITOR_URL}?tag=serveruptime&email=${MONITOR_USER}&app_password=${MONITOR_PASS}&server_id=${SERVER_ID}&HoursUnit=${MONITORHOURS}"
   "${curl_cmd}" -s --request GET "${MONITORAPI}" -o "${trash_file}"
   # Uptime
   UPTIME=$(grep -Po '"uptime":.*?[^\\]",' ${trash_file})

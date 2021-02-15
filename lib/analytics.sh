@@ -52,16 +52,16 @@ function ga_metrics() {
 
 function analytics() {
   # If profile does not exist, skip it all
-  if [[ -z "${PROFILEID}" ]]; then
+  if [[ -z "${PROFILE_ID}" ]]; then
     return
   else
     # Setup the metric we're after
     ga_metrics
 
     # Update access token
-    "${curl_cmd}" -s -d "client_id=${CLIENTID}&client_secret=${CLIENTSECRET}&refresh_token=${REFRESHTOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trash_file}"
+    "${curl_cmd}" -s -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trash_file}"
     sed -i '/access_token/!d' "${trash_file}"
-    ACCESSTOKEN="$(awk -F\" '{print $4}' "${trash_file}")"
+    ACCESS_TOKEN="$(awk -F\" '{print $4}' "${trash_file}")"
 
     # Grab data from Google
     ga_data
@@ -115,16 +115,16 @@ function analytics() {
 }
 
 function ga_data() {
-  RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4)
+  RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4)
   SIZE="$(printf "%.0f\n" "${RESULT}")"
 
   # TODO: Make this a proper loop
   if [[ "${PROJSTATS}" == "1" ]]; then 
-    GA_HITS=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:pageviews&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:pageviews\":" | cut -d'"' -f4)
-    GA_PERCENT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:percentNewSessions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:percentNewSessions\":" | cut -d'"' -f4)
-    GA_SEARCHES=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:organicSearches&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:organicSearches\":" | cut -d'"' -f4)
-    GA_DURATION=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:avgSessionDuration&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:avgSessionDuration\":" | cut -d'"' -f4)
-    GA_SOCIAL=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:socialInteractions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:socialInteractions\":" | cut -d'"' -f4)
+    GA_HITS=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:pageviews&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:pageviews\":" | cut -d'"' -f4)
+    GA_PERCENT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:percentNewSessions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:percentNewSessions\":" | cut -d'"' -f4)
+    GA_SEARCHES=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:organicSearches&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:organicSearches\":" | cut -d'"' -f4)
+    GA_DURATION=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:avgSessionDuration&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:avgSessionDuration\":" | cut -d'"' -f4)
+    GA_SOCIAL=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:socialInteractions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:socialInteractions\":" | cut -d'"' -f4)
 
     # Make sure we're only dealing with integers
     GA_PERCENT="$(printf "%.0f\n" "${GA_PERCENT}")"
@@ -166,7 +166,7 @@ function ga_data_loop() {
 
   # Start the loop
   for i in "${ga_var[@]}" ; do
-    RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4); dot
+    RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4); dot
 
     if [[ -z "${RESULT}" ]]; then
       RESULT="0"
@@ -175,7 +175,7 @@ function ga_data_loop() {
     # Workaround for buggy Google shit
     until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
     do
-      RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESSTOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4)
+      RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4)
     done
   
     # Round to two decimal places if needed
@@ -207,7 +207,7 @@ function ga_data_loop() {
 #   None
 ###############################################################################  
 function ga_over_time() {
-  if [[ -z "${PROFILEID}" ]] || [[ -z "${gnuplot_cmd}" ]]; then
+  if [[ -z "${PROFILE_ID}" ]] || [[ -z "${gnuplot_cmd}" ]]; then
     return
   else
     # Process arguments
@@ -231,12 +231,12 @@ function ga_over_time() {
     [[ -f "${trash_file}" ]] && rm "${trash_file}"
 
     while [ "$ga_day" != "${GASTART}" ]; do 
-      RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4);
+      RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4);
       
       # Workaround for buggy Google shit
       until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
       do
-        RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILEID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESSTOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4)
+        RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4)
       done
 
       # Make sure we're only dealing with integers
@@ -336,53 +336,53 @@ function ga_fail() {
 
 function ga_test() {
   empty_line
-  if [[ -z "${CLIENTID}" ]] || [[ -z "${CLIENTSECRET}" ]];  then
+  if [[ -z "${CLIENT_ID}" ]] || [[ -z "${CLIENT_SECRET}" ]];  then
     warning "Define API project"
     console "Analytics API project not defined. Check https://console.developers.google.com/"
     quiet_exit
   else
-    console "CLIENTID=${CLIENTID}"
-    console "CLIENTSECRET=${CLIENTSECRET}"
+    console "CLIENT_ID=${CLIENT_ID}"
+    console "CLIENT_SECRET=${CLIENT_SECRET}"
   fi
 
-  if [[ -z "${AUTHORIZATIONCODE}" ]]; then
+  if [[ -z "${AUTHORIZATION_CODE}" ]]; then
     empty_line; warning "Authorization required"
-    console "Point your browser to this link: https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fanalytics&redirect_uri=${REDIRECTURI}&response_type=code&client_id=${CLIENTID}"
+    console "Point your browser to this link: https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fanalytics&redirect_uri=${REDIRECT_URI}&response_type=code&client_id=${CLIENT_ID}"
     quiet_exit
   else
-    console "AUTHORIZATIONCODE=${AUTHORIZATIONCODE}"
+    console "AUTHORIZATION_CODE=${AUTHORIZATION_CODE}"
   fi
 
-  if [[ -z "${ACCESSTOKEN}" ]] || [[ -z "${REFRESHTOKEN}" ]]; then
+  if [[ -z "${ACCESS_TOKEN}" ]] || [[ -z "${REFRESH_TOKEN}" ]]; then
     empty_line; warning "Create an access token"
-    console "Run this command: curl -H \"Content-Type: application/x-www-form-urlencoded\" -d code=${AUTHORIZATIONCODE} -d client_id=${CLIENTID} -d client_secret=${CLIENTSECRET} -d redirect_uri=${REDIRECTURI} -d grant_type=authorization_code https://accounts.google.com/o/oauth2/token"
+    console "Run this command: curl -H \"Content-Type: application/x-www-form-urlencoded\" -d code=${AUTHORIZATION_CODE} -d client_id=${CLIENT_ID} -d client_secret=${CLIENT_SECRET} -d redirect_uri=${REDIRECT_URI} -d grant_type=authorization_code https://accounts.google.com/o/oauth2/token"
     quiet_exit
   else
-    console "ACCESSTOKEN=${ACCESSTOKEN}"
-    console "REFRESHTOKEN=${REFRESHTOKEN}"
+    console "ACCESS_TOKEN=${ACCESS_TOKEN}"
+    console "REFRESH_TOKEN=${REFRESH_TOKEN}"
   fi
 
-  if [[ -z "${PROFILEID}" ]]; then
+  if [[ -z "${PROFILE_ID}" ]]; then
     empty_line; warning "Missing Profile ID"
     console "Your project's profile ID is not defined."
     quiet_exit
   else
-    console "PROFILEID=${PROFILEID}"
+    console "PROFILE_ID=${PROFILE_ID}"
   fi
 
-  if [[ -z "${REDIRECTURI}" ]]; then 
+  if [[ -z "${REDIRECT_URI}" ]]; then 
     warning "Missing Redirect URI"
     console "Generally your Redirect URI will be set to http://localhost"
     quiet_exit
   else
-    console "REDIRECTURI=${REDIRECTURI}"
+    console "REDIRECT_URI=${REDIRECT_URI}"
   fi
 
   notice "Refreshing token..."
-  "${curl_cmd}" -s -d "client_id=${CLIENTID}&client_secret=${CLIENTSECRET}&refresh_token=${REFRESHTOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trash_file}"
+  "${curl_cmd}" -s -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trash_file}"
   sed -i '/access_token/!d' "${trash_file}"
-  ACCESSTOKEN="$(awk -F\" '{print $4}' "${trash_file}")"
-  echo "${ACCESSTOKEN}"
+  ACCESS_TOKEN="$(awk -F\" '{print $4}' "${trash_file}")"
+  echo "${ACCESS_TOKEN}"
 
   ga_data_loop
   return

@@ -14,10 +14,10 @@ function lock() {
     # Unlock?
     if [[ "${UNLOCK}" == "1" ]]; then
       rm "${LOCK_FILE}"
-      notice "${WORKPATH}/${APP} is now unlocked."
+      notice "${WORK_PATH}/${APP} is now unlocked."
       quiet_exit
     else
-      warning "${WORKPATH}/${APP} is already being deployed in another instance."
+      warning "${WORK_PATH}/${APP} is already being deployed in another instance."
       quiet_exit
     fi
   else

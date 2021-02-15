@@ -71,7 +71,7 @@ function proj_deploy() {
       }
     fi
 
-    if [[ "${REQUIREAPPROVAL}" != "TRUE" ]]; then
+    if [[ "${REQUIRE_APPROVAL}" != "TRUE" ]]; then
 
       # If we don't require approval to push to live, keep going
       if [[ "${FORCE}" == "1" ]] || yesno --default yes "Deploy to live server? [Y/n] "; then
@@ -122,10 +122,10 @@ function proj_deploy() {
         eval "${DEPLOY}" &>> "${log_file}"
       else
         if [[ "${APPROVE}" != "1" ]]; then
-          if [[ -z "${PRODURL}" ]]; then 
+          if [[ -z "${PROD_URL}" ]]; then 
             warning "This project requires approval but has no production URL configured."
           else
-            info "The project requires approval before pushing to ${PRODURL}"
+            info "The project requires approval before pushing to ${PROD_URL}"
           fi
         fi
       fi
@@ -161,7 +161,7 @@ function postDeploy() {
     if [[ "${APPROVE}" == "1" ]]; then
     	info "Deployment queued for approval."
     else
-      if [[ -z "${PRODURL}" ]]; then
+      if [[ -z "${PROD_URL}" ]]; then
         warning "No production URL configured, but deployment command ran successfully."
       else
         deploy_msg
@@ -171,7 +171,7 @@ function postDeploy() {
 }
 
 function deploy_msg() {
-  if [[ -n "${PRODURL}" ]] && [[ "${start_deploy}" == "1" ]]; then
-    info "Deployed to ${PRODURL}"
+  if [[ -n "${PROD_URL}" ]] && [[ "${start_deploy}" == "1" ]]; then
+    info "Deployed to ${PROD_URL}"
   fi
 }

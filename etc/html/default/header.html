@@ -68,13 +68,13 @@
 					  	<tr>
 							<td bgcolor="#ffffff" style="padding: 40px; text-align: left; font-family: Roboto, sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555;"><h1 style="display: block; font-family: Roboto, sans-serif; font-size: 44px; font-style: normal; font-weight: bold; line-height: 100%;  text-align: left; color: #000000 !important; margin: 0 0 10px 0;">{{LOGTITLE}}</h1>
 								<style>@media (max-width: 768px) {.hide {display:none; !important}}</style>
-								<!--[BEGIN PRODURL]--><a href="{{PRODURL}}">
-								<!--[CLIENTLOGO]--><img src="{{CLIENTLOGO}}" class="hide" style="width: 20%; min-width: 32px; max-width: 192px; float: right; -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; overflow: hidden; margin-left: 1.0em;" alt="{{PROJCLIENT}}" title="{{PROJCLIENT}}" width="192">
-								<!--[CLOSE PRODURL]--></a>
+								<!--[BEGIN PROD_URL]--><a href="{{PROD_URL}}">
+								<!--[CLIENT_LOGO]--><img src="{{CLIENT_LOGO}}" class="hide" style="width: 20%; min-width: 32px; max-width: 192px; float: right; -webkit-border-radius: 4px; -moz-border-radius: 4px; -ms-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; overflow: hidden; margin-left: 1.0em;" alt="{{PROJECT_CLIENT}}" title="{{PROJECT_CLIENT}}" width="192">
+								<!--[CLOSE PROD_URL]--></a>
 								<p style="font-family: Roboto, sans-serif; font-size: 18px; line-height: 26px; font-style: normal; font-weight: 400; margin-bottom: 3px;"><strong>Date:</strong> {{NOW}}<br />
-								<strong>Project:</strong> {{PROJNAME}} ({{PROJCLIENT}})<br />
-								<strong>Staging:</strong> <a style="color: {{PRIMARY}}; text-decoration:none; font-weight: bold;" href="{{DEVURL}}">{{DEVURL}}</a><br />
-								<strong>Production:</strong> <a style="color: {{PRIMARY}}; text-decoration:none; font-weight: bold;" href="{{PRODURL}}">{{PRODURL}}</a>
+								<strong>Project:</strong> {{PROJECT_NAME}} ({{PROJECT_CLIENT}})<br />
+								<strong>Staging:</strong> <a style="color: {{PRIMARY}}; text-decoration:none; font-weight: bold;" href="{{DEV_URL}}">{{DEV_URL}}</a><br />
+								<strong>Production:</strong> <a style="color: {{PRIMARY}}; text-decoration:none; font-weight: bold;" href="{{PROD_URL}}">{{PROD_URL}}</a>
 								</p>
 								<div style="font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: {{INFO}}; font-size: 11px; color: #FFFFFF;">Uptime: {{UPTIME}}% <span style="color: {{UPTIME_STATUS}}">&#9698;</span></div>
 								<div style="font-weight: 500; letter-spacing: .05em; vertical-align: middle; display: inline-block; padding: 0px 8px; text-align: center; white-space: nowrap; vertical-align: baseline; border-radius: .25em; background-color: {{INFO}}; font-size: 10px; font-size: 11px ; color: #FFFFFF;">Latency: {{LATENCY}}s <span style="color: {{LATENCY_STATUS}};">&#9698;</span></div>

@@ -13,10 +13,10 @@ function build_log() {
     COMMITHASH="$(git rev-parse --short HEAD)"; 
 
     # Create commit URL
-    if [[ "${REPOHOST}" == *"bitbucket"* ]]; then
-      COMMITURL="${REPOHOST}/${REPO}/commits/${COMMITHASH}"
-    elif [[ "${REPOHOST}" == *"github"* ]]; then
-      COMMITURL="${REPOHOST}/${REPO}/commit/${COMMITHASH}"
+    if [[ "${REPO_HOST}" == *"bitbucket"* ]]; then
+      COMMITURL="${REPO_HOST}/${REPO}/commits/${COMMITHASH}"
+    elif [[ "${REPO_HOST}" == *"github"* ]]; then
+      COMMITURL="${REPO_HOST}/${REPO}/commit/${COMMITHASH}"
     fi
 
     # Is this a publish only?
@@ -36,7 +36,7 @@ function build_log() {
 # Post integration via email
 function mail_post() {
   # If this is an outstanding approval, don't post
-  if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
+  if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
     trace "Approval required, skipping integration"
   else
 
@@ -51,22 +51,22 @@ function mail_post() {
     # Is this an automated deployment?
     if [ "${AUTOMATE}" = "1" ]; then
       # Is the project configured to log task time
-      if [[ -z "${TASKUSER}" ]] || [[ -z "${ADDTIME}" ]]; then
+      if [[ -z "${TASK_USER}" ]] || [[ -z "${ADD_TIME}" ]]; then
         echo "From: ${FROM}"
       else
-        echo "From: ${TASKUSER}"
-        echo "Subject: ${ADDTIME}"
+        echo "From: ${TASK_USER}"
+        echo "Subject: ${ADD_TIME}"
       fi
     else
       # If not an automated deployment, use address from .deployrc, or current user email address
-      if [[ -n "${FROMUSER}" ]]; then
-        echo "From: ${FROMUSER}@${FROMDOMAIN}"
+      if [[ -n "${FROM_USER}" ]]; then
+        echo "From: ${FROM_USER}@${FROM_DOMAIN}"
       else
-        echo "From: ${USER}@${FROMDOMAIN}"
+        echo "From: ${USER}@${FROM_DOMAIN}"
       fi
       # If deployment happened with the --time switch active, add time to subject line
-      if [[ -n "${TIME}" ]] && [[ -n "${ADDTIME}" ]]; then
-        echo "Subject: ${ADDTIME}"
+      if [[ -n "${TIME}" ]] && [[ -n "${ADD_TIME}" ]]; then
+        echo "Subject: ${ADD_TIME}"
       fi
     fi
     echo "To: ${POSTEMAIL}"
@@ -79,16 +79,16 @@ function mail_post() {
 
 function postCommit() {
   # Run Wordpress database updates
-  if [[ -n "${PRODUCTION}" ]] && [[ -n "${PRODURL}" ]]; then
+  if [[ -n "${PRODUCTION}" ]] && [[ -n "${PROD_URL}" ]]; then
     info "Updating production database..."
-    "${curl_cmd}" --silent "${PRODURL}${WPSYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
+    "${curl_cmd}" --silent "${PROD_URL}${WP_SYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
     # In case curl is being weird
-    "${wget_cmd}" -q -O - "${PRODURL}${WPSYSTEM}"/wp-admin/upgrade.php?step=1 > /dev/null 2>&1
+    "${wget_cmd}" -q -O - "${PROD_URL}${WP_SYSTEM}"/wp-admin/upgrade.php?step=1 > /dev/null 2>&1
   fi
 
   # Check for a Wordpress core update, update production database if needed
-  #if [[ "${UPDCORE}" == "1" ]] && [[ -n "${PRODUCTION}" ]] && [[ -n "${PRODURL}" ]] && [[ -n "${DEPLOY}" ]]; then
-  #  info "Upgrading production database..."; curl --silent "${PRODURL}${WPSYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
+  #if [[ "${UPDCORE}" == "1" ]] && [[ -n "${PRODUCTION}" ]] && [[ -n "${PROD_URL}" ]] && [[ -n "${DEPLOY}" ]]; then
+  #  info "Upgrading production database..."; curl --silent "${PROD_URL}${WP_SYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
   #fi
 
   # Just for yuks, display git stats for this user (user can override this if it annoys them)

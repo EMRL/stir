@@ -9,7 +9,7 @@
 function wp_core() {
   # There's a little bug when certain plugins are spitting errors; work around 
   # seems to be to check for core updates a second time
-  cd "${APP_PATH}"/"${WPROOT}"; \
+  cd "${APP_PATH}"/"${WP_ROOT}"; \
   "${wp_cmd}" core check-update --no-color &>> "${log_file}"
   if grep -aq 'WordPress is at the latest version.' "${log_file}"; then
     info "Wordpress core is up to date."; UPD2="1"
@@ -59,7 +59,7 @@ function wp_core() {
         warning "Checking for available core update was unreliable, skipping.";
       else
         if [[ "${FORCE}" = "1" ]] || yesno --default no "A new version of Wordpress is available (${COREUPD}), update? [y/N] "; then
-          cd "${APP_PATH}/${WPROOT}"; \
+          cd "${APP_PATH}/${WP_ROOT}"; \
           if [[ "${QUIET}" != "1" ]]; then
             "${wp_cmd}" core update --no-color &>> "${log_file}" &
             spinner $!
@@ -80,8 +80,8 @@ function wp_core() {
           fi
                   
           # Update staging server database if needed
-          if [[ "${UPDCORE}" = "1" ]] && [[ -n "${DEVURL}" ]]; then
-            info "Upgrading staging database..."; "${curl_cmd}" --silent "${DEVURL}${WPSYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
+          if [[ "${UPDCORE}" = "1" ]] && [[ -n "${DEV_URL}" ]]; then
+            info "Upgrading staging database..."; "${curl_cmd}" --silent "${DEV_URL}${WP_SYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
           fi                          
         else
           info "Skipping Wordpress core updates..."

@@ -49,19 +49,19 @@ function go() {
   fi
 
   # Is this project locked?
-  if [[ "${DONOTDEPLOY}" == "TRUE" ]]; then
+  if [[ "${DO_NOT_DEPLOY}" == "TRUE" ]]; then
     warning "This project is currently locked."; quiet_exit
   fi
 
   # Is the user root?
-  if [[ "${ALLOWROOT}" != "TRUE" ]] && [[ "${EUID}" -eq "0" ]]; then
+  if [[ "${ALLOW_ROOT}" != "TRUE" ]] && [[ "${EUID}" -eq "0" ]]; then
     warning "Can't continue as root."; quiet_exit
   fi
 
   # Disallow server check?
   if [[ "${NOCHECK}" == "1" ]]; then
-    SERVERCHECK="FALSE";
-    ACTIVECHECK="FALSE"
+    CHECK_SERVER="FALSE";
+    CHECK_ACTIVE="FALSE"
   fi
 
   # if git.lock exists, do we want to remove it?
@@ -81,7 +81,7 @@ function go() {
   fi
   
   # Outstanding approval?
-  if [[ "${REQUIREAPPROVAL}" == "TRUE" ]] && [[ -f "${WORKPATH}/${APP}/.queued" ]] && [[ -f "${WORKPATH}/${APP}/.approved" ]]; then 
+  if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]] && [[ -f "${WORK_PATH}/${APP}/.approved" ]]; then 
     notice "Processing outstanding approval..."
   fi
 }
@@ -151,7 +151,7 @@ function get_json_value() {
 #   Set defaults for things liks SSH ports if missing
 ###############################################################################
 function set_fallback_values() {
-  [[ -z "${SCPPORT}" ]] && SCPPORT="22"
+  [[ -z "${SCP_PORT}" ]] && SCP_PORT="22"
   [[ -z "${SCP_DEPLOY_PORT}" ]] && SCP_DEPLOY_PORT="22"
 }
 
@@ -198,7 +198,7 @@ function user_tests() {
 
   # Test SSH key authentication using the --ssh-check flag
   if [[ "${SSHTEST}" == "1" ]]; then
-    if [[ "${NOKEY}" != "TRUE" ]] && [[ "${DISABLESSHCHECK}" != "TRUE" ]]; then
+    if [[ "${NO_KEY}" != "TRUE" ]] && [[ "${DISABLE_SSH_CHECK}" != "TRUE" ]]; then
       notice "Checking SSH Configuration..."
       ssh_check
     else
@@ -218,19 +218,19 @@ function check_dependencies() {
   # Does a configuration file for this repo exist?
   if [[ -z "${APPRC}" ]]; then
     # Make sure app directory is writable
-    if [[ -w "${WORKPATH}/${APP}" ]]; then
+    if [[ -w "${WORK_PATH}/${APP}" ]]; then
       empty_line; info "Project configuration not found, creating."; sleep 2
       # If configuration directory is defined
-      if [[ -n "${CONFIGDIR}" ]]; then
-        if [[ ! -d "${WORKPATH}/${APP}/${CONFIGDIR}" ]]; then
-          mkdir "${WORKPATH}/${APP}/${CONFIGDIR}"
+      if [[ -n "${CONFIG_DIR}" ]]; then
+        if [[ ! -d "${WORK_PATH}/${APP}/${CONFIG_DIR}" ]]; then
+          mkdir "${WORK_PATH}/${APP}/${CONFIG_DIR}"
         fi
-        cp "${stir_path}"/deploy.sh "${WORKPATH}/${APP}/${CONFIGDIR}/"
-        APPRC="${WORKPATH}/${APP}/${CONFIGDIR}/stir.sh"
+        cp "${stir_path}"/deploy.sh "${WORK_PATH}/${APP}/${CONFIG_DIR}/"
+        APPRC="${WORK_PATH}/${APP}/${CONFIG_DIR}/stir.sh"
       else
         # If using root directory for .stir.sh
-        cp "${stir_path}"/deploy.sh "${WORKPATH}/${APP}/.stir.sh"
-        APPRC="${WORKPATH}/${APP}/.stir.sh"
+        cp "${stir_path}"/deploy.sh "${WORK_PATH}/${APP}/.stir.sh"
+        APPRC="${WORK_PATH}/${APP}/.stir.sh"
       fi
       # Ask the user if they would like to edit
       if [[ -x "$(command -v nano)" ]]; then
@@ -260,7 +260,7 @@ function check_dependencies() {
   fi
 
   # Do we need Sendmail, and if so can we find it?
-  if [[ "${EMAILERROR}" == "TRUE" ]] || [[ "${EMAILSUCCESS}" == "TRUE" ]] || [[ "${EMAILQUIT}" == "TRUE" ]] || [[ "${NOTIFYCLIENT}" == "TRUE" ]]; then
+  if [[ "${EMAIL_ERROR}" == "TRUE" ]] || [[ "${EMAIL_SUCCESS}" == "TRUE" ]] || [[ "${EMAIL_QUIT}" == "TRUE" ]] || [[ "${NOTIFYCLIENT}" == "TRUE" ]]; then
     hash "${sendmail_cmd}" 2>/dev/null || {
       error "stir ${VERSION} requires Sendmail to function properly with your current configuration."
     }
@@ -277,91 +277,91 @@ function check_dependencies() {
 function show_settings() {
   notice "General Setup"
   echo "-------------"
-  [[ -n "${WORKPATH}" ]] && echo "Root project storage: ${WORKPATH}"
-  [[ -n "${REPOHOST}" ]] && echo "Repohost: ${REPOHOST}"
-  [[ -n "${SERVERCHECK}" ]] && echo "Server checking: ${SERVERCHECK}"
-  [[ -n "${ALLOWROOT}" ]] && echo "Allow superuser: ${ALLOWROOT}"
-  [[ -n "${ACTIVECHECK}" ]] && echo "Check file activity: ${ACTIVECHECK}"  
-  [[ -n "${CHECKTIME}" ]] && echo "Active time limit: ${CHECKTIME} minutes"
+  [[ -n "${WORK_PATH}" ]] && echo "Root project storage: ${WORK_PATH}"
+  [[ -n "${REPO_HOST}" ]] && echo "REPO_HOST: ${REPO_HOST}"
+  [[ -n "${CHECK_SERVER}" ]] && echo "Server checking: ${CHECK_SERVER}"
+  [[ -n "${ALLOW_ROOT}" ]] && echo "Allow superuser: ${ALLOW_ROOT}"
+  [[ -n "${CHECK_ACTIVE}" ]] && echo "Check file activity: ${CHECK_ACTIVE}"  
+  [[ -n "${CHECK_TIME}" ]] && echo "Active time limit: ${CHECK_TIME} minutes"
   # Project
   notice "Project Information"
   echo "-------------------"
-  [[ -n "${PROJNAME}" ]] && echo "Name: ${PROJNAME}"
-  [[ -n "${PROJCLIENT}" ]] && echo "Client: ${PROJCLIENT}"
-  [[ -n "${DEVURL}" ]] && echo "Staging URL: ${DEVURL}"
-  [[ -n "${PRODURL}" ]] && echo "Production URL: ${PRODURL}"
+  [[ -n "${PROJECT_NAME}" ]] && echo "Name: ${PROJECT_NAME}"
+  [[ -n "${PROJECT_CLIENT}" ]] && echo "Client: ${PROJECT_CLIENT}"
+  [[ -n "${DEV_URL}" ]] && echo "Staging URL: ${DEV_URL}"
+  [[ -n "${PROD_URL}" ]] && echo "Production URL: ${PROD_URL}"
   # Git
-  if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECKBRANCH}" ]]; then
+  if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECK_BRANCH}" ]]; then
     notice "Git Configuration"
     echo "-----------------"
-    [[ -n "${REPO}" ]] && echo "Repo URL: ${REPOHOST}/${REPO}"
+    [[ -n "${REPO}" ]] && echo "Repo URL: ${REPO_HOST}/${REPO}"
     [[ -n "${REPO}" ]] && echo "Local repo path: ${APP_PATH}"
     [[ -n "${MASTER}" ]] && echo "Master branch: ${MASTER}"
     [[ -n "${STAGING}" ]] && echo "Staging branch: ${STAGING}"
     [[ -n "${PRODUCTION}" ]] && echo "Production branch: ${PRODUCTION}"
     [[ -n "${AUTOMERGE}" ]] && echo "Auto merge: ${AUTOMERGE}"
     [[ -n "${STASH}" ]] && echo "File Stashing: ${STASH}"
-    [[ -n "${CHECKBRANCH}" ]] && echo "Force branch checking: ${CHECKBRANCH}" 
+    [[ -n "${CHECK_BRANCH}" ]] && echo "Force branch checking: ${CHECK_BRANCH}" 
   fi
   # Wordpress
-  if [[ -n "${WPROOT}" ]] || [[ -n "${WPAPP}" ]] || [[ -n "${WPSYSTEM}" ]]; then
+  if [[ -n "${WP_ROOT}" ]] || [[ -n "${WP_APP}" ]] || [[ -n "${WP_SYSTEM}" ]]; then
     notice "Wordpress Setup"
     echo "---------------"
-    [[ -n "${WPROOT}" ]] && echo "Wordpress root: ${WPROOT}"
-    [[ -n "${WPAPP}" ]] && echo "Wordpress application: ${WPAPP}"
-    [[ -n "${WPSYSTEM}" ]] && echo "Wordpress system: ${WPSYSTEM}"
+    [[ -n "${WP_ROOT}" ]] && echo "Wordpress root: ${WP_ROOT}"
+    [[ -n "${WP_APP}" ]] && echo "Wordpress application: ${WP_APP}"
+    [[ -n "${WP_SYSTEM}" ]] && echo "Wordpress system: ${WP_SYSTEM}"
   fi
   # Deployment
-  if [[ -n "${DEPLOY}" ]] || [[ -n "${DONOTDEPLOY}" ]]; then
+  if [[ -n "${DEPLOY}" ]] || [[ -n "${DO_NOT_DEPLOY}" ]]; then
     notice "Deployment Configuration"
     echo "------------------------"
     [[ -n "${DEPLOY}" ]] && echo "Deploy command: ${DEPLOY}"
-    [[ -n "${DONOTDEPLOY}" ]] && echo "Disallow deployment: ${DONOTDEPLOY}"
+    [[ -n "${DO_NOT_DEPLOY}" ]] && echo "Disallow deployment: ${DO_NOT_DEPLOY}"
   fi
   # Notifications
-  if [[ -n "${TASK}" ]] || [[ -n "${TASKUSER}" ]] || [[ -n "${ADDTIME}" ]] || [[ -n "${POSTTOSLACK}" ]] || [[ -n "${SLACKERROR}" ]] || [[ -n "${PROFILEID}" ]] || [[ -n "${POSTURL}" ]]; then
+  if [[ -n "${TASK}" ]] || [[ -n "${TASK_USER}" ]] || [[ -n "${ADD_TIME}" ]] || [[ -n "${POST_TO_SLACK}" ]] || [[ -n "${SLACK_ERROR}" ]] || [[ -n "${PROFILE_ID}" ]] || [[ -n "${POST_URL}" ]]; then
     notice "Notifications"
     echo "-------------"
     [[ -n "${TASK}" ]] && echo "Task #: ${TASK}"
-    [[ -n "${TASKUSER}" ]] && echo "Task user: ${TASKUSER}"
-    [[ -n "${ADDTIME}" ]] && echo "Task time: ${ADDTIME}"
-    [[ -n "${POSTTOSLACK}" ]] && echo "Post to Slack: ${POSTTOSLACK}"
-    [[ -n "${SLACKERROR}" ]] && echo "Post errors to Slack: ${SLACKERROR}"
-    [[ -n "${POSTURL}" ]] && echo "Webhook URL: ${POSTURL}"
-    [[ -n "${PROFILEID}" ]] && echo "Google Analytics ID: ${PROFILEID}"
+    [[ -n "${TASK_USER}" ]] && echo "Task user: ${TASK_USER}"
+    [[ -n "${ADD_TIME}" ]] && echo "Task time: ${ADD_TIME}"
+    [[ -n "${POST_TO_SLACK}" ]] && echo "Post to Slack: ${POST_TO_SLACK}"
+    [[ -n "${SLACK_ERROR}" ]] && echo "Post errors to Slack: ${SLACK_ERROR}"
+    [[ -n "${POST_URL}" ]] && echo "Webhook URL: ${POST_URL}"
+    [[ -n "${PROFILE_ID}" ]] && echo "Google Analytics ID: ${PROFILE_ID}"
   fi
   # Logging
-  if [[ -n "${REMOTELOG}" ]] || [[ -n "${REMOTEURL}" ]] || [[ -n "${EXPIRELOGS}" ]] || [[ -n "${LOCALHOSTPOST}" ]] || [[ -n "${LOCALHOSTPATH}" ]] || [[ -n "${SCPPOST}" ]] || [[ -n "${SCPUSER}" ]] || [[ -n "${SCPHOST}" ]] || [[ -n "${SCPHOSTPATH}" ]] || [[ -n "${SCPPASS}" ]] || [[ -n "${REMOTETEMPLATE}" ]] || [[ -n "${REMOTETEMPLATE}" ]]; then
+  if [[ -n "${REMOTE_LOG}" ]] || [[ -n "${REMOTE_URL}" ]] || [[ -n "${EXPIRE_LOGS}" ]] || [[ -n "${POST_TO_LOCAL_HOST}" ]] || [[ -n "${LOCAL_HOST_PATH}" ]] || [[ -n "${SCP_POST}" ]] || [[ -n "${SCP_USER}" ]] || [[ -n "${SCP_HOST}" ]] || [[ -n "${SCP_HOST_PATH}" ]] || [[ -n "${SCP_PASS}" ]] || [[ -n "${REMOTE_TEMPLATE}" ]] || [[ -n "${REMOTE_TEMPLATE}" ]]; then
     notice "Logging"
     echo "-------"
     [[ -n "${TO}" ]] && echo "Send to: ${TO}"
-    [[ -n "${HTMLTEMPLATE}" ]] && echo "Email template: ${HTMLTEMPLATE}"
-    [[ -n "${CLIENTLOGO}" ]] && echo "Logo: ${CLIENTLOGO}"
+    [[ -n "${HTML_TEMPLATE}" ]] && echo "Email template: ${HTML_TEMPLATE}"
+    [[ -n "${CLIENT_LOGO}" ]] && echo "Logo: ${CLIENT_LOGO}"
     [[ -n "${COVER}" ]] && echo "Cover image: ${COVER}"
     [[ -n "${INCOGNITO}" ]] && echo "Logo: ${INCOGNITO}"
-    [[ -n "${REMOTELOG}" ]] && echo "Web logs: ${REMOTELOG}"
-    [[ -n "${REMOTEURL}" ]] && echo "Address: ${REMOTEURL}"
-    [[ -n "${EXPIRELOGS}" ]] && echo "Log expiration: ${EXPIRELOGS} days"
-    [[ -n "${REMOTETEMPLATE}" ]] && echo "Log template: ${REMOTETEMPLATE}"
-    [[ -n "${SCPPOST}" ]] && echo "Post with SCP/SSH: ${SCPPOST}"
-    [[ -n "${SCPUSER}" ]] && echo "SCP user: ${SCPUSER}"
-    [[ -n "${SCPHOST}" ]] && echo "Remote log host: ${SCPHOST}"
-    [[ -n "${SCPHOSTPATH}" ]] && echo "Remote log path: ${SCPHOSTPATH}"
-    [[ -n "${LOCALHOSTPOST}" ]] && echo "Save logs locally: ${LOCALHOSTPOST}"
-    [[ -n "${LOCALHOSTPATH}" ]] && echo "Path to local logs: ${}LOCALHOSTPATH"
+    [[ -n "${REMOTE_LOG}" ]] && echo "Web logs: ${REMOTE_LOG}"
+    [[ -n "${REMOTE_URL}" ]] && echo "Address: ${REMOTE_URL}"
+    [[ -n "${EXPIRE_LOGS}" ]] && echo "Log expiration: ${EXPIRE_LOGS} days"
+    [[ -n "${REMOTE_TEMPLATE}" ]] && echo "Log template: ${REMOTE_TEMPLATE}"
+    [[ -n "${SCP_POST}" ]] && echo "Post with SCP/SSH: ${SCP_POST}"
+    [[ -n "${SCP_USER}" ]] && echo "SCP user: ${SCP_USER}"
+    [[ -n "${SCP_HOST}" ]] && echo "Remote log host: ${SCP_HOST}"
+    [[ -n "${SCP_HOST_PATH}" ]] && echo "Remote log path: ${SCP_HOST_PATH}"
+    [[ -n "${POST_TO_LOCAL_HOST}" ]] && echo "Save logs locally: ${POST_TO_LOCAL_HOST}"
+    [[ -n "${LOCAL_HOST_PATH}" ]] && echo "Path to local logs: ${}LOCAL_HOST_PATH"
   fi
   # Weekly Digests
-  if [[ -n "${DIGESTEMAIL}" ]]; then
+  if [[ -n "${DIGEST_EMAIL}" ]]; then
     notice "Weekly Digests"
     echo "--------------"
-    [[ -n "${DIGESTEMAIL}" ]] && echo "Send to: ${DIGESTEMAIL}"
+    [[ -n "${DIGEST_EMAIL}" ]] && echo "Send to: ${DIGEST_EMAIL}"
   fi
   # Monthly Reporting
-  if [[ -n "${CLIENTCONTACT}" ]] || [[ -n "${INCLUDEHOSTING}" ]]; then
+  if [[ -n "${CLIENT_CONTACT}" ]] || [[ -n "${INCLUDE_HOSTING}" ]]; then
     notice "Monthly Reporting"
     echo "-----------------"
-    [[ -n "${CLIENTCONTACT}" ]] && echo "Client contact: ${CLIENTCONTACT}"
-    [[ -n "${INCLUDEHOSTING}" ]] && echo "Hosting notes: ${INCLUDEHOSTING}"
+    [[ -n "${CLIENT_CONTACT}" ]] && echo "Client contact: ${CLIENT_CONTACT}"
+    [[ -n "${INCLUDE_HOSTING}" ]] && echo "Hosting notes: ${INCLUDE_HOSTING}"
   fi
   # Invoice Ninja integration
   if [[ -n "${IN_HOST}" ]] || [[ -n "${IN_TOKEN}" ]] || [[ -n "${IN_CLIENT_ID}" ]] || [[ -n "${IN_PRODUCT}" ]] || [[ -n "${IN_ITEM_COST}" ]] || [[ -n "${IN_ITEM_QTY}" ]] || [[ -n "${IN_NOTES}" ]] || [[ -n "${IN_NOTES}" ]]; then
@@ -378,24 +378,24 @@ function show_settings() {
     [[ -n "${IN_INCLUDE_REPORT}" ]] && echo "Include report: ${IN_INCLUDE_REPORT}"
   fi
   # Google Analytics
-  if [[ -n "${CLIENTID}" ]] || [[ -n "${CLIENTSECRET}" ]] || [[ -n "${REDIRECTURI}" ]] || [[ -n "${AUTHORIZATIONCODE}" ]] || [[ -n "${ACCESSTOKEN}" ]] || [[ -n "${REFRESHTOKEN}" ]] || [[ -n "${PROFILEID}" ]]; then
+  if [[ -n "${CLIENT_ID}" ]] || [[ -n "${CLIENT_SECRET}" ]] || [[ -n "${REDIRECT_URI}" ]] || [[ -n "${AUTHORIZATION_CODE}" ]] || [[ -n "${ACCESS_TOKEN}" ]] || [[ -n "${REFRESH_TOKEN}" ]] || [[ -n "${PROFILE_ID}" ]]; then
     notice "Google Analytics"
     echo "----------------"
-    [[ -n "${CLIENTID}" ]] && echo "Client ID: ${CLIENTID}"
-    [[ -n "${CLIENTSECRET}" ]] && echo "Client secret: ${CLIENTSECRET}"
-    [[ -n "${REDIRECTURI}" ]] && echo "Redirect URI: ${REDIRECTURI}"
-    [[ -n "${AUTHORIZATIONCODE}" ]] && echo "Authorization code: ${AUTHORIZATIONCODE}"
-    [[ -n "${ACCESSTOKEN}" ]] && echo "Access token: ${ACCESSTOKEN}"
-    [[ -n "${REFRESHTOKEN}" ]] && echo "Refresh token: ${REFRESHTOKEN}"
-    [[ -n "${PROFILEID}" ]] && echo "Profile ID: ${PROFILEID}"
+    [[ -n "${CLIENT_ID}" ]] && echo "Client ID: ${CLIENT_ID}"
+    [[ -n "${CLIENT_SECRET}" ]] && echo "Client secret: ${CLIENT_SECRET}"
+    [[ -n "${REDIRECT_URI}" ]] && echo "Redirect URI: ${REDIRECT_URI}"
+    [[ -n "${AUTHORIZATION_CODE}" ]] && echo "Authorization code: ${AUTHORIZATION_CODE}"
+    [[ -n "${ACCESS_TOKEN}" ]] && echo "Access token: ${ACCESS_TOKEN}"
+    [[ -n "${REFRESH_TOKEN}" ]] && echo "Refresh token: ${REFRESH_TOKEN}"
+    [[ -n "${PROFILE_ID}" ]] && echo "Profile ID: ${PROFILE_ID}"
   fi
   # Server monitoring
-  if [[ -n "${MONITORURL}" ]] || [[ -n "${MONITORUSER}" ]] || [[ -n "${SERVERID}" ]]; then
+  if [[ -n "${MONITOR_URL}" ]] || [[ -n "${MONITOR_USER}" ]] || [[ -n "${SERVER_ID}" ]]; then
     notice "Server Monitoring"
     echo "-----------------"
-    [[ -n "${MONITORURL}" ]] && echo "Monitor URL: ${MONITORURL}"
-    [[ -n "${MONITORUSER}" ]] && echo "User: ${MONITORUSER}"
-    [[ -n "${SERVERID}" ]] && echo "Server ID: ${SERVERID}"
+    [[ -n "${MONITOR_URL}" ]] && echo "Monitor URL: ${MONITOR_URL}"
+    [[ -n "${MONITOR_USER}" ]] && echo "User: ${MONITOR_USER}"
+    [[ -n "${SERVER_ID}" ]] && echo "Server ID: ${SERVER_ID}"
   fi
   # Dropbox integration
   if [[ -n "${DB_API_TOKEN}" ]] || [[ -n "${DB_BACKUP_PATH}" ]]; then

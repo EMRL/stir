@@ -27,7 +27,7 @@ function deny() {
 
 # Check for approval queue
 function queue_check() {
-	if [[ -f "${WORKPATH}/${APP}/.queued" ]]; then
+	if [[ -f "${WORK_PATH}/${APP}/.queued" ]]; then
 		info "Approval functionality is deprecated and has been removed."
 	  quiet_exit
 	fi

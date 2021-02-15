@@ -14,15 +14,15 @@ init_loop
 
 function process_html() {
   # Clean out the stuff we don't need
-  [[ -z "${DEVURL}" ]] && sed -i '/DEVURL/d' "${html_file}"
-  [[ -z "${PRODURL}" ]] && sed -i '/PRODURL/d' "${html_file}"
+  [[ -z "${DEV_URL}" ]] && sed -i '/DEV_URL/d' "${html_file}"
+  [[ -z "${PROD_URL}" ]] && sed -i '/PROD_URL/d' "${html_file}"
   [[ -z "${UPTIME}" ]] && sed -i '/UPTIME/d' "${html_file}"
   [[ -z "${LATENCY}" ]] && sed -i '/LATENCY/d' "${html_file}"  
   [[ -z "${SCAN_MSG}" ]] && sed -i '/SCAN_MSG/d' "${html_file}" 
   [[ -z "${LAST_BACKUP}" ]] && sed -i '/LAST_BACKUP/d' "${html_file}" 
-  [[ -z "${PROJCLIENT}" ]] && sed -i 's/()//' "${html_file}"
-  [[ -z "${CLIENTLOGO}" ]] && sed -i '/CLIENTLOGO/d' "${html_file}"
-  [[ -z "${CLIENTCONTACT}" ]] && sed -i '/CLIENTCONTACT/d' "${html_file}"
+  [[ -z "${PROJECT_CLIENT}" ]] && sed -i 's/()//' "${html_file}"
+  [[ -z "${CLIENT_LOGO}" ]] && sed -i '/CLIENT_LOGO/d' "${html_file}"
+  [[ -z "${CLIENT_CONTACT}" ]] && sed -i '/CLIENT_CONTACT/d' "${html_file}"
   [[ -z "${notes}" ]] && sed -i '/NOTES/d' "${html_file}"
   [[ -z "${SMOOCHID}" ]] && sed -i '/SMOOCHID/d' "${html_file}"
   [[ -z "${COMMITHASH}" ]] && sed -i '/COMMITHASH/d' "${html_file}"
@@ -32,7 +32,7 @@ function process_html() {
   [[ -z "${SCAN_MSG}" ]] && sed -i '/SCAN_NAV/d' "${html_file}"
   [[ -z "${FIREWALL_STATUS}" ]] && sed -i '/FIREWALL_NAV/d' "${html_file}"
   [[ -z "${BACKUP_STATUS}" ]] && sed -i '/BACKUP_NAV/d' "${html_file}"
-  [[ -z "${PROFILEID}" ]] && sed -i '/ENGAGEMENT_NAV/d' "${html_file}"
+  [[ -z "${PROFILE_ID}" ]] && sed -i '/ENGAGEMENT_NAV/d' "${html_file}"
 
 
   if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
@@ -90,11 +90,11 @@ function process_html() {
   sed -i "s^{{RSS_NEWS}}^${RSS_NEWS}^g" "${html_file}"
 
   # Setup variables to process
-  process_var=(VIEWPORT NOW DEV LOGTITLE USER PROJNAME PROJCLIENT CLIENTLOGO \
-    DEVURL PRODURL COMMITURL EXITCODE COMMITHASH USER LOGURL REMOTEURL \
-    VIEWPORTPRE PATHTOREPO PROJNAME CLIENTCONTACT DEVURL PRODURL SCAN_MSG \
+  process_var=(VIEWPORT NOW DEV LOGTITLE USER PROJECT_NAME PROJECT_CLIENT CLIENT_LOGO \
+    DEV_URL PROD_URL COMMITURL EXITCODE COMMITHASH USER LOGURL REMOTE_URL \
+    VIEWPORTPRE PATHTOREPO PROJECT_NAME CLIENT_CONTACT DEV_URL PROD_URL SCAN_MSG \
     SCAN_RESULT SCAN_URL BACKUP_STATUS LAST_BACKUP SMOOCHID DIGESTWRAP \
-    GREETING REMOTEURL ANALYTICSMSG COVER WEEKOF UPTIME LATENCY GA_HITS \
+    GREETING REMOTE_URL ANALYTICSMSG COVER WEEKOF UPTIME LATENCY GA_HITS \
     GA_PERCENT GA_SEARCHES GA_DURATION GA_SOCIAL CODE_STATS SCAN_BTN \
     UPTIME_BTN LATENCY_BTN BACKUP_BTN ACTIVITY_NAV STATISTICS_NAV SCAN_NAV \
     ENGAGEMENT_NAV FIREWALL_NAV BACKUP_NAV BACKUP_MSG TOTAL_COMMITS RSS_URL \
@@ -134,9 +134,9 @@ function process_html() {
     -e "s^{{SCAN_STATUS}}^${SCANC}^g" \
     -e "s^{{UPTIME_STATUS}}^${UPTIMEC}^g" \
     -e "s^{{LATENCY_STATUS}}^${LATENCYC}^g" \
-    -e "s^{{GRAVATARURL}}^${REMOTEURL}\/${APP}\/avatar^g" \
-    -e "s^{{STATURL}}^${REMOTEURL}\/${APP}\/stats^g" \
+    -e "s^{{GRAVATARURL}}^${REMOTE_URL}\/${APP}\/avatar^g" \
+    -e "s^{{STATURL}}^${REMOTE_URL}\/${APP}\/stats^g" \
     -e "s^{{LASTMONTH}}^${last_month}^g" \
-    -e "s^{{ANALYTICS_CHART}}^${REMOTEURL}/${APP}/stats/${METRIC}.png^g" \
+    -e "s^{{ANALYTICS_CHART}}^${REMOTE_URL}/${APP}/stats/${METRIC}.png^g" \
     "${html_file}"
   }

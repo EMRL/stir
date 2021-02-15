@@ -2,7 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.8.4] - 14-2-2020
+## Unreleased
+### Changed
+- **IMPORTANT:** Some variable names in configuration files have changed. Project and user configuration files will be migrated as part of the upgrade install, global configuration must be migrated manually by using `stir --migrate` at the shell prompt and will require sudo access.
+
+## [3.8.4] - 2-14-2020
 ### Fixed 
 - Fixed issues generating monthly reports
 
@@ -39,7 +43,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added a workaround for emailing Invoice Ninja invoices with an offset invoice numbering
 ### Changed
 - Deprecated and removed the `gitStatus()`, `gitStart()`, `permFix()` and `fix_index()` functions
-- Deprecated the `WPCLI` and `MAILPATH` global variables
+- Deprecated the `WP_CLI` and `MAILPATH` global variables
 - Deprecated approval functionality
 - Plugins are no longer activated by default, unless required for reliable upgrades
 - Composer now creates less noise in log_files
@@ -78,7 +82,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Wordpress projects can now be managed using either `composer` or `wp-cli` (or both) transparently
 - ACF Pro update files must now pass an integrity check before proceeding with plugin upgrade
 ### Changed
-- Project deployment can be disabled by adding a file called `.donotdeploy` in the project's root directory (This is the equivalent of setting `DONOTDEPLOY="TRUE"` in `.deploy.sh`)
+- Project deployment can be disabled by adding a file called `.donotdeploy` in the project's root directory (This is the equivalent of setting `DO_NOT_DEPLOY="TRUE"` in `.deploy.sh`)
 ### Fixed
 - Fixed a bug that occasionally caused successful deployment to be incorrectly reported
 
@@ -115,7 +119,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added malware scanning using [Nikto](https://www.cirt.net/Nikto2)
 ### Changed
 - Ports other than 22 can be used for SSH/SCP functions
-- Running with the `--automate` switch now requires the branch defined as "master" must be currently checked out. The behavior is the equivalent of setting `CHECKBRANCH="${MASTER}"`
+- Running with the `--automate` switch now requires the branch defined as "master" must be currently checked out. The behavior is the equivalent of setting `CHECK_BRANCH="${MASTER}"`
 
 ## [3.6.7] - 03-05-2018
 ### Added
@@ -168,7 +172,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added error handling for projects with no commits
 ### Changed
 - Recently changed files that are .gitignored will no longer halt automated deployment
-- Running as root is no longer allowed; this can be overridden by setting `ALLOWROOT="TRUE"`
+- Running as root is no longer allowed; this can be overridden by setting `ALLOW_ROOT="TRUE"`
 - Slightly improved deployment error checking
 - Tightened up many functions
 ### Fixed

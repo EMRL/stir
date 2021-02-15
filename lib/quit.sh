@@ -8,23 +8,23 @@
 
 # Clean exit
 function clean_exit() {
-  notice "Closing ${APP} (${REPOHOST}/${REPO})"
+  notice "Closing ${APP} (${REPO_HOST}/${REPO})"
 
   if [[ "${NO_LOG}" != "1" ]]; then
     make_log # Compile log
     # Check email settings
-    if [[ "${EMAILSUCCESS}" == "TRUE" ]]; then
+    if [[ "${EMAIL_SUCCESS}" == "TRUE" ]]; then
       mail_log
     fi
 
     # Is Slack integration configured?
     # Ghetto but will do for now
-    if [[ "${POSTTOSLACK}" == "TRUE" ]] && [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" = "1" ]] && [[ "${UPD2}" = "1" ]]; then
+    if [[ "${POST_TO_SLACK}" == "TRUE" ]] && [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" = "1" ]] && [[ "${UPD2}" = "1" ]]; then
       message_state="NOTICE"
       notes="No updates available for deployment"
       post_slack
     else
-      if [[ "${POSTTOSLACK}" == "TRUE" ]]; then
+      if [[ "${POST_TO_SLACK}" == "TRUE" ]]; then
         build_log; post_slack > /dev/null 2>&1
       fi
     fi
@@ -39,15 +39,15 @@ function clean_exit() {
 
 # Exit on error
 function error_exit() {
-  notice "Closing ${APP} (${REPOHOST}/${REPO})"
+  notice "Closing ${APP} (${REPO_HOST}/${REPO})"
   message_state="ERROR"; make_log # Compile log
   # Check email settings
-  if [[ "${EMAILERROR}" == "TRUE" ]] || [[ -n "${sendmail_cmd}" ]]; then
+  if [[ "${EMAIL_ERROR}" == "TRUE" ]] || [[ -n "${sendmail_cmd}" ]]; then
     mail_log
   fi
 
   # Check Slack settings
-  if [[ "${POSTTOSLACK}" == "TRUE" ]] && [[ "${SLACKERROR}" == "TRUE" ]]; then
+  if [[ "${POST_TO_SLACK}" == "TRUE" ]] && [[ "${SLACK_ERROR}" == "TRUE" ]]; then
     message_state="ERROR"
     post_slack
   fi
@@ -58,10 +58,10 @@ function error_exit() {
 
 # User interrupted exit
 function user_exit() {
-  rm "${WORKPATH}/${APP}/.git/index.lock" &> /dev/null
+  rm "${WORK_PATH}/${APP}/.git/index.lock" &> /dev/null
   trace "Exit on user request"
   # Check email settings
-  if [[ "${EMAILQUIT}" == "TRUE" ]]; then
+  if [[ "${EMAIL_QUIT}" == "TRUE" ]]; then
      mail_log
   fi
   # Clean up your mess
@@ -101,11 +101,11 @@ function clean_up() {
 
   # Was this an approval?
   if [[ "${APPROVE}" == "1" ]]; then
-    if [[ -f "${WORKPATH}/${APP}/.queued" ]] && [[ "${message_state}" != "ERROR" ]]; then 
-      rm "${WORKPATH}/${APP}/.queued"
+    if [[ -f "${WORK_PATH}/${APP}/.queued" ]] && [[ "${message_state}" != "ERROR" ]]; then 
+      rm "${WORK_PATH}/${APP}/.queued"
     fi
-    if [[ -f "${WORKPATH}/${APP}/.approved" ]]; then
-      rm "${WORKPATH}/${APP}/.approved"
+    if [[ -f "${WORK_PATH}/${APP}/.approved" ]]; then
+      rm "${WORK_PATH}/${APP}/.approved"
     fi
   fi
 

@@ -51,12 +51,12 @@ function build_grunt() {
 function build_npm() {
   [[ -z "${npm_cmd}" ]] && return
   
-  if [[ -f "${APP_PATH}/${WPROOT}${WPAPP}/themes/site/package.json" ]]; then
-    trace "${APP_PATH}/${WPROOT}${WPAPP}/themes/site/package.json found."
-    npm_json="${APP_PATH}/${WPROOT}${WPAPP}/themes/site"
-  elif [[ -f "${APP_PATH}/${WPROOT}${WPAPP}/themes/${APP}/package.json" ]]; then
-    trace "${APP_PATH}/${WPROOT}${WPAPP}/themes/${APP}/package.json found."
-    npm_json="${APP_PATH}/${WPROOT}${WPAPP}/themes/${APP}"
+  if [[ -f "${APP_PATH}/${WP_ROOT}${WP_APP}/themes/site/package.json" ]]; then
+    trace "${APP_PATH}/${WP_ROOT}${WP_APP}/themes/site/package.json found."
+    npm_json="${APP_PATH}/${WP_ROOT}${WP_APP}/themes/site"
+  elif [[ -f "${APP_PATH}/${WP_ROOT}${WP_APP}/themes/${APP}/package.json" ]]; then
+    trace "${APP_PATH}/${WP_ROOT}${WP_APP}/themes/${APP}/package.json found."
+    npm_json="${APP_PATH}/${WP_ROOT}${WP_APP}/themes/${APP}"
   elif [[ -f "${APP_PATH}//package.json" ]]; then
     trace "${APP_PATH}//package.json found."
     npm_json="${APP_PATH}"

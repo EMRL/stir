@@ -11,14 +11,14 @@ var=(active_files)
 init_loop
 
 function check_active() { 
-  if [[ "${FORCE}" == "1" ]] && [[ "${UPGRADE}" == "1" ]] && [[ "${QUIET}" == "1" ]] && [[ "${ACTIVECHECK}" = "TRUE" ]]; then
+  if [[ "${FORCE}" == "1" ]] && [[ "${UPGRADE}" == "1" ]] && [[ "${QUIET}" == "1" ]] && [[ "${CHECK_ACTIVE}" = "TRUE" ]]; then
     trace "Checking for active files"
-    active_files=$(find "${WORKPATH}/${APP}" -mmin -"${CHECKTIME}" ! -path "${WORKPATH}/${APP}/public/app/wflogs" ! -path "${WORKPATH}/${APP}/.git/*" ! -path "${WORKPATH}/${APP}/.git")
+    active_files=$(find "${WORK_PATH}/${APP}" -mmin -"${CHECK_TIME}" ! -path "${WORK_PATH}/${APP}/public/app/wflogs" ! -path "${WORK_PATH}/${APP}/.git/*" ! -path "${WORK_PATH}/${APP}/.git")
 
     # Check for changed files and make sure they are actually waiting to be committed
     if [[ ! -z "${active_files}" ]] && [[ ! -z "$(git status --porcelain)" ]]; then
       trace "Recently changed files: ${active_files}"
-      error "Code base has changed within the last ${CHECKTIME} minutes. Halting deployment."
+      error "Code base has changed within the last ${CHECK_TIME} minutes. Halting deployment."
     fi
   fi
 }

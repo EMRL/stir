@@ -12,8 +12,8 @@ var=(SSH_REPO TMP_PATH SET_ENV dest REMOVE_ME MYSQL_USER MYSQL_PASS \
 init_loop
 
 function wp_clone_handler() {
-  "${git_cmd}" clone --no-checkout "${SSH_REPO}" "${WORKPATH}/${APP}/${REPO}" &>> /dev/null; error_check
-  cd "${WORKPATH}/${APP}/${REPO}"
+  "${git_cmd}" clone --no-checkout "${SSH_REPO}" "${WORK_PATH}/${APP}/${REPO}" &>> /dev/null; error_check
+  cd "${WORK_PATH}/${APP}/${REPO}"
   "${git_cmd}" branch --track origin/"${MASTER}" &>> /dev/null; error_check
   if [[ -n "${STAGING}" ]]; then   
     "${git_cmd}" branch --track origin/"${STAGING}" &>> /dev/null; error_check
@@ -21,9 +21,9 @@ function wp_clone_handler() {
   if [[ -n "${PRODUCTION}" ]]; then
       "${git_cmd}" branch --track origin/"${PRODUCTION}" &>> /dev/null; error_check
   fi
-  cd "${WORKPATH}/${APP}"
-  mv "${WORKPATH}/${APP}/${REPO}/.git" "${WORKPATH}/${APP}"  &>> /dev/null; error_check 
-  rm -rf "${WORKPATH}/${APP}/${REPO}"  &>> /dev/null; error_check
+  cd "${WORK_PATH}/${APP}"
+  mv "${WORK_PATH}/${APP}/${REPO}/.git" "${WORK_PATH}/${APP}"  &>> /dev/null; error_check 
+  rm -rf "${WORK_PATH}/${APP}/${REPO}"  &>> /dev/null; error_check
   "${git_cmd}" reset --hard HEAD &>> /dev/null; error_check 
 }
 
@@ -46,7 +46,7 @@ function wp_clone() {
   wp_tmp
 
   # Create SSH string
-  SSH_REPO="${REPOHOST}/${REPO}.git"
+  SSH_REPO="${REPO_HOST}/${REPO}.git"
   SSH_REPO=$(sed -e "s^.org/^.org:^g" <<< ${SSH_REPO})
   SSH_REPO=$(sed -e "s^https://^git@^g" <<< ${SSH_REPO})
 
@@ -59,8 +59,8 @@ function wp_clone() {
   ssh_check
   
   notice "Setting up project..."
-  cd "${WORKPATH}/${APP}"; \
-  if [[ -d "${WORKPATH}/${APP}/.gitignore" ]]; then
+  cd "${WORK_PATH}/${APP}"; \
+  if [[ -d "${WORK_PATH}/${APP}/.gitignore" ]]; then
     "${git_cmd}" checkout "${MASTER}" &>> /dev/null; error_check
   else
     trace "Cloning ${SSH_REPO}... "
@@ -73,13 +73,13 @@ function wp_clone() {
   # cp -nrp "${WP_PATH}/plugins" "${WP_TMP}/" &>> "${log_file}";
 
   # Reset our root working directory
-  # APP_PATH="${WORKPATH}/${REPO}"
+  # APP_PATH="${WORK_PATH}/${REPO}"
   cd "${APP_PATH}"
 
   # Setup environment variables
   create_env
   #WP_PATH="${WP_TMP}"
-  ACTIVECHECK="FALSE"
+  CHECK_ACTIVE="FALSE"
   #cd "${WP_PATH}"
 
   # Create database
@@ -168,7 +168,7 @@ function wp_clone() {
     fi
 
     # Check server
-    # wp_server_check
+    # wp_CHECK_SERVER
 
     # Activate required plugins
     trace status "Checking plugin requirements... "
