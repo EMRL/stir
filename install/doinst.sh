@@ -138,11 +138,14 @@ fi
 
 # Start the install
 echo; sleep 1
-if [[ ! -d /etc/stir ]]; then # || [[ ! -d /etc/stir/lib ]] || [[ ! -d /etc/stir/crontab ]]; then
+if [[ ! -d /etc/stir ]]; then
   echo "Creating directories"
-  if [[ ! -d /etc/stir ]]; then
-    sudo mkdir /etc/stir; error_check
-  fi
+  sudo mkdir /etc/stir; error_check
+fi
+
+# Clean out old libraries
+if [[ -d /etc/stir/lib ]]; then
+  sudo rm /etc/stir/lib/*; error_check
 fi
 
 echo "Installing system files"
@@ -165,8 +168,32 @@ cp etc/extras/bulk.stir.sh /usr/local/bin/bulk.stir || error_check
 sudo chmod 755 /usr/local/bin/stir || error_check
 sudo chmod 755 /usr/local/bin/bulk.stir || error_check
 
+# Check for a needed migration
+if grep -aq "WORKPATH" "/etc/stir/global.conf"; then
+  echo "Done."
+  echo; echo "${fg_red}#### IMPORTANT CHANGES ####${reset}"
+  echo "Some variable names in configuration files have changed, and Stir will "
+  echo "not launch until your configuration is updated. See below. "
+  echo
+  echo "1. Global configuration files must be migrated manually by using "
+  echo "   a one-time command"
+  echo "2. Project and user configuration files will be migrated as part of "
+  echo "   the upgrade install and will need no extra user interaction "
+  echo
+
+  # Get user authorization
+  if [[ "${TIMEOUT}" != "TRUE" ]]; then
+    read -rp "${fg_yellow}=> Type ${reset}YES${fg_yellow} to migrate your configuration:${reset} " MIGRATE
+    if [[ "${MIGRATE}" == "YES" ]]; then 
+      sudo stir --migrate
+    else
+      echo "You must type YES (case-sensitive) to migrate, no changes made."
+    fi
+  fi
+  exit 0
+fi
+
 if [[ "${FIRSTRUN}" == "TRUE" ]]; then
-  # Someday some first run help stuff could go here
   echo
   echo "${fg_yellow}     _   _"     
   echo " ___| |_(_)_ __" 
@@ -174,11 +201,9 @@ if [[ "${FIRSTRUN}" == "TRUE" ]]; then
   echo "\__ \ |_| | |"  
   echo "|___/\__|_|_|${reset}"
   echo
-  echo "welcome to Stir!"
-  echo
-  echo "Stir is designed to speed up, integrate, and automate project "
-  echo "deployment. Its main focus is Wordpress websites, but it can be used "
-  echo "with any code repository."
+  echo "Stir was created to speed and automate maintaining Wordpress websites "
+  echo "in an agency environment, with an emphasis on client communication and "
+  echo "generating revenue. "
   echo
   echo "Here's a few things that stir can help you do:"
   echo
@@ -186,9 +211,9 @@ if [[ "${FIRSTRUN}" == "TRUE" ]]; then
   echo "   system files"
   echo "2. Keep clients up to date with simple dashboards and scheduled digest "
   echo "   emails notifying them of their code updates"
-  echo "3. Track all changes internally w/ integration into project management, "
-  echo "   time tracking, and invoicing systems"
-  echo "4. Notify your team of deployments through Slack and emails"
+  echo "3. Get paid! Track all changes internally w/ integration into project "
+  echo "   management, time tracking, and invoicing systems"
+  echo "4. Notify your clients and team of updates through Slack and email"
   echo "5. Solve deployment issues with verbose logging features"
   echo
   echo "Let's get your configuration started!"
@@ -237,14 +262,6 @@ if [[ "${FIRSTRUN}" == "TRUE" ]]; then
   echo
   echo "Learn about configuring Stir at https://github.com/EMRL/stir/wiki"
 fi
-
-# If automated unit testing, exit now
-#if [[ "${TIMEOUT}" == "TRUE" ]]; then
-#  exit 0
-#fi
-
-# Clean out unused variables
-# sed -i 's^{{.*}}^^g' /etc/stir/global.conf
 
 echo "Successfully installed, try typing 'stir' for help."
 exit 0

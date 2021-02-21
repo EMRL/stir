@@ -222,11 +222,11 @@ function check_dependencies() {
         if [[ ! -d "${WORK_PATH}/${APP}/${CONFIG_DIR}" ]]; then
           mkdir "${WORK_PATH}/${APP}/${CONFIG_DIR}"
         fi
-        cp "${stir_path}"/deploy.sh "${WORK_PATH}/${APP}/${CONFIG_DIR}/"
+        cp "${stir_path}"/stir-project.sh "${WORK_PATH}/${APP}/${CONFIG_DIR}/.stir.sh"
         APPRC="${WORK_PATH}/${APP}/${CONFIG_DIR}/stir.sh"
       else
         # If using root directory for .stir.sh
-        cp "${stir_path}"/deploy.sh "${WORK_PATH}/${APP}/.stir.sh"
+        cp "${stir_path}"/stir-project.sh "${WORK_PATH}/${APP}/.stir.sh"
         APPRC="${WORK_PATH}/${APP}/.stir.sh"
       fi
       # Ask the user if they would like to edit

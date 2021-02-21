@@ -333,9 +333,10 @@ fi
 # Immediately migrate to newer project format if needed
 if [[ ${MIGRATE} == "1" ]]; then
   i="/etc/stir/global.conf"
+  echo "Migrating configuration files to latest format..."
   if [[ ! -w "${i}" ]]; then
-    echo "Migration requires sudo access."
-    echo "Format: sudo stir --migrate"
+    echo "Requires sudo access."
+    echo "Try using: sudo stir --migrate"
     exit
   fi
   local_version="null"
