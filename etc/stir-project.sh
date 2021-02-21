@@ -91,10 +91,6 @@ PROJECT_VERSION="3.8.5"
 # behavior, set DISABLE_SSH_CHECK to TRUE
 # DISABLE_SSH_CHECK="{{DISABLE_SSH_CHECK}}"
 
-# If for some reason you'd like a default commit message. It will
-# always be editable before finalizing commit.
-# COMMIT_MSG="{{COMMIT_MSG}}"
-
 
 ###############################################################################
 # Wordpress Setup

@@ -6,9 +6,27 @@
 # Checks for Wordpress plugin updates
 ###############################################################################
 
+# Initialize variables
+var=(plugin_update_complete)
+init_loop
+
 function wp_plugins() {
-  # If available then let's do it
+  # Look for updates
+  if [[ "${QUIET}" != "1" ]]; then
+    wp_update_check &
+    spinner $!
+  else
+    wp_update_check
+  fi
+
+  # Check the logs
+  if ! grep -aq "Available plugin updates:" "${wp_file}"; then
+    return
+  fi
+
+  # Looks like we have stuff to update
   info "The following updates are available:"
+
   # Clean the garbage out of the log for console display
   # This is all going to be rewritten
   sed 's/[+|]//g' "${wp_file}" > "${trash_file}" && mv "${trash_file}" "${wp_file}";
@@ -34,12 +52,7 @@ function wp_plugins() {
     # If ACFPRO needs an update, do it first via wget
     if [[ "${ACF_LOCK}" != "TRUE" ]]; then
       if grep -aq "advanced-custom-fields-pro" "${wp_file}"; then
-        if [[ "${QUIET}" != "1" ]]; then
-          acf_update &
-        spinner $!
-        else
-          acf_update
-        fi
+        acf_update & spinner $!
       fi
     fi
 
@@ -76,11 +89,25 @@ function wp_plugins() {
     fi
 
     cd "${APP_PATH}"; \
+    plugin_update_complete="1"
     info "Plugin updates complete."
   else  
     info "Skipping plugin updates..."
-    SMART_COMMIT="FALSE"
   fi 
+}
+
+function wp_update_check() {
+  "${wp_cmd}" cache delete &>> /dev/null
+
+  # For the log_file
+  "${wp_cmd}" plugin status --no-color &>> $log_file
+
+  # For the console/smart commit message
+  "${wp_cmd}" plugin update --dry-run --no-color --all &> "${wp_file}"
+
+  # Other options, thanks Corey
+  # wp plugin list --format=csv --all --fields=name,update_version,update | grep -a 'available'
+  # wp plugin list --format=csv --all --fields=title,update_version,update | grep -a 'available'
 }
 
 ###############################################################################
@@ -93,10 +120,10 @@ function wp_plugins() {
 #               the Wordpress plugin archive
 ############################################################################### 
 function add_plugin() {
-  # User will be doing something like `deploy --add-plugin wp-job-manager` from 
+  # User will be doing something like `stir --add-plugin wp-job-manager` from 
   # the shell
   # If composer:
-  "${composer_cmd}" --no-progress require wpackagist-plugin/wp-job-manager:*
+  "${composer_cmd}" --no-progress require wpackagist-plugin/${1}:*
   # If no composer:
-  wp plugin install wp-job-manager
+  wp plugin install ${1}
 }

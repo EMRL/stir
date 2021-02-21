@@ -29,7 +29,6 @@ function migrate_variables {
       -e 's^CLIENTID^CLIENT_ID^g' \
       -e 's^CLIENTLOGO^CLIENT_LOGO^g' \
       -e 's^CLIENTSECRET^CLIENT_SECRET^g' \
-      -e 's^COMMITMSG^COMMIT_MSG^g' \
       -e 's^CONFIGDIR^CONFIG_DIR^g' \
       -e 's^DEVURL^DEV_URL^g' \
       -e 's^DIGESTEMAIL^DIGEST_EMAIL^g' \

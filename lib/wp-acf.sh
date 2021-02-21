@@ -7,12 +7,13 @@
 ###############################################################################
 
 # Declare needed variables
-var=(acf_file)
+var=(acf_file acf_update_complete)
 init_loop
 
 function acf_update() {
   acf_file="/tmp/acfpro.zip"
-  trace status "Updating ACF Pro... "
+  trace "Updating ACF Pro "
+	
 	# Download the ACF Pro upgrade file
 	"${wget_cmd}" --header="Accept: application/zip" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" -O "${acf_file}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACF_KEY}" &>> "${log_file}"; error_check
 
@@ -20,10 +21,13 @@ function acf_update() {
 	acf_filecheck
 
 	# Proceed with install
-	"${wp_cmd}" plugin delete --no-color advanced-custom-fields-pro &>> "${log_file}"
-	"${wp_cmd}" plugin install --no-color "${acf_file}" &>> "${log_file}"
+	"${wp_cmd}" plugin delete --no-color advanced-custom-fields-pro &>> "${log_file}"; error_check
+	"${wp_cmd}" plugin install --no-color "${acf_file}" &>> "${log_file}"; error_check
+	
+	# Housekeeping
 	rm "${acf_file}"
-  trace notime "OK"
+	acf_update_complete="1"
+  trace "ACF: ${acf_update_complete}"
 }
 
 function acf_filecheck() {

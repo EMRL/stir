@@ -12,11 +12,23 @@ init_loop
 
 function wp() {
   # Make sure we are allowed to update
-  if [[ "${SKIPUPDATE}" != "1" ]] && [[ "${WP_PATH}" != "FALSE" ]]; then
+  if [[ "${SKIP_UPDATE}" != "1" ]] && [[ "${WP_PATH}" != "FALSE" ]]; then
     # Check for Wordfence
     wf_check
     
     cd "${WP_PATH}"
+
+    # If if this is a manual ACF upgrade, jump right in
+    if [[ "${UPDATE_ACF}" == "1" ]]; then
+      error_detail="Adnvanced Custom Fields Pro is not installed in this project, nothing to update"
+      "${wp_cmd}" plugin is-installed advanced-custom-fields-pro; error_check
+
+      acf_update & spinner $!
+
+      plugin_update_complete="1"
+      plugins_updated="1"
+      return
+    fi
 
     notice "Checking for updates..."
 
@@ -27,57 +39,15 @@ function wp() {
       wp_core
     fi
 
-    # If if this is a manual ACF upgrade, jump right in
-    if [[ "${UPDATE_ACF}" == "1" ]]; then
-      error_detail="Adnvanced Custom Fields Pro is not installed in this project, nothing to update"
-      "${wp_cmd}" plugin is-installed advanced-custom-fields-pro; error_check
-      acf_update
-    else
-      # Not sure I like having the entire upgrade process in this `esle` 
-      # but here we are...
-      # Look for updates
-      if [[ "${QUIET}" != "1" ]]; then
-        wp_update_check &
-        spinner $!
-      else
-        "${wp_cmd}" plugin status --no-color >> "${log_file}"
-        "${wp_cmd}" plugin update --dry-run --no-color --all > "${wp_file}"
-      fi
-
-      # Check the logs
-      #if grep -aq "U = Update Available" "${log_file}"; then
-      if grep -aq "Available plugin updates:" "${wp_file}"; then    
-        wp_plugins
-      else
-        # Was there a database glitch?
-        if grep -aq 'plugins can not be updated' "${wp_file}"; then
-          sleep 1
-        else
-          info "Plugins are up to date."; UPD1="1"
-        fi
-      fi
-    fi
+    # Update plugins
+    wp_plugins
   fi
-
+ 
   # If running in Wordpress update-only mode, bail out
   if [[ "${UPGRADE}" == "1" ]] && [[ "${UPD1}" == "1" ]] && [[ "${UPD2}" == "1" ]]; then
     notice "No updates available, halting."
     clean_exit
   fi
-}
-
-function wp_update_check() {
-  "${wp_cmd}" cache delete &>> /dev/null
-
-  # For the log_file
-  "${wp_cmd}" plugin status --no-color &>> $log_file
-
-  # For the console/smart commit message
-  "${wp_cmd}" plugin update --dry-run --no-color --all &> "${wp_file}"
-
-  # Other options, thanks Corey
-  # wp plugin list --format=csv --all --fields=name,update_version,update | grep -a 'available'
-  # wp plugin list --format=csv --all --fields=title,update_version,update | grep -a 'available'
 }
 
 function wp_check() {
@@ -117,7 +87,7 @@ function wp_check() {
   fi
 }
 
-function wp_CHECK_SERVER {
+function wp_check_server {
   # Launch server
   # "${wp_cmd}" server --host=localhost > /dev/null 2>&1; EXITCODE=$?; 
   # if [[ "${EXITCODE}" -eq "0" ]]; then

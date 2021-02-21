@@ -5,6 +5,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## Unreleased
 ### Changed
 - **IMPORTANT:** Some variable names in configuration files have changed. Project and user configuration files will be migrated as part of the upgrade install, global configuration must be migrated manually by using `stir --migrate` at the shell prompt and will require sudo access.
+- Removed the ability to set a default commit message
+- Improved Wordpress core and plugin update functions
+### Fixed
+- Smart Commits include Wordpress core updates once again, resolve #151
 
 ## [3.8.4] - 2-14-2020
 ### Fixed 

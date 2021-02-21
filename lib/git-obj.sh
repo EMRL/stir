@@ -233,7 +233,7 @@ function commit() {
     clean_exit
   else
     # Found stuff, let's get a commit message
-    if [[ -z "${COMMIT_MSG}" ]]; then
+    if [[ -z "${commit_message}" ]]; then
       # while read -p "Enter commit message: " notes && [[ -z "$notes" ]]; do :; done
       read -rp "Enter commit message: " notes
       if [[ -z "${notes}" ]]; then
@@ -260,22 +260,22 @@ function commit() {
           console "Smart Commits must be enabled when forcing updates."
           console "Set SMART_COMMIT=TRUE in .stir.sh"; quiet_exit
         else
-          if [[ -z "${COMMIT_MSG}" ]]; then
+          if [[ -z "${commit_message}" ]]; then
             info "Commit message must not be empty."; quiet_exit
           else
-            notes="${COMMIT_MSG}"
+            notes="${commit_message}"
           fi
         fi
       else
         # We want to be able to edit the default commit if available
         if [[ "${FORCE}" != "1" ]]; then
-          notes="${COMMIT_MSG}"
-          read -rp "Edit commit message: " -e -i "${COMMIT_MSG}" notes
+          notes="${commit_message}"
+          read -rp "Edit commit message: " -e -i "${commit_message}" notes
           # Update the commit message based on user input ()
-          notes="${notes:-$COMMIT_MSG}"
+          notes="${notes:-$commit_message}"
         else
-          info "Using auto-generated commit message: ${COMMIT_MSG}"
-          notes="${COMMIT_MSG}"
+          info "Using auto-generated commit message: ${commit_message}"
+          notes="${commit_message}"
         fi
       fi
     fi
