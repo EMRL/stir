@@ -24,7 +24,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.8.2] - 10-17-2020
 ### Added
-- Digests can now display detailed traffic, AdWords, and ecommerce activity data 
+- Digests can now display detailed traffic, Goodle Ads, and ecommerce activity data 
 ### Changed
 - Engagement reports and digests now use the more useful `pageviews` instead of `hits`
 - Variables changed to use more consistent naming 

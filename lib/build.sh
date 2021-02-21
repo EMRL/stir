@@ -35,15 +35,9 @@ function build_grunt() {
     notice "Found grunt configuration!" 
   else
     if  [[ "${FORCE}" = "1" ]] || yesno --default no "Build assets? [y/N] "; then
-      cd "${APP_PATH}" || error_check
-      
-      if [[ "${VERBOSE}" == "TRUE" ]]; then
-        "${grunt_cmd}" build --force 2>&1 | tee --append "${trash_file}"           
-      else
-        "${grunt_cmd}" build --force &>> "${trash_file}" &
-        spinner $!
-        info "Packages successfully built."
-      fi
+      cd "${APP_PATH}" || error_check     
+      "${grunt_cmd}" build --force &>> "${trash_file}" & spinner $!
+      info "Packages successfully built."
     fi
   fi
 }

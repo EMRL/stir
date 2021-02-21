@@ -83,7 +83,7 @@ function init_internal() {
   var=(optstring options log_file wp_file core_file post_file trash_file stat_file \
   url_file html_file htmlSendmail html_email client_email textSendmail stir_path \
   etc_path lib_path POSTEMAIL current_branch error_msg notes \
-  UPDCORE TASKLOG plugins_updated PCB PCC PCD PLUGINS slack_icon APPRC USERRC message_state \
+  UPDCORE TASKLOG plugins_updated PCB PCC PCD PLUGINS slack_icon APPRC userrc message_state \
   COMMITURL COMMITHASH UPD1 UPD2 UPDATE git_lock AUTOMERGE MERGE EXITCODE \
   current_stash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
   VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WP_ROOT \
@@ -266,7 +266,7 @@ while [[ ${1:-unset} = -?* ]]; do
     -S|--skip-update|--skip-updates) SKIP_UPDATE="1" ;;
     -c|--current) CURRENT="1" ;;
     -v|--version) echo "$(basename "${0}") ${VERSION}"; exit ;;
-    -V|--verbose) VERBOSE="1" ;;
+    -V|--verbose) VERBOSE="TRUE" ;;
     -q|--quiet) QUIET="1" ;;
     --strict) STRICT="1" ;;
     --debug) DEBUG="1" ;;
@@ -412,7 +412,7 @@ if [[ "${CURRENT}" == "1" ]]; then
   APP="${PWD##*/}"
 fi
 
-# If not trying to deploy current directory, and no repo is named, exit
+# If not trying to work with current directory, and no project is named, exit
 if [[ "${CURRENT}" != "1" ]]; then
   # if [[ -z "${@}" ]]; then
   if [[ -z "${APP}" ]]; then
@@ -426,10 +426,10 @@ if [[ "${CURRENT}" != "1" ]]; then
   fi
 fi
 
-# Load per-user configuration, if it exists
+# Load user configuration, if it exists
 if [[ -r ~/.stirrc ]]; then
   # shellcheck disable=1090
-  source ~/.stirrc; USERRC="1"
+  source ~/.stirrc; userrc="1"
 fi
 
 # Load libraries, or die
@@ -478,7 +478,7 @@ if [[ "${INCOGNITO}" != "TRUE" ]]; then
 fi
 
 # Does a user configuration exit?
-if [[ "${USERRC}" != "1" ]]; then
+if [[ "${userrc}" != "1" ]]; then
   trace "User configuration not found, creating"
   if [[ -r "${stir_path}/stir-user.rc" ]]; then
     cp "${stir_path}"/stir-user.rc ~/.stirrc

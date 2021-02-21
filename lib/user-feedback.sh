@@ -12,37 +12,34 @@ init_loop
 
 # Progress spinner; we'll see if this works
 function spinner() {
-  if [[ "${QUIET}" != "1" ]] && [[ "${DEBUG}" != "1" ]]; then
-    local pid=$1
-    local delay=0.15
-    # Is there a better way to format this thing?  It's wonky
-    local spinstr='|/-\'
-    tput civis;
-    while [[ "$(ps a | awk '{print $1}' | grep ${pid})" ]]; do
+  local pid=$1
+  local delay=0.15
+  # Is there a better way to format this thing?  It's wonky
+  local spinstr='|/-\'
+  tput civis;
+  while [[ "$(ps a | awk '{print $1}' | grep ${pid})" ]]; do
+    if [[ "${QUIET}" != "1" ]]; then
       local temp=${spinstr#?}
       printf "Working... %c  " "$spinstr"
       local spinstr=$temp${spinstr%"$temp"}
       sleep $delay
       printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
-    done
-    printf "            \b\b\b\b\b\b\b\b\b\b\b\b"
-    tput cnorm;
-  fi
+    fi
+  done
+  printf "            \b\b\b\b\b\b\b\b\b\b\b\b"
+  tput cnorm;
 }
 
 # Set up the progress bar function
 function progress_bar() {
-  # There is a bug in here I have not been able to track down yet, so 
-  # overridding set -e in this function
-  # set +e
   let _progress=\(${1}*100/${2}*100\)/100
   let _done=\(${_progress}*4\)/10
   let _left=40-$_done
   _fill=$(printf "%${_done}s")
   _empty=$(printf "%${_left}s")
-  printf "\rProgress : [${_fill// /#}${_empty// /-}] ${_progress}%%"
-  # Switch back to strict
-  # set -e
+  if [[ "${QUIET}" != "1" ]]; then
+    printf "\rProgress : [${_fill// /#}${_empty// /-}] ${_progress}%%"
+  fi
 }
 
 # Display progress bar
@@ -59,10 +56,12 @@ function show_progress() {
 }
 
 function dot {  
-  if [[ "${1-default}" == "newline" ]]; then
-    echo "."
-  else
-    echo -n "."
+  if [[ "${QUIET}" != "1" ]]; then
+    if [[ "${1-default}" == "newline" ]]; then
+      echo "."
+    else
+      echo -n "."
+    fi
   fi
 }
 
