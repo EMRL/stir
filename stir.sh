@@ -82,10 +82,10 @@ function init_env() {
 function init_internal() {
   var=(optstring options log_file wp_file core_file post_file trash_file stat_file \
   url_file html_file htmlSendmail html_email client_email textSendmail stir_path \
-  etc_path lib_path POSTEMAIL current_branch error_msg notes \
-  UPDCORE TASKLOG plugins_updated PCB PCC PCD PLUGINS slack_icon APPRC userrc message_state \
-  COMMITURL COMMITHASH UPD1 UPD2 UPDATE git_lock AUTOMERGE MERGE EXITCODE \
-  current_stash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
+  etc_path lib_path integration_email current_branch error_msg notes \
+  UPDCORE TASKLOG plugins_updated PCB PCC PCD PLUGINS slack_icon APPRC userrc \
+  message_state COMMITURL COMMITHASH UPD1 UPD2 UPDATE git_lock AUTOMERGE MERGE \
+  EXITCODE current_stash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
   VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WP_ROOT \
   WP_APP WP_SYSTEM DO_NOT_UPDATE_WP gitHistory digest_payload MINAUSER \
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE  LOGSUFFIX \
@@ -551,10 +551,10 @@ if [[ "${POST_TO_SLACK}" == "TRUE" ]]; then
 fi
 
 # Integration email
-POSTEMAIL="${POST_EMAIL_HEAD}${TASK}${POST_EMAIL_TAIL}"
-if [[ -n "${POSTEMAIL}" ]]; then
+integration_email="${POST_EMAIL_HEAD}${TASK}${POST_EMAIL_TAIL}"
+if [[ -n "${integration_email}" ]]; then
   if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    trace "Email integration enabled (${POSTEMAIL})"
+    trace "Email integration enabled (${integration_email})"
   else
     trace "Email integration enabled"
   fi

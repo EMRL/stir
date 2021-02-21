@@ -38,13 +38,13 @@ function main() {
   elif [[ "${SCAN}" == "1" ]]; then
     scan_host
   else
-    CHECK_SERVER      # Check that servers are up and running
+    check_server      # Check that servers are up and running
     
     if [[ "${DISABLE_SSH_CHECK}" != "TRUE" ]]; then
       ssh_check   # Check keys
     fi
     if [[ "${PUBLISH}" == "1" ]]; then
-      proj_deploy   # Deploy project to live server
+      deploy_project   # Deploy project to live server
     else
       checkout "${MASTER}"    # Checkout master branch
       garbage                 # If needed, clean up the trash
@@ -69,7 +69,7 @@ function main() {
   
         checkout "${MASTER}"
 
-        proj_deploy      # Deploy project to live server
+        deploy_project      # Deploy project to live server
         return 0
       elif [[ ! -f "${WORK_PATH}/${APP}/.queued" ]]; then
         pre_deploy      # Get the status
@@ -90,7 +90,7 @@ function main() {
 
       # Continue normally
       if [[ "${APPROVE}" != "1" ]]; then
-        wp            # Run Wordpress upgrades if needed
+        wp_main       # Run Wordpress upgrades if needed
         build_check   # Run package manager
         status        # Make sure there's something here to commit         
       fi
@@ -123,7 +123,7 @@ function main() {
         checkout "${MASTER}"
       fi
 
-      proj_deploy     # Deploy project to live server
+      deploy_project     # Deploy project to live server
     fi
   fi  
 }

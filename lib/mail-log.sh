@@ -374,7 +374,7 @@ function email_test() {
   if [[ ! -z "${TASK}" ]]; then
     sleep 2
     if [[ "${POST_EMAIL_HEAD}${TASK}${POST_EMAIL_TAIL}" == ?*@?*.?* ]]; then
-      console "Testing integration to ${POSTEMAIL}"
+      console "Testing integration to ${integration_email}"
       (
       if [[ -z "${TASK_USER}" ]] || [[ -z "${ADD_TIME}" ]]; then
         echo "From: ${FROM}"

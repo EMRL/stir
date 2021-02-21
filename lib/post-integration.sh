@@ -69,7 +69,7 @@ function mail_post() {
         echo "Subject: ${ADD_TIME}"
       fi
     fi
-    echo "To: ${POSTEMAIL}"
+    echo "To: ${integration_email}"
     echo "Content-Type: text/plain"
     echo
     echo "${post}";
@@ -86,21 +86,16 @@ function postCommit() {
     "${wget_cmd}" -q -O - "${PROD_URL}${WP_SYSTEM}"/wp-admin/upgrade.php?step=1 > /dev/null 2>&1
   fi
 
-  # Check for a Wordpress core update, update production database if needed
-  #if [[ "${UPDCORE}" == "1" ]] && [[ -n "${PRODUCTION}" ]] && [[ -n "${PROD_URL}" ]] && [[ -n "${DEPLOY}" ]]; then
-  #  info "Upgrading production database..."; curl --silent "${PROD_URL}${WP_SYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
-  #fi
-
   # Just for yuks, display git stats for this user (user can override this if it annoys them)
   git_stats
 
   # Check to see if there's an email integration setup
-  if [[ -n "${POSTEMAIL}" ]]; then
+  if [[ -n "${integration_email}" ]]; then
     # Is it a valid email address? Ghetto check but better than nothing
-    if [[ "${POSTEMAIL}" == ?*@?*.?* ]]; then
+    if [[ "${integration_email}" == ?*@?*.?* ]]; then
       build_log; mail_post
     else
-      trace "Integration email address ${POSTEMAIL} does not look valid"
+      trace "Integration email address ${integration_email} does not look valid"
     fi
   fi
 }

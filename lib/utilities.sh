@@ -108,9 +108,6 @@ function get_fullpath() {
 
   # If the user has SMTP configured, overwrite sendmail command with ssmtp
   check_smtp
-
-  # What is this I don't even
-  wp_cmd="$(which wp)"
 }
 
 ###############################################################################

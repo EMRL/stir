@@ -52,7 +52,7 @@ function pre_deploy() {
   fi
 } 
 
-function proj_deploy() {
+function deploy_project() {
   empty_line
   if [[ -n "${DEPLOY}" ]]; then
     # Add ssh keys and double check directoy
@@ -131,10 +131,10 @@ function proj_deploy() {
       fi
     fi
   fi
-  postDeploy
+  deploy_cleanup
 }
 
-function postDeploy() {
+function deploy_cleanup() {
   # Check for deployment failure
   if grep -aq "ERROR: Deploy failed." "${log_file}"; then
     error "Deploy failed."
