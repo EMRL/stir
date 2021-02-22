@@ -102,8 +102,6 @@ function update_global() {
     IN_HOST IN_TOKEN IN_OFFSET BUGSNAG_AUTH USE_SMTP CONFIG_BACKUP \
     GRAVITY_FORMS_LICENSE ACF_KEY)
 
-
-
   # Reload global values
   source "${stir_path}"/global.conf
   

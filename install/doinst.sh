@@ -185,7 +185,14 @@ if grep -aq "WORKPATH" "/etc/stir/global.conf"; then
   if [[ "${TIMEOUT}" != "TRUE" ]]; then
     read -rp "${fg_yellow}=> Type ${reset}YES${fg_yellow} to migrate your configuration:${reset} " MIGRATE
     if [[ "${MIGRATE}" == "YES" ]]; then 
-      sudo stir --migrate
+      if [[ -x "$(command -v stir)" ]]; then
+        stir_cmd="$(which stir)"
+        sudo "${stir_cmd}" --migrate
+      else
+        echo "Problem with automatic migration"
+        echo "Try running 'sudo stir --migrate' from your shell prompt"
+        exit 1
+      fi
     else
       echo "You must type YES (case-sensitive) to migrate, no changes made."
     fi

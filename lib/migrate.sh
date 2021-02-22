@@ -53,8 +53,8 @@ function migrate_variables {
       -e 's^MONITORUSER^MONITOR_USER^g' \
       -e 's^NOKEY^NO_KEY^g' \
       -e 's^NOPHP^NO_PHP^g' \
-      -e 's^integration_emailHEAD^POST_EMAIL_HEAD^g' \
-      -e 's^integration_emailTAIL^POST_EMAIL_TAIL^g' \
+      -e 's^POSTEMAILHEAD^POST_EMAIL_HEAD^g' \
+      -e 's^POSTEMAILTAIL^POST_EMAIL_TAIL^g' \
       -e 's^POSTTOSLACK^POST_TO_SLACK^g' \
       -e 's^POSTURL^POST_URL^g' \
       -e 's^PRODURL^PROD_URL^g' \
