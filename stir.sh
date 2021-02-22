@@ -35,11 +35,11 @@ function init_loop {
 # Startup switches
 function init_startup() {
   var=(APP UPGRADE SKIP_UPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
-    SLACKTEST FUNCTION_LIST VARIABLE_LIST AUTOMATE EMAILTEST APPROVE \
-    DENY PUBLISH DIGEST ANALYTICS ANALYTICSTEST BUILD PROJSTATS UNLOCK  \
-    SSHTEST TIME UPDATEONLY test_webhook REPORT REPAIR CREATE_INVOICE SCAN \
+    TEST_SLACK FUNCTION_LIST VARIABLE_LIST AUTOMATE TEST_EMAIL APPROVE \
+    DENY PUBLISH DIGEST ANALYTICS TEST_ANALYTICS BUILD PROJSTATS UNLOCK  \
+    TEST_SSH TIME UPDATEONLY TEST_WEBHOOK REPORT REPAIR CREATE_INVOICE SCAN \
     CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET MIGRATE \
-    SHOW_SETTINGS UNIT_TEST test_bugsnag UPDATE_ACF DEBUG_TO_FILE)
+    SHOW_SETTINGS UNIT_TEST TEST_BUGSNAG UPDATE_ACF DEBUG_TO_FILE)
   init_loop
 }
 
@@ -91,7 +91,7 @@ function init_internal() {
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE  LOGSUFFIX \
   DISABLE_SSH_CHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile \
   TMP MONITOR_URL MONITOR_USER MONITOR_PASS SERVER_ID \
-  MONITORHOURS LATENCY UPTIME MONITORTEST MONITORAPI IN_HOST IN_TOKEN)
+  MONITORHOURS LATENCY UPTIME TEST_MONITOR MONITORAPI IN_HOST IN_TOKEN)
   init_loop
 }
 
@@ -174,7 +174,7 @@ Options:
   -u, --update           If no available Wordpress updates, halt deployment
   -U, --update-only      Deploy only Wordpresss plugin/core updates
   -D, --deploy           Deploy current production code to live environment
-  -m, --merge            Force merge of branches
+  -m, --merge            Force merge of all branches
   -c, --current          Deploy a project from current directory          
   -t, --time             Add time to project management integration
   -p, --prepare          Clone and setup local Wordpress project
@@ -205,7 +205,6 @@ Other Options:
   --repair               Repair a deployment after merge failure
   --scan                 Scan production hosts for malware issues
   --update-acf           Force an update or reinstall of ACF Pro
-  --migrate              Migrate global configuration files to newest format
   --test-ssh             Validate SSH key setup
   --test-email           Test email configuration
   --test-slack           Test Slack integration
@@ -283,13 +282,13 @@ while [[ ${1:-unset} = -?* ]]; do
     --report) REPORT="1"; FORCE="1";; #QUIET="1" ;;
     --automate) FORCE="1"; UPGRADE="1"; QUIET="1"; MERGE="1"; AUTOMATE="1" ;;
     --update-acf) UPDATE_ACF="1" ;;
-    --test-ssh) SSHTEST="1"; NO_LOG="1" ;;
-    --test-slack) SLACKTEST="1"; NO_LOG="1" ;;
-    --test-email) EMAILTEST="1"; NO_LOG="1" ;;
-    --test-webhook) test_webhook="1"; NO_LOG="1" ;;
-    --test-analytics) ANALYTICSTEST="1"; NO_LOG="1" ;; 
-    --test-monitor) MONITORTEST="1"; NO_LOG="1" ;;
-    --test-bugsnag) test_bugsnag="1"; NO_LOG="1" ;;
+    --test-ssh) TEST_SSH="1"; NO_LOG="1" ;;
+    --test-slack) TEST_SLACK="1"; NO_LOG="1" ;;
+    --test-email) TEST_EMAIL="1"; NO_LOG="1" ;;
+    --test-webhook) TEST_WEBHOOK="1"; NO_LOG="1" ;;
+    --test-analytics) TEST_ANALYTICS="1"; NO_LOG="1" ;; 
+    --test-monitor) TEST_MONITOR="1"; NO_LOG="1" ;;
+    --test-bugsnag) TEST_BUGSNAG="1"; NO_LOG="1" ;;
     --stats) PROJSTATS="1" ;;
     --build) BUILD="1"; NOCHECK="1"; FORCE="1" ;;
     --invoice) CREATE_INVOICE="1"; NO_LOG="1"; FORCE="1" ;;
@@ -366,9 +365,9 @@ fi
 [[ "${UPDATEONLY}" == "1" ]] && STARTUP="${STARTUP} --update-only"
 
 # Probably not relevant but included because reasons
-[[ "${SLACKTEST}" == "1" ]] && STARTUP="${STARTUP} --slack-test"
-[[ "${test_webhook}" == "1" ]] && STARTUP="${STARTUP} --post-test"
-[[ "${EMAILTEST}" == "1" ]] && STARTUP="${STARTUP} --email-test"
+[[ "${TEST_SLACK}" == "1" ]] && STARTUP="${STARTUP} --slack-test"
+[[ "${TEST_WEBHOOK}" == "1" ]] && STARTUP="${STARTUP} --post-test"
+[[ "${TEST_EMAIL}" == "1" ]] && STARTUP="${STARTUP} --email-test"
 [[ "${FUNCTION_LIST}" == "1" ]] && STARTUP="${STARTUP} --function-list"
 [[ "${VARIABLE_LIST}" == "1" ]] && STARTUP="${STARTUP} --variable-list"
 
@@ -580,7 +579,7 @@ fi
 # General info
 if [[ "${INCOGNITO}" != "TRUE" ]]; then
   trace "Log file is ${log_file}"
-  trace "global workpath is ${WORK_PATH}"
+  trace "Global workpath is ${WORK_PATH}"
 fi
 
 # Check for upcoming merge

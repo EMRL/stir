@@ -19,7 +19,7 @@ function go() {
   # Get some project data for the logs; we only want to get server monitor 
   # info if we're not running a monitor test since we already loaded the 
   # password file contents into a variable
-  if [[ "${MONITORTEST}" != "1" ]]; then
+  if [[ "${TEST_MONITOR}" != "1" ]]; then
     server_monitor
   fi
   scan_check
@@ -159,33 +159,33 @@ function user_tests() {
   fi
 
   # Slack test
-  if [[ "${SLACKTEST}" == "1" ]]; then
+  if [[ "${TEST_SLACK}" == "1" ]]; then
     slack_test; quiet_exit
   fi
 
   # Webhook POST test
-  if [[ "${test_webhook}" == "1" ]]; then
-    test_webhook; quiet_exit
+  if [[ "${TEST_WEBHOOK}" == "1" ]]; then
+    TEST_WEBHOOK; quiet_exit
   fi
 
   # Email test
-  if [[ "${EMAILTEST}" == "1" ]]; then
+  if [[ "${TEST_EMAIL}" == "1" ]]; then
     email_test; quiet_exit
   fi
 
   # Test analytics authentication
-  if [[ "${ANALYTICSTEST}" == "1" ]]; then
+  if [[ "${TEST_ANALYTICS}" == "1" ]]; then
     ga_test; quiet_exit
   fi
 
   # Test server monitoring
-  if [[ "${MONITORTEST}" == "1" ]]; then
+  if [[ "${TEST_MONITOR}" == "1" ]]; then
     server_monitor_test; quiet_exit
   fi
 
   # Test Bugsnag integration
-  if [[ "${test_bugsnag}" == "1" ]]; then
-    test_bugsnag; quiet_exit
+  if [[ "${TEST_BUGSNAG}" == "1" ]]; then
+    TEST_BUGSNAG; quiet_exit
   fi
 
   # Test Dropbox backup authentication
@@ -194,7 +194,7 @@ function user_tests() {
   fi
 
   # Test SSH key authentication using the --ssh-check flag
-  if [[ "${SSHTEST}" == "1" ]]; then
+  if [[ "${TEST_SSH}" == "1" ]]; then
     if [[ "${NO_KEY}" != "TRUE" ]] && [[ "${DISABLE_SSH_CHECK}" != "TRUE" ]]; then
       notice "Checking SSH Configuration..."
       ssh_check

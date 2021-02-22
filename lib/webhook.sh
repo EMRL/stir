@@ -25,7 +25,7 @@ function post_webhook {
 }
 
 # Webhook configuration test
-function test_webhook {
+function TEST_WEBHOOK {
   console "Testing POST integration..."
   echo "${POST_URL}"
   if [[ -z "${POST_URL}" ]]; then

@@ -133,7 +133,7 @@ function ga_data() {
 }
 
 function ga_data_loop() {
-  if [[ "${ANALYTICSTEST}" == "1" ]]; then
+  if [[ "${TEST_ANALYTICS}" == "1" ]]; then
     # Setup variables to process
     console "${GASTART} - ${GAEND}"
     ga_var=(users newUsers percentNewSessions sessionsPerUser sessions bounces bounceRate \
@@ -187,7 +187,7 @@ function ga_data_loop() {
     eval "ga_${i}"="${RESULT}"
 
     # Output trace
-    if [[ "${ANALYTICSTEST}" == "1" ]]; then
+    if [[ "${TEST_ANALYTICS}" == "1" ]]; then
       trace "${i}: ${RESULT}"
     fi
   done

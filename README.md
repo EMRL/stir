@@ -22,7 +22,7 @@ Options:
   -u, --update           If no available Wordpress updates, halt deployment
   -U, --update-only      Deploy only Wordpresss plugin/core updates
   -D, --deploy           Deploy current production code to live environment
-  -m, --merge            Force merge of branches
+  -m, --merge            Force merge of all branches
   -c, --current          Deploy a project from current directory          
   -t, --time             Add time to project management integration
   -p, --prepare          Clone and setup local Wordpress project
@@ -50,14 +50,13 @@ Other Options:
   --repair               Repair a deployment after merge failure
   --scan                 Scan production hosts for malware issues
   --update-acf           Force an update or reinstall of ACF Pro
-  --migrate              Migrate global configuration files to newest format
   --test-ssh             Validate SSH key setup
   --test-email           Test email configuration
   --test-slack           Test Slack integration
   --test-webhook         Test webhook integration  
   --test-analytics       Test Google Analytics authentication
   --test-monitor         Test production server uptime and latency monitoring
-  --test-bugsnag         Test Bugsnag integration
+  --TEST_BUGSNAG         Test Bugsnag integration
   --show-settings        Display current global and project settings
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables

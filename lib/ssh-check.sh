@@ -16,7 +16,7 @@ function ssh_check() {
       if [[ "${EXITCODE}" != "0" ]]; then
         error "git@bitbucket.org: SSH check failed (Error code ${EXITCODE})"
       else
-        [[ "${SSHTEST}" == "1" ]] && console "git@bitbucket.org: OK"
+        [[ "${TEST_SSH}" == "1" ]] && console "git@bitbucket.org: OK"
         trace "git@bitbucket.org: OK"
       fi
     elif [[ "${REPO_HOST}" == *"github"* ]]; then
@@ -24,7 +24,7 @@ function ssh_check() {
       if [[ "${EXITCODE}" -gt "1" ]]; then
         error "git@github.com: SSH check failed (Error code ${EXITCODE})"
       else
-        [[ "${SSHTEST}" == "1" ]] && console "git@github.com: OK"
+        [[ "${TEST_SSH}" == "1" ]] && console "git@github.com: OK"
         trace "git@github.com: OK"
       fi
     fi

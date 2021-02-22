@@ -51,7 +51,7 @@ function verify_project() {
     fi
     # If CHECK_BRANCH is set, make sure current branch is correct.
     start_branch="$(git rev-parse --abbrev-ref HEAD)"
-    if [[ -n "${CHECK_BRANCH}" ]] && [[ "${DIGEST}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]] && [[ "${EMAILTEST}" != "1" ]] && [[ "${SLACKTEST}" != "1" ]]; then 
+    if [[ -n "${CHECK_BRANCH}" ]] && [[ "${DIGEST}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]] && [[ "${TEST_EMAIL}" != "1" ]] && [[ "${TEST_SLACK}" != "1" ]]; then 
       if [[ "${start_branch}" != "${CHECK_BRANCH}" ]]; then
         error "Must be on ${CHECK_BRANCH} branch to continue.";
       fi
