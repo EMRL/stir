@@ -183,7 +183,7 @@ function build_html() {
         if [[ "${AUTOMATE}" == "1" ]]; then
           LOGTITLE="Scheduled Update"
         else
-          LOGTITLE="Deployment Log"
+          LOGTITLE="Activity Log"
         fi
       fi
       if [[ "${DIGEST}" != "1" ]] && [[ "${REPORT}" != "1" ]]; then

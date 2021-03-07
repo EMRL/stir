@@ -18,7 +18,7 @@ function spinner() {
   local spinstr='|/-\'
   tput civis;
   while [[ "$(ps a | awk '{print $1}' | grep ${pid})" ]]; do
-    if [[ "${QUIET}" != "1" ]]; then
+    if [[ "${QUIET}" != "1" ]] && [[ "${DEBUG}" != "1" ]]; then
       local temp=${spinstr#?}
       printf "Working... %c  " "$spinstr"
       local spinstr=$temp${spinstr%"$temp"}
@@ -56,7 +56,7 @@ function show_progress() {
 }
 
 function dot {  
-  if [[ "${QUIET}" != "1" ]]; then
+  if [[ "${QUIET}" != "1" ]] && [[ "${DEBUG}" != "1" ]]; then
     if [[ "${1-default}" == "newline" ]]; then
       echo "."
     else
@@ -66,9 +66,11 @@ function dot {
 }
 
 function plus {  
-  if [[ "${1-default}" == "newline" ]]; then
-    echo "+"
-  else
-    echo -n "+"
+  if [[ "${QUIET}" != "1" ]] && [[ "${DEBUG}" != "1" ]]; then
+    if [[ "${1-default}" == "newline" ]]; then
+      echo "+"
+    else
+      echo -n "+"
+    fi
   fi
 }

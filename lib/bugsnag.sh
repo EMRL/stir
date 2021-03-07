@@ -10,7 +10,7 @@
 var=(BUGSNAG_ORG)
 init_loop
 
-function TEST_BUGSNAG() { 
+function test_bugsnag() { 
   if [[ -n "${BUGSNAG_AUTH}" ]]; then
     trace status "Testing Bugsnag... "
     # Test goes here

@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## [Unreleased]
 ### Changed
 - Some variable names in configuration files have changed, and require a new migration process which is described in detail during the update process
 - Removed the ability to set a default commit message
@@ -11,7 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Smart Commits include Wordpress core updates once again, resolve #151
 
-## [3.8.4] - 2-14-2020
+## [3.8.4] - 2-14-2021
 ### Fixed 
 - Fixed issues generating monthly reports
 
