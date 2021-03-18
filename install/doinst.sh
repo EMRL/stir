@@ -117,12 +117,8 @@ for i in "${dependencies[@]}" ; do
   check_program "${i}"
 done
 
-if [[ -z "${message}" ]] ; then
-  #echo "${fg_green}SUCCESS: System is ready!${reset}"
-  sleep 1
-else
+if [[ -n "${message}" ]] ; then
   echo "${fg_red}ERROR: Install missing dependencies and retry installation${reset}"
-  # echo ${message};
   exit 1
 fi
 
@@ -140,7 +136,12 @@ fi
 echo; sleep 1
 if [[ ! -d /etc/stir ]]; then
   echo "Creating directories"
-  sudo mkdir /etc/stir; error_check
+  if [[ -w /etc/stir ]]; then
+    sudo mkdir /etc/stir; error_check
+  else
+    echo "Cannot create directory."
+    exit 1
+  fi
 fi
 
 # Clean out old libraries
@@ -241,8 +242,13 @@ if [[ "${FIRSTRUN}" == "TRUE" ]]; then
           echo "Using ${WORK_PATH} as your default stir path."
         fi
       else
-        mkdir "${WORK_PATH}"; error_check
-        [[ -d "${WORK_PATH}" ]] && echo "Created ${WORK_PATH} and using it as your default stir path."
+        if [[ -w ${WORK_PATH} ]]; then
+          mkdir "${WORK_PATH}"; error_check
+          [[ -d "${WORK_PATH}" ]] && echo "Created ${WORK_PATH} and using it as your default stir path."
+        else
+          echo "Can not create ${WORK_PATH}"
+          exit 1
+        fi
       fi
     else
       WORK_PATH="$(cd -P .. && pwd -P)"
