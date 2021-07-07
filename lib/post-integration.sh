@@ -79,7 +79,7 @@ function mail_post() {
 
 function postCommit() {
   # Run Wordpress database updates
-  if [[ -n "${PRODUCTION}" ]] && [[ -n "${PROD_URL}" ]]; then
+  if [[ -n "${PRODUCTION}" ]] && [[ -n "${PROD_URL}" ]] && [[ "core_update_complete" == "1" ]]; then
     info "Updating production database..."
     "${curl_cmd}" --silent "${PROD_URL}${WP_SYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
     # In case curl is being weird

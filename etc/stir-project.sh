@@ -34,7 +34,7 @@ PROJECT_VERSION="3.8.5"
 ###############################################################################
 
 # If you will need to execute custom scripts before beginning your session,
-# insert the command with (full path in the value below. If you won't be
+# insert the command with full path in the value below. If you won't be
 # needing to run prepare scripts, leave this value empty or set to FALSE. To
 # use stir's built-in Wordpress prepare function, set this value to TRUE.
 # PREPARE="{{PREPARE}}"

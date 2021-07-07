@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.8.4] - 2-14-2021
 ### Fixed 
+- Updates to Wordpress production databases should now only happen when actually needed
 - Fixed issues generating monthly reports
 
 ## [3.8.3] - 11-12-2020
