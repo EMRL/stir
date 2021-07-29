@@ -85,9 +85,9 @@ function init_internal() {
   etc_path lib_path integration_email current_branch error_msg notes \
   UPDCORE TASKLOG plugins_updated PCB PCC PCD PLUGINS slack_icon APPRC userrc \
   message_state COMMITURL COMMITHASH UPD1 UPD2 UPDATE git_lock AUTOMERGE MERGE \
-  EXITCODE current_stash deploy_cmd deps start_branch postSendmail SLACKUSER NOCHECK \
+  EXITCODE current_stash deploy_cmd start_branch postSendmail SLACKUSER NOCHECK \
   VIEWPORT VIEWPORTPRE LOGTITLE LOGURL TIMESTAMP STARTUP WP_ROOT \
-  WP_APP WP_SYSTEM DO_NOT_UPDATE_WP gitHistory digest_payload MINAUSER \
+  WP_APP WP_SYSTEM DO_NOT_UPDATE_WP digest_payload MINAUSER \
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE  LOGSUFFIX \
   DISABLE_SSH_CHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile \
   TMP MONITOR_URL MONITOR_USER MONITOR_PASS SERVER_ID \
@@ -96,8 +96,8 @@ function init_internal() {
 }
 
 function init_theme() {
-  var=(THEME_MODE DEFAULTC PRIMARYC SECONDARYC SUCCESSC INFOC WARNINGC \
-  DANGERC LOGC LOGBC)
+  var=(THEME_MODE DEFAULT_COLOR PRIMARY_COLOR SECONDARYC SUCCESS_COLOR \
+  INFO_COLOR WARNING_COLOR DANGER_COLOR LOG_COLOR LOG_BACKGROUND_COLOR)
   init_loop
 }
 

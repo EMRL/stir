@@ -202,23 +202,23 @@ function check_backup() {
       var="$(date -d "${i} day ago" +"%Y-%m-%d")"
       if [[ $(grep -a "${var}" "${trash_file}") ]]; then
         # Assume success
-        BACKUP_STATUS="${SUCCESSC}"
+        BACKUP_STATUS="${SUCCESS_COLOR}"
         BACKUP_BTN="btn-success"
         if [[ "${i}" == "0" ]]; then 
           LAST_BACKUP="Today"
-          BACKUP_STATUS="${SUCCESSC}"
+          BACKUP_STATUS="${SUCCESS_COLOR}"
           BACKUP_BTN="btn-success"
         elif [[ "${i}" == "1" ]]; then
           LAST_BACKUP="Yesterday" 
         else
           LAST_BACKUP="${i} days ago"
           if [[ "${i}" -lt "5" ]]; then
-            BACKUP_STATUS="${SUCCESSC}"
+            BACKUP_STATUS="${SUCCESS_COLOR}"
           elif [[ "${i}" -gt "4" && "${i}" -lt "11" ]]; then
-            BACKUP_STATUS="${WARNINGC}"
+            BACKUP_STATUS="${WARNING_COLOR}"
             BACKUP_BTN="btn-warning"
           else
-            BACKUP_STATUS="${DANGERC}"
+            BACKUP_STATUS="${DANGER_COLOR}"
             BACKUP_BTN="btn-danger"
           fi
         fi

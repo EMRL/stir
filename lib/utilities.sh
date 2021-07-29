@@ -144,6 +144,24 @@ function get_json_value() {
 }
 
 ###############################################################################
+# clean_url()
+#   Strip extra forward slashes in URL values
+#
+# Arguments:
+#   [url]         Input URL
+#   [output]      Variable to store cleaned URL   
+#
+# Example use:
+#   clean_url url output
+############################################################################### 
+function clean_url() {
+  if [[ -n "${1}" && -n "${2}"  ]]; then
+    "${2}"=$(sed -i "s^//^/^g" "${1}")
+    "${2}"=$(sed 's^//^/^g' url)
+  fi 
+}
+
+###############################################################################
 # set_fallback_values()
 #   Set defaults for things liks SSH ports if missing
 ###############################################################################

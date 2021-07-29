@@ -49,7 +49,7 @@ function process_xml() {
 				;;
 			'/item')
 			cat<<EOF
-<td valign="top" style="padding: 10px 20px; text-align: left; font-family: Roboto, sans-serif; font-size: 13px; mso-height-rule: exactly; color: {{DEFAULTC}};"><article><strong><a style="font-size: 15px; color: {{PRIMARY}}; text-decoration: none; font-weight: bold;" href="$link">$title</a></strong><br /><time datetime="$datetime">$pubDate</time>$description</article></td>
+<td valign="top" style="padding: 10px 20px; text-align: left; font-family: Roboto, sans-serif; font-size: 13px; mso-height-rule: exactly; color: {{DEFAULT_COLOR}};"><article><strong><a style="font-size: 15px; color: {{PRIMARY}}; text-decoration: none; font-weight: bold;" href="$link">$title</a></strong><br /><time datetime="$datetime">$pubDate</time>$description</article></td>
 EOF
 ;;
 	  esac

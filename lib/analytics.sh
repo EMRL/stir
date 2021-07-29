@@ -296,8 +296,8 @@ function ga_over_time() {
     set terminal png enhanced size 1280,600
     primary = "${CHARTC}"; 
     secondary = "${SECONDARYC}";
-    info = "${INFOC}";
-    default = "${DEFAULTC}";
+    info = "${INFO_COLOR}";
+    default = "${DEFAULT_COLOR}";
     set key off
     set datafile separator ","
     set output '${stat_dir}/${METRIC}.png'

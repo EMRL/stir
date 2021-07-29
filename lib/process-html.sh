@@ -7,8 +7,8 @@
 ###############################################################################
 
 # Initialize variables 
-var=(DEFAULTC PRIMARYC SECONDARYC SUCCESSC INFOC WARNINGC DANGERC SMOOCHID \
-  COVER SCANC UPTIMEC LATENCYC LOGC LOGBC sed_commits sed_scan sed_backup \
+var=(DEFAULT_COLOR PRIMARY_COLOR SECONDARYC SUCCESS_COLOR INFO_COLOR WARNING_COLOR DANGER_COLOR SMOOCHID \
+  COVER SCANC UPTIMEC LATENCYC LOG_COLOR LOG_BACKGROUND_COLOR sed_commits sed_scan sed_backup \
   process_var v i)
 init_loop
 
@@ -122,15 +122,15 @@ function process_html() {
   # Special snowflakes; for some silly reason the variables don't match
   sed -i -e "s^{{VIEWPORT}}^${VIEWPORT}^g" \
     -e "s^{{NOTES}}^${notes}^g" \
-    -e "s^{{DEFAULT}}^${DEFAULTC}^g" \
-    -e "s^{{PRIMARY}}^${PRIMARYC}^g" \
+    -e "s^{{DEFAULT}}^${DEFAULT_COLOR}^g" \
+    -e "s^{{PRIMARY}}^${PRIMARY_COLOR}^g" \
     -e "s^{{SECONDARY}}^${SECONDARYC}^g" \
-    -e "s^{{SUCCESS}}^${SUCCESSC}^g" \
-    -e "s^{{INFO}}^${INFOC}^g" \
-    -e "s^{{WARNING}}^${WARNINGC}^g" \
-    -e "s^{{DANGER}}^${DANGERC}^g" \
-    -e "s^{{LOG}}^${LOGC}^g" \
-    -e "s^{{LOGBACKGROUND}}^${LOGBC}^g" \
+    -e "s^{{SUCCESS}}^${SUCCESS_COLOR}^g" \
+    -e "s^{{INFO}}^${INFO_COLOR}^g" \
+    -e "s^{{WARNING}}^${WARNING_COLOR}^g" \
+    -e "s^{{DANGER}}^${DANGER_COLOR}^g" \
+    -e "s^{{LOG}}^${LOG_COLOR}^g" \
+    -e "s^{{LOGBACKGROUND}}^${LOG_BACKGROUND_COLOR}^g" \
     -e "s^{{SCAN_STATUS}}^${SCANC}^g" \
     -e "s^{{UPTIME_STATUS}}^${UPTIMEC}^g" \
     -e "s^{{LATENCY_STATUS}}^${LATENCYC}^g" \
