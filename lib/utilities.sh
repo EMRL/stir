@@ -79,7 +79,18 @@ function go() {
       fi
     fi
   fi
-  
+
+  # Get absolute paths to critical commands
+  var=(cal composer curl git gitchart gnuplot grep grunt mysqlshow npm scp 
+    sendmail ssh sshpass ssmtp unzip wc wget wkhtmltopdf wp xmlstarlet)
+  for i in "${var[@]}" ; do
+    read -r "${i}_cmd" <<< ""
+    echo "${i}_cmd" > /dev/null
+    if [[ -x "$(command -v ${i})" ]]; then
+      eval "${i}_cmd=\"$(which ${i})\""
+    fi
+  done
+
   # Outstanding approval?
   if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]] && [[ -f "${WORK_PATH}/${APP}/.approved" ]]; then 
     notice "Processing outstanding approval..."
@@ -144,7 +155,25 @@ function get_json_value() {
 }
 
 ###############################################################################
-# clean_url()
+# get_percent()
+#   Get percentage
+#
+# Arguments:
+#   [total]   Total quantity
+#   [items]   Number from which to derive percent
+#
+# Example use:
+#   get_percent 80 37
+#   VARIABLE="$(get_percent ${var1} ${var2})"
+############################################################################### 
+function get_percent {
+  if [[ -n "${1}" && -n "${2}" ]]; then
+    awk "BEGIN { pc=100*${2}/${1}; i=int(pc); print (pc-i<0.5)?i:i+1 }"
+  fi
+}
+
+###############################################################################
+# clean_path()
 #   Strip extra forward slashes in URL values
 #
 # Arguments:
@@ -152,9 +181,9 @@ function get_json_value() {
 #   [output]      Variable to store cleaned URL   
 #
 # Example use:
-#   clean_url url output
+#   clean_path url output
 ############################################################################### 
-function clean_url() {
+function clean_path() {
   if [[ -n "${1}" && -n "${2}"  ]]; then
     "${2}"=$(sed -i "s^//^/^g" "${1}")
     "${2}"=$(sed 's^//^/^g' url)
@@ -203,7 +232,12 @@ function user_tests() {
 
   # Test Bugsnag integration
   if [[ "${TEST_BUGSNAG}" == "1" ]]; then
-    TEST_BUGSNAG; quiet_exit
+    test_bugsnag; quiet_exit
+  fi
+
+  # Test Mautic integration
+  if [[ "${TEST_MAUTIC}" == "1" ]]; then
+    test_mautic; quiet_exit
   fi
 
   # Test Dropbox backup authentication

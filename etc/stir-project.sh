@@ -9,7 +9,7 @@
 # This value indicates the version number when this file was last changed:
 # it does not necessarily reflect stir's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-PROJECT_VERSION="3.8.5"
+PROJECT_VERSION="3.8.5.1"
 
 
 ###############################################################################
@@ -43,7 +43,7 @@ PROJECT_VERSION="3.8.5"
 # value below to TRUE.
 # PREPARE_WITH_RESET="{{PREPARE_WITH_RESET}}"
 
-# If you need to load extra environment variables, enter a the location to
+# If you need to load extra environment variables, enter the location to
 # that file below.
 # PREPARE_CONFIG="{{PREPARE_CONFIG}}"
 
@@ -382,6 +382,20 @@ PROJECT_VERSION="3.8.5"
 # Define the *full* path to this project's backup. Do not including "/Home" as
 # part of the path
 # DB_BACKUP_PATH="{{DB_BACKUP_PATH}}"
+
+
+###############################################################################
+# Mautic integration
+###############################################################################
+
+# Your Mautic API url. Make sure you've enabled API and BasicAuthentication in 
+# your Mautic instance, and do NOT include a trailing slash
+# MAUTIC_URL="{{MAUTIC_URL}}"
+
+# Your authorization key. Generate your key by running
+# "echo -n "user:pass" | base64"
+# at your schell prompt
+# MAUTIC_AUTH={{MAUTIC_AUTH}}
 
 
 ###############################################################################

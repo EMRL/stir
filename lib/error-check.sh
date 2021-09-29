@@ -21,7 +21,7 @@ function error_check() {
     error_msg="${error_detail} (Error ${EXITCODE})"
     error_exit
   else
-    error_text=""
+    error_detail=""
   fi
 }
 

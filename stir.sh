@@ -91,7 +91,7 @@ function init_internal() {
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE  LOGSUFFIX \
   DISABLE_SSH_CHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile \
   TMP MONITOR_URL MONITOR_USER MONITOR_PASS SERVER_ID \
-  MONITORHOURS LATENCY UPTIME TEST_MONITOR MONITORAPI IN_HOST IN_TOKEN)
+  MONITORHOURS LATENCY UPTIME TEST_MONITOR MONITORAPI IN_HOST IN_TOKEN TEST_MAUTIC)
   init_loop
 }
 
@@ -289,6 +289,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --test-analytics) TEST_ANALYTICS="1"; NO_LOG="1" ;; 
     --test-monitor) TEST_MONITOR="1"; NO_LOG="1" ;;
     --test-bugsnag) TEST_BUGSNAG="1"; NO_LOG="1" ;;
+    --test-mautic) TEST_MAUTIC="1"; NO_LOG="1" ;;
     --stats) PROJSTATS="1" ;;
     --build) BUILD="1"; NOCHECK="1"; FORCE="1" ;;
     --invoice) CREATE_INVOICE="1"; NO_LOG="1"; FORCE="1" ;;
@@ -500,10 +501,10 @@ fi
 
 # Load per-project configuration, if it exists
 if [[ -f "${WORK_PATH}/${APP}/.stir.sh" ]]; then
-  if [[ "${INCOGNITO}" != "TRUE" ]]; then
-    trace "Loading project configuration from ${WORK_PATH}/${APP}/.stir.sh"
-  fi
   project_config="${WORK_PATH}/${APP}/.stir.sh"
+  if [[ "${INCOGNITO}" != "TRUE" ]]; then
+    trace "Loading project configuration from ${project_config}"
+  fi
   # Zero out the global CONFIG_DIR variable
   CONFIG_DIR=""
 else
