@@ -136,12 +136,7 @@ fi
 echo; sleep 1
 if [[ ! -d /etc/stir ]]; then
   echo "Creating directories"
-  if [[ -w /etc/stir ]]; then
-    sudo mkdir /etc/stir; error_check
-  else
-    echo "Cannot create directory."
-    exit 1
-  fi
+  sudo mkdir /etc/stir; error_check
 fi
 
 # Clean out old libraries
