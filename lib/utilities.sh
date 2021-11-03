@@ -237,7 +237,7 @@ function user_tests() {
 
   # Test Mautic integration
   if [[ "${TEST_MAUTIC}" == "1" ]]; then
-    test_mautic; quiet_exit
+    mtc_test; quiet_exit
   fi
 
   # Test Dropbox backup authentication
