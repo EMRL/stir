@@ -44,10 +44,23 @@ function process_html() {
     sed -i '/BEGIN DETAILS/,/END DETAILS/d' "${html_file}"
   else
     if [[ "${ga_impressions}" == "0" ]]; then
-      sed -i '/BEGIN ADWORDS/,/END ADWORDS/d' "${html_file}"
+      sed -i '/BEGIN ADS/,/END ADS/d' "${html_file}"
     fi
     if [[ "${ga_transactions}" == "0" ]]; then
       sed -i '/BEGIN ECOMMERCE/,/END ECOMMERCE/d' "${html_file}"
+    fi
+    if [[ "${mtc_valid}" != "1" ]]; then
+      sed -i '/BEGIN EMAIL/,/END EMAIL/d' "${html_file}"
+    else
+      if [[ -z "${mtc_publishUp_1}" ]]; then
+        sed -i '/BEGIN 01_EMAIL/,/END 01_EMAIL/d' "${html_file}"
+      fi
+      if [[ -z "${mtc_publishUp_2}" ]]; then
+        sed -i '/BEGIN 02_EMAIL/,/END 02_EMAIL/d' "${html_file}"
+      fi
+      if [[ -z "${mtc_publishUp_3}" ]]; then
+        sed -i '/BEGIN 03_EMAIL/,/END 03_EMAIL/d' "${html_file}"
+      fi
     fi
   fi
 
@@ -90,21 +103,24 @@ function process_html() {
   sed -i "s^{{RSS_NEWS}}^${RSS_NEWS}^g" "${html_file}"
 
   # Setup variables to process
-  process_var=(VIEWPORT NOW DEV LOGTITLE USER PROJECT_NAME PROJECT_CLIENT CLIENT_LOGO \
-    DEV_URL PROD_URL COMMITURL EXITCODE COMMITHASH USER LOGURL REMOTE_URL \
-    VIEWPORTPRE PATHTOREPO PROJECT_NAME CLIENT_CONTACT DEV_URL PROD_URL SCAN_MSG \
-    SCAN_RESULT SCAN_URL BACKUP_STATUS LAST_BACKUP SMOOCHID DIGESTWRAP \
-    GREETING REMOTE_URL ANALYTICSMSG COVER WEEKOF UPTIME LATENCY GA_HITS \
-    GA_PERCENT GA_SEARCHES GA_DURATION GA_SOCIAL CODE_STATS SCAN_BTN \
+  process_var=(VIEWPORT NOW DEV LOGTITLE USER PROJECT_NAME PROJECT_CLIENT \
+    CLIENT_LOGO DEV_URL PROD_URL COMMITURL EXITCODE COMMITHASH USER LOGURL \
+    REMOTE_URL VIEWPORTPRE PATHTOREPO PROJECT_NAME CLIENT_CONTACT DEV_URL \
+    PROD_URL SCAN_MSG SCAN_RESULT SCAN_URL BACKUP_STATUS LAST_BACKUP SMOOCHID \
+    DIGESTWRAP GREETING REMOTE_URL ANALYTICSMSG COVER WEEKOF UPTIME LATENCY \
+    GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION GA_SOCIAL CODE_STATS SCAN_BTN \
     UPTIME_BTN LATENCY_BTN BACKUP_BTN ACTIVITY_NAV STATISTICS_NAV SCAN_NAV \
     ENGAGEMENT_NAV FIREWALL_NAV BACKUP_NAV BACKUP_MSG TOTAL_COMMITS RSS_URL \
-    THEME_MODE ENGAGEMENT_DAYS \
-    ga_hits  ga_sessions ga_users ga_newUsers ga_sessionsPerUser \
-    ga_avgSessionDuration ga_organicSearches ga_pageviews ga_pageviewsPerSession \
-    ga_avgTimeOnPage ga_bounceRate ga_impressions ga_adClicks ga_adCost \
-    ga_CPC ga_CTR ga_costPerConversion ga_transactions ga_transactionRevenue \
-    ga_revenuePerTransaction ga_revenuePerItem ga_transactionsPerSession \
-    ga_transactionsPerUser)
+    THEME_MODE ENGAGEMENT_DAYS ga_hits  ga_sessions ga_users ga_newUsers \
+    ga_sessionsPerUser ga_avgSessionDuration ga_organicSearches ga_pageviews \
+    ga_pageviewsPerSession ga_avgTimeOnPage ga_bounceRate ga_impressions \
+    ga_adClicks ga_adCost ga_CPC ga_CTR ga_costPerConversion ga_transactions \
+    ga_transactionRevenue ga_revenuePerTransaction ga_revenuePerItem \
+    ga_transactionsPerSession ga_transactionsPerUser MAUTIC_URL \
+    mtc_id_1 mtc_subject_1 mtc_publishUp_1 mtc_sentCount_1 mtc_readCount_1 \
+    mtc_readRate_1 mtc_id_2 mtc_subject_2 mtc_publishUp_2 mtc_sentCount_2 \
+    mtc_readCount_2 mtc_readRate_2 mtc_id_3 mtc_subject_3 mtc_publishUp_3 \
+    mtc_sentCount_3 mtc_readCount_3 mtc_readRate_3)
 
   # Start the loop
   for i in "${process_var[@]}" ; do

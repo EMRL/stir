@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initialize variables
-var=(integer_check json_key json_num)
+var=(integer_check json_key json_num cleaned_date)
 init_loop
 
 # Open a deployment session, ask for user confirmation before beginning
@@ -167,8 +167,10 @@ function get_json_value() {
 #   VARIABLE="$(get_percent ${var1} ${var2})"
 ############################################################################### 
 function get_percent {
-  if [[ -n "${1}" && -n "${2}" ]]; then
-    awk "BEGIN { pc=100*${2}/${1}; i=int(pc); print (pc-i<0.5)?i:i+1 }"
+  declare arg1="${1:-}"
+  declare arg2="${2:-}"
+  if [[ -n "${arg1}" && -n "${arg2}" ]]; then
+    awk "BEGIN { pc=100*${arg2}/${arg1}; i=int(pc); print (pc-i<0.5)?i:i+1 }"
   fi
 }
 
@@ -188,6 +190,22 @@ function clean_path() {
     "${2}"=$(sed -i "s^//^/^g" "${1}")
     "${2}"=$(sed 's^//^/^g' url)
   fi 
+}
+
+###############################################################################
+# clean_date()
+#   Format string containing default date format to be more readable 
+#
+# Arguments:
+#   [date]        Date string  
+#
+# Example use:
+#   clean_date 2021-10-29
+############################################################################### 
+function clean_date() {
+  if [[ -n "${1}" ]]; then
+    cleaned_date="$(date -d ${1} +'%B %d, %Y')"
+  fi
 }
 
 ###############################################################################

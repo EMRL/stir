@@ -85,7 +85,12 @@ function create_digest() {
     if [[ "${INCLUDE_DETAILS}" == "TRUE" ]]; then
       ga_data_loop
     fi
-    
+
+    # Email marketing stats
+    if [[ -n "${MAUTIC_URL}" && -n "${MAUTIC_AUTH}" ]]; then
+      mtc_data_loop; dot
+    fi
+
     get_digest_commits
 
     # If there's no analytics and no commit activity, there's no need for a digest
