@@ -179,16 +179,20 @@ function get_percent {
 #   Strip extra forward slashes in URL values
 #
 # Arguments:
-#   [url]         Input URL
-#   [output]      Variable to store cleaned URL   
+#   [url]         Input URL   
+#
+# Returns:
+#   ${clean_url}  The post-precessed URL
 #
 # Example use:
-#   clean_path url output
+#   clean_path url
 ############################################################################### 
 function clean_path() {
-  if [[ -n "${1}" && -n "${2}"  ]]; then
-    "${2}"=$(sed -i "s^//^/^g" "${1}")
-    "${2}"=$(sed 's^//^/^g' url)
+  if [[ -n "${1}" ]]; then
+    declare arg1="${1}"
+    clean_url="$(echo ${arg1} | tr -s /)"
+    # "${2}"=$(sed -i "s^//^/^g" "${1}")
+    clean_url="$(echo $clean_url | sed -e 's#:/#://#g')"
   fi 
 }
 
