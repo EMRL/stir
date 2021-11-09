@@ -166,7 +166,10 @@ function ga_data_loop() {
 
   # Start the loop
   for i in "${ga_var[@]}" ; do
-    RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4); dot
+    RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4)
+    if [[ "${TEST_ANALYTICS}" != "1" ]]; then 
+      dot
+    fi
 
     if [[ -z "${RESULT}" ]]; then
       RESULT="0"
@@ -274,6 +277,9 @@ function ga_over_time() {
         var_percent="0"
       fi
       # trace "100*${!var}/${max_value} = ${var_percent}%"
+
+      # This should eventually work
+      # VARIABLE="$(get_percent ${!var} ${max_value})"
 
       # Store values
       eval $1_$n="${!var}"

@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initialize variables
-var=(integer_check json_key json_num cleaned_date)
+var=(integer_check json_key json_num cleaned_date cleanup_path)
 init_loop
 
 # Open a deployment session, ask for user confirmation before beginning
@@ -167,32 +167,32 @@ function get_json_value() {
 #   VARIABLE="$(get_percent ${var1} ${var2})"
 ############################################################################### 
 function get_percent {
-  declare arg1="${1:-}"
-  declare arg2="${2:-}"
+  declare arg1="${1}"
+  declare arg2="${2}"
   if [[ -n "${arg1}" && -n "${arg2}" ]]; then
-    awk "BEGIN { pc=100*${arg2}/${arg1}; i=int(pc); print (pc-i<0.5)?i:i+1 }"
+    awk "BEGIN { pc=100*${arg2}/${arg1}; i=int(pc); print (pc-i<0.5)?i:i+1 }" > /dev/null 2>&1
   fi
 }
 
 ###############################################################################
-# clean_path()
-#   Strip extra forward slashes in URL values
+# cleanup_path()
+#   Strip extra forward slashes in URL or path directory values
 #
 # Arguments:
-#   [url]         Input URL   
+#   [path]         Input path or URL   
 #
 # Returns:
-#   ${clean_url}  The post-precessed URL
+#   ${clean_path}  The post-precessed URL
 #
 # Example use:
-#   clean_path url
+#   cleanup_path path
 ############################################################################### 
-function clean_path() {
+function cleanup_path() {
   if [[ -n "${1}" ]]; then
     declare arg1="${1}"
-    clean_url="$(echo ${arg1} | tr -s /)"
+    clean_path="$(echo ${arg1} | tr -s /)"
     # "${2}"=$(sed -i "s^//^/^g" "${1}")
-    clean_url="$(echo $clean_url | sed -e 's#:/#://#g')"
+    clean_path="$(echo ${clean_path} | sed -e 's#:/#://#g')"
   fi 
 }
 

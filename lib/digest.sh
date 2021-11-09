@@ -78,7 +78,7 @@ function create_digest() {
     # Attempt to get analytics
     analytics; dot
 
-    # Genereate the correct analytics chart
+    # Generate the correct analytics chart
     ga_over_time "${METRIC}" 7; dot
 
     # If we're displaying details, get them now
