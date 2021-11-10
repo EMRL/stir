@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initialize variables
-var=(integer_check json_key json_num cleaned_date cleanup_path)
+var=(integer_check json_key json_num cleaned_date cleaned_path)
 init_loop
 
 # Open a deployment session, ask for user confirmation before beginning
@@ -175,7 +175,7 @@ function get_percent {
 }
 
 ###############################################################################
-# cleanup_path()
+# clean_path()
 #   Strip extra forward slashes in URL or path directory values
 #
 # Arguments:
@@ -185,14 +185,14 @@ function get_percent {
 #   ${clean_path}  The post-precessed URL
 #
 # Example use:
-#   cleanup_path path
+#   clean_path path
 ############################################################################### 
-function cleanup_path() {
+function clean_path() {
   if [[ -n "${1}" ]]; then
     declare arg1="${1}"
-    clean_path="$(echo ${arg1} | tr -s /)"
+    cleaned_path="$(echo ${arg1} | tr -s /)"
     # "${2}"=$(sed -i "s^//^/^g" "${1}")
-    clean_path="$(echo ${clean_path} | sed -e 's#:/#://#g')"
+    cleaned_path="$(echo ${cleaned_path} | sed -e 's#:/#://#g')"
   fi 
 }
 

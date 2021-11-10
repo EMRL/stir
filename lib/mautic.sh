@@ -11,20 +11,22 @@
 # echo -n "user:pass" | base64 
 
 # Initialize variables
-var=(MAUTIC_URL MAUTIC_AUTH working_subject working_sentCount \
+var=(MAUTIC_URL MAUTIC_AUTH working_subject working_sentCount working_url \
   working_readCount working_readCount working_readRate working_publishUp \
-  current_mtc_value mtc_valid mtc_id_1 mtc_subject_1 mtc_publishUp_1 \
-  mtc_sentCount_1 mtc_readCount_1 mtc_readRate_1 mtc_id_2 mtc_subject_2 \
-  mtc_publishUp_2 mtc_sentCount_2 mtc_readCount_2 mtc_readRate_2 mtc_id_3 \
-  mtc_subject_3 mtc_publishUp_3 mtc_sentCount_3 mtc_readCount_3 mtc_readRate_3)
+  working_id_url current_mtc_value mtc_valid mtc_subject_1   mtc_publishUp_1 \
+  mtc_sentCount_1 mtc_readCount_1 mtc_readRate_1  mtc_subject_2 \
+  mtc_publishUp_2 mtc_sentCount_2 mtc_readCount_2 mtc_readRate_2 \
+  mtc_subject_3 mtc_publishUp_3 mtc_sentCount_3 mtc_readCount_3 \
+  mtc_readRate_3)
 init_loop
 
 function mtc_data_loop() {
   mtc_var=(id subject publishUp sentCount readCount emailType)  
 
   # Get payload
-  cleanup_path "${MAUTIC_URL}/api/emails?limit=3&orderBy=id&orderByDir=desc"
-  mtc_payload="$(${curl_cmd} --silent --get "${clean_path}" --header "Authorization: Basic ${MAUTIC_AUTH}")"; error_check
+  clean_path "${MAUTIC_URL}/api/emails?limit=3&orderBy=id&orderByDir=desc"
+  trace "${curl_cmd} --silent --get \"${cleaned_path}\" --header \"Authorization: Basic ${MAUTIC_AUTH}\""
+  mtc_payload="$(${curl_cmd} --silent --get "${cleaned_path}" --header "Authorization: Basic ${MAUTIC_AUTH}")"; error_check
 
   if [[ -n "${mtc_payload}" ]]; then
     mtc_valid="1"
@@ -33,25 +35,25 @@ function mtc_data_loop() {
   # Start the loop
   for i in {1..3} ; do
     for j in "${mtc_var[@]}" ; do
-      current_mtc_value="$(echo ${mtc_payload} | get_json_value ${j} ${i})"
-      
+      current_mtc_value="$(echo ${mtc_payload} | get_json_value ${j} ${i})"      
       # Mautic prefixes its variables with a space, here's the fix
       current_mtc_value="${current_mtc_value:1}"
       if [[ -z "${current_mtc_value}" ]]; then
         return
       else
-        if [[ ${j} == "subject" ]]; then
+        if [[ "${j}" == "subject" ]]; then
           # current_mtc_value="${current_mtc_value@Q}"
           current_mtc_value=$(echo ${current_mtc_value} | sed 's/[^a-zA-Z0-9 ]//g')
         fi
-        if [[ ${j} == "publishUp" ]]; then
+        if [[ "${j}" == "publishUp" ]]; then
           current_mtc_value="${current_mtc_value::-3}"
           clean_date "${current_mtc_value}"
           current_mtc_value="${cleaned_date}"
         fi
+        trace "mtc_${j}_${i}=\"${current_mtc_value}\""
         eval "mtc_${j}_${i}=\"${current_mtc_value}\"" 
       fi 
-    done
+    done 
     mtc_read_rate
   done
 }
