@@ -388,14 +388,18 @@ PROJECT_VERSION="3.8.5.1"
 # Mautic integration
 ###############################################################################
 
-# Your Mautic API url. Make sure you've enabled API and BasicAuthentication in 
-# your Mautic instance, and do NOT include a trailing slash
+# Your Mautic instance's root url. Make sure you've enabled both API and 
+# BasicAuthentication in your Mautic's configuration, and the API tab
 # MAUTIC_URL="{{MAUTIC_URL}}"
 
 # Your authorization key. Generate your key by running
 # "echo -n "user:pass" | base64"
 # at your schell prompt
 # MAUTIC_AUTH={{MAUTIC_AUTH}}
+
+# Mautic changed its JSON payload format in version 3+. If you're using an 
+# older version of Mautic (v1 or v2) then set the following to TRUE
+# MAUTIC_LEGACY_VERSION="{{MAUTIC_LEGACY_VERSION}}"
 
 
 ###############################################################################

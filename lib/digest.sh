@@ -124,6 +124,21 @@ function create_digest() {
       fi
     fi   
 
+    # Strip out Mautic stuff if not needed
+    #if [[ -z "${MAUTIC_URL}" || -z "${MAUTIC_AUTH}" ]]; then
+    #  sed -i '/BEGIN EMAIL MARKETING/,/END EMAIL MARKETING/d' "${html_file}"
+    #  else
+      if [[ -z "${mtc_sentCount_1}" || "${mtc_sentCount_1}" == "0" ]]; then
+        sed -i '/BEGIN 01_EMAIL/,/END 01_EMAIL/d' "${html_file}"
+      fi
+      if [[ -z "${mtc_sentCount_2}" || "${mtc_sentCount_2}" == "0" ]]; then
+        sed -i '/BEGIN 02_EMAIL/,/END 02_EMAIL/d' "${html_file}"
+      fi
+      if [[ -z "${mtc_sentCount_3}" || "${mtc_sentCount_3}" == "0" ]]; then
+        sed -i '/BEGIN 03_EMAIL/,/END 03_EMAIL/d' "${html_file}"
+      fi
+    #fi
+
     # Get the email payload ready
     digest_payload=$(<"${html_file}")
   fi

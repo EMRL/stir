@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- Added Mautic integration for reporting on email performance
+- Added Mautic integration for reporting on marketing email performance
 ### Changed
 - Some variable names in configuration files have changed, and require a new migration process which is described in detail during the update process
 - Removed the ability to set a default commit message

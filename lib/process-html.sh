@@ -64,6 +64,7 @@ function process_html() {
     fi
   fi
 
+  # Strip out RSS if not needed
   if [[ -z "${RSS_URL}" ]]; then
     sed -i -e '/BEGIN WORK RSS/,/END WORK RSS/d' \
       -e '/RSS_URL/d' "${html_file}" \
