@@ -7,9 +7,8 @@
 ###############################################################################
 
 function check_smtp() {
-  if [[ "${USE_SMTP}" != "TRUE" ]] || [[ -z "${ssmtp_cmd}" ]]; then
-    return
-  else
+  if [[ "${USE_SMTP}" == "TRUE" ]] && [[ -n "${ssmtp_cmd}" ]]; then
     sendmail_cmd="${ssmtp_cmd}"
   fi
+  trace "sendmail_cmd=${sendmail_cmd}"
 }

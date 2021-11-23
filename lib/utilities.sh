@@ -80,17 +80,6 @@ function go() {
     fi
   fi
 
-  # Get absolute paths to critical commands
-  var=(cal composer curl git gitchart gnuplot grep grunt mysqlshow npm scp 
-    sendmail ssh sshpass ssmtp unzip wc wget wkhtmltopdf wp xmlstarlet)
-  for i in "${var[@]}" ; do
-    read -r "${i}_cmd" <<< ""
-    echo "${i}_cmd" > /dev/null
-    if [[ -x "$(command -v ${i})" ]]; then
-      eval "${i}_cmd=\"$(which ${i})\""
-    fi
-  done
-
   # Outstanding approval?
   if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]] && [[ -f "${WORK_PATH}/${APP}/.approved" ]]; then 
     notice "Processing outstanding approval..."
