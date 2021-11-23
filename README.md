@@ -2,7 +2,6 @@
 
 [![release](https://img.shields.io/github/v/release/emrl/stir?sort=semver)](https://github.com/EMRL/stir/releases/latest)
 [![Github issues](https://img.shields.io/github/issues/emrl/stir)](https://github.com/EMRL/stir/issues)
-[![Build Status](https://travis-ci.org/EMRL/stir.svg?branch=master)](https://travis-ci.org/EMRL/stir)
 
 `stir` is designed to speed up, automate, and integrate project commits, management, and deployment. Its main focus is Wordpress websites, but it can be used with any code repository. 
 
