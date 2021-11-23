@@ -11,7 +11,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Improved Wordpress core and plugin update functions
 - Improved install process
 ### Fixed
-- Smart Commits include Wordpress core updates once again, resolve #151
+- Smart Commits include Wordpress core updates once again (#151)
+- Fixed a bug that prevented the sending of email in some environments (#193)
 
 ## [3.8.4] - 2-14-2021
 ### Fixed 
@@ -320,7 +321,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Old monolithic script rewritten
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.8.4...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.8.5...HEAD
+[3.8.5]: https://github.com/EMRL/deploy/compare/v3.8.4...v3.8.5
 [3.8.4]: https://github.com/EMRL/deploy/compare/v3.8.3...v3.8.4
 [3.8.3]: https://github.com/EMRL/deploy/compare/v3.8.2...v3.8.3
 [3.8.2]: https://github.com/EMRL/deploy/compare/v3.8...v3.8.2

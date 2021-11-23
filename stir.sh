@@ -11,7 +11,7 @@
 ###############################################################################
 
 IFS=$'\n\t'
-VERSION="3.8.5-dev"
+VERSION="3.8.5"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 last_month="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
@@ -211,6 +211,7 @@ Other Options:
   --test-webhook         Test webhook integration  
   --test-analytics       Test Google Analytics authentication
   --test-monitor         Test production server uptime and latency monitoring
+  --test-mautic          Test Mautic integration
   --test-bugsnag         Test Bugsnag integration
   --show-settings        Display current global and project settings
   --function-list        Output a list of all functions()

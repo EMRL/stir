@@ -55,7 +55,8 @@ Other Options:
   --test-webhook         Test webhook integration  
   --test-analytics       Test Google Analytics authentication
   --test-monitor         Test production server uptime and latency monitoring
-  --TEST_BUGSNAG         Test Bugsnag integration
+  --test-mautic          Test Mautic integration
+  --test-bugsnag         Test Bugsnag integration
   --show-settings        Display current global and project settings
   --function-list        Output a list of all functions()
   --variable-list        Output a project's declared variables
@@ -84,7 +85,7 @@ Repositories can each have their own configuration. An example of this file can 
 
 ## Integration
 
-`stir` is able to integrate with many third-party platforms, including [Slack](https://slack.com), [Google Analytics](https://google.com/analytics/), [PHP Server Monitor](https://phpservermonitor.org), [Bugsnag](https://bugsnag.com), [Invoice Ninja](https://invoiceninja.com), and more. Check out the [integration wiki](https://github.com/EMRL/stir/wiki/Integration) for more information.
+`stir` is able to integrate with many third-party platforms, including [Slack](https://slack.com), [Google Analytics](https://google.com/analytics/), [PHP Server Monitor](https://phpservermonitor.org), [Bugsnag](https://bugsnag.com), [Invoice Ninja](https://invoiceninja.com), [Mautic](https://mautic.org), and more. Check out the [integration wiki](https://github.com/EMRL/stir/wiki/Integration) for more information.
 
 ## Autopilot
 
