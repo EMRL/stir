@@ -29,7 +29,7 @@ function go() {
 
   # Are we skipping git functions?
   if [[ "${SKIP_GIT}" == "1" ]]; then 
-    if [[ "${DIGEST}" -ne "1" ]]; then
+    if [[ "${DIGEST}" != "1" ]]; then
       error "Skipping git functionality is only allowed when using --digest"
     fi
   fi
@@ -90,6 +90,11 @@ function go() {
   # Outstanding approval?
   if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]] && [[ -f "${WORK_PATH}/${APP}/.approved" ]]; then 
     notice "Processing outstanding approval..."
+  fi
+
+  if [[ "${NEWS_URL}" == "FALSE" ]]; then
+    var=(NEWS_URL)
+    init_loop
   fi
 }
 
