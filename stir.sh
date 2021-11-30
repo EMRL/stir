@@ -74,7 +74,7 @@ function init_env() {
   CLIENT_CONTACT INCLUDE_HOSTING GLOBAL_VERSION USER_VERSION PROJECT_VERSION \
   TERSE NOTIFYCLIENT HTML_TEMPLATE PREPARE PRODUCTION_DEPLOY_HOST \
   PRODUCTION_DEPLOY_PATH PREPARE_CONFIG GRAVITY_FORMS_LICENSE NEWS_URL \
-  BUGSNAG_AUTH USE_SMTP INCLUDE_DETAILS NO_LOG)
+  BUGSNAG_AUTH USE_SMTP INCLUDE_DETAILS NO_LOG SKIP_GIT)
   init_loop
 }
 
@@ -198,6 +198,7 @@ Other Options:
   --no-check             Override active file and server checks
   --stats                Generate project statistics pages
   --invoice              Create an invoice
+  --skip-git             Skip all git or git-related functions
   --strict               Any error will halt deployment completely
   --debug                Run in debug mode
   --debug-to-file        Save debug output to a file
@@ -282,6 +283,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --digest) DIGEST="1"; FORCE="1" ;;
     --report) REPORT="1"; FORCE="1";; #QUIET="1" ;;
     --automate) FORCE="1"; UPGRADE="1"; QUIET="1"; MERGE="1"; AUTOMATE="1" ;;
+    --skip-git) SKIP_GIT="1" ;;
     --update-acf) UPDATE_ACF="1" ;;
     --test-ssh) TEST_SSH="1"; NO_LOG="1" ;;
     --test-slack) TEST_SLACK="1"; NO_LOG="1" ;;

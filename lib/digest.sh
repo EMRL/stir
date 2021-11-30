@@ -12,6 +12,10 @@ var=(AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMGFILE DIGESTWRAP \
 init_loop
 
 function get_avatars() {
+  if [[ "${SKIP_GIT}" == "1" ]]; then
+    return
+  fi
+  
   for AUTHOR in $(git log --pretty=format:"%ae|%an" | sort | uniq); do
     AUTHOREMAIL=$(echo $AUTHOR | cut -d\| -f1 | tr -d '[[:space:]]' | tr '[:upper:]' '[:lower:]')
     AUTHORNAME=$(echo $AUTHOR | cut -d\| -f2)
@@ -37,6 +41,10 @@ function get_avatars() {
 }
 
 function get_digest_commits() {
+  if [[ "${SKIP_GIT}" == "1" ]]; then
+    return
+  fi
+
   # Get ready
   DIGESTWRAP="$(<${stir_path}/html/${HTML_TEMPLATE}/digest/commit.html)"
   > "${stat_file}"

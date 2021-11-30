@@ -27,6 +27,11 @@ function verify_project() {
     cd "${APP_PATH}" || error_check
   fi
 
+  # Return if this is not a git project
+  if [[ "${SKIP_GIT}" -eq "1" ]]; then
+    return
+  fi
+
   # Check that .git exists
   if [[ -f "${APP_PATH}/.git/index" ]]; then
     sleep 1

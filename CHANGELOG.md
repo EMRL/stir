@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+- Added `--skip-git` for projects that are focused only on client communication
+
 ## [3.8.5]
 ### Added
 - Added Mautic integration for reporting on marketing email performance

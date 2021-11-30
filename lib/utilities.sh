@@ -27,6 +27,13 @@ function go() {
 
   console "stir ${VERSION}"
 
+  # Are we skipping git functions?
+  if [[ "${SKIP_GIT}" == "1" ]]; then 
+    if [[ "${DIGEST}" -ne "1" ]]; then
+      error "Skipping git functionality is only allowed when using --digest"
+    fi
+  fi
+
   # Build only
   if [[ "${BUILD}" == "1" ]]; then
     build_check; quiet_exit
@@ -36,7 +43,7 @@ function go() {
     console "Current working path is ${APP_PATH}"
   fi
 
-  # Generate git stats
+  # Generate stats
   if [[ "${PROJSTATS}" == "1" ]]; then
     project_stats; quiet_exit
   fi

@@ -34,6 +34,12 @@ function process_html() {
   [[ -z "${BACKUP_STATUS}" ]] && sed -i '/BACKUP_NAV/d' "${html_file}"
   [[ -z "${PROFILE_ID}" ]] && sed -i '/ENGAGEMENT_NAV/d' "${html_file}"
 
+  # If skipping git in digests
+  if [[ "${SKIP_GIT}" == "1" ]]; then
+    sed -i '/BEGIN STATS BUTTON/,/END STATS BUTTON/d' "${html_file}"
+    sed -i '/ANALYTICS_CHART/d' "${html_file}"
+    sed -i '/SKIPPING GIT/d' "${html_file}"
+  fi
 
   if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
     sed -i '/BEGIN ANALYTICS/,/END ANALYTICS/d' "${html_file}"
