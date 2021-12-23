@@ -25,7 +25,13 @@ function prepare() {
 
   # Should we use our built-in Worpdress prepare clone function?
   if [[ "${PREPARE}" == "TRUE" ]] || [[ "${PREPARE}" == "1" ]]; then
-    wp_clone
+    wp_check
+
+    # Clone WP when necessary
+    if [[ -n "${WP_PATH}" ]] && [[ "${WP_PATH}" != "FALSE" ]]; then
+      wp_clone
+    fi
+
     # If --prepare switch is being used, exit immediately
     if [[ "${PREPARE}" == "1" ]]; then
       quiet_exit

@@ -7,9 +7,9 @@
 ###############################################################################
 
 # Initialize variables 
-var=(DEFAULT_COLOR PRIMARY_COLOR SECONDARYC SUCCESS_COLOR INFO_COLOR WARNING_COLOR DANGER_COLOR SMOOCHID \
-  COVER SCANC UPTIMEC LATENCYC LOG_COLOR LOG_BACKGROUND_COLOR sed_commits sed_scan sed_backup \
-  process_var v i)
+var=(DEFAULT_COLOR PRIMARY_COLOR SECONDARY_COLOR SUCCESS_COLOR INFO_COLOR \
+  WARNING_COLOR DANGER_COLOR SMOOCHID COVER SCAN_STATUS UPTIME_STATUS LATENCY_STATUS LOG_COLOR \
+  LOG_BACKGROUND_COLOR sed_commits sed_scan sed_backup process_var v i)
 init_loop
 
 function process_html() {
@@ -147,16 +147,16 @@ function process_html() {
     -e "s^{{NOTES}}^${notes}^g" \
     -e "s^{{DEFAULT}}^${DEFAULT_COLOR}^g" \
     -e "s^{{PRIMARY}}^${PRIMARY_COLOR}^g" \
-    -e "s^{{SECONDARY}}^${SECONDARYC}^g" \
+    -e "s^{{SECONDARY}}^${SECONDARY_COLOR}^g" \
     -e "s^{{SUCCESS}}^${SUCCESS_COLOR}^g" \
     -e "s^{{INFO}}^${INFO_COLOR}^g" \
     -e "s^{{WARNING}}^${WARNING_COLOR}^g" \
     -e "s^{{DANGER}}^${DANGER_COLOR}^g" \
     -e "s^{{LOG}}^${LOG_COLOR}^g" \
     -e "s^{{LOGBACKGROUND}}^${LOG_BACKGROUND_COLOR}^g" \
-    -e "s^{{SCAN_STATUS}}^${SCANC}^g" \
-    -e "s^{{UPTIME_STATUS}}^${UPTIMEC}^g" \
-    -e "s^{{LATENCY_STATUS}}^${LATENCYC}^g" \
+    -e "s^{{SCAN_STATUS}}^${SCAN_STATUS}^g" \
+    -e "s^{{UPTIME_STATUS}}^${UPTIME_STATUS}^g" \
+    -e "s^{{LATENCY_STATUS}}^${LATENCY_STATUS}^g" \
     -e "s^{{GRAVATARURL}}^${REMOTE_URL}\/${APP}\/avatar^g" \
     -e "s^{{STATURL}}^${REMOTE_URL}\/${APP}\/stats^g" \
     -e "s^{{LASTMONTH}}^${last_month}^g" \

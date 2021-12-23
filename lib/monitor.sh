@@ -76,20 +76,20 @@ function server_monitor_log() {
 
   # Set colors for html reports
   if [[ "${UPTIME}" == "100" ]]; then
-    UPTIMEC="${SUCCESS_COLOR}"; UPTIME_BTN="btn-success"
+    UPTIME_STATUS="${SUCCESS_COLOR}"; UPTIME_BTN="btn-success"
   elif [[ "${UPTIME}" > "97" || "${UPTIME}" == "97" ]]; then
-    UPTIMEC="${SUCCESS_COLOR}"; UPTIME_BTN="btn-success"
+    UPTIME_STATUS="${SUCCESS_COLOR}"; UPTIME_BTN="btn-success"
   elif [[ "${UPTIME}" > "88" && "${UPTIME}" < "97" ]]; then
-    UPTIMEC="${WARNING_COLOR}"; UPTIME_BTN="btn-warning"
+    UPTIME_STATUS="${WARNING_COLOR}"; UPTIME_BTN="btn-warning"
   else
-    UPTIMEC="${DANGER_COLOR}"; UPTIME_BTN="btn-danger"
+    UPTIME_STATUS="${DANGER_COLOR}"; UPTIME_BTN="btn-danger"
   fi
 
   if [[ "${LATENCY}" < "2.2" || "${LATENCY}" == "2.2" ]]; then
-    LATENCYC="${SUCCESS_COLOR}"; LATENCY_BTN="btn-success"
+    LATENCY_STATUS="${SUCCESS_COLOR}"; LATENCY_BTN="btn-success"
   elif [[ "${LATENCY}" > "2.2" && "${LATENCY}" < "3.8" ]]; then
-    LATENCYC="${WARNING_COLOR}"; LATENCY_BTN="btn-warning"
+    LATENCY_STATUS="${WARNING_COLOR}"; LATENCY_BTN="btn-warning"
   else
-    LATENCYC="${DANGER_COLOR}"; LATENCY_BTN="btn-danger"
+    LATENCY_STATUS="${DANGER_COLOR}"; LATENCY_BTN="btn-danger"
   fi
 }

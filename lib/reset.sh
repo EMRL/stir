@@ -8,7 +8,7 @@
 
 function reset_local() {
   if [[ -n "${project_config}" ]] && [[ -w "${WORK_PATH}/${APP}" ]] && [[ "${DO_NOT_DEPLOY}" != "TRUE" ]]; then
-
+    
     if [[ -n "${wp_cmd}" ]]; then
       "${wp_cmd}" db check  > /dev/null 2>&1
       EXITCODE=$?; 
@@ -36,6 +36,11 @@ function reset_local() {
     info "Resetting local files..."
     remove_local_files &
     spinner $!
+
+    # Future home of better repo cloning
+    # clone_project
+    # verify_project
+    # checkout "${MASTER}"
 
     if [[ -n "${PREPARE}" ]] && [[ "${PREPARE}" != "FALSE" ]]; then
       return

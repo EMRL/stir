@@ -22,10 +22,10 @@ function scan_check() {
     #if "${curl_cmd}" -LIs --speed-time 900 "${SCAN_URL}" tac | tac | grep -aq "200"; then
     if "${curl_cmd}" -LIs "${SCAN_URL}"  | grep -aq "200"; then
       if "${curl_cmd}" -Ls --speed-time 900 "${SCAN_URL}" | tac | tac | grep -aq "0 error"; then
-        SCANC="${SUCCESS_COLOR}"; SCAN_BTN="btn-success"
+        SCAN_STATUS="${SUCCESS_COLOR}"; SCAN_BTN="btn-success"
         SCAN_MSG="Scan passed"
       elif "${curl_cmd}" -Ls --speed-time 900 "${SCAN_URL}" | tac | tac | grep -aq "error"; then
-        SCANC="${DANGER_COLOR}"; SCAN_BTN="btn-danger"
+        SCAN_STATUS="${DANGER_COLOR}"; SCAN_BTN="btn-danger"
         SCAN_MSG="Problem found"
         trace "error"
       fi
@@ -109,11 +109,11 @@ function scan_host() {
 
   # Set the scan result label text and color
   if [[ "${SCAN_MSG}"  == *"0 errors"* ]]; then
-    SCANC="${SUCCESS_COLOR}"
+    SCAN_STATUS="${SUCCESS_COLOR}"
     SCAN_MSG="Scan passed"
     message_state="PASSED"
   else
-    SCANC="${DANGER_COLOR}"
+    SCAN_STATUS="${DANGER_COLOR}"
     SCAN_MSG="Problem found"
     message_state="ERROR"
   fi

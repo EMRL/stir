@@ -73,7 +73,7 @@ function project_stats() {
       commits_month commits_year commits_year_month files_type)
     for i in "${repo_charts[@]}" ; do
       "${gitchart_cmd}" -r "${WORK_PATH}/${APP}" "${i}" "${stat_dir}/${i}.svg" &>> /dev/null
-      sed -i "s/#9999ff/${CHARTC}/g" "${stat_dir}/${i}.svg" 
+      sed -i "s/#9999ff/${CHART_COLOR}/g" "${stat_dir}/${i}.svg" 
       sed -i 's/Consolas,"Liberation Mono",Menlo,Courier,monospace/Roboto, Helvetica, Arial, sans-serif/g' "${stat_dir}/${i}.svg"
     done #&
     #spinner $!
@@ -141,7 +141,7 @@ function project_engagement() {
     ENGAGEMENT_DAYS="7"
   fi
 
-  ga_var=(pageviews users newUsers sessions organicSearches pageviews percentNewSessions socialInteractions)
+  ga_var=(pageviews users newUsers sessions organicSearches percentNewSessions socialInteractions)
   # Start the loop
   for i in "${ga_var[@]}" ; do
     ga_over_time ${i} ${ENGAGEMENT_DAYS}
