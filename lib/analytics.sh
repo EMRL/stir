@@ -297,11 +297,11 @@ function ga_over_time() {
 
     tac "${trash_file}" > ${stat_dir}/"${METRIC}".csv
 
-    ${gnuplot_cmd} -p << EOF
+    ${gnuplot_cmd} -p >/dev/null 2>&1  << EOF
     set encoding utf8
     set terminal png enhanced size 1280,600
-    primary = "${CHARTC}"; 
-    secondary = "${SECONDARYC}";
+    primary = "${CHART_COLOR}"; 
+    secondary = "${SECONDARY_COLOR}";
     info = "${INFO_COLOR}";
     default = "${DEFAULT_COLOR}";
     set key off
