@@ -127,7 +127,7 @@ function process_html() {
     mtc_id_1 mtc_subject_1 mtc_publishUp_1 mtc_sentCount_1 mtc_readCount_1 \
     mtc_readRate_1 mtc_id_2 mtc_subject_2 mtc_publishUp_2 mtc_sentCount_2 \
     mtc_readCount_2 mtc_readRate_2 mtc_id_3 mtc_subject_3 mtc_publishUp_3 \
-    mtc_sentCount_3 mtc_readCount_3 mtc_readRate_3)
+    mtc_sentCount_3 mtc_readCount_3 mtc_readRate_3 LOG_BACKGROUND_COLOR)
 
   # Start the loop
   for i in "${process_var[@]}" ; do

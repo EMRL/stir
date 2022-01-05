@@ -6,6 +6,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added `--skip-git` for projects that are focused only on client communication
 - Added ability to turn off RSS feed per project, even if set globally
+### [Fixed]
+- Fixed a bug in preparing new Wordpress projects
+- Fixed an activity log email formatting error
 
 ## [3.8.5]
 ### Added

@@ -28,7 +28,7 @@ function prepare() {
     wp_check
 
     # Clone WP when necessary
-    if [[ -n "${WP_PATH}" ]] && [[ "${WP_PATH}" != "FALSE" ]]; then
+    if [[ -n "${WP_PATH}" ]]; then
       wp_clone
     fi
 
