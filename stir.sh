@@ -232,6 +232,9 @@ More information at https://github.com/EMRL/stir
 # If no arguments are passed, display help
 [[ $# == "0" ]] && set -- "--help"
 
+# Total number of switches used on command line
+SWITCHES="$#"
+
 # Grab options and parse their format
 option_string=h
 unset options

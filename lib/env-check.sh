@@ -71,6 +71,11 @@ function env_check() {
 function update_config() {
   empty_line; info "New version (${VERSION}) requires configuration updates."
   if yesno --default yes "Update now? [Y/n] "; then
+    if [[ "${SWITCHES}" != "0" ]]; then
+      warning "Cannot be updated while running with command line options."
+      info "Try running 'stir ${APP}'"
+      quiet_exit
+  fi
     [[ "${update_global}" == "1" ]] && update_global
     [[ "${update_user}" == "1" ]] && update_user
     [[ "${update_project}" == "1" ]] && update_project

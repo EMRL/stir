@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### [Fixed]
 - Fixed a bug in preparing new Wordpress projects
 - Fixed an activity log email formatting error
+- Resolved #189
 
 ## [3.8.5]
 ### Added
