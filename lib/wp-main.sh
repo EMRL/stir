@@ -20,7 +20,7 @@ function wp_main() {
 
     # If if this is a manual ACF upgrade, jump right in
     if [[ "${UPDATE_ACF}" == "1" ]]; then
-      error_detail="Adnvanced Custom Fields Pro is not installed in this project, nothing to update"
+      error_detail="Advanced Custom Fields Pro is not installed in this project, nothing to update"
       "${wp_cmd}" plugin is-installed advanced-custom-fields-pro; error_check
 
       acf_update & spinner $!

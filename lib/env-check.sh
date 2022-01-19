@@ -71,7 +71,7 @@ function env_check() {
 function update_config() {
   empty_line; info "New version (${VERSION}) requires configuration updates."
   if yesno --default yes "Update now? [Y/n] "; then
-    if [[ "${SWITCHES}" != "0" ]]; then
+    if [[ "${SWITCHES}" != "1" ]]; then
       warning "Cannot be updated while running with command line options."
       info "Try running 'stir ${APP}'"
       quiet_exit
@@ -177,7 +177,7 @@ function update_project() {
     SCP_DEPLOY_USER SCP_DEPLOY_PASS SCP_DEPLOY_PORT NIKTO NIKTO_CONFIG \
     NIKTO_PROXY DB_BACKUP_PATH PREPARE PREPARE_CONFIG ACF_LOCK STAGING \
     GRAVITY_FORMS_LICENSE INCLUDE_DETAILS MAUTIC_URL MAUTIC_AUTH \
-    MAUTIC_LEGACY_VERSION SKIP_GIT NEWS_URL)
+    MAUTIC_LEGACY_VERSION SKIP_GIT NEWS_URL ACF_COMPOSER)
 
   # Loops through the variables
   for i in "${env_settings[@]}" ; do

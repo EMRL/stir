@@ -9,7 +9,7 @@
 # This value indicates the version number when this file was last changed:
 # it does not necessarily reflect stir's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-PROJECT_VERSION="3.8.5.2"
+PROJECT_VERSION="3.8.5.3"
 
 
 ###############################################################################
@@ -109,9 +109,13 @@ PROJECT_VERSION="3.8.5.2"
 
 # Advanced Custom Fields Pro License
 #
-# Too many issues seem to crop up with the normal method of updating the
-# Wordpress plugin ACF Pro. Including your license key below will enable
-# upgrades to happen more reliably.
+# When not updated via composer, many issues seem to crop up with updating the 
+# Wordpress plugin ACF Pro. We recommend using composer for updates and setting
+# the value below to TRUE
+# ACF_COMPOSER="{{ACF_COMPOSER}}"
+
+# Including your ACF license key below will enable upgrades to happen more 
+# reliably.
 # ACF_KEY="{{ACF_KEY}}"
 #
 # If you need to lock your version of ACF fro some reason, set the value

@@ -50,7 +50,7 @@ function wp_plugins() {
 
   if [[ "${FORCE}" = "1" ]] || yesno --default no "Proceed with updates? [y/N] "; then
     # If ACFPRO needs an update, do it first via wget
-    if [[ "${ACF_LOCK}" != "TRUE" ]]; then
+    if [[ "${ACF_LOCK}" != "TRUE" ]] || [[ "${ACF_COMPOSER}" == "TRUE" ]]; then
       if grep -aq "advanced-custom-fields-pro" "${wp_file}"; then
         acf_update & spinner $!
       fi
