@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added ability to turn off RSS feed per project, even if set globally
 
 ### [Fixed]
+- Fixed success color rendering in default html theme
 - Fixed a bug in preparing new Wordpress projects
 - Fixed an activity log email formatting error
 - Resolved [#189](https://github.com/emrl/stir/issues/189)

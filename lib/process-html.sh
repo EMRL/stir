@@ -8,8 +8,9 @@
 
 # Initialize variables 
 var=(DEFAULT_COLOR PRIMARY_COLOR SECONDARY_COLOR SUCCESS_COLOR INFO_COLOR \
-  WARNING_COLOR DANGER_COLOR SMOOCHID COVER SCAN_STATUS UPTIME_STATUS LATENCY_STATUS LOG_COLOR \
-  LOG_BACKGROUND_COLOR sed_commits sed_scan sed_backup process_var v i)
+  WARNING_COLOR DANGER_COLOR SMOOCHID COVER SCAN_STATUS UPTIME_STATUS \
+  LATENCY_STATUS LOG_COLOR LOG_BACKGROUND_COLOR sed_commits sed_scan \
+  sed_backup process_var v i)
 init_loop
 
 function process_html() {
@@ -83,17 +84,6 @@ function process_html() {
     "${html_file}"
   fi
 
-  # Prettify errors, warning, and successes
-  sed -i -e '/ERROR/s/$/<\/span>/' \
-    -e '/^ERROR/s/^/<span style=\"background-color: {{DANGER}};\">/' \
-    -e '/WARNING/s/$/<\/span>/' \
-    -e '/^WARNING/s/^/<span style=\"color: {{WARNING}};\">/' \
-    -e '/SUCCESS/s/$/<\/span>/' \
-    -e '/^SUCCESS/s/^/<span style=\"color: {{SUCCESS}};\">/' \
-    -e '/Deployed to/s/$/<\/span>/' \
-    -e '/^Deployed to/s/^/<span style=\"color: {{SUCCESS}};\">/' \
-    "${html_file}"
-
   # Insert commits
   sed_commits=$(echo "sed -e '/{{COMMITS_RECENT}}/ {' -e 'r ${stat_file}' -e 'd' -e '}' -i \"${html_file}\"")
   eval "${sed_commits}"
@@ -127,7 +117,8 @@ function process_html() {
     mtc_id_1 mtc_subject_1 mtc_publishUp_1 mtc_sentCount_1 mtc_readCount_1 \
     mtc_readRate_1 mtc_id_2 mtc_subject_2 mtc_publishUp_2 mtc_sentCount_2 \
     mtc_readCount_2 mtc_readRate_2 mtc_id_3 mtc_subject_3 mtc_publishUp_3 \
-    mtc_sentCount_3 mtc_readCount_3 mtc_readRate_3 LOG_BACKGROUND_COLOR)
+    mtc_sentCount_3 mtc_readCount_3 mtc_readRate_3 LOG_BACKGROUND_COLOR \
+    SUCCESS_COLOR DANGER_COLOR WARNING_COLOR PRIMARY_COLOR)
 
   # Start the loop
   for i in "${process_var[@]}" ; do
@@ -148,7 +139,6 @@ function process_html() {
     -e "s^{{DEFAULT}}^${DEFAULT_COLOR}^g" \
     -e "s^{{PRIMARY}}^${PRIMARY_COLOR}^g" \
     -e "s^{{SECONDARY}}^${SECONDARY_COLOR}^g" \
-    -e "s^{{SUCCESS}}^${SUCCESS_COLOR}^g" \
     -e "s^{{INFO}}^${INFO_COLOR}^g" \
     -e "s^{{WARNING}}^${WARNING_COLOR}^g" \
     -e "s^{{DANGER}}^${DANGER_COLOR}^g" \
@@ -161,5 +151,16 @@ function process_html() {
     -e "s^{{STATURL}}^${REMOTE_URL}\/${APP}\/stats^g" \
     -e "s^{{LASTMONTH}}^${last_month}^g" \
     -e "s^{{ANALYTICS_CHART}}^${REMOTE_URL}/${APP}/stats/${METRIC}.png^g" \
+    "${html_file}"
+
+  # Prettify errors, warning, and successes
+  sed -i -e '/ERROR/s/$/<\/span>/' \
+    -e '/^ERROR/s/^/<span style=\"background-color: {{DANGER}};\">/' \
+    -e '/WARNING/s/$/<\/span>/' \
+    -e '/^WARNING/s/^/<span style=\"color: {{WARNING}};\">/' \
+    -e '/SUCCESS/s/$/<\/span>/' \
+    -e '/^SUCCESS/s/^/<span style=\"color: {{SUCCESS}};\">/' \
+    -e '/Deployed to/s/$/<\/span>/' \
+    -e '/^Deployed to/s/^/<span style=\"color: {{SUCCESS}};\">/' \
     "${html_file}"
   }
