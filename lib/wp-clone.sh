@@ -173,16 +173,16 @@ function wp_clone() {
     # wp_CHECK_SERVER
 
     # Activate required plugins
-    trace status "Checking plugin requirements... "
-    var=(gravityforms)
+    trace "Checking plugin requirements... "
+    var=(gravityforms advanced-custom-fields-pro)
     for i in "${var[@]}" ; do
       "${wp_cmd}" plugin is-active "${i}" #2>&1
       EXITCODE=$?; 
       if [[ "${EXITCODE}" -ne "0" ]]; then
+        trace "Activating ${i}"
         "${wp_cmd}" plugin activate "${i}" >> "${log_file}" 2>&1
       fi
     done
-    trace notime "OK"
   fi
 }
 

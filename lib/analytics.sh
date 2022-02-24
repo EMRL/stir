@@ -322,13 +322,14 @@ function ga_over_time() {
     set terminal png enhanced size 1280,600
     set output '${stat_dir}/${METRIC}.png'
     plot '${stat_dir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
-      "" using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3
+      "" using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 2
 
     # SVG
     set terminal svg dynamic enhanced size 1280,600
     set output '${stat_dir}/${METRIC}.svg'
     plot '${stat_dir}/${METRIC}.csv' using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info,\
-      "" using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 3
+      "" using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 2
+
 EOF
 fi
 }
