@@ -19,7 +19,7 @@ function get_avatars() {
   for AUTHOR in $(git log --pretty=format:"%ae|%an" | sort | uniq); do
     AUTHOREMAIL=$(echo $AUTHOR | cut -d\| -f1 | tr -d '[[:space:]]' | tr '[:upper:]' '[:lower:]')
     AUTHORNAME=$(echo $AUTHOR | cut -d\| -f2)
-    GRAVATAR="http://www.gravatar.com/avatar/$(echo -n $AUTHOREMAIL | md5sum)?d=404&s=200"
+    GRAVATAR="http://gravatar.com/avatar/$(echo -n ${AUTHOREMAIL} | md5sum - | cut -d' ' -f1)?s=300"
 
     # Check for missing Gravatar
     if "${curl_cmd}" --output /dev/null --silent --head --fail "${GRAVATAR}"; then
