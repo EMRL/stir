@@ -71,7 +71,7 @@ function get_digest_commits() {
 }
 
 function check_stats() {
-  # Future site of stats check
+  trace "Future site of stats check"
 }
 
 function create_digest() {
