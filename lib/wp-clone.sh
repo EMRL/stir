@@ -78,9 +78,7 @@ function wp_clone() {
 
   # Setup environment variables
   create_env
-  #WP_PATH="${WP_TMP}"
   CHECK_ACTIVE="FALSE"
-  #cd "${WP_PATH}"
 
   # Create database
   if [[ -z "${PREPARE_CONFIG}" ]]; then
@@ -172,25 +170,9 @@ function wp_clone() {
     # Check server
     # wp_CHECK_SERVER
 
-    # Activate required plugins
-    # trace status "Activating plugins..."
-    #"${wp_cmd}" plugin activate --all >> "${log_file}" 2>&1; error_check
-    #trace notime "OK"
-
-    #var="$(wp plugin list --field=name --format=count)"
-    trace "Checking plugin requirements... "
+    # Activate plugins
     wp_activate_plugin all
-
-    # var=(gravityforms advanced-custom-fields-pro)
-    #var=($(${wp_cmd} plugin list --field=name --format=count 2> /dev/null))
-    #for i in "${var[@]}" ; do
-    #  "${wp_cmd}" plugin is-active "${i}" --quiet 2> /dev/null
-    #  EXITCODE=$?; 
-    #  if [[ "${EXITCODE}" -ne "0" ]]; then
-    #    trace "Activating ${i}"
-    #    "${wp_cmd}" plugin activate "${i}" >> "${log_file}" 2> /dev/null
-    #  fi
-    #done
+    trace "Done."
   fi
 }
 

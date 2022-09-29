@@ -11,6 +11,9 @@ var=(plugin_update_complete)
 init_loop
 
 function wp_plugins() {
+  # Make sure things are activated
+  wp_activate_plugin all
+
   # Look for updates
   if [[ "${QUIET}" != "1" ]]; then
     wp_update_check &
@@ -120,20 +123,21 @@ function wp_update_check() {
 #   all         Activate all available plugins
 ############################################################################### 
 function wp_activate_plugin() {
+  trace "Checking plugin requirements... "
   if [[ "${1}" == "all" ]]; then
-    var=($(${wp_cmd} plugin list --field=name --format=count 2> /dev/null))
+    # var=($(${wp_cmd} plugin list --field=name --format=count 2> /dev/null))
+    ${wp_cmd} plugin activate --all 2> /dev/null
   else
     var="${1}"
+    for i in "${var[@]}" ; do
+      "${wp_cmd}" plugin is-active "${i}" --quiet 2> /dev/null
+      EXITCODE=$?; 
+      if [[ "${EXITCODE}" -ne "0" ]]; then
+        trace "Activating ${i}"
+        "${wp_cmd}" plugin activate "${i}" >> "${log_file}" 2> /dev/null
+      fi
+    done
   fi
-
-  for i in "${var[@]}" ; do
-    "${wp_cmd}" plugin is-active "${i}" --quiet 2> /dev/null
-    EXITCODE=$?; 
-    if [[ "${EXITCODE}" -ne "0" ]]; then
-      trace "Activating ${i}"
-      "${wp_cmd}" plugin activate "${i}" >> "${log_file}" 2> /dev/null
-    fi
-  done
 }
 
 ###############################################################################
