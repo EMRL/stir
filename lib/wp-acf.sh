@@ -27,7 +27,6 @@ function acf_update() {
 	# Housekeeping
 	rm "${acf_file}"
 	acf_update_complete="1"
-  trace "ACF: ${acf_update_complete}"
 }
 
 function acf_filecheck() {

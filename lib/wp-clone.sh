@@ -155,7 +155,7 @@ function wp_clone() {
     trace status "Creating database... "
     error_detail="Unable to create database"
       "${wp_cmd}" db create &>> /dev/null; error_check; 
-      # Insert wp dp check here
+      # Insert wp db check here
       trace notime "OK"
     #fi
 
@@ -173,16 +173,24 @@ function wp_clone() {
     # wp_CHECK_SERVER
 
     # Activate required plugins
+    # trace status "Activating plugins..."
+    #"${wp_cmd}" plugin activate --all >> "${log_file}" 2>&1; error_check
+    #trace notime "OK"
+
+    #var="$(wp plugin list --field=name --format=count)"
     trace "Checking plugin requirements... "
-    var=(gravityforms advanced-custom-fields-pro)
-    for i in "${var[@]}" ; do
-      "${wp_cmd}" plugin is-active "${i}" #2>&1
-      EXITCODE=$?; 
-      if [[ "${EXITCODE}" -ne "0" ]]; then
-        trace "Activating ${i}"
-        "${wp_cmd}" plugin activate "${i}" >> "${log_file}" 2>&1
-      fi
-    done
+    wp_activate_plugin all
+
+    # var=(gravityforms advanced-custom-fields-pro)
+    #var=($(${wp_cmd} plugin list --field=name --format=count 2> /dev/null))
+    #for i in "${var[@]}" ; do
+    #  "${wp_cmd}" plugin is-active "${i}" --quiet 2> /dev/null
+    #  EXITCODE=$?; 
+    #  if [[ "${EXITCODE}" -ne "0" ]]; then
+    #    trace "Activating ${i}"
+    #    "${wp_cmd}" plugin activate "${i}" >> "${log_file}" 2> /dev/null
+    #  fi
+    #done
   fi
 }
 

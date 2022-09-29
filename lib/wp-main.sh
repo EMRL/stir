@@ -87,7 +87,8 @@ function wp_check() {
   fi
 }
 
-function wp_check_server {
+function wp_check_server() {
+  trace "Nothing here"
   # Launch server
   # "${wp_cmd}" server --host=localhost > /dev/null 2>&1; EXITCODE=$?; 
   # if [[ "${EXITCODE}" -eq "0" ]]; then
@@ -98,9 +99,6 @@ function wp_check_server {
     #   sleep 1
     # done
   # fi
-
-  trace "Activating plugins"
-  "${wp_cmd}" plugin activate --all >> "${log_file}" 2>&1
   # trace "Activating theme"
   # "${wp_cmd}" theme activate site >> "${log_file}" 2>&1
   

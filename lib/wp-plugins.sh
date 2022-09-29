@@ -111,7 +111,33 @@ function wp_update_check() {
 }
 
 ###############################################################################
-# add_plugin()
+# wp_activate_plugin()
+#   Activates Wordpress plugins 
+#
+# Arguments:
+#   [plugin]    Name of the plugin to activate. Multiple plugins can be 
+#               activated when the argument is an array. 
+#   all         Activate all available plugins
+############################################################################### 
+function wp_activate_plugin() {
+  if [[ "${1}" == "all" ]]; then
+    var=($(${wp_cmd} plugin list --field=name --format=count 2> /dev/null))
+  else
+    var="${1}"
+  fi
+
+  for i in "${var[@]}" ; do
+    "${wp_cmd}" plugin is-active "${i}" --quiet 2> /dev/null
+    EXITCODE=$?; 
+    if [[ "${EXITCODE}" -ne "0" ]]; then
+      trace "Activating ${i}"
+      "${wp_cmd}" plugin activate "${i}" >> "${log_file}" 2> /dev/null
+    fi
+  done
+}
+
+###############################################################################
+# wp_add_plugin()
 #   Adds plugins to a Wordpress project, using either composer or wp-cli 
 #   depending on project setup 
 #
@@ -119,7 +145,7 @@ function wp_update_check() {
 #   [plugin]    Name of the plugin. Will only work if plugin is tracked in 
 #               the Wordpress plugin archive
 ############################################################################### 
-function add_plugin() {
+function wp_add_plugin() {
   # User will be doing something like `stir --add-plugin wp-job-manager` from 
   # the shell
   # If composer:
