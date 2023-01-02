@@ -95,6 +95,8 @@ function wp_clone() {
         -e "/DB_USERNAME/c\DB_USERNAME='${MYSQL_USER}'" \
         -e "/DB_PASSWORD/c\DB_PASSWORD='${MYSQL_PASS}'" \
         -e "/WP_SECURE_AUTH_KEY/c\WP_SECURE_AUTH_KEY='null_key'" \
+        -e "/GRAVITY_FORMS_LICENSE/c\GRAVITY_FORMS_LICENSE='${GRAVITY_FORMS_LICENSE}'" \
+        -e "/EVENTS_CALENDAR_PRO_LICENSE/c\EVENTS_CALENDAR_PRO_LICENSE='${EVENTS_CALENDAR_PRO_LICENSE}'" \
         -e "/WP_AUTH_KEY/c\WP_AUTH_KEY='null_key'" \
         -e "/WP_LOGGED_IN_KEY/c\WP_LOGGED_IN_KEY='null_key'" \
         -e "/WP_NONCE_KEY/c\WP_NONCE_KEY='null_key'" \
