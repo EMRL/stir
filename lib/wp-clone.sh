@@ -152,6 +152,14 @@ function wp_clone() {
     # "${mysqlshow_cmd}" --user=${MYSQL_USER} --password=${MYSQL_PASS} ${DB_DATABASE} 2> /dev/null
     # DB_CHECK=$?;
     # if [[ "${DB_CHECK}" != "0" ]]; then
+    if [[ -n "${wp_cmd}" ]]; then
+      eval "${wp_cmd}" db check  > /dev/null 2>&1
+      EXITCODE=$?; 
+      if [[ "${EXITCODE}" -eq "0" ]]; then
+        info "Dropping Wordpress database..."
+        eval "${wp_cmd}" db drop --yes
+      fi
+    fi
     trace status "Creating database... "
     error_detail="Unable to create database"
       eval "${wp_cmd}" db create &>> /dev/null; error_check; 

@@ -8,7 +8,6 @@
 
 function reset_local() {
   if [[ -n "${project_config}" ]] && [[ -w "${WORK_PATH}/${APP}" ]] && [[ "${DO_NOT_DEPLOY}" != "TRUE" ]]; then
-    
     if [[ -n "${wp_cmd}" ]]; then
       eval "${wp_cmd}" db check  > /dev/null 2>&1
       EXITCODE=$?; 

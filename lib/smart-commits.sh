@@ -35,7 +35,7 @@ function smart_commit() {
     # So what about a Wordpress core update?
     # Check if composer failed on first try, but worked while updating plugins
     if [[ "${core_update_attempt}" == "1" ]]; then
-      core_current_version="$(${wp_cmd[@]} core version)"
+      core_current_version=(eval "${wp_cmd}" core version)
       if [[ "${core_update_version}" == "${core_current_version}" ]]; then
         # Build the appropiate smart commit message
         core_update_complete="1"
