@@ -96,7 +96,7 @@ function clean_up() {
 
   # If Wordfence was an issue, restart the plugin
   if [[ "${WFOFF}" = "1" ]]; then
-    "${wp_cmd}" plugin activate --no-color wordfence &>> $log_file; error_check
+    eval "${wp_cmd}" plugin activate --no-color wordfence &>> $log_file; error_check
   fi
 
   # Was this an approval?

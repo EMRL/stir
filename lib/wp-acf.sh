@@ -21,8 +21,8 @@ function acf_update() {
 	acf_filecheck
 
 	# Proceed with install
-	"${wp_cmd}" plugin delete --no-color advanced-custom-fields-pro &>> "${log_file}"; error_check
-	"${wp_cmd}" plugin install --no-color "${acf_file}" &>> "${log_file}"; error_check
+	eval "${wp_cmd}" plugin delete --no-color advanced-custom-fields-pro &>> "${log_file}"; error_check
+	eval "${wp_cmd}" plugin install --no-color "${acf_file}" &>> "${log_file}"; error_check
 	
 	# Housekeeping
 	rm "${acf_file}"

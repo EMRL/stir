@@ -19,9 +19,9 @@ function wp_main() {
     cd "${WP_PATH}"
 
     # If if this is a manual ACF upgrade, jump right in
-    if [[ "${UPDATE_ACF}" == "1" ]]; then
+    if [[ "${UPDATE_ACF}" == "1" ]] && [[ "${ACF_COMPOSER}" != "TRUE" ]]; then
       error_detail="Advanced Custom Fields Pro is not installed in this project, nothing to update"
-      "${wp_cmd}" plugin is-installed advanced-custom-fields-pro; error_check
+      eval "${wp_cmd}" plugin is-installed advanced-custom-fields-pro; error_check
 
       acf_update & spinner $!
 
@@ -53,7 +53,6 @@ function wp_main() {
 function wp_check() {
   # Is wp-cli installed? 
   if [[ -n "${wp_cmd}" ]]; then
-    trace "wp-cli found at ${wp_cmd}"
 
     # Bug out if this is a new style project
     if [[ "${PREPARE}" == "TRUE" ]]; then 
@@ -66,10 +65,10 @@ function wp_check() {
 
       # Local database check
       trace status "Checking database... "
-      "${wp_cmd}" db check &>> /dev/null; EXITCODE=$?; 
+      eval "${wp_cmd}" db check &>> /dev/null; EXITCODE=$?; 
       
       if [[ "${EXITCODE}" != "0" ]]; then 
-        "${wp_cmd}" db check &>> "${log_file}"; 
+        eval "${wp_cmd}" db check &>> "${log_file}"; 
         trace notime "FAIL"
         if [[ "${AUTOMATE}" == "1" ]]; then
           error "There is a problem with your Wordpress installation, check your configuration."
@@ -79,7 +78,7 @@ function wp_check() {
       else
         # Get info
         trace notime "OK"
-        "${wp_cmd}" core version --extra  &>> "${log_file}";
+        eval "${wp_cmd}" core version --extra  &>> "${log_file}";
       fi
     else
       WP_PATH="FALSE"
@@ -90,17 +89,17 @@ function wp_check() {
 function wp_check_server() {
   trace "Nothing here"
   # Launch server
-  # "${wp_cmd}" server --host=localhost > /dev/null 2>&1; EXITCODE=$?; 
+  # eval "${wp_cmd}" server --host=localhost > /dev/null 2>&1; EXITCODE=$?; 
   # if [[ "${EXITCODE}" -eq "0" ]]; then
     # trace "Launching server"
-    # "${wp_cmd}" server --host=localhost >> "${log_file}" 2>&1 &
+    # eval "${wp_cmd}" server --host=localhost >> "${log_file}" 2>&1 &
     # Keep checking for server to come online
     # until $(${curl_cmd} --output /dev/null --silent --head --fail http://localhost:8080); do
     #   sleep 1
     # done
   # fi
   # trace "Activating theme"
-  # "${wp_cmd}" theme activate site >> "${log_file}" 2>&1
+  # eval "${wp_cmd}" theme activate site >> "${log_file}" 2>&1
   
   #"${curl_cmd}" -sL localhost:8080 | grep -E "Warning:|Fatal:" >> "${log_file}" 2>&1
   

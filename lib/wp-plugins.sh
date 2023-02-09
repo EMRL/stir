@@ -64,20 +64,20 @@ function wp_plugins() {
       trace "Found composer.json, updating"
       cd "${APP_PATH}"; \
       if [[ "${QUIET}" != "1" ]]; then
-        "${composer_cmd}" --no-progress update &>> "${log_file}" &
+        eval "${composer_cmd}" --no-progress update &>> "${log_file}" &
         spinner $!
       else
-        "${composer_cmd}" --no-progress update &>> "${log_file}"
+        eval "${composer_cmd}" --no-progress update &>> "${log_file}"
       fi
       cd "${WP_PATH}"; \
     fi
 
     # Now, run the rest of the needed updates via wp-cli
     if [[ "${QUIET}" != "1" ]]; then
-      "${wp_cmd}" plugin update --all --no-color &>> "${log_file}" &
+      eval "${wp_cmd}" plugin update --all --no-color &>> "${log_file}" &
       spinner $!
     else
-      "${wp_cmd}" plugin update --all --no-color &>> "${log_file}" 
+      eval "${wp_cmd}" plugin update --all --no-color &>> "${log_file}" 
     fi  
 
     # Any problems with plugin updates?
@@ -100,13 +100,13 @@ function wp_plugins() {
 }
 
 function wp_update_check() {
-  "${wp_cmd}" cache delete &>> /dev/null
+  eval "${wp_cmd}" cache delete &>> /dev/null
 
   # For the log_file
-  "${wp_cmd}" plugin status --no-color &>> $log_file
+  eval "${wp_cmd}" plugin status --no-color &>> $log_file
 
   # For the console/smart commit message
-  "${wp_cmd}" plugin update --dry-run --no-color --all &> "${wp_file}"
+  eval "${wp_cmd}" plugin update --dry-run --no-color --all &> "${wp_file}"
 
   # Other options, thanks Corey
   # wp plugin list --format=csv --all --fields=name,update_version,update | grep -a 'available'
@@ -125,16 +125,16 @@ function wp_update_check() {
 function wp_activate_plugin() {
   trace "Checking plugin requirements... "
   if [[ "${1}" == "all" ]]; then
-    # var=($(${wp_cmd} plugin list --field=name --format=count 2> /dev/null))
-    ${wp_cmd} plugin activate --all 2> /dev/null
+    # var=($(${wp_cmd[@]} plugin list --field=name --format=count 2> /dev/null))
+    ${wp_cmd[@]} plugin activate --all 2> /dev/null
   else
     var="${1}"
     for i in "${var[@]}" ; do
-      "${wp_cmd}" plugin is-active "${i}" --quiet 2> /dev/null
+      eval "${wp_cmd}" plugin is-active "${i}" --quiet 2> /dev/null
       EXITCODE=$?; 
       if [[ "${EXITCODE}" -ne "0" ]]; then
         trace "Activating ${i}"
-        "${wp_cmd}" plugin activate "${i}" >> "${log_file}" 2> /dev/null
+        eval "${wp_cmd}" plugin activate "${i}" >> "${log_file}" 2> /dev/null
       fi
     done
   fi
@@ -153,7 +153,7 @@ function wp_add_plugin() {
   # User will be doing something like `stir --add-plugin wp-job-manager` from 
   # the shell
   # If composer:
-  "${composer_cmd}" --no-progress require wpackagist-plugin/${1}:*
+  eval "${composer_cmd}" --no-progress require wpackagist-plugin/${1}:*
   # If no composer:
   wp plugin install ${1}
 }

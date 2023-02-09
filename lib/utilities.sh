@@ -121,12 +121,8 @@ function get_fullpath() {
   done
 
   # Overwrite composer and wp commands if they are manually configured
-  [[ ! -z "${WP_CLI_PATH}" ]] && wp_cmd="${WP_CLI_PATH}"
-  [[ ! -z "${COMPOSER_CLI_PATH}" ]] && composer_cmd="${COMPOSER_CLI_PATH}"
-
-  if [[ ! -z "${composer_cmd}" ]]; then 
-    trace "composer found at ${composer_cmd}"
-  fi
+  [[ ! -z "${WP_CLI_PATH}" ]] && wp_cmd=("${WP_CLI_PATH}")
+  [[ ! -z "${COMPOSER_CLI_PATH}" ]] && composer_cmd=("${COMPOSER_CLI_PATH}")
 
   # If the user has SMTP configured, overwrite sendmail command with ssmtp
   check_smtp

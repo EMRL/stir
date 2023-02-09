@@ -144,7 +144,7 @@ function wp_clone() {
     # Composer stuff
     if [[ -f "${APP_PATH}/composer.json" ]]; then
       cd "${APP_PATH}"
-      ${composer_cmd} install; error_check
+      eval "${composer_cmd}" install; error_check
     fi
     
     # Database check (check is not working correctly)
@@ -154,18 +154,18 @@ function wp_clone() {
     # if [[ "${DB_CHECK}" != "0" ]]; then
     trace status "Creating database... "
     error_detail="Unable to create database"
-      "${wp_cmd}" db create &>> /dev/null; error_check; 
+      eval "${wp_cmd}" db create &>> /dev/null; error_check; 
       # Insert wp db check here
       trace notime "OK"
     #fi
 
     # Install wordpress database tables
-    "${wp_cmd}" core > /dev/null 2>&1
+    eval "${wp_cmd}" core > /dev/null 2>&1
     EXITCODE=$?; 
     if [[ "${EXITCODE}" -ne "0" ]]; then
       trace status "Installing Wordpress... "
       error_detail="Unable to install Wordpress"
-      "${wp_cmd}" core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
+      eval "${wp_cmd}" core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
       trace notime "OK"
     fi
 

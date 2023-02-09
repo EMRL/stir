@@ -15,7 +15,7 @@ function wp_core() {
   # There's a little bug when certain plugins are spitting errors; work around 
   # seems to be to check for core updates a second time
   cd "${APP_PATH}"/"${WP_ROOT}"; \
-  core_update_version="$(${wp_cmd} core check-update --format=csv | awk '{if(NR>1)print}')"
+  core_update_version="$(${wp_cmd[@]} core check-update --format=csv | awk '{if(NR>1)print}')"
 
   if [[ -z "${core_update_version}" ]]; then
     info "Wordpress core is up to date."
@@ -23,7 +23,7 @@ function wp_core() {
   fi
   
   # Write update info to log
-  "${wp_cmd}" core check-update --no-color &>> "${log_file}"
+  eval "${wp_cmd}" core check-update --no-color &>> "${log_file}"
   
   # Get update version number
   core_update_version="$(echo ${core_update_version} | cut -f1 -d',')"
@@ -39,24 +39,24 @@ function wp_core() {
       if [[ "${QUIET}" != "1" ]]; then
         # Execute the update
         info "Core update found, updating to ${core_update_version}"
-        trace "Executing ${composer_cmd} update johnpbloch/wordpress-core"
-        "${composer_cmd}" --no-progress update johnpbloch/wordpress-core &>> "${log_file}" &
+        trace "Executing ${composer_cmd[@]} update johnpbloch/wordpress-core"
+        eval "${composer_cmd}" --no-progress update johnpbloch/wordpress-core &>> "${log_file}" &
         spinner $!
       else
-        "${composer_cmd}" --no-progress update johnpbloch/wordpress-core &>> "${log_file}"
+        eval "${composer_cmd}" --no-progress update johnpbloch/wordpress-core &>> "${log_file}"
       fi
       composer_core_update="1"
       check_core_update_success; return
     else
       if [[ "${composer_core_update}" != "1" ]]; then
         # Assume updating via wp-cli
-        trace "Executing ${wp_cmd} core update"
+        trace "Executing ${wp_cmd[@]} core update"
         cd "${WP_PATH}"; \
         if [[ "${QUIET}" != "1" ]]; then
-          "${wp_cmd}" core update --no-color &>> "${log_file}" &
+          eval "${wp_cmd}" core update --no-color &>> "${log_file}" &
           spinner $!
         else
-          "${wp_cmd}" core update --no-color &>> "${log_file}"
+          eval "${wp_cmd}" core update --no-color &>> "${log_file}"
         fi
         check_core_update_success; return
       fi
@@ -69,7 +69,7 @@ function wp_core() {
 function check_core_update_success() {
   # Check update success
   core_update_attempt="1" 
-  core_current_version="$(${wp_cmd} core version)"
+  core_current_version="$(${wp_cmd[@]} core version)"
   if [[ "${core_update_version}" != "${core_current_version}" ]]; then
     warning "Update to version ${core_update_version} failed, keeping version ${core_current_version}";
   else
