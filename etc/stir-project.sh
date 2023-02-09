@@ -9,7 +9,7 @@
 # This value indicates the version number when this file was last changed:
 # it does not necessarily reflect stir's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-PROJECT_VERSION="3.8.5.3"
+PROJECT_VERSION="3.8.5.4"
 
 
 ###############################################################################
@@ -104,7 +104,14 @@ PROJECT_VERSION="3.8.5.3"
 # WP_APP="{{WP_APP}}"
 # WP_SYSTEM="{{WP_SYSTEM}}"
 
-# If you do not want to allow core updates, set DO_NOT_UPDATE_WP to TRUE.
+# If this Wordpress project requires a specific version of PHP that is not 
+# your machine's default version, set the path to those commands below
+# Example: WP_CLI_PATH="/usr/bin/php74 ~/bin/wp"
+# WP_CLI_PATH="{{WP_CLI_PATH}}"
+# COMPOSER_CLI_PATH="{{COMPOSER_CLI_PATH}}"
+
+# If you do not want to allow core updates, set DO_NOT_UPDATE_WP to TRUE. This
+# does not currently disable composer updating core.
 # DO_NOT_UPDATE_WP="{{DO_NOT_UPDATE_WP}}"
 
 # Advanced Custom Fields Pro License

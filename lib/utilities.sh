@@ -7,7 +7,8 @@
 ###############################################################################
 
 # Initialize variables
-var=(integer_check json_key json_num cleaned_date cleaned_path)
+var=(integer_check json_key json_num cleaned_date cleaned_path wp_cmd \
+  composer_cmd cmd_string)
 init_loop
 
 # Open a deployment session, ask for user confirmation before beginning
@@ -101,7 +102,7 @@ function go() {
 # Check that a variable is an integer
 function is_integer() {
   declare arg1="${1}"; integer_check="0"
-  if [[ ! "${arg1}" =~ ^[0-9]+$ ]] ; then
+  if [[ ! "${arg1}" =~ ^[0-9]+$ ]]; then
     integer_check="1"
   fi
 }
@@ -110,13 +111,22 @@ function get_fullpath() {
   # Get absolute paths to critical commands
   var=(cal composer curl git gitchart gnuplot grep grunt mysqlshow npm scp 
     sendmail ssh sshpass ssmtp unzip wc wget wkhtmltopdf wp xmlstarlet)
+
   for i in "${var[@]}" ; do
     read -r "${i}_cmd" <<< ""
     echo "${i}_cmd" > /dev/null
     if [[ -x "$(command -v ${i})" ]]; then
       eval "${i}_cmd=\"$(which ${i})\""
-    fi
+    fi   
   done
+
+  # Overwrite composer and wp commands if they are manually configured
+  [[ ! -z "${WP_CLI_PATH}" ]] && wp_cmd="${WP_CLI_PATH}"
+  [[ ! -z "${COMPOSER_CLI_PATH}" ]] && composer_cmd="${COMPOSER_CLI_PATH}"
+
+  if [[ ! -z "${composer_cmd}" ]]; then 
+    trace "composer found at ${composer_cmd}"
+  fi
 
   # If the user has SMTP configured, overwrite sendmail command with ssmtp
   check_smtp

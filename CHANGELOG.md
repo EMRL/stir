@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- Settings use specific versions of PHP with `composer` and `wp-cli` are now available, per project
 - ACF Pro can now be updated via `composer` as well as the legacy method
 - Added `--skip-git` for projects that are focused only on client communication
 - Added ability to turn off RSS feed per project, even if set globally
