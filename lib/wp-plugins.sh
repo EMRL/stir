@@ -127,6 +127,8 @@ function wp_activate_plugin() {
   if [[ "${1}" == "all" ]]; then
     # var=($(${wp_cmd[@]} plugin list --field=name --format=count 2> /dev/null))
     eval "${wp_cmd}" plugin activate --all 2> /dev/null
+    # Except Wordfence
+    eval "${wp_cmd}" plugin deactivate wordfence 2> /dev/null
   else
     var="${1}"
     for i in "${var[@]}" ; do

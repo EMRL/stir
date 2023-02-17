@@ -323,3 +323,16 @@ function git_stats() {
   fi
 }
 
+# Get info about the git repository
+function git_info() {
+  # git config --get remote.origin.url returns result like git@github.com:EMRL/stir.git
+  # git rev-parse --show-toplevel returns path to project
+
+  # Get repo name
+  REPO=$(git config --get remote.origin.url | sed 's@.*/@@'); REPO="${REPO//.git}"
+
+  # Get repo URL
+  REPO_HOST=$(git config --get remote.origin.url | sed -e 's@.*\@@@' -e 's^:^/^g' \
+    -e 's@^@https://@'); REPO_HOST="${REPO_HOST//.git}"
+
+}

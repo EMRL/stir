@@ -11,7 +11,7 @@ var=(integer_check json_key json_num cleaned_date cleaned_path wp_cmd \
   composer_cmd cmd_string)
 init_loop
 
-# Open a deployment session, ask for user confirmation before beginning
+# Open a session, ask for user confirmation before beginning
 function go() {
   if [[ "${QUIET}" != "1" ]]; then
     tput cnorm;
