@@ -37,7 +37,8 @@ function mtc_data_loop() {
   for i in {1..3} ; do
     for j in "${mtc_var[@]}" ; do
       current_mtc_value="$(echo ${mtc_payload} | get_json_value ${j} ${i})"; dot     
-      # Old versions of Mautic prefix their variables with a space, here's the fix
+      # Old versions of Mautic prefix their variables with a space
+      # so here's the fix (well really it's a break)
       if [[ "${MAUTIC_LEGACY_VERSION}" == "TRUE" ]]; then
         current_mtc_value="${current_mtc_value:1}"
       fi

@@ -178,10 +178,12 @@ function wp_clone() {
     fi
 
     # Check server
-    # wp_CHECK_SERVER
+    # wp_check_server
 
     # Activate plugins
-    wp_activate_plugin all
+    wp_activate_plugin "${ACTIVATE_PLUGINS}"
+
+    #wp_activate_plugin all
     trace "Done."
   fi
 }

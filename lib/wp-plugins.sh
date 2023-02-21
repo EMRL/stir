@@ -12,7 +12,7 @@ init_loop
 
 function wp_plugins() {
   # Make sure things are activated
-  wp_activate_plugin all
+  wp_activate_plugin "${ACTIVATE_PLUGINS}"
 
   # Look for updates
   if [[ "${QUIET}" != "1" ]]; then
@@ -127,10 +127,8 @@ function wp_activate_plugin() {
   if [[ "${1}" == "all" ]]; then
     # var=($(${wp_cmd[@]} plugin list --field=name --format=count 2> /dev/null))
     eval "${wp_cmd}" plugin activate --all 2> /dev/null
-    # Except Wordfence
-    eval "${wp_cmd}" plugin deactivate wordfence 2> /dev/null
   else
-    var="${1}"
+    var=(${1})
     for i in "${var[@]}" ; do
       eval "${wp_cmd}" plugin is-active "${i}" --quiet 2> /dev/null
       EXITCODE=$?; 

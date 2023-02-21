@@ -8,7 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - ACF Pro can now be updated via `composer` as well as the legacy method
 - Added `--skip-git` for projects that are focused only on client communication
 - Added ability to turn off RSS feed per project, even if set globally
-- All plugins are activated when using `--prepare-with-reset` or when running updates on a Wordpress project
+- Added ability to define which Wordpress plugins are to be activated when using `--prepare-with-reset` and when running updates on a Wordpress project
 
 ### Fixed
 - Fixed success color rendering in default html theme

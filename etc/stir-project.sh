@@ -9,7 +9,7 @@
 # This value indicates the version number when this file was last changed:
 # it does not necessarily reflect stir's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-PROJECT_VERSION="3.8.5.5"
+PROJECT_VERSION="3.8.5.7"
 
 
 ###############################################################################
@@ -39,7 +39,7 @@ PROJECT_VERSION="3.8.5.5"
 # use stir's built-in Wordpress prepare function, set this value to TRUE.
 # PREPARE="{{PREPARE}}"
 
-# To reset projects files before executing your prepare sequence, set the
+# To reset project files before executing your prepare sequence, set the
 # value below to TRUE.
 # PREPARE_WITH_RESET="{{PREPARE_WITH_RESET}}"
 
@@ -131,6 +131,12 @@ PROJECT_VERSION="3.8.5.5"
 
 # Gravityforms License
 # GRAVITY_FORMS_LICENSE="{{GRAVITY_FORMS_LICENSE}}"
+
+# Specify which plugins to activate in list format seperated by a space, 
+# e.g. "gravityforms advanced-custom-fields-pro wordpress-seo" or activate
+# all plugins by simply setting to "all"; keep in mind this setting will 
+# override your settings in global.conf
+# ACTIVATE_PLUGINS="{{ACTIVATE_PLUGINS}}"
 
 
 ###############################################################################
@@ -404,9 +410,8 @@ PROJECT_VERSION="3.8.5.5"
 # MAUTIC_URL="{{MAUTIC_URL}}"
 
 # Your authorization key. Generate your key by running
-# "echo -n "user:pass" | base64"
-# at your schell prompt
-# MAUTIC_AUTH={{MAUTIC_AUTH}}
+# "echo -n "user:pass" | base64" at your shell prompt
+# MAUTIC_AUTH="{{MAUTIC_AUTH}}"
 
 # Mautic changed its JSON payload format in version 3+. If you're using an 
 # older version of Mautic (v1 or v2) then set the following to TRUE
