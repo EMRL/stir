@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed a bug in preparing new Wordpress projects
 - Fixed an activity log email formatting error
 - Resolved [#189](https://github.com/emrl/stir/issues/189)
+- Updating Wordpress core should now be more reliable 
 
 ## [3.8.5]
 ### Added

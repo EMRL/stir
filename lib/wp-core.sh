@@ -40,10 +40,12 @@ function wp_core() {
         # Execute the update
         info "Core update found, updating to ${core_update_version}"
         trace "Executing ${composer_cmd} update johnpbloch/wordpress-core"
-        eval "${composer_cmd}" --no-progress update johnpbloch/wordpress-core &>> "${log_file}" &
+        eval "${composer_cmd}" --no-progress update johnpbloch/wordpress --with-dependencies
+ &>> "${log_file}" &
         spinner $!
       else
-        eval "${composer_cmd}" --no-progress update johnpbloch/wordpress-core &>> "${log_file}"
+        eval "${composer_cmd}" --no-progress update johnpbloch/wordpress --with-dependencies
+ &>> "${log_file}"
       fi
       composer_core_update="1"
       check_core_update_success; return
@@ -69,7 +71,7 @@ function wp_core() {
 function check_core_update_success() {
   # Check update success
   core_update_attempt="1" 
-  core_current_version="$(${wp_cmd[@]} core version)"
+  core_current_version="$(eval ${wp_cmd[@]} core version)"
   if [[ "${core_update_version}" != "${core_current_version}" ]]; then
     warning "Update to version ${core_update_version} failed, keeping version ${core_current_version}";
   else
