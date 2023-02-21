@@ -53,6 +53,11 @@ function wp_main() {
 function wp_check() {
   # Is wp-cli installed? 
   if [[ -n "${wp_cmd}" ]]; then
+    trace "wp_cmd: ${wp_cmd}"
+
+    if [[ -n "${composer_cmd}" ]]; then 
+      trace "composer_cmd: ${composer_cmd}"
+    fi   
 
     # Bug out if this is a new style project
     if [[ "${PREPARE}" == "TRUE" ]]; then 
