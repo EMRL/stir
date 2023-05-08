@@ -94,7 +94,8 @@ function wp_plugins() {
     cd "${APP_PATH}"; \
     plugin_update_complete="1"
     info "Plugin updates complete."
-  else  
+  else
+    commit_message=""
     info "Skipping plugin updates..."
   fi 
 }
