@@ -144,7 +144,7 @@ function wp_clone() {
     # Composer stuff
     if [[ -f "${APP_PATH}/composer.json" ]]; then
       cd "${APP_PATH}"
-      eval "${composer_cmd}" install --with-all-dependencies; error_check
+      eval "${composer_cmd}" install; error_check
     fi
     
     # Database check (check is not working correctly)
