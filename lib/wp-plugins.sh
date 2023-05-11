@@ -86,7 +86,9 @@ function wp_plugins() {
     elif grep -aq "Plugin update failed." "${log_file}"; then
       error "One or more plugin updates have failed."
     elif grep -aq 'Warning: Update package not available.' "${log_file}"; then
-      error "One or more update packages are not available. \nThis is often be caused by commercial plugins; check your log files."
+      if [[ "${ACF_LOCK}" != "TRUE" ]]; then
+        warning "One or more update packages are not available. \nThis is often be caused by commercial plugins; check your log files."
+      fi
     elif grep -aq 'Error: Updated' "${log_file}"; then
       error "One or more plugin updates have failed."
     fi
