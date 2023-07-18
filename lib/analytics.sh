@@ -13,7 +13,8 @@
 
 # Initialize variables
 var=(SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \
-  GA_SOCIAL ANALYTICSMSG ga_day ga_sequence max_value n a GA_TOTAL ga_)
+  GA_SOCIAL ANALYTICSMSG ga_day ga_sequence max_value n a GA_TOTAL ga_ \
+  ga4_var ga4_payload)
 init_loop
 
 ga_var=(users newUsers percentNewSessions sessionsPerUser sessions bounces bounceRate \
@@ -394,3 +395,40 @@ function ga_test() {
   ga_data_loop
   return
 }
+
+function ga4_test() {
+  notice "Refreshing token..."
+  "${curl_cmd}" -s -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trash_file}"
+  sed -i '/access_token/!d' "${trash_file}"
+  ACCESS_TOKEN="$(awk -F\" '{print $4}' "${trash_file}")"
+  trace "CLIENT_ID=${CLIENT_ID}"
+  trace "CLIENT_SECRET=${CLIENT_SECRET}"
+  trace "AUTHORIZATION_CODE=${AUTHORIZATION_CODE}"
+  trace "REFRESH_TOKEN=${REFRESH_TOKEN}"
+  trace "PROFILE_ID=${PROFILE_ID}"
+  trace "REDIRECT_URI=${REDIRECT_URI}"
+  trace "ACCESS-TOKEN=${ACCESS_TOKEN}"
+
+  notice "Running 7 day report..."
+
+  ga4_var=(activeUsers newUsers sessionsPerUser avgSessionDuration \
+    screenPageViews screenPageViewsPerSession screenPageViewsPerUser \
+    organicGoogleSearchClicks organicGoogleSearchImpressions bounceRate)
+
+  for i in "${ga4_var[@]}" ; do
+    echo "{\"dateRanges\": [{ \"startDate\": \"7daysAgo\", \"endDate\": \"yesterday\" }],\"metrics\": [{ \"name\": \"${i}\" }]}" > /tmp/ga4.json
+
+    ga4_payload="$(${curl_cmd} -sX POST \
+      -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+      -H "Content-Type: application/json; charset=utf-8" \
+      -d @/tmp/ga4.json \
+      https://analyticsdata.googleapis.com/v1beta/properties/${PROFILE_ID}:runReport)"
+
+    ga4_value="$(echo ${ga4_payload} | get_json_value value 1)"
+
+    if [[ ! -z "${ga4_value}" ]]; then
+      trace "${i}: ${ga4_value}"
+    fi
+  done
+}
+

@@ -254,6 +254,10 @@ function user_tests() {
     ga_test; quiet_exit
   fi
 
+  if [[ "${TEST_GA4}" == "1" ]]; then
+    ga4_test; quiet_exit
+  fi
+
   # Test server monitoring
   if [[ "${TEST_MONITOR}" == "1" ]]; then
     server_monitor_test; quiet_exit

@@ -39,7 +39,7 @@ function init_startup() {
     DENY PUBLISH DIGEST ANALYTICS TEST_ANALYTICS BUILD PROJSTATS UNLOCK  \
     TEST_SSH TIME UPDATEONLY TEST_WEBHOOK REPORT REPAIR CREATE_INVOICE SCAN \
     CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET MIGRATE \
-    SHOW_SETTINGS UNIT_TEST TEST_BUGSNAG UPDATE_ACF DEBUG_TO_FILE)
+    SHOW_SETTINGS UNIT_TEST TEST_BUGSNAG UPDATE_ACF DEBUG_TO_FILE TEST_GA4)
   init_loop
 }
 
@@ -212,6 +212,7 @@ Other Options:
   --test-slack           Test Slack integration
   --test-webhook         Test webhook integration  
   --test-analytics       Test Google Analytics authentication
+  --test-ga4             Test GA4 Analytics (Temp debug)
   --test-monitor         Test production server uptime and latency monitoring
   --test-mautic          Test Mautic integration
   --test-bugsnag         Test Bugsnag integration
@@ -294,6 +295,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --test-email) TEST_EMAIL="1"; NO_LOG="1" ;;
     --test-webhook) TEST_WEBHOOK="1"; NO_LOG="1" ;;
     --test-analytics) TEST_ANALYTICS="1"; NO_LOG="1" ;; 
+    --test-ga4) TEST_GA4="1"; NO_LOG="1" ;; 
     --test-monitor) TEST_MONITOR="1"; NO_LOG="1" ;;
     --test-bugsnag) TEST_BUGSNAG="1"; NO_LOG="1" ;;
     --test-mautic) TEST_MAUTIC="1"; NO_LOG="1" ;;
