@@ -7,7 +7,7 @@
 
 [Changelog](https://github.com/EMRL/stir/blob/master/CHANGELOG.md) &bull; [Known bugs](https://github.com/EMRL/stir/issues?q=is%3Aopen+is%3Aissue+label%3Abug) &bull; [Installation](https://github.com/EMRL/stir/wiki)
 
-`stir` is in daily use at [EMRL](http://emrl.com), an advertising, design, and development agency in northern California. If you have any questions, please feel free to contact us.
+`stir` is in daily use at [EMRL](https://emrl.com), an advertising, design, and development agency in northern California. If you have any questions, please feel free to contact us.
 
 Please note that there is quite a bit of setup involved in getting this running reliably. A full setup guide is coming soon™ but for now check out what we've got started in the [wiki documentation](https://github.com/EMRL/stir/wiki).
 
@@ -93,5 +93,5 @@ Repositories can each have their own configuration. An example of this file can 
 
 ## Contact
 
-* <http://emrl.com/>
+* <https://emrl.com/>
 * <https://www.facebook.com/advertisingisnotacrime>

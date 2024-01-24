@@ -19,13 +19,13 @@ function get_avatars() {
   for AUTHOR in $(git log --pretty=format:"%ae|%an" | sort | uniq); do
     AUTHOREMAIL=$(echo $AUTHOR | cut -d\| -f1 | tr -d '[[:space:]]' | tr '[:upper:]' '[:lower:]')
     AUTHORNAME=$(echo $AUTHOR | cut -d\| -f2)
-    GRAVATAR="http://gravatar.com/avatar/$(echo -n ${AUTHOREMAIL} | md5sum - | cut -d' ' -f1)?s=300"
+    GRAVATAR="https://gravatar.com/avatar/$(echo -n ${AUTHOREMAIL} | md5sum - | cut -d' ' -f1)?s=300"
 
     # Check for missing Gravatar
     if "${curl_cmd}" --output /dev/null --silent --head --fail "${GRAVATAR}"; then
       dot
     else
-      GRAVATAR="http://www.gravatar.com/avatar"
+      GRAVATAR="https://www.gravatar.com/avatar"
     fi
 
     if [[ "${SCP_POST}" != "TRUE" ]]; then 
@@ -36,6 +36,7 @@ function get_avatars() {
       #fi
       IMGFILE="${avatar_dir}/${AUTHORNAME}.png"
     fi
+    trace "\"${curl_cmd}" -fso "${IMGFILE}" "${GRAVATAR}"\"
     "${curl_cmd}" -fso "${IMGFILE}" "${GRAVATAR}"; dot
   done 
 }

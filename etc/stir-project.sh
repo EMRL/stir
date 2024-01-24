@@ -22,10 +22,10 @@ PROJECT_VERSION="3.8.5.7"
 # A human readable client name
 # PROJECT_CLIENT="{{PROJECT_CLIENT}}"
 
-# Staging URL, including http:// or https://
+# Staging URL, including https://
 # DEV_URL="{{DEV_URL}}"
 
-# Production, or "Live" project URL, including http:// or https://
+# Production, or "Live" project URL, including https://
 # PROD_URL="{{PROD_URL}}"
 
 

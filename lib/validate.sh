@@ -11,7 +11,7 @@ function validate_conf() {
   for var in "${REPO_HOST} ${CLIENT_LOGO}" "${DEV_URL}" "${PROD_URL}"; do
     if [[ -n "${var}" ]]; then
       if [[ "${var}" != *"http"*"://"* ]]; then
-        error "The URL in your configuration ($var) must be preceded by either http:// or https:// - check your setup."
+        error "The URL in your configuration ($var) must be preceded by either https:// - check your setup."
       fi
     fi
   done

@@ -18,7 +18,7 @@ function configure_project() {
   # REPO_HOST
   remote_origin="$(git ls-remote --get-url)"
   REPO_HOST=$(echo ${remote_origin%/*})
-  arg="${REPO_HOST}"; read -rp "Repo root URL (including http:// or https://):" -e -i "${arg}" value; set_value "${value}"
+  arg="${REPO_HOST}"; read -rp "Repo root URL (including https://):" -e -i "${arg}" value; set_value "${value}"
 
   # Repo name
   REPO="$(basename -s .git `git config --get remote.origin.url`)"
@@ -35,8 +35,8 @@ function configure_project() {
   arg="${PROJECT_NAME}"; read -rp "Project name:" -e -i "${arg} " value; set_value "${value}"
   #arg="${PROJECT_CLIENT}"; read -rp "Client name:" -e -i "${arg} " value; set_value "${value}"
 
-  #arg="${DEV_URL}"; read -rp "Staging URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
-  #arg="${PROD_URL}"; read -rp "Production URL (including http:// or https://)" -e -i "${arg}" value; set_value "${value}"
+  #arg="${DEV_URL}"; read -rp "Staging URL (including https://)" -e -i "${arg}" value; set_value "${value}"
+  #arg="${PROD_URL}"; read -rp "Production URL (including https://)" -e -i "${arg}" value; set_value "${value}"
 }
 
 function configure_user() {
