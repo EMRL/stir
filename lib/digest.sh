@@ -36,7 +36,6 @@ function get_avatars() {
       #fi
       IMGFILE="${avatar_dir}/${AUTHORNAME}.png"
     fi
-    trace "\"${curl_cmd}" -fso "${IMGFILE}" "${GRAVATAR}"\"
     "${curl_cmd}" -fso "${IMGFILE}" "${GRAVATAR}"; dot
   done 
 }

@@ -16,6 +16,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Fixed an activity log email formatting error
 - Resolved [#189](https://github.com/emrl/stir/issues/189)
 - Updating Wordpress core should now be more reliable 
+- Gravatars are now being accessed securely
 
 ## [3.8.5]
 ### Added
