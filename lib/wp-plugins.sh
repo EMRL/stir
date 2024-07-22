@@ -12,7 +12,11 @@ init_loop
 
 function wp_plugins() {
   # Make sure things are activated
-  wp_activate_plugin "${ACTIVATE_PLUGINS}"
+  if [[ -z "${ACTIVATE_PLUGINS}" ]]; then
+    return
+  else
+    wp_activate_plugin "${ACTIVATE_PLUGINS}"
+  fi
 
   # Look for updates
   if [[ "${QUIET}" != "1" ]]; then

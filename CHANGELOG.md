@@ -17,6 +17,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Resolved [#189](https://github.com/emrl/stir/issues/189)
 - Updating Wordpress core should now be more reliable 
 - Gravatars are now being accessed securely
+- Fixed potential unbound variable issue in `wp_activate_plugin`
+- Cleaned up old code here and there
 
 ## [3.8.5]
 ### Added

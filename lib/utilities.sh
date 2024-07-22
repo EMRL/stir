@@ -30,8 +30,8 @@ function go() {
 
   # Are we skipping git functions?
   if [[ "${SKIP_GIT}" == "1" ]]; then 
-    if [[ "${DIGEST}" != "1" ]]; then
-      error "Skipping git functionality is only allowed when using --digest"
+    if [[ "${DIGEST}" != "1" || "${SWITCHES}" == *"test"*  ]]; then
+      error "Skipping git functionality is only allowed when using --digest or test switches"
     fi
   fi
 

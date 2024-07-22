@@ -28,14 +28,9 @@ function verify_project() {
   fi
 
   # Return if this is not a git project
-  if [[ "${SKIP_GIT}" -eq "1" ]]; then
+  if [[ "${SKIP_GIT}" == "1" ]]; then
     return
-  fi
-
-  # Check that .git exists
-  if [[ -f "${APP_PATH}/.git/index" ]]; then
-    sleep 1
-  else
+  elif [[ ! -f "${APP_PATH}/.git/index" ]]; then
     info "There is no working project at ${APP_PATH}"
     clean_up; exit 51
   fi

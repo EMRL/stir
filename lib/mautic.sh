@@ -26,7 +26,7 @@ function mtc_data_loop() {
 
   # Get payload
   clean_path "${MAUTIC_URL}/api/emails?limit=7&orderBy=id&orderByDir=desc"
-  # trace "${curl_cmd} --silent --get \"${cleaned_path}\" --header \"Authorization: Basic ${MAUTIC_AUTH}\""
+  trace "${curl_cmd} --silent --get \"${cleaned_path}\" --header \"Authorization: Basic ${MAUTIC_AUTH}\""
   mtc_payload="$(${curl_cmd} --silent --get "${cleaned_path}" --header "Authorization: Basic ${MAUTIC_AUTH}")"; error_check
 
   if [[ -n "${mtc_payload}" ]]; then
