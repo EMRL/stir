@@ -69,15 +69,18 @@ function wp_core() {
 }
 
 function check_core_update_success() {
-  # Check update success
+  # Check update success. Discovery of multiple at once updates 
+  # breaks this function
   core_update_attempt="1" 
   core_current_version="$(eval ${wp_cmd[@]} core version)"
   if version_compare "${core_update_version}" "${core_current_version}"; then
-      warning "Update to version ${core_update_version} failed, keeping version ${core_current_version}";
+      trace "Update ${core_update_version} does not match current version (${core_current_version})";
+      info "Wordpress core running ${core_current_version}"
+      core_update_complete="1"
   else
       sleep 1
       cd "${APP_PATH}/"; # \ 
-      info "Wordpress core updated to ${core_current_version}"
+      info "Wordpress core running ${core_current_version}"
       core_update_complete="1"
   fi
 }
