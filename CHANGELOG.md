@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [3.8.6]
 ### Added
 - Settings use specific versions of PHP with `composer` and `wp-cli` are now available, per project
 - ACF Pro can now be updated via `composer` as well as the legacy method
@@ -19,6 +19,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Gravatars are now being accessed securely
 - Fixed potential unbound variable issue in `wp_activate_plugin`
 - Cleaned up old code here and there
+- Resolved [#197]
 
 ## [3.8.5]
 ### Added
@@ -339,7 +340,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Old monolithic script rewritten
 
-[Unreleased]: https://github.com/EMRL/deploy/compare/v3.8.5...HEAD
+[Unreleased]: https://github.com/EMRL/deploy/compare/v3.8.6...HEAD
+[3.8.6]: https://github.com/EMRL/deploy/compare/v3.8.4...v3.8.5
 [3.8.5]: https://github.com/EMRL/deploy/compare/v3.8.4...v3.8.5
 [3.8.4]: https://github.com/EMRL/deploy/compare/v3.8.3...v3.8.4
 [3.8.3]: https://github.com/EMRL/deploy/compare/v3.8.2...v3.8.3
@@ -364,4 +366,3 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [3.3]: https://github.com/EMRL/deploy/compare/v3.1...v3.3
 [3.1]: https://github.com/EMRL/deploy/compare/v3.0...v3.1
 [3.0]: https://github.com/EMRL/deploy/commits/v3.0
-
