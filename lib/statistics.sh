@@ -116,10 +116,16 @@ function project_scan(){
   #if [[ ! -d "${stat_dir}" ]]; then
   #  umask 077 && mkdir ${stat_dir} &> /dev/null
   #fi
-  
-  SCAN_STATS=$(<${scan_html})
-  cat "${stir_path}/html/${HTML_TEMPLATE}/stats/scan.html" > "${html_file}"
+
+  # Text mode, Nikto is broked :(
+  SCAN_STATS=$(<${scan_file})
+  cat "${stir_path}/html/${HTML_TEMPLATE}/stats/scan.txt.html" > "${html_file}"
   process_html; cat "${html_file}" > "${stat_dir}/scan.html"
+
+  # Assuming HTML output from Nikto was working, we'd run this
+  # SCAN_STATS=$(<${scan_html})
+  # cat "${stir_path}/html/${HTML_TEMPLATE}/stats/scan.html" > "${html_file}"
+  # process_html; cat "${html_file}" > "${stat_dir}/scan.html"
 }
 
 function project_firewall() {

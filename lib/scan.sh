@@ -75,8 +75,8 @@ function scan_host() {
     -e '/^Loaded/d' \
     -e "s/: currently in plugin 'Nikto Tests'//" \
     -e 's/^\(+ \)*//' \
+    -e 's/^\(- \)*//' \
     -e  '/^Running/d' \
-
     "${scan_file}"
 
   # For testing only
@@ -106,7 +106,10 @@ function scan_host() {
   assign_nav
   project_scan
 
-  cat "${stir_path}/html/${HTML_TEMPLATE}/scan/header.html" "${scan_html}" "${stir_path}/html/${HTML_TEMPLATE}/scan/footer.html" > "${html_file}"
+  # Nikto html output is broked, using text only for now
+  cat "${stir_path}/html/${HTML_TEMPLATE}/scan/header.txt.html" "${scan_file}" "${stir_path}/html/${HTML_TEMPLATE}/scan/footer.txt.html" > "${html_file}"
+
+  # cat "${stir_path}/html/${HTML_TEMPLATE}/scan/header.html" "${scan_html}" "${stir_path}/html/${HTML_TEMPLATE}/scan/footer.html" > "${html_file}"
 
   SCAN_MSG=$(grep -a "error" "${html_file}")
 
