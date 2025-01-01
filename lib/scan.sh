@@ -72,11 +72,11 @@ function scan_host() {
   sed -i -e 's/^.*Running/Running/' "${scan_file}" \
     -e 's/^.*Loaded/Loaded/' \
     -e '/^V\:/d' \
-    -e '/^Running average\: Not enough data/d' \
+    -e '/^Loaded/d' \
     -e "s/: currently in plugin 'Nikto Tests'//" \
     -e 's/^\(+ \)*//' \
-    -e  '/^Running scan/d' \
-    -e  '/^Running recon/d' \
+    -e  '/^Running/d' \
+
     "${scan_file}"
 
   # For testing only
