@@ -9,7 +9,7 @@
 # This value indicates the version number when this file was last changed:
 # it does not necessarily reflect stir's current version number.
 # DO NOT EDIT THIS NUMBER OR YOU MAY BLOW SOMETHING UP
-PROJECT_VERSION="3.8.5.7"
+PROJECT_VERSION="3.8.5.8"
 
 
 ###############################################################################
@@ -416,14 +416,3 @@ PROJECT_VERSION="3.8.5.7"
 # Mautic changed its JSON payload format in version 3+. If you're using an 
 # older version of Mautic (v1 or v2) then set the following to TRUE
 # MAUTIC_LEGACY_VERSION="{{MAUTIC_LEGACY_VERSION}}"
-
-
-###############################################################################
-# Malware scanning
-###############################################################################
-
-# If you want to make use of nikto for malware/security host scanning, define
-# its full path (including command) as well as its configuration file below
-# NIKTO="{{NIKTO}}"
-# NIKTO_CONFIG="{{NIKTO_CONFIG}}"
-# NIKTO_PROXY="{{NIKTO_PROXY}}"

@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Changed
+- Nikto scan configuration is now global as opposed to per-project
+
 ## [3.8.6]
 ### Added
 - Settings use specific versions of PHP with `composer` and `wp-cli` are now available, per project
@@ -341,7 +345,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Old monolithic script rewritten
 
 [Unreleased]: https://github.com/EMRL/deploy/compare/v3.8.6...HEAD
-[3.8.6]: https://github.com/EMRL/deploy/compare/v3.8.4...v3.8.5
+[3.8.6]: https://github.com/EMRL/deploy/compare/v3.8.5...v3.8.6
 [3.8.5]: https://github.com/EMRL/deploy/compare/v3.8.4...v3.8.5
 [3.8.4]: https://github.com/EMRL/deploy/compare/v3.8.3...v3.8.4
 [3.8.3]: https://github.com/EMRL/deploy/compare/v3.8.2...v3.8.3
