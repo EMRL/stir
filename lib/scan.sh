@@ -68,16 +68,17 @@ function scan_host() {
     fi
   fi
 
-  # For testing only
-  cp "${scan_file}" ~/verbose_scan.txt
-
   # Create and clean up the log
   sed -i -e 's/^.*Running/Running/' "${scan_file}" \
     -e 's/^.*Loaded/Loaded/' \
     -e '/^V\:/d' \
     -e '/^Running average\: Not enough data/d' \
     -e "s/: currently in plugin 'Nikto Tests'//" \
+    -e 's/^\(+ \)*//' \
     "${scan_file}"
+
+  # For testing only
+  cp "${scan_file}" ~/verbose_scan.txt
   
   # Strip redirects, can get very spammy on a Wordpress project
   sed -i '/Redirects (301) to/d' "${scan_file}"
