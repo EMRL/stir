@@ -75,6 +75,8 @@ function scan_host() {
     -e '/^Running average\: Not enough data/d' \
     -e "s/: currently in plugin 'Nikto Tests'//" \
     -e 's/^\(+ \)*//' \
+    -e  '/^Running scan/d' \
+    -e  '/^Running recon/d' \
     "${scan_file}"
 
   # For testing only
