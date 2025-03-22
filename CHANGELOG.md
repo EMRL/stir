@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Changed
 - Nikto scan configuration is now global as opposed to per-project
+- Default theme scan link temporaily changed to point to old "beta" report
 
 ## [3.8.6]
 ### Added
