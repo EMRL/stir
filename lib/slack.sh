@@ -117,7 +117,8 @@ function post_slack () {
 
   # Arf I hate this
   if [[ "${SCAN}" == "1" ]]; then
-    slack_message="${notes} (<${LOGURL}|Details>)"
+    return # This is temporary
+    # slack_message="${notes} (<${LOGURL}|Details>)"
   fi
 
   # Set icon for message state
