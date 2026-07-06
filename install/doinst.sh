@@ -140,7 +140,7 @@ if [[ ! -d /etc/stir ]]; then
 fi
 
 # Clean out old libraries
-if [[ -d /etc/stir/lib ]]; then
+if [[ -d /etc/stir/lib ]]  && [[ ! -z "$(find /etc/stir/lib -maxdepth 0 -type d ! -empty)" ]]; then
   sudo rm /etc/stir/lib/*; error_check
 fi
 
@@ -204,9 +204,9 @@ if [[ "${FIRSTRUN}" == "TRUE" ]]; then
   echo "\__ \ |_| | |"  
   echo "|___/\__|_|_|${reset}"
   echo
-  echo "Stir was created to speed and automate maintaining Wordpress websites "
-  echo "in an agency environment, with an emphasis on client communication and "
-  echo "generating revenue. "
+  echo "Stir was created to speed up and automate maintaining Wordpress "
+  echo "websites in an agency environment, with an emphasis on client "
+  echo "communication and generating revenue. "
   echo
   echo "Here's a few things that stir can help you do:"
   echo
@@ -228,23 +228,35 @@ if [[ "${FIRSTRUN}" == "TRUE" ]]; then
     if [[ "${TIMEOUT}" != "TRUE" ]]; then
       WORK_PATH="/etc/stir/repos/"
       echo; echo "${fg_yellow}=> Where are all (or most) of your repos stored?${reset}" 
-      read -rp "[ Ex. ${WORK_PATH} ]: " -e -i "${WORK_PATH}" INPUTPATH
-      WORK_PATH="${INPUTPATH:-$WORK_PATH}"
-      if [[ -d "${WORK_PATH}" ]]; then
-        if [[ -n "$(find ${WORK_PATH} -type d -exec test -e '{}/.git' ';' -print -prune)" ]]; then
-          echo "Found git repos at ${WORK_PATH} and using it as your default stir path"
-        else
-          echo "Using ${WORK_PATH} as your default stir path."
+      
+
+      while true; do
+        read -rp "[ Ex. ${WORK_PATH} ]: " -e -i "${WORK_PATH}" INPUTPATH
+
+        # Keep the existing default when Enter is pressed.
+        [[ -n "${INPUTPATH}" ]] && WORK_PATH="${INPUTPATH}"
+
+        if [[ "${WORK_PATH}" == *"~"* ]]; then
+          echo -e "${fg_red}Please use an absolute path. The ~ character is not allowed.${reset}\n"
+          continue
         fi
-      else
-        if [[ -w ${WORK_PATH} ]]; then
-          mkdir "${WORK_PATH}"; error_check
-          [[ -d "${WORK_PATH}" ]] && echo "Created ${WORK_PATH} and using it as your default stir path."
-        else
-          echo "Can not create ${WORK_PATH}"
-          exit 1
+
+        if [[ -d "${WORK_PATH}" ]]; then
+          if [[ -n "$(find "${WORK_PATH}" -type d -exec test -e '{}/.git' ';' -print -prune)" ]]; then
+            echo "Found git repos at ${WORK_PATH} and using it as your default stir path."
+          else
+            echo "Using ${WORK_PATH} as your default stir path."
+          fi
+          break
         fi
-      fi
+
+        if mkdir -p "${WORK_PATH}"; then
+          echo "Created ${WORK_PATH} and using it as your default stir path."
+          break
+        else
+          echo "${fg_red}Could not create ${WORK_PATH}. Check the path and your permissions, then try again.${reset}\n"
+        fi
+      done
     else
       WORK_PATH="$(cd -P .. && pwd -P)"
     fi
