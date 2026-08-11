@@ -112,6 +112,7 @@ function wp_clone() {
         -e "/AUTH_SALT/c\AUTH_SALT='null_salt'" \
         -e "/LOGGED_IN_SALT/c\LOGGED_IN_SALT='null_salt'" \
         -e "/NONCE_SALT/c\NONCE_SALT='null_salt'" \
+        -e "/DEFUSE_KEY/c\DEFUSE_KEY='null_key'" \
         "${APP_PATH}/${env_file}"
     fi
 
