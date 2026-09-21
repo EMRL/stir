@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Added CI test harness and Github Actions workflow 
 ### Changed
 - Nikto scan configuration is now global as opposed to per-project
 - Default theme scan link temporaily changed to point to old "beta" report
@@ -14,7 +16,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added `--skip-git` for projects that are focused only on client communication
 - Added ability to turn off RSS feed per project, even if set globally
 - Added ability to define which Wordpress plugins are to be activated when using `--prepare-with-reset` and when running updates on a Wordpress project
-
 ### Fixed
 - Fixed success color rendering in default html theme
 - Fixed a bug in preparing new Wordpress projects
