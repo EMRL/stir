@@ -1,0 +1,43 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - master
+      - test
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bash:
+    name: Bash checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes shellcheck
+
+      - name: Run syntax and smoke tests
+        run: bash test/ci/run.sh
+
+      - name: Check the CI test scripts
+        run: shellcheck test/ci/*.sh
+
+      - name: Report existing ShellCheck errors
+        continue-on-error: true
+        run: |
+          find . -type f \( -name '*.sh' -o -name '*.rc' \) \
+            -not -path './.git/*' -print0 \
+            | xargs -0 shellcheck --external-sources --severity=error
