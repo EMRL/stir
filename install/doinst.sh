@@ -132,6 +132,43 @@ if [[ -n "${message}" ]] ; then
   # echo ${message};
 fi
 
+# Resolve source paths relative to this installer.
+INSTALL_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)" || {
+  echo "Could not locate the installer directory." >&2
+  exit 1
+}
+
+SOURCE_DIR="$(cd -- "${INSTALL_DIR}/.." && pwd -P)" || {
+  echo "Could not locate the Stir source directory." >&2
+  exit 1
+}
+
+# Validate installation sources before changing the existing installation.
+for source_dir in etc lib; do
+  if [[ ! -d "${SOURCE_DIR}/${source_dir}" ||
+        ! -r "${SOURCE_DIR}/${source_dir}" ||
+        ! -x "${SOURCE_DIR}/${source_dir}" ]]; then
+    printf 'Missing or inaccessible source directory: %s\n' \
+      "${SOURCE_DIR}/${source_dir}" >&2
+    exit 1
+  fi
+done
+
+for source_file in \
+  stir.sh \
+  etc/stir-user.rc \
+  etc/stir-global.conf \
+  etc/html/default/theme-example.conf \
+  etc/extras/bulk.stir.sh
+do
+  if [[ ! -f "${SOURCE_DIR}/${source_file}" ||
+        ! -r "${SOURCE_DIR}/${source_file}" ]]; then
+    printf 'Missing or unreadable source file: %s\n' \
+      "${SOURCE_DIR}/${source_file}" >&2
+    exit 1
+  fi
+done
+
 # Start the install
 echo; sleep 1
 if [[ ! -d /etc/stir ]]; then
@@ -145,8 +182,8 @@ if [[ -d /etc/stir/lib ]]  && [[ ! -z "$(find /etc/stir/lib -maxdepth 0 -type d 
 fi
 
 echo "Installing system files"
-sudo cp -R etc/* /etc/stir; error_check
-sudo cp etc/stir-user.rc /etc/stir; error_check
+sudo cp -R "${SOURCE_DIR}/etc/"* /etc/stir; error_check
+sudo cp "${SOURCE_DIR}/etc/stir-user.rc" /etc/stir; error_check
 
 if [[ ! -f /etc/stir/global.conf ]]; then
   echo "Global configuration not found, installing."
@@ -158,9 +195,9 @@ if [[ ! -f "/etc/stir/html/default/theme.conf" ]]; then
   sudo cp "/etc/stir/html/default/theme-example.conf" "/etc/stir/html/default/theme.conf"
 fi
 
-cp -R lib /etc/stir || error_check
-cp stir.sh /usr/local/bin/stir || error_check
-cp etc/extras/bulk.stir.sh /usr/local/bin/bulk.stir || error_check
+cp -R "${SOURCE_DIR}/lib" /etc/stir || error_check
+cp "${SOURCE_DIR}/stir.sh" /usr/local/bin/stir || error_check
+cp "${SOURCE_DIR}/etc/extras/bulk.stir.sh" /usr/local/bin/bulk.stir || error_check
 sudo chmod 755 /usr/local/bin/stir || error_check
 sudo chmod 755 /usr/local/bin/bulk.stir || error_check
 
@@ -210,14 +247,14 @@ if [[ "${FIRSTRUN}" == "TRUE" ]]; then
   echo
   echo "Here's a few things that stir can help you do:"
   echo
-  echo "1. Schedule automatic updates and deployment of Wordpress plugins and "
+  echo "1. Schedule automatic updates and of Wordpress plugins and "
   echo "   system files"
-  echo "2. Keep clients up to date with simple dashboards and scheduled digest "
-  echo "   emails notifying them of their code updates"
-  echo "3. Get paid! Track all changes internally w/ integration into project "
-  echo "   management, time tracking, and invoicing systems"
+  echo "2. Keep clients up to date with simple dashboards and scheduled"
+  echo "   digest emails notifying them of their code updates"
+  echo "3. Get paid! Track all changes internally w/ integration into"
+  echo "   project management, time tracking, and invoicing systems"
   echo "4. Notify your clients and team of updates through Slack and email"
-  echo "5. Solve deployment issues with verbose logging features"
+  echo "5. Solve issues with verbose logging features"
   echo
   echo "Let's get your configuration started!"
 
@@ -236,8 +273,9 @@ if [[ "${FIRSTRUN}" == "TRUE" ]]; then
         # Keep the existing default when Enter is pressed.
         [[ -n "${INPUTPATH}" ]] && WORK_PATH="${INPUTPATH}"
 
-        if [[ "${WORK_PATH}" == *"~"* ]]; then
-          echo -e "${fg_red}Please use an absolute path. The ~ character is not allowed.${reset}\n"
+        if [[ "${WORK_PATH}" == *"~"* || "${WORK_PATH}" != /* ]]; then
+          echo -e "${fg_red}Please use an absolute path.${reset}\n"
+          WORK_PATH="/etc/stir/repos/"
           continue
         fi
 
