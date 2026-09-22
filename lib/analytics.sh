@@ -261,7 +261,7 @@ function ga_over_time() {
     ga_sequence="$(echo -e "${ga_sequence}" | sed -e 's/[[:space:]]*$//')"
     IFS=', ' read -r -a a <<< "${ga_sequence}"
 
-    for i in ${a[@]}; do
+    for i in "${a[@]}"; do
       if [[ $i -gt $max_value ]]; then 
         max_value=$i
       fi

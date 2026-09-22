@@ -77,17 +77,18 @@ function server_monitor_log() {
   # Set colors for html reports
   if [[ "${UPTIME}" == "100" ]]; then
     UPTIME_STATUS="${SUCCESS_COLOR}"; UPTIME_BTN="btn-success"
-  elif [[ "${UPTIME}" > "97" || "${UPTIME}" == "97" ]]; then
+  elif [[ "${UPTIME}" -gt "97" || "${UPTIME}" == "97" ]]; then
     UPTIME_STATUS="${SUCCESS_COLOR}"; UPTIME_BTN="btn-success"
-  elif [[ "${UPTIME}" > "88" && "${UPTIME}" < "97" ]]; then
+  elif [[ "${UPTIME}" -gt "88" && "${UPTIME}" -lt "97" ]]; then
     UPTIME_STATUS="${WARNING_COLOR}"; UPTIME_BTN="btn-warning"
   else
     UPTIME_STATUS="${DANGER_COLOR}"; UPTIME_BTN="btn-danger"
   fi
 
-  if [[ "${LATENCY}" < "2.2" || "${LATENCY}" == "2.2" ]]; then
+  LATENCY_MS="$(awk -v latency="${LATENCY}" 'BEGIN { printf "%.0f", latency * 1000 }')"
+  if [[ "${LATENCY_MS}" -le 2200 ]]; then
     LATENCY_STATUS="${SUCCESS_COLOR}"; LATENCY_BTN="btn-success"
-  elif [[ "${LATENCY}" > "2.2" && "${LATENCY}" < "3.8" ]]; then
+  elif [[ "${LATENCY_MS}" -lt 3800 ]]; then
     LATENCY_STATUS="${WARNING_COLOR}"; LATENCY_BTN="btn-warning"
   else
     LATENCY_STATUS="${DANGER_COLOR}"; LATENCY_BTN="btn-danger"

@@ -83,7 +83,7 @@ function init_env() {
 function init_internal() {
   var=(optstring options log_file wp_file core_file post_file trash_file stat_file \
   url_file html_file htmlSendmail html_email client_email textSendmail stir_path \
-  etc_path lib_path integration_email current_branch error_msg notes \
+  etc_path lib_path integration_email current_branch error_msg notes latency \
   UPDCORE TASKLOG plugins_updated PCB PCC PCD PLUGINS slack_icon APPRC userrc \
   message_state COMMITURL COMMITHASH UPD1 UPD2 UPDATE git_lock AUTOMERGE MERGE \
   EXITCODE current_stash deploy_cmd start_branch postSendmail SLACKUSER NOCHECK \
@@ -92,7 +92,8 @@ function init_internal() {
   MINADOMAIN SSHTARGET SSHSTATUS REMOTEFILE  LOGSUFFIX \
   DISABLE_SSH_CHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile \
   TMP MONITOR_URL MONITOR_USER MONITOR_PASS SERVER_ID \
-  MONITORHOURS LATENCY UPTIME TEST_MONITOR MONITORAPI IN_HOST IN_TOKEN TEST_MAUTIC)
+  MONITORHOURS LATENCY LATENCY_MS UPTIME TEST_MONITOR MONITORAPI IN_HOST IN_TOKEN \
+  TEST_MAUTIC)
   init_loop
 }
 
@@ -412,7 +413,7 @@ else
 fi
 
 # If global.conf appears empty, launch configuration options
-if [[ -z "#{WORK_PATH}" ]]; then
+if [[ -z "${WORK_PATH}" ]]; then
   configure_global
 fi
 

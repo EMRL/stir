@@ -75,7 +75,7 @@ function check_stats() {
 }
 
 function create_digest() {
-  if [[ -z "${DIGEST_SLACK}" || "${DIGEST_SLACK}" == "FALSE" ]] && [[ -z "${DIGEST_EMAIL} " ]]; then 
+  if [[ -z "${DIGEST_SLACK}" || "${DIGEST_SLACK}" == "FALSE" ]] && [[ -z "${DIGEST_EMAIL}" ]]; then 
     return
   else
     message_state="DIGEST"

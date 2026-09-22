@@ -15,7 +15,7 @@ function wp_core() {
   # There's a little bug when certain plugins are spitting errors; work around 
   # seems to be to check for core updates a second time
   cd "${APP_PATH}"/"${WP_ROOT}"; \
-  core_update_version="$(eval ${wp_cmd[@]} core check-update --format=csv | awk '{if(NR>1)print}')"
+  core_update_version="$(eval '${wp_cmd[@]}' core check-update --format=csv | awk '{if(NR>1)print}')"
 
   if [[ -z "${core_update_version}" ]]; then
     info "Wordpress core is up to date."
@@ -72,7 +72,7 @@ function check_core_update_success() {
   # Check update success. Discovery of multiple at once updates 
   # breaks this function
   core_update_attempt="1" 
-  core_current_version="$(eval ${wp_cmd[@]} core version)"
+  core_current_version="$(eval '${wp_cmd[@]}' core version)"
   if version_compare "${core_update_version}" "${core_current_version}"; then
       trace "Update ${core_update_version} does not match current version (${core_current_version})";
       info "Wordpress core running ${core_current_version}"
