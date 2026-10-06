@@ -38,7 +38,7 @@ function main() {
   elif [[ "${SCAN}" == "1" ]]; then
     scan_host
   else
-    check_server     # Check that servers are up and running
+    server_check     # Check that servers are up and running
     
     if [[ "${DISABLE_SSH_CHECK}" != "TRUE" ]]; then
       ssh_check   # Check keys

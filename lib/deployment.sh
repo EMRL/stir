@@ -85,7 +85,7 @@ function deploy_project() {
         # Deploy via deployment command specified in configuration
         if [[ "${VERBOSE}" == "TRUE" ]] && [[ "${INCOGNITO}" != "TRUE" ]]; then
           if [[ "${DEPLOY}" == "SCP" ]]; then
-            deploy_scp
+            scp_deploy
           else
             eval "${DEPLOY}" | tee --append "${log_file}"            
           fi
@@ -93,7 +93,7 @@ function deploy_project() {
         else
           if [[ "${QUIET}" != "1" ]]; then
             if [[ "${DEPLOY}" == "SCP" ]]; then
-              deploy_scp &
+              scp_deploy &
               spinner $!
             else
               eval "${DEPLOY}" &>> "${log_file}" &
@@ -101,7 +101,7 @@ function deploy_project() {
             fi
           else
             if [[ "${DEPLOY}" == "SCP" ]]; then
-              deploy_scp &>> "${log_file}"; error_check
+              scp_deploy &>> "${log_file}"; error_check
             else
               eval "${DEPLOY}" &>> "${log_file}"; error_check
             fi

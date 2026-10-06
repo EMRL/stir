@@ -9,7 +9,7 @@
 var=(title link pubDate description RSS_NEWS)
 init_loop
 
-function get_rss() {
+function rss_get() {
 	# Pull RSS feed
 	"${curl_cmd}" --silent "${NEWS_URL}" > /tmp/${APP}.xml; error_check
 	# Strip CDATA stuff
@@ -61,7 +61,7 @@ function create_rss_payload() {
 		NEWS_URL=""
 		return
 	else
-		get_rss
+		rss_get
 		process_xml > ${trash_file}
 
 		# Clean up output

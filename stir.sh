@@ -548,7 +548,7 @@ else
 fi
 
 # Validate configuration setings
-validate_conf
+validate_config
 
 # Get full path to all commands
 get_full_path

@@ -10,7 +10,7 @@
 var=(STAGING_DEPLOY_PATH SCP_DEPLOY_USER SCP_DEPLOY_PASS SCP_DEPLOY_PORT)
 init_loop
 
-function deploy_scp() {
+function scp_deploy() {
   # This is ghetto
   if [[ -n "${PRODUCTION_DEPLOY_PATH}" ]]; then
     # TODO: Modernize this for compatability with multple non-master branches
