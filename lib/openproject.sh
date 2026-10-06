@@ -8,7 +8,7 @@
 
 # Initialize internal variables
 var=(op_payload op_response op_http_code op_duration op_user op_subject \
-  op_comment)
+op_comment op_activity_comment)
 init_loop
 
 ###############################################################################
@@ -40,14 +40,36 @@ function op_addtime() {
     return 1
   fi
 
-  # Use the commit message as the time entry/activity comment
+  # Use the commit message as the time entry comment
   op_comment="${notes:-Automated maintenance via Stir}"
+
+  # Get current commit information
+  COMMITHASH="$(git rev-parse --short HEAD)"
+  COMMITURL=""
+
+  if [[ "${REPO_HOST}" == *"bitbucket"* ]]; then
+    COMMITURL="${REPO_HOST}/${REPO}/commits/${COMMITHASH}"
+  elif [[ "${REPO_HOST}" == *"github"* ]]; then
+    COMMITURL="${REPO_HOST}/${REPO}/commit/${COMMITHASH}"
+  fi
+
+  # Build activity feed comment with linked commit hash
+  if [[ -n "${COMMITURL}" ]]; then
+    op_activity_comment="[${COMMITHASH}](${COMMITURL}) ${op_comment}"
+  else
+    op_activity_comment="${COMMITHASH} ${op_comment}"
+  fi
 
   # Escape characters that would break JSON
   op_comment="${op_comment//\\/\\\\}"
   op_comment="${op_comment//\"/\\\"}"
   op_comment="${op_comment//$'\n'/\\n}"
   op_comment="${op_comment//$'\r'/}"
+
+  op_activity_comment="${op_activity_comment//\\/\\\\}"
+  op_activity_comment="${op_activity_comment//\"/\\\"}"
+  op_activity_comment="${op_activity_comment//$'\n'/\\n}"
+  op_activity_comment="${op_activity_comment//$'\r'/}"
 
   # Build API URL
   clean_path "${OPENPROJECT_URL}/api/v3/time_entries"
@@ -100,7 +122,7 @@ function op_addtime() {
 
   op_payload="{
     \"comment\": {
-      \"raw\": \"${op_comment}\"
+      \"raw\": \"${op_activity_comment}\"
     }
   }"
 
