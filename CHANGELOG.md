@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- [OpenProject](http://openproject.com/) integration
 - Added CI test harness and Github Actions workflow 
 ### Changed
 - Nikto scan configuration is now global as opposed to per-project

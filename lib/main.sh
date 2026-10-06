@@ -124,12 +124,6 @@ function main() {
       fi
 
       deploy_project   # Deploy project to live server
-      
-      # Log project time
-      if [[ "${TIME}" == "1" ]]; then
-        op_addtime
-      fi
-      
     fi
   fi  
 }

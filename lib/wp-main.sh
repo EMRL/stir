@@ -11,6 +11,11 @@ var=(WP_PATH WP_SERVER_PID)
 init_loop
 
 function wp_main() {
+  # Validate Wordpress command exists
+  if [[ -z "${wp_cmd}" ]]; then
+    return 1
+  fi
+  
   # Make sure we are allowed to update
   if [[ "${SKIP_UPDATE}" != "1" ]] && [[ "${WP_PATH}" != "FALSE" ]]; then
     # Check for Wordfence

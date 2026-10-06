@@ -146,7 +146,7 @@ function deploy_cleanup() {
 
     if [[ -z $(git status -uno --porcelain) ]]; then
       # Run integration hooks
-      postCommit  
+      post_commit  
       deploy_msg
     else
       warning "Deployment succeeded, but something unexpected happened."
@@ -156,7 +156,7 @@ function deploy_cleanup() {
     fi
   else
     # Run integration hooks
-    postCommit
+    post_commit
     # This needs a check.
     if [[ "${APPROVE}" == "1" ]]; then
     	info "Deployment queued for approval."

@@ -77,13 +77,18 @@ function mail_post() {
   fi
 }
 
-function postCommit() {
+function post_commit() {
   # Run Wordpress database updates
   if [[ -n "${PRODUCTION}" ]] && [[ -n "${PROD_URL}" ]] && [[ "core_update_complete" == "1" ]]; then
     info "Updating production database..."
     "${curl_cmd}" --silent "${PROD_URL}${WP_SYSTEM}"/wp-admin/upgrade.php?step=1 >/dev/null 2>&1
     # In case curl is being weird
     "${wget_cmd}" -q -O - "${PROD_URL}${WP_SYSTEM}"/wp-admin/upgrade.php?step=1 > /dev/null 2>&1
+  fi
+
+  # Log project time
+  if [[ "${TIME}" == "1" ]]; then
+    op_addtime
   fi
 
   # Just for yuks, display git stats for this user (user can override this if it annoys them)
