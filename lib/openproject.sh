@@ -8,7 +8,7 @@
 
 # Initialize variables
 var=(OPENPROJECT_URL OPENPROJECT_TOKEN_FILE \
-  OPENPROJECT_WORK_PACKAGE ADD_TIME)
+  OPENPROJECT_WORK_PACKAGE OPENPROJECT_ADD_TIME)
 init_loop
 
 ###############################################################################
@@ -16,6 +16,8 @@ init_loop
 #   Logs time to the assigned OpenProject work package
 ###############################################################################      
 function op_addtime() {
+  trace "Adding ${OPENPROJECT_ADD_TIME} to work \
+    package #${OPENPROJECT_WORK_PACKAGE}"
 }
 
 ###############################################################################
