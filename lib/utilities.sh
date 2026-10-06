@@ -273,6 +273,11 @@ function user_tests() {
     mtc_test; quiet_exit
   fi
 
+  # Test OpenProject integration
+  if [[ "${TEST_MAUTIC}" == "1" ]]; then
+    op_test; quiet_exit
+  fi
+
   # Test Dropbox backup authentication
   if [[ "${CHECK_BACKUP}" == "1" ]]; then
     check_backup; quiet_exit
