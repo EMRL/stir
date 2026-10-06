@@ -67,9 +67,9 @@ function op_test() {
     op_user="$(get_json_value name 1 <<< "${op_payload}")"
 
     if [[ -n "${op_user}" ]]; then
-      info "OK (${op_user})"
+      console "OK (${op_user})"
     else
-      info "OK"
+      console "OK"
     fi
   else
     warning "FAIL (HTTP ${op_http_code})"
