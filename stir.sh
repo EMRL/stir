@@ -39,7 +39,7 @@ function init_startup() {
     DENY PUBLISH DIGEST ANALYTICS TEST_ANALYTICS BUILD PROJSTATS UNLOCK  \
     TEST_SSH TIME UPDATEONLY TEST_WEBHOOK REPORT REPAIR CREATE_INVOICE SCAN \
     CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET MIGRATE \
-    SHOW_SETTINGS UNIT_TEST bs_test UPDATE_ACF DEBUG_TO_FILE TEST_GA4 \
+    SHOW_SETTINGS UNIT_TEST TEST_BUGSNAG UPDATE_ACF DEBUG_TO_FILE TEST_GA4 \
     TEST_OPENPROJECT)
   init_loop
 }
@@ -303,7 +303,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --test-analytics) TEST_ANALYTICS="1"; NO_LOG="1" ;; 
     --test-ga4) TEST_GA4="1"; NO_LOG="1" ;; 
     --test-monitor) TEST_MONITOR="1"; NO_LOG="1" ;;
-    --test-bugsnag) bs_test="1"; NO_LOG="1" ;;
+    --test-bugsnag) TEST_BUGSNAG="1"; NO_LOG="1" ;;
     --test-mautic) TEST_MAUTIC="1"; NO_LOG="1" ;;
     --stats) PROJSTATS="1" ;;
     --build) BUILD="1"; NOCHECK="1"; FORCE="1" ;;

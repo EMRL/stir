@@ -38,7 +38,7 @@ function main() {
   elif [[ "${SCAN}" == "1" ]]; then
     scan_host
   else
-    check_server      # Check that servers are up and running
+    check_server     # Check that servers are up and running
     
     if [[ "${DISABLE_SSH_CHECK}" != "TRUE" ]]; then
       ssh_check   # Check keys
@@ -58,7 +58,7 @@ function main() {
         if [[ -n "${STAGING}" ]]; then
           git_checkout "${STAGING}"
           git_merge
-          push
+          git_push
         fi
 
         if [[ -n "${PRODUCTION}" ]]; then

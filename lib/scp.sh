@@ -18,7 +18,7 @@ function deploy_scp() {
     if [[ -n "${PRODUCTION}" ]]; then
       # Remove this requirement at some point
       MERGE="1"
-      checkout "${PRODUCTION}"
+      git_checkout "${PRODUCTION}"
     else
       error "Production branch must be defined"
       return
@@ -30,7 +30,7 @@ function deploy_scp() {
     "${sshpass_cmd}" -p "${SCP_DEPLOY_PASS}" scp -o StrictHostKeyChecking=no -P "${SCP_DEPLOY_PORT}" -r -v "${WORK_PATH}/${APP}/${STAGING_DEPLOY_PATH}"/* "${SCP_DEPLOY_USER}@${PRODUCTION_DEPLOY_HOST}:${PRODUCTION_DEPLOY_PATH}/"  &>> "${log_file}"; error_check;
 
     # Checkout master and move on
-    checkout "${MASTER}"
+    git_checkout "${MASTER}"
 
   else
     echo "ERROR: Can not find production server path"; return

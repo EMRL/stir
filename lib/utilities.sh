@@ -264,7 +264,7 @@ function user_tests() {
   fi
 
   # Test Bugsnag integration
-  if [[ "${bs_test}" == "1" ]]; then
+  if [[ "${TEST_BUGSNAG}" == "1" ]]; then
     bs_test; quiet_exit
   fi
 
