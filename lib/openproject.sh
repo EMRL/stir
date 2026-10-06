@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initialize internal variables
-var=(op_payload op_response op_http_code op_duration op_user)
+var=(op_payload op_response op_http_code op_duration op_user op_subject)
 init_loop
 
 ###############################################################################
@@ -15,8 +15,70 @@ init_loop
 #   Logs time to the assigned OpenProject work package
 ###############################################################################      
 function op_addtime() {
-  trace "Adding ${OPENPROJECT_ADD_TIME} to work \
-    package #${OPENPROJECT_WORK_PACKAGE}"
+  # Make sure required configuration exists
+  if [[ -z "${OPENPROJECT_URL}" ]] || \
+     [[ -z "${OPENPROJECT_TOKEN}" ]] || \
+     [[ -z "${OPENPROJECT_WORK_PACKAGE}" ]] || \
+     [[ -z "${OPENPROJECT_ADD_TIME}" ]] || \
+     [[ -z "${OPENPROJECT_ACTIVITY}" ]]; then
+    warning "OpenProject time logging is not configured correctly."
+    return 1
+  fi
+
+  # Convert configured time to ISO 8601
+  if [[ "${OPENPROJECT_ADD_TIME}" =~ ^([0-9]+)m$ ]]; then
+    op_duration="PT${BASH_REMATCH[1]}M"
+  elif [[ "${OPENPROJECT_ADD_TIME}" =~ ^([0-9]+)h$ ]]; then
+    op_duration="PT${BASH_REMATCH[1]}H"
+  elif [[ "${OPENPROJECT_ADD_TIME}" =~ ^([0-9]+)h([0-9]+)m$ ]]; then
+    op_duration="PT${BASH_REMATCH[1]}H${BASH_REMATCH[2]}M"
+  else
+    warning "Invalid OPENPROJECT_ADD_TIME value: ${OPENPROJECT_ADD_TIME}"
+    return 1
+  fi
+
+  clean_path "${OPENPROJECT_URL}/api/v3/time_entries"
+
+  op_payload="{
+    \"spentOn\": \"$(date +%Y-%m-%d)\",
+    \"hours\": \"${op_duration}\",
+    \"comment\": {
+      \"format\": \"plain\",
+      \"raw\": \"Automated maintenance via Stir\"
+    },
+    \"_links\": {
+      \"entity\": {
+        \"href\": \"/api/v3/work_packages/${OPENPROJECT_WORK_PACKAGE}\"
+      },
+      \"activity\": {
+        \"href\": \"/api/v3/time_entries/activities/${OPENPROJECT_ACTIVITY}\"
+      }
+    }
+  }"
+
+  op_response="$(
+    "${curl_cmd}" \
+      --silent \
+      --show-error \
+      --request POST \
+      --write-out $'\n%{http_code}' \
+      --header "Authorization: Bearer ${OPENPROJECT_TOKEN}" \
+      --header "Content-Type: application/json" \
+      --header "Accept: application/hal+json" \
+      --data "${op_payload}" \
+      "${cleaned_path}"
+  )"
+
+  op_http_code="${op_response##*$'\n'}"
+  op_response="${op_response%$'\n'*}"
+
+  if [[ "${op_http_code}" == "201" ]]; then
+    info "Logged ${OPENPROJECT_ADD_TIME} to OpenProject work package #${OPENPROJECT_WORK_PACKAGE}."
+  else
+    warning "Unable to log OpenProject time (HTTP ${op_http_code})."
+    log "${op_response}"
+    return 1
+  fi
 }
 
 ###############################################################################
@@ -114,6 +176,16 @@ function op_test() {
     console "OK (${OPENPROJECT_ADD_TIME})"
   else
     warning "FAIL: OPENPROJECT_ADD_TIME is not configured."
+    return 1
+  fi
+
+  # Check configured activity
+  console_inline "Checking activity... "
+
+  if [[ -n "${OPENPROJECT_ACTIVITY}" ]]; then
+    console "OK (#${OPENPROJECT_ACTIVITY})"
+  else
+    warning "FAIL: OPENPROJECT_ACTIVITY is not configured."
     return 1
   fi
 }
