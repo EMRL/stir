@@ -26,10 +26,17 @@ if [[ "${QUIET}" != "1" ]]; then
   tan=$(tput setaf 3)
 fi
 
-#  Standard text output only to console
+# Standard text output only to console
 function console() {
   if [[ "${QUIET}" != "1" ]]; then
     echo -e "${reset}$*${endColor}"
+  fi
+}
+
+# Will place the next console output on the same line
+function console_inline() {
+  if [[ "${QUIET}" != "1" ]]; then
+    echo -e -n "${reset}$*${endColor}"
   fi
 }
 
@@ -40,6 +47,8 @@ function info() {
   fi
   echo "$@" >> "${log_file}"
 }
+
+
 
 # Standard text output only to log
 function log() {
