@@ -102,7 +102,7 @@ function main() {
 
       if [[ "${APPROVE}" != "1" ]] && [[ ! -f "${WORK_PATH}/${APP}/.queued" ]]; then
         stage         # Stage files     
-        commit     # Commit, with message
+        commit        # Commit, with message
       fi 
       
       confirm_branch "${MASTER}"
@@ -123,7 +123,13 @@ function main() {
         checkout "${MASTER}"
       fi
 
-      deploy_project     # Deploy project to live server
+      deploy_project   # Deploy project to live server
+      
+      # Log project time
+      if [[ "${TIME}" == "1" ]]; then
+        op_addtime
+      fi
+      
     fi
   fi  
 }

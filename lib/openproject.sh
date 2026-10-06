@@ -7,14 +7,17 @@
 ###############################################################################
 
 # Initialize internal variables
-var=(op_payload op_response op_http_code op_duration op_user op_subject)
+var=(op_payload op_response op_http_code op_duration op_user op_subject \
+  op_comment)
 init_loop
 
 ###############################################################################
 # op_addtime()
-#   Logs time to the assigned OpenProject work package
-###############################################################################      
+#   Logs time to the assigned OpenProject work package and adds the commit
+#   message to the work package activity feed
+###############################################################################
 function op_addtime() {
+
   # Make sure required configuration exists
   if [[ -z "${OPENPROJECT_URL}" ]] || \
      [[ -z "${OPENPROJECT_TOKEN}" ]] || \
@@ -37,14 +40,25 @@ function op_addtime() {
     return 1
   fi
 
+  # Use the commit message as the time entry/activity comment
+  op_comment="${notes:-Automated maintenance via Stir}"
+
+  # Escape characters that would break JSON
+  op_comment="${op_comment//\\/\\\\}"
+  op_comment="${op_comment//\"/\\\"}"
+  op_comment="${op_comment//$'\n'/\\n}"
+  op_comment="${op_comment//$'\r'/}"
+
+  # Build API URL
   clean_path "${OPENPROJECT_URL}/api/v3/time_entries"
 
+  # Build time entry payload
   op_payload="{
     \"spentOn\": \"$(date +%Y-%m-%d)\",
     \"hours\": \"${op_duration}\",
     \"comment\": {
       \"format\": \"plain\",
-      \"raw\": \"Automated maintenance via Stir\"
+      \"raw\": \"${op_comment}\"
     },
     \"_links\": {
       \"entity\": {
@@ -53,6 +67,40 @@ function op_addtime() {
       \"activity\": {
         \"href\": \"/api/v3/time_entries/activities/${OPENPROJECT_ACTIVITY}\"
       }
+    }
+  }"
+
+  # Log time
+  op_response="$(
+    "${curl_cmd}" \
+      --silent \
+      --show-error \
+      --request POST \
+      --write-out $'\n%{http_code}' \
+      --header "Authorization: Bearer ${OPENPROJECT_TOKEN}" \
+      --header "Content-Type: application/json" \
+      --header "Accept: application/hal+json" \
+      --data "${op_payload}" \
+      "${cleaned_path}"
+  )"
+
+  # Separate response body and HTTP status
+  op_http_code="${op_response##*$'\n'}"
+  op_response="${op_response%$'\n'*}"
+
+  if [[ "${op_http_code}" != "201" ]]; then
+    warning "Unable to log OpenProject time (HTTP ${op_http_code})."
+    log "${op_response}"
+    return 1
+  fi
+
+  # Add commit message to work package activity feed
+  clean_path \
+    "${OPENPROJECT_URL}/api/v3/work_packages/${OPENPROJECT_WORK_PACKAGE}/activities?notify=false"
+
+  op_payload="{
+    \"comment\": {
+      \"raw\": \"${op_comment}\"
     }
   }"
 
@@ -69,15 +117,15 @@ function op_addtime() {
       "${cleaned_path}"
   )"
 
+  # Separate response body and HTTP status
   op_http_code="${op_response##*$'\n'}"
   op_response="${op_response%$'\n'*}"
 
   if [[ "${op_http_code}" == "201" ]]; then
     info "Logged ${OPENPROJECT_ADD_TIME} to OpenProject work package #${OPENPROJECT_WORK_PACKAGE}."
   else
-    warning "Unable to log OpenProject time (HTTP ${op_http_code})."
+    warning "Time logged, but unable to add OpenProject activity comment (HTTP ${op_http_code})."
     log "${op_response}"
-    return 1
   fi
 }
 
