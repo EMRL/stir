@@ -18,7 +18,7 @@ function acf_update() {
 	"${wget_cmd}" --header="Accept: application/zip" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" -O "${acf_file}" "http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=${ACF_KEY}" &>> "${log_file}"; error_check
 
 	# Check file integrity
-	acf_filecheck
+	acf_file_check
 
 	# Proceed with install
 	eval "${wp_cmd}" plugin delete --no-color advanced-custom-fields-pro &>> "${log_file}"; error_check
@@ -29,7 +29,7 @@ function acf_update() {
 	acf_update_complete="1"
 }
 
-function acf_filecheck() {
+function acf_file_check() {
 	if [[ -f "${acf_file}" ]]; then
 		hash unzip 2>/dev/null || {
 			if [[ "${AUTOMATE}" == "1" ]]; then

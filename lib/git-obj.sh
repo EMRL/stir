@@ -41,7 +41,7 @@ function verify_project() {
   fi
 
   # Make sure there has been at least one commit previously made
-  git rev-parse --abbrev-ref HEAD &>> "${trash_file}"
+  "${git_cmd}" rev-parse --abbrev-ref HEAD &>> "${trash_file}"
   if grep -aq "fatal" "${trash_file}"; then 
     error "Unable to start, push your first commit manually and try again."
   else  
@@ -74,13 +74,13 @@ function verify_project() {
 }
 
 ###############################################################################
-# checkout()
+# git_checkout()
 #   A simple function to handle git checkouts
 #
 # Arguments:
 #   [branch]    The branch name to be checked out
 ################################################################################
-function checkout() {
+function git_checkout() {
   if [[ -n "${1}" ]]; then
     working_branch="${1}"
     notice "Checking out ${working_branch} branch...";
@@ -99,7 +99,7 @@ function checkout() {
 }
 
 # Does anything need to be committed? (Besides me?)
-function status() {
+function git_status() {
   if [[ -z "$(git status --porcelain)" ]]; then
     if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
       if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]]; then
@@ -113,7 +113,7 @@ function status() {
 }
 
 # Stage files
-function stage() {
+function git_stage() {
   # Check for stuff that needs a commit
   if [[ -z $(git status --porcelain) ]]; then
     console "Nothing to commit, working directory clean."; quiet_exit
@@ -133,7 +133,7 @@ function stage() {
 }
 
 # TODO: REWRITE
-function push() {
+function git_push() {
   trace "Push ${working_branch}";
   empty_line
   if [[ "${VERBOSE}" == "TRUE" ]]; then
@@ -161,14 +161,14 @@ function push() {
 }
 
 ###############################################################################
-# merge()
+# git_merge()
 #   Merges [branch] into the current working branch. If no variable is passed,
 #   the value if MASTER is used
 #
 # Arguments:
 #   [branch]    The branch to merge into current branch
 ################################################################################
-function merge() {
+function git_merge() {
   if [[ "${MERGE}" = "1" ]] && [[ "${working_branch}" != "${MASTER}" ]]; then
     notice "Merging ${MASTER} into ${working_branch}..."
     # Clear out the index.lock file, cause reasons
@@ -221,12 +221,12 @@ function confirm_branch() {
 }
 
 # Commit, with message
-function commit() {
+function git_commit() {
   # Smart commit stuff
   smart_commit; empty_line
 
   # Do a dry run; check for anything to commit
-  git commit --dry-run &>> "${log_file}" 
+  "${git_cmd}" commit --dry-run &>> "${log_file}" 
 
   if grep -aq "nothing to commit, working directory clean" "${log_file}"; then 
     info "Nothing to commit, working directory clean."
@@ -296,7 +296,7 @@ function commit() {
 }
 
 # Garbage collection
-function garbage() {
+function git_gc() {
   if [[ "${GARBAGE}" = "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then 
     notice "Preparing project files..."
     git gc | tee --append "${log_file}"

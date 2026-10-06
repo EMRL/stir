@@ -6,7 +6,7 @@
 # Integration with Slack
 ###############################################################################
 
-function post_slack () {
+function slack_post () {
 
   # If running in --automate, change the user name
   if [[ "${AUTOMATE}" == "1" ]]; then

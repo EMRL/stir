@@ -22,10 +22,10 @@ function clean_exit() {
     if [[ "${POST_TO_SLACK}" == "TRUE" ]] && [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" = "1" ]] && [[ "${UPD2}" = "1" ]]; then
       message_state="NOTICE"
       notes="No updates available for deployment"
-      post_slack
+      slack_post
     else
       if [[ "${POST_TO_SLACK}" == "TRUE" ]]; then
-        build_log; post_slack > /dev/null 2>&1
+        build_log; slack_post > /dev/null 2>&1
       fi
     fi
 
@@ -49,7 +49,7 @@ function error_exit() {
   # Check Slack settings
   if [[ "${POST_TO_SLACK}" == "TRUE" ]] && [[ "${SLACK_ERROR}" == "TRUE" ]]; then
     message_state="ERROR"
-    post_slack
+    slack_post
   fi
 
   # Clean up your mess
@@ -84,7 +84,7 @@ function clean_up() {
   fi  
 
   # Remove temporary files
-  temp_files remove
+  init_temp_files remove
 
   # Make sure we leave the repo as we found it
   if [[ -n "${start_branch}" ]]; then

@@ -65,7 +65,7 @@ function mail_log() {
 
 function email_test() {
   # If the user has SMTP configured, overwrite sendmail command with ssmtp
-  check_smtp
+  smtp_check
   
   # Make sure mail transport exists and is configured 
   if [[ -z "${sendmail_cmd}" ]]; then

@@ -34,7 +34,7 @@ function create_invoice() {
 
   get_current_invoice
   if [[ -n "${REPORTURL}" ]]; then
-    attach_pdf2invoice
+    attach_pdf_to_invoice
   fi 
 
   if [[ "${IN_EMAIL}" == "TRUE" ]]; then
@@ -70,7 +70,7 @@ function send_invoice() {
   trace notime "OK"
 }
 
-function attach_pdf2invoice() {
+function attach_pdf_to_invoice() {
   trace status "Attaching PDF report... "
   "${wkhtmltopdf_cmd}" "${REPORTURL}" "/tmp/${APP}_${current_year}-${current_month}.pdf" &>> "${log_file}"; error_check
 

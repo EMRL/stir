@@ -27,7 +27,7 @@ function wp_clone_handler() {
   "${git_cmd}" reset --hard HEAD &>> /dev/null; error_check 
 }
 
-function check_mysql_service() {
+function mysql_check_service() {
   if [[ -z "$(pgrep mysql)" ]]; then 
     warning "MySQL service not found, can not continue."
     quiet_exit
@@ -39,7 +39,7 @@ function wp_clone() {
   sleep 2
   
   # This is all under construction
-  check_mysql_service
+  mysql_check_service
 
   # Get paths
   wp_path

@@ -147,7 +147,7 @@ function deploy_cleanup() {
     if [[ -z $(git status -uno --porcelain) ]]; then
       # Run integration hooks
       post_commit  
-      deploy_msg
+      deploy_message
     else
       warning "Deployment succeeded, but something unexpected happened."
       if yesno --default yes "View status? [Y/n] "; then
@@ -164,13 +164,13 @@ function deploy_cleanup() {
       if [[ -z "${PROD_URL}" ]]; then
         warning "No production URL configured, but deployment command ran successfully."
       else
-        deploy_msg
+        deploy_message
       fi
     fi
   fi
 }
 
-function deploy_msg() {
+function deploy_message() {
   if [[ -n "${PROD_URL}" ]] && [[ "${start_deploy}" == "1" ]]; then
     info "Deployed to ${PROD_URL}"
   fi

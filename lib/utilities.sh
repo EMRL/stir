@@ -107,7 +107,7 @@ function is_integer() {
   fi
 }
 
-function get_fullpath() {
+function get_full_path() {
   # Get absolute paths to critical commands
   var=(cal composer curl git gitchart gnuplot grep grunt mysqlshow npm scp 
     sendmail ssh sshpass ssmtp unzip wc wget wkhtmltopdf wp xmlstarlet)
@@ -125,7 +125,7 @@ function get_fullpath() {
   [[ ! -z "${COMPOSER_CLI_PATH}" ]] && composer_cmd=("${COMPOSER_CLI_PATH}")
 
   # If the user has SMTP configured, overwrite sendmail command with ssmtp
-  check_smtp
+  smtp_check
 }
 
 ###############################################################################
@@ -264,8 +264,8 @@ function user_tests() {
   fi
 
   # Test Bugsnag integration
-  if [[ "${TEST_BUGSNAG}" == "1" ]]; then
-    test_bugsnag; quiet_exit
+  if [[ "${bs_test}" == "1" ]]; then
+    bs_test; quiet_exit
   fi
 
   # Test Mautic integration

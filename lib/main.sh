@@ -46,28 +46,28 @@ function main() {
     if [[ "${PUBLISH}" == "1" ]]; then
       deploy_project   # Deploy project to live server
     else
-      checkout "${MASTER}"    # Checkout master branch
-      garbage                 # If needed, clean up the trash
+      git_checkout "${MASTER}"    # Checkout master branch
+      git_gc                 # If needed, clean up the trash
 
       # A simple way to repair a failed push
       if [[ "${REPAIR}" == "1" ]]; then 
         pre_deploy     # Get the status  
 
         confirm_branch "${MASTER}"
-        push
+        git_push
         if [[ -n "${STAGING}" ]]; then
-          checkout "${STAGING}"
-          merge
+          git_checkout "${STAGING}"
+          git_merge
           push
         fi
 
         if [[ -n "${PRODUCTION}" ]]; then
-          checkout "${PRODUCTION}"
-          merge
-          push
+          git_checkout "${PRODUCTION}"
+          git_merge
+          git_push
         fi
   
-        checkout "${MASTER}"
+        git_checkout "${MASTER}"
 
         deploy_project      # Deploy project to live server
         return 0
@@ -92,7 +92,7 @@ function main() {
       if [[ "${APPROVE}" != "1" ]]; then
         wp_main       # Run Wordpress upgrades if needed
         build_check   # Run package manager
-        status        # Make sure there's something here to commit         
+        git_status    # Make sure there's something here to commit         
       fi
 
       if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ ! -f "${WORK_PATH}/${APP}/.queued" ]]; then
@@ -101,26 +101,26 @@ function main() {
       fi
 
       if [[ "${APPROVE}" != "1" ]] && [[ ! -f "${WORK_PATH}/${APP}/.queued" ]]; then
-        stage         # Stage files     
-        commit        # Commit, with message
+        git_stage         # Stage files     
+        git_commit        # Commit, with message
       fi 
       
       confirm_branch "${MASTER}"
-      push
+      git_push
 
       if [[ "${MERGE}" == "1" ]]; then
         if [[ -n "${STAGING}" ]]; then
-          checkout "${STAGING}"
-          merge
-          push
+          git_checkout "${STAGING}"
+          git_merge
+          git_push
         fi
 
         if [[ -n "${PRODUCTION}" ]]; then
-          checkout "${PRODUCTION}"
-          merge
-          push
+          git_checkout "${PRODUCTION}"
+          git_merge
+          git_push
         fi
-        checkout "${MASTER}"
+        git_checkout "${MASTER}"
       fi
 
       deploy_project   # Deploy project to live server

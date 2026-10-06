@@ -39,7 +39,7 @@ function init_startup() {
     DENY PUBLISH DIGEST ANALYTICS TEST_ANALYTICS BUILD PROJSTATS UNLOCK  \
     TEST_SSH TIME UPDATEONLY TEST_WEBHOOK REPORT REPAIR CREATE_INVOICE SCAN \
     CHECK_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET MIGRATE \
-    SHOW_SETTINGS UNIT_TEST TEST_BUGSNAG UPDATE_ACF DEBUG_TO_FILE TEST_GA4 \
+    SHOW_SETTINGS UNIT_TEST bs_test UPDATE_ACF DEBUG_TO_FILE TEST_GA4 \
     TEST_OPENPROJECT)
   init_loop
 }
@@ -115,14 +115,14 @@ init_internal
 init_theme
 
 ###############################################################################
-# temp_files()
+# init_temp_files()
 #   A function to create temporary files
 #
 # Arguments:
 #   create    Create a new set of temporary files and directories
 #   remove    Remove existing temporary files and directories
 ###############################################################################
-function temp_files() {
+function init_temp_files() {
   if [[ -z "${1}" ]]; then
     exit 78
   else
@@ -165,7 +165,7 @@ function ctrl_c() {
   if type quiet_exit &>/dev/null; then
     quiet_exit
   else
-    temp_files remove
+    init_temp_files remove
   fi
 }
 
@@ -303,7 +303,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --test-analytics) TEST_ANALYTICS="1"; NO_LOG="1" ;; 
     --test-ga4) TEST_GA4="1"; NO_LOG="1" ;; 
     --test-monitor) TEST_MONITOR="1"; NO_LOG="1" ;;
-    --test-bugsnag) TEST_BUGSNAG="1"; NO_LOG="1" ;;
+    --test-bugsnag) bs_test="1"; NO_LOG="1" ;;
     --test-mautic) TEST_MAUTIC="1"; NO_LOG="1" ;;
     --stats) PROJSTATS="1" ;;
     --build) BUILD="1"; NOCHECK="1"; FORCE="1" ;;
@@ -458,7 +458,7 @@ else
 fi
 
 # Create temporary files
-temp_files create
+init_temp_files create
 
 # Fire up temporary log files. Consolidate this shit better someday, geez.
 # Main log file
@@ -551,7 +551,7 @@ fi
 validate_conf
 
 # Get full path to all commands
-get_fullpath
+get_full_path
 
 # Check that all dependencies are available
 check_dependencies  
