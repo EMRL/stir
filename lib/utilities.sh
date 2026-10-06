@@ -274,7 +274,7 @@ function user_tests() {
   fi
 
   # Test OpenProject integration
-  if [[ "${TEST_MAUTIC}" == "1" ]]; then
+  if [[ "${TEST_OPENPROJECT}" == "1" ]]; then
     op_test; quiet_exit
   fi
 

@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initialize variables
-var=(OPENPROJECT_URL OPENPROJECT_TOKEN_FILE \
+var=(OPENPROJECT_URL OPENPROJECT_TOKEN \
   OPENPROJECT_WORK_PACKAGE OPENPROJECT_ADD_TIME)
 init_loop
 
