@@ -116,7 +116,7 @@ init_theme
 
 ###############################################################################
 # init_temp_files()
-#   A to create temporary files
+#   A function to create or remove temporary files
 #
 # Arguments:
 #   create    Create a new set of temporary files and directories
@@ -159,7 +159,7 @@ log_fail() {
 # Trap ctrl-c exits; someday I'll do this better 
 trap ctrl_c INT
 
-# to try and cleanup after a user exit, even when external function
+# Function to try and cleanup after a user exit, even when external function
 # libraries may not be loaded
 ctrl_c() {
   if type quiet_exit &>/dev/null; then
@@ -471,7 +471,7 @@ init_temp_files create
 echo -e "Activity log_file for ${APP^^} - ${NOW}\r" >> "${log_file}"
 echo -e "Launching stir${STARTUP}\n" >> "${log_file}"
 
-# list
+# Display a list of all function() names
 if [[ "${FUNCTION_LIST}" == "1" ]]; then
   compgen -A function | more; quiet_exit
 fi

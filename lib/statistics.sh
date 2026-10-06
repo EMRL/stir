@@ -111,7 +111,7 @@ project_statistics() {
 }
 
 # This is a special snowflake for now, called from within scan_host()
-project_scan(){
+project_scan() {
   
   #if [[ ! -d "${stat_dir}" ]]; then
   #  umask 077 && mkdir ${stat_dir} &> /dev/null
