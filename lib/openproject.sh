@@ -16,7 +16,7 @@ init_loop
 #   Logs time to the assigned OpenProject work package and adds the commit
 #   message to the work package activity feed
 ###############################################################################
-function op_addtime() {
+op_addtime() {
 
   # Make sure required configuration exists
   if [[ -z "${OPENPROJECT_URL}" ]] || \
@@ -155,7 +155,7 @@ function op_addtime() {
 # op_test()
 #   Test OpenProject configuration and authentication
 ###############################################################################
-function op_test() {
+op_test() {
 
   notice "Checking OpenProject settings" 
   console_inline "Testing integration... "

@@ -27,21 +27,21 @@ if [[ "${QUIET}" != "1" ]]; then
 fi
 
 # Standard text output only to console
-function console() {
+console() {
   if [[ "${QUIET}" != "1" ]]; then
     echo -e "${reset}$*${endColor}"
   fi
 }
 
 # Will place the next console output on the same line
-function console_inline() {
+console_inline() {
   if [[ "${QUIET}" != "1" ]]; then
     echo -e -n "${reset}$*${endColor}"
   fi
 }
 
 # Standard text output to console and log_file
-function info() {
+info() {
   if [[ "${QUIET}" != "1" ]]; then
     echo -e "${reset}$*${endColor}"
   fi
@@ -51,25 +51,25 @@ function info() {
 
 
 # Standard text output only to log
-function log() {
+log() {
   echo "$@" >> "${log_file}"
 }
 
-function input() {
+input() {
   if [[ "${QUIET}" != "1" ]]; then
     echo -e "${reset}$*${endColor}"
   fi
 }
 
 # Sectional header
-function notice() {
+notice() {
   if [[ "${QUIET}" != "1" ]]; then
     echo; echo -e "${green}$*${endColor}"
   fi
   echo "" >> "${log_file}"; echo "$@" >> "${log_file}"
 }
 
-function error() {
+error() {
   # Set to ERROR
   message_state="ERROR"
   if [[ "${QUIET}" != "1" ]]; then
@@ -82,14 +82,14 @@ function error() {
   error_exit
 }
 
-function warning() {
+warning() {
   if [[ "${QUIET}" != "1" ]]; then
     echo -e "${red}$*${endColor}"
   fi
   echo "WARNING: $*" >> "${log_file}"
 }
 
-function empty_line() {
+empty_line() {
   if [[ "${QUIET}" != "1" ]]; then
     echo ""
     echo "" >> "${log_file}"

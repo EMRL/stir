@@ -23,7 +23,7 @@ if [[ "${EUID}" -ne 0 ]]; then
   exit 1
 fi
 
-function error_check() {
+error_check() {
   EXITCODE=$?; 
   if [[ "${EXITCODE}" != "0" ]]; then 
     echo "Error ${EXITCODE}: stir not uninstalled."
@@ -31,7 +31,7 @@ function error_check() {
   fi
 }
 
-function yesno() {
+yesno() {
   local ans
   local ok=0
   local timeout=0

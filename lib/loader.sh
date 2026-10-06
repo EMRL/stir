@@ -28,7 +28,7 @@ fi
 #   notime      Output trace with no timestamp, generally used after a 
 #               `trace status "blahblah"`  
 ###############################################################################      
-function trace() {
+trace() {
   if [[ "${VERBOSE}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then
     TIMESTAMP="$(date '+%H:%M:%S')"
     if [[ "${1}" == "status" ]]; then

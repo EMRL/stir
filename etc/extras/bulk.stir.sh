@@ -16,7 +16,7 @@ if [[ -z "${WORK_PATH}" ]]; then
     exit 1
 fi
 
-function error_check() {
+error_check() {
     EXITCODE=$?;
     if [[ "${EXITCODE}" -ne "0" ]]; then
         exit 1

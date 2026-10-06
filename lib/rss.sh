@@ -9,7 +9,7 @@
 var=(title link pubDate description RSS_NEWS)
 init_loop
 
-function rss_get() {
+rss_get() {
 	# Pull RSS feed
 	"${curl_cmd}" --silent "${NEWS_URL}" > /tmp/${APP}.xml; error_check
 	# Strip CDATA stuff
@@ -18,12 +18,12 @@ function rss_get() {
 	rm /tmp/${APP}.xml
 }
 
-function next_xml() {
+next_xml() {
 	local IFS='>'
   read -d '<' TAG VALUE
 }
 
-function process_xml() {
+process_xml() {
 	cat ${stat_file} | while next_xml ; do
 		case $TAG in
 			'item')
@@ -56,7 +56,7 @@ EOF
 	done
 }
 
-function create_rss_payload() {
+create_rss_payload() {
 	if [[ -z "${NEWS_URL}" ]] || [[ -z "${xmlstarlet_cmd}" ]]; then
 		NEWS_URL=""
 		return

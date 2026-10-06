@@ -6,7 +6,7 @@
 # Runs user-defined prepare command
 ###############################################################################
 
-function prepare() {
+prepare() {
 
   # If running a command that is not going to touch code, we can skip the 
   # --prepare stuff altogether

@@ -6,7 +6,7 @@
 # A simple Yes/No function
 ###############################################################################
 
-function yesno() {
+yesno() {
   local ans
   local ok=0
   local default

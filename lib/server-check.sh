@@ -6,7 +6,7 @@
 # Check to see if production environment is online and running web server
 ###############################################################################
 
-function server_check() {
+server_check() {
   if [[ "${CHECK_SERVER}" == "TRUE" ]]; then
     notice "Checking servers..."
     # Set SERVERFAIL to 0

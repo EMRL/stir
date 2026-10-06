@@ -30,7 +30,7 @@ if [[ $# != "0" ]]; then
   fi
 fi
 
-function check_os() {
+check_os() {
   # Try to discover the OS flavor 
   if [[ -f /etc/os-release ]]; then
     # freedesktop.org and systemd 
@@ -65,7 +65,7 @@ function check_os() {
   fi
 }
 
-function check_program() {
+check_program() {
   printf "%-40s" "Checking for ${1}..."; read -p "" -t 0.03
   # There's potential for non-global stuff to fail this check so here's a
   # fairly kludgey way to hopefully allow those to pass
@@ -76,7 +76,7 @@ function check_program() {
   fi
 }
 
-function error_check() {
+error_check() {
   EXITCODE=$?; 
   if [[ "${EXITCODE}" != "0" ]]; then 
     echo "Error ${EXITCODE}: stir not installed."

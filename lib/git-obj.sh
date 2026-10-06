@@ -13,7 +13,7 @@ init_loop
 # Assign a variable to represent .git/index.lock
 git_lock="${APP_PATH}/.git/index.lock"
 
-function verify_project() {
+verify_project() {
   # If this is just a build, we won't require git repo functions
   if [[ "${BUILD}" == "1" ]]; then 
     return 0
@@ -80,7 +80,7 @@ function verify_project() {
 # Arguments:
 #   [branch]    The branch name to be checked out
 ################################################################################
-function git_checkout() {
+git_checkout() {
   if [[ -n "${1}" ]]; then
     working_branch="${1}"
     notice "Checking out ${working_branch} branch...";
@@ -99,7 +99,7 @@ function git_checkout() {
 }
 
 # Does anything need to be committed? (Besides me?)
-function git_status() {
+git_status() {
   if [[ -z "$(git status --porcelain)" ]]; then
     if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
       if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]]; then
@@ -113,7 +113,7 @@ function git_status() {
 }
 
 # Stage files
-function git_stage() {
+git_stage() {
   # Check for stuff that needs a commit
   if [[ -z $(git status --porcelain) ]]; then
     console "Nothing to commit, working directory clean."; quiet_exit
@@ -133,7 +133,7 @@ function git_stage() {
 }
 
 # TODO: REWRITE
-function git_push() {
+git_push() {
   trace "Push ${working_branch}";
   empty_line
   if [[ "${VERBOSE}" == "TRUE" ]]; then
@@ -168,7 +168,7 @@ function git_push() {
 # Arguments:
 #   [branch]    The branch to merge into current branch
 ################################################################################
-function git_merge() {
+git_merge() {
   if [[ "${MERGE}" = "1" ]] && [[ "${working_branch}" != "${MASTER}" ]]; then
     notice "Merging ${MASTER} into ${working_branch}..."
     # Clear out the index.lock file, cause reasons
@@ -196,7 +196,7 @@ function git_merge() {
 #   [branch]    The branch we confirmed being checked out, if left empty stir 
 #               will assueme the current value of ${working_branch}
 ################################################################################
-function confirm_branch() {
+confirm_branch() {
   if [[ -n "${1}" ]]; then
     working_branch="${1}"
   fi
@@ -221,7 +221,7 @@ function confirm_branch() {
 }
 
 # Commit, with message
-function git_commit() {
+git_commit() {
   # Smart commit stuff
   smart_commit; empty_line
 
@@ -296,7 +296,7 @@ function git_commit() {
 }
 
 # Garbage collection
-function git_gc() {
+git_gc() {
   if [[ "${GARBAGE}" = "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then 
     notice "Preparing project files..."
     git gc | tee --append "${log_file}"
@@ -307,7 +307,7 @@ function git_gc() {
 }
 
 # Get the stats for this git author, just for fun
-function git_stats() {
+git_stats() {
   if [[ "${GIT_STATS}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]] && [[ "${PUBLISH}" != "1" ]] && [[ "${APPROVE}" != "1" ]]; then
     console "Calculating..."
     getent passwd "${USER}" | cut -d ':' -f 5 | cut -d ',' -f 1 > "${trash_file}"
@@ -319,7 +319,7 @@ function git_stats() {
 }
 
 # Get info about the git repository
-function git_info() {
+git_info() {
   # git config --get remote.origin.url returns result like git@github.com:EMRL/stir.git
   # git rev-parse --show-toplevel returns path to project
 

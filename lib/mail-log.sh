@@ -6,7 +6,7 @@
 # Mail handling
 ###############################################################################
 
-function mail_log() {
+mail_log() {
   # Only send email if a commit has been made, an approval is required, or there has been an error
   if [[ -n "${COMMITHASH}" ]] || [[ "${message_state}" == "ERROR" ]] || [[ "${message_state}" == "APPROVAL NEEDED" ]] || [[ "${AUTOMATE}" == "1" ]]; then
 
@@ -63,7 +63,7 @@ function mail_log() {
   fi
 }
 
-function email_test() {
+email_test() {
   # If the user has SMTP configured, overwrite sendmail command with ssmtp
   smtp_check
   

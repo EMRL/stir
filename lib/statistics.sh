@@ -15,7 +15,7 @@ var=(DB_API_TOKEN DB_BACKUP_PATH LAST_BACKUP BACKUP_STATUS CODE_STATS \
   ga_organicSearches ga_pageviews ENGAGEMENT_DAYS)
 init_loop
 
-function project_stats() {
+project_stats() {
   #hash gitchart 2>/dev/null || {
   #error "Can not chart project stats, gitchart not installed." 
   #}
@@ -93,7 +93,7 @@ function project_stats() {
   fi
 }
 
-function project_activity() {
+project_activity() {
   # Grab the total number of commits
   TOTAL_COMMITS=$(git rev-list --count ${MASTER})
   get_commits "${TOTAL_COMMITS}"
@@ -104,14 +104,14 @@ function project_activity() {
   process_html; cat "${html_file}" > "${stat_dir}/activity.html"
 }
 
-function project_statistics() {
+project_statistics() {
   # Process the HTML
   cat "${stir_path}/html/${HTML_TEMPLATE}/stats/stats.html" > "${html_file}"
   process_html; cat "${html_file}" > "${stat_dir}/stats.html"
 }
 
 # This is a special snowflake for now, called from within scan_host()
-function project_scan(){
+project_scan(){
   
   #if [[ ! -d "${stat_dir}" ]]; then
   #  umask 077 && mkdir ${stat_dir} &> /dev/null
@@ -128,13 +128,13 @@ function project_scan(){
   # process_html; cat "${html_file}" > "${stat_dir}/scan.html"
 }
 
-function project_firewall() {
+project_firewall() {
   # Process the HTML
   cat "${stir_path}/html/${HTML_TEMPLATE}/stats/firewall.html" > "${html_file}"
   process_html; cat "${html_file}" > "${stat_dir}/firewall.html"
 }
 
-function project_engagement() {
+project_engagement() {
   if [[ -z "${PROFILE_ID}" ]]; then
     trace "Google Analytics not configured"
     return
@@ -158,13 +158,13 @@ function project_engagement() {
   cat "${html_file}" > "${stat_dir}/engagement.html"
 }
 
-function project_css() {
+project_css() {
   # Process the CSS files
   cat "${stir_path}/html/${HTML_TEMPLATE}/stats/css/${THEME_MODE}.css" > "${html_file}"
   process_html; cat "${html_file}" > "${stat_dir}/css/${THEME_MODE}.css"
 }
 
-function project_backup() {
+project_backup() {
   # Get file directory
   #echo "${BACKUP_FILES}" > "${trash_file}"
 
@@ -180,7 +180,7 @@ function project_backup() {
   process_html; cat "${html_file}" > "${stat_dir}/backup.html"
 }
 
-function check_backup() {
+check_backup() {
   # Are we setup?
   if [[ -z "${DB_BACKUP_PATH}" ]] || [[ -z "${DB_API_TOKEN}" ]]; then
     return
@@ -237,7 +237,7 @@ function check_backup() {
 }
 
 # Usage: get_commits [number of commits]
-function get_commits() {
+get_commits() {
   git log -n $1 --pretty=format:"%n<table style=\"border-bottom: solid 1px rgba(127, 127, 127, 0.25);\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tr><td width=\"90\" valign=\"top\" align=\"left\"><img src=\"{{GRAVATARURL}}/%an.png\" alt=\"%aN\" title=\"%aN\" width=\"64\" style=\"width: 64px; float: left; background-color: #f0f0f0; overflow: hidden; margin-top: 4px;\" class=\"img-circle\"></td><td valign=\"top\" style=\"padding-bottom: 20px;\"><strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTE_URL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table><br>" > "${stat_file}"
   sed -i '/^commit/ s/$/ <\/strong><br>/' "${stat_file}"
   sed -i '/^Author:/ s/$/ <br>/' "${stat_file}"
@@ -245,7 +245,7 @@ function get_commits() {
 }
 
 # Usage: url_check [source file]
-function validate_urls() {
+validate_urls() {
   grep -oP "(?<=href=\")[^\"]+(?=\")" $1 > "${trash_file}"
   while read URL; do
     CODE=$(${curl_cmd} -o /dev/null --silent --head --write-out '%{http_code}' "$URL")
@@ -255,7 +255,7 @@ function validate_urls() {
   done < "${trash_file}"
 }
 
-function assign_nav() {
+assign_nav() {
   # Assign URLs - this will change later on
   ACTIVITY_NAV="activity.html"
   STATISTICS_NAV="stats.html"

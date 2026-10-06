@@ -7,7 +7,7 @@
 # staging server
 ###############################################################################
 
-function wf_check() {
+wf_check() {
   if [[ "${WF_CHECK}" == "TRUE" ]]; then
     if [[ -f "${WORK_PATH}/${APP}${WP_ROOT}${WP_APP}/wflogs/config.php" ]]; then
       trace "Wordfence detected"; empty_line

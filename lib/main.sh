@@ -6,7 +6,7 @@
 # The main application
 ###############################################################################
 
-function main() {
+main() {
   user_tests            # Run tests if specified by the user
   release_check         # Check for newer version at Github
   env_check             # Check for configuration files that need updating

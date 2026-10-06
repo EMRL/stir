@@ -10,7 +10,7 @@
 var=(value remote_origin config_file)
 init_loop
 
-function configure_project() {
+configure_project() {
   # 
   empty_line
   config_file="${APPRC}"
@@ -39,7 +39,7 @@ function configure_project() {
   #arg="${PROD_URL}"; read -rp "Production URL (including https://)" -e -i "${arg}" value; set_value "${value}"
 }
 
-function configure_user() {
+configure_user() {
   empty_line
   config_file="$HOME/.stirrc"
   arg="CLEAR_SCREEN"
@@ -65,21 +65,21 @@ function configure_user() {
   [[ "${VERBOSE}" == "TRUE" ]] && VERBOSE="1"; empty_line
 }
 
-function configure_global() {
+configure_global() {
   trace "This is an empty function"
 }
 
-function set_value() {
+set_value() {
   value="$1"
   sed -i -e "s^{{${arg}}}^${value}^g" \
     -e "s^# ${arg}^${arg}^g" "${config_file}"      
 }
 
-function unset_value() {
+unset_value() {
   sed -i -e "s^{{${arg}}}^FALSE^g" "${config_file}"      
 }
 
-function clear_user() {
+clear_user() {
 settings=(CLEAR_SCREEN VERBOSE GIT_STATS)
 empty_line
 for arg in "${settings[@]}" ; do

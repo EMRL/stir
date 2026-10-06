@@ -7,7 +7,7 @@
 # uptime and latency
 ###############################################################################
 
-function server_monitor() {
+server_monitor() {
   # Don't bother unless all the needed variables are declared
   if [[ -n "${MONITOR_URL}" ]] && [[ -n "${MONITOR_USER}" ]] && [[ -n "${SERVER_ID}" ]] && [[ -n "${MONITOR_PASS}" ]]; then
     # What kind of log is this?
@@ -28,7 +28,7 @@ function server_monitor() {
   fi
 }
 
-function server_monitor_test() {
+server_monitor_test() {
   notice "Testing server monitor integration..."
   if [[ -n "${MONITOR_URL}" ]] && [[ -n "${MONITOR_USER}" ]] && [[ -n "${SERVER_ID}" ]] && [[ -n "${MONITOR_PASS}" ]]; then
     console "Monitor URL: ${MONITOR_URL}"
@@ -49,7 +49,7 @@ function server_monitor_test() {
   console "Latency: ${LATENCY}s"
 }
 
-function server_monitor_log() {
+server_monitor_log() {
   # Load the password and setup the curl command
   MONITOR_PASS=$(<$MONITOR_PASS)
   MONITORAPI="${MONITOR_URL}?tag=serveruptime&email=${MONITOR_USER}&app_password=${MONITOR_PASS}&server_id=${SERVER_ID}&HoursUnit=${MONITORHOURS}"

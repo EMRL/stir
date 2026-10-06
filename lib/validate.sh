@@ -6,7 +6,7 @@
 # Check project's variables for special characters that may cause issues
 ###############################################################################
 
-function validate_config() {
+validate_config() {
   # Check URLs
   for var in "${REPO_HOST} ${CLIENT_LOGO}" "${DEV_URL}" "${PROD_URL}"; do
     if [[ -n "${var}" ]]; then

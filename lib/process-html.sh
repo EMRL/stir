@@ -13,7 +13,7 @@ var=(DEFAULT_COLOR PRIMARY_COLOR SECONDARY_COLOR SUCCESS_COLOR INFO_COLOR \
   sed_backup process_var v i)
 init_loop
 
-function process_html() {
+process_html() {
   # Clean out the stuff we don't need
   [[ -z "${DEV_URL}" ]] && sed -i '/DEV_URL/d' "${html_file}"
   [[ -z "${PROD_URL}" ]] && sed -i '/PROD_URL/d' "${html_file}"

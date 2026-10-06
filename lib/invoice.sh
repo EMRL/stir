@@ -12,7 +12,7 @@ var=(IN_CLIENT_ID IN_PRODUCT IN_ITEM_COST IN_ITEM_QTY \
   IN_INCLUDE_REPORT IN_PUBLIC_NOTES current_invoice_offset)
 init_loop
 
-function create_invoice() {
+create_invoice() {
   if [[ -z "${IN_HOST}" || -z "${IN_TOKEN}" || -z "${IN_CLIENT_ID}" || -z "${IN_PRODUCT}" || -z "${IN_ITEM_COST}" || -z "${IN_ITEM_QTY}" ]]; then
     console "Invoicing not configured correctly, can not create payload."; quiet_exit
   fi
@@ -44,7 +44,7 @@ function create_invoice() {
   clean_exit
 }
 
-function get_current_invoice() {
+get_current_invoice() {
   "${curl_cmd}" --silent -X GET "${IN_HOST}/api/v1/clients/${IN_CLIENT_ID}?include=invoices" -H "X-Ninja-Token: ${IN_TOKEN}" > "${trash_file}"; error_check
 
   # Many sedtastic things
@@ -62,7 +62,7 @@ function get_current_invoice() {
   fi
 }
 
-function send_invoice() {
+send_invoice() {
   trace status "Emailing invoice ${current_invoice}... "
   # Build out the command to send the email
   invoice_hack=$(echo "curl -X POST ${IN_HOST}/api/v1/email_invoice -d '{\"id\":$current_invoice_offset}' -H \"Content-Type:application/json\" -H \"X-Ninja-Token: ${IN_TOKEN}\"")
@@ -70,7 +70,7 @@ function send_invoice() {
   trace notime "OK"
 }
 
-function attach_pdf_to_invoice() {
+attach_pdf_to_invoice() {
   trace status "Attaching PDF report... "
   "${wkhtmltopdf_cmd}" "${REPORTURL}" "/tmp/${APP}_${current_year}-${current_month}.pdf" &>> "${log_file}"; error_check
 

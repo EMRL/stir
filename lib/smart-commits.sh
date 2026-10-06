@@ -11,7 +11,7 @@ var=(commit_message plugins_updated plugin_list)
 init_loop
 
 # Constructing smart *cough* commit messages
-function smart_commit() {
+smart_commit() {
   if [[ "${SMART_COMMIT}" == "TRUE" ]]; then 
     plugins_updated=$("${wc_cmd}" -l < "${wp_file}")
 

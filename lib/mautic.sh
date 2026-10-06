@@ -21,7 +21,7 @@ var=(MAUTIC_URL MAUTIC_AUTH MAUTIC_LEGACY_VERSION working_subject \
   mtc_readCount_3 mtc_readRate_3)
 init_loop
 
-function mtc_data_loop() {
+mtc_data_loop() {
   mtc_var=(isPublished subject publishUp sentCount readCount emailType)  
 
   # Get payload
@@ -60,7 +60,7 @@ function mtc_data_loop() {
   done
 }
 
-function mtc_read_rate() {
+mtc_read_rate() {
   # Calculate read rate in percent
   working_sentCount="mtc_sentCount_${i}"
   working_readCount="mtc_readCount_${i}"
@@ -73,7 +73,7 @@ function mtc_read_rate() {
   eval "mtc_readRate_${i}=\"${working_readRate}\""
 }
 
-function mtc_test() {
+mtc_test() {
   mtc_data_loop
   # Output test values to console
   for i in {1..3} ; do

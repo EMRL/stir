@@ -11,7 +11,7 @@ var=(SCP_PORT)
 init_loop
 
 # Remote log function; this really needs to be rewritten
-function post_log() {
+post_log() {
   if [[ "${REMOTE_LOG}" == "TRUE" ]]; then
 
     # Post to localhost by simply copying files
@@ -130,7 +130,7 @@ function post_log() {
   fi
 }
 
-function html_dir() {
+html_dir() {
   # Yet another if/then to cover my ass. What a mess!
   if [[ "${POST_TO_LOCAL_HOST}" == "TRUE" ]] && [[ -n "${LOCAL_HOST_PATH}" ]]; then
 

@@ -12,7 +12,7 @@ var=(update_global update_user update_project env_settings project_config \
   tmp_WORK_PATH default_etc updates_skipped)
 init_loop
 
-function env_check() {
+env_check() {
   # Only check when someone is at the console
   if [[ "${FORCE}" != "1" ]]; then
     # Save the WORK_PATH to reload after this process; this is to allow a 
@@ -68,7 +68,7 @@ function env_check() {
   fi
 }
 
-function update_config() {
+update_config() {
   empty_line; info "New version (${VERSION}) requires configuration updates."
   if yesno --default yes "Update now? [Y/n] "; then
     if [[ "${SWITCHES}" != "1" ]]; then
@@ -86,7 +86,7 @@ function update_config() {
   fi
 }
 
-function update_global() {
+update_global() {
   info "Updating ${stir_path}/global.conf..."
   if [[ ! -w "${stir_path}/global.conf" ]]; then
     info "Requesting sudo access..."
@@ -138,7 +138,7 @@ function update_global() {
   quiet_exit
 }
 
-function update_user() {
+update_user() {
   info "Updating ~/.stirrc..."
 
   cp ~/.stirrc ~/.stirrc.bak
@@ -163,7 +163,7 @@ function update_user() {
   quiet_exit
 }
 
-function update_project() { 
+update_project() { 
   i="${project_config}"
   migrate_variables
 
@@ -204,7 +204,7 @@ function update_project() {
   quiet_exit
 }
 
-function insert_values() {
+insert_values() {
   if [[ -n "${!i:-}" ]]; then
     [[ "${INCOGNITO}" != "1" ]] && trace "${i}: ${!i}"
     sed_hack=$(echo "sed -i 's^{{${i}}}^${!i}^g' ${trash_file}; sed -i 's^# ${i}^${i}^g' ${trash_file}")
@@ -213,7 +213,7 @@ function insert_values() {
   fi
 }
 
-function env_cleanup() {
+env_cleanup() {
   sed -i "s^{{.*}}^^g" "${trash_file}"
 }
 

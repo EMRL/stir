@@ -6,7 +6,7 @@
 # Deletes local repo files, while keeping configuration intact
 ###############################################################################
 
-function reset_local() {
+reset_local() {
   if [[ -n "${project_config}" ]] && [[ -w "${WORK_PATH}/${APP}" ]] && [[ "${DO_NOT_DEPLOY}" != "TRUE" ]]; then
     if [[ -n "${wp_cmd}" ]]; then
       eval "${wp_cmd}" db check  > /dev/null 2>&1
@@ -53,7 +53,7 @@ function reset_local() {
   fi
 }
 
-function remove_local_files() {
+remove_local_files() {
   mv "${project_config}" /tmp/"${APP}"-stir.sh &>> "${log_file}"
   rm -rf ${WORK_PATH}/${APP}/* &>> "${log_file}" 
   rm -rf ${WORK_PATH}/${APP}/.* &>> "${log_file}"

@@ -11,7 +11,7 @@ var=(SSH_REPO TMP_PATH SET_ENV dest REMOVE_ME MYSQL_USER MYSQL_PASS \
   DB_CHECK)
 init_loop
 
-function wp_clone_handler() {
+wp_clone_handler() {
   "${git_cmd}" clone --no-checkout "${SSH_REPO}" "${WORK_PATH}/${APP}/${REPO}" &>> /dev/null; error_check
   cd "${WORK_PATH}/${APP}/${REPO}"
   "${git_cmd}" branch --track origin/"${MASTER}" &>> /dev/null; error_check
@@ -27,14 +27,14 @@ function wp_clone_handler() {
   "${git_cmd}" reset --hard HEAD &>> /dev/null; error_check 
 }
 
-function mysql_check_service() {
+mysql_check_service() {
   if [[ -z "$(pgrep mysql)" ]]; then 
     warning "MySQL service not found, can not continue."
     quiet_exit
   fi
 }
 
-function wp_clone() {
+wp_clone() {
   # Chill for a sec
   sleep 2
   
@@ -189,7 +189,7 @@ function wp_clone() {
   fi
 }
 
-function create_env() {
+create_env() {
   env_file=(config/env-example.php env-example.php .env-example.php \
     .env.example .env.sample public/wp-config-sample.php wp-config-sample.php)
   for arg in "${env_file[@]}"; do

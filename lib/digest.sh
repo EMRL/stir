@@ -11,7 +11,7 @@ var=(AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMGFILE DIGESTWRAP \
   DIGEST_SLACK GREETING NO_ACTIVITY)
 init_loop
 
-function get_avatars() {
+get_avatars() {
   if [[ "${SKIP_GIT}" == "1" ]]; then
     return
   fi
@@ -40,7 +40,7 @@ function get_avatars() {
   done 
 }
 
-function get_digest_commits() {
+get_digest_commits() {
   if [[ "${SKIP_GIT}" == "1" ]]; then
     return
   fi
@@ -70,11 +70,11 @@ function get_digest_commits() {
   fi
 }
 
-function check_stats() {
+check_stats() {
   trace "Future site of stats check"
 }
 
-function create_digest() {
+create_digest() {
   if [[ -z "${DIGEST_SLACK}" || "${DIGEST_SLACK}" == "FALSE" ]] && [[ -z "${DIGEST_EMAIL}" ]]; then 
     return
   else

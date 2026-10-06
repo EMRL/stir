@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Compile commit message with other stuff for integration
-function build_log() {
+build_log() {
   if [[ "${DIGEST}" != "1" ]]; then 
     # OK let's grab the short version of the commit hash
     COMMITHASH="$(git rev-parse --short HEAD)"; 
@@ -34,7 +34,7 @@ function build_log() {
 }
 
 # Post integration via email
-function mail_post() {
+mail_post() {
   # If this is an outstanding approval, don't post
   if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
     trace "Approval required, skipping integration"
@@ -77,7 +77,7 @@ function mail_post() {
   fi
 }
 
-function post_commit() {
+post_commit() {
   # Run Wordpress database updates
   if [[ -n "${PRODUCTION}" ]] && [[ -n "${PROD_URL}" ]] && [[ "core_update_complete" == "1" ]]; then
     info "Updating production database..."

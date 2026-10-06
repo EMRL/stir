@@ -10,7 +10,7 @@
 var=(release release_notes release_url)
 init_loop
 
-function release_check() {
+release_check() {
   # Only check for a newer release when someone is at the console
   if [[ "${FORCE}" != "1" ]]; then
     # Get the release tag
@@ -47,12 +47,12 @@ function release_check() {
   fi
 }
 
-function version_compare() {
+version_compare() {
   test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; 
 }
 
 # Get latest version and install globally
-function update_release() {
+update_release() {
   release_url="$(${curl_cmd} -s https://api.github.com/repos/emrl/stir/releases/latest | grep tarball_url | cut -d '"' -f 4)"
 
   # If user is not root, warn them

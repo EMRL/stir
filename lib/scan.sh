@@ -11,7 +11,7 @@ var=(NIKTO NIKTO_CONFIG NIKTO_PROXY scan_html SCAN_RESULT SCAN_MSG \
   SCAN_URL)
 init_loop
 
-function scan_check() {
+scan_check() {
   if [[ -n "${PROD_URL}" ]] || [[ -n "${NIKTO}" ]]; then
     SCAN_URL="${REMOTE_URL}/${APP}/scan/"
 
@@ -34,7 +34,7 @@ function scan_check() {
   fi
 }
 
-function scan_host() {
+scan_host() {
   if [[ -z "${NIKTO}" ]]; then
     warning "Scanning command is not configured, check your setup."; quiet_exit
   fi

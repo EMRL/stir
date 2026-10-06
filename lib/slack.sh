@@ -6,7 +6,7 @@
 # Integration with Slack
 ###############################################################################
 
-function slack_post () {
+slack_post() {
 
   # If running in --automate, change the user name
   if [[ "${AUTOMATE}" == "1" ]]; then
@@ -146,7 +146,7 @@ function slack_post () {
 }
 
 # Slack configuration test
-function slack_test {
+slack_test() {
   console "Testing Slack integration..."
   echo "${SLACK_URL}"
   if [[ -z "${SLACK_URL}" ]]; then

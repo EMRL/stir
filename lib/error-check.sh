@@ -11,7 +11,7 @@ var=(error_detail last_command)
 init_loop
 
 # Try to get exit/error code, with a hard stop on fail
-function error_check() {
+error_check() {
   EXITCODE=$?; 
   if [[ "${EXITCODE}" != 0 ]]; then
     if [[ -z "${error_detail}" ]]; then
@@ -27,7 +27,7 @@ function error_check() {
 
 # I'm not sure why this is here, figure it out!
 # Try to get exit/error code, with a hard stop on fail
-function error_status() {
+error_status() {
   EXITCODE=$?; 
   if [[ "${EXITCODE}" != 0 ]]; then 
     error_msg="WARNING: Error code ${EXITCODE}"
@@ -35,7 +35,7 @@ function error_status() {
   fi
 }
 
-function deploy_check() {
+deploy_check() {
   if [[ "${DEPLOY}" == *"mina"* ]]; then # && [[ "${DEPLOY}" != *"bundle"* ]]; then
     DEPLOYTEST="mina --simulate deploy"
     # Get variables organized

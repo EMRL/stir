@@ -10,7 +10,7 @@
 var=(WP_PATH WP_SERVER_PID)
 init_loop
 
-function wp_main() {
+wp_main() {
   # Validate Wordpress command exists
   if [[ -z "${wp_cmd}" ]]; then
     return 1
@@ -55,7 +55,7 @@ function wp_main() {
   fi
 }
 
-function wp_check() {
+wp_check() {
   # Is wp-cli installed? 
   if [[ -n "${wp_cmd}" ]]; then
     trace "wp_cmd: ${wp_cmd}"
@@ -96,7 +96,7 @@ function wp_check() {
   fi
 }
 
-function wp_check_server() {
+wp_check_server() {
   trace "Nothing here"
   # Launch server
   # eval "${wp_cmd}" server --host=localhost > /dev/null 2>&1; EXITCODE=$?; 
@@ -121,7 +121,7 @@ function wp_check_server() {
   #fi
 }
 
-function wp_path() {
+wp_path() {
   # Store path in variable and remove any extra /
   WP_PATH="${APP_PATH}${WP_ROOT}${WP_APP}"
   WP_PATH=$(sed -e "s^//^/^g" <<< ${WP_PATH})
@@ -130,7 +130,7 @@ function wp_path() {
   fi
 }
 
-function wp_tmp {
+wp_tmp() {
   # Store path in variable and remove any extra /
   # WP_TMP="/tmp/${REPO}/${WP_ROOT}${WP_APP}"
   WP_TMP="/${WORK_PATH}/${REPO}/${WP_ROOT}${WP_APP}"

@@ -10,7 +10,7 @@
 var=(acf_file acf_update_complete)
 init_loop
 
-function acf_update() {
+acf_update() {
   acf_file="/tmp/acfpro.zip"
   trace "Updating ACF Pro "
 	
@@ -29,7 +29,7 @@ function acf_update() {
 	acf_update_complete="1"
 }
 
-function acf_file_check() {
+acf_file_check() {
 	if [[ -f "${acf_file}" ]]; then
 		hash unzip 2>/dev/null || {
 			if [[ "${AUTOMATE}" == "1" ]]; then

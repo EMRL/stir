@@ -12,7 +12,7 @@ var=(integer_check json_key json_num cleaned_date cleaned_path wp_cmd \
 init_loop
 
 # Open a session, ask for user confirmation before beginning
-function go() {
+go() {
   if [[ "${QUIET}" != "1" ]]; then
     tput cnorm;
   fi
@@ -100,14 +100,14 @@ function go() {
 }
 
 # Check that a variable is an integer
-function is_integer() {
+is_integer() {
   declare arg1="${1}"; integer_check="0"
   if [[ ! "${arg1}" =~ ^[0-9]+$ ]]; then
     integer_check="1"
   fi
 }
 
-function get_full_path() {
+get_full_path() {
   # Get absolute paths to critical commands
   var=(cal composer curl git gitchart gnuplot grep grunt mysqlshow npm scp 
     sendmail ssh sshpass ssmtp unzip wc wget wkhtmltopdf wp xmlstarlet)
@@ -135,7 +135,7 @@ function get_full_path() {
 # Arguments:
 #   [file]    The file in which to strip out {{UNUSED_VARIABLE}}
 ###############################################################################
-function strip_empty_variables() {
+strip_empty_variables() {
   sudo sed -i 's^{{.*}}^^g' "${1}"
 }
 
@@ -153,7 +153,7 @@ function strip_empty_variables() {
 #   cat tmpfile.txt | get_json_value id
 #   VARIABLE="$(cat tmpfile.txt | get_json_value id 7)"
 ############################################################################### 
-function get_json_value() {
+get_json_value() {
   if [[ -n ${1} ]]; then
       json_key="${1}"
       json_num="${2}"
@@ -173,7 +173,7 @@ function get_json_value() {
 #   get_percent 80 37
 #   VARIABLE="$(get_percent ${var1} ${var2})"
 ############################################################################### 
-function get_percent {
+get_percent() {
   declare arg1="${1}"
   declare arg2="${2}"
   if [[ -n "${arg1}" && -n "${arg2}" ]]; then
@@ -194,7 +194,7 @@ function get_percent {
 # Example use:
 #   clean_path path
 ############################################################################### 
-function clean_path() {
+clean_path() {
   if [[ -n "${1}" ]]; then
     declare arg1="${1}"
     cleaned_path="$(echo ${arg1} | tr -s /)"
@@ -213,7 +213,7 @@ function clean_path() {
 # Example use:
 #   clean_date 2021-10-29
 ############################################################################### 
-function clean_date() {
+clean_date() {
   if [[ -n "${1}" ]]; then
     cleaned_date="$(date -d ${1} +'%B %d, %Y')"
   fi
@@ -223,13 +223,13 @@ function clean_date() {
 # set_fallback_values()
 #   Set defaults for things liks SSH ports if missing
 ###############################################################################
-function set_fallback_values() {
+set_fallback_values() {
   [[ -z "${SCP_PORT}" ]] && SCP_PORT="22"
   [[ -z "${SCP_DEPLOY_PORT}" ]] && SCP_DEPLOY_PORT="22"
 }
 
 # User tests
-function user_tests() {
+user_tests() {
   if [[ "${SHOW_SETTINGS}" == "1" ]]; then
     show_settings; quiet_exit
   fi
@@ -241,7 +241,7 @@ function user_tests() {
 
   # Webhook POST test
   if [[ "${TEST_WEBHOOK}" == "1" ]]; then
-    TEST_WEBHOOK; quiet_exit
+    webhook_test; quiet_exit
   fi
 
   # Email test
@@ -296,7 +296,7 @@ function user_tests() {
 }
 
 # Check that dependencies exist
-function check_dependencies() {
+check_dependencies() {
   # Is git installed?
   hash git 2>/dev/null || {
     error "stir ${VERSION} requires git to function properly." 
@@ -361,7 +361,7 @@ function check_dependencies() {
   fi
 }
 
-function show_settings() {
+show_settings() {
   notice "General Setup"
   echo "-------------"
   [[ -n "${WORK_PATH}" ]] && echo "Root project storage: ${WORK_PATH}"

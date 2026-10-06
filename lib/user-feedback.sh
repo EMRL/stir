@@ -11,7 +11,7 @@ var=(pid delay spinstr temp)
 init_loop
 
 # Progress spinner; we'll see if this works
-function spinner() {
+spinner() {
   local pid=$1
   local delay=0.15
   # Is there a better way to format this thing?  It's wonky
@@ -31,7 +31,7 @@ function spinner() {
 }
 
 # Set up the progress bar function
-function progress_bar() {
+progress_bar() {
   let _progress=\(${1}*100/${2}*100\)/100
   let _done=\(${_progress}*4\)/10
   let _left=40-$_done
@@ -43,7 +43,7 @@ function progress_bar() {
 }
 
 # Display progress bar
-function show_progress() {
+show_progress() {
   if [[ "${QUIET}" != "1" ]] && [[ "${DEBUG}" != "1" ]]; then
     _start=1
     _end=100
@@ -55,7 +55,7 @@ function show_progress() {
   fi
 }
 
-function dot {  
+dot() {  
   if [[ "${QUIET}" != "1" ]] && [[ "${DEBUG}" != "1" ]]; then
     if [[ "${1-default}" == "newline" ]]; then
       echo "."
@@ -65,7 +65,7 @@ function dot {
   fi
 }
 
-function plus {  
+plus() {  
   if [[ "${QUIET}" != "1" ]] && [[ "${DEBUG}" != "1" ]]; then
     if [[ "${1-default}" == "newline" ]]; then
       echo "+"

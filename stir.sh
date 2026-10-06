@@ -25,7 +25,7 @@ APP="null"
 set -uo pipefail
 
 # Variable init loop
-function init_loop {
+init_loop() {
   for i in "${var[@]}" ; do
     read -r "${i}" <<< ""
     echo "${i}" > /dev/null
@@ -33,7 +33,7 @@ function init_loop {
 }
 
 # Startup switches
-function init_startup() {
+init_startup() {
   var=(APP UPGRADE SKIP_UPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
     TEST_SLACK FUNCTION_LIST VARIABLE_LIST AUTOMATE TEST_EMAIL APPROVE \
     DENY PUBLISH DIGEST ANALYTICS TEST_ANALYTICS BUILD PROJSTATS UNLOCK  \
@@ -45,21 +45,21 @@ function init_startup() {
 }
 
 # Temp files
-function init_temp() {
+init_temp() {
   var=(log_file wp_file core_file post_file trash_file scan_file stat_file \
     url_file)
   init_loop
 }
 
 # Console colors
-function init_color() {
+init_color() {
   var=(black red green yellow blue magenta cyan white endColor bold \
   underline reset purple tan)
   init_loop
 }
 
 # Constants and environment variables
-function init_env() {
+init_env() {
   var=(CLEAR_SCREEN WORK_PATH CONFIG_DIR CONFIG_BACKUP REPO_HOST SMART_COMMIT \
   GIT_STATS EMAIL_HTML NO_PHP TO FROM SUBJECT EMAIL_ERROR EMAIL_SUCCESS \
   EMAIL_QUIT FROM_DOMAIN FROM_USER POST_EMAIL_HEAD POST_EMAIL_TAIL \
@@ -83,7 +83,7 @@ function init_env() {
 }
 
 # Internal variables
-function init_internal() {
+init_internal() {
   var=(optstring options log_file wp_file core_file post_file trash_file stat_file \
   url_file html_file htmlSendmail html_email client_email textSendmail stir_path \
   etc_path lib_path integration_email current_branch error_msg notes latency \
@@ -100,7 +100,7 @@ function init_internal() {
   init_loop
 }
 
-function init_theme() {
+init_theme() {
   var=(THEME_MODE DEFAULT_COLOR PRIMARY_COLOR SECONDARY_COLOR SUCCESS_COLOR \
   INFO_COLOR WARNING_COLOR DANGER_COLOR LOG_COLOR LOG_BACKGROUND_COLOR)
   init_loop
@@ -116,13 +116,13 @@ init_theme
 
 ###############################################################################
 # init_temp_files()
-#   A function to create temporary files
+#   A to create temporary files
 #
 # Arguments:
 #   create    Create a new set of temporary files and directories
 #   remove    Remove existing temporary files and directories
 ###############################################################################
-function init_temp_files() {
+init_temp_files() {
   if [[ -z "${1}" ]]; then
     exit 78
   else
@@ -152,16 +152,16 @@ function init_temp_files() {
   fi
 }
 
-function log_fail() {
+log_fail() {
   echo "Could not create temporary file (${1}), exiting."; exit 2
 }
 
 # Trap ctrl-c exits; someday I'll do this better 
 trap ctrl_c INT
 
-# Function to try and cleanup after a user exit, even when external function
+# to try and cleanup after a user exit, even when external function
 # libraries may not be loaded
-function ctrl_c() {
+ctrl_c() {
   if type quiet_exit &>/dev/null; then
     quiet_exit
   else
@@ -170,7 +170,7 @@ function ctrl_c() {
 }
 
 # Display command options
-function flags() {
+flags() {
   echo -n "Usage: stir [options] [target] ...
 
 Options:
@@ -471,7 +471,7 @@ init_temp_files create
 echo -e "Activity log_file for ${APP^^} - ${NOW}\r" >> "${log_file}"
 echo -e "Launching stir${STARTUP}\n" >> "${log_file}"
 
-# Function list
+# list
 if [[ "${FUNCTION_LIST}" == "1" ]]; then
   compgen -A function | more; quiet_exit
 fi

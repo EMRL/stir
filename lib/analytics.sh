@@ -40,7 +40,7 @@ for i in "${ga_var[@]}" ; do
   echo "ga_${i}" > /dev/null
 done
 
-function ga_metrics() {
+ga_metrics() {
   array[0]="pageviews"
   array[1]="percentNewSessions"
   array[2]="organicSearches"
@@ -51,7 +51,7 @@ function ga_metrics() {
   METRIC="${array[$RND]}"
 }
 
-function analytics() {
+analytics() {
   # If profile does not exist, skip it all
   if [[ -z "${PROFILE_ID}" ]]; then
     return
@@ -115,7 +115,7 @@ function analytics() {
   fi
 }
 
-function ga_data() {
+ga_data() {
   RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4)
   SIZE="$(printf "%.0f\n" "${RESULT}")"
 
@@ -133,7 +133,7 @@ function ga_data() {
   fi
 }
 
-function ga_data_loop() {
+ga_data_loop() {
   if [[ "${TEST_ANALYTICS}" == "1" ]]; then
     # Setup variables to process
     console "${GASTART} - ${GAEND}"
@@ -210,7 +210,7 @@ function ga_data_loop() {
 # Returns:  
 #   None
 ###############################################################################  
-function ga_over_time() {
+ga_over_time() {
   if [[ -z "${PROFILE_ID}" ]] || [[ -z "${gnuplot_cmd}" ]]; then
     return
   else
@@ -336,13 +336,13 @@ fi
 }
 
 # If no other results are worth displaying, fall back to displaying hits
-function ga_fail() {
+ga_fail() {
   METRIC="pageviews"
   ga_data
   ANALYTICSMSG="You had <strong>${SIZE}</strong> pageviews in the last week."
 }
 
-function ga_test() {
+ga_test() {
   empty_line
   if [[ -z "${CLIENT_ID}" ]] || [[ -z "${CLIENT_SECRET}" ]];  then
     warning "Define API project"
@@ -396,7 +396,7 @@ function ga_test() {
   return
 }
 
-function ga4_test() {
+ga4_test() {
   notice "Refreshing token..."
   "${curl_cmd}" -s -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trash_file}"
   sed -i '/access_token/!d' "${trash_file}"

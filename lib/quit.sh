@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Clean exit
-function clean_exit() {
+clean_exit() {
   notice "Closing ${APP} (${REPO_HOST}/${REPO})"
 
   if [[ "${NO_LOG}" != "1" ]]; then
@@ -30,7 +30,7 @@ function clean_exit() {
     fi
 
     # Fire webhook
-    post_webhook
+    webhook_post
   fi
 
   # Clean up your mess
@@ -38,7 +38,7 @@ function clean_exit() {
 }
 
 # Exit on error
-function error_exit() {
+error_exit() {
   notice "Closing ${APP} (${REPO_HOST}/${REPO})"
   message_state="ERROR"; make_log # Compile log
   # Check email settings
@@ -57,7 +57,7 @@ function error_exit() {
 }
 
 # User interrupted exit
-function user_exit() {
+user_exit() {
   rm "${WORK_PATH}/${APP}/.git/index.lock" &> /dev/null
   trace "Exit on user request"
   # Check email settings
@@ -69,13 +69,13 @@ function user_exit() {
 }
 
 # Quiet exit, never send log. Ever.
-function quiet_exit() {
+quiet_exit() {
   # Clean up your mess
   clean_up; exit 0
 }
 
 # Clean everything up 
-function clean_up() {
+clean_up() {
   # If anything is stashed, unstash it.
   if [[ "${current_stash}" == "1" ]]; then
     trace "Unstashing files"

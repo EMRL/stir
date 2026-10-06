@@ -11,7 +11,7 @@ var=(start_deploy)
 init_loop
 
 # Housekeeping tasks to run before final deployment
-function pre_deploy() {
+pre_deploy() {
   # If there are changes waiting in the repo, stop and ask for user input
   # This should probably be it's own function
   current_stash="0"
@@ -52,7 +52,7 @@ function pre_deploy() {
   fi
 } 
 
-function deploy_project() {
+deploy_project() {
   empty_line
   if [[ -n "${DEPLOY}" ]]; then
     # Add ssh keys and double check directoy
@@ -134,7 +134,7 @@ function deploy_project() {
   deploy_cleanup
 }
 
-function deploy_cleanup() {
+deploy_cleanup() {
   # Check for deployment failure
   if grep -aq "ERROR: Deploy failed." "${log_file}"; then
     error "Deploy failed."
@@ -170,7 +170,7 @@ function deploy_cleanup() {
   fi
 }
 
-function deploy_message() {
+deploy_message() {
   if [[ -n "${PROD_URL}" ]] && [[ "${start_deploy}" == "1" ]]; then
     info "Deployed to ${PROD_URL}"
   fi

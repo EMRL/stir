@@ -11,7 +11,7 @@ var=(core_update_version core_update_complete core_current_version \
   composer_core_update core_update_attempt)
 init_loop
 
-function wp_core() {
+wp_core() {
   # There's a little bug when certain plugins are spitting errors; work around 
   # seems to be to check for core updates a second time
   cd "${APP_PATH}"/"${WP_ROOT}"; \
@@ -68,7 +68,7 @@ function wp_core() {
   fi
 }
 
-function check_core_update_success() {
+check_core_update_success() {
   # Check update success. Discovery of multiple at once updates 
   # breaks this function
   core_update_attempt="1" 

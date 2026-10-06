@@ -10,7 +10,7 @@
 var=(plugin_update_complete)
 init_loop
 
-function wp_plugins() {
+wp_plugins() {
   # Make sure things are activated
   if [[ -z "${ACTIVATE_PLUGINS}" ]]; then
     return
@@ -106,7 +106,7 @@ function wp_plugins() {
   fi 
 }
 
-function wp_update_check() {
+wp_update_check() {
   eval "${wp_cmd}" cache delete &>> /dev/null
 
   # For the log_file
@@ -129,7 +129,7 @@ function wp_update_check() {
 #               activated when the argument is an array. 
 #   all         Activate all available plugins
 ############################################################################### 
-function wp_activate_plugin() {
+wp_activate_plugin() {
   trace "Checking plugin requirements... "
   if [[ "${1}" == "all" ]]; then
     # var=($(${wp_cmd[@]} plugin list --field=name --format=count 2> /dev/null))
@@ -156,7 +156,7 @@ function wp_activate_plugin() {
 #   [plugin]    Name of the plugin. Will only work if plugin is tracked in 
 #               the Wordpress plugin archive
 ############################################################################### 
-function wp_add_plugin() {
+wp_add_plugin() {
   # User will be doing something like `stir --add-plugin wp-job-manager` from 
   # the shell
   # If composer:

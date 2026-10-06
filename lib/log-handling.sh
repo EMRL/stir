@@ -6,7 +6,7 @@
 # Handles parsing and creating logs
 ###############################################################################
 
-function make_log() {
+make_log() {
   # Clean up stuff that is most likely there
   sed -i -e '/git reset HEAD/d' \
     -e '/Checking out files:/d' \
@@ -152,7 +152,7 @@ function make_log() {
   fi
 }
 
-function build_html() {
+build_html() {
   LOGSUFFIX="html"
   
   # Build out the HTML

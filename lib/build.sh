@@ -10,14 +10,14 @@
 var=(deploy_config SKIP_BUILD npm_json)
 init_loop
 
-function build_check() {
+build_check() {
   if [[ "${FORCE}" != "1" || "${BUILD}" == "1" ]] && [[ "${UPGRADE}" != "1" ]]; then
     build_grunt   # Grunt check
     build_npm     # node.js check
   fi
 }
 
-function build_mina() {
+build_mina() {
   if [[ "${DEPLOY}" == *"mina"* ]]; then
     # Trying this a weirdo way, turn it into a loop or something later
     [[ -f "${APP_PATH}/Minafile" ]] && deploy_config="$(cat ${APP_PATH}/Minafile)"
@@ -27,7 +27,7 @@ function build_mina() {
   fi
 }
 
-function build_grunt() {
+build_grunt() {
   # Checking for app/lib, which assumes we're using Grunt
   [[ -z "${grunt_cmd}" ]] && return
 
@@ -42,7 +42,7 @@ function build_grunt() {
   fi
 }
 
-function build_npm() {
+build_npm() {
   [[ -z "${npm_cmd}" ]] && return
   
   if [[ -f "${APP_PATH}/${WP_ROOT}${WP_APP}/themes/site/package.json" ]]; then

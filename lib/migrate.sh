@@ -6,7 +6,7 @@
 # A ridiculous method of migrating deprecated 
 ###############################################################################
 
-function migrate_variables {
+migrate_variables() {
   if [[ -z "${i}" ]]; then
     echo "Can't find target file"
     exit 1

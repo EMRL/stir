@@ -9,7 +9,7 @@
 # Define lock file location
 LOCK_FILE="/tmp/$APP.lock"
 
-function lock() {
+lock() {
   if [[ -f "${LOCK_FILE}" ]]; then
     # Unlock?
     if [[ "${UNLOCK}" == "1" ]]; then

@@ -6,7 +6,7 @@
 # Webhook POST functionality
 ###############################################################################
 
-function post_webhook {
+webhook_post() {
   if [[ -n "${POST_URL}" ]]; then
     # Create payload for digests
     if [[ "${DIGEST}" == "1" ]] && [[ -n "${GREETING}" ]]; then
@@ -25,7 +25,7 @@ function post_webhook {
 }
 
 # Webhook configuration test
-function TEST_WEBHOOK {
+webhook_test() {
   console "Testing POST integration..."
   echo "${POST_URL}"
   if [[ -z "${POST_URL}" ]]; then
