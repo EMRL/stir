@@ -6,9 +6,8 @@
 # Handles integration with OpenProject
 ###############################################################################
 
-# Initialize variables
-var=(OPENPROJECT_URL OPENPROJECT_TOKEN \
-  OPENPROJECT_WORK_PACKAGE OPENPROJECT_ADD_TIME)
+# Initialize internal variables
+var=(op_payload op_response op_http_code op_duration)
 init_loop
 
 ###############################################################################
