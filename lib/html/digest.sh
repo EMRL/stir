@@ -40,7 +40,7 @@ get_avatars() {
   done 
 }
 
-get_digest_commits() {
+build_digest_commits() {
   if [[ "${SKIP_GIT}" == "1" ]]; then
     return
   fi
@@ -74,12 +74,12 @@ check_stats() {
   trace "Future site of stats check"
 }
 
-create_digest() {
+build_digest() {
   if [[ -z "${DIGEST_SLACK}" || "${DIGEST_SLACK}" == "FALSE" ]] && [[ -z "${DIGEST_EMAIL}" ]]; then 
     return
   else
     message_state="DIGEST"
-    html_dir
+    prepare_html_dir
     
     # Collect gravatars for all the authors in this repo
     get_avatars; dot
@@ -103,7 +103,7 @@ create_digest() {
       mtc_data_loop; dot
     fi
 
-    get_digest_commits
+    build_digest_commits
 
     # If there's no analytics and no commit activity, there's no need for a digest
     if [[ -z "${ANALYTICSMSG}" ]] && [[ "${NO_ACTIVITY}" == "1" ]]; then
@@ -125,7 +125,7 @@ create_digest() {
     RND="$(($RANDOM % $SIZE))"
     GREETING="${array[$RND]}"
 
-    process_html; dot
+    render_html; dot
 
     # Strip out useless analytics results
     if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then

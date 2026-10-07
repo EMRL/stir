@@ -10,14 +10,14 @@
 var=(current_month current_year previous_month previous_year last_day)
 init_loop
 
-create_report() {
+build_report() {
   # Make sure we've got cal, or don't bother
   if [[ -z "${cal_cmd}" ]]; then
     console "Creating reports requires the cal utility which cannot be found."; quiet_exit
   fi
 
   message_state="REPORT"
-  html_dir
+  prepare_html_dir
 
   # Get the first and last day of last month
   current_month="$(date +%m)"
@@ -63,7 +63,7 @@ create_report() {
   cat "${stir_path}/html/${HTML_TEMPLATE}/report/header.html" "${stat_file}" "${stir_path}/html/${HTML_TEMPLATE}/report/footer.html" > "${html_file}"
 
   # Filter and replace template variables
-  process_html
+  render_html
 
   # Set URL
   REMOTEFILE="${current_year}-${current_month}.php"

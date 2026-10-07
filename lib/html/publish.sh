@@ -11,14 +11,14 @@ var=(SCP_PORT)
 init_loop
 
 # Remote log function; this really needs to be rewritten
-post_log() {
+publish_html() {
   if [[ "${REMOTE_LOG}" == "TRUE" ]]; then
 
     # Post to localhost by simply copying files
     if [[ "${POST_TO_LOCAL_HOST}" == "TRUE" ]] && [[ -n "${LOCAL_HOST_PATH}" ]] && [[ -f "${html_file}" ]]; then
       
       # Check that directory exists
-      html_dir
+      prepare_html_dir
 
       # Post the file   
       if [[ -n "${REMOTEFILE}" ]] && [[ "${REPORT}" != "1" ]]; then #&& [[ -n "${COMMITHASH}" ]]; then
@@ -130,7 +130,7 @@ post_log() {
   fi
 }
 
-html_dir() {
+prepare_html_dir() {
   # Yet another if/then to cover my ass. What a mess!
   if [[ "${POST_TO_LOCAL_HOST}" == "TRUE" ]] && [[ -n "${LOCAL_HOST_PATH}" ]]; then
 

@@ -11,10 +11,10 @@ clean_exit() {
   notice "Closing ${APP} (${REPO_HOST}/${REPO})"
 
   if [[ "${NO_LOG}" != "1" ]]; then
-    make_log # Compile log
+    build_log # Compile log
     # Check email settings
     if [[ "${EMAIL_SUCCESS}" == "TRUE" ]]; then
-      mail_log
+      send_log_email
     fi
 
     # Is Slack integration configured?
@@ -40,10 +40,10 @@ clean_exit() {
 # Exit on error
 error_exit() {
   notice "Closing ${APP} (${REPO_HOST}/${REPO})"
-  message_state="ERROR"; make_log # Compile log
+  message_state="ERROR"; build_log # Compile log
   # Check email settings
   if [[ "${EMAIL_ERROR}" == "TRUE" ]] || [[ -n "${sendmail_cmd}" ]]; then
-    mail_log
+    send_log_email
   fi
 
   # Check Slack settings
@@ -62,7 +62,7 @@ user_exit() {
   trace "Exit on user request"
   # Check email settings
   if [[ "${EMAIL_QUIT}" == "TRUE" ]]; then
-     mail_log
+     send_log_email
   fi
   # Clean up your mess
   clean_up; exit 0

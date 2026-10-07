@@ -15,7 +15,7 @@ var=(DB_API_TOKEN DB_BACKUP_PATH LAST_BACKUP BACKUP_STATUS CODE_STATS \
   ga_organicSearches ga_pageviews ENGAGEMENT_DAYS)
 init_loop
 
-project_stats() {
+build_stats() {
   #hash gitchart 2>/dev/null || {
   #error "Can not chart project stats, gitchart not installed." 
   #}
@@ -63,7 +63,7 @@ project_stats() {
 
     # Process the HTML
     cat "${stir_path}/html/${HTML_TEMPLATE}/stats/index.html" > "${html_file}"
-    process_html
+    render_html
 
     cat "${html_file}" > "${stat_dir}/index.html"
 
@@ -79,21 +79,21 @@ project_stats() {
     #spinner $!
 
     # Create sub pages
-    project_activity #& spinner $!
-    project_statistics #& spinner $!
-    project_firewall #& spinner $!
-    project_backup #& spinner $!
-    project_engagement #& spinner $!
+    build_stats_activity #& spinner $!
+    build_stats_code #& spinner $!
+    build_stats_firewall #& spinner $!
+    build_stats_backup #& spinner $!
+    build_stats_engagement #& spinner $!
 
     # Filter CSS
-    project_css #& spinner $!
+    build_stats_css #& spinner $!
 
     # Post files
-    post_log #& spinner $!
+    publish_html #& spinner $!
   fi
 }
 
-project_activity() {
+build_stats_activity() {
   # Grab the total number of commits
   TOTAL_COMMITS=$(git rev-list --count ${MASTER})
   get_commits "${TOTAL_COMMITS}"
@@ -101,17 +101,17 @@ project_activity() {
 
   # Process the HTML
   cat "${stir_path}/html/${HTML_TEMPLATE}/stats/activity.html" > "${html_file}"
-  process_html; cat "${html_file}" > "${stat_dir}/activity.html"
+  render_html; cat "${html_file}" > "${stat_dir}/activity.html"
 }
 
-project_statistics() {
+build_stats_code() {
   # Process the HTML
   cat "${stir_path}/html/${HTML_TEMPLATE}/stats/stats.html" > "${html_file}"
-  process_html; cat "${html_file}" > "${stat_dir}/stats.html"
+  render_html; cat "${html_file}" > "${stat_dir}/stats.html"
 }
 
 # This is a special snowflake for now, called from within scan_host()
-project_scan() {
+build_stats_scan() {
   
   #if [[ ! -d "${stat_dir}" ]]; then
   #  umask 077 && mkdir ${stat_dir} &> /dev/null
@@ -120,21 +120,21 @@ project_scan() {
   # Text mode, Nikto is broked :(
   SCAN_STATS=$(<${scan_file})
   cat "${stir_path}/html/${HTML_TEMPLATE}/stats/scan.txt.html" > "${html_file}"
-  process_html; cat "${html_file}" > "${stat_dir}/scan.html"
+  render_html; cat "${html_file}" > "${stat_dir}/scan.html"
 
   # Assuming HTML output from Nikto was working, we'd run this
   # SCAN_STATS=$(<${scan_html})
   # cat "${stir_path}/html/${HTML_TEMPLATE}/stats/scan.html" > "${html_file}"
-  # process_html; cat "${html_file}" > "${stat_dir}/scan.html"
+  # render_html; cat "${html_file}" > "${stat_dir}/scan.html"
 }
 
-project_firewall() {
+build_stats_firewall() {
   # Process the HTML
   cat "${stir_path}/html/${HTML_TEMPLATE}/stats/firewall.html" > "${html_file}"
-  process_html; cat "${html_file}" > "${stat_dir}/firewall.html"
+  render_html; cat "${html_file}" > "${stat_dir}/firewall.html"
 }
 
-project_engagement() {
+build_stats_engagement() {
   if [[ -z "${PROFILE_ID}" ]]; then
     trace "Google Analytics not configured"
     return
@@ -154,17 +154,17 @@ project_engagement() {
   done
 
   # Process the HTML
-  process_html
+  render_html
   cat "${html_file}" > "${stat_dir}/engagement.html"
 }
 
-project_css() {
+build_stats_css() {
   # Process the CSS files
   cat "${stir_path}/html/${HTML_TEMPLATE}/stats/css/${THEME_MODE}.css" > "${html_file}"
-  process_html; cat "${html_file}" > "${stat_dir}/css/${THEME_MODE}.css"
+  render_html; cat "${html_file}" > "${stat_dir}/css/${THEME_MODE}.css"
 }
 
-project_backup() {
+build_stats_backup() {
   # Get file directory
   #echo "${BACKUP_FILES}" > "${trash_file}"
 
@@ -177,7 +177,7 @@ project_backup() {
 
   # Process the HTML
   cat "${stir_path}/html/${HTML_TEMPLATE}/stats/backup.html" > "${html_file}"
-  process_html; cat "${html_file}" > "${stat_dir}/backup.html"
+  render_html; cat "${html_file}" > "${stat_dir}/backup.html"
 }
 
 check_backup() {

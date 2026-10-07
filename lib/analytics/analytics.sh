@@ -845,7 +845,7 @@ ga4_test() {
     umask 077 && mkdir "${stat_dir}"
   fi
 
-  # Copy the assets normally prepared by project_stats().
+  # Copy the assets normally prepared by build_stats().
   cp -R "${stir_path}/html/${HTML_TEMPLATE}/stats/css" "${stat_dir}/"
   cp -R "${stir_path}/html/${HTML_TEMPLATE}/stats/fonts" "${stat_dir}/"
   cp -R "${stir_path}/html/${HTML_TEMPLATE}/stats/js" "${stat_dir}/"
@@ -855,7 +855,7 @@ ga4_test() {
 
   # Render the engagement template.
   cat "${stir_path}/html/${HTML_TEMPLATE}/stats/engagement.html" > "${html_file}"
-  process_html
+  render_html
   cat "${html_file}" > "${stat_dir}/engagement.html"
 
   if [[ ! -s "${stat_dir}/engagement.html" ]]; then

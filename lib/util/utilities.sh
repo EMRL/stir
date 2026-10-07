@@ -46,7 +46,7 @@ go() {
 
   # Generate stats
   if [[ "${PROJSTATS}" == "1" ]]; then
-    project_stats; quiet_exit
+    build_stats; quiet_exit
   fi
 
   # Chill and wait for user to confirm project

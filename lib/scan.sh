@@ -104,7 +104,7 @@ scan_host() {
   # Create the scan report in the new dashboard format, this is kinda
   # maybe temporary, it's getting pretty tangled
   assign_nav
-  project_scan
+  build_stats_scan
 
   # Nikto html output is broked, using text only for now
   cat "${stir_path}/html/${HTML_TEMPLATE}/scan/header.txt.html" "${scan_file}" "${stir_path}/html/${HTML_TEMPLATE}/scan/footer.txt.html" > "${html_file}"
@@ -129,7 +129,7 @@ scan_host() {
     message_state="ERROR"
   fi
 
-  process_html
+  render_html
 
   cp "${html_file}" "${scan_html}"
   

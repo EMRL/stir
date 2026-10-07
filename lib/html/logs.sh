@@ -6,7 +6,7 @@
 # Handles parsing and creating logs
 ###############################################################################
 
-make_log() {
+build_log() {
   # Clean up stuff that is most likely there
   sed -i -e '/git reset HEAD/d' \
     -e '/Checking out files:/d' \
@@ -117,7 +117,7 @@ make_log() {
 
   # IF we're using HTML emails, let's get to work
   if [[ "${EMAIL_HTML}" == "TRUE" ]]; then
-    [[ "${message_state}" != "DIGEST" ]] && build_html
+    [[ "${message_state}" != "DIGEST" ]] && render_log
     cat "${html_file}" > "${trash_file}"
 
     # If this is an approval email, strip out PHP
@@ -137,22 +137,22 @@ make_log() {
 
   # Create HTML/PHP logs for viewing online
   if [[ "${REMOTE_LOG}" == "TRUE" ]]; then
-    html_dir
+    prepare_html_dir
 
     # For web logs, VIEWPORT should be 960
     VIEWPORT="960"
     VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
 
     # Build the html email and details pages
-    # build_html
+    # render_log
 
     # Strip out the buttons that self-link
     sed -e "s^// BUTTON: BEGIN //-->^BUTTON HIDE^g" -i "${html_file}"
-    post_log
+    publish_html
   fi
 }
 
-build_html() {
+render_log() {
   LOGSUFFIX="html"
   
   # Build out the HTML
@@ -219,6 +219,6 @@ build_html() {
   if [[ "${REPORT}" != "1" ]]; then
     cat "${log_file}" "${stir_path}/html/${HTML_TEMPLATE}/footer.html" >> "${html_file}"
     # There's probably a better place for this.
-    process_html
+    render_html
   fi
 }

@@ -19,7 +19,7 @@ create_invoice() {
 
   # Report creation is coming soon, currently bugged
   if [[ "${IN_INCLUDE_REPORT}" == "TRUE" ]]; then
-    create_report
+    build_report
     if [[ -n "${IN_NOTES}" ]]; then
       IN_NOTES="${IN_NOTES}\n"
     fi

@@ -30,9 +30,9 @@ main() {
   go                # Start a work session
 
   if [[ "${DIGEST}" == "1" ]]; then
-    create_digest
+    build_digest
   elif [[ "${REPORT}" == "1" ]]; then
-    create_report
+    build_report
   elif [[ "${CREATE_INVOICE}" == "1" ]]; then
     create_invoice
   elif [[ "${SCAN}" == "1" ]]; then
