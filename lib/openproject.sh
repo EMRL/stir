@@ -23,7 +23,7 @@ op_addtime() {
      [[ -z "${OPENPROJECT_TOKEN}" ]] || \
      [[ -z "${OPENPROJECT_WORK_PACKAGE}" ]] || \
      [[ -z "${OPENPROJECT_ADD_TIME}" ]] || \
-     [[ -z "${OPENbuild_stats_activity}" ]]; then
+     [[ -z "${OPENPROJECT_ACTIVITY}" ]]; then
     warning "OpenProject time logging is not configured correctly."
     return 1
   fi
@@ -87,7 +87,7 @@ op_addtime() {
         \"href\": \"/api/v3/work_packages/${OPENPROJECT_WORK_PACKAGE}\"
       },
       \"activity\": {
-        \"href\": \"/api/v3/time_entries/activities/${OPENbuild_stats_activity}\"
+        \"href\": \"/api/v3/time_entries/activities/${OPENPROJECT_ACTIVITY}\"
       }
     }
   }"
@@ -252,10 +252,10 @@ op_test() {
   # Check configured activity
   console_inline "Checking activity... "
 
-  if [[ -n "${OPENbuild_stats_activity}" ]]; then
-    console "OK (#${OPENbuild_stats_activity})"
+  if [[ -n "${OPENPROJECT_ACTIVITY}" ]]; then
+    console "OK (#${OPENPROJECT_ACTIVITY})"
   else
-    warning "FAIL: OPENbuild_stats_activity is not configured."
+    warning "FAIL: OPENPROJECT_ACTIVITY is not configured."
     return 1
   fi
 }
