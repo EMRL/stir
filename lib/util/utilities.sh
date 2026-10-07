@@ -165,7 +165,7 @@ show_settings() {
     [[ -n "${PROFILE_ID}" ]] && echo "Google Analytics ID: ${PROFILE_ID}"
   fi
   # Logging
-  if [[ -n "${REMOTE_LOG}" ]] || [[ -n "${REMOTE_URL}" ]] || [[ -n "${EXPIRE_LOGS}" ]] || [[ -n "${POST_TO_LOCAL_HOST}" ]] || [[ -n "${LOCAL_HOST_PATH}" ]] || [[ -n "${SCP_POST}" ]] || [[ -n "${SCP_USER}" ]] || [[ -n "${SCP_HOST}" ]] || [[ -n "${SCP_HOST_PATH}" ]] || [[ -n "${SCP_PASS}" ]] || [[ -n "${REMOTE_TEMPLATE}" ]] || [[ -n "${REMOTE_TEMPLATE}" ]]; then
+  if [[ -n "${REMOTE_LOG}" ]] || [[ -n "${REMOTE_URL}" ]] || [[ -n "${EXPIRE_LOGS}" ]] || [[ -n "${POST_TO_LOCAL_HOST}" ]] || [[ -n "${LOCAL_HOST_PATH}" ]] || [[ -n "${SCP_POST}" ]] || [[ -n "${SCP_USER}" ]] || [[ -n "${SCP_HOST}" ]] || [[ -n "${SCP_HOST_PATH}" ]] || [[ -n "${SCP_PASS}" ]]; then
     notice "Logging"
     echo "-------"
     [[ -n "${TO}" ]] && echo "Send to: ${TO}"
@@ -176,7 +176,6 @@ show_settings() {
     [[ -n "${REMOTE_LOG}" ]] && echo "Web logs: ${REMOTE_LOG}"
     [[ -n "${REMOTE_URL}" ]] && echo "Address: ${REMOTE_URL}"
     [[ -n "${EXPIRE_LOGS}" ]] && echo "Log expiration: ${EXPIRE_LOGS} days"
-    [[ -n "${REMOTE_TEMPLATE}" ]] && echo "Log template: ${REMOTE_TEMPLATE}"
     [[ -n "${SCP_POST}" ]] && echo "Post with SCP/SSH: ${SCP_POST}"
     [[ -n "${SCP_USER}" ]] && echo "SCP user: ${SCP_USER}"
     [[ -n "${SCP_HOST}" ]] && echo "Remote log host: ${SCP_HOST}"

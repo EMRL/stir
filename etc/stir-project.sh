@@ -265,11 +265,6 @@ PROJECT_VERSION="3.8.6.1"
 # trailing slash
 # REMOTE_URL="{{REMOTE_URL}}"
 
-# If using HTML logs, define which template you'd like to use. HTML templates
-# are stored in separate folders in /etc/stir/html. The value used below
-# should be the folder name of your template.
-# REMOTE_TEMPLATE="{{REMOTE_TEMPLATE}}"
-
 # Post logs via SCP
 # SCP_POST="{{SCP_POST}}"
 # SCP_USER="{{SCP_USER}}"

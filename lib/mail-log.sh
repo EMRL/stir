@@ -137,7 +137,7 @@ email_test() {
       echo "<br />"
     fi
     # Logging
-    if [[ -n "${REMOTE_LOG}" ]] || [[ -n "${REMOTE_URL}" ]] || [[ -n "${EXPIRE_LOGS}" ]] || [[ -n "${POST_TO_LOCAL_HOST}" ]] || [[ -n "${LOCAL_HOST_PATH}" ]] || [[ -n "${SCP_POST}" ]] || [[ -n "${SCP_USER}" ]] || [[ -n "${SCP_HOST}" ]] || [[ -n "${SCP_HOST_PATH}" ]] || [[ -n "${SCP_PASS}" ]] || [[ -n "${REMOTE_TEMPLATE}" ]] || [[ -n "${REMOTE_TEMPLATE}" ]]; then
+    if [[ -n "${REMOTE_LOG}" ]] || [[ -n "${REMOTE_URL}" ]] || [[ -n "${EXPIRE_LOGS}" ]] || [[ -n "${POST_TO_LOCAL_HOST}" ]] || [[ -n "${LOCAL_HOST_PATH}" ]] || [[ -n "${SCP_POST}" ]] || [[ -n "${SCP_USER}" ]] || [[ -n "${SCP_HOST}" ]] || [[ -n "${SCP_HOST_PATH}" ]] || [[ -n "${SCP_PASS}" ]]; then
       echo "<strong>Logging</strong><br />"
       [[ -n "${TO}" ]] && echo "Send to: ${TO}<br />"
       [[ -n "${HTML_TEMPLATE}" ]] && echo "Email template: ${HTML_TEMPLATE}<br />"
@@ -147,7 +147,6 @@ email_test() {
       [[ -n "${REMOTE_LOG}" ]] && echo "Web logs: ${REMOTE_LOG}<br />"
       [[ -n "${REMOTE_URL}" ]] && echo "Address: ${REMOTE_URL} <br />"
       [[ -n "${EXPIRE_LOGS}" ]] && echo "Log expiration: ${EXPIRE_LOGS} days <br />"
-      [[ -n "${REMOTE_TEMPLATE}" ]] && echo "Log template: ${REMOTE_TEMPLATE}<br />"
       [[ -n "${SCP_POST}" ]] && echo "Post with SCP/SSH: ${SCP_POST}<br />"
       [[ -n "${SCP_USER}" ]] && echo "SCP user: ${SCP_USER}<br />"
       [[ -n "${SCP_HOST}" ]] && echo "Remote log host: ${SCP_HOST}<br />"
@@ -281,7 +280,7 @@ email_test() {
       echo
     fi
     # Logging
-    if [[ -n "${REMOTE_LOG}" ]] || [[ -n "${REMOTE_URL}" ]] || [[ -n "${EXPIRE_LOGS}" ]] || [[ -n "${POST_TO_LOCAL_HOST}" ]] || [[ -n "${LOCAL_HOST_PATH}" ]] || [[ -n "${SCP_POST}" ]] || [[ -n "${SCP_USER}" ]] || [[ -n "${SCP_HOST}" ]] || [[ -n "${SCP_HOST_PATH}" ]] || [[ -n "${SCP_PASS}" ]] || [[ -n "${REMOTE_TEMPLATE}" ]] || [[ -n "${REMOTE_TEMPLATE}" ]]; then
+    if [[ -n "${REMOTE_LOG}" ]] || [[ -n "${REMOTE_URL}" ]] || [[ -n "${EXPIRE_LOGS}" ]] || [[ -n "${POST_TO_LOCAL_HOST}" ]] || [[ -n "${LOCAL_HOST_PATH}" ]] || [[ -n "${SCP_POST}" ]] || [[ -n "${SCP_USER}" ]] || [[ -n "${SCP_HOST}" ]] || [[ -n "${SCP_HOST_PATH}" ]] || [[ -n "${SCP_PASS}" ]]; then
       echo "Logging"
       echo "-------"
       [[ -n "${TO}" ]] && echo "Send to: ${TO}"
@@ -292,7 +291,6 @@ email_test() {
       [[ -n "${REMOTE_LOG}" ]] && echo "Web logs: ${REMOTE_LOG}"
       [[ -n "${REMOTE_URL}" ]] && echo "Address: ${REMOTE_URL}"
       [[ -n "${EXPIRE_LOGS}" ]] && echo "Log expiration: ${EXPIRE_LOGS} days"
-      [[ -n "${REMOTE_TEMPLATE}" ]] && echo "Log template: ${REMOTE_TEMPLATE}"
       [[ -n "${SCP_POST}" ]] && echo "Post with SCP/SSH: ${SCP_POST}"
       [[ -n "${SCP_USER}" ]] && echo "SCP user: ${SCP_USER}"
       [[ -n "${SCP_HOST}" ]] && echo "Remote log host: ${SCP_HOST}"

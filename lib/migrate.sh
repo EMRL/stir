@@ -64,7 +64,6 @@ migrate_variables() {
       -e 's^REDIRECTURI^REDIRECT_URI^g' \
       -e 's^REFRESHTOKEN^REFRESH_TOKEN^g' \
       -e 's^REMOTELOG^REMOTE_LOG^g' \
-      -e 's^REMOTETEMPLATE^REMOTE_TEMPLATE^g' \
       -e 's^REMOTEURL^REMOTE_URL^g' \
       -e 's^REPOHOST^REPO_HOST^g' \
       -e 's^REQUIREAPPROVAL^REQUIRE_APPROVAL^g' \
