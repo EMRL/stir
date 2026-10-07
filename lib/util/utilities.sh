@@ -24,7 +24,7 @@ go() {
     server_monitor
   fi
   scan_check
-  check_backup
+  test_backup
 
   console "stir ${VERSION}"
 

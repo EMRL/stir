@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 #
 # user-tests.sh
@@ -42,7 +41,7 @@
 #   ${TEST_BUGSNAG}        Run Bugsnag integration test
 #   ${TEST_MAUTIC}         Run Mautic integration test
 #   ${TEST_OPENPROJECT}    Run OpenProject integration test
-#   ${CHECK_BACKUP}        Run Dropbox backup authentication check
+#   ${TEST_BACKUP}        Run Dropbox backup authentication check
 #   ${TEST_SSH}            Run SSH authentication test
 #   ${NO_KEY}              Indicates the project does not use SSH keys
 #   ${DISABLE_SSH_CHECK}   Disables SSH authentication checks
@@ -115,8 +114,8 @@ user_tests() {
   fi
 
   # Test Dropbox backup authentication
-  if [[ "${CHECK_BACKUP}" == "1" ]]; then
-    check_backup
+  if [[ "${TEST_BACKUP}" == "1" ]]; then
+    test_backup
     quiet_exit
   fi
 

@@ -180,7 +180,7 @@ build_stats_backup() {
   render_html; cat "${html_file}" > "${stat_dir}/backup.html"
 }
 
-check_backup() {
+test_backup() {
   # Are we setup?
   if [[ -z "${DB_BACKUP_PATH}" ]] || [[ -z "${DB_API_TOKEN}" ]]; then
     return

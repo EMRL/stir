@@ -178,7 +178,7 @@ fi
 
 # Clean out old libraries
 if [[ -d /etc/stir/lib ]]  && [[ ! -z "$(find /etc/stir/lib -maxdepth 0 -type d ! -empty)" ]]; then
-  sudo rm /etc/stir/lib/*; error_check
+  sudo rm -rf /etc/stir/lib; error_check
 fi
 
 echo "Installing system files"
