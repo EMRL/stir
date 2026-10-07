@@ -1,3 +1,8 @@
+
+#!/usr/bin/env bash
+#
+# user-tests.sh
+
 ###############################################################################
 # user_tests()
 #   Run user-requested diagnostic, integration, and configuration tests.

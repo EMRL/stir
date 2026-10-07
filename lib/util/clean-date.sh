@@ -1,3 +1,8 @@
+
+#!/usr/bin/env bash
+#
+# clean-date.sh
+
 ###############################################################################
 # clean_date()
 #   Format string containing default date format to be more readable 

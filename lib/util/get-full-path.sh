@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+#
+# get-full-path.sh
+
 ###############################################################################
 # get_full_path()
 #   Resolve absolute paths for external commands used by Stir and store them in

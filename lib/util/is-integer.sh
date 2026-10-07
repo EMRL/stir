@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+#
+# is-integer.sh
+
 ###############################################################################
 # is_integer()
 #   Check whether a value contains only numeric integer characters

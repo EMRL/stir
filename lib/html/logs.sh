@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# log-handling.sh
+# logs.sh
 #
 ###############################################################################
 # Handles parsing and creating logs

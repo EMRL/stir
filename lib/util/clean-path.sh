@@ -1,4 +1,8 @@
-###############################################################################
+#!/usr/bin/env bash
+#
+# clean-path.sh
+
+################################################################################
 # clean_path()
 #   Strip extra forward slashes in URL or path directory values
 #

@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+#
+# check_dependencies.sh
+
 ###############################################################################
 # check_dependencies()
 #   Validate project requirements before Stir begins its main workflow.

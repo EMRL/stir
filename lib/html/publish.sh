@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# post-log.sh
+# publish.sh
 #
 ###############################################################################
 # Handles posting logs to localhost as well as remote hosts

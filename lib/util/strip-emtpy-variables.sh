@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+#
+# strip-emtpy-variables.sh
+
 ###############################################################################
 # strip_empty_variables()
 #   Remove unresolved {{VARIABLE}} placeholders from a file.

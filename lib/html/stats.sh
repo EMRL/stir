@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# statistics.sh
+# stats.sh
 #
 ###############################################################################
 # Generate HTML statistics pages

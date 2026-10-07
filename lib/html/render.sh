@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# process-html.sh
+# process.sh
 #
 ###############################################################################
 # Filters through html templates to inject our project's variables
