@@ -181,14 +181,31 @@ get_json_value() {
 #
 # Example use:
 #   get_percent 80 37
-#   VARIABLE="$(get_percent ${var1} ${var2})"
-############################################################################### 
+#   VARIABLE="$(get_percent "${var1}" "${var2}")"
+#
+# Returns:
+#   Rounded percentage as an integer
+###############################################################################
 get_percent() {
-  declare arg1="${1}"
-  declare arg2="${2}"
-  if [[ -n "${arg1}" && -n "${arg2}" ]]; then
-    awk "BEGIN { pc=100*${arg2}/${arg1}; i=int(pc); print (pc-i<0.5)?i:i+1 }" > /dev/null 2>&1
+  local total="${1:-}"
+  local items="${2:-}"
+
+  if [[ -z "${total}" ]] || [[ -z "${items}" ]]; then
+    return 1
   fi
+
+  if ! [[ "${total}" =~ ^[0-9]+([.][0-9]+)?$ ]] ||
+     ! [[ "${items}" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+    return 1
+  fi
+
+  if [[ "${total}" == "0" ]]; then
+    printf '0\n'
+    return 0
+  fi
+
+  awk -v total="${total}" -v items="${items}" \
+    'BEGIN { printf "%.0f\n", 100 * items / total }'
 }
 
 ###############################################################################
