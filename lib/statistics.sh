@@ -139,7 +139,7 @@ project_engagement() {
     trace "Google Analytics not configured"
     return
   fi
-  
+
   cat "${stir_path}/html/${HTML_TEMPLATE}/stats/engagement.html" > "${html_file}"
 
   # How many days of analytics to display?
@@ -147,14 +147,14 @@ project_engagement() {
     ENGAGEMENT_DAYS="7"
   fi
 
-  ga_var=(pageviews users newUsers sessions organicSearches percentNewSessions socialInteractions)
-  # Start the loop
-  for i in "${ga_var[@]}" ; do
-    ga_over_time ${i} ${ENGAGEMENT_DAYS}
+  ga_var=(pageviews users newUsers sessions organicSearches)
+
+  for i in "${ga_var[@]}"; do
+    ga4_over_time "${i}" "${ENGAGEMENT_DAYS}"
   done
 
   # Process the HTML
-  process_html; 
+  process_html
   cat "${html_file}" > "${stat_dir}/engagement.html"
 }
 

@@ -7,14 +7,20 @@
 #
 # Thanks to https://jacobsalmela.com/2014/08/18/oauth-2-0-google-analytics-desktop-using-geektool-bash-curl/
 # for breaking this down and helping us get started
-# 
-# https://developers.google.com/analytics/devguides/reporting/core/dimsmets for all the metrics
+#
+# Universal Analytics:
+# https://developers.google.com/analytics/devguides/reporting/core/dimsmets
+#
+# GA4 Data API:
+# https://developers.google.com/analytics/devguides/reporting/data/v1
 ###############################################################################
 
 # Initialize variables
 var=(SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \
   GA_SOCIAL ANALYTICSMSG ga_day ga_sequence max_value n a GA_TOTAL ga_ \
-  ga4_var ga4_payload)
+  ga4_var ga4_payload ga4_request ga4_error ga4_error_description \
+  ga4_row_count GA4_TOKEN_READY GA4_API_METRIC GA4_FILTER_DIMENSION \
+  GA4_FILTER_VALUE)
 init_loop
 
 ga_var=(users newUsers percentNewSessions sessionsPerUser sessions bounces bounceRate \
@@ -76,7 +82,7 @@ analytics() {
     fi
 
     if [[ "${RND}" == "1" ]]; then
-      # Sometimes Google reports confusion percentages that exceed 
+      # Sometimes Google reports confusion percentages that exceed
       # 100%, let's kill those results
       if [[ "${SIZE}" -gt "100" ]]; then
         ga_fail
@@ -88,15 +94,15 @@ analytics() {
       fi
     fi
 
-    if [[ "${RND}" == "2" ]]; then 
+    if [[ "${RND}" == "2" ]]; then
       if [[ "${SIZE}" -ge "30" ]]; then
         ANALYTICSMSG="You had traffic from <strong>${SIZE}</strong> organic searches last week. Not bad!"
       else
-        ga_fail     
+        ga_fail
       fi
     fi
 
-    if [[ "${RND}" == "3" ]]; then 
+    if [[ "${RND}" == "3" ]]; then
       RESULT="$((${SIZE} / 60))"
       if [[ "${RESULT}" -gt "2" ]]; then
         ANALYTICSMSG="Last week visitors averaged over <strong>${RESULT}</strong> minutes each on your site. Nice!"
@@ -105,7 +111,7 @@ analytics() {
       fi
     fi
 
-    if [[ "${RND}" == "4" ]]; then 
+    if [[ "${RND}" == "4" ]]; then
       if [[ "${SIZE}" -ge "20" ]]; then
         ANALYTICSMSG="Your site had <strong>${SIZE}</strong> social media interactions in the last week!"
       else
@@ -120,7 +126,7 @@ ga_data() {
   SIZE="$(printf "%.0f\n" "${RESULT}")"
 
   # TODO: Make this a proper loop
-  if [[ "${PROJSTATS}" == "1" ]]; then 
+  if [[ "${PROJSTATS}" == "1" ]]; then
     GA_HITS=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:pageviews&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:pageviews\":" | cut -d'"' -f4)
     GA_PERCENT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:percentNewSessions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:percentNewSessions\":" | cut -d'"' -f4)
     GA_SEARCHES=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:organicSearches&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:organicSearches\":" | cut -d'"' -f4)
@@ -154,7 +160,7 @@ ga_data_loop() {
       socialInteractions uniqueSocialInteractions socialInteractionsPerSession \
       userTimingValue userTimingSample avgUserTimingValue transactions transactionRevenue \
       revenuePerTransaction revenuePerItem transactionsPerSession transactionsPerUser)
-  else 
+  else
     if [[ "${DIGEST}" == "1" ]]; then
       # Setup for extended digest analytics
       ga_var=(users newUsers sessionsPerUser avgSessionDuration pageviews \
@@ -168,20 +174,20 @@ ga_data_loop() {
   # Start the loop
   for i in "${ga_var[@]}" ; do
     RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4)
-    if [[ "${TEST_ANALYTICS}" != "1" ]]; then 
+    if [[ "${TEST_ANALYTICS}" != "1" ]]; then
       dot
     fi
 
     if [[ -z "${RESULT}" ]]; then
       RESULT="0"
     fi
-    
+
     # Workaround for buggy Google shit
     until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
     do
       RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4)
     done
-  
+
     # Round to two decimal places if needed
     if [[ "${RESULT}" = *"."* ]]; then
       RESULT="$(printf '%0.2f\n' "${RESULT}")"
@@ -204,12 +210,12 @@ ga_data_loop() {
 # Arguments:
 #   [metric]    Defines the metric you wish to get from Google's API. Examples
 #               include 'sessions', 'hits', etc. Refere to Google API docs at
-#               https://developers.google.com/analytics/devguides/reporting/core/dimsmets 
+#               https://developers.google.com/analytics/devguides/reporting/core/dimsmets
 #   [days]      The number of days for which to gather analytics data.
 #
-# Returns:  
+# Returns:
 #   None
-###############################################################################  
+###############################################################################
 ga_over_time() {
   if [[ -z "${PROFILE_ID}" ]] || [[ -z "${gnuplot_cmd}" ]]; then
     return
@@ -223,7 +229,7 @@ ga_over_time() {
     if [[ ! -d "${stat_dir}" ]]; then
       umask 077 && mkdir ${stat_dir} &> /dev/null
     fi
-    
+
     # Setup variables
     ga_day="${GAEND}"
     day="0"
@@ -234,9 +240,9 @@ ga_over_time() {
     # Flush csv
     [[ -f "${trash_file}" ]] && rm "${trash_file}"
 
-    while [ "$ga_day" != "${GASTART}" ]; do 
+    while [ "$ga_day" != "${GASTART}" ]; do
       RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${METRIC}&start-date=$ga_day&end-date=$ga_day&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4);
-      
+
       # Workaround for buggy Google shit
       until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
       do
@@ -245,30 +251,30 @@ ga_over_time() {
 
       # Make sure we're only dealing with integers
       RESULT="$(printf "%.0f\n" "${RESULT}")"; dot
-      
+
       # Add to total
       let ga_${METRIC}+="${RESULT}"
-      
-      # Store the values 
+
+      # Store the values
       declare "$1_${day}"="${RESULT}"
       ga_sequence="${ga_sequence}${RESULT} "
       day="$((day+1))"
       ga_day="$(date -I -d "$ga_day - 1 day")"
     done
-  
-    # Create percentage array, this is pretty much obsolete now since 
+
+    # Create percentage array, this is pretty much obsolete now since
     # we're using gnuplot
     ga_sequence="$(echo -e "${ga_sequence}" | sed -e 's/[[:space:]]*$//')"
     IFS=', ' read -r -a a <<< "${ga_sequence}"
 
     for i in "${a[@]}"; do
-      if [[ $i -gt $max_value ]]; then 
+      if [[ $i -gt $max_value ]]; then
         max_value=$i
       fi
     done
 
     # Calculate
-    for ((n=0; n < $2; n++)); do 
+    for ((n=0; n < $2; n++)); do
       var="$1_$n"; var_percent="$1_percent_$n"
 
       # Calculating percent while zero was causing nasty bugs
@@ -293,7 +299,7 @@ ga_over_time() {
           -e "s^{{$1_percent_$n}}^${var_percent}^g" \
           -e "s^{{$1_date_$n}}^${this_day}^g" \
           "${html_file}"
-      fi    
+      fi
     done
 
     tac "${trash_file}" > ${stat_dir}/"${METRIC}".csv
@@ -301,7 +307,7 @@ ga_over_time() {
     ${gnuplot_cmd} -p >/dev/null 2>&1  << EOF
     set encoding utf8
     set terminal png enhanced size 1280,600
-    primary = "${CHART_COLOR}"; 
+    primary = "${CHART_COLOR}";
     secondary = "${SECONDARY_COLOR}";
     info = "${INFO_COLOR}";
     default = "${DEFAULT_COLOR}";
@@ -318,7 +324,7 @@ ga_over_time() {
     set style line 11 lc rgb default lt 1 lw 3
     set border 3 back ls 11
     set tics out nomirror
-    
+
     # PNG
     set terminal png enhanced size 1280,600
     set output '${stat_dir}/${METRIC}.png'
@@ -378,7 +384,7 @@ ga_test() {
     console "PROFILE_ID=${PROFILE_ID}"
   fi
 
-  if [[ -z "${REDIRECT_URI}" ]]; then 
+  if [[ -z "${REDIRECT_URI}" ]]; then
     warning "Missing Redirect URI"
     console "Generally your Redirect URI will be set to http://localhost"
     quiet_exit
@@ -396,39 +402,468 @@ ga_test() {
   return
 }
 
-ga4_test() {
-  notice "Refreshing token..."
-  "${curl_cmd}" -s -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token" https://accounts.google.com/o/oauth2/token > "${trash_file}"
-  sed -i '/access_token/!d' "${trash_file}"
-  ACCESS_TOKEN="$(awk -F\" '{print $4}' "${trash_file}")"
-  trace "CLIENT_ID=${CLIENT_ID}"
-  trace "CLIENT_SECRET=${CLIENT_SECRET}"
-  trace "AUTHORIZATION_CODE=${AUTHORIZATION_CODE}"
-  trace "REFRESH_TOKEN=${REFRESH_TOKEN}"
-  trace "PROFILE_ID=${PROFILE_ID}"
-  trace "REDIRECT_URI=${REDIRECT_URI}"
-  trace "ACCESS-TOKEN=${ACCESS_TOKEN}"
+###############################################################################
+# ga_refresh_token()
+#   Refresh the OAuth access token used by the GA4 Data API.
+#
+# Returns:
+#   0 on success
+#   1 on failure
+###############################################################################
+ga_refresh_token() {
+  local ga4_token_payload
 
-  notice "Running 7 day report..."
+  ga4_token_payload="$("${curl_cmd}" --silent --show-error \
+    --request POST \
+    --data-urlencode "client_id=${CLIENT_ID}" \
+    --data-urlencode "client_secret=${CLIENT_SECRET}" \
+    --data-urlencode "refresh_token=${REFRESH_TOKEN}" \
+    --data-urlencode "grant_type=refresh_token" \
+    "https://oauth2.googleapis.com/token")"
 
-  ga4_var=(activeUsers newUsers sessionsPerUser avgSessionDuration \
-    screenPageViews screenPageViewsPerSession screenPageViewsPerUser \
-    organicGoogleSearchClicks organicGoogleSearchImpressions bounceRate)
+  ACCESS_TOKEN="$(
+    printf '%s\n' "${ga4_token_payload}" |
+      get_json_value access_token 1 |
+      tr -d '[:space:]'
+  )"
 
-  for i in "${ga4_var[@]}" ; do
-    echo "{\"dateRanges\": [{ \"startDate\": \"7daysAgo\", \"endDate\": \"yesterday\" }],\"metrics\": [{ \"name\": \"${i}\" }]}" > /tmp/ga4.json
+  if [[ -n "${ACCESS_TOKEN}" ]]; then
+    GA4_TOKEN_READY="1"
+    trace "Google Analytics access token refreshed"
+    return 0
+  fi
 
-    ga4_payload="$(${curl_cmd} -sX POST \
-      -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-      -H "Content-Type: application/json; charset=utf-8" \
-      -d @/tmp/ga4.json \
-      https://analyticsdata.googleapis.com/v1beta/properties/${PROFILE_ID}:runReport)"
+  ga4_error="$(
+    printf '%s\n' "${ga4_token_payload}" |
+      get_json_value error 1 |
+      tr -d '[:space:]'
+  )"
 
-    ga4_value="$(echo ${ga4_payload} | get_json_value value 1)"
+  ga4_error_description="$(
+    printf '%s\n' "${ga4_token_payload}" |
+      get_json_value error_description 1
+  )"
 
-    if [[ ! -z "${ga4_value}" ]]; then
-      trace "${i}: ${ga4_value}"
-    fi
-  done
+  warning "Unable to refresh Google Analytics access token"
+
+  if [[ -n "${ga4_error}" ]]; then
+    console "Google OAuth error: ${ga4_error}"
+  fi
+
+  if [[ -n "${ga4_error_description}" ]]; then
+    console "${ga4_error_description}"
+  fi
+
+  return 1
 }
 
+###############################################################################
+# ga4_metric_map()
+#   Map legacy Stir Analytics metric names to GA4 metrics and filters.
+###############################################################################
+ga4_metric_map() {
+  GA4_API_METRIC="${1:-}"
+  GA4_FILTER_DIMENSION=""
+  GA4_FILTER_VALUE=""
+
+  case "${1:-}" in
+    pageviews)
+      GA4_API_METRIC="screenPageViews"
+      ;;
+    users)
+      GA4_API_METRIC="activeUsers"
+      ;;
+    newUsers)
+      GA4_API_METRIC="newUsers"
+      ;;
+    sessions)
+      GA4_API_METRIC="sessions"
+      ;;
+    organicSearches)
+      GA4_API_METRIC="sessions"
+      GA4_FILTER_DIMENSION="sessionDefaultChannelGroup"
+      GA4_FILTER_VALUE="Organic Search"
+      ;;
+  esac
+}
+
+###############################################################################
+# ga4_data()
+#   Retrieve a report from the GA4 Data API.
+#
+# Arguments:
+#   [metric]       GA4 metric to retrieve.
+#   [start date]   GA4 start date. Defaults to 7daysAgo.
+#   [end date]     GA4 end date. Defaults to yesterday.
+#   [dimension]    Optional dimension used to break results into rows.
+#
+# Examples:
+#   ga4_data "screenPageViews"
+#   ga4_data "screenPageViews" "7daysAgo" "yesterday" "date"
+#
+# Returns:
+#   The raw API response is stored in ga4_payload.
+#   The number of returned rows is stored in ga4_row_count.
+###############################################################################
+ga4_data() {
+  local metric="${1:-}"
+  local start_date="${2:-7daysAgo}"
+  local end_date="${3:-yesterday}"
+  local dimension="${4:-}"
+  local filter_dimension="${5:-}"
+  local filter_value="${6:-}"
+  local dimensions_json=""
+  local order_json=""
+  local filter_json=""
+
+  if [[ -z "${PROFILE_ID}" ]]; then
+    warning "Google Analytics property ID is not configured"
+    return 1
+  fi
+
+  if [[ -z "${metric}" ]]; then
+    warning "Google Analytics metric is required"
+    return 1
+  fi
+
+  # Make sure we have a fresh access token.
+  if [[ "${GA4_TOKEN_READY:-}" != "1" ]]; then
+    if ! ga_refresh_token; then
+      return 1
+    fi
+  fi
+
+  # Add an optional dimension.
+  if [[ -n "${dimension}" ]]; then
+    printf -v dimensions_json \
+      ',"dimensions":[{"name":"%s"}]' \
+      "${dimension}"
+
+    printf -v order_json \
+      ',"orderBys":[{"dimension":{"dimensionName":"%s"}}]' \
+      "${dimension}"
+  fi
+
+  # Add an optional dimension filter.
+  if [[ -n "${filter_dimension}" ]] && [[ -n "${filter_value}" ]]; then
+    printf -v filter_json \
+      ',"dimensionFilter":{"filter":{"fieldName":"%s","stringFilter":{"matchType":"EXACT","value":"%s","caseSensitive":true}}}' \
+      "${filter_dimension}" \
+      "${filter_value}"
+  fi
+
+  printf -v ga4_request \
+    '{"dateRanges":[{"startDate":"%s","endDate":"%s"}],"metrics":[{"name":"%s"}]%s%s%s,"keepEmptyRows":true}' \
+    "${start_date}" \
+    "${end_date}" \
+    "${metric}" \
+    "${dimensions_json}" \
+    "${order_json}" \
+    "${filter_json}"
+
+  ga4_payload="$("${curl_cmd}" --silent --show-error \
+    --request POST \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --data "${ga4_request}" \
+    "https://analyticsdata.googleapis.com/v1beta/properties/${PROFILE_ID}:runReport")"
+
+  ga4_error="$(
+    printf '%s\n' "${ga4_payload}" |
+      get_json_value message 1
+  )"
+
+  if [[ -n "${ga4_error}" ]]; then
+    warning "Google Analytics report failed"
+    console "${ga4_error}"
+    return 1
+  fi
+
+  ga4_row_count="$(
+    printf '%s\n' "${ga4_payload}" |
+      get_json_value rowCount 1 |
+      tr -d '[:space:]'
+  )"
+
+  if [[ -z "${ga4_row_count}" ]]; then
+    ga4_row_count="0"
+  fi
+
+  return 0
+}
+
+###############################################################################
+# ga4_over_time()
+#   Collect GA4 metric data over a period of time and generate chart files.
+#
+# Arguments:
+#   [metric]    GA4 metric to retrieve, such as screenPageViews.
+#   [days]      Number of days to retrieve. Defaults to 7.
+#
+# Examples:
+#   ga4_over_time "screenPageViews" 7
+#
+# Returns:
+#   Creates CSV, PNG, and SVG files in stat_dir.
+###############################################################################
+ga4_over_time() {
+  local metric="${1:-}"
+  local days="${2:-7}"
+  local start_date="${days}daysAgo"
+  local -a ga4_values=()
+  local ga4_date
+  local ga4_value
+  local chart_date
+  local max_value="0"
+  local value_percent="0"
+  local total="0"
+  local i
+
+  if [[ -z "${PROFILE_ID}" ]] || [[ -z "${gnuplot_cmd}" ]]; then
+    return
+  fi
+
+  if [[ -z "${metric}" ]]; then
+    warning "Google Analytics metric is required"
+    return 1
+  fi
+
+  ga4_metric_map "${metric}"
+
+  if ! ga4_data \
+    "${GA4_API_METRIC}" \
+    "${start_date}" \
+    "yesterday" \
+    "date" \
+    "${GA4_FILTER_DIMENSION}" \
+    "${GA4_FILTER_VALUE}"; then
+    return 1
+  fi
+
+  if [[ "${ga4_row_count}" == "0" ]]; then
+    warning "Google Analytics returned no data"
+    return 1
+  fi
+
+  # Make sure the statistics directory exists.
+  if [[ ! -d "${stat_dir}" ]]; then
+    umask 077 && mkdir "${stat_dir}" &> /dev/null
+  fi
+
+  mapfile -t ga4_values < <(
+    printf '%s\n' "${ga4_payload}" |
+      get_json_value value
+  )
+
+  # Find the largest value so the third CSV column can retain the
+  # percentage value used by the old Analytics chart format.
+  for ((i=1; i<${#ga4_values[@]}; i+=2)); do
+    ga4_value="$(
+      printf '%s\n' "${ga4_values[$i]}" |
+        tr -d '[:space:]'
+    )"
+
+    [[ -z "${ga4_value}" ]] && ga4_value="0"
+
+    if awk -v value="${ga4_value}" -v max="${max_value}" \
+      'BEGIN { exit !(value > max) }'; then
+      max_value="${ga4_value}"
+    fi
+  done
+
+  # Flush the CSV file.
+  : > "${stat_dir}/${metric}.csv"
+
+  # GA4 returns one dimension value followed by one metric value.
+  for ((i=0; i<${#ga4_values[@]}; i+=2)); do
+    ga4_date="$(
+      printf '%s\n' "${ga4_values[$i]}" |
+        tr -d '[:space:]'
+    )"
+
+    ga4_value="$(
+      printf '%s\n' "${ga4_values[$((i + 1))]}" |
+        tr -d '[:space:]'
+    )"
+
+    [[ -z "${ga4_value}" ]] && ga4_value="0"
+
+    # Convert 20261005 to Sun, Mon, Tue, etc.
+    chart_date="$(date -d \
+      "${ga4_date:0:4}-${ga4_date:4:2}-${ga4_date:6:2}" '+%a')"
+
+    if awk -v max="${max_value}" 'BEGIN { exit !(max > 0) }'; then
+      value_percent="$(
+        awk -v value="${ga4_value}" -v max="${max_value}" \
+          'BEGIN {
+            pc = 100 * value / max
+            printf "%.0f", pc
+          }'
+      )"
+    else
+      value_percent="0"
+    fi
+
+    printf '%s, %s, %s\n' \
+      "${chart_date}" \
+      "${ga4_value}" \
+      "${value_percent}" \
+      >> "${stat_dir}/${metric}.csv"
+
+    total="$(
+      awk -v total="${total}" -v value="${ga4_value}" \
+        'BEGIN { print total + value }'
+    )"
+  done
+
+  # Preserve the old ga_<metric> total convention.
+  printf -v "ga_${metric}" '%s' "${total}"
+
+  METRIC="${metric}"
+
+  #   "${gnuplot_cmd}" -p >/dev/null 2>&1 << EOF
+  "${gnuplot_cmd}" -p >/dev/null << EOF
+    set encoding utf8
+    primary = "${CHART_COLOR}"
+    secondary = "${SECONDARY_COLOR}"
+    info = "${INFO_COLOR}"
+    default = "${DEFAULT_COLOR}"
+
+    set key off
+    set datafile separator ","
+    set boxwidth 0.5
+    set style fill transparent solid 0.1 noborder
+    set samples 1000
+
+    set style line 100 lt 1 lc rgb secondary lw 1
+    set style line 101 lt 0.5 lc rgb secondary lw 1
+    set grid mytics ytics ls 100, ls 101
+    set grid mxtics xtics ls 100, ls 101
+
+    set style line 11 lc rgb default lt 1 lw 3
+    set border 3 back ls 11
+    set tics out nomirror
+
+    # PNG
+    set terminal png enhanced size 1280,600
+    set output '${stat_dir}/${metric}.png'
+
+    plot '${stat_dir}/${metric}.csv' \
+      using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info, \
+      '' using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 2
+
+    # SVG
+    set terminal svg dynamic enhanced size 1280,600
+    set output '${stat_dir}/${metric}.svg'
+
+    plot '${stat_dir}/${metric}.csv' \
+      using 2:xtic(1) smooth bezier with lines lw 2 lc rgb info, \
+      '' using 2:xtic(1) with linespoints lw 3 lc rgb primary pointtype 7 pointsize 2
+EOF
+
+  return 0
+}
+
+###############################################################################
+# ga4_test()
+#   Test GA4 authentication, generate engagement charts, and render the
+#   engagement statistics page.
+###############################################################################
+ga4_test() {
+  local -a ga4_values=()
+  local ga4_date
+  local ga4_views
+  local metric
+  local i
+
+  if [[ -z "${CLIENT_ID}" ]] ||
+     [[ -z "${CLIENT_SECRET}" ]] ||
+     [[ -z "${REFRESH_TOKEN}" ]] ||
+     [[ -z "${PROFILE_ID}" ]]; then
+    warning "Google Analytics is not configured"
+    console "CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN, and PROFILE_ID are required."
+    return 1
+  fi
+
+  notice "Refreshing Google Analytics access token..."
+
+  if ! ga_refresh_token; then
+    return 1
+  fi
+
+  notice "Running 7 day GA4 report..."
+
+  if ! ga4_data "screenPageViews" "7daysAgo" "yesterday" "date"; then
+    return 1
+  fi
+
+  if [[ "${ga4_row_count}" == "0" ]]; then
+    warning "Google Analytics returned no data"
+    return 1
+  fi
+
+  mapfile -t ga4_values < <(
+    printf '%s\n' "${ga4_payload}" |
+      get_json_value value
+  )
+
+  for ((i=0; i<${#ga4_values[@]}; i+=2)); do
+    ga4_date="$(
+      printf '%s\n' "${ga4_values[$i]}" |
+        tr -d '[:space:]'
+    )"
+
+    ga4_views="$(
+      printf '%s\n' "${ga4_values[$((i + 1))]}" |
+        tr -d '[:space:]'
+    )"
+
+    console "${ga4_date}: ${ga4_views} pageviews"
+  done
+
+  notice "Generating GA4 engagement charts..."
+
+  for metric in pageviews users newUsers sessions organicSearches; do
+    if ! ga4_over_time "${metric}" 7; then
+      warning "Unable to generate ${metric} chart"
+      return 1
+    fi
+
+    if [[ ! -s "${stat_dir}/${metric}.png" ]] ||
+       [[ ! -s "${stat_dir}/${metric}.svg" ]]; then
+      warning "${metric} chart was not generated"
+      return 1
+    fi
+
+    console "${metric} chart generated"
+  done
+
+  notice "Rendering engagement page..."
+
+  # Make sure the statistics directory exists.
+  if [[ ! -d "${stat_dir}" ]]; then
+    umask 077 && mkdir "${stat_dir}"
+  fi
+
+  # Copy the assets normally prepared by project_stats().
+  cp -R "${stir_path}/html/${HTML_TEMPLATE}/stats/css" "${stat_dir}/"
+  cp -R "${stir_path}/html/${HTML_TEMPLATE}/stats/fonts" "${stat_dir}/"
+  cp -R "${stir_path}/html/${HTML_TEMPLATE}/stats/js" "${stat_dir}/"
+
+  # Populate dashboard navigation values used by the template.
+  assign_nav
+
+  # Render the engagement template.
+  cat "${stir_path}/html/${HTML_TEMPLATE}/stats/engagement.html" > "${html_file}"
+  process_html
+  cat "${html_file}" > "${stat_dir}/engagement.html"
+
+  if [[ ! -s "${stat_dir}/engagement.html" ]]; then
+    warning "Engagement page was not generated"
+    return 1
+  fi
+
+  console "Engagement page generated"
+  console "${stat_dir}/engagement.html"
+  notice "GA4 test complete"
+}

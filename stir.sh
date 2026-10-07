@@ -159,7 +159,7 @@ log_fail() {
 # Trap ctrl-c exits; someday I'll do this better 
 trap ctrl_c INT
 
-# Function to try and cleanup after a user exit, even when external function
+# Function to try and clean up after a user exit, even when external function
 # libraries may not be loaded
 ctrl_c() {
   if type quiet_exit &>/dev/null; then
@@ -576,6 +576,9 @@ if [[ -n "${integration_email}" ]]; then
   fi
 fi
 
+# Use the default HTML template if none is configured
+HTML_TEMPLATE="${HTML_TEMPLATE:-default}"
+
 # Load HTML theme configuration
 if [[ -f "${stir_path}/html/${HTML_TEMPLATE}/theme.conf" ]]; then
   # shellcheck disable=1090
@@ -583,7 +586,7 @@ if [[ -f "${stir_path}/html/${HTML_TEMPLATE}/theme.conf" ]]; then
 
   # Lowercase dashboard class is better form
   if [[ -n "${THEME_MODE}" ]]; then
-    THEME_MODE="$(echo ${THEME_MODE} | awk '{print tolower($0)}')"
+    THEME_MODE="$(echo "${THEME_MODE}" | awk '{print tolower($0)}')"
   fi
 fi
 

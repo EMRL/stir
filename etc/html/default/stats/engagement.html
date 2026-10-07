@@ -35,13 +35,16 @@
                     {{PROJECT_NAME}}
                 </a>
             </div>
+
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-                            My EMRL Stuff <span class="caret"></span></a>
+                            My EMRL Stuff <span class="caret"></span>
+                        </a>
                         <ul id="g-account-menu" class="dropdown-menu" role="menu">
-                            <!--[RSS_URL]--><li><a data-toggle="modal" href="#workModal">My Work</a></li>
+                            <!--[RSS_URL]-->
+                            <li><a data-toggle="modal" href="#workModal">My Work</a></li>
                             <li><a href="//cloud.emrl.com">My Files</a></li>
                             <li><a href="//invoice.emrl.com/client/login">My Invoices</a></li>
                             <!--li><a href="#">Help</a></li-->
@@ -55,27 +58,71 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-2">
-                <strong><i class="glyphicon glyphicon-wrench"></i><span style="padding-left: 10px;">Reports</span></strong>
+                <strong>
+                    <i class="glyphicon glyphicon-wrench"></i>
+                    <span style="padding-left: 10px;">Reports</span>
+                </strong>
+
                 <hr>
+
                 <ul class="nav nav-pills nav-stacked">
                     <li class="nav-header"></li>
-                    <li><a href="{{ENGAGEMENT_NAV}}"><i class="glyphicon glyphicon-stats"></i><span>Traffic</span></a></li>
-                    <li><a href="{{ACTIVITY_NAV}}"><i class="glyphicon glyphicon-transfer"></i><span>Code</span></a></li>
-                    <li><a href="{{STATISTICS_NAV}}"><i class="glyphicon glyphicon-flash"></i><span>Statistics</span></a></li>
-                    <li><a href="{{SCAN_NAV}}"><i class="glyphicon glyphicon-heart"></i><span>Health</span></a></li>
-                    <li><a href="{{FIREWALL_NAV}}"><i class="glyphicon glyphicon-lock"></i><span>Security</span></a></li>
-                    <li><a href="{{BACKUP_NAV}}"><i class="glyphicon glyphicon-cloud-upload"></i><span>Backup</span></a></li>
+                    <li>
+                        <a href="{{ENGAGEMENT_NAV}}">
+                            <i class="glyphicon glyphicon-stats"></i>
+                            <span>Traffic</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ACTIVITY_NAV}}">
+                            <i class="glyphicon glyphicon-transfer"></i>
+                            <span>Code</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{STATISTICS_NAV}}">
+                            <i class="glyphicon glyphicon-flash"></i>
+                            <span>Statistics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{SCAN_NAV}}">
+                            <i class="glyphicon glyphicon-heart"></i>
+                            <span>Health</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{FIREWALL_NAV}}">
+                            <i class="glyphicon glyphicon-lock"></i>
+                            <span>Security</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{BACKUP_NAV}}">
+                            <i class="glyphicon glyphicon-cloud-upload"></i>
+                            <span>Backup</span>
+                        </a>
+                    </li>
                 </ul>
-                <!--hr>
+
+                <!--
+                <hr>
                 <ul class="nav nav-stacked">
-                    <li class="nav-header"> <a href="#" data-toggle="collapse" data-target="#menu2"> Help &amp; Support <i class="glyphicon glyphicon-chevron-right"></i></a>
+                    <li class="nav-header">
+                        <a href="#" data-toggle="collapse" data-target="#menu2">
+                            Help &amp; Support
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </a>
+
                         <ul class="nav nav-stacked collapse" id="menu2">
                             <li><a href="#">Transparency Mission</a></li>
                             <li><a href="#">About Active Maintenance</a></li>
                             <li><a href="#">Schedule</a></li>
                         </ul>
                     </li>
-                </ul-->
+                </ul>
+                -->
+
                 <p>&nbsp;</p>
             </div>
 
@@ -83,82 +130,122 @@
                 <ul class="list-inline pull-right">
                     <li><small>Updated {{NOW}}</small></li>
                 </ul>
-                <strong><i class="glyphicon glyphicon-stats"></i><span style="padding-left: 10px;"><a href="./">My Dashboard</a> &gt; Site Traffic</span></a></strong>
+
+                <strong>
+                    <i class="glyphicon glyphicon-stats"></i>
+                    <span style="padding-left: 10px;">
+                        <a href="./">My Dashboard</a> &gt; Site Traffic
+                    </span>
+                </strong>
+
                 <hr>
+
                 <div class="row">
                     <div class="col-md-8">
 
                         <div class="panel panel-default panel-light">
                             <div class="panel-heading">
                                 <div class="panel-title" style="overflow: hidden; text-overflow: ellipsis;">
-                                    <h4>{{GA_HITS}} pageviews <small>(Last {{ENGAGEMENT_DAYS}} days)</small></h4>
+                                    <h4>
+                                        {{ga_pageviews}} pageviews
+                                        <small>(Last {{ENGAGEMENT_DAYS}} days)</small>
+                                    </h4>
                                 </div>
                             </div>
+
                             <div class="panel-body text-center">
                                 <object data="pageviews.svg" type="image/svg+xml"></object>
                             </div>
-                            <p class="text-center"><small>The total number of pageviews across the entire site.</small></p>
-                        </div>
-                        <hr>
-                       <!--div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="panel-title" style="overflow: hidden; text-overflow: ellipsis;">
-                                    <h4>Pageviews (Last {{ENGAGEMENT_DAYS}} days)</h4>
-                                </div>
-                            </div>
-                            <div class="panel-body text-center">
-                                <object data="hits.svg" type="image/svg+xml"></object>
-                            </div>
-                            <p class="text-center"><small>The total number of times a user has viewed an entire page including all text, images, etc.</small></p>
-                        </div-->
 
-                       <div class="panel panel-default panel-light">
+                            <p class="text-center">
+                                <small>The total number of pageviews across the entire site.</small>
+                            </p>
+                        </div>
+
+                        <hr>
+
+                        <div class="panel panel-default panel-light">
                             <div class="panel-heading">
                                 <div class="panel-title" style="overflow: hidden; text-overflow: ellipsis;">
-                                    <h4>{{ga_organicSearches}} organic searches <small>(Last {{ENGAGEMENT_DAYS}} days)</small></h4>
+                                    <h4>
+                                        {{ga_organicSearches}} organic search sessions
+                                        <small>(Last {{ENGAGEMENT_DAYS}} days)</small>
+                                    </h4>
                                 </div>
                             </div>
+
                             <div class="panel-body text-center">
                                 <object data="organicSearches.svg" type="image/svg+xml"></object>
                             </div>
-                            <p class="text-center"><small>The number of organic searches that helped visitors find your website. This metric is search engine&nbsp;agnostic.</small></p>
+
+                            <p class="text-center">
+                                <small>The number of sessions that reached your website through organic search.</small>
+                            </p>
                         </div>
+
                         <hr>
+
                         <div class="panel panel-default panel-light">
                             <div class="panel-heading">
                                 <div class="panel-title" style="overflow: hidden; text-overflow: ellipsis;">
-                                    <h4>{{ga_users}} unique visitors <small>(Last {{ENGAGEMENT_DAYS}} days)</small></h4>
+                                    <h4>
+                                        {{ga_users}} active users
+                                        <small>(Last {{ENGAGEMENT_DAYS}} days)</small>
+                                    </h4>
                                 </div>
                             </div>
+
                             <div class="panel-body text-center">
                                 <object data="users.svg" type="image/svg+xml"></object>
                             </div>
-                            <p class="text-center"><small>The total number of users over the last 7&nbsp;days.</small></p>
+
+                            <p class="text-center">
+                                <small>The number of distinct users who actively engaged with your website.</small>
+                            </p>
                         </div>
+
                         <hr>
+
                         <div class="panel panel-default panel-light">
                             <div class="panel-heading">
                                 <div class="panel-title" style="overflow: hidden; text-overflow: ellipsis;">
-                                    <h4>{{ga_newUsers}} new users <small>(Last {{ENGAGEMENT_DAYS}} days)</small></h4>
+                                    <h4>
+                                        {{ga_newUsers}} new users
+                                        <small>(Last {{ENGAGEMENT_DAYS}} days)</small>
+                                    </h4>
                                 </div>
                             </div>
+
                             <div class="panel-body text-center">
                                 <object data="newUsers.svg" type="image/svg+xml"></object>
                             </div>
-                            <p class="text-center"><small>The number of sessions marked as a user's first&nbsp;visit.</small></p>
+
+                            <p class="text-center">
+                                <small>The number of users who interacted with your website for the first time.</small>
+                            </p>
                         </div>
+
                         <hr>
+
                         <div class="panel panel-default panel-light">
                             <div class="panel-heading">
                                 <div class="panel-title" style="overflow: hidden; text-overflow: ellipsis;">
-                                    <h4>{{ga_sessions}} sessions <small>(Last {{ENGAGEMENT_DAYS}} days)</small></h4>
+                                    <h4>
+                                        {{ga_sessions}} sessions
+                                        <small>(Last {{ENGAGEMENT_DAYS}} days)</small>
+                                    </h4>
                                 </div>
                             </div>
+
                             <div class="panel-body text-center">
                                 <object data="sessions.svg" type="image/svg+xml"></object>
                             </div>
-                            <p class="text-center"><small>The total number of sessions, defined as a group of interactions one user takes within a single&nbsp;visit.</small></p>
+
+                            <p class="text-center">
+                                <small>The total number of sessions, defined as a group of interactions one user takes within a single visit.</small>
+                            </p>
                         </div>
+
                     </div>
 
                     <div class="col-md-4">
@@ -168,24 +255,30 @@
                                     <h4>About these charts</h4>
                                 </div>
                             </div>
+
                             <div class="panel-body">
                                 <p>
-                                    This data is collected using <a href="https://analytics.google.com">Google Analytics</a>.
+                                    This data is collected using
+                                    <a href="https://analytics.google.com">Google Analytics</a>.
                                 </p>
+
                                 <p>
-                                    There is <strong><em>much</em></strong> more detailed data available; if you would like to see more comprehensive reports we can set you up easy. <a href="mailto:support@emrl.com">Drop us an email</a> or let us know using the live support chat on this page.
+                                    There is <strong><em>much</em></strong> more detailed data available; if you would like to see more comprehensive reports we can set you up easy.
+                                    <a href="mailto:support@emrl.com">Drop us an email</a>
+                                    or let us know using the live support chat on this page.
                                 </p>
                             </div>
                         </div>
-                    </div> 
-                </div>  
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <footer class="text-center"></footer>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/scripts.js"></script>
-    </body>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
+</body>
 </html>

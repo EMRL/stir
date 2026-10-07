@@ -154,10 +154,20 @@ strip_empty_variables() {
 #   VARIABLE="$(cat tmpfile.txt | get_json_value id 7)"
 ############################################################################### 
 get_json_value() {
-  if [[ -n ${1} ]]; then
-      json_key="${1}"
-      json_num="${2}"
-      awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'${json_key}'\042/){print $(i+1)}}}' | tr -d '"' | sed -n "${json_num}"p
+  if [[ -n "${1:-}" ]]; then
+    json_key="${1}"
+    json_num="${2:-}"
+
+    if [[ -n "${json_num}" ]]; then
+      awk -F"[,:}]" \
+        '{for(i=1;i<=NF;i++){if($i~/'"${json_key}"'\042/){print $(i+1)}}}' |
+        tr -d '"' |
+        sed -n "${json_num}p"
+    else
+      awk -F"[,:}]" \
+        '{for(i=1;i<=NF;i++){if($i~/'"${json_key}"'\042/){print $(i+1)}}}' |
+        tr -d '"'
+    fi
   fi
 }
 
