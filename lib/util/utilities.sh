@@ -99,14 +99,6 @@ go() {
   fi
 }
 
-# Check that a variable is an integer
-is_integer() {
-  declare arg1="${1}"; integer_check="0"
-  if [[ ! "${arg1}" =~ ^[0-9]+$ ]]; then
-    integer_check="1"
-  fi
-}
-
 get_full_path() {
   # Get absolute paths to critical commands
   var=(cal composer curl git gitchart gnuplot grep grunt mysqlshow npm scp 
@@ -137,77 +129,6 @@ get_full_path() {
 ###############################################################################
 strip_empty_variables() {
   sudo sed -i 's^{{.*}}^^g' "${1}"
-}
-
-###############################################################################
-# get_json_value()
-#   Get a value (or values) from a json file
-#
-# Arguments:
-#   [key]         The JSON key whose value you are after
-#   [occurance]   Get the value of the nth occurance of the key
-#
-# Example use:
-#   get_json_value name
-#   get_json_value name 30
-#   cat tmpfile.txt | get_json_value id
-#   VARIABLE="$(cat tmpfile.txt | get_json_value id 7)"
-############################################################################### 
-get_json_value() {
-  if [[ -n "${1:-}" ]]; then
-    json_key="${1}"
-    json_num="${2:-}"
-
-    if [[ -n "${json_num}" ]]; then
-      awk -F"[,:}]" \
-        '{for(i=1;i<=NF;i++){if($i~/'"${json_key}"'\042/){print $(i+1)}}}' |
-        tr -d '"' |
-        sed -n "${json_num}p"
-    else
-      awk -F"[,:}]" \
-        '{for(i=1;i<=NF;i++){if($i~/'"${json_key}"'\042/){print $(i+1)}}}' |
-        tr -d '"'
-    fi
-  fi
-}
-
-
-###############################################################################
-# clean_path()
-#   Strip extra forward slashes in URL or path directory values
-#
-# Arguments:
-#   [path]         Input path or URL   
-#
-# Returns:
-#   ${clean_path}  The post-precessed URL
-#
-# Example use:
-#   clean_path path
-############################################################################### 
-clean_path() {
-  if [[ -n "${1}" ]]; then
-    declare arg1="${1}"
-    cleaned_path="$(echo ${arg1} | tr -s /)"
-    # "${2}"=$(sed -i "s^//^/^g" "${1}")
-    cleaned_path="$(echo ${cleaned_path} | sed -e 's#:/#://#g')"
-  fi 
-}
-
-###############################################################################
-# clean_date()
-#   Format string containing default date format to be more readable 
-#
-# Arguments:
-#   [date]        Date string  
-#
-# Example use:
-#   clean_date 2021-10-29
-############################################################################### 
-clean_date() {
-  if [[ -n "${1}" ]]; then
-    cleaned_date="$(date -d ${1} +'%B %d, %Y')"
-  fi
 }
 
 ###############################################################################

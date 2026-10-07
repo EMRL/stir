@@ -23,11 +23,11 @@ fi
 #
 # Arguments:
 #   status      Will place the next trace output on the same line, e.g.
-#               [trace 1]Checking database... [trace 2]OK will render 
+#               [trace 1]Checking database... [trace 2]OK will render
 #               Checking database... OK in the logs
-#   notime      Output trace with no timestamp, generally used after a 
-#               `trace status "blahblah"`  
-###############################################################################      
+#   notime      Output trace with no timestamp, generally used after a
+#               `trace status "blahblah"`
+###############################################################################
 trace() {
   if [[ "${VERBOSE}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then
     TIMESTAMP="$(date '+%H:%M:%S')"
@@ -53,27 +53,32 @@ trace() {
   fi
 }
 
-# Source everything in /lib
+# Find the /lib directory
 SOURCE="${BASH_SOURCE[0]}"
-while [[ -h "${SOURCE}" ]]; do 
-  DIR="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
+
+while [[ -h "${SOURCE}" ]]; do
+  DIR="$(cd -P "$(dirname "${SOURCE}")" && pwd)"
   SOURCE="$(readlink "${SOURCE}")"
   [[ "${SOURCE}" != /* ]] && SOURCE="${DIR}/${SOURCE}"
 done
 
-SOURCEPATH="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
+SOURCEPATH="$(cd -P "$(dirname "${SOURCE}")" && pwd)"
 
 if [[ ! -d "${SOURCEPATH}" ]]; then
-  echo "Failed to find library files expected in: ${SOURCEPATH}"; exit 1
+  echo "Failed to find library files expected in: ${SOURCEPATH}"
+  exit 1
 fi
-for LIBRARIES in "${SOURCEPATH}"/*.sh
-do
-  if [[ -e "${LIBRARIES}" ]]; then
-    # Don't source yourself, silly script
-    if [[ "${LIBRARIES}" == *"loader.sh"* ]]; then
-      continue
-    fi
-    # shellcheck disable=1090
-    source "${LIBRARIES}"
+
+# Source everything in /lib recursively
+while IFS= read -r -d '' library; do
+  # Don't source yourself, silly script
+  if [[ "${library}" == "${SOURCEPATH}/loader.sh" ]]; then
+    continue
   fi
-done
+
+  # shellcheck disable=SC1090
+  source "${library}"
+done < <(
+  find "${SOURCEPATH}" -type f -name '*.sh' -print0 |
+    sort -z
+)
