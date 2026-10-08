@@ -765,6 +765,71 @@ EOF
 }
 
 ###############################################################################
+# ga4_summary()
+#   Collect summary GA4 metrics used by the statistics overview page.
+###############################################################################
+ga4_summary() {
+  local active_users="0"
+  local new_users="0"
+
+  ENGAGEMENT_DAYS="${ENGAGEMENT_DAYS:-7}"
+
+  # Total pageviews
+  if ga4_data "screenPageViews" "${ENGAGEMENT_DAYS}daysAgo" "yesterday"; then
+    GA_HITS="$(
+      printf '%s\n' "${ga4_payload}" |
+        get_json_value value 1 |
+        tr -d '[:space:]'
+    )"
+  fi
+
+  # Active users
+  if ga4_data "activeUsers" "${ENGAGEMENT_DAYS}daysAgo" "yesterday"; then
+    active_users="$(
+      printf '%s\n' "${ga4_payload}" |
+        get_json_value value 1 |
+        tr -d '[:space:]'
+    )"
+  fi
+
+  # New users
+  if ga4_data "newUsers" "${ENGAGEMENT_DAYS}daysAgo" "yesterday"; then
+    new_users="$(
+      printf '%s\n' "${ga4_payload}" |
+        get_json_value value 1 |
+        tr -d '[:space:]'
+    )"
+  fi
+
+  # Percentage of users who were new
+  if [[ "${active_users}" != "0" ]]; then
+    GA_PERCENT="$(get_percent "${new_users}" "${active_users}")"
+  else
+    GA_PERCENT="0"
+  fi
+
+  # Organic search sessions
+  if ga4_data \
+    "sessions" \
+    "${ENGAGEMENT_DAYS}daysAgo" \
+    "yesterday" \
+    "" \
+    "sessionDefaultChannelGroup" \
+    "Organic Search"; then
+
+    GA_SEARCHES="$(
+      printf '%s\n' "${ga4_payload}" |
+        get_json_value value 1 |
+        tr -d '[:space:]'
+    )"
+  fi
+
+  GA_HITS="${GA_HITS:-0}"
+  GA_PERCENT="${GA_PERCENT:-0}"
+  GA_SEARCHES="${GA_SEARCHES:-0}"
+}
+
+###############################################################################
 # ga4_test()
 #   Test GA4 authentication, generate engagement charts, and render the
 #   engagement statistics page.

@@ -17,7 +17,6 @@
 # Returns:
 #   Rounded percentage as an integer
 ###############################################################################
-
 get_percent() {
   local total="${1:-}"
   local items="${2:-}"

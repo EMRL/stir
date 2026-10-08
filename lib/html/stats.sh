@@ -27,9 +27,6 @@ build_stats() {
   fi
   
   if [[ "${REMOTE_LOG}" == "TRUE" ]]; then
-  # Check for approval queue
-  queue_check
-
     # Setup up tmp work folder
     #if [[ ! -d "${stat_dir}" ]]; then
     #  umask 077 && mkdir "${stat_dir}" &> /dev/null
@@ -46,11 +43,11 @@ build_stats() {
     assign_nav
 
     # Collect gravatars for all the authors in this repo
-    get_avatars
+    prepare_author_avatars
 
     # Start building the main stat overview dashboard
     # Attempt to get analytics
-    analytics
+    ga4_summary
 
     # Code stats
     CODE_STATS=$(git log --author="${full_user}" --pretty=tformat: --numstat | \
@@ -68,15 +65,18 @@ build_stats() {
     cat "${html_file}" > "${stat_dir}/index.html"
 
     # Create SVG charts
-    # Spinners commented out for now, causing issues when running from a crontab
     repo_charts=(authors commits_day_week commits_hour_day commits_hour_week \
       commits_month commits_year commits_year_month files_type)
-    for i in "${repo_charts[@]}" ; do
-      "${gitchart_cmd}" -r "${WORK_PATH}/${APP}" "${i}" "${stat_dir}/${i}.svg" &>> /dev/null
-      sed -i "s/#9999ff/${CHART_COLOR}/g" "${stat_dir}/${i}.svg" 
-      sed -i 's/Consolas,"Liberation Mono",Menlo,Courier,monospace/Roboto, Helvetica, Arial, sans-serif/g' "${stat_dir}/${i}.svg"
-    done #&
-    #spinner $!
+
+      for i in "${repo_charts[@]}" ; do
+        "${gitchart_cmd}" -r "${WORK_PATH}/${APP}" "${i}" \
+          "${stat_dir}/${i}.svg" &>> /dev/null
+
+        sed -i "s/#4444ff/${CHART_COLOR}/g" "${stat_dir}/${i}.svg"
+        sed -i \
+          's/Consolas, "Liberation Mono", Menlo, Courier, monospace/Roboto, Helvetica, Arial, sans-serif/g' \
+          "${stat_dir}/${i}.svg"
+      done
 
     # Create sub pages
     build_stats_activity #& spinner $!
