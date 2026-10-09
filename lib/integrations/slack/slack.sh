@@ -203,19 +203,56 @@ slack_post() {
 
 # Slack configuration test
 slack_test() {
+  local repo_url=""
+  local stats_url=""
+  local slack_links=""
+  local slack_message=""
+
   console "Testing Slack integration..."
-  echo "${SLACK_URL}"
 
   if [[ -z "${SLACK_URL}" ]]; then
     warning "No Slack configuration found."
     empty_line
     clean_up
     exit 1
-  else
-    "${curl_cmd}" -X POST \
-      --data "payload={\"text\": \"${slack_icon} Testing Slack integration of ${APP} from stir ${VERSION}\nhttps://github.com/EMRL/stir\"}" \
-      "${SLACK_URL}"
-
-    empty_line
   fi
+
+  # Get repository root from the configured Git host.
+  if [[ -n "${REPO_HOST}" ]] && [[ -n "${REPO}" ]]; then
+    repo_url="${REPO_HOST%/}/${REPO#/}"
+  fi
+
+  # Link to the repository.
+  if [[ -n "${repo_url}" ]]; then
+    slack_links="<${repo_url}|View repository>"
+  fi
+
+  # Link to published stats only if the page is accessible.
+  if [[ -n "${REMOTE_URL}" ]] && [[ -n "${APP}" ]]; then
+    stats_url="${REMOTE_URL%/}/${APP}/stats/"
+
+    if "${curl_cmd}" --silent --location --head \
+      --max-time 5 --fail \
+      "${stats_url}" > /dev/null; then
+      if [[ -n "${slack_links}" ]]; then
+        slack_links="${slack_links} · "
+      fi
+
+      slack_links="${slack_links}<${stats_url}|View stats>"
+    fi
+  fi
+
+  # Build test notification.
+  slack_message="Testing Slack integration of *${APP}* from Stir ${VERSION}"
+
+  if [[ -n "${slack_links}" ]]; then
+    slack_message="${slack_message}\n${slack_links}"
+  fi
+
+  # Send test notification.
+  "${curl_cmd}" --silent --show-error \
+    --data-urlencode "payload={\"text\":\"${slack_message}\"}" \
+    "${SLACK_URL}"
+
+  empty_line
 }
