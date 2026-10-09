@@ -429,7 +429,6 @@ ga_refresh_token() {
 
   if [[ -n "${ACCESS_TOKEN}" ]]; then
     GA4_TOKEN_READY="1"
-    trace "Google Analytics access token refreshed"
     return 0
   fi
 
