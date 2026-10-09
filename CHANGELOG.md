@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Utility functions for percentage calculations, integer validation, path resolution, and dependency checks
 
 ### Changed
+- Updated Slack notifications to link to Stir execution logs with separate links to GitHub or Bitbucket commits
 - Improved statistics generation performance with caching for Git activity charts
 - Changed commit history links to point directly to GitHub or Bitbucket, eliminating unnecessary URL validation
 - Reorganized library files into subdirectories with recursive sourcing
