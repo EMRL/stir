@@ -41,7 +41,7 @@ render_html() {
     sed -i '/SKIPPING GIT/d' "${html_file}"
   fi
 
-  if [[ -z "${RESULT}" ]] || [[ "${RESULT}" == "0" ]] || [[ "${SIZE}" == "0" ]]; then
+  if [[ -z "${PROFILE_ID}" ]] || [[ -z "${GA_HITS}" ]]; then
     sed -i '/BEGIN ANALYTICS/,/END ANALYTICS/d' "${html_file}"
     sed -i '/ANALYTICS/d' "${html_file}"
   fi
