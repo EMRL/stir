@@ -67,7 +67,7 @@ server_monitor_log() {
   fi
 
   # Latency
-  LATENCY="$(grep -Po '"average_latency":.*?[^\\]",' ${trash_file})"
+  LATENCY="$(grep -Po '"average_latency":.*?[^\\]",' "${trash_file}")"
   LATENCY="$(cut -d ',' -f 1 <<< "${LATENCY}")"
   # Isolate the value we need
   LATENCY="$(sed 's/^[^:]*://g' <<< "${LATENCY}")"
@@ -75,17 +75,18 @@ server_monitor_log() {
   LATENCY="$(printf '%0.2f\n' "${LATENCY}")"
 
   # Set colors for html reports
-  if [[ "${UPTIME}" == "100" ]]; then
+  UPTIME_INT="$(awk -v uptime="${UPTIME}" 'BEGIN { printf "%.0f", uptime * 100 }')"
+
+  if [[ "${UPTIME_INT}" -ge 9700 ]]; then
     UPTIME_STATUS="${SUCCESS_COLOR}"; UPTIME_BTN="btn-success"
-  elif [[ "${UPTIME}" -gt "97" || "${UPTIME}" == "97" ]]; then
-    UPTIME_STATUS="${SUCCESS_COLOR}"; UPTIME_BTN="btn-success"
-  elif [[ "${UPTIME}" -gt "88" && "${UPTIME}" -lt "97" ]]; then
+  elif [[ "${UPTIME_INT}" -gt 8800 ]]; then
     UPTIME_STATUS="${WARNING_COLOR}"; UPTIME_BTN="btn-warning"
   else
     UPTIME_STATUS="${DANGER_COLOR}"; UPTIME_BTN="btn-danger"
   fi
 
   LATENCY_MS="$(awk -v latency="${LATENCY}" 'BEGIN { printf "%.0f", latency * 1000 }')"
+
   if [[ "${LATENCY_MS}" -le 2200 ]]; then
     LATENCY_STATUS="${SUCCESS_COLOR}"; LATENCY_BTN="btn-success"
   elif [[ "${LATENCY_MS}" -lt 3800 ]]; then

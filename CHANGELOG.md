@@ -3,12 +3,32 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
 ### Added
-- [OpenProject](http://openproject.com/) integration
-- Added CI test harness and Github Actions workflow 
+- [OpenProject](https://www.openproject.org/) integration for automated time tracking and work package activity updates
+- Google Analytics 4 integration with OAuth token refresh and reporting
+- GA4 engagement reports and updated analytics charts
+- Repository activity comparison charts with caching
+- CI test harness and GitHub Actions workflow
+- `AGENTS.md` and `STYLES.md` to document development standards
+- Utility functions for percentage calculations, integer validation, path resolution, and dependency checks
+
 ### Changed
-- Nikto scan configuration is now global as opposed to per-project
-- Default theme scan link temporaily changed to point to old "beta" report
+- Reorganized library files into subdirectories with recursive sourcing
+- Standardized Bash function names, variables, and formatting
+- Improved integration testing and command-line test functions
+- Updated reporting templates and chart configuration
+- Moved OpenProject time logging to the end of the post-commit process
+- Nikto scan configuration is now global rather than per-project
+- Default theme scan link temporarily points to the old beta report
+
+### Fixed
+- Decimal comparison errors in server monitoring uptime and latency checks
+- GA4 authentication and token refresh issues
+- Chart color configuration and SVG rendering issues
+- ShellCheck warnings and Bash compatibility issues
+- Version validation in CI to support three-part version numbers
+- Various reporting and template generation issues
 
 ## [3.8.6]
 ### Added
