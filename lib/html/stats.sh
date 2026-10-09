@@ -133,7 +133,6 @@ build_stats() {
    
     # Get commits
     get_commits 6
-    validate_urls "${stat_file}"
 
     # Process the HTML
     cat "${stir_path}/html/${HTML_TEMPLATE}/stats/index.html" > "${html_file}"
