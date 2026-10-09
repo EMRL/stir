@@ -14,6 +14,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Utility functions for percentage calculations, integer validation, path resolution, and dependency checks
 
 ### Changed
+- Improved statistics generation performance with caching for Git activity charts
+- Changed commit history links to point directly to GitHub or Bitbucket, eliminating unnecessary URL validation
 - Reorganized library files into subdirectories with recursive sourcing
 - Standardized Bash function names, variables, and formatting
 - Improved integration testing and command-line test functions

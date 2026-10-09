@@ -295,6 +295,58 @@ git_commit() {
   notes=$(<$trash_file)
 }
 
+# Return a URL prefix for browsing commits on the Git host.
+# Usage: git_get_commit_url
+git_get_commit_url() {
+  local remote_url
+  local repo_path
+  local host
+
+  remote_url="$(git remote get-url origin 2>/dev/null)" || return 1
+
+  # Convert common SSH remote formats to HTTPS.
+  case "${remote_url}" in
+    git@github.com:*)
+      remote_url="https://github.com/${remote_url#git@github.com:}"
+      ;;
+    git@bitbucket.org:*)
+      remote_url="https://bitbucket.org/${remote_url#git@bitbucket.org:}"
+      ;;
+    ssh://git@github.com/*)
+      remote_url="https://github.com/${remote_url#ssh://git@github.com/}"
+      ;;
+    ssh://git@bitbucket.org/*)
+      remote_url="https://bitbucket.org/${remote_url#ssh://git@bitbucket.org/}"
+      ;;
+  esac
+
+  # Remove optional .git suffix and trailing slash.
+  remote_url="${remote_url%/}"
+  remote_url="${remote_url%.git}"
+
+  case "${remote_url}" in
+    https://github.com/*)
+      host="github"
+      repo_path="${remote_url#https://github.com/}"
+      ;;
+    https://bitbucket.org/*)
+      host="bitbucket"
+      repo_path="${remote_url#https://bitbucket.org/}"
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+
+  [[ -n "${repo_path}" ]] || return 1
+
+  if [[ "${host}" == "github" ]]; then
+    printf '%s/commit/' "${remote_url}"
+  else
+    printf '%s/commits/' "${remote_url}"
+  fi
+}
+
 # Garbage collection
 git_gc() {
   if [[ "${GARBAGE}" = "TRUE" ]] && [[ "${QUIET}" != "1" ]]; then 
