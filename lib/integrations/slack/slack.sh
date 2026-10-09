@@ -6,7 +6,30 @@
 # Integration with Slack
 ###############################################################################
 
+# Return the preferred URL for the current commit.
+# Prefer Stir's execution log, falling back to the Git host.
+git_get_log_url() {
+  if [[ "${REMOTE_LOG}" == "TRUE" ]] &&
+    [[ -n "${REMOTE_URL}" ]] &&
+    [[ -n "${LOGURL}" ]]; then
+    printf '%s\n' "${LOGURL}"
+  elif [[ -n "${COMMITURL}" ]]; then
+    printf '%s\n' "${COMMITURL}"
+  else
+    return 1
+  fi
+}
+
 slack_post() {
+  local commit_target=""
+  local commit_link="${COMMITHASH}"
+  local slack_links=""
+
+  commit_target="$(git_get_log_url)" || commit_target=""
+
+  if [[ -n "${commit_target}" ]] && [[ -n "${COMMITHASH}" ]]; then
+    commit_link="<${commit_target}|${COMMITHASH}>"
+  fi
 
   # If running in --automate, change the user name
   if [[ "${AUTOMATE}" == "1" ]]; then
@@ -15,53 +38,55 @@ slack_post() {
     SLACKUSER="${USER}"
   fi
 
-  # If using --current, use the REPO value instead of the APP (current directory)
+  # If using --current, use the REPO value instead of the APP
   if [[ "${CURRENT}" == "1" ]]; then
     APP="${REPO}"
   fi
 
-  # Setup the payload w/ the baseline language
+  # Setup the payload with the baseline language
   slack_message="*${SLACKUSER}* (${DEV}) pushed updates to ${APP}"
 
   # Is this a simple publish of existing code to live?
   if [[ "${PUBLISH}" == "1" ]]; then
     if [[ -z "${PROD_URL}" ]]; then
-      slack_message="*${SLACKUSER}* (${DEV}) published commit <${COMMITURL}|${COMMITHASH}> to ${APP}"
+      slack_message="*${SLACKUSER}* (${DEV}) published commit ${commit_link} to ${APP}"
     else
-      slack_message="*${SLACKUSER}* (${DEV}) published commit <${COMMITURL}|${COMMITHASH}> to <${PROD_URL}|${APP}>"
+      slack_message="*${SLACKUSER}* (${DEV}) published commit ${commit_link} to <${PROD_URL}|${APP}>"
     fi
-  fi  
+  fi
 
   # Does this need approval?
-  if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
+  if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] &&
+    [[ "${APPROVE}" != "1" ]] &&
+    [[ "${DENY}" != "1" ]] &&
+    [[ "${DIGEST}" != "1" ]]; then
     slack_message="*${SLACKUSER}* queued updates to <${DEV_URL}|${APP}> for approval"
   fi
 
   # Is this being approved?
   if [[ "${APPROVE}" == "1" ]]; then
     if [[ -z "${PROD_URL}" ]]; then
-      slack_message="*${SLACKUSER}* approved updates <${COMMITURL}|${COMMITHASH}> and deployed to ${APP}"
+      slack_message="*${SLACKUSER}* approved updates ${commit_link} and deployed to ${APP}"
     else
-      slack_message="*${SLACKUSER}* approved updates <${COMMITURL}|${COMMITHASH}> and deployed to <${PROD_URL}|${APP}>"
+      slack_message="*${SLACKUSER}* approved updates ${commit_link} and deployed to <${PROD_URL}|${APP}>"
     fi
-  fi      
+  fi
 
-  # This is broken
-  # if [[ "${PUBLISH}" != "1" ]] && [[ "${AUTOMATE}" != "1" ]] && [[ -n "${notes}" ]] && [[ "${APPROVE}" != "1" ]]; then
-
-  # If there's a commit, AND there are notes/commit message. spam this
+  # Include the commit message when available
   if [[ -n "${notes}" ]] && [[ -n "${COMMITHASH}" ]]; then
     # Is this a queue for approval?
-    if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
+    if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] &&
+      [[ "${APPROVE}" != "1" ]] &&
+      [[ "${DENY}" != "1" ]]; then
       slack_message="${slack_message}\nProposed commit message: ${notes}"
     else
-      slack_message="${slack_message}\n<${COMMITURL}|${COMMITHASH}>: ${notes}"
+      slack_message="${slack_message}\n${commit_link}: ${notes}"
     fi
   fi
 
   # Has there been an error?
   if [[ "${message_state}" == "ERROR" ]]; then
-    if [ -z "${notes}" ]; then
+    if [[ -z "${notes}" ]]; then
       notes="Something went wrong."
     fi
     slack_message="*${SLACKUSER}* (${DEV}) attempted to make changes to ${APP}\nERROR: ${error_msg}"
@@ -75,50 +100,77 @@ slack_post() {
   # Create a payload for invoices
   if [[ "${CREATE_INVOICE}" == "1" ]]; then
     message_state="NOTICE"
-    # Does a production URL exit?
-    if [[ -n "${PROD_URL}" ]]; then 
+
+    if [[ -n "${PROD_URL}" ]]; then
       slack_message="${IN_NOTES} invoice (#${current_invoice}) created for <${PROD_URL}|${PROJECT_NAME}>"
-    else 
-      slack_message="${IN_NOTES} invoice (#${current_invoice}) created for *${PROJECT_NAME}*"               
-    fi    
+    else
+      slack_message="${IN_NOTES} invoice (#${current_invoice}) created for *${PROJECT_NAME}*"
+    fi
   fi
 
-  # Add a details link to online log_files if they exist
-  if [[ -n "${REMOTE_URL}" ]] && [[ -n "${REMOTE_LOG}" ]] && [[ "${CREATE_INVOICE}" != "1" ]] && [[ -n "${LOGURL}" ]]; then
-    slack_message="${slack_message} (<${LOGURL}|Details>)"
+  # Add execution log and commit links for regular notifications
+  if [[ "${CREATE_INVOICE}" != "1" ]] &&
+    [[ "${REPORT}" != "1" ]] &&
+    [[ "${DIGEST}" != "1" ]] &&
+    [[ "${SCAN}" != "1" ]]; then
+
+    # Link to Stir's execution log
+    if [[ "${REMOTE_LOG}" == "TRUE" ]] &&
+      [[ -n "${REMOTE_URL}" ]] &&
+      [[ -n "${LOGURL}" ]]; then
+      slack_links="<${LOGURL}|Execution log>"
+    fi
+
+    # Link directly to GitHub or Bitbucket
+    if [[ -n "${COMMITURL}" ]] && [[ -n "${COMMITHASH}" ]]; then
+      if [[ -n "${slack_links}" ]]; then
+        slack_links="${slack_links} · <${COMMITURL}|View commit>"
+      else
+        slack_links="<${COMMITURL}|View commit>"
+      fi
+    fi
+
+    if [[ -n "${slack_links}" ]]; then
+      slack_message="${slack_message}\n${slack_links}"
+    fi
   fi
 
   # Create payload for reports
-  if [[ "${REPORT}" == "1" ]] || [[ "${CREATE_INVOICE}" == "1" && "${}" ]]; then
-    if [[ -n "${PROD_URL}" ]]; then 
+  if [[ "${REPORT}" == "1" ]]; then
+    if [[ -n "${PROD_URL}" ]]; then
       slack_message="Monthly report for <${PROD_URL}|${PROJECT_NAME}> created (<${REPORTURL}|View>)"
     else
-      slack_message="Monthly report for *${PROJECT_NAME}* created (<${REPORTURL}|View>)"               
+      slack_message="Monthly report for *${PROJECT_NAME}* created (<${REPORTURL}|View>)"
     fi
   fi
 
   # Create payload for digests
-  if [[ "${DIGEST}" == "1" ]] && [[ -n "${DIGESTURL}" ]] && [[ -n "${GREETING}" ]]; then
-    if [[ -n "${DIGEST_SLACK}" ]] && [[ "${DIGEST_SLACK}" != "FALSE" ]]; then
+  if [[ "${DIGEST}" == "1" ]] &&
+    [[ -n "${DIGESTURL}" ]] &&
+    [[ -n "${GREETING}" ]]; then
+
+    if [[ -n "${DIGEST_SLACK}" ]] &&
+      [[ "${DIGEST_SLACK}" != "FALSE" ]]; then
+
       message_state="DIGEST"
+
       if [[ "${DIGEST_SLACK}" == *"slack"* ]]; then
         SLACK_URL="${DIGEST_SLACK}"
       fi
-      # Does a production URL exit?
-      if [[ -n "${PROD_URL}" ]]; then 
+
+      if [[ -n "${PROD_URL}" ]]; then
         slack_message="<${PROD_URL}|${PROJECT_NAME}> updates for the week of ${WEEKOF} (<${DIGESTURL}|View>)"
       else
-        slack_message="*${PROJECT_NAME}* updates for the week of ${WEEKOF} (<${DIGESTURL}|View>)"               
+        slack_message="*${PROJECT_NAME}* updates for the week of ${WEEKOF} (<${DIGESTURL}|View>)"
       fi
-        else
+    else
       return
     fi
   fi
 
-  # Arf I hate this
+  # Scan notifications are currently disabled
   if [[ "${SCAN}" == "1" ]]; then
-    return # This is temporary
-    # slack_message="${notes} (<${LOGURL}|Details>)"
+    return
   fi
 
   # Set icon for message state
@@ -141,7 +193,11 @@ slack_post() {
   if [[ "${DIGEST}" == "1" ]] && [[ -z "${GREETING}" ]]; then
     trace "No activity found, canceling digest."
   else
-    "${curl_cmd}" -X POST --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" "${SLACK_URL}" > /dev/null 2>&1; error_status
+    "${curl_cmd}" -X POST \
+      --data "payload={\"text\": \"${slack_icon} ${slack_message}\"}" \
+      "${SLACK_URL}" > /dev/null 2>&1
+
+    error_status
   fi
 }
 
@@ -149,11 +205,17 @@ slack_post() {
 slack_test() {
   console "Testing Slack integration..."
   echo "${SLACK_URL}"
+
   if [[ -z "${SLACK_URL}" ]]; then
-    warning "No Slack configuration found."; empty_line
-    clean_up; exit 1
+    warning "No Slack configuration found."
+    empty_line
+    clean_up
+    exit 1
   else
-    "${curl_cmd}" -X POST --data "payload={\"text\": \"${slack_icon} Testing Slack integration of ${APP} from stir ${VERSION}\nhttps://github.com/EMRL/stir\"}" "${SLACK_URL}"
+    "${curl_cmd}" -X POST \
+      --data "payload={\"text\": \"${slack_icon} Testing Slack integration of ${APP} from stir ${VERSION}\nhttps://github.com/EMRL/stir\"}" \
+      "${SLACK_URL}"
+
     empty_line
   fi
 }
