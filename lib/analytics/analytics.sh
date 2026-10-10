@@ -638,7 +638,7 @@ ga4_data() {
 #   Collect summary GA4 metrics used by the statistics overview page.
 ###############################################################################
 ga4_summary() {
-  local active_users="0"
+  local total_users="0"
   local new_users="0"
 
   ENGAGEMENT_DAYS="${ENGAGEMENT_DAYS:-7}"
@@ -652,9 +652,9 @@ ga4_summary() {
     )"
   fi
 
-  # Active users
-  if ga4_data "activeUsers" "${ENGAGEMENT_DAYS}daysAgo" "yesterday"; then
-    active_users="$(
+  # Total users
+  if ga4_data "totalUsers" "${ENGAGEMENT_DAYS}daysAgo" "yesterday"; then
+    total_users="$(
       printf '%s\n' "${ga4_payload}" |
         get_json_value value 1 |
         tr -d '[:space:]'
@@ -671,8 +671,8 @@ ga4_summary() {
   fi
 
   # Percentage of users who were new
-  if [[ "${active_users}" != "0" ]]; then
-    GA_PERCENT="$(get_percent "${new_users}" "${active_users}")"
+  if [[ "${total_users}" != "0" ]]; then
+    GA_PERCENT="$(get_percent "${new_users}" "${total_users}")"
   else
     GA_PERCENT="0"
   fi
