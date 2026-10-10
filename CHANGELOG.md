@@ -32,6 +32,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - ShellCheck warnings and Bash compatibility issues
 - Version validation in CI to support three-part version numbers
 - Various reporting and template generation issues
+- Removed duplicate GA4 chart function that prevented the correct traffic chart filename from being used
+- Updated GA4 test to verify renamed traffic chart files
 
 ## [3.8.6]
 ### Added

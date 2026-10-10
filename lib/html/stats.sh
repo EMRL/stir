@@ -26,7 +26,7 @@ build_stats_chart() {
   local repo_head cache_key cache_file temp_file
 
   # Identify the current repository state.
-  repo_head="$(git -C "${repo_dir}" rev-parse HEAD 2>/dev/null)" || return 1
+  repo_head="$(cd "${repo_dir}" && git rev-parse HEAD 2>/dev/null)" || return 1
 
   # Key includes the repository, commit, chart, and appearance.
   cache_key="$(
