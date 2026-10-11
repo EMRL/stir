@@ -133,7 +133,7 @@ scan_host() {
 
   cp "${html_file}" "${scan_html}"
   
-  LOGTITLE="Malware Scan"
+  LOG_TITLE="Malware Scan"
   notes="Malware scan on ${PROD_URL}: ${SCAN_RESULT}"
 
   clean_exit

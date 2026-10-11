@@ -106,7 +106,7 @@ deploy_project() {
       fi
 
       # Check for deployment failure
-      if [[ "${EXITCODE}" == "0" ]]; then
+      if [[ "${EXIT_CODE}" == "0" ]]; then
         trace "Deployment success"
       fi
 

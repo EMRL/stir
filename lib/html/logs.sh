@@ -152,19 +152,19 @@ render_log() {
   # Build out the HTML
   if [[ "${message_state}" == "ERROR" ]]; then
     notes="${error_msg}"
-    LOGTITLE="Deployment Error"
+    LOG_TITLE="Deployment Error"
     cat "${stir_path}/html/${HTML_TEMPLATE}/header.html" "${stir_path}/html/${HTML_TEMPLATE}/error.html" > "${html_file}"
   else
     if [[ "${AUTOMATE}" == "1" ]] && [[ "${UPD1}" == "1" ]] && [[ "${UPD2}" == "1" ]]; then
       message_state="NOTICE"
-      LOGTITLE="Scheduled Update"
+      LOG_TITLE="Scheduled Update"
       notes="No updates available for deployment"
     else
       message_state="SUCCESS"
       if [[ "${AUTOMATE}" == "1" ]]; then
-        LOGTITLE="Scheduled Update"
+        LOG_TITLE="Scheduled Update"
       else
-        LOGTITLE="Activity Log"
+        LOG_TITLE="Activity Log"
       fi
     fi
 
@@ -178,18 +178,18 @@ render_log() {
 
   # Create URL
   if [[ "${PUBLISH}" == "1" ]]; then
-    LOGURL="${REMOTE_URL}/${APP}/${EPOCH}.${LOGSUFFIX}"
-    REMOTEFILE="${EPOCH}.${LOGSUFFIX}"
+    LOG_URL="${REMOTE_URL}/${APP}/${EPOCH}.${LOGSUFFIX}"
+    REMOTE_FILE="${EPOCH}.${LOGSUFFIX}"
   elif [[ "${SCAN}" == "1" ]]; then
-    LOGURL="${REMOTE_URL}/${APP}/scan"
-    REMOTEFILE="index.html"
+    LOG_URL="${REMOTE_URL}/${APP}/scan"
+    REMOTE_FILE="index.html"
   else
-    if [[ "${message_state}" != "SUCCESS" ]] || [[ -z "${COMMITHASH}" ]]; then
-      LOGURL="${REMOTE_URL}/${APP}/${message_state}-${EPOCH}.${LOGSUFFIX}"
-      REMOTEFILE="${message_state}-${EPOCH}.${LOGSUFFIX}"
+    if [[ "${message_state}" != "SUCCESS" ]] || [[ -z "${COMMIT_HASH}" ]]; then
+      LOG_URL="${REMOTE_URL}/${APP}/${message_state}-${EPOCH}.${LOGSUFFIX}"
+      REMOTE_FILE="${message_state}-${EPOCH}.${LOGSUFFIX}"
     else
-      LOGURL="${REMOTE_URL}/${APP}/${COMMITHASH}.${LOGSUFFIX}"
-      REMOTEFILE="${COMMITHASH}.${LOGSUFFIX}"
+      LOG_URL="${REMOTE_URL}/${APP}/${COMMIT_HASH}.${LOGSUFFIX}"
+      REMOTE_FILE="${COMMIT_HASH}.${LOGSUFFIX}"
     fi
   fi
 

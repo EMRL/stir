@@ -75,9 +75,9 @@ wp_check() {
 
       # Local database check
       trace status "Checking database... "
-      eval "${wp_cmd}" db check &>> /dev/null; EXITCODE=$?; 
+      eval "${wp_cmd}" db check &>> /dev/null; EXIT_CODE=$?; 
       
-      if [[ "${EXITCODE}" != "0" ]]; then 
+      if [[ "${EXIT_CODE}" != "0" ]]; then 
         eval "${wp_cmd}" db check &>> "${log_file}"; 
         trace notime "FAIL"
         if [[ "${AUTOMATE}" == "1" ]]; then
@@ -99,8 +99,8 @@ wp_check() {
 wp_check_server() {
   trace "Nothing here"
   # Launch server
-  # eval "${wp_cmd}" server --host=localhost > /dev/null 2>&1; EXITCODE=$?; 
-  # if [[ "${EXITCODE}" -eq "0" ]]; then
+  # eval "${wp_cmd}" server --host=localhost > /dev/null 2>&1; EXIT_CODE=$?; 
+  # if [[ "${EXIT_CODE}" -eq "0" ]]; then
     # trace "Launching server"
     # eval "${wp_cmd}" server --host=localhost >> "${log_file}" 2>&1 &
     # Keep checking for server to come online

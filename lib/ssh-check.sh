@@ -13,16 +13,16 @@ ssh_check() {
     trace "Checking SSH configuration"
     if [[ "${REPO_HOST}" == *"bitbucket"* ]]; then
       "${ssh_cmd}" -oStrictHostKeyChecking=no git@bitbucket.org &> /dev/null; error_status
-      if [[ "${EXITCODE}" != "0" ]]; then
-        error "git@bitbucket.org: SSH check failed (Error code ${EXITCODE})"
+      if [[ "${EXIT_CODE}" != "0" ]]; then
+        error "git@bitbucket.org: SSH check failed (Error code ${EXIT_CODE})"
       else
         [[ "${TEST_SSH}" == "1" ]] && console "git@bitbucket.org: OK"
         trace "git@bitbucket.org: OK"
       fi
     elif [[ "${REPO_HOST}" == *"github"* ]]; then
       "${ssh_cmd}" -oStrictHostKeyChecking=no git@github.com &> /dev/null #; error_status     
-      if [[ "${EXITCODE}" -gt "1" ]]; then
-        error "git@github.com: SSH check failed (Error code ${EXITCODE})"
+      if [[ "${EXIT_CODE}" -gt "1" ]]; then
+        error "git@github.com: SSH check failed (Error code ${EXIT_CODE})"
       else
         [[ "${TEST_SSH}" == "1" ]] && console "git@github.com: OK"
         trace "git@github.com: OK"

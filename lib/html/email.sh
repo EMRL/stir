@@ -8,7 +8,7 @@
 
 send_log_email() {
   # Send email for commits, errors, and automated updates
-  if [[ -n "${COMMITHASH}" ]] || [[ "${message_state}" == "ERROR" ]] || [[ "${AUTOMATE}" == "1" ]]; then
+  if [[ -n "${COMMIT_HASH}" ]] || [[ "${message_state}" == "ERROR" ]] || [[ "${AUTOMATE}" == "1" ]]; then
     if [[ ! -x "$(command -v ${sendmail_cmd})" ]]; then
       quiet_exit
     fi

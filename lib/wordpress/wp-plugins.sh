@@ -138,8 +138,8 @@ wp_activate_plugin() {
     var=(${1})
     for i in "${var[@]}" ; do
       eval "${wp_cmd}" plugin is-active "${i}" --quiet 2> /dev/null
-      EXITCODE=$?; 
-      if [[ "${EXITCODE}" -ne "0" ]]; then
+      EXIT_CODE=$?; 
+      if [[ "${EXIT_CODE}" -ne "0" ]]; then
         trace "Activating ${i}"
         eval "${wp_cmd}" plugin activate "${i}" >> "${log_file}" 2> /dev/null
       fi

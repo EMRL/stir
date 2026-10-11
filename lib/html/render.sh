@@ -25,7 +25,7 @@ render_html() {
   [[ -z "${CLIENT_LOGO}" ]] && sed -i '/CLIENT_LOGO/d' "${html_file}"
   [[ -z "${CLIENT_CONTACT}" ]] && sed -i '/CLIENT_CONTACT/d' "${html_file}"
   [[ -z "${notes}" ]] && sed -i '/NOTES/d' "${html_file}"
-  [[ -z "${COMMITHASH}" ]] && sed -i '/COMMITHASH/d' "${html_file}"
+  [[ -z "${COMMIT_HASH}" ]] && sed -i '/COMMIT_HASH/d' "${html_file}"
   [[ -z "${NEWS_URL}" ]] && sed -i '/RSS_NEWS/d' "${html_file}"
 
   # Clean out dashboard nav menu
@@ -99,8 +99,8 @@ render_html() {
   sed -i "s^{{RSS_NEWS}}^${RSS_NEWS}^g" "${html_file}"
 
   # Setup variables to process
-  process_var=(VIEWPORT NOW DEV LOGTITLE USER PROJECT_NAME PROJECT_CLIENT \
-    CLIENT_LOGO DEV_URL PROD_URL COMMITURL EXITCODE COMMITHASH USER LOGURL \
+  process_var=(VIEWPORT NOW DEV LOG_TITLE USER PROJECT_NAME PROJECT_CLIENT \
+    CLIENT_LOGO DEV_URL PROD_URL COMMIT_URL EXIT_CODE COMMIT_HASH USER LOG_URL \
     REMOTE_URL VIEWPORTPRE PATHTOREPO PROJECT_NAME CLIENT_CONTACT DEV_URL \
     PROD_URL SCAN_MSG SCAN_RESULT SCAN_URL BACKUP_STATUS LAST_BACKUP \
     DIGESTWRAP GREETING REMOTE_URL ANALYTICSMSG COVER WEEKOF UPTIME LATENCY \

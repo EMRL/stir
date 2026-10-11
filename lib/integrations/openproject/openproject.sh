@@ -44,20 +44,20 @@ op_addtime() {
   op_comment="${notes:-Automated maintenance via Stir}"
 
   # Get current commit information
-  COMMITHASH="$(git rev-parse --short HEAD)"
-  COMMITURL=""
+  COMMIT_HASH="$(git rev-parse --short HEAD)"
+  COMMIT_URL=""
 
   if [[ "${REPO_HOST}" == *"bitbucket"* ]]; then
-    COMMITURL="${REPO_HOST}/${REPO}/commits/${COMMITHASH}"
+    COMMIT_URL="${REPO_HOST}/${REPO}/commits/${COMMIT_HASH}"
   elif [[ "${REPO_HOST}" == *"github"* ]]; then
-    COMMITURL="${REPO_HOST}/${REPO}/commit/${COMMITHASH}"
+    COMMIT_URL="${REPO_HOST}/${REPO}/commit/${COMMIT_HASH}"
   fi
 
   # Build activity feed comment with linked commit hash
-  if [[ -n "${COMMITURL}" ]]; then
-    op_activity_comment="[${COMMITHASH}](${COMMITURL}) ${op_comment}"
+  if [[ -n "${COMMIT_URL}" ]]; then
+    op_activity_comment="[${COMMIT_HASH}](${COMMIT_URL}) ${op_comment}"
   else
-    op_activity_comment="${COMMITHASH} ${op_comment}"
+    op_activity_comment="${COMMIT_HASH} ${op_comment}"
   fi
 
   # Escape characters that would break JSON

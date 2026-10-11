@@ -10,13 +10,13 @@
 build_log() {
   if [[ "${DIGEST}" != "1" ]]; then 
     # OK let's grab the short version of the commit hash
-    COMMITHASH="$(git rev-parse --short HEAD)"; 
+    COMMIT_HASH="$(git rev-parse --short HEAD)"; 
 
     # Create commit URL
     if [[ "${REPO_HOST}" == *"bitbucket"* ]]; then
-      COMMITURL="${REPO_HOST}/${REPO}/commits/${COMMITHASH}"
+      COMMIT_URL="${REPO_HOST}/${REPO}/commits/${COMMIT_HASH}"
     elif [[ "${REPO_HOST}" == *"github"* ]]; then
-      COMMITURL="${REPO_HOST}/${REPO}/commit/${COMMITHASH}"
+      COMMIT_URL="${REPO_HOST}/${REPO}/commit/${COMMIT_HASH}"
     fi
 
     # Is this a publish only?
@@ -24,7 +24,7 @@ build_log() {
       notes="Published to production and marked as deployed"
     fi
 
-    echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${post_file}"
+    echo "<strong>Commit ${COMMIT_HASH}</strong>: ${notes}" > "${post_file}"
   fi
 }
 
@@ -36,7 +36,7 @@ mail_post() {
     return
   fi
 
-  echo "${COMMITURL}" >> "${post_file}"
+  echo "${COMMIT_URL}" >> "${post_file}"
   post=$(<"${post_file}")
 
   (

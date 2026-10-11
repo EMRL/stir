@@ -11,10 +11,10 @@
 git_get_log_url() {
   if [[ "${REMOTE_LOG}" == "TRUE" ]] &&
     [[ -n "${REMOTE_URL}" ]] &&
-    [[ -n "${LOGURL}" ]]; then
-    printf '%s\n' "${LOGURL}"
-  elif [[ -n "${COMMITURL}" ]]; then
-    printf '%s\n' "${COMMITURL}"
+    [[ -n "${LOG_URL}" ]]; then
+    printf '%s\n' "${LOG_URL}"
+  elif [[ -n "${COMMIT_URL}" ]]; then
+    printf '%s\n' "${COMMIT_URL}"
   else
     return 1
   fi
@@ -22,13 +22,13 @@ git_get_log_url() {
 
 slack_post() {
   local commit_target=""
-  local commit_link="${COMMITHASH}"
+  local commit_link="${COMMIT_HASH}"
   local slack_links=""
 
   commit_target="$(git_get_log_url)" || commit_target=""
 
-  if [[ -n "${commit_target}" ]] && [[ -n "${COMMITHASH}" ]]; then
-    commit_link="<${commit_target}|${COMMITHASH}>"
+  if [[ -n "${commit_target}" ]] && [[ -n "${COMMIT_HASH}" ]]; then
+    commit_link="<${commit_target}|${COMMIT_HASH}>"
   fi
 
   # If running in --automate, change the user name
@@ -56,7 +56,7 @@ slack_post() {
   fi
 
   # Include the commit message when available
-  if [[ -n "${notes}" ]] && [[ -n "${COMMITHASH}" ]]; then
+  if [[ -n "${notes}" ]] && [[ -n "${COMMIT_HASH}" ]]; then
     slack_message="${slack_message}\n${commit_link}: ${notes}"
   fi
 
@@ -93,16 +93,16 @@ slack_post() {
     # Link to Stir's execution log
     if [[ "${REMOTE_LOG}" == "TRUE" ]] &&
       [[ -n "${REMOTE_URL}" ]] &&
-      [[ -n "${LOGURL}" ]]; then
-      slack_links="<${LOGURL}|Execution log>"
+      [[ -n "${LOG_URL}" ]]; then
+      slack_links="<${LOG_URL}|Execution log>"
     fi
 
     # Link directly to GitHub or Bitbucket
-    if [[ -n "${COMMITURL}" ]] && [[ -n "${COMMITHASH}" ]]; then
+    if [[ -n "${COMMIT_URL}" ]] && [[ -n "${COMMIT_HASH}" ]]; then
       if [[ -n "${slack_links}" ]]; then
-        slack_links="${slack_links} · <${COMMITURL}|View commit>"
+        slack_links="${slack_links} · <${COMMIT_URL}|View commit>"
       else
-        slack_links="<${COMMITURL}|View commit>"
+        slack_links="<${COMMIT_URL}|View commit>"
       fi
     fi
 

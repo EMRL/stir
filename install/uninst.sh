@@ -12,9 +12,9 @@
 set -uo pipefail
 
 # Initialize variables 
-read -r OS VER EXITCODE dependencies option message fg_green fg_red reset \
+read -r OS VER EXIT_CODE dependencies option message fg_green fg_red reset \
   YES NO NOT i k <<< ""
-echo "${OS} ${VER} ${EXITCODE} ${dependencies} ${option} ${message} ${fg_green} 
+echo "${OS} ${VER} ${EXIT_CODE} ${dependencies} ${option} ${message} ${fg_green} 
   ${fg_red} ${reset} ${YES} ${NO} ${NOT} ${i} ${k}" > /dev/null
 
 # No root, no fun
@@ -24,10 +24,10 @@ if [[ "${EUID}" -ne 0 ]]; then
 fi
 
 error_check() {
-  EXITCODE=$?; 
-  if [[ "${EXITCODE}" != "0" ]]; then 
-    echo "Error ${EXITCODE}: stir not uninstalled."
-    exit "${EXITCODE}"
+  EXIT_CODE=$?; 
+  if [[ "${EXIT_CODE}" != "0" ]]; then 
+    echo "Error ${EXIT_CODE}: stir not uninstalled."
+    exit "${EXIT_CODE}"
   fi
 }
 

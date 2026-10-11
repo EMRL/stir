@@ -21,25 +21,25 @@ publish_html() {
       prepare_html_dir
 
       # Post the file   
-      if [[ -n "${REMOTEFILE}" ]] && [[ "${REPORT}" != "1" ]]; then #&& [[ -n "${COMMITHASH}" ]]; then
-        cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/${REMOTEFILE}"
-        chmod a+rw "${LOCAL_HOST_PATH}/${APP}/${REMOTEFILE}" &> /dev/null
+      if [[ -n "${REMOTE_FILE}" ]] && [[ "${REPORT}" != "1" ]]; then #&& [[ -n "${COMMIT_HASH}" ]]; then
+        cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/${REMOTE_FILE}"
+        chmod a+rw "${LOCAL_HOST_PATH}/${APP}/${REMOTE_FILE}" &> /dev/null
       fi
 
       # Post the digest
       if [[ "${DIGEST}" == "1" ]]; then
-        REMOTEFILE="digest-${EPOCH}.html"
-        cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/${REMOTEFILE}"
-        chmod a+rw "${LOCAL_HOST_PATH}/${APP}/${REMOTEFILE}" &> /dev/null
-        DIGESTURL="${REMOTE_URL}/${APP}/${REMOTEFILE}"
+        REMOTE_FILE="digest-${EPOCH}.html"
+        cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/${REMOTE_FILE}"
+        chmod a+rw "${LOCAL_HOST_PATH}/${APP}/${REMOTE_FILE}" &> /dev/null
+        DIGESTURL="${REMOTE_URL}/${APP}/${REMOTE_FILE}"
       fi
 
       # Post the report
       if [[ "${REPORT}" == "1" ]]; then
-        REMOTEFILE="${current_year}-${current_month}.php"
-        cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/report/${REMOTEFILE}"
-        chmod a+rw "${LOCAL_HOST_PATH}/${APP}/report/${REMOTEFILE}" &> /dev/null
-        REPORTURL="${REMOTE_URL}/${APP}/report/${REMOTEFILE}"
+        REMOTE_FILE="${current_year}-${current_month}.php"
+        cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/report/${REMOTE_FILE}"
+        chmod a+rw "${LOCAL_HOST_PATH}/${APP}/report/${REMOTE_FILE}" &> /dev/null
+        REPORTURL="${REMOTE_URL}/${APP}/report/${REMOTE_FILE}"
       fi
 
       # Statistics
@@ -79,8 +79,8 @@ publish_html() {
       eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}"
 
       if [[ "${DIGEST}" == "1" ]]; then
-        REMOTEFILE="digest-${EPOCH}.html"
-        DIGESTURL="${REMOTE_URL}/${APP}/${REMOTEFILE}"
+        REMOTE_FILE="digest-${EPOCH}.html"
+        DIGESTURL="${REMOTE_URL}/${APP}/${REMOTE_FILE}"
       fi
 
       if [[ "${PROJSTATS}" == "1" || "${DIGEST}" == "1" && -f "${stat_dir}/*" ]]; then
@@ -102,18 +102,18 @@ publish_html() {
       fi
 
       if [[ "${REPORT}" == "1" ]]; then
-        REMOTEFILE="${current_year}-${current_month}.php"
+        REMOTE_FILE="${current_year}-${current_month}.php"
         eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report"
         eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report/css"
         eval "${SCPCMD} -r" "${stir_path}/html/${HTML_TEMPLATE}/report/css" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report"
         eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report/js"
         eval "${SCPCMD} -r" "${stir_path}/html/${HTML_TEMPLATE}/report/js" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report"
-        eval "${SCPCMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report/${REMOTEFILE}"
+        eval "${SCPCMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report/${REMOTE_FILE}"
       fi
 
       # Send over the logs and set permissions
       if [[ "${REPORT}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]]; then 
-        eval "${SCPCMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/${REMOTEFILE}" &> /dev/null
+        eval "${SCPCMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/${REMOTE_FILE}" &> /dev/null
       fi
 
       # Remove logs older then X days

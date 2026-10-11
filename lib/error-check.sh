@@ -12,13 +12,13 @@ init_loop
 
 # Try to get exit/error code, with a hard stop on fail
 error_check() {
-  EXITCODE=$?; 
-  if [[ "${EXITCODE}" != 0 ]]; then
+  EXIT_CODE=$?; 
+  if [[ "${EXIT_CODE}" != 0 ]]; then
     if [[ -z "${error_detail}" ]]; then
       error_detail="Operation fault"
     fi
-    warning "${error_detail} (Error ${EXITCODE})"
-    error_msg="${error_detail} (Error ${EXITCODE})"
+    warning "${error_detail} (Error ${EXIT_CODE})"
+    error_msg="${error_detail} (Error ${EXIT_CODE})"
     error_exit
   else
     error_detail=""
@@ -28,9 +28,9 @@ error_check() {
 # I'm not sure why this is here, figure it out!
 # Try to get exit/error code, with a hard stop on fail
 error_status() {
-  EXITCODE=$?; 
-  if [[ "${EXITCODE}" != 0 ]]; then 
-    error_msg="WARNING: Error code ${EXITCODE}"
+  EXIT_CODE=$?; 
+  if [[ "${EXIT_CODE}" != 0 ]]; then 
+    error_msg="WARNING: Error code ${EXIT_CODE}"
     trace "${error_msg}"
   fi
 }
@@ -115,23 +115,23 @@ deploy_check() {
     # When using bundle, make sure it exists
     if [[ "${DEPLOYTEST}" == *"bundle"* ]]; then
       eval "bundle check" &>> /dev/null
-      EXITCODE=$?;
-      if [[ "${EXITCODE}" != 0 ]]; then
+      EXIT_CODE=$?;
+      if [[ "${EXIT_CODE}" != 0 ]]; then
         warning "Could not locate Gemfile or .bundle/ directory, installing..." 
         eval "bundle install" | tee --append "${log_file}"
         eval "bundle check" &>> /dev/null
-        EXITCODE=$?;
-        if [[ "${EXITCODE}" != 0 ]]; then
-          error "Problem with bundle gem (Error ${EXITCODE})"
+        EXIT_CODE=$?;
+        if [[ "${EXIT_CODE}" != 0 ]]; then
+          error "Problem with bundle gem (Error ${EXIT_CODE})"
         fi
       fi
     fi
 
     eval "${DEPLOYTEST}" &>> /dev/null
-    EXITCODE=$?; 
-    if [[ "${EXITCODE}" != 0 ]]; then 
-      warning "Deployment exited due to a configuration problem (Error ${EXITCODE})"
-      error_msg="Deployment exited due to a configuration problem (Error ${EXITCODE})"
+    EXIT_CODE=$?; 
+    if [[ "${EXIT_CODE}" != 0 ]]; then 
+      warning "Deployment exited due to a configuration problem (Error ${EXIT_CODE})"
+      error_msg="Deployment exited due to a configuration problem (Error ${EXIT_CODE})"
       error_exit
     fi
     trace "OK"

@@ -12,9 +12,9 @@
 set -uo pipefail
 
 # Initialize variables 
-read -r OS VER EXITCODE dependencies option message fg_green fg_red fg_yellow \
+read -r OS VER EXIT_CODE dependencies option message fg_green fg_red fg_yellow \
   reset YES NO NOT i k WORK_PATH FIRSTRUN INPUTPATH TIMEOUT <<< ""
-echo "${OS} ${VER} ${EXITCODE} ${dependencies} ${option} ${message} ${fg_green} 
+echo "${OS} ${VER} ${EXIT_CODE} ${dependencies} ${option} ${message} ${fg_green} 
   ${fg_red} ${reset} ${YES} ${NO} ${NOT} ${i} ${k} ${WORK_PATH} 
   ${FIRSTRUN} ${INPUTPATH}" > /dev/null
 
@@ -77,10 +77,10 @@ check_program() {
 }
 
 error_check() {
-  EXITCODE=$?; 
-  if [[ "${EXITCODE}" != "0" ]]; then 
-    echo "Error ${EXITCODE}: stir not installed."
-    exit "${EXITCODE}"
+  EXIT_CODE=$?; 
+  if [[ "${EXIT_CODE}" != "0" ]]; then 
+    echo "Error ${EXIT_CODE}: stir not installed."
+    exit "${EXIT_CODE}"
   fi
 }
 

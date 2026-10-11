@@ -155,8 +155,8 @@ wp_clone() {
     # if [[ "${DB_CHECK}" != "0" ]]; then
     if [[ -n "${wp_cmd}" ]]; then
       eval "${wp_cmd}" db check  > /dev/null 2>&1
-      EXITCODE=$?; 
-      if [[ "${EXITCODE}" -eq "0" ]]; then
+      EXIT_CODE=$?; 
+      if [[ "${EXIT_CODE}" -eq "0" ]]; then
         info "Dropping Wordpress database..."
         eval "${wp_cmd}" db drop --yes
       fi
@@ -170,8 +170,8 @@ wp_clone() {
 
     # Install wordpress database tables
     eval "${wp_cmd}" core > /dev/null 2>&1
-    EXITCODE=$?; 
-    if [[ "${EXITCODE}" -ne "0" ]]; then
+    EXIT_CODE=$?; 
+    if [[ "${EXIT_CODE}" -ne "0" ]]; then
       trace status "Installing Wordpress... "
       error_detail="Unable to install Wordpress"
       eval "${wp_cmd}" core install --url=null.com --title=Nullsite --admin_user=null --admin_email=null@null.com &>> /dev/null; error_check
