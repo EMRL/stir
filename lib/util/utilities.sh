@@ -88,11 +88,6 @@ go() {
     fi
   fi
 
-  # Outstanding approval?
-  if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]] && [[ -f "${WORK_PATH}/${APP}/.approved" ]]; then 
-    notice "Processing outstanding approval..."
-  fi
-
   if [[ "${NEWS_URL}" == "FALSE" ]]; then
     var=(NEWS_URL)
     init_loop

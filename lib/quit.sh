@@ -19,7 +19,7 @@ clean_exit() {
 
     # Is Slack integration configured?
     # Ghetto but will do for now
-    if [[ "${POST_TO_SLACK}" == "TRUE" ]] && [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" = "1" ]] && [[ "${UPD2}" = "1" ]]; then
+    if [[ "${POST_TO_SLACK}" == "TRUE" ]] && [[ "${AUTOMATE}" == "1" ]] && [[ "${UPD1}" == "1" ]] && [[ "${UPD2}" == "1" ]]; then
       message_state="NOTICE"
       notes="No updates available for deployment"
       slack_post
@@ -97,16 +97,6 @@ clean_up() {
   # If Wordfence was an issue, restart the plugin
   if [[ "${WFOFF}" = "1" ]]; then
     eval "${wp_cmd}" plugin activate --no-color wordfence &>> $log_file; error_check
-  fi
-
-  # Was this an approval?
-  if [[ "${APPROVE}" == "1" ]]; then
-    if [[ -f "${WORK_PATH}/${APP}/.queued" ]] && [[ "${message_state}" != "ERROR" ]]; then 
-      rm "${WORK_PATH}/${APP}/.queued"
-    fi
-    if [[ -f "${WORK_PATH}/${APP}/.approved" ]]; then
-      rm "${WORK_PATH}/${APP}/.approved"
-    fi
   fi
 
   # Do we need to shutdown local wp server?

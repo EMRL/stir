@@ -35,6 +35,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Removed duplicate GA4 chart function that prevented the correct traffic chart filename from being used
 - Updated GA4 test to verify renamed traffic chart files
 
+### Removed
+- Removed deprecated deployment approval functionality, including approval queues, CLI options, configuration, notifications, and reporting
+
 ## [3.8.6]
 ### Added
 - Settings use specific versions of PHP with `composer` and `wp-cli` are now available, per project

@@ -120,12 +120,6 @@ build_log() {
     [[ "${message_state}" != "DIGEST" ]] && render_log
     cat "${html_file}" > "${trash_file}"
 
-    # If this is an approval email, strip out PHP
-    if [[ "${message_state}" == "APPROVAL NEEDED" ]]; then 
-      sed -i '/<?php/,/?>/d' "${trash_file}"
-      sed -e "s^EMAIL BUTTONS: BEGIN^EMAIL BUTTONS: BEGIN //-->^g" -i "${trash_file}"
-    fi
-
     # Strip out logs if necessary
     if [[ "${SHORT_EMAIL}" == "TRUE" ]]; then
       sed -i '/LOG: BEGIN/,/LOG: END/d' "${trash_file}"
@@ -135,7 +129,7 @@ build_log() {
     htmlSendmail=$(<"${trash_file}")
   fi
 
-  # Create HTML/PHP logs for viewing online
+  # Create HTML logs for viewing online
   if [[ "${REMOTE_LOG}" == "TRUE" ]]; then
     prepare_html_dir
 
@@ -154,44 +148,31 @@ build_log() {
 
 render_log() {
   LOGSUFFIX="html"
-  
+
   # Build out the HTML
   if [[ "${message_state}" == "ERROR" ]]; then
-    # Oh man, this is an error
     notes="${error_msg}"
     LOGTITLE="Deployment Error"
-    # Create the header
     cat "${stir_path}/html/${HTML_TEMPLATE}/header.html" "${stir_path}/html/${HTML_TEMPLATE}/error.html" > "${html_file}"
   else
-    # Does this project need to be approved before finalizing deployment?
-    #if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]]; then
-    if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]  && [[ "${REPORT}" != "1" ]]; then
-      message_state="APPROVAL NEEDED"
-      LOGTITLE="Approval Needed"
-      LOGSUFFIX="php"
-      # cat "${stir_path}/html/${HTML_TEMPLATE}/header.html" "${stir_path}/html/${HTML_TEMPLATE}/approve.html" > "${html_file}"
-      cat "${stir_path}/html/${HTML_TEMPLATE}/approval.php" > "${html_file}"
+    if [[ "${AUTOMATE}" == "1" ]] && [[ "${UPD1}" == "1" ]] && [[ "${UPD2}" == "1" ]]; then
+      message_state="NOTICE"
+      LOGTITLE="Scheduled Update"
+      notes="No updates available for deployment"
     else
-      if [[ "${AUTOMATE}" == "1" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${UPD1}" == "1" ]] && [[ "${UPD2}" == "1" ]]; then
-        message_state="NOTICE"
+      message_state="SUCCESS"
+      if [[ "${AUTOMATE}" == "1" ]]; then
         LOGTITLE="Scheduled Update"
-        notes="No updates available for deployment"
       else
-        # Looks like we've got a normal successful deployment
-        message_state="SUCCESS"
-        # Is this a scheduled update?
-        if [[ "${AUTOMATE}" == "1" ]]; then
-          LOGTITLE="Scheduled Update"
-        else
-          LOGTITLE="Activity Log"
-        fi
+        LOGTITLE="Activity Log"
       fi
-      if [[ "${DIGEST}" != "1" ]] && [[ "${REPORT}" != "1" ]]; then
-        if [[ "${REPAIR}" == "1" ]] && [[ -z "${notes}" ]]; then
-          notes="Merged and deployed codebase"
-        fi
-        cat "${stir_path}/html/${HTML_TEMPLATE}/header.html" "${stir_path}/html/${HTML_TEMPLATE}/success.html" > "${html_file}"
+    fi
+
+    if [[ "${DIGEST}" != "1" ]] && [[ "${REPORT}" != "1" ]]; then
+      if [[ "${REPAIR}" == "1" ]] && [[ -z "${notes}" ]]; then
+        notes="Merged and deployed codebase"
       fi
+      cat "${stir_path}/html/${HTML_TEMPLATE}/header.html" "${stir_path}/html/${HTML_TEMPLATE}/success.html" > "${html_file}"
     fi
   fi
 
@@ -202,9 +183,6 @@ render_log() {
   elif [[ "${SCAN}" == "1" ]]; then
     LOGURL="${REMOTE_URL}/${APP}/scan"
     REMOTEFILE="index.html"
-  elif [[ "${message_state}" == "APPROVAL NEEDED" ]]; then
-      LOGURL="${REMOTE_URL}/${APP}/APPROVAL-${EPOCH}.${LOGSUFFIX}"
-      REMOTEFILE="APPROVAL-${EPOCH}.${LOGSUFFIX}"
   else
     if [[ "${message_state}" != "SUCCESS" ]] || [[ -z "${COMMITHASH}" ]]; then
       LOGURL="${REMOTE_URL}/${APP}/${message_state}-${EPOCH}.${LOGSUFFIX}"
@@ -215,10 +193,9 @@ render_log() {
     fi
   fi
 
-  # Insert the full deployment log_file & button it all up
+  # Insert the full deployment log and button it all up
   if [[ "${REPORT}" != "1" ]]; then
     cat "${log_file}" "${stir_path}/html/${HTML_TEMPLATE}/footer.html" >> "${html_file}"
-    # There's probably a better place for this.
     render_html
   fi
 }

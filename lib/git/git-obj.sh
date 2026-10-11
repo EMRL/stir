@@ -101,14 +101,8 @@ git_checkout() {
 # Does anything need to be committed? (Besides me?)
 git_status() {
   if [[ -z "$(git status --porcelain)" ]]; then
-    if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
-      if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]]; then
-        console "Nothing to queue, working directory clean."
-      else
-        console "Nothing to commit, working directory clean."
-      fi
-      quiet_exit
-    fi
+    console "Nothing to commit, working directory clean."
+    quiet_exit
   fi
 }
 
@@ -279,14 +273,8 @@ git_commit() {
         fi
       fi
     fi
-
-    if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then 
-      trace "Queuing commit message"
-      echo "${notes}" > "${WORK_PATH}/${APP}/.queued"
-    else
-      git commit -m "${notes}" &>> "${log_file}"; error_check
-      trace "Commit message: ${notes}"
-    fi
+    git commit -m "${notes}" &>> "${log_file}"; error_check
+    trace "Commit message: ${notes}"
   fi
 
   # Check for bad characters in commit message
@@ -360,7 +348,7 @@ git_gc() {
 
 # Get the stats for this git author, just for fun
 git_stats() {
-  if [[ "${GIT_STATS}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]] && [[ "${PUBLISH}" != "1" ]] && [[ "${APPROVE}" != "1" ]]; then
+  if [[ "${GIT_STATS}" == "TRUE" ]] && [[ "${QUIET}" != "1" ]] && [[ "${PUBLISH}" != "1" ]]; then
     console "Calculating..."
     getent passwd "${USER}" | cut -d ':' -f 5 | cut -d ',' -f 1 > "${trash_file}"
     full_user=$(<"${trash_file}")

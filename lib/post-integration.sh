@@ -24,33 +24,25 @@ build_log() {
       notes="Published to production and marked as deployed"
     fi
 
-    # Is this just an approval?
-    if [[ "${APPROVE}" == "1" ]] && [[ -z "${notes}" ]]; then
-      notes="Marked as approved and deployed" 
-    fi
-
     echo "<strong>Commit ${COMMITHASH}</strong>: ${notes}" > "${post_file}"
   fi
 }
 
 # Post integration via email
 mail_post() {
-  # If this is an outstanding approval, don't post
-  if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${APPROVE}" != "1" ]] && [[ "${DIGEST}" != "1" ]]; then
-    trace "Approval required, skipping integration"
-  else
+  if [[ ! -f "${sendmail_cmd}" ]]; then
+    empty_line
+    warning "Mail system misconfigured or not found, skipping email integration."
+    return
+  fi
 
-    if [[ ! -f "${sendmail_cmd}" ]]; then
-      empty_line; warning "Mail system misconfigured or not found, skipping email integration."
-      return
-    fi
+  echo "${COMMITURL}" >> "${post_file}"
+  post=$(<"${post_file}")
 
-    echo "${COMMITURL}" >> "${post_file}"
-    post=$(<"${post_file}")
-    (
+  (
     # Is this an automated deployment?
-    if [ "${AUTOMATE}" = "1" ]; then
-      # Is the project configured to log task time
+    if [[ "${AUTOMATE}" == "1" ]]; then
+      # Is the project configured to log task time?
       if [[ -z "${TASK_USER}" ]] || [[ -z "${ADD_TIME}" ]]; then
         echo "From: ${FROM}"
       else
@@ -58,23 +50,24 @@ mail_post() {
         echo "Subject: ${ADD_TIME}"
       fi
     else
-      # If not an automated deployment, use address from .deployrc, or current user email address
+      # Use the configured address or current user email
       if [[ -n "${FROM_USER}" ]]; then
         echo "From: ${FROM_USER}@${FROM_DOMAIN}"
       else
         echo "From: ${USER}@${FROM_DOMAIN}"
       fi
-      # If deployment happened with the --time switch active, add time to subject line
+
+      # Add time to subject if requested
       if [[ -n "${TIME}" ]] && [[ -n "${ADD_TIME}" ]]; then
         echo "Subject: ${ADD_TIME}"
       fi
     fi
+
     echo "To: ${integration_email}"
     echo "Content-Type: text/plain"
     echo
-    echo "${post}";
-    ) | "${sendmail_cmd}" -t
-  fi
+    echo "${post}"
+  ) | "${sendmail_cmd}" -t
 }
 
 post_commit() {

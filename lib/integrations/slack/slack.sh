@@ -55,33 +55,9 @@ slack_post() {
     fi
   fi
 
-  # Does this need approval?
-  if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] &&
-    [[ "${APPROVE}" != "1" ]] &&
-    [[ "${DENY}" != "1" ]] &&
-    [[ "${DIGEST}" != "1" ]]; then
-    slack_message="*${SLACKUSER}* queued updates to <${DEV_URL}|${APP}> for approval"
-  fi
-
-  # Is this being approved?
-  if [[ "${APPROVE}" == "1" ]]; then
-    if [[ -z "${PROD_URL}" ]]; then
-      slack_message="*${SLACKUSER}* approved updates ${commit_link} and deployed to ${APP}"
-    else
-      slack_message="*${SLACKUSER}* approved updates ${commit_link} and deployed to <${PROD_URL}|${APP}>"
-    fi
-  fi
-
   # Include the commit message when available
   if [[ -n "${notes}" ]] && [[ -n "${COMMITHASH}" ]]; then
-    # Is this a queue for approval?
-    if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] &&
-      [[ "${APPROVE}" != "1" ]] &&
-      [[ "${DENY}" != "1" ]]; then
-      slack_message="${slack_message}\nProposed commit message: ${notes}"
-    else
-      slack_message="${slack_message}\n${commit_link}: ${notes}"
-    fi
+    slack_message="${slack_message}\n${commit_link}: ${notes}"
   fi
 
   # Has there been an error?

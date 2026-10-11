@@ -35,8 +35,8 @@ init_loop() {
 # Startup switches
 init_startup() {
   var=(APP UPGRADE SKIP_UPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
-    TEST_SLACK FUNCTION_LIST VARIABLE_LIST AUTOMATE TEST_EMAIL APPROVE \
-    DENY PUBLISH DIGEST ANALYTICS TEST_ANALYTICS BUILD PROJSTATS UNLOCK  \
+    TEST_SLACK FUNCTION_LIST VARIABLE_LIST AUTOMATE TEST_EMAIL \
+    PUBLISH DIGEST ANALYTICS TEST_ANALYTICS BUILD PROJSTATS UNLOCK  \
     TEST_SSH TIME UPDATEONLY TEST_WEBHOOK REPORT REPAIR CREATE_INVOICE SCAN \
     TEST_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET MIGRATE \
     SHOW_SETTINGS UNIT_TEST TEST_BUGSNAG UPDATE_ACF DEBUG_TO_FILE TEST_GA4 \
@@ -69,7 +69,7 @@ init_env() {
   ACF_KEY ACF_LOCK WFOFF REMOTE_LOG POST_TO_LOCAL_HOST LOCAL_HOST_PATH \
   DIGEST_EMAIL DIGEST_SLACK DIGESTURL CLIENT_LOGO REMOTE_URL \
   SCP_POST SCP_USER SCP_HOST SCP_HOST_PATH SCP_PASS SCPCMD SSHCMD LOGMSG \
-  EXPIRE_LOGS CHECK_SERVER STASH REQUIRE_APPROVAL ADD_TIME SCP_PORT TASK_USER \
+  EXPIRE_LOGS CHECK_SERVER STASH ADD_TIME SCP_PORT TASK_USER \
   CLIENT_ID CLIENT_SECRET REDIRECT_URI AUTHORIZATION_CODE ACCESS_TOKEN \
   REFRESH_TOKEN PROFILE_ID ALLOW_ROOT SHORT_EMAIL INCOGNITO REPORTURL \
   CLIENT_CONTACT INCLUDE_HOSTING GLOBAL_VERSION USER_VERSION PROJECT_VERSION \
@@ -285,8 +285,6 @@ while [[ ${1:-unset} = -?* ]]; do
     -F|--force) FORCE="1" ;;
     -m|--merge) MERGE="1" ;; 
     -t|--time) TIME="1" ;;
-    --approve) APPROVE="1"; FORCE="1" ;;
-    --deny) DENY="1"; FORCE="1" ;;
     -p|--prepare) PREPARE="1" ;;
     --reset) RESET="1" ;;
     --prepare-with-reset) PREPARE_WITH_RESET="1"; PREPARE="1" ;;
@@ -362,8 +360,6 @@ fi
 # Get the active switches for display in log_files
 [[ "${AUTOMATE}" == "1" ]] && STARTUP="${STARTUP} --automate"
 [[ "${UPGRADE}" == "1" ]] && STARTUP="${STARTUP} --update"
-[[ "${APPROVE}" == "1" ]] && STARTUP="${STARTUP} --approve" #; FORCE="1"
-[[ "${DENY}" == "1" ]] && STARTUP="${STARTUP} --deny" #; FORCE="1"
 [[ "${PUBLISH}" == "1" ]] && STARTUP="${STARTUP} --publish"
 [[ "${SKIP_UPDATE}" == "1" ]] && STARTUP="${STARTUP} --skip-update"
 [[ "${TIME}" == "1" ]] && STARTUP="${STARTUP} --time"
@@ -624,44 +620,6 @@ fi
 if [[ "${PUBLISH}" == "1" ]]; then
   if [[ "${FORCE}" == "1" ]] || [[ "${QUIET}" == "1" ]]; then
     error "You can not publish production code without user interaction."
-  fi
-fi
-
-# If approval required, are smart commits enabled?
-if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ "${SMART_COMMIT}" != "TRUE" ]]; then
-  SMART_COMMIT="TRUE"
-  trace "Enabling smart commits for approval queue" 
-fi
-
-# Has this repo already been approved?
-if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]] && [[ -f "${WORK_PATH}/${APP}/.approved" ]]; then 
-  APPROVE="1"; FORCE="1"
-fi
-
-# Is someone trying to approve and deny at the same time? :trollface:
-if [[ "${APPROVE}" == "1" ]] && [[ "${DENY}" == "1" ]]; then
-  error "The --approve and --deny switches can not be used together."
-fi
-
-# Check if a deployment is queued
-if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]]; then
-  if [[ "${APPROVE}" != "1" ]] && [[ "${DENY}" != "1" ]]; then
-    queue_check
-  fi
-  if [[ "${DENY}" == "1" ]] || [[ -f "${WORK_PATH}/${APP}/.denied" ]]; then
-    deny
-  fi
-fi
-
-# Check if approval is queued
-if [[ ! -f "${WORK_PATH}/${APP}/.queued" ]]; then
-  if [[ "${APPROVE}" == "1" ]] || [[ "${DENY}" == "1" ]]; then
-    if [[ "${REQUIRE_APPROVAL}" != "TRUE" ]]; then
-      warning "This project is not configured to require approval." 
-    else  
-      warning "No outstanding approval request found."
-    fi
-    quiet_exit
   fi
 fi
 

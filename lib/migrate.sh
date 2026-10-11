@@ -66,7 +66,6 @@ migrate_variables() {
       -e 's^REMOTELOG^REMOTE_LOG^g' \
       -e 's^REMOTEURL^REMOTE_URL^g' \
       -e 's^REPOHOST^REPO_HOST^g' \
-      -e 's^REQUIREAPPROVAL^REQUIRE_APPROVAL^g' \
       -e 's^SCPHOST^SCP_HOST^g' \
       -e 's^SCPHOSTPATH^SCP_HOST_PATH^g' \
       -e 's^SCPPASS^SCP_PASS^g' \

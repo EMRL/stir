@@ -71,40 +71,16 @@ main() {
 
         deploy_project      # Deploy project to live server
         return 0
-      elif [[ ! -f "${WORK_PATH}/${APP}/.queued" ]]; then
-        pre_deploy      # Get the status
-      fi
-
-
-      # Check for approval/deny/queue
-      if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ -f "${WORK_PATH}/${APP}/.queued" ]]; then
-        notice "Approval queue functions are deprecated and will be removed soon."
-        if [[ "${APPROVE}" == "1" ]] || [[ -f "${WORK_PATH}/${APP}/.approved" ]]; then
-          approve     # Approve proposed changes
-        else
-          if [[ "${DENY}" == "1" ]] || [[ -f "${WORK_PATH}/${APP}/.denied" ]]; then 
-            deny      # Deny proposed changes
-          fi
-        fi
+      else
+        pre_deploy
       fi
 
       # Continue normally
-      if [[ "${APPROVE}" != "1" ]]; then
-        wp_main       # Run Wordpress upgrades if needed
-        build_check   # Run package manager
-        git_status    # Make sure there's something here to commit         
-      fi
-
-      if [[ "${REQUIRE_APPROVAL}" == "TRUE" ]] && [[ ! -f "${WORK_PATH}/${APP}/.queued" ]]; then
-        notice "Approval queue functions are deprecated and will be removed soon."
-        queue 		    # Queue for approval if needed
-      fi
-
-      if [[ "${APPROVE}" != "1" ]] && [[ ! -f "${WORK_PATH}/${APP}/.queued" ]]; then
-        git_stage         # Stage files     
-        git_commit        # Commit, with message
-      fi 
-      
+      wp_main       # Run Wordpress upgrades if needed
+      build_check   # Run package manager
+      git_status    # Make sure there's something here to commit
+      git_stage     # Stage files
+      git_commit    # Commit, with message
       confirm_branch "${MASTER}"
       git_push
 

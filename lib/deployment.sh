@@ -17,7 +17,7 @@ pre_deploy() {
   current_stash="0"
   if [[ -n $(git status --porcelain) ]]; then
     # If running in --force mode we will not allow deployment to continue
-    if [[ "${FORCE}" == "1" && "${APPROVE}" != "1" ]] || [[ "${UPDATEONLY}" == "1" ]] || [[ "${REPAIR}" = "1" ]]; then
+    if [[ "${FORCE}" == "1" ]] || [[ "${UPDATEONLY}" == "1" ]] || [[ "${REPAIR}" == "1" ]]; then
       trace "Checking for files that need stashing"
       # Stash the dirty bits
       if [[ "${STASH}" == "TRUE" ]] || [[ "${UPDATEONLY}" == "1" ]]; then # Bah, clunky
@@ -71,64 +71,48 @@ deploy_project() {
       }
     fi
 
-    if [[ "${REQUIRE_APPROVAL}" != "TRUE" ]]; then
+    if [[ "${FORCE}" == "1" ]] || yesno --default yes "Deploy to live server? [Y/n] "; then
+      start_deploy="1"
 
-      # If we don't require approval to push to live, keep going
-      if [[ "${FORCE}" == "1" ]] || yesno --default yes "Deploy to live server? [Y/n] "; then
-        start_deploy="1"
+      # Test deployment command before running
+      if [[ "${DEPLOY}" != "SCP" ]]; then
+        deploy_check
+      fi
 
-        # Test deployment command before running
-        if [[ "${DEPLOY}" != "SCP" ]]; then
-          deploy_check
-        fi
-
-        # Deploy via deployment command specified in configuration
-        if [[ "${VERBOSE}" == "TRUE" ]] && [[ "${INCOGNITO}" != "TRUE" ]]; then
-          if [[ "${DEPLOY}" == "SCP" ]]; then
-            scp_deploy
-          else
-            eval "${DEPLOY}" | tee --append "${log_file}"            
-          fi
-          error_check
+      # Deploy via deployment command specified in configuration
+      if [[ "${VERBOSE}" == "TRUE" ]] && [[ "${INCOGNITO}" != "TRUE" ]]; then
+        if [[ "${DEPLOY}" == "SCP" ]]; then
+          scp_deploy
         else
-          if [[ "${QUIET}" != "1" ]]; then
-            if [[ "${DEPLOY}" == "SCP" ]]; then
-              scp_deploy &
-              spinner $!
-            else
-              eval "${DEPLOY}" &>> "${log_file}" &
-              spinner $!
-            fi
+          eval "${DEPLOY}" | tee --append "${log_file}"
+        fi
+        error_check
+      else
+        if [[ "${QUIET}" != "1" ]]; then
+          if [[ "${DEPLOY}" == "SCP" ]]; then
+            scp_deploy &
+            spinner $!
           else
-            if [[ "${DEPLOY}" == "SCP" ]]; then
-              scp_deploy &>> "${log_file}"; error_check
-            else
-              eval "${DEPLOY}" &>> "${log_file}"; error_check
-            fi
+            eval "${DEPLOY}" &>> "${log_file}" &
+            spinner $!
+          fi
+        else
+          if [[ "${DEPLOY}" == "SCP" ]]; then
+            scp_deploy &>> "${log_file}"; error_check
+          else
+            eval "${DEPLOY}" &>> "${log_file}"; error_check
           fi
         fi
-
-        # Check for deployment failure
-        if [[ "${EXITCODE}" == "0" ]]; then
-          trace "Deployment success"
-        fi
-
-      else
-        # If running --publish exit now
-        [[ "${PUBLISH}" == "1" ]] && quiet_exit
       fi
+
+      # Check for deployment failure
+      if [[ "${EXITCODE}" == "0" ]]; then
+        trace "Deployment success"
+      fi
+
     else
-      if [[ "${APPROVE}" == "1" ]]; then
-        eval "${DEPLOY}" &>> "${log_file}"
-      else
-        if [[ "${APPROVE}" != "1" ]]; then
-          if [[ -z "${PROD_URL}" ]]; then 
-            warning "This project requires approval but has no production URL configured."
-          else
-            info "The project requires approval before pushing to ${PROD_URL}"
-          fi
-        fi
-      fi
+      # If running --publish exit now
+      [[ "${PUBLISH}" == "1" ]] && quiet_exit
     fi
   fi
   deploy_cleanup
@@ -140,13 +124,11 @@ deploy_cleanup() {
     error "Deploy failed."
   fi
 
-  if [[ "${APPROVE}" != "1" ]] && [[ "${PUBLISH}" != "1" ]]; then
-    # We just attempted to deploy, check for changes still waiting in the repo
-    # if we find any, something went wrong.
-
+  if [[ "${PUBLISH}" != "1" ]]; then
+    # Check for unexpected changes remaining in the repo
     if [[ -z $(git status -uno --porcelain) ]]; then
       # Run integration hooks
-      post_commit  
+      post_commit
       deploy_message
     else
       warning "Deployment succeeded, but something unexpected happened."
@@ -157,15 +139,11 @@ deploy_cleanup() {
   else
     # Run integration hooks
     post_commit
-    # This needs a check.
-    if [[ "${APPROVE}" == "1" ]]; then
-    	info "Deployment queued for approval."
+
+    if [[ -z "${PROD_URL}" ]]; then
+      warning "No production URL configured, but deployment command ran successfully."
     else
-      if [[ -z "${PROD_URL}" ]]; then
-        warning "No production URL configured, but deployment command ran successfully."
-      else
-        deploy_message
-      fi
+      deploy_message
     fi
   fi
 }
