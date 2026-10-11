@@ -33,9 +33,9 @@ slack_post() {
 
   # If running in --automate, change the user name
   if [[ "${AUTOMATE}" == "1" ]]; then
-    SLACKUSER="Scheduled update:"
+    SLACK_USER="Scheduled update:"
   else
-    SLACKUSER="${USER}"
+    SLACK_USER="${USER}"
   fi
 
   # If using --current, use the REPO value instead of the APP
@@ -44,14 +44,14 @@ slack_post() {
   fi
 
   # Setup the payload with the baseline language
-  slack_message="*${SLACKUSER}* (${DEV}) pushed updates to ${APP}"
+  slack_message="*${SLACK_USER}* (${DEV}) pushed updates to ${APP}"
 
   # Is this a simple publish of existing code to live?
   if [[ "${PUBLISH}" == "1" ]]; then
     if [[ -z "${PROD_URL}" ]]; then
-      slack_message="*${SLACKUSER}* (${DEV}) published commit ${commit_link} to ${APP}"
+      slack_message="*${SLACK_USER}* (${DEV}) published commit ${commit_link} to ${APP}"
     else
-      slack_message="*${SLACKUSER}* (${DEV}) published commit ${commit_link} to <${PROD_URL}|${APP}>"
+      slack_message="*${SLACK_USER}* (${DEV}) published commit ${commit_link} to <${PROD_URL}|${APP}>"
     fi
   fi
 
@@ -65,12 +65,12 @@ slack_post() {
     if [[ -z "${notes}" ]]; then
       notes="Something went wrong."
     fi
-    slack_message="*${SLACKUSER}* (${DEV}) attempted to make changes to ${APP}\nERROR: ${error_msg}"
+    slack_message="*${SLACK_USER}* (${DEV}) attempted to make changes to ${APP}\nERROR: ${error_msg}"
   fi
 
   # Is there nothing to do?
   if [[ "${message_state}" == "NOTICE" ]]; then
-    slack_message="*${SLACKUSER}* (${DEV}) nothing to do for ${APP}\nNOTICE: ${notes}"
+    slack_message="*${SLACK_USER}* (${DEV}) nothing to do for ${APP}\nNOTICE: ${notes}"
   fi
 
   # Create a payload for invoices

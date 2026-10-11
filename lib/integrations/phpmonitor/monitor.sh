@@ -15,16 +15,16 @@ server_monitor() {
       # Last 30 days; this will not correlate exactly with the time range of the report 
       # which is dealing with the last calendar month, but oh well we get what we pay
       # for. The PHP Monitor API has no ability to look up results in that way 
-      MONITORHOURS="720"
+      MONITOR_HOURS="720"
     elif [[ "${DIGEST}" == "1" ]] || [[ "${PROJSTATS}" == "1" ]] || [[ "${SCAN}" == "1" ]]; then
       # Digests and stats should average 7 days
-      MONITORHOURS="168"
+      MONITOR_HOURS="168"
     else
       # Anything else defaults to 24 hours
-      MONITORHOURS="24"
+      MONITOR_HOURS="24"
     fi
     server_monitor_log
-    trace "Uptime: ${UPTIME}% / Latency: ${LATENCY} (avg. over last ${MONITORHOURS} hours)"
+    trace "Uptime: ${UPTIME}% / Latency: ${LATENCY} (avg. over last ${MONITOR_HOURS} hours)"
   fi
 }
 
@@ -34,16 +34,14 @@ server_monitor_test() {
     console "Monitor URL: ${MONITOR_URL}"
     console "User: ${MONITOR_USER}"
     console "Server ID: ${SERVER_ID}"
-    console "Password file: ${MONITOR_PASS}"
   else
     warning "Server monitoring is not configured; check your project's configuration file."
     return
   fi
 
   # Check last 7 days for the sake of the test
-  MONITORHOURS="24"
+  MONITOR_HOURS="24"
   server_monitor_log
-  console "API: ${MONITORAPI}"  
   notice "Results (last 24 hours)"
   console "Uptime: ${UPTIME}%"
   console "Latency: ${LATENCY}s"
@@ -52,8 +50,8 @@ server_monitor_test() {
 server_monitor_log() {
   # Load the password and setup the curl command
   MONITOR_PASS=$(<$MONITOR_PASS)
-  MONITORAPI="${MONITOR_URL}?tag=serveruptime&email=${MONITOR_USER}&app_password=${MONITOR_PASS}&server_id=${SERVER_ID}&HoursUnit=${MONITORHOURS}"
-  "${curl_cmd}" -s --request GET "${MONITORAPI}" -o "${trash_file}"
+  MONITOR_API="${MONITOR_URL}?tag=serveruptime&email=${MONITOR_USER}&app_password=${MONITOR_PASS}&server_id=${SERVER_ID}&HoursUnit=${MONITOR_HOURS}"
+  "${curl_cmd}" -s --request GET "${MONITOR_API}" -o "${trash_file}"
   # Uptime
   UPTIME=$(grep -Po '"uptime":.*?[^\\]",' ${trash_file})
   UPTIME="$(cut -d ',' -f 1 <<< "${UPTIME}")"
