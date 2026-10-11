@@ -68,8 +68,8 @@ PROJECT_VERSION="3.8.6.1"
 # PRODUCTION="{{PRODUCTION}}"
 
 # Configure merge behavior. If you wish to automatically merge your branches
-# when deploying, set AUTOMERGE to TRUE.
-# AUTOMERGE="{{AUTOMERGE}}"
+# when deploying, set AUTO_MERGE to TRUE.
+# AUTO_MERGE="{{AUTO_MERGE}}"
 
 # If dirty (yet to be committed) files exist in the repo, stir will normally
 # not halt execution when running with the --automate flag. If you prefer to

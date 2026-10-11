@@ -11,7 +11,7 @@ prepare() {
   # If running a command that is not going to touch code, we can skip the 
   # --prepare stuff altogether
   startup_switch=(REPORT DIGEST SCAN TEST_SSH TEST_EMAIL TEST_SLACK TEST_WEBHOOK \
-    PUBLISH PROJSTATS CREATE_INVOICE FUNCTION_LIST VARIABLE_LIST)
+    PUBLISH PROJ_STATS CREATE_INVOICE FUNCTION_LIST VARIABLE_LIST)
   for arg in "${startup_switch[@]}"; do
     if [[ "${arg}" == "1" ]]; then
       PREPARE="FALSE"; return

@@ -45,12 +45,12 @@ go() {
   fi
 
   # Generate stats
-  if [[ "${PROJSTATS}" == "1" ]]; then
+  if [[ "${PROJ_STATS}" == "1" ]]; then
     build_stats; quiet_exit
   fi
 
   # Chill and wait for user to confirm project
-  if  [[ "${FORCE}" == "1" || "${SCAN}" == "1" || "${PROJSTATS}" == "1" ]] || yesno --default yes "Continue? [Y/n] "; then
+  if  [[ "${FORCE}" == "1" || "${SCAN}" == "1" || "${PROJ_STATS}" == "1" ]] || yesno --default yes "Continue? [Y/n] "; then
     trace "Loading project"
   else
     quiet_exit
@@ -67,7 +67,7 @@ go() {
   fi
 
   # Disallow server check?
-  if [[ "${NOCHECK}" == "1" ]]; then
+  if [[ "${NO_CHECK}" == "1" ]]; then
     CHECK_SERVER="FALSE";
     CHECK_ACTIVE="FALSE"
   fi
@@ -120,7 +120,7 @@ show_settings() {
   [[ -n "${DEV_URL}" ]] && echo "Staging URL: ${DEV_URL}"
   [[ -n "${PROD_URL}" ]] && echo "Production URL: ${PROD_URL}"
   # Git
-  if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECK_BRANCH}" ]]; then
+  if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTO_MERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECK_BRANCH}" ]]; then
     notice "Git Configuration"
     echo "-----------------"
     [[ -n "${REPO}" ]] && echo "Repo URL: ${REPO_HOST}/${REPO}"
@@ -128,7 +128,7 @@ show_settings() {
     [[ -n "${MASTER}" ]] && echo "Master branch: ${MASTER}"
     [[ -n "${STAGING}" ]] && echo "Staging branch: ${STAGING}"
     [[ -n "${PRODUCTION}" ]] && echo "Production branch: ${PRODUCTION}"
-    [[ -n "${AUTOMERGE}" ]] && echo "Auto merge: ${AUTOMERGE}"
+    [[ -n "${AUTO_MERGE}" ]] && echo "Auto merge: ${AUTO_MERGE}"
     [[ -n "${STASH}" ]] && echo "File Stashing: ${STASH}"
     [[ -n "${CHECK_BRANCH}" ]] && echo "Force branch checking: ${CHECK_BRANCH}" 
   fi

@@ -16,7 +16,7 @@ server_monitor() {
       # which is dealing with the last calendar month, but oh well we get what we pay
       # for. The PHP Monitor API has no ability to look up results in that way 
       MONITOR_HOURS="720"
-    elif [[ "${DIGEST}" == "1" ]] || [[ "${PROJSTATS}" == "1" ]] || [[ "${SCAN}" == "1" ]]; then
+    elif [[ "${DIGEST}" == "1" ]] || [[ "${PROJ_STATS}" == "1" ]] || [[ "${SCAN}" == "1" ]]; then
       # Digests and stats should average 7 days
       MONITOR_HOURS="168"
     else

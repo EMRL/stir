@@ -126,7 +126,7 @@ ga_data() {
   SIZE="$(printf "%.0f\n" "${RESULT}")"
 
   # TODO: Make this a proper loop
-  if [[ "${PROJSTATS}" == "1" ]]; then
+  if [[ "${PROJ_STATS}" == "1" ]]; then
     GA_HITS=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:pageviews&start-date=$GA_START&end-date=$GA_END&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:pageviews\":" | cut -d'"' -f4)
     GA_PERCENT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:percentNewSessions&start-date=$GA_START&end-date=$GA_END&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:percentNewSessions\":" | cut -d'"' -f4)
     GA_SEARCHES=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:organicSearches&start-date=$GA_START&end-date=$GA_END&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:organicSearches\":" | cut -d'"' -f4)

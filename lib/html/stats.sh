@@ -98,7 +98,7 @@ build_stats() {
   #}
 
   if [[ -z "${gitchart_cmd}" ]]; then
-    PROJSTATS=""
+    PROJ_STATS=""
     warning "Can not chart project statistics, gitchart not installed."
     quiet_exit
   fi

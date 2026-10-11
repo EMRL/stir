@@ -97,13 +97,13 @@ email_test() {
     [[ -n "${PROD_URL}" ]] && echo "Production URL: <a href=\"${PROD_URL}\">${PROD_URL}</a><br />"
     echo "<br />"
     # Git
-    if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECK_BRANCH}" ]]; then
+    if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTO_MERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECK_BRANCH}" ]]; then
       echo "<strong>Git Configuration</strong><br />"
       [[ -n "${REPO}" ]] && echo "Repo: <a href=\"${REPO_HOST}/${REPO}\">${REPO_HOST}/${REPO}</a><br />"
       [[ -n "${MASTER}" ]] && echo "Master branch: ${MASTER}<br />"
       [[ -n "${STAGING}" ]] && echo "Staging branch: ${STAGING}<br />"
       [[ -n "${PRODUCTION}" ]] && echo "Production branch: ${PRODUCTION}<br />"
-      [[ -n "${AUTOMERGE}" ]] && echo "Auto merge: ${AUTOMERGE}<br />"
+      [[ -n "${AUTO_MERGE}" ]] && echo "Auto merge: ${AUTO_MERGE}<br />"
       [[ -n "${STASH}" ]] && echo "File Stashing: ${STASH}<br />"
       [[ -n "${CHECK_BRANCH}" ]] && echo "Force branch checking: ${CHECK_BRANCH}<br />"
       echo "<br />"
@@ -236,14 +236,14 @@ email_test() {
     [[ -n "${PROD_URL}" ]] && echo "Production URL: ${PROD_URL}"
     echo 
     # Git
-    if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTOMERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECK_BRANCH}" ]]; then
+    if [[ -n "${REPO}" ]] || [[ -n "${MASTER}" ]] || [[ -n "${PRODUCTION}" ]] || [[ -n "${AUTO_MERGE}" ]] || [[ -n "${STASH}" ]] || [[ -n "${CHECK_BRANCH}" ]]; then
       echo "Git Configuration"
       echo "-----------------"
       [[ -n "${REPO}" ]] && echo "Repo: ${REPO_HOST}/${REPO}"
       [[ -n "${MASTER}" ]] && echo "Master branch: ${MASTER}"
       [[ -n "${STAGING}" ]] && echo "Staging branch: ${STAGING}"
       [[ -n "${PRODUCTION}" ]] && echo "Production branch: ${PRODUCTION}"
-      [[ -n "${AUTOMERGE}" ]] && echo "Auto merge: ${AUTOMERGE}"
+      [[ -n "${AUTO_MERGE}" ]] && echo "Auto merge: ${AUTO_MERGE}"
       [[ -n "${STASH}" ]] && echo "File Stashing: ${STASH}"
       [[ -n "${CHECK_BRANCH}" ]] && echo "Force branch checking: ${CHECK_BRANCH}"
       echo 

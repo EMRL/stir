@@ -95,7 +95,7 @@ clean_up() {
   fi
 
   # If Wordfence was an issue, restart the plugin
-  if [[ "${WFOFF}" = "1" ]]; then
+  if [[ "${WF_OFF}" = "1" ]]; then
     eval "${wp_cmd}" plugin activate --no-color wordfence &>> $log_file; error_check
   fi
 

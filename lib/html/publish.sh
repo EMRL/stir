@@ -43,7 +43,7 @@ publish_html() {
       fi
 
       # Statistics
-      if [[ "${PROJSTATS}" == "1" ]]; then
+      if [[ "${PROJ_STATS}" == "1" ]]; then
         [[ ! -d "${LOCAL_HOST_PATH}/${APP}" ]] && mkdir "${LOCAL_HOST_PATH}/${APP}"
         [[ ! -d "${LOCAL_HOST_PATH}/${APP}/stats" ]] && mkdir "${LOCAL_HOST_PATH}/${APP}/stats"
         cp -R "${stat_dir}" "${LOCAL_HOST_PATH}/${APP}"
@@ -83,7 +83,7 @@ publish_html() {
         DIGEST_URL="${REMOTE_URL}/${APP}/${REMOTE_FILE}"
       fi
 
-      if [[ "${PROJSTATS}" == "1" || "${DIGEST}" == "1" && -f "${stat_dir}/*" ]]; then
+      if [[ "${PROJ_STATS}" == "1" || "${DIGEST}" == "1" && -f "${stat_dir}/*" ]]; then
         eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/stats"
         eval "${SCP_CMD} -r" "${stat_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/stats/"
         eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/avatar"
@@ -112,7 +112,7 @@ publish_html() {
       fi
 
       # Send over the logs and set permissions
-      if [[ "${REPORT}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]]; then 
+      if [[ "${REPORT}" != "1" ]] && [[ "${PROJ_STATS}" != "1" ]]; then 
         eval "${SCP_CMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/${REMOTE_FILE}" &> /dev/null
       fi
 

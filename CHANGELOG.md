@@ -317,7 +317,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Logs are now only emailed and posted when something noteworthy has occured - e.g. a commit has been made or an error has occurred
 - Changed checkout behavior - master branch is now only checked out when needed
 - Cleaned up log output
-- Changed default merge behavior - deploy will no longer perform automatic merges unless ran as `deploy --merge` or `AUTOMERGE="TRUE"` is defined in `config/deploy.sh`
+- Changed default merge behavior - deploy will no longer perform automatic merges unless ran as `deploy --merge` or `AUTO_MERGE="TRUE"` is defined in `config/deploy.sh`
 - Existence of all defined branches is now confirmed before starting deployment process
 ### Fixed 
 - Fixed a small bug when repo name is undeclared when not running `deploy --current`

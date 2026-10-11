@@ -36,8 +36,8 @@ init_loop() {
 init_startup() {
   var=(APP UPGRADE SKIP_UPDATE CURRENT VERBOSE QUIET STRICT DEBUG FORCE \
     TEST_SLACK FUNCTION_LIST VARIABLE_LIST AUTOMATE TEST_EMAIL \
-    PUBLISH DIGEST ANALYTICS TEST_ANALYTICS BUILD PROJSTATS UNLOCK  \
-    TEST_SSH TIME UPDATEONLY TEST_WEBHOOK REPORT REPAIR CREATE_INVOICE SCAN \
+    PUBLISH DIGEST ANALYTICS TEST_ANALYTICS BUILD PROJ_STATS UNLOCK  \
+    TEST_SSH TIME UPDATE_ONLY TEST_WEBHOOK REPORT REPAIR CREATE_INVOICE SCAN \
     TEST_BACKUP APP_PATH EXTENDED_HELP RESET PREPARE_WITH_RESET MIGRATE \
     SHOW_SETTINGS UNIT_TEST TEST_BUGSNAG UPDATE_ACF DEBUG_TO_FILE TEST_GA4 \
     TEST_OPENPROJECT)
@@ -66,7 +66,7 @@ init_env() {
   POST_TO_SLACK SLACK_URL SLACK_ERROR POST_URL NO_KEY PROJECT_NAME \
   PROJECT_CLIENT DEV_URL PROD_URL REPO MASTER STAGING PRODUCTION DEPLOY \
   DO_NOT_DEPLOY TASK CHECK_BRANCH CHECK_ACTIVE CHECK_TIME GARBAGE WF_CHECK \
-  ACF_KEY ACF_LOCK WFOFF REMOTE_LOG POST_TO_LOCAL_HOST LOCAL_HOST_PATH \
+  ACF_KEY ACF_LOCK WF_OFF REMOTE_LOG POST_TO_LOCAL_HOST LOCAL_HOST_PATH \
   DIGEST_EMAIL DIGEST_SLACK DIGEST_URL CLIENT_LOGO REMOTE_URL \
   SCP_POST SCP_USER SCP_HOST SCP_HOST_PATH SCP_PASS SCP_CMD SSH_CMD LOGMSG \
   EXPIRE_LOGS CHECK_SERVER STASH ADD_TIME SCP_PORT TASK_USER \
@@ -87,9 +87,9 @@ init_internal() {
   var=(optstring options log_file wp_file core_file post_file trash_file stat_file \
   url_file html_file htmlSendmail html_email client_email textSendmail stir_path \
   etc_path lib_path integration_email current_branch error_msg notes latency \
-  UPDCORE TASKLOG plugins_updated PCB PCC PCD PLUGINS slack_icon APPRC userrc \
-  message_state COMMIT_URL COMMIT_HASH UPD1 UPD2 UPDATE git_lock AUTOMERGE MERGE \
-  EXIT_CODE current_stash deploy_cmd start_branch postSendmail SLACK_USER NOCHECK \
+  UPD_CORE TASK_LOG plugins_updated PCB PCC PCD PLUGINS slack_icon APPRC userrc \
+  message_state COMMIT_URL COMMIT_HASH UPD1 UPD2 UPDATE git_lock AUTO_MERGE MERGE \
+  EXIT_CODE current_stash deploy_cmd start_branch postSendmail SLACK_USER NO_CHECK \
   VIEWPORT VIEWPORT_PRE LOG_TITLE LOG_URL TIMESTAMP STARTUP WP_ROOT \
   WP_APP WP_SYSTEM DO_NOT_UPDATE_WP digest_payload MINA_USER \
   MINA_DOMAIN SSH_TARGET SSH_STATUS REMOTE_FILE  LOG_SUFFIX \
@@ -272,7 +272,7 @@ while [[ ${1:-unset} = -?* ]]; do
     -h|--help) flags >&2; exit ;;
     -H|--more-help) EXTENDED_HELP="1"; flags >&2; exit ;;
     -u|--update) UPGRADE="1" ;;
-    -U|--update-only) UPDATEONLY="1" ;;
+    -U|--update-only) UPDATE_ONLY="1" ;;
     -D|--deploy) PUBLISH="1" ;;
     -S|--skip-update|--skip-updates) SKIP_UPDATE="1" ;;
     -c|--current) CURRENT="1" ;;
@@ -303,13 +303,13 @@ while [[ ${1:-unset} = -?* ]]; do
     --test-monitor) TEST_MONITOR="1"; NO_LOG="1" ;;
     --test-bugsnag) TEST_BUGSNAG="1"; NO_LOG="1" ;;
     --test-mautic) TEST_MAUTIC="1"; NO_LOG="1" ;;
-    --stats) PROJSTATS="1" ;;
-    --build) BUILD="1"; NOCHECK="1"; FORCE="1" ;;
+    --stats) PROJ_STATS="1" ;;
+    --build) BUILD="1"; NO_CHECK="1"; FORCE="1" ;;
     --invoice) CREATE_INVOICE="1"; NO_LOG="1"; FORCE="1" ;;
     --unlock) UNLOCK="1"; NO_LOG="1" ;;
     --repair) REPAIR="1"; FORCE="1"; STASH="TRUE"; VERBOSE="TRUE" ;;
     --scan) SCAN="1" ;;
-    --no-check) NOCHECK="1" ;;
+    --no-check) NO_CHECK="1" ;;
     --show-settings) SHOW_SETTINGS="1"; NO_LOG="1" ;;
     --function-list) FUNCTION_LIST="1"; CURRENT="1"; NO_LOG="1" ;; # Spoofs --current
     --variable-list) VARIABLE_LIST="1"; CURRENT="1"; NO_LOG="1" ;; # Spoofs --current
@@ -371,10 +371,10 @@ fi
 [[ "${FORCE}" == "1" ]] && STARTUP="${STARTUP} --force"
 [[ "${DEBUG_TO_FILE}" == "1" ]] && STARTUP="${STARTUP} --debug-to-file"
 [[ "${MERGE}" == "1" ]] && STARTUP="${STARTUP} --merge"
-[[ "${NOCHECK}" == "1" ]] && STARTUP="${STARTUP} --no-check"
+[[ "${NO_CHECK}" == "1" ]] && STARTUP="${STARTUP} --no-check"
 [[ "${UNLOCK}" == "1" ]] && STARTUP="${STARTUP} --unlock"
 [[ "${REPAIR}" == "1" ]] && STARTUP="${STARTUP} --repair"
-[[ "${UPDATEONLY}" == "1" ]] && STARTUP="${STARTUP} --update-only"
+[[ "${UPDATE_ONLY}" == "1" ]] && STARTUP="${STARTUP} --update-only"
 
 # Probably not relevant but included because reasons
 [[ "${TEST_SLACK}" == "1" ]] && STARTUP="${STARTUP} --slack-test"
@@ -598,9 +598,9 @@ if [[ "${INCOGNITO}" != "TRUE" ]]; then
 fi
 
 # Check for upcoming merge
-if [[ "${AUTOMERGE}" == "TRUE" ]]; then
+if [[ "${AUTO_MERGE}" == "TRUE" ]]; then
   MERGE="1"
-  trace "Automerge is enabled"
+  trace "AUTO_MERGE is enabled"
 fi
 
 # If using --automate, force branch checking
@@ -639,7 +639,7 @@ if [[ "${MERGE}" == "1" ]]; then
       error "Automated deployment requires a code merge, but a target branch is not defined."
     fi
     # If not, spit out warnings and begin walk of shame
-    if [[ "${AUTOMERGE}" == "TRUE" ]]; then
+    if [[ "${AUTO_MERGE}" == "TRUE" ]]; then
       warning "This project is configured to automatically merge branches, but a target branch is not defined."
     else
       warning "You are attempting to merge branches, but a target branch is not defined."
