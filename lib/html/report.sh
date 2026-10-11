@@ -67,7 +67,7 @@ build_report() {
 
   # Set URL
   REMOTE_FILE="${current_year}-${current_month}.php"
-  REPORTURL="${REMOTE_URL}/${APP}/report/${REMOTE_FILE}"
+  REPORT_URL="${REMOTE_URL}/${APP}/report/${REMOTE_FILE}"
   
   #if [[ "${CREATE_INVOICE}" == "1" ]]; then
   #  return

@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initializa needed variables
-var=(AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMG_FILE DIGEST_WRAP)
+var=(AUTHOR AUTHOR_EMAIL AUTHOR_NAME GRAVATAR IMG_FILE DIGEST_WRAP)
 init_loop
 
 ###############################################################################
@@ -21,9 +21,9 @@ prepare_author_avatars() {
   fi
   
   for AUTHOR in $(git log --pretty=format:"%ae|%an" | sort | uniq); do
-    AUTHOREMAIL=$(echo $AUTHOR | cut -d\| -f1 | tr -d '[[:space:]]' | tr '[:upper:]' '[:lower:]')
-    AUTHORNAME=$(echo $AUTHOR | cut -d\| -f2)
-    GRAVATAR="https://gravatar.com/avatar/$(echo -n ${AUTHOREMAIL} | md5sum - | cut -d' ' -f1)?s=300"
+    AUTHOR_EMAIL=$(echo $AUTHOR | cut -d\| -f1 | tr -d '[[:space:]]' | tr '[:upper:]' '[:lower:]')
+    AUTHOR_NAME=$(echo $AUTHOR | cut -d\| -f2)
+    GRAVATAR="https://gravatar.com/avatar/$(echo -n ${AUTHOR_EMAIL} | md5sum - | cut -d' ' -f1)?s=300"
 
     # Check for missing Gravatar
     if "${curl_cmd}" --output /dev/null --silent --head --fail "${GRAVATAR}"; then
@@ -33,12 +33,12 @@ prepare_author_avatars() {
     fi
 
     if [[ "${SCP_POST}" != "TRUE" ]]; then 
-      IMG_FILE="${LOCAL_HOST_PATH}/${APP}/avatar/$AUTHORNAME.png"
+      IMG_FILE="${LOCAL_HOST_PATH}/${APP}/avatar/$AUTHOR_NAME.png"
     else
       #if [[ ! -d "/tmp/avatar" ]]; then
       #  umask 077 && mkdir /tmp/avatar &> /dev/null
       #fi
-      IMG_FILE="${avatar_dir}/${AUTHORNAME}.png"
+      IMG_FILE="${avatar_dir}/${AUTHOR_NAME}.png"
     fi
     "${curl_cmd}" -fso "${IMG_FILE}" "${GRAVATAR}"; dot
   done 

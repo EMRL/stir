@@ -62,23 +62,23 @@ while [[ -h "${SOURCE}" ]]; do
   [[ "${SOURCE}" != /* ]] && SOURCE="${DIR}/${SOURCE}"
 done
 
-SOURCEPATH="$(cd -P "$(dirname "${SOURCE}")" && pwd)"
+SOURCE_PATH="$(cd -P "$(dirname "${SOURCE}")" && pwd)"
 
-if [[ ! -d "${SOURCEPATH}" ]]; then
-  echo "Failed to find library files expected in: ${SOURCEPATH}"
+if [[ ! -d "${SOURCE_PATH}" ]]; then
+  echo "Failed to find library files expected in: ${SOURCE_PATH}"
   exit 1
 fi
 
 # Source everything in /lib recursively
 while IFS= read -r -d '' library; do
   # Don't source yourself, silly script
-  if [[ "${library}" == "${SOURCEPATH}/loader.sh" ]]; then
+  if [[ "${library}" == "${SOURCE_PATH}/loader.sh" ]]; then
     continue
   fi
 
   # shellcheck disable=SC1090
   source "${library}"
 done < <(
-  find "${SOURCEPATH}" -type f -name '*.sh' -print0 |
+  find "${SOURCE_PATH}" -type f -name '*.sh' -print0 |
     sort -z
 )

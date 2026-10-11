@@ -114,15 +114,15 @@ slack_post() {
   # Create payload for reports
   if [[ "${REPORT}" == "1" ]]; then
     if [[ -n "${PROD_URL}" ]]; then
-      slack_message="Monthly report for <${PROD_URL}|${PROJECT_NAME}> created (<${REPORTURL}|View>)"
+      slack_message="Monthly report for <${PROD_URL}|${PROJECT_NAME}> created (<${REPORT_URL}|View>)"
     else
-      slack_message="Monthly report for *${PROJECT_NAME}* created (<${REPORTURL}|View>)"
+      slack_message="Monthly report for *${PROJECT_NAME}* created (<${REPORT_URL}|View>)"
     fi
   fi
 
   # Create payload for digests
   if [[ "${DIGEST}" == "1" ]] &&
-    [[ -n "${DIGESTURL}" ]] &&
+    [[ -n "${DIGEST_URL}" ]] &&
     [[ -n "${GREETING}" ]]; then
 
     if [[ -n "${DIGEST_SLACK}" ]] &&
@@ -135,9 +135,9 @@ slack_post() {
       fi
 
       if [[ -n "${PROD_URL}" ]]; then
-        slack_message="<${PROD_URL}|${PROJECT_NAME}> updates for the week of ${WEEK_OF} (<${DIGESTURL}|View>)"
+        slack_message="<${PROD_URL}|${PROJECT_NAME}> updates for the week of ${WEEK_OF} (<${DIGEST_URL}|View>)"
       else
-        slack_message="*${PROJECT_NAME}* updates for the week of ${WEEK_OF} (<${DIGESTURL}|View>)"
+        slack_message="*${PROJECT_NAME}* updates for the week of ${WEEK_OF} (<${DIGEST_URL}|View>)"
       fi
     else
       return

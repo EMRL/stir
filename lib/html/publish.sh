@@ -31,7 +31,7 @@ publish_html() {
         REMOTE_FILE="digest-${EPOCH}.html"
         cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/${REMOTE_FILE}"
         chmod a+rw "${LOCAL_HOST_PATH}/${APP}/${REMOTE_FILE}" &> /dev/null
-        DIGESTURL="${REMOTE_URL}/${APP}/${REMOTE_FILE}"
+        DIGEST_URL="${REMOTE_URL}/${APP}/${REMOTE_FILE}"
       fi
 
       # Post the report
@@ -39,7 +39,7 @@ publish_html() {
         REMOTE_FILE="${current_year}-${current_month}.php"
         cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/report/${REMOTE_FILE}"
         chmod a+rw "${LOCAL_HOST_PATH}/${APP}/report/${REMOTE_FILE}" &> /dev/null
-        REPORTURL="${REMOTE_URL}/${APP}/report/${REMOTE_FILE}"
+        REPORT_URL="${REMOTE_URL}/${APP}/report/${REMOTE_FILE}"
       fi
 
       # Statistics
@@ -66,28 +66,28 @@ publish_html() {
       if [[ -n "${SCP_PASS}" ]] && [[ -n "${sshpass_cmd}" ]]; then
         TMP=$(<$SCP_PASS)
         SCP_PASS="${TMP}"
-        SCPCMD="${sshpass_cmd} -p \"${SCP_PASS}\" scp -o StrictHostKeyChecking=no -P \"${SCP_PORT}\""
-        SSHCMD="${sshpass_cmd} -p \"${SCP_PASS}\" ssh -p \"${SCP_PORT}\""
+        SCP_CMD="${sshpass_cmd} -p \"${SCP_PASS}\" scp -o StrictHostKeyChecking=no -P \"${SCP_PORT}\""
+        SSH_CMD="${sshpass_cmd} -p \"${SCP_PASS}\" ssh -p \"${SCP_PORT}\""
       elif [[ -n "${scp_cmd}" ]]; then
-        SCPCMD="${scp_cmd} -P \"${SCP_PORT}\""
-        SSHCMD="${ssh_cmd} -p \"${SCP_PORT}\""
+        SCP_CMD="${scp_cmd} -P \"${SCP_PORT}\""
+        SSH_CMD="${ssh_cmd} -p \"${SCP_PORT}\""
       else
         return
       fi
 
       # Loop through the various scenarios, make directories if needed
-      eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}"
+      eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}"
 
       if [[ "${DIGEST}" == "1" ]]; then
         REMOTE_FILE="digest-${EPOCH}.html"
-        DIGESTURL="${REMOTE_URL}/${APP}/${REMOTE_FILE}"
+        DIGEST_URL="${REMOTE_URL}/${APP}/${REMOTE_FILE}"
       fi
 
       if [[ "${PROJSTATS}" == "1" || "${DIGEST}" == "1" && -f "${stat_dir}/*" ]]; then
-        eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/stats"
-        eval "${SCPCMD} -r" "${stat_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/stats/"
-        eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/avatar"
-        eval "${SCPCMD} -r" "${avatar_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/avatar/"
+        eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/stats"
+        eval "${SCP_CMD} -r" "${stat_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/stats/"
+        eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/avatar"
+        eval "${SCP_CMD} -r" "${avatar_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/avatar/"
         if [[ -d "${avatar_dir}" ]]; then
           rm -R "${avatar_dir}"
         fi
@@ -95,37 +95,37 @@ publish_html() {
 
       if [[ "${SCAN}" == "1" ]]; then
         trace "Sending /scan"
-        eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/scan"
-        eval "${SCPCMD} -r" "${scan_html}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/scan/index.html"
+        eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/scan"
+        eval "${SCP_CMD} -r" "${scan_html}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/scan/index.html"
         # This stuff is for the new dashboard method
-        eval "${SCPCMD} -r" "${stat_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/stats/"
+        eval "${SCP_CMD} -r" "${stat_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/stats/"
       fi
 
       if [[ "${REPORT}" == "1" ]]; then
         REMOTE_FILE="${current_year}-${current_month}.php"
-        eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report"
-        eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report/css"
-        eval "${SCPCMD} -r" "${stir_path}/html/${HTML_TEMPLATE}/report/css" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report"
-        eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report/js"
-        eval "${SCPCMD} -r" "${stir_path}/html/${HTML_TEMPLATE}/report/js" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report"
-        eval "${SCPCMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report/${REMOTE_FILE}"
+        eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report"
+        eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report/css"
+        eval "${SCP_CMD} -r" "${stir_path}/html/${HTML_TEMPLATE}/report/css" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report"
+        eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report/js"
+        eval "${SCP_CMD} -r" "${stir_path}/html/${HTML_TEMPLATE}/report/js" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report"
+        eval "${SCP_CMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report/${REMOTE_FILE}"
       fi
 
       # Send over the logs and set permissions
       if [[ "${REPORT}" != "1" ]] && [[ "${PROJSTATS}" != "1" ]]; then 
-        eval "${SCPCMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/${REMOTE_FILE}" &> /dev/null
+        eval "${SCP_CMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/${REMOTE_FILE}" &> /dev/null
       fi
 
       # Remove logs older then X days
       if [[ -n "${EXPIRE_LOGS}" ]]; then
         is_integer "${EXPIRE_LOGS}"
         if [[ "${integer_check}" != "1" ]]; then
-          eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "'find ${SCP_HOST_PATH}/${APP}* -mtime +${EXPIRE_LOGS} -exec rm {} \;' &> /dev/null"
+          eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "'find ${SCP_HOST_PATH}/${APP}* -mtime +${EXPIRE_LOGS} -exec rm {} \;' &> /dev/null"
         fi
       fi
 
       # Set permissions
-      eval "${SSHCMD}" "${SCP_USER}"@"${SCP_HOST}" "chmod -R 755 ${SCP_HOST_PATH}/${APP}/"
+      eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "chmod -R 755 ${SCP_HOST_PATH}/${APP}/"
     fi
   fi
 }

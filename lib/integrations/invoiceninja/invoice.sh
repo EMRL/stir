@@ -23,8 +23,8 @@ create_invoice() {
     if [[ -n "${IN_NOTES}" ]]; then
       IN_NOTES="${IN_NOTES}\n"
     fi
-    IN_NOTES="${IN_NOTES}View your full monthly update report at ${REPORTURL}"
-    IN_PUBLIC_NOTES="View your monthly update report at ${REPORTURL}"
+    IN_NOTES="${IN_NOTES}View your full monthly update report at ${REPORT_URL}"
+    IN_PUBLIC_NOTES="View your monthly update report at ${REPORT_URL}"
   fi
 
   # Will create the invoice payload
@@ -33,7 +33,7 @@ create_invoice() {
   eval "${invoice_hack}" &>> "${log_file}"; error_check
 
   get_current_invoice
-  if [[ -n "${REPORTURL}" ]]; then
+  if [[ -n "${REPORT_URL}" ]]; then
     attach_pdf_to_invoice
   fi 
 
@@ -72,7 +72,7 @@ send_invoice() {
 
 attach_pdf_to_invoice() {
   trace status "Attaching PDF report... "
-  "${wkhtmltopdf_cmd}" "${REPORTURL}" "/tmp/${APP}_${current_year}-${current_month}.pdf" &>> "${log_file}"; error_check
+  "${wkhtmltopdf_cmd}" "${REPORT_URL}" "/tmp/${APP}_${current_year}-${current_month}.pdf" &>> "${log_file}"; error_check
 
   "${curl_cmd}" --silent -X POST "${IN_HOST}/api/v1/documents?invoice_id=${current_invoice_offset}" -H "Content-Type:multipart/form-data" -H "X-Requested-With: XMLHttpRequest" -H "X-Ninja-Token:${IN_TOKEN}" -F "file=@/tmp/${APP}_${current_year}-${current_month}.pdf" &>> "${log_file}"; error_check
 

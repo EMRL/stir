@@ -11,14 +11,14 @@ webhook_post() {
     # Create payload for digests
     if [[ "${DIGEST}" == "1" ]] && [[ -n "${GREETING}" ]]; then
       message_state="DIGEST"
-      payload="*${PROJECT_NAME}* updates for the week of ${WEEK_OF} (<${DIGESTURL})"               
+      payload="*${PROJECT_NAME}* updates for the week of ${WEEK_OF} (<${DIGEST_URL})"               
       # Send it
       "${curl_cmd}" -X POST --data "payload={\"text\": \"${payload}\"}" "${POST_URL}" > /dev/null 2>&1; error_status
     fi
 
     # Create payload for reports
     if [[ "${REPORT}" == "1" ]]; then
-      payload="Monthly report for *${PROJECT_NAME}* created (<${REPORTURL})" 
+      payload="Monthly report for *${PROJECT_NAME}* created (<${REPORT_URL})" 
       "${curl_cmd}" -X POST --data "payload={\"text\": \"${payload}\"}" "${POST_URL}" > /dev/null 2>&1; error_status              
     fi
   fi
