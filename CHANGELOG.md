@@ -18,7 +18,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Improved statistics generation performance with caching for Git activity charts
 - Changed commit history links to point directly to GitHub or Bitbucket, eliminating unnecessary URL validation
 - Reorganized library files into subdirectories with recursive sourcing
-- Standardized Bash function names, variables, and formatting
+- Standardized Bash function names
+- Standardized internal variable names to use uppercase snake case
 - Improved integration testing and command-line test functions
 - Updated reporting templates and chart configuration
 - Moved OpenProject time logging to the end of the post-commit process

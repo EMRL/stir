@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initializa needed variables
-var=(DIGESTWRAP DIGEST_SLACK GREETING NO_ACTIVITY)
+var=(DIGEST_WRAP DIGEST_SLACK GREETING NO_ACTIVITY)
 init_loop
 
 build_digest_commits() {
@@ -16,12 +16,12 @@ build_digest_commits() {
   fi
 
   # Get ready
-  DIGESTWRAP="$(<${stir_path}/html/${HTML_TEMPLATE}/digest/commit.html)"
+  DIGEST_WRAP="$(<${stir_path}/html/${HTML_TEMPLATE}/digest/commit.html)"
   > "${stat_file}"
 
   # If there have been no commits in the last week, skip
   if [[ $(git log --since="7 days ago") ]]; then
-    git log --pretty=format:"%n$DIGESTWRAP<strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTE_URL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${stat_file}"; dot
+    git log --pretty=format:"%n$DIGEST_WRAP<strong>%ncommit <a style=\"color: {{PRIMARY}}; text-decoration: none; font-weight: bold;\" href=\"${REMOTE_URL}/${APP}/%h.html\">%h</a>%nAuthor: %aN%nDate: %aD (%cr)%n%s</td></tr></table>" --since="7 days ago" > "${stat_file}"; dot
     sed -i '/^commit/ s/$/ <\/strong><br>/' "${stat_file}"
     sed -i '/^Author:/ s/$/ <br>/' "${stat_file}"
     sed -i '/^Date:/ s/$/ <br><br>/' "${stat_file}"
@@ -76,7 +76,7 @@ build_digest() {
     build_digest_commits
 
     # If there's no analytics and no commit activity, there's no need for a digest
-    if [[ -z "${ANALYTICSMSG}" ]] && [[ "${NO_ACTIVITY}" == "1" ]]; then
+    if [[ -z "${ANALYTICS_MSG}" ]] && [[ "${NO_ACTIVITY}" == "1" ]]; then
       console " No activity found."
       quiet_exit
     fi

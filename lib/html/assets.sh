@@ -7,7 +7,7 @@
 ###############################################################################
 
 # Initializa needed variables
-var=(AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMGFILE DIGESTWRAP)
+var=(AUTHOR AUTHOREMAIL AUTHORNAME GRAVATAR IMG_FILE DIGEST_WRAP)
 init_loop
 
 ###############################################################################
@@ -33,13 +33,13 @@ prepare_author_avatars() {
     fi
 
     if [[ "${SCP_POST}" != "TRUE" ]]; then 
-      IMGFILE="${LOCAL_HOST_PATH}/${APP}/avatar/$AUTHORNAME.png"
+      IMG_FILE="${LOCAL_HOST_PATH}/${APP}/avatar/$AUTHORNAME.png"
     else
       #if [[ ! -d "/tmp/avatar" ]]; then
       #  umask 077 && mkdir /tmp/avatar &> /dev/null
       #fi
-      IMGFILE="${avatar_dir}/${AUTHORNAME}.png"
+      IMG_FILE="${avatar_dir}/${AUTHORNAME}.png"
     fi
-    "${curl_cmd}" -fso "${IMGFILE}" "${GRAVATAR}"; dot
+    "${curl_cmd}" -fso "${IMG_FILE}" "${GRAVATAR}"; dot
   done 
 }

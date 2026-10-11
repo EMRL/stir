@@ -113,7 +113,7 @@ build_log() {
 
   # Setup a couple of variables
   VIEWPORT="680"
-  VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
+  VIEWPORT_PRE=$(expr ${VIEWPORT} - 80)
 
   # IF we're using HTML emails, let's get to work
   if [[ "${EMAIL_HTML}" == "TRUE" ]]; then
@@ -135,7 +135,7 @@ build_log() {
 
     # For web logs, VIEWPORT should be 960
     VIEWPORT="960"
-    VIEWPORTPRE=$(expr ${VIEWPORT} - 80)
+    VIEWPORT_PRE=$(expr ${VIEWPORT} - 80)
 
     # Build the html email and details pages
     # render_log
@@ -147,7 +147,7 @@ build_log() {
 }
 
 render_log() {
-  LOGSUFFIX="html"
+  LOG_SUFFIX="html"
 
   # Build out the HTML
   if [[ "${message_state}" == "ERROR" ]]; then
@@ -178,18 +178,18 @@ render_log() {
 
   # Create URL
   if [[ "${PUBLISH}" == "1" ]]; then
-    LOG_URL="${REMOTE_URL}/${APP}/${EPOCH}.${LOGSUFFIX}"
-    REMOTE_FILE="${EPOCH}.${LOGSUFFIX}"
+    LOG_URL="${REMOTE_URL}/${APP}/${EPOCH}.${LOG_SUFFIX}"
+    REMOTE_FILE="${EPOCH}.${LOG_SUFFIX}"
   elif [[ "${SCAN}" == "1" ]]; then
     LOG_URL="${REMOTE_URL}/${APP}/scan"
     REMOTE_FILE="index.html"
   else
     if [[ "${message_state}" != "SUCCESS" ]] || [[ -z "${COMMIT_HASH}" ]]; then
-      LOG_URL="${REMOTE_URL}/${APP}/${message_state}-${EPOCH}.${LOGSUFFIX}"
-      REMOTE_FILE="${message_state}-${EPOCH}.${LOGSUFFIX}"
+      LOG_URL="${REMOTE_URL}/${APP}/${message_state}-${EPOCH}.${LOG_SUFFIX}"
+      REMOTE_FILE="${message_state}-${EPOCH}.${LOG_SUFFIX}"
     else
-      LOG_URL="${REMOTE_URL}/${APP}/${COMMIT_HASH}.${LOGSUFFIX}"
-      REMOTE_FILE="${COMMIT_HASH}.${LOGSUFFIX}"
+      LOG_URL="${REMOTE_URL}/${APP}/${COMMIT_HASH}.${LOG_SUFFIX}"
+      REMOTE_FILE="${COMMIT_HASH}.${LOG_SUFFIX}"
     fi
   fi
 

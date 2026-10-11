@@ -54,7 +54,7 @@ send_log_email() {
     echo "From: EMRL <${FROM}>"
     echo "Reply-To: ${FROM} <${FROM}>"
     echo "To: ${DIGEST_EMAIL}"
-    echo "Subject: ${PROJECT_NAME} updates for the week of ${WEEKOF}"               
+    echo "Subject: ${PROJECT_NAME} updates for the week of ${WEEK_OF}"               
     echo "Content-Type: text/html"
     echo
     echo "${digest_payload}";

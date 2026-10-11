@@ -135,9 +135,9 @@ slack_post() {
       fi
 
       if [[ -n "${PROD_URL}" ]]; then
-        slack_message="<${PROD_URL}|${PROJECT_NAME}> updates for the week of ${WEEKOF} (<${DIGESTURL}|View>)"
+        slack_message="<${PROD_URL}|${PROJECT_NAME}> updates for the week of ${WEEK_OF} (<${DIGESTURL}|View>)"
       else
-        slack_message="*${PROJECT_NAME}* updates for the week of ${WEEKOF} (<${DIGESTURL}|View>)"
+        slack_message="*${PROJECT_NAME}* updates for the week of ${WEEK_OF} (<${DIGESTURL}|View>)"
       fi
     else
       return

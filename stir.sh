@@ -15,9 +15,9 @@ VERSION="3.8.6.2"
 EPOCH="$(date +%s)"
 NOW="$(date +"%B %d, %Y")"
 last_month="$(date --date="$(date +%Y-%m-15) -1 month" +'%B')"
-WEEKOF="$(date -d '7 days ago' +"%B %d, %Y")"
-GASTART="$(date -d '7 days ago' "+%Y-%m-%d")"
-GAEND="$(date "+%Y-%m-%d")"
+WEEK_OF="$(date -d '7 days ago' +"%B %d, %Y")"
+GA_START="$(date -d '7 days ago' "+%Y-%m-%d")"
+GA_END="$(date "+%Y-%m-%d")"
 DEV="${USER}@${HOSTNAME}"
 APP="null"
 
@@ -90,9 +90,9 @@ init_internal() {
   UPDCORE TASKLOG plugins_updated PCB PCC PCD PLUGINS slack_icon APPRC userrc \
   message_state COMMIT_URL COMMIT_HASH UPD1 UPD2 UPDATE git_lock AUTOMERGE MERGE \
   EXIT_CODE current_stash deploy_cmd start_branch postSendmail SLACKUSER NOCHECK \
-  VIEWPORT VIEWPORTPRE LOG_TITLE LOG_URL TIMESTAMP STARTUP WP_ROOT \
+  VIEWPORT VIEWPORT_PRE LOG_TITLE LOG_URL TIMESTAMP STARTUP WP_ROOT \
   WP_APP WP_SYSTEM DO_NOT_UPDATE_WP digest_payload MINAUSER \
-  MINADOMAIN SSHTARGET SSHSTATUS REMOTE_FILE  LOGSUFFIX \
+  MINADOMAIN SSHTARGET SSHSTATUS REMOTE_FILE  LOG_SUFFIX \
   DISABLE_SSH_CHECK URL CODE DEPLOYPID DEPLOYTEST payload reportFile \
   TMP MONITOR_URL MONITOR_USER MONITOR_PASS SERVER_ID \
   MONITORHOURS LATENCY LATENCY_MS UPTIME TEST_MONITOR MONITORAPI IN_HOST IN_TOKEN \

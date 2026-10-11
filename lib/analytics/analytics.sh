@@ -17,7 +17,7 @@
 
 # Initialize variables
 var=(SIZE RND METRIC RESULT GA_HITS GA_PERCENT GA_SEARCHES GA_DURATION \
-  GA_SOCIAL ANALYTICSMSG ga_day ga_sequence max_value n a GA_TOTAL ga_ \
+  GA_SOCIAL ANALYTICS_MSG ga_day ga_sequence max_value n a GA_TOTAL ga_ \
   ga4_var ga4_payload ga4_request ga4_error ga4_error_description \
   ga4_row_count GA4_TOKEN_READY GA4_API_METRIC GA4_FILTER_DIMENSION \
   GA4_FILTER_VALUE)
@@ -75,7 +75,7 @@ analytics() {
 
     if [[ "${RND}" == "0" ]]; then
       if [[ "${RESULT}" -gt "200" ]]; then
-        ANALYTICSMSG="You had <strong>${SIZE}</strong> pageviews in the last week. Awesome!"
+        ANALYTICS_MSG="You had <strong>${SIZE}</strong> pageviews in the last week. Awesome!"
       else
         ga_fail
       fi
@@ -87,16 +87,16 @@ analytics() {
       if [[ "${SIZE}" -gt "100" ]]; then
         ga_fail
       elif [[ "${SIZE}" -gt "50" ]]; then
-        ANALYTICSMSG="Last week <strong>${SIZE}</strong> percent of your users were first time visitors. That\&#39;s great!"
+        ANALYTICS_MSG="Last week <strong>${SIZE}</strong> percent of your users were first time visitors. That\&#39;s great!"
       else
         RESULT="$((100 - ${SIZE}))"
-        ANALYTICSMSG="Last week <strong>${RESULT}</strong> percent of your users were return visitors. That\&#39;s great!"
+        ANALYTICS_MSG="Last week <strong>${RESULT}</strong> percent of your users were return visitors. That\&#39;s great!"
       fi
     fi
 
     if [[ "${RND}" == "2" ]]; then
       if [[ "${SIZE}" -ge "30" ]]; then
-        ANALYTICSMSG="You had traffic from <strong>${SIZE}</strong> organic searches last week. Not bad!"
+        ANALYTICS_MSG="You had traffic from <strong>${SIZE}</strong> organic searches last week. Not bad!"
       else
         ga_fail
       fi
@@ -105,7 +105,7 @@ analytics() {
     if [[ "${RND}" == "3" ]]; then
       RESULT="$((${SIZE} / 60))"
       if [[ "${RESULT}" -gt "2" ]]; then
-        ANALYTICSMSG="Last week visitors averaged over <strong>${RESULT}</strong> minutes each on your site. Nice!"
+        ANALYTICS_MSG="Last week visitors averaged over <strong>${RESULT}</strong> minutes each on your site. Nice!"
       else
         ga_fail
       fi
@@ -113,7 +113,7 @@ analytics() {
 
     if [[ "${RND}" == "4" ]]; then
       if [[ "${SIZE}" -ge "20" ]]; then
-        ANALYTICSMSG="Your site had <strong>${SIZE}</strong> social media interactions in the last week!"
+        ANALYTICS_MSG="Your site had <strong>${SIZE}</strong> social media interactions in the last week!"
       else
         ga_fail
       fi
@@ -122,16 +122,16 @@ analytics() {
 }
 
 ga_data() {
-  RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:$METRIC&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4)
+  RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:$METRIC&start-date=$GA_START&end-date=$GA_END&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:$METRIC\":" | cut -d'"' -f4)
   SIZE="$(printf "%.0f\n" "${RESULT}")"
 
   # TODO: Make this a proper loop
   if [[ "${PROJSTATS}" == "1" ]]; then
-    GA_HITS=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:pageviews&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:pageviews\":" | cut -d'"' -f4)
-    GA_PERCENT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:percentNewSessions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:percentNewSessions\":" | cut -d'"' -f4)
-    GA_SEARCHES=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:organicSearches&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:organicSearches\":" | cut -d'"' -f4)
-    GA_DURATION=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:avgSessionDuration&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:avgSessionDuration\":" | cut -d'"' -f4)
-    GA_SOCIAL=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:socialInteractions&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:socialInteractions\":" | cut -d'"' -f4)
+    GA_HITS=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:pageviews&start-date=$GA_START&end-date=$GA_END&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:pageviews\":" | cut -d'"' -f4)
+    GA_PERCENT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:percentNewSessions&start-date=$GA_START&end-date=$GA_END&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:percentNewSessions\":" | cut -d'"' -f4)
+    GA_SEARCHES=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:organicSearches&start-date=$GA_START&end-date=$GA_END&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:organicSearches\":" | cut -d'"' -f4)
+    GA_DURATION=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:avgSessionDuration&start-date=$GA_START&end-date=$GA_END&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:avgSessionDuration\":" | cut -d'"' -f4)
+    GA_SOCIAL=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:socialInteractions&start-date=$GA_START&end-date=$GA_END&access_token=$ACCESS_TOKEN" | tr , '\n' | grep -a "\"ga:socialInteractions\":" | cut -d'"' -f4)
 
     # Make sure we're only dealing with integers
     GA_PERCENT="$(printf "%.0f\n" "${GA_PERCENT}")"
@@ -142,7 +142,7 @@ ga_data() {
 ga_data_loop() {
   if [[ "${TEST_ANALYTICS}" == "1" ]]; then
     # Setup variables to process
-    console "${GASTART} - ${GAEND}"
+    console "${GA_START} - ${GA_END}"
     ga_var=(users newUsers percentNewSessions sessionsPerUser sessions bounces bounceRate \
       sessionDuration avgSessionDuration uniqueDimensionCombinations hits \
       organicSearches pageValue entrances entranceRate pageviews \
@@ -173,7 +173,7 @@ ga_data_loop() {
 
   # Start the loop
   for i in "${ga_var[@]}" ; do
-    RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4)
+    RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${i}&start-date=$GA_START&end-date=$GA_END&access_token=$ACCESS_TOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4)
     if [[ "${TEST_ANALYTICS}" != "1" ]]; then
       dot
     fi
@@ -185,7 +185,7 @@ ga_data_loop() {
     # Workaround for buggy Google shit
     until [[ "${RESULT}" =~ ^[0-9]+([.][0-9]+)?$ ]];
     do
-      RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${i}&start-date=$GASTART&end-date=$GAEND&access_token=$ACCESS_TOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4)
+      RESULT=$(${curl_cmd} -s "https://www.googleapis.com/analytics/v3/data/ga?ids=ga:$PROFILE_ID&metrics=ga:${i}&start-date=$GA_START&end-date=$GA_END&access_token=$ACCESS_TOKEN" | tr , '\n\n' | grep -a "\"ga:${i}\":" | cut -d'"' -f4)
     done
 
     # Round to two decimal places if needed
@@ -387,7 +387,7 @@ EOF
 ga_fail() {
   METRIC="pageviews"
   ga_data
-  ANALYTICSMSG="You had <strong>${SIZE}</strong> pageviews in the last week."
+  ANALYTICS_MSG="You had <strong>${SIZE}</strong> pageviews in the last week."
 }
 
 ga_test() {
