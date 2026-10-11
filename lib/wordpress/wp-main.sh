@@ -49,7 +49,7 @@ wp_main() {
   fi
  
   # If running in Wordpress update-only mode, bail out
-  if [[ "${UPGRADE}" == "1" ]] && [[ "${UPD1}" == "1" ]] && [[ "${UPD2}" == "1" ]]; then
+  if [[ "${UPGRADE}" == "1" ]] && [[ "${UPD_1}" == "1" ]] && [[ "${UPD_2}" == "1" ]]; then
     notice "No updates available, halting."
     clean_exit
   fi

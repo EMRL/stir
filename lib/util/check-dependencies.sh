@@ -29,7 +29,7 @@
 #   None
 #
 # Uses:
-#   ${APPRC}           Current project configuration path/status
+#   ${APP_RC}           Current project configuration path/status
 #   ${WORK_PATH}       Root directory containing Stir projects
 #   ${APP}             Current project name
 #   ${CONFIG_DIR}      Optional directory for project configuration
@@ -39,12 +39,12 @@
 #   ${EMAIL_ERROR}     Enable email notifications for errors
 #   ${EMAIL_SUCCESS}   Enable email notifications for successful operations
 #   ${EMAIL_QUIT}      Enable email notifications when Stir exits
-#   ${NOTIFYCLIENT}    Enable client email notifications
+#   ${NOTIFY_CLIENT}    Enable client email notifications
 #   ${PREPARE}         Indicates a prepare operation is being performed
 #   ${PREPARE_CONFIG}  Optional configuration file used during preparation
 #
 # Sets:
-#   ${APPRC}           Path to a newly created project configuration file
+#   ${APP_RC}           Path to a newly created project configuration file
 #
 # Returns:
 #   Continues normally when all required dependencies are available.
@@ -62,7 +62,7 @@ check_dependencies() {
   }
 
   # Does a configuration file for this repo exist?
-  if [[ -z "${APPRC}" ]]; then
+  if [[ -z "${APP_RC}" ]]; then
     # Make sure app directory is writable
     if [[ -w "${WORK_PATH}/${APP}" ]]; then
       empty_line
@@ -76,24 +76,24 @@ check_dependencies() {
         fi
         cp "${stir_path}/stir-project.sh" \
           "${WORK_PATH}/${APP}/${CONFIG_DIR}/.stir.sh"
-        APPRC="${WORK_PATH}/${APP}/${CONFIG_DIR}/stir.sh"
+        APP_RC="${WORK_PATH}/${APP}/${CONFIG_DIR}/stir.sh"
       else
         # If using root directory for .stir.sh
         cp "${stir_path}/stir-project.sh" "${WORK_PATH}/${APP}/.stir.sh"
-        APPRC="${WORK_PATH}/${APP}/.stir.sh"
+        APP_RC="${WORK_PATH}/${APP}/.stir.sh"
       fi
 
       # Ask the user if they would like to edit
       if [[ -x "$(command -v nano)" ]]; then
         if yesno --default yes \
           "Would you like to edit the configuration file now? [Y/n] "; then
-          nano "${APPRC}"
+          nano "${APP_RC}"
           clear
           sleep 1
           $(basename "${APP}") && exit
           # exec "/usr/local/bin/deploy ${STARTUP} ${APP}"
         fi
-        info "You can change configuration later by editing ${APPRC}"
+        info "You can change configuration later by editing ${APP_RC}"
       fi
     else
       error "Project directory is not writable."
@@ -113,7 +113,7 @@ check_dependencies() {
   if [[ "${EMAIL_ERROR}" == "TRUE" ]] ||
      [[ "${EMAIL_SUCCESS}" == "TRUE" ]] ||
      [[ "${EMAIL_QUIT}" == "TRUE" ]] ||
-     [[ "${NOTIFYCLIENT}" == "TRUE" ]]; then
+     [[ "${NOTIFY_CLIENT}" == "TRUE" ]]; then
     hash "${sendmail_cmd}" 2>/dev/null || {
       error "stir ${VERSION} requires Sendmail to function properly with your current configuration."
     }

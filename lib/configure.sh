@@ -13,7 +13,7 @@ init_loop
 configure_project() {
   # 
   empty_line
-  config_file="${APPRC}"
+  config_file="${APP_RC}"
 
   # REPO_HOST
   remote_origin="$(git ls-remote --get-url)"

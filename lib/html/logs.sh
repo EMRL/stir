@@ -155,7 +155,7 @@ render_log() {
     LOG_TITLE="Deployment Error"
     cat "${stir_path}/html/${HTML_TEMPLATE}/header.html" "${stir_path}/html/${HTML_TEMPLATE}/error.html" > "${html_file}"
   else
-    if [[ "${AUTOMATE}" == "1" ]] && [[ "${UPD1}" == "1" ]] && [[ "${UPD2}" == "1" ]]; then
+    if [[ "${AUTOMATE}" == "1" ]] && [[ "${UPD_1}" == "1" ]] && [[ "${UPD_2}" == "1" ]]; then
       message_state="NOTICE"
       LOG_TITLE="Scheduled Update"
       notes="No updates available for deployment"

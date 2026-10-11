@@ -68,12 +68,12 @@ init_env() {
   DO_NOT_DEPLOY TASK CHECK_BRANCH CHECK_ACTIVE CHECK_TIME GARBAGE WF_CHECK \
   ACF_KEY ACF_LOCK WF_OFF REMOTE_LOG POST_TO_LOCAL_HOST LOCAL_HOST_PATH \
   DIGEST_EMAIL DIGEST_SLACK DIGEST_URL CLIENT_LOGO REMOTE_URL \
-  SCP_POST SCP_USER SCP_HOST SCP_HOST_PATH SCP_PASS SCP_CMD SSH_CMD LOGMSG \
+  SCP_POST SCP_USER SCP_HOST SCP_HOST_PATH SCP_PASS SCP_CMD SSH_CMD LOG_MSG \
   EXPIRE_LOGS CHECK_SERVER STASH ADD_TIME SCP_PORT TASK_USER \
   CLIENT_ID CLIENT_SECRET REDIRECT_URI AUTHORIZATION_CODE ACCESS_TOKEN \
   REFRESH_TOKEN PROFILE_ID ALLOW_ROOT SHORT_EMAIL INCOGNITO REPORT_URL \
   CLIENT_CONTACT INCLUDE_HOSTING GLOBAL_VERSION USER_VERSION PROJECT_VERSION \
-  TERSE NOTIFYCLIENT HTML_TEMPLATE PREPARE PRODUCTION_DEPLOY_HOST \
+  TERSE NOTIFY_CLIENT HTML_TEMPLATE PREPARE PRODUCTION_DEPLOY_HOST \
   PRODUCTION_DEPLOY_PATH PREPARE_CONFIG GRAVITY_FORMS_LICENSE \
   EVENTS_CALENDAR_PRO_LICENSE NEWS_URL BUGSNAG_AUTH USE_SMTP INCLUDE_DETAILS \
   NO_LOG SKIP_GIT ACF_COMPOSER WP_CLI_PATH COMPOSER_CLI_PATH ACTIVATE_PLUGINS \
@@ -87,13 +87,13 @@ init_internal() {
   var=(optstring options log_file wp_file core_file post_file trash_file stat_file \
   url_file html_file htmlSendmail html_email client_email textSendmail stir_path \
   etc_path lib_path integration_email current_branch error_msg notes latency \
-  UPD_CORE TASK_LOG plugins_updated PCB PCC PCD PLUGINS slack_icon APPRC userrc \
-  message_state COMMIT_URL COMMIT_HASH UPD1 UPD2 UPDATE git_lock AUTO_MERGE MERGE \
+  UPD_CORE TASK_LOG plugins_updated PCB PCC PCD PLUGINS slack_icon APP_RC userrc \
+  message_state COMMIT_URL COMMIT_HASH UPD_1 UPD_2 UPDATE git_lock AUTO_MERGE MERGE \
   EXIT_CODE current_stash deploy_cmd start_branch postSendmail SLACK_USER NO_CHECK \
   VIEWPORT VIEWPORT_PRE LOG_TITLE LOG_URL TIMESTAMP STARTUP WP_ROOT \
   WP_APP WP_SYSTEM DO_NOT_UPDATE_WP digest_payload MINA_USER \
   MINA_DOMAIN SSH_TARGET SSH_STATUS REMOTE_FILE  LOG_SUFFIX \
-  DISABLE_SSH_CHECK URL CODE DEPLOYPID DEPLOY_TEST payload reportFile \
+  DISABLE_SSH_CHECK URL CODE DEPLOY_PID DEPLOY_TEST payload reportFile \
   TMP MONITOR_URL MONITOR_USER MONITOR_PASS SERVER_ID \
   MONITOR_HOURS LATENCY LATENCY_MS UPTIME TEST_MONITOR MONITOR_API IN_HOST IN_TOKEN \
   TEST_MAUTIC)
@@ -525,22 +525,22 @@ fi
 if [[ -n "${project_config}" ]]; then
   # shellcheck disable=1090 
   source "${project_config}"
-  APPRC="1"
+  APP_RC="1"
 else
   # Make sure app directory is writable
   if [[ -w "${WORK_PATH}/${APP}" ]]; then
     empty_line; info "Project configuration not found, creating."; sleep 2
     cp "${stir_path}"/stir-project.sh "${WORK_PATH}/${APP}/.stir.sh"
-    APPRC="${WORK_PATH}/${APP}/.stir.sh"
+    APP_RC="${WORK_PATH}/${APP}/.stir.sh"
     if [[ -x "$(command -v nano)" ]]; then
       if yesno --default yes "Would you like to edit the configuration file now? [Y/n] "; then
-        nano "${APPRC}"
+        nano "${APP_RC}"
         clear; sleep 1
       fi
     fi
-    info "You can change configuration later by editing ${APPRC}"
+    info "You can change configuration later by editing ${APP_RC}"
   fi
-  source "${APPRC}"
+  source "${APP_RC}"
 fi
 
 # Validate configuration setings
