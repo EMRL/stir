@@ -1,17 +1,30 @@
 #!/usr/bin/env bash
 #
-# utilities.sh
-#
-###############################################################################
-# Handles various setup, logging, and option flags
-###############################################################################
+# preflight.sh
 
 # Initialize variables
 var=(integer_check json_key json_num cleaned_date cleaned_path wp_cmd \
   composer_cmd cmd_string)
 init_loop
 
-# Open a session, ask for user confirmation before beginning
+###############################################################################
+# preflight()
+#   Perform preliminary checks and prepare the runtime environment before
+#   beginning Stir's main workflow.
+#
+#   Handles server monitoring, backup and scan checks, user confirmation,
+#   special operations, deployment locks, permissions, and runtime overrides.
+#
+# Arguments:
+#   None
+#
+# Returns:
+#   Continues when all preflight checks pass.
+#   Calls quiet_exit() when execution should stop.
+#
+# Example use:
+#   preflight
+###############################################################################
 go() {
   if [[ "${QUIET}" != "1" ]]; then
     tput cnorm;
