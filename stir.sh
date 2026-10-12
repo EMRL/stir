@@ -87,13 +87,13 @@ init_internal() {
   var=(optstring options log_file wp_file core_file post_file trash_file stat_file \
   url_file html_file htmlSendmail html_email client_email textSendmail stir_path \
   etc_path lib_path integration_email current_branch error_msg notes latency \
-  UPD_CORE  plugins_updated PLUGINS slack_icon APP_RC userrc \
+  plugins_updated slack_icon APP_RC userrc \
   message_state COMMIT_URL COMMIT_HASH UPD_1 UPD_2 UPDATE git_lock AUTO_MERGE MERGE \
   EXIT_CODE current_stash deploy_cmd start_branch SLACK_USER NO_CHECK \
   VIEWPORT VIEWPORT_PRE LOG_TITLE LOG_URL TIMESTAMP STARTUP WP_ROOT \
   WP_APP WP_SYSTEM DO_NOT_UPDATE_WP digest_payload MINA_USER \
   MINA_DOMAIN SSH_TARGET SSH_STATUS REMOTE_FILE  LOG_SUFFIX \
-  DISABLE_SSH_CHECK URL CODE DEPLOY_PID DEPLOY_TEST payload \
+  DISABLE_SSH_CHECK URL CODE DEPLOY_TEST payload \
   TMP MONITOR_URL MONITOR_USER MONITOR_PASS SERVER_ID \
   MONITOR_HOURS LATENCY LATENCY_MS UPTIME TEST_MONITOR MONITOR_API IN_HOST IN_TOKEN \
   TEST_MAUTIC)
