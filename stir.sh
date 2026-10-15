@@ -219,6 +219,7 @@ Other Options:
   --test-analytics       Test Google Analytics authentication
   --test-ga4             Test GA4 Analytics (Temp debug)
   --test-monitor         Test production server uptime and latency monitoring
+  --test-dropbox         Test Dropbox integration
   --test-mautic          Test Mautic integration
   --test-bugsnag         Test Bugsnag integration
   --show-settings        Display current global and project settings
@@ -301,6 +302,7 @@ while [[ ${1:-unset} = -?* ]]; do
     --test-analytics) TEST_ANALYTICS="1"; NO_LOG="1" ;; 
     --test-ga4) TEST_GA4="1"; NO_LOG="1" ;; 
     --test-monitor) TEST_MONITOR="1"; NO_LOG="1" ;;
+    --test-dropbox) TEST_BACKUP="1"; NO_LOG="1" ;;
     --test-bugsnag) TEST_BUGSNAG="1"; NO_LOG="1" ;;
     --test-mautic) TEST_MAUTIC="1"; NO_LOG="1" ;;
     --stats) PROJ_STATS="1" ;;

@@ -353,23 +353,11 @@ PROJECT_VERSION="3.8.6.1"
 
 
 ###############################################################################
-# Google Analytics
+# Google Analytics (GA4)
 ###############################################################################
 
-# API credentials
-# CLIENT_ID="{{CLIENT_ID}}"
-# CLIENT_SECRET="{{CLIENT_SECRET}}"
-# REDIRECT_URI="{{REDIRECT_URI}}"
-
-# OAuth authorization will expire after one hour, but will be updated when needed
-# if the tokens below are configured correctly
-# AUTHORIZATION_CODE="{{AUTHORIZATION_CODE}}"
-
-# Tokens
-# ACCESS_TOKEN="{{ACCESS_TOKEN}}"
-# REFRESH_TOKEN="{{REFRESH_TOKEN}}"
-
-# Google Analytics ID
+# GA4 property ID
+# OAuth credentials are configured globally in /etc/stir/global.conf
 # PROFILE_ID="{{PROFILE_ID}}"
 
 

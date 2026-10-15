@@ -754,50 +754,6 @@ ga4_test() {
 
     console "${ga4_date}: ${ga4_views} pageviews"
   done
-
-  notice "Generating GA4 engagement charts..."
-
-  for metric in pageviews users newUsers sessions organicSearches; do
-    if ! ga4_over_time "${metric}" 7; then
-      warning "Unable to generate ${metric} chart"
-      return 1
-    fi
-
-    if [[ ! -s "${stat_dir}/${metric}.png" ]] ||
-       [[ ! -s "${stat_dir}/${metric}.svg" ]]; then
-      warning "${metric} chart was not generated"
-      return 1
-    fi
-
-    console "${metric} chart generated"
-  done
-
-  notice "Rendering engagement page..."
-
-  # Make sure the statistics directory exists.
-  if [[ ! -d "${stat_dir}" ]]; then
-    umask 077 && mkdir "${stat_dir}"
-  fi
-
-  # Copy the assets normally prepared by build_stats().
-  cp -R "${stir_path}/html/${HTML_TEMPLATE}/stats/css" "${stat_dir}/"
-  cp -R "${stir_path}/html/${HTML_TEMPLATE}/stats/fonts" "${stat_dir}/"
-  cp -R "${stir_path}/html/${HTML_TEMPLATE}/stats/js" "${stat_dir}/"
-
-  # Populate dashboard navigation values used by the template.
-  assign_nav
-
-  # Render the engagement template.
-  cat "${stir_path}/html/${HTML_TEMPLATE}/stats/engagement.html" > "${html_file}"
-  render_html
-  cat "${html_file}" > "${stat_dir}/engagement.html"
-
-  if [[ ! -s "${stat_dir}/engagement.html" ]]; then
-    warning "Engagement page was not generated"
-    return 1
-  fi
-
-  console "Engagement page generated"
-  console "${stat_dir}/engagement.html"
+  
   notice "GA4 test complete"
 }

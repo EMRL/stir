@@ -189,7 +189,7 @@ show_settings() {
     notice "Invoice Ninja Integration"
     echo "-------------------------"
     [[ -n "${IN_HOST}" ]] && echo "Host: ${IN_HOST}"
-    [[ -n "${IN_TOKEN}" ]] && echo "Token: ${IN_TOKEN}"
+    [[ -n "${IN_TOKEN}" ]] && echo "Token: ****"
     [[ -n "${IN_CLIENT_ID}" ]] && echo "Client ID: ${IN_CLIENT_ID}"
     [[ -n "${IN_PRODUCT}" ]] && echo "Product: ${IN_PRODUCT}"
     [[ -n "${IN_ITEM_COST}" ]] && echo "Item cost: ${IN_ITEM_COST}"
@@ -202,12 +202,9 @@ show_settings() {
   if [[ -n "${CLIENT_ID}" ]] || [[ -n "${CLIENT_SECRET}" ]] || [[ -n "${REDIRECT_URI}" ]] || [[ -n "${AUTHORIZATION_CODE}" ]] || [[ -n "${ACCESS_TOKEN}" ]] || [[ -n "${REFRESH_TOKEN}" ]] || [[ -n "${PROFILE_ID}" ]]; then
     notice "Google Analytics"
     echo "----------------"
-    [[ -n "${CLIENT_ID}" ]] && echo "Client ID: ${CLIENT_ID}"
-    [[ -n "${CLIENT_SECRET}" ]] && echo "Client secret: ${CLIENT_SECRET}"
-    [[ -n "${REDIRECT_URI}" ]] && echo "Redirect URI: ${REDIRECT_URI}"
-    [[ -n "${AUTHORIZATION_CODE}" ]] && echo "Authorization code: ${AUTHORIZATION_CODE}"
-    [[ -n "${ACCESS_TOKEN}" ]] && echo "Access token: ${ACCESS_TOKEN}"
-    [[ -n "${REFRESH_TOKEN}" ]] && echo "Refresh token: ${REFRESH_TOKEN}"
+    [[ -n "${CLIENT_ID}" ]] && echo "Client ID: ****"
+    [[ -n "${CLIENT_SECRET}" ]] && echo "Client secret: ****"
+    [[ -n "${REFRESH_TOKEN}" ]] && echo "Refresh token: ****"
     [[ -n "${PROFILE_ID}" ]] && echo "Profile ID: ${PROFILE_ID}"
   fi
   # Server monitoring
@@ -222,7 +219,7 @@ show_settings() {
   if [[ -n "${DB_API_TOKEN}" ]] || [[ -n "${DB_BACKUP_PATH}" ]]; then
     notice "Dropbox Integration"
     echo "-------------------"
-    [[ -n "${DB_API_TOKEN}" ]] && echo "Token: ${DB_API_TOKEN}"
+    [[ -n "${DB_API_TOKEN}" ]] && echo "Token: ****"
     [[ -n "${DB_BACKUP_PATH}" ]] && echo "Backup path: ${DB_BACKUP_PATH}"
   fi
   # Malware scanning
