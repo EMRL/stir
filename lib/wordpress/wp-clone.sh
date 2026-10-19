@@ -35,6 +35,11 @@ mysql_check_service() {
 }
 
 wp_clone() {
+  local composer_attempt=0
+  local composer_status=0
+  local composer_max_attempts=3
+  local composer_retry_delay=5
+  
   # Chill for a sec
   sleep 2
   
@@ -142,10 +147,29 @@ wp_clone() {
 
     source "${APP_PATH}/${env_file}"
 
-    # Composer stuff
+    # Install Composer dependencies, retrying on failure
     if [[ -f "${APP_PATH}/composer.json" ]]; then
-      cd "${APP_PATH}"
-      eval "${composer_cmd}" install; error_check
+      cd "${APP_PATH}" || error_check
+
+      for (( composer_attempt=1; composer_attempt<=composer_max_attempts; composer_attempt++ )); do
+        if eval "${composer_cmd}" install; then
+          composer_status=0
+          break
+        else
+          composer_status=$?
+        fi
+
+        # Wait before trying again
+        if (( composer_attempt < composer_max_attempts )); then
+          warning "Composer install failed (attempt ${composer_attempt}/${composer_max_attempts}). Retrying in ${composer_retry_delay} seconds..."
+          sleep "${composer_retry_delay}"
+        fi
+      done
+
+      # All attempts failed
+      if (( composer_status != 0 )); then
+        error "Composer install failed after ${composer_max_attempts} attempts (Error ${composer_status})"
+      fi
     fi
     
     # Database check (check is not working correctly)

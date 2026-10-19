@@ -27,6 +27,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Default theme scan link temporarily points to the old beta report
 
 ### Fixed
+- Added automatic retries for failed Composer installations during project preparation
 - Decimal comparison errors in server monitoring uptime and latency checks
 - GA4 authentication and token refresh issues
 - Chart color configuration and SVG rendering issues
