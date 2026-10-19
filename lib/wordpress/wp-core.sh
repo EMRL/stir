@@ -39,13 +39,11 @@ wp_core() {
       if [[ "${QUIET}" != "1" ]]; then
         # Execute the update
         info "Core update found, updating to ${core_update_version}"
-        trace "Executing ${composer_cmd} update johnpbloch/wordpress-core"
-        eval "${composer_cmd}" --no-progress update johnpbloch/wordpress --with-dependencies
- &>> "${log_file}" &
+        trace "Executing ${composer_cmd} update '*/wordpress' --with-all-dependencies --no-progress"
+        eval "${composer_cmd} update '*/wordpress' --with-all-dependencies --no-progress" &>> "${log_file}"
         spinner $!
       else
-        eval "${composer_cmd}" --no-progress update johnpbloch/wordpress --with-dependencies
- &>> "${log_file}"
+        eval "${composer_cmd} update '*/wordpress' --with-all-dependencies --no-progress" &>> "${log_file}"
       fi
       composer_core_update="1"
       check_core_update_success; return
