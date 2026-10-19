@@ -132,7 +132,6 @@ email_test() {
       [[ -n "${POST_TO_SLACK}" ]] && echo "Post to Slack: ${POST_TO_SLACK}<br />"
       [[ -n "${SLACK_ERROR}" ]] && echo "Post errors to Slack: ${SLACK_ERROR}<br />"
       [[ -n "${POST_URL}" ]] && echo "Webhook URL: ${POST_URL}<br />"
-      [[ -n "${PROFILE_ID}" ]] && echo "Google Analytics ID: ${PROFILE_ID}<br />"
       echo "<br />"
     fi
     # Logging
@@ -171,7 +170,7 @@ email_test() {
     if [[ -n "${IN_HOST}" ]] || [[ -n "${IN_TOKEN}" ]] || [[ -n "${IN_CLIENT_ID}" ]] || [[ -n "${IN_PRODUCT}" ]] || [[ -n "${IN_ITEM_COST}" ]] || [[ -n "${IN_ITEM_QTY}" ]] || [[ -n "${IN_NOTES}" ]] || [[ -n "${IN_NOTES}" ]]; then
       echo "<strong>Invoice Ninja Integration</strong><br />"
       [[ -n "${IN_HOST}" ]] && echo "Host: ${IN_HOST}<br />"
-      [[ -n "${IN_TOKEN}" ]] && echo "Token: ${IN_TOKEN}<br />"
+      [[ -n "${IN_TOKEN}" ]] && echo "Token: ****<br />"
       [[ -n "${IN_CLIENT_ID}" ]] && echo "Client ID: ${IN_CLIENT_ID}<br />"
       [[ -n "${IN_PRODUCT}" ]] && echo "Product: ${IN_PRODUCT}<br />"
       [[ -n "${IN_ITEM_COST}" ]] && echo "Item cost: ${IN_ITEM_COST}<br />"
@@ -182,12 +181,9 @@ email_test() {
     # Google Analytics
     if [[ -n "${CLIENT_ID}" ]] || [[ -n "${CLIENT_SECRET}" ]] || [[ -n "${REDIRECT_URI}" ]] || [[ -n "${AUTHORIZATION_CODE}" ]] || [[ -n "${ACCESS_TOKEN}" ]] || [[ -n "${REFRESH_TOKEN}" ]] || [[ -n "${PROFILE_ID}" ]]; then
       echo "<strong>Google Analytics</strong><br />"
-      [[ -n "${CLIENT_ID}" ]] && echo "Client ID: ${CLIENT_ID}<br />"
-      [[ -n "${CLIENT_SECRET}" ]] && echo "Client secret: ${CLIENT_SECRET}<br />"
-      [[ -n "${REDIRECT_URI}" ]] && echo "Redirect URI: ${REDIRECT_URI}<br />"
-      [[ -n "${AUTHORIZATION_CODE}" ]] && echo "Authorization code: ${AUTHORIZATION_CODE}<br />"
-      [[ -n "${ACCESS_TOKEN}" ]] && echo "Access token: ${ACCESS_TOKEN}<br />"
-      [[ -n "${REFRESH_TOKEN}" ]] && echo "Refresh token: ${REFRESH_TOKEN}<br />"
+      [[ -n "${CLIENT_ID}" ]] && echo "Client ID: ****<br />"
+      [[ -n "${CLIENT_SECRET}" ]] && echo "Client secret: ****<br />"
+      [[ -n "${REFRESH_TOKEN}" ]] && echo "Refresh token: ****<br />"
       [[ -n "${PROFILE_ID}" ]] && echo "Profile ID: ${PROFILE_ID}<br />"
       echo "<br />"
     fi
@@ -202,7 +198,7 @@ email_test() {
     # Dropbox integration
     if [[ -n "${DB_API_TOKEN}" ]] || [[ -n "${DB_BACKUP_PATH}" ]]; then
       echo "<strong>Dropbox Integration</strong><br />"
-      [[ -n "${DB_API_TOKEN}" ]] && echo "Token: ${DB_API_TOKEN}<br />"
+      [[ -n "${DB_API_TOKEN}" ]] && echo "Token: ****<br />"
       [[ -n "${DB_BACKUP_PATH}" ]] && echo "Backup path: ${DB_BACKUP_PATH}<br />"
       echo "<br />"
     fi
@@ -275,7 +271,6 @@ email_test() {
       [[ -n "${POST_TO_SLACK}" ]] && echo "Post to Slack: ${POST_TO_SLACK}"
       [[ -n "${SLACK_ERROR}" ]] && echo "Post errors to Slack: ${SLACK_ERROR}"
       [[ -n "${POST_URL}" ]] && echo "Webhook URL: ${POST_URL}"
-      [[ -n "${PROFILE_ID}" ]] && echo "Google Analytics ID: ${PROFILE_ID}"
       echo
     fi
     # Logging
@@ -317,7 +312,7 @@ email_test() {
     if [[ -n "${IN_HOST}" ]] || [[ -n "${IN_TOKEN}" ]] || [[ -n "${IN_CLIENT_ID}" ]] || [[ -n "${IN_PRODUCT}" ]] || [[ -n "${IN_ITEM_COST}" ]] || [[ -n "${IN_ITEM_QTY}" ]] || [[ -n "${IN_NOTES}" ]] || [[ -n "${IN_NOTES}" ]]; then
       echo "Invoice Ninja Integration"
       [[ -n "${IN_HOST}" ]] && echo "Host: ${IN_HOST}"
-      [[ -n "${IN_TOKEN}" ]] && echo "Token: ${IN_TOKEN}"
+      [[ -n "${IN_TOKEN}" ]] && echo "Token: ****"
       [[ -n "${IN_CLIENT_ID}" ]] && echo "Client ID: ${IN_CLIENT_ID}"
       [[ -n "${IN_PRODUCT}" ]] && echo "Product: ${IN_PRODUCT}"
       [[ -n "${IN_ITEM_COST}" ]] && echo "Item cost: ${IN_ITEM_COST}"
@@ -329,12 +324,9 @@ email_test() {
     if [[ -n "${CLIENT_ID}" ]] || [[ -n "${CLIENT_SECRET}" ]] || [[ -n "${REDIRECT_URI}" ]] || [[ -n "${AUTHORIZATION_CODE}" ]] || [[ -n "${ACCESS_TOKEN}" ]] || [[ -n "${REFRESH_TOKEN}" ]] || [[ -n "${PROFILE_ID}" ]]; then
       echo "Google Analytics"
       echo "----------------"
-      [[ -n "${CLIENT_ID}" ]] && echo "Client ID: ${CLIENT_ID}"
-      [[ -n "${CLIENT_SECRET}" ]] && echo "Client secret: ${CLIENT_SECRET}"
-      [[ -n "${REDIRECT_URI}" ]] && echo "Redirect URI: ${REDIRECT_URI}"
-      [[ -n "${AUTHORIZATION_CODE}" ]] && echo "Authorization code: ${AUTHORIZATION_CODE}"
-      [[ -n "${ACCESS_TOKEN}" ]] && echo "Access token: ${ACCESS_TOKEN}"
-      [[ -n "${REFRESH_TOKEN}" ]] && echo "Refresh token: ${REFRESH_TOKEN}"
+      [[ -n "${CLIENT_ID}" ]] && echo "Client ID: ****"
+      [[ -n "${CLIENT_SECRET}" ]] && echo "Client secret: ****"
+      [[ -n "${REFRESH_TOKEN}" ]] && echo "Refresh token: ****"
       [[ -n "${PROFILE_ID}" ]] && echo "Profile ID: ${PROFILE_ID}"
       echo
     fi
@@ -351,7 +343,7 @@ email_test() {
     if [[ -n "${DB_API_TOKEN}" ]] || [[ -n "${DB_BACKUP_PATH}" ]]; then
       echo "Dropbox Integration"
       echo "-------------------"
-      [[ -n "${DB_API_TOKEN}" ]] && echo "Token: ${DB_API_TOKEN}"
+      [[ -n "${DB_API_TOKEN}" ]] && echo "Token: ****"
       [[ -n "${DB_BACKUP_PATH}" ]] && echo "Backup path: ${DB_BACKUP_PATH}"
       echo
     fi
