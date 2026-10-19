@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 #
 # openproject.sh
@@ -153,11 +154,11 @@ op_addtime() {
 
 ###############################################################################
 # op_test()
-#   Test OpenProject configuration and authentication
+#   Test OpenProject configuration, authentication, and write permissions
 ###############################################################################
 op_test() {
 
-  notice "Checking OpenProject settings" 
+  notice "Checking OpenProject settings"
   console_inline "Testing integration... "
 
   # Make sure required configuration exists
@@ -194,7 +195,7 @@ op_test() {
   op_payload="${op_response%$'\n'*}"
 
   console_inline "Checking user... "
-  
+
   if [[ "${op_http_code}" == "200" ]]; then
     op_user="$(get_json_value name 1 <<< "${op_payload}")"
 
@@ -236,6 +237,31 @@ op_test() {
     console "OK (#${OPENPROJECT_WORK_PACKAGE}: ${op_subject})"
   else
     warning "FAIL (HTTP ${op_http_code})"
+    return 1
+  fi
+
+  # Check write permissions for time entries and activity comments
+  local access_ok=1
+
+  console_inline "Checking time logging access... "
+
+  if [[ "${op_payload}" =~ \"logTime\"[[:space:]]*: ]]; then
+    console "OK"
+  else
+    warning "FAIL: Cannot log time to work package #${OPENPROJECT_WORK_PACKAGE}."
+    access_ok=0
+  fi
+
+  console_inline "Checking activity comment access... "
+
+  if [[ "${op_payload}" =~ \"addComment\"[[:space:]]*: ]]; then
+    console "OK"
+  else
+    warning "FAIL: Cannot add activity comments to work package #${OPENPROJECT_WORK_PACKAGE}."
+    access_ok=0
+  fi
+
+  if [[ "${access_ok}" != "1" ]]; then
     return 1
   fi
 
