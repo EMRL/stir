@@ -69,18 +69,26 @@ wp_core() {
 }
 
 check_core_update_success() {
-  # Check update success. Discovery of multiple at once updates 
-  # breaks this function
-  core_update_attempt="1" 
-  core_current_version="$(eval "${wp_cmd}" core version)"
-  if version_compare "${core_update_version}" "${core_current_version}"; then
-      trace "Update ${core_update_version} does not match current version (${core_current_version})";
-      info "Wordpress core running ${core_current_version}"
-      core_update_complete="1"
-  else
-      sleep 1
-      cd "${APP_PATH}/"; # \ 
-      info "Wordpress core running ${core_current_version}"
-      core_update_complete="1"
+  core_update_attempt="1"
+  core_update_complete="0"
+
+  # Verify the installed WordPress version
+  cd "${WP_PATH}" || return 1
+
+  if ! core_current_version="$(eval "${wp_cmd}" core version 2>> "${log_file}")"; then
+    warning "Unable to verify WordPress core version."
+    return 1
   fi
+
+  info "WordPress core running ${core_current_version}"
+
+  # Only mark the update complete when versions match
+  if [[ "${core_current_version}" == "${core_update_version}" ]]; then
+    core_update_complete="1"
+    trace "WordPress core updated to ${core_current_version}"
+    return 0
+  fi
+
+  warning "WordPress core update failed. Expected ${core_update_version}, found ${core_current_version}"
+  return 1
 }
