@@ -3,7 +3,7 @@
 # digest.sh
 #
 ###############################################################################
-# Handles parsing and creating logs
+# Handles creating of digest emails
 ###############################################################################
 
 # Initializa needed variables
@@ -44,6 +44,42 @@ check_stats() {
   trace "Future site of stats check"
 }
 
+###############################################################################
+# build_digest_analytics()
+#   Generate the weekly GA4 summary and chart for digest emails.
+###############################################################################
+build_digest_analytics() {
+  # Analytics are optional.
+  if [[ -z "${PROFILE_ID}" ]]; then
+    return 0
+  fi
+
+  GA_HITS=""
+  ANALYTICS_MSG=""
+  RESULT=""
+  METRIC=""
+
+  # Retrieve seven days of GA4 pageviews and generate the chart.
+  if ! ga4_over_time "pageviews" 7 ||
+     [[ ! -s "${stat_dir}/traffic.png" ]]; then
+    warning "Could not generate the weekly GA4 digest chart"
+    return 0
+  fi
+
+  if [[ ! "${ga_pageviews:-}" =~ ^[0-9]+$ ]]; then
+    warning "GA4 returned an invalid pageview total"
+    return 0
+  fi
+
+  GA_HITS="${ga_pageviews}"
+  RESULT="${GA_HITS}"
+
+  ANALYTICS_MSG="Your website had <strong>${GA_HITS}</strong> pageviews last week."
+
+  # render_html() uses METRIC to construct the public chart URL.
+  METRIC="traffic"
+}
+
 build_digest() {
   if [[ -z "${DIGEST_SLACK}" || "${DIGEST_SLACK}" == "FALSE" ]] && [[ -z "${DIGEST_EMAIL}" ]]; then 
     return
@@ -57,16 +93,8 @@ build_digest() {
     # If configured, setup RSS news
     create_rss_payload; dot
     
-    # Attempt to get analytics
-    analytics; dot
-
-    # Generate the correct analytics chart
-    ga_over_time "${METRIC}" 7; dot
-
-    # If we're displaying details, get them now
-    if [[ "${INCLUDE_DETAILS}" == "TRUE" ]]; then
-      ga_data_loop
-    fi
+    # Generate weekly GA4 analytics
+    build_digest_analytics; dot
 
     # Email marketing stats
     if [[ -n "${MAUTIC_URL}" && -n "${MAUTIC_AUTH}" ]]; then

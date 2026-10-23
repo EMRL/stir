@@ -11,17 +11,18 @@ var=(SCP_PORT)
 init_loop
 
 # Remote log function; this really needs to be rewritten
+
 publish_html() {
   if [[ "${REMOTE_LOG}" == "TRUE" ]]; then
 
     # Post to localhost by simply copying files
     if [[ "${POST_TO_LOCAL_HOST}" == "TRUE" ]] && [[ -n "${LOCAL_HOST_PATH}" ]] && [[ -f "${html_file}" ]]; then
-      
+
       # Check that directory exists
       prepare_html_dir
 
-      # Post the file   
-      if [[ -n "${REMOTE_FILE}" ]] && [[ "${REPORT}" != "1" ]]; then #&& [[ -n "${COMMIT_HASH}" ]]; then
+      # Post the file
+      if [[ -n "${REMOTE_FILE}" ]] && [[ "${REPORT}" != "1" ]]; then
         cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/${REMOTE_FILE}"
         chmod a+rw "${LOCAL_HOST_PATH}/${APP}/${REMOTE_FILE}" &> /dev/null
       fi
@@ -32,6 +33,13 @@ publish_html() {
         cp "${html_file}" "${LOCAL_HOST_PATH}/${APP}/${REMOTE_FILE}"
         chmod a+rw "${LOCAL_HOST_PATH}/${APP}/${REMOTE_FILE}" &> /dev/null
         DIGEST_URL="${REMOTE_URL}/${APP}/${REMOTE_FILE}"
+
+        # Publish the weekly analytics chart
+        if [[ -s "${stat_dir}/traffic.png" ]]; then
+          mkdir -p "${LOCAL_HOST_PATH}/${APP}/stats"
+          cp "${stat_dir}/traffic.png" \
+            "${LOCAL_HOST_PATH}/${APP}/stats/traffic.png"
+        fi
       fi
 
       # Post the report
@@ -50,7 +58,7 @@ publish_html() {
         chmod -R a+rw "${stir_path}/html/${HTML_TEMPLATE}/stats" &> /dev/null
       fi
 
-      # Remove logs older then X days
+      # Remove logs older than X days
       if [[ -n "${EXPIRE_LOGS}" ]]; then
         is_integer "${EXPIRE_LOGS}"
         if [[ "${integer_check}" != "1" ]]; then
@@ -62,9 +70,9 @@ publish_html() {
     # Send the files through SSH/SCP
     if [[ "${SCP_POST}" == "TRUE" ]] && [[ -f "${html_file}" ]]; then
 
-      # Setup up the proper command, depending on whether we're using key or password
+      # Setup the proper command, depending on whether we're using key or password
       if [[ -n "${SCP_PASS}" ]] && [[ -n "${sshpass_cmd}" ]]; then
-        TMP=$(<$SCP_PASS)
+        TMP=$(<"$SCP_PASS")
         SCP_PASS="${TMP}"
         SCP_CMD="${sshpass_cmd} -p \"${SCP_PASS}\" scp -o StrictHostKeyChecking=no -P \"${SCP_PORT}\""
         SSH_CMD="${sshpass_cmd} -p \"${SCP_PASS}\" ssh -p \"${SCP_PORT}\""
@@ -83,11 +91,16 @@ publish_html() {
         DIGEST_URL="${REMOTE_URL}/${APP}/${REMOTE_FILE}"
       fi
 
-      if [[ "${PROJ_STATS}" == "1" || "${DIGEST}" == "1" && -f "${stat_dir}/*" ]]; then
+      # Publish statistics assets and digest charts
+      if [[ "${PROJ_STATS}" == "1" ]] ||
+         { [[ "${DIGEST}" == "1" ]] &&
+           [[ -s "${stat_dir}/traffic.png" ]]; }; then
+
         eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/stats"
         eval "${SCP_CMD} -r" "${stat_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/stats/"
         eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/avatar"
         eval "${SCP_CMD} -r" "${avatar_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/avatar/"
+
         if [[ -d "${avatar_dir}" ]]; then
           rm -R "${avatar_dir}"
         fi
@@ -97,6 +110,7 @@ publish_html() {
         trace "Sending /scan"
         eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/scan"
         eval "${SCP_CMD} -r" "${scan_html}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/scan/index.html"
+
         # This stuff is for the new dashboard method
         eval "${SCP_CMD} -r" "${stat_dir}/*" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/stats/"
       fi
@@ -108,15 +122,15 @@ publish_html() {
         eval "${SCP_CMD} -r" "${stir_path}/html/${HTML_TEMPLATE}/report/css" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report"
         eval "${SSH_CMD}" "${SCP_USER}"@"${SCP_HOST}" "mkdir -p ${SCP_HOST_PATH}/${APP}/report/js"
         eval "${SCP_CMD} -r" "${stir_path}/html/${HTML_TEMPLATE}/report/js" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report"
-        eval "${SCP_CMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report/${REMOTE_FILE}"
+        eval "${SCP_CMD} -r" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/report/${REMOTE_FILE}"
       fi
 
       # Send over the logs and set permissions
-      if [[ "${REPORT}" != "1" ]] && [[ "${PROJ_STATS}" != "1" ]]; then 
+      if [[ "${REPORT}" != "1" ]] && [[ "${PROJ_STATS}" != "1" ]]; then
         eval "${SCP_CMD}" "${html_file}" "${SCP_USER}"@"${SCP_HOST}":"${SCP_HOST_PATH}/${APP}/${REMOTE_FILE}" &> /dev/null
       fi
 
-      # Remove logs older then X days
+      # Remove logs older than X days
       if [[ -n "${EXPIRE_LOGS}" ]]; then
         is_integer "${EXPIRE_LOGS}"
         if [[ "${integer_check}" != "1" ]]; then
