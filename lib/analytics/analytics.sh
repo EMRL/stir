@@ -167,7 +167,7 @@ ga_data_loop() {
         pageviewsPerSession avgTimeOnPage organicSearches bounceRate \
         impressions adClicks adCost CPC CTR costPerConversion transactions \
         transactionRevenue revenuePerTransaction revenuePerItem transactionsPerSession \
-        transactionsPerUser)
+        transactionsPerUser ga_engagedSessions)
     fi
   fi
 
